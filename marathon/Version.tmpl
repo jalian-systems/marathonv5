@@ -1,0 +1,46 @@
+import net.sourceforge.marathon.api.IVersion;
+
+/**
+ * Marathon version information. This tmpl file is used to generated Version.java.
+ * Version.java is not part of the source code control.
+ */
+public class Version implements IVersion {
+	/**
+	 * @return the version given in the ant build file.
+	 */
+	public String id() {
+		return "$marathonversion";
+	}
+
+	/**
+	 * @return the product name
+	 */
+	public String product() {
+		return "$marathonproduct";
+	}
+
+	public String blurbTitle() {
+		return "$blurbtitle";
+	}
+
+	public String blurbCompany() {
+		return "$blurbcompany";
+	}
+
+	public String blurbWebsite() {
+		return "$blurbwebsite";
+	}
+
+	public String blurbCredits() {
+		return "$blurbcredits";
+	}
+
+	public String tstamp() {
+		return "$buildtime";
+	}
+	
+	public String build() {
+		return "$buildtime";
+	}
+
+}

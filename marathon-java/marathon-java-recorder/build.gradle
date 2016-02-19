@@ -1,0 +1,37 @@
+repositories {
+  mavenCentral()
+}
+
+configurations {
+  antBuildXML
+}
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+dependencies {
+  compile project(":marathon:JSON-java")
+  compile project(':marathon-java:marathon-java-agent')
+  compile project(":marathon:nanohttpd-2.1.1")
+  testCompile "org.testng:testng:${testng_version}"
+  testCompile project(":marathon-java:marathon-test-helpers")
+  testCompile project(':marathon-java:marathon-java-agent')
+  antBuildXML project(":marathon:JSON-java").files("bin")
+  antBuildXML project(':marathon-java:marathon-java-agent').files("bin")
+  antBuildXML project(":marathon:nanohttpd-2.1.1").files("bin")
+}
+
+jar {
+  configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
+  manifest {
+    attributes 'Manifest-Version': '1.0',
+      'Agent-Class': 'net.sourceforge.marathon.javarecorder.JavaHook',
+      'Can-Redefine-Classes': 'false',
+      'Can-Retransform-Classes': 'false',
+      'Premain-Class': 'net.sourceforge.marathon.javarecorder.JavaHook'
+  }
+}
+
+test {
+  useTestNG()
+}

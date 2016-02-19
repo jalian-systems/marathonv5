@@ -1,0 +1,41 @@
+repositories {
+  mavenCentral()
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots'
+  }
+}
+
+configurations {
+  antBuildXML
+}
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+dependencies {
+  compile project(":marathon:JSON-java")
+  compile project(":marathon:nanohttpd-2.1.1")
+  compile "org.javassist:javassist:${javassist_version}"
+  testCompile "org.testng:testng:${testng_version}"
+  testCompile project(":marathon-java:marathon-test-helpers")
+  antBuildXML project(":marathon:JSON-java").files("bin")
+  antBuildXML project(":marathon:nanohttpd-2.1.1").files("bin")
+  antBuildXML "org.javassist:javassist:${javassist_version}"
+}
+
+jar {
+  configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
+  manifest {
+    attributes 'Manifest-Version': '1.0',
+      'Agent-Class': 'net.sourceforge.marathon.javaagent.JavaHook',
+      'Can-Redefine-Classes': 'false',
+      'Can-Retransform-Classes': 'false',
+      'Premain-Class': 'net.sourceforge.marathon.javaagent.JavaHook'
+  }
+}
+
+test {
+  useTestNG()
+  systemProperty 'file.encoding', 'utf8'
+  testLogging.showStandardStreams = true
+}

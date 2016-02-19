@@ -1,0 +1,115 @@
+import org.gradle.plugins.ide.eclipse.model.SourceFolder 
+import org.gradle.plugins.ide.eclipse.model.BuildCommand
+
+ext.vendor = "Jalian Systems Pvt. Ltd"
+ext.appName = "Marathon (OSS) (Java Version)"
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
+  version = '4.0.1.0'
+  task allDependencies(type: DependencyReportTask) {}
+
+  eclipse.classpath {
+    defaultOutputDir = file('bin')
+  }
+
+  compileJava {
+    options.fork = true
+    if(project.properties['jdk6home'])
+      options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+  }
+
+  compileTestJava {
+    options.fork = true
+    if(project.properties['jdk6home'])
+      options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+  }
+
+  eclipse.classpath.file {
+      beforeMerged { classpath -> 
+          classpath.entries.clear()
+      }
+      whenMerged {  cp -> 
+          cp.entries.findAll { it instanceof SourceFolder && it.path.startsWith("src/main/") }*.output = "bin" 
+          cp.entries.findAll { it instanceof SourceFolder && it.path.startsWith("src/test/") }*.output = "bin-test" 
+          cp.entries.removeAll { it.kind == "output" }
+      }
+  }
+
+  eclipse.project.file {
+    whenMerged { eclipseProject ->
+      if(configurations.findByName('antBuildXML')) {
+        eclipseProject.buildCommands.add( new BuildCommand('org.eclipse.ui.externaltools.ExternalToolBuilder', [ LaunchConfigHandle: '<project>/.externalToolBuilders/Build ' + project.name + ' JAR.launch' ]))
+      }
+    }
+
+    withXml { root ->
+      root.asNode().depthFirst().findAll { it instanceof Node && it.name() == 'buildCommand'  }.each {
+        it.getAt('name').findAll { !it.value().startsWith('org.eclipse') }.each { it.parent().appendNode('triggers', 'full,incremental,auto,')}
+      }
+    }
+  }
+
+  task antBuild << {
+    def buildFile = file(project.name + '.xml')
+    buildFile.delete()
+    buildFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    buildFile << "<project basedir=\"${file(".").path}\" default=\"${project.name}\" name=\"${project.name}\">\n"
+    buildFile << "    <target name=\"${project.name}\">\n"
+    buildFile << "        <jar jarfile=\"\${basedir}/${jar.archiveName}\" basedir=\"\${basedir}/bin\">\n"
+    configurations.antBuildXML.each {
+      if(it.isFile())
+        buildFile << "            <zipgroupfileset file=\"${it.path}\"/>\n"
+      else
+        buildFile << "            <fileset dir=\"${it.path}\"/>\n"
+    }
+    buildFile << "            <manifest>\n"
+    jar.manifest.attributes.each {
+      buildFile << "              <attribute name=\"${it.key}\" value=\"${it.value}\"></attribute>\n"
+    }
+    buildFile << "            </manifest>\n"
+    buildFile << "        </jar>\n"
+    buildFile << "    </target>\n"
+    buildFile << "</project>\n"
+
+    file(".externalToolBuilders").mkdir()
+    def externalToolBuilder = file('.externalToolBuilders/' + 'Build ' + project.name + ' JAR.launch')
+    externalToolBuilder.delete()
+    externalToolBuilder << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+    externalToolBuilder << "<launchConfiguration type=\"org.eclipse.ant.AntBuilderLaunchConfigurationType\">\n"
+    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ant.ui.ATTR_TARGETS_UPDATED\" value=\"true\"/>\n"
+    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ant.ui.DEFAULT_VM_INSTALL\" value=\"false\"/>\n"
+    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.debug.core.ATTR_REFRESH_RECURSIVE\" value=\"false\"/>\n"
+    externalToolBuilder << "<stringAttribute key=\"org.eclipse.debug.core.ATTR_REFRESH_SCOPE\" value=\"\${project}\"/>\n"
+    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND\" value=\"false\"/>\n"
+    externalToolBuilder << "<stringAttribute key=\"org.eclipse.jdt.launching.CLASSPATH_PROVIDER\" value=\"org.eclipse.ant.ui.AntClasspathProvider\"/>\n"
+    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.jdt.launching.DEFAULT_CLASSPATH\" value=\"true\"/>\n"
+    externalToolBuilder << "<stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${project.name}\"/>\n"
+    externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_LOCATION\" value=\"\${workspace_loc:/${project.name}/${project.name}.xml}\"/>\n"
+    externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS\" value=\"full,incremental,auto,\"/>\n"
+    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED\" value=\"true\"/>\n"
+    externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY\" value=\"\${workspace_loc:/${project.name}}\"/>\n"
+    externalToolBuilder << "</launchConfiguration>\n"
+  }
+
+  antBuild.onlyIf { configurations.findByName('antBuildXML') }
+  tasks.eclipse.dependsOn(antBuild)
+  
+  tasks.withType(Tar){
+    compression = Compression.GZIP
+  }
+
+  // def testNumber = 0
+  test {
+	outputs.upToDateWhen { false }
+    // beforeTest { descriptor ->
+      // logger.lifecycle("Running test(" + (++testNumber) + "): " + descriptor)
+    // }
+    // afterTest { descriptor ->
+      // logger.lifecycle("Finished test(" + (testNumber) + "): " + descriptor)
+    // }
+  }
+
+  clean.dependsOn project.tasks.collect { return "clean" + it.name.capitalize() }
+}

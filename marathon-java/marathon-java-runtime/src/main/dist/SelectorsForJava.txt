@@ -1,0 +1,34 @@
+tagname   => Selects an element with the given tagname.
+             A tagname is computed by finding the Swing/AWT superclass of the component and converting CamelCase to camel-case.
+             For example: JSpinner -> spinner, JTextField -> text-field
+
+#name => Select a component with the given name
+
+[attr<op>value] => Find components with the given value for the attribute. The operation can be *= (contains), /= (regex match), = (equals), ^= (startswith), $= (endswith)
+
+:<pseudoclass> => Find components for which <pseudoclass> returns true.
+                  Pseudoclasses => selected, enabled, displayed, hidden, displayed and instance-of('<class>')
+
+:nth(index) => Returns the index-th component from the selection. Should always be last one and only one nth filter is supported.
+
+PseudoElements(::)
+
+JComboBox: nth-option(index), all-options
+
+JEditorPane: tag(name) => name is one of 'a', 'ol', 'ul' etc.
+
+JList: nth-item(index), all-items
+
+JTabbedPane: nth-tab(index), all-tabs
+
+JTableHeader: nth-item(index), all-items
+
+JTable: header, mnth-cell(row, column), all-cells, mnth-cell-editor(row, column)
+
+JTree: nth-node(index), all-nodes, root
+
+JTreeNode: editor
+
+SimpleSelector: tagname/*(all)/.(self)
+
+[tagname][#name][pseudoclass/pseudoelement/attrselection...][:nth(index)]

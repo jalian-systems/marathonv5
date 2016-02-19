@@ -1,0 +1,16 @@
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile project(":marathon")
+  compile project(":marathon-java:marathon-java-driver")
+  compile project(":marathon").files('support/JRubyParser.jar', 'support/yydebug.jar')
+  compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
+  testCompile project(":marathon:ruby-selenium-webdriver")
+  testCompile "org.testng:testng:${testng_version}"
+}
+
+test {
+  useTestNG()
+}

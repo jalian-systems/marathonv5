@@ -1,0 +1,16 @@
+dependencies {
+    compile files('swingset3/SwingSet3.jar')
+}
+
+eclipse.classpath.file {
+    withXml { root ->
+      println 'In JSON-java'
+      root.asNode().depthFirst().findAll { it instanceof Node && it.name().equals('classpathentry')  }.each {
+        if(it.attribute("kind").equals("src")) {
+          def xnode = it.appendNode('attributes').appendNode('attribute')
+          xnode.attributes().put('name', 'ignore_optional_problems')
+          xnode.attributes().put('value', 'true')
+        }
+      }
+    }
+}

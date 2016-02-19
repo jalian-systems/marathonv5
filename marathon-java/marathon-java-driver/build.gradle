@@ -1,0 +1,21 @@
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile project(":marathon:JSON-java")
+  compile project(":marathon-java:marathon-java-agent")
+  compile project(":marathon:nanohttpd-2.1.1")
+  compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
+  testCompile "org.testng:testng:${testng_version}"
+  testCompile project(":marathon-java:marathon-test-helpers")
+}
+
+test {
+  useTestNG()
+  systemProperty 'file.encoding', 'utf8'
+  systemProperty 'marathon.agent.file', project(":marathon-java:marathon-java-agent").tasks.jar.archivePath
+  systemProperty 'marathon.recorder.file', project(":marathon-java:marathon-java-recorder").tasks.jar.archivePath
+  systemProperty 'applet.html', project(":marathon-java:marathon-test-helpers").file("swingset3/applet.html").path
+  systemProperty 'SwingSet3.jnlp', project(":marathon-java:marathon-test-helpers").file("swingset3/SwingSet3.jnlp").path
+}

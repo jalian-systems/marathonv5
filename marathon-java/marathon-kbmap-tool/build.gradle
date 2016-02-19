@@ -1,0 +1,42 @@
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile "com.jgoodies:jgoodies-common:${jgoodies_common_version}"
+  compile "com.jgoodies:jgoodies-forms:${jgoodies_forms_version}"
+}
+
+jar.doFirst{
+  manifest {
+    def classpath = configurations.runtime.filter{ it.name.startsWith 'marathon' }.collect { it.name } +
+              configurations.runtime.filter{ !it.name.startsWith('marathon') }.collect { 'support/' + it.name }
+    Properties props = new Properties()
+    props.load(new FileInputStream(file('../build.properties')))
+    props.put("marathonversion", "${version}")
+    attributes("Manifest-Version" : "1.0",
+              "Created-By" : props.get('blurbcompany'),
+              "Specification-Title" : props.get('blurbtitle'),
+              "Specification-Version" : props.get('marathonversion'),
+              "Specification-Vendor" : props.get('blurbcompany'),
+              "Implementation-Title" : props.get('marathonproduct'),
+              "Implementation-Version" : props.get('marathonversion'),
+              "Implementation-Vendor" : props.get('blurbcompany'),
+              "Main-Class" : "net.sourceforge.marathon.kbmap.Generator",
+              "Class-Path" : classpath.join(' ')
+    )
+  }
+}
+
+task startScripts(type: Copy) {
+    destinationDir file("$buildDir/scripts")
+    from('script-templates/marathon-kbmap-tool') {
+      expand( [ 'marathonKBMapToolJar' : jar.archiveName, ])
+      fileMode(0755)
+    }
+    from('script-templates/marathon-kbmap-tool.bat') {
+      expand( [ 'marathonKBMapToolJar' : jar.archiveName, ])
+    }
+}
+
+build.dependsOn(startScripts)

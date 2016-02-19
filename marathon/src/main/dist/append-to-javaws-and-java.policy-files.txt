@@ -1,0 +1,7 @@
+grant codeBase "${marathon.agent}" {
+        permission java.security.AllPermission;
+};
+
+grant codeBase "${marathon.recorder}" {
+        permission java.security.AllPermission;
+};
