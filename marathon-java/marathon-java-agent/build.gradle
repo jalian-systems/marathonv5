@@ -12,6 +12,18 @@ configurations {
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
+compileJava {
+	options.fork = true
+	if(project.properties['jdk6home'])
+		options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk6home'])
+		options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+}
+
 dependencies {
   compile project(":marathon:JSON-java")
   compile project(":marathon:nanohttpd-2.1.1")

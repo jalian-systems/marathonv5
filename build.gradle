@@ -14,18 +14,6 @@ subprojects {
     defaultOutputDir = file('bin')
   }
 
-  compileJava {
-    options.fork = true
-    if(project.properties['jdk6home'])
-      options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
-  }
-
-  compileTestJava {
-    options.fork = true
-    if(project.properties['jdk6home'])
-      options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
-  }
-
   eclipse.classpath.file {
       beforeMerged { classpath -> 
           classpath.entries.clear()

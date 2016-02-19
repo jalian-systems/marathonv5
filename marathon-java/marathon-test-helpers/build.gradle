@@ -4,7 +4,6 @@ dependencies {
 
 eclipse.classpath.file {
     withXml { root ->
-      println 'In JSON-java'
       root.asNode().depthFirst().findAll { it instanceof Node && it.name().equals('classpathentry')  }.each {
         if(it.attribute("kind").equals("src")) {
           def xnode = it.appendNode('attributes').appendNode('attribute')
@@ -14,3 +13,19 @@ eclipse.classpath.file {
       }
     }
 }
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+compileJava {
+	options.fork = true
+	if(project.properties['jdk6home'])
+		options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk6home'])
+		options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+}
+
