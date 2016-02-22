@@ -17,7 +17,7 @@ import net.sourceforge.marathon.runtime.api.SourceLine;
 
 public class FailureDetailView extends JScrollPane {
     private static final long serialVersionUID = 1L;
-    private DefaultListModel dataModel;
+    private DefaultListModel<Object> dataModel;
     private IResultPaneSelectionListener resultPaneSelectionListener;
 
     private static class StackElement {
@@ -39,9 +39,9 @@ public class FailureDetailView extends JScrollPane {
         setColumnHeaderView(new JLabel("Trace", Icons.TRACE, SwingConstants.LEFT));
     }
 
-    private JList createList() {
-        dataModel = new DefaultListModel();
-        final JList stackTrace = new JList(dataModel);
+    private JList<Object> createList() {
+        dataModel = new DefaultListModel<Object>();
+        final JList<Object> stackTrace = new JList<Object>(dataModel);
         stackTrace.addMouseListener(new MouseAdapter() {
             @Override public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() > 1) {

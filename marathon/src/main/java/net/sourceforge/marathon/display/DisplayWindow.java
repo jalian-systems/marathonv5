@@ -557,7 +557,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                     final File file = new File(reportDir, fileName);
                     final CheckList checklist;
                     try {
-                        checklist = CheckList.read(new FileInputStream(file));
+                        checklist = CheckList.read(file);
                         CheckListForm checklistForm = new CheckListForm(checklist, Mode.DISPLAY);
                         final CheckListDialog dialog = new CheckListDialog((JFrame) null, checklistForm);
 

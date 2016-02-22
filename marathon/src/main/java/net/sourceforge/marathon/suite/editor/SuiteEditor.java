@@ -32,6 +32,11 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 
+import com.jgoodies.forms.builder.ButtonStackBuilder;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import net.sourceforge.marathon.display.DisplayWindow;
@@ -44,11 +49,7 @@ import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.UIUtils;
 
-import com.jgoodies.forms.builder.ButtonStackBuilder;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class SuiteEditor implements IEditor {
 
     private final static class SuiteListCellRenderer extends DefaultListCellRenderer {

@@ -63,7 +63,7 @@ public class StatusBar extends JPanel implements IStatusBar {
     }
 
     private JLabel createLabel(String s) {
-        JComboBox box = new JComboBox();
+        JComboBox<String> box = new JComboBox<String>();
         box.setPrototypeDisplayValue(s);
         box.getPreferredSize();
         JLabel label = new JLabel(" ", SwingConstants.CENTER);
