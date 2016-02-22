@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
@@ -24,7 +25,7 @@ import components.TabbedPaneDemo;
 
 @Test public class JTabbedPaneJavaElementTest extends JavaElementTest {
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
     ImageIcon icon = createImageIcon("images/middle.gif");
 

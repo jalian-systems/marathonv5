@@ -23,11 +23,11 @@ import org.json.JSONObject;
 
 public abstract class AbstractJavaElement extends JavaElementPropertyAccessor implements IJavaElement {
 
-    protected JavaAgent driver;
+    protected IJavaAgent driver;
     protected JWindow window;
     private UUID id;
 
-    public AbstractJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public AbstractJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component);
         this.driver = driver;
         this.window = window;
@@ -94,7 +94,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     }
 
     private String matchesCSS(String selector) {
-        long implicitWait = getDriver().implicitWait;
+        long implicitWait = getDriver().getImplicitWait();
         try {
             getDriver().setImplicitWait(0);
             return Boolean.toString(findElementsByCssSelector(selector).size() == 1);
@@ -160,7 +160,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     protected List<IJavaElement> findByCss(String css) {
         if (!(component instanceof Container))
             throw new UnsupportedCommandException("findElements unsupported for non container objects", null);
-        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.implicitWait);
+        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(css);
     }
 
@@ -249,7 +249,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     @Override public List<IJavaElement> findElementsByCssSelector(String using) {
         if (!(component instanceof Container))
             throw new UnsupportedCommandException("findElements unsupported for non container objects", null);
-        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.implicitWait);
+        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }
 
@@ -411,7 +411,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         driver.getDevices().moveto(component, xoffset, yoffset);
     }
 
-    public JavaAgent getDriver() {
+    public IJavaAgent getDriver() {
         return driver;
     }
 

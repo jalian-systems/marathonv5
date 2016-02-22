@@ -8,6 +8,7 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -21,7 +22,7 @@ import org.testng.annotations.Test;
 import components.PopupMenuDemoX;
 
 @Test public class JMenuItemJavaElement2Test extends JavaElementTest {
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
 
     @BeforeMethod public void showDialog() throws Throwable {
@@ -57,7 +58,7 @@ import components.PopupMenuDemoX;
 
     public void selectPopupMenuItem1() throws InterruptedException {
         driver = new JavaAgent();
-        driver.implicitWait = 30000;
+        driver.setImplicitWait(30000);
         IJavaElement textArea = driver.findElementByTagName("text-area");
         textArea.click(2, 1, 10, 10);
         AssertJUnit.assertEquals(1, driver.getWindowHandles().size());
@@ -79,7 +80,7 @@ import components.PopupMenuDemoX;
 
     public void selectPopupMenuItem2() throws InterruptedException {
         driver = new JavaAgent();
-        driver.implicitWait = 30000;
+        driver.setImplicitWait(30000);
         IJavaElement textArea = driver.findElementByTagName("text-area");
         textArea.click(2, 1, 10, 10);
         AssertJUnit.assertEquals(1, driver.getWindowHandles().size());
@@ -101,7 +102,7 @@ import components.PopupMenuDemoX;
 
     public void selectPopupMenuItem3() throws InterruptedException {
         driver = new JavaAgent();
-        driver.implicitWait = 30000;
+        driver.setImplicitWait(30000);
         IJavaElement textArea = driver.findElementByTagName("text-area");
         textArea.click(2, 1, 10, 10);
         AssertJUnit.assertEquals(1, driver.getWindowHandles().size());
@@ -123,7 +124,7 @@ import components.PopupMenuDemoX;
 
     public void selectPopupMenuItem4() throws InterruptedException {
         driver = new JavaAgent();
-        driver.implicitWait = 30000;
+        driver.setImplicitWait(30000);
         IJavaElement textArea = driver.findElementByTagName("text-area");
         textArea.click(2, 1, 10, 10);
         AssertJUnit.assertEquals(1, driver.getWindowHandles().size());

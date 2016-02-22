@@ -8,6 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -23,7 +24,7 @@ import com.sun.swingset3.demos.combobox.ComboBoxDemo;
 @Test public class JComboBoxJavaElementTest extends JavaElementTest {
 
     protected JFrame frame;
-    private JavaAgent driver;
+    private IJavaAgent driver;
 
     @BeforeMethod public void showDialog() throws Throwable {
         JavaElementFactory.add(JComboBox.class, JComboBoxJavaElement.class);

@@ -19,7 +19,7 @@ import javax.swing.tree.TreePath;
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 import org.json.JSONArray;
@@ -31,7 +31,7 @@ public class JTreeJavaElement extends AbstractJavaElement {
         public boolean isValid(JTreeNodeJavaElement e);
     }
 
-    public JTreeJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JTreeJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

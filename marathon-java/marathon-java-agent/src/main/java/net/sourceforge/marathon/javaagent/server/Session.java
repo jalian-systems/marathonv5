@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import net.sourceforge.marathon.javaagent.Device;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
@@ -21,7 +22,7 @@ import org.json.JSONObject;
 
 public class Session {
     private String id;
-    private JavaAgent agent;
+    private IJavaAgent agent;
 
     private List<LogEntry> logEntries = new ArrayList<LogEntry>();
     private Level logLevel = Level.ALL;

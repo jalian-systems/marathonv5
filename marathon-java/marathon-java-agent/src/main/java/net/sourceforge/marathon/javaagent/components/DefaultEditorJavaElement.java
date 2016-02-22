@@ -5,12 +5,12 @@ import java.awt.Component;
 import javax.swing.JSpinner.DefaultEditor;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class DefaultEditorJavaElement extends AbstractJavaElement {
 
-    public DefaultEditorJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public DefaultEditorJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

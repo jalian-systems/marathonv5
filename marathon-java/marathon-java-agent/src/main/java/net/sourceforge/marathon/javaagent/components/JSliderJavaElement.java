@@ -5,12 +5,12 @@ import java.awt.Component;
 import javax.swing.JSlider;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JSliderJavaElement extends AbstractJavaElement {
 
-    public JSliderJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JSliderJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

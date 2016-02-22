@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -18,7 +19,7 @@ import org.testng.annotations.Test;
 import components.SplitPaneDemo;
 
 @Test public class JSplitPaneJavaElementTest extends JavaElementTest {
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
 
     @BeforeMethod public void showDialog() throws Throwable {
