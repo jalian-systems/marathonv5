@@ -1,4 +1,5 @@
 net.sourceforge.marathon.runtime.RuntimeLauncherModel=Java Command Line Launcher
+net.sourceforge.marathon.runtime.FXRuntimeLauncherModel=JavaFX Command Line Launcher
 com.jaliansystems.marathonite.launchers.commandline.CommandLineLauncherModel=Command Line Launcher(Available only in MarathonITE)
 com.jaliansystems.marathonite.launchers.webstart.WebstartLauncherModel=Webstart Launcher(Available only in MarathonITE)
 com.jaliansystems.marathonite.launchers.applet.AppletLauncherModel=Applet Launcher(Available only in MarathonITE)
