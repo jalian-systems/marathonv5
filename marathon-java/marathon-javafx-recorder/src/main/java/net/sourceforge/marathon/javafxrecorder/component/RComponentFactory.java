@@ -3,33 +3,21 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
-import javax.swing.AbstractButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
-import javax.swing.JSpinner.DefaultEditor;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.JTableHeader;
-import javax.swing.text.JTextComponent;
 
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -76,26 +64,6 @@ public class RComponentFactory {
     public static void reset() {
         entries.clear();
         add(Component.class, RUnknownComponent.class);
-        add(Window.class, RWindow.class);
-        add(JTable.class, RTable.class);
-        add(JTableHeader.class, RTableHeader.class);
-        add(AbstractButton.class, RAbstractButton.class);
-        add(JToggleButton.class, RToggleButton.class);
-        add(JComboBox.class, RComboBox.class);
-        add(JTextComponent.class, RTextComponent.class);
-        add(JTree.class, RTree.class);
-        add(JList.class, RList.class);
-        add(JTabbedPane.class, RTabbedPane.class);
-        add(JMenuItem.class, RMenuItem.class);
-        add(JSlider.class, RSlider.class);
-        add(JSpinner.class, RSpinner.class);
-        add(DefaultEditor.class, RDefaultEditor.class);
-        add(JColorChooser.class, RColorChooser.class);
-        add(JSplitPane.class, RSplitPane.class);
-        add(BasicSplitPaneDivider.class, RSplitPane.class);
-        add(JFileChooser.class, RFileChooser.class);
-        add(JEditorPane.class, REditorPane.class);
-        add(JLabel.class, RLabel.class);
         add(JScrollBar.class, RIgnoreComponent.class);
     }
 
