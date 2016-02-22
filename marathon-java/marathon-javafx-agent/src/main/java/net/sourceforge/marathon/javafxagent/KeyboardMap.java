@@ -24,6 +24,7 @@ public class KeyboardMap {
     private char c;
 
     private static Map<Character, List<CharSequence[]>> keys;
+
     static {
         keys = new HashMap<Character, List<CharSequence[]>>();
         File marathon = new File(System.getProperty("user.home"), ".marathon");
@@ -97,30 +98,34 @@ public class KeyboardMap {
     private static CharSequence[] getSequence(String keys) {
         List<CharSequence> lcs = new ArrayList<CharSequence>();
         Scanner scanner = new Scanner(keys);
-        while (scanner.hasNext()) {
-            String key = scanner.next();
-            if (key.equals("SHIFT")) {
-                lcs.add(JavaAgentKeys.SHIFT);
-            } else if (key.equals("ALT")) {
-                lcs.add(JavaAgentKeys.ALT);
-            } else if (key.equals("META")) {
-                lcs.add(JavaAgentKeys.META);
-            } else if (key.equals("CONTROL")) {
-                lcs.add(JavaAgentKeys.CONTROL);
-            } else {
-                String vkCode = "VK_" + key;
-                try {
-                    lcs.add(KeyEvent.class.getDeclaredField(vkCode).get(null) + "");
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
+        try {
+            while (scanner.hasNext()) {
+                String key = scanner.next();
+                if (key.equals("SHIFT")) {
+                    lcs.add(JavaAgentKeys.SHIFT);
+                } else if (key.equals("ALT")) {
+                    lcs.add(JavaAgentKeys.ALT);
+                } else if (key.equals("META")) {
+                    lcs.add(JavaAgentKeys.META);
+                } else if (key.equals("CONTROL")) {
+                    lcs.add(JavaAgentKeys.CONTROL);
+                } else {
+                    String vkCode = "VK_" + key;
+                    try {
+                        lcs.add(KeyEvent.class.getDeclaredField(vkCode).get(null) + "");
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+        } finally {
+            scanner.close();
         }
         return lcs.toArray(new CharSequence[lcs.size()]);
     }

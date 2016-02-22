@@ -37,13 +37,11 @@ import javax.swing.Box.Filler;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -836,18 +834,6 @@ public class JavaElementPropertyAccessor {
     public Integer getRowCount() {
         if (component instanceof JTable)
             return ((JTable) component).getRowCount();
-        return null;
-    }
-
-    public Integer getItemCount() {
-        if (component instanceof JComboBox)
-            return ((JComboBox) component).getItemCount();
-        return null;
-    }
-
-    public Integer getModelSize() {
-        if (component instanceof JList)
-            return ((JList) component).getModel().getSize();
         return null;
     }
 
