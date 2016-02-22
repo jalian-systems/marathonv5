@@ -88,7 +88,7 @@ public abstract class CompositePanel implements IPropertiesPanel {
                     boolean cellHasFocus) {
                 Component c = oldRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 try {
-                    getLauncherModel(((PlugInModelInfo) launcherField.getItemAt(index)).className);
+                    getLauncherModel(((PlugInModelInfo) value).className);
                     c.setEnabled(true);
                 } catch (Throwable t) {
                     c.setEnabled(false);
