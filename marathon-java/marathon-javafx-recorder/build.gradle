@@ -22,10 +22,10 @@ jar {
   configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
   manifest {
     attributes 'Manifest-Version': '1.0',
-      'Agent-Class': 'net.sourceforge.marathon.javarecorder.JavaHook',
+      'Agent-Class': 'net.sourceforge.marathon.javafxrecorder.JavaHook',
       'Can-Redefine-Classes': 'false',
       'Can-Retransform-Classes': 'false',
-      'Premain-Class': 'net.sourceforge.marathon.javarecorder.JavaHook'
+      'Premain-Class': 'net.sourceforge.marathon.javafxrecorder.JavaHook'
   }
 }
 
