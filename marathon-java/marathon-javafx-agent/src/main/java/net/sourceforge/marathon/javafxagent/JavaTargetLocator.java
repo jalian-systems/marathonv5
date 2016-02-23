@@ -1,34 +1,24 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Point;
-import java.awt.Window;
 import java.io.UnsupportedEncodingException;
-import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.Callable;
-
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import sun.awt.AppContext;
+import com.sun.javafx.stage.StageHelper;
+
+import javafx.collections.ObservableList;
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.stage.Stage;
 
 public class JavaTargetLocator {
 
@@ -47,17 +37,17 @@ public class JavaTargetLocator {
     public class JWindow {
 
         private String currentWindowHandle;
-        private Window currentWindow;
+        private Stage currentWindow;
 
         private ElementMap elements = new ElementMap();
-        private Map<Component, IJavaElement> components = new HashMap<Component, IJavaElement>();
+        private Map<Node, IJavaElement> components = new HashMap<Node, IJavaElement>();
 
-        private JWindow(Window window) {
+        private JWindow(Stage window) {
             currentWindow = window;
             currentWindowHandle = JavaTargetLocator.getWindowHandle(window);
         }
 
-        public Window getWindow() {
+        public Stage getWindow() {
             return currentWindow;
         }
 
@@ -77,11 +67,11 @@ public class JavaTargetLocator {
             EventQueueWait.call_noexc(currentWindow, "dispose");
         }
 
-        public Dimension getSize() {
+        public Dimension2D getSize() {
             return EventQueueWait.call_noexc(currentWindow, "getSize");
         }
 
-        public Point getLocation() {
+        public Point2D getLocation() {
             return EventQueueWait.call_noexc(currentWindow, "getLocation");
         }
 
@@ -94,25 +84,20 @@ public class JavaTargetLocator {
         }
 
         public void maximize() {
-            if (currentWindow instanceof JFrame) {
-                EventQueueWait.call_noexc(currentWindow, "setExtendedState", JFrame.MAXIMIZED_BOTH);
+            if (currentWindow instanceof Stage) {
+                ((Stage) currentWindow).setMaximized(true);
             }
         }
 
         public IJavaElement addElement(IJavaElement je) {
-            Component active = je instanceof IPseudoElement ? ((IPseudoElement) je).getParent().getComponent() : je.getComponent();
+            Node active = je.getComponent();
             IJavaElement found = components.get(active);
             if (found != null) {
                 je.setId(found.getId());
                 return je;
             }
-            if (je instanceof IPseudoElement) {
-                elements.put(((IPseudoElement) je).getParent().createId(), ((IPseudoElement) je).getParent());
-                je.setId(((IPseudoElement) je).getParent().getId());
-            } else {
-                elements.put(je.createId(), je);
-            }
-            components.put(active, je instanceof IPseudoElement ? ((IPseudoElement) je).getParent() : je);
+            elements.put(je.createId(), je);
+            components.put(active, je);
             return je;
         }
 
@@ -145,7 +130,7 @@ public class JavaTargetLocator {
             return e;
         }
 
-        public IJavaElement findElement(Component active) {
+        public IJavaElement findElement(Node active) {
             IJavaElement found = components.get(active);
             if (found == null) {
                 IJavaElement e = JavaElementFactory.createElement(active, driver, this);
@@ -156,8 +141,8 @@ public class JavaTargetLocator {
             return found;
         }
 
-        public IJavaElement findElementFromMap(Component active) {
-            return components.get(active);
+        public IJavaElement findElementFromMap(Node component) {
+            return components.get(component);
         }
 
         public JSONObject getWindowProperties() {
@@ -171,24 +156,14 @@ public class JavaTargetLocator {
         }
 
         public String getOMapClassName() {
-            if (currentWindow instanceof Frame || currentWindow instanceof Window || currentWindow instanceof Dialog) {
+            if (currentWindow instanceof Stage) {
                 String className = currentWindow.getClass().getName();
                 Package pkg = currentWindow.getClass().getPackage();
                 if (pkg == null)
                     return className;
                 String pkgName = pkg.getName();
-                if (!pkgName.startsWith("javax.swing") && !pkgName.startsWith("java.awt"))
+                if (!pkgName.startsWith(Stage.class.getPackage().getName()))
                     return className;
-                if (className.equals("javax.swing.ColorChooserDialog"))
-                    return className;
-                if (currentWindow instanceof JDialog) {
-                    Component[] components = ((JDialog) currentWindow).getContentPane().getComponents();
-                    if (components.length == 1 && components[0] instanceof JFileChooser)
-                        return JFileChooser.class.getName() + "#Dialog";
-                    if (components.length == 1 && components[0] instanceof JOptionPane)
-                        return JOptionPane.class.getName() + "#Dialog_" + ((JOptionPane) components[0]).getMessageType() + "_"
-                                + ((JOptionPane) components[0]).getOptionType();
-                }
                 return null;
             }
             return null;
@@ -198,7 +173,7 @@ public class JavaTargetLocator {
 
     private IJavaAgent driver;
     private JWindow currentWindow;
-    private Map<Window, JWindow> windows = new HashMap<Window, JavaTargetLocator.JWindow>();
+    private Map<Stage, JWindow> windows = new HashMap<Stage, JavaTargetLocator.JWindow>();
 
     public JavaTargetLocator(IJavaAgent driver) {
         this.driver = driver;
@@ -230,14 +205,14 @@ public class JavaTargetLocator {
     }
 
     private IJavaAgent window_internal(String nameOrHandleOrTitle) {
-        Window[] windows = getValidWindows();
-        for (Window window : windows) {
-            if (window.getName().equals(nameOrHandleOrTitle)) {
+        Stage[] windows = getValidWindows();
+        for (Stage window : windows) {
+            if (window.getTitle().equals(nameOrHandleOrTitle)) {
                 setCurrentWindow(window);
                 return driver;
             }
         }
-        for (Window window : windows) {
+        for (Stage window : windows) {
             JWindow jw = new JWindow(window);
             String title = jw.getTitle();
             if (title != null && title.equals(nameOrHandleOrTitle)) {
@@ -245,7 +220,7 @@ public class JavaTargetLocator {
                 return driver;
             }
         }
-        for (Window window : windows) {
+        for (Stage window : windows) {
             String handle = getWindowHandle(window);
             if (nameOrHandleOrTitle.equals(handle)) {
                 setCurrentWindow(window);
@@ -256,57 +231,23 @@ public class JavaTargetLocator {
     }
 
     public void deleteWindow() {
-        Window w = getTopContainer().getWindow();
+        Stage w = getTopContainer().getWindow();
         windows.remove(w);
         getTopContainer().deleteWindow();
     }
 
-    private Window[] getValidWindows() {
-        List<Window> valid = new ArrayList<Window>();
-        Set<AppContext> appContexts = AppContext.getAppContexts();
-        for (AppContext appContext : appContexts) {
-            Window[] windows = getWindows(appContext);
-            for (Window window : windows) {
-                if (window.getClass().getName().equals("javax.swing.SwingUtilities$SharedOwnerFrame"))
-                    continue;
-                if (window.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow"))
-                    continue;
-                if (window.isVisible()) {
-                    valid.add(window);
-                }
+    private Stage[] getValidWindows() {
+        ObservableList<Stage> stages = StageHelper.getStages();
+        List<Stage> valid = new ArrayList<Stage>();
+        for (Stage window : stages) {
+            if (window.isShowing()) {
+                valid.add(window);
             }
         }
-        return valid.toArray(new Window[valid.size()]);
+        return valid.toArray(new Stage[valid.size()]);
     }
 
-    private static Window[] getWindows(AppContext appContext) {
-        synchronized (Window.class) {
-            Window realCopy[];
-            @SuppressWarnings("unchecked")
-            Vector<WeakReference<Window>> windowList = (Vector<WeakReference<Window>>) appContext.get(Window.class);
-            if (windowList != null) {
-                int fullSize = windowList.size();
-                int realSize = 0;
-                Window fullCopy[] = new Window[fullSize];
-                for (int i = 0; i < fullSize; i++) {
-                    Window w = windowList.get(i).get();
-                    if (w != null) {
-                        fullCopy[realSize++] = w;
-                    }
-                }
-                if (fullSize != realSize) {
-                    realCopy = Arrays.copyOf(fullCopy, realSize);
-                } else {
-                    realCopy = fullCopy;
-                }
-            } else {
-                realCopy = new Window[0];
-            }
-            return realCopy;
-        }
-    }
-
-    private void setCurrentWindow(Window window) {
+    private void setCurrentWindow(Stage window) {
         JWindow jw = windows.get(window);
         if (jw == null) {
             jw = new JWindow(window);
@@ -316,7 +257,7 @@ public class JavaTargetLocator {
         EventQueueWait.call_noexc(window, "toFront");
     }
 
-    private static String getWindowHandle(Container topContainer) {
+    private static String getWindowHandle(Stage topContainer) {
         return Integer.toHexString(System.identityHashCode(topContainer));
     }
 
@@ -330,8 +271,8 @@ public class JavaTargetLocator {
 
     public Collection<String> getWindowHandles() {
         Collection<String> windowHandles = new ArrayList<String>();
-        Window[] windows = getValidWindows();
-        for (Window window : windows) {
+        Stage[] windows = getValidWindows();
+        for (Stage window : windows) {
             windowHandles.add(getWindowHandle(window));
         }
         return windowHandles;
@@ -353,11 +294,12 @@ public class JavaTargetLocator {
 
     private JWindow _getTopContainer() {
         if (currentWindow == null) {
-            Window[] windows = getValidWindows();
+            Stage[] windows = getValidWindows();
             if (windows.length == 1) {
                 setCurrentWindow(windows[0]);
             } else if (windows.length > 1) {
-                throw new NoSuchWindowException("No top level window is set. Java driver is unable to select from multiple windows", null);
+                throw new NoSuchWindowException("No top level window is set. Java driver is unable to select from multiple windows",
+                        null);
             }
         }
         if (currentWindow == null)
@@ -367,8 +309,8 @@ public class JavaTargetLocator {
     }
 
     public JWindow getWindowForHandle(String windowHandle) {
-        Window[] windows = getValidWindows();
-        for (Window window : windows) {
+        Stage[] windows = getValidWindows();
+        for (Stage window : windows) {
             if (windowHandle.equals(getWindowHandle(window)))
                 return new JWindow(window);
         }
@@ -381,7 +323,7 @@ public class JavaTargetLocator {
 
     public IJavaElement getActiveElement() {
         JWindow top = getTopContainer();
-        Component active = top.getWindow().getFocusOwner();
+        Node active = top.getWindow().getScene().getFocusOwner();
         if (active == null)
             throw new NoSuchElementException("Could not find focus owner for the topmost window", null);
         return top.findElement(active);

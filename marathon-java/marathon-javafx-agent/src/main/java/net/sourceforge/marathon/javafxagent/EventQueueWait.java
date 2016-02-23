@@ -1,21 +1,16 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Window;
-import java.awt.event.FocusEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-import javax.swing.SwingUtilities;
+import javafx.application.Platform;
+import javafx.scene.Node;
 
 public abstract class EventQueueWait extends Wait {
 
     private static final long FOCUS_WAIT_INTERVAL = 50;
     private static final long FOCUS_WAIT = 1000;
-    private static Component focusComponent;
     private boolean setupDone = false;
 
     @Override public boolean until() {
@@ -140,74 +135,33 @@ public abstract class EventQueueWait extends Wait {
      * 
      * @param c
      */
-    public static void requestFocus(final Component c) {
+    public static void requestFocus(final Node c) {
         try {
             new EventQueueWait() {
                 public void setup() {
-                    c.requestFocusInWindow();
-                    if (!c.isFocusOwner())
-                        c.requestFocusInWindow();
+                    c.requestFocus();
                 };
 
                 @Override public boolean till() {
-                    if (!c.requestFocusInWindow()) {
-                        generateFocusEvents(c);
-                        return true;
-                    }
-                    Window w = SwingUtilities.windowForComponent(c);
-                    if (w != null) {
-                        c.requestFocusInWindow();
-                        Component f = w.getFocusOwner();
-                        return focused(c, f) || !c.isFocusable();
-                    }
-                    return false;
+                    return c.isFocused();
                 }
 
-                private boolean focused(final Component c, Component f) {
-                    if (f == c)
-                        return true;
-                    else if (c instanceof Container) {
-                        Component[] cs = ((Container) c).getComponents();
-                        for (Component component : cs) {
-                            if (focused(component, f))
-                                return true;
-                        }
-                    }
-                    return false;
-                }
             }.wait("Waiting for the component to receive focus", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
         } catch (Throwable t) {
             // Ignore failure. Most times the actions should work even when the
             // focus is not set.
         }
-        focusComponent = c;
     }
 
-    private static void generateFocusEvents(Component c) {
-        if (c == focusComponent || !c.isFocusable())
-            return;
-        if (focusComponent != null)
-            dispatchEvent(new FocusEvent(focusComponent, FocusEvent.FOCUS_LOST, false, c));
-        dispatchEvent(new FocusEvent(c, FocusEvent.FOCUS_GAINED, false, focusComponent));
-    }
-
-    private static void dispatchEvent(final AWTEvent event) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                ((Component) event.getSource()).dispatchEvent(event);
-            }
-        });
-    }
-
-    public static void waitTillDisabled(final Component c) {
+    public static void waitTillDisabled(final Node c) {
         new EventQueueWait() {
             @Override public boolean till() {
-                return !c.isEnabled();
+                return c.isDisabled();
             }
         }.wait("Waiting for the component to be disabled", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
     }
 
-    public static void waitTillInvisibled(final Component c) {
+    public static void waitTillInvisibled(final Node c) {
         new EventQueueWait() {
             @Override public boolean till() {
                 return !c.isVisible();
@@ -215,28 +169,33 @@ public abstract class EventQueueWait extends Wait {
         }.wait("Waiting for the component to be hidden", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
     }
 
-    public static void waitTillShown(final Component c) {
-        new EventQueueWait() {
-            @Override public boolean till() {
-                return c.isShowing();
-            }
-        }.wait("Waiting for the component to be shown", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
-    }
-
-    private static void invokeAndWait(Runnable r) {
-        if (SwingUtilities.isEventDispatchThread())
+    private static void invokeAndWait(final Runnable r) {
+        if (Platform.isFxApplicationThread())
             r.run();
-        else
-            try {
-                SwingUtilities.invokeAndWait(r);
-            } catch (InterruptedException e) {
-                throw new RuntimeException("invokeAndWait failed: " + e.getMessage(), e);
-            } catch (InvocationTargetException e) {
-                Throwable cause = e.getCause();
-                if (cause instanceof RuntimeException)
-                    throw ((RuntimeException) cause);
-                throw new RuntimeException("invokeAndWait failed: " + e.getMessage(), e);
+        else {
+            final boolean[] lock = new boolean[] { false };
+            Runnable r1 = new Runnable() {
+                @Override public void run() {
+                    r.run();
+                    synchronized (lock) {
+                        lock[0] = true;
+                        lock.notifyAll();
+                    }
+                }
+            };
+            Platform.runLater(r1);
+            synchronized (lock) {
+                while (true) {
+                    try {
+                        if(lock[0])
+                            break;
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        }
     }
 
     public static <T> T call_noexc(final Object o, String f, final Object... args) {

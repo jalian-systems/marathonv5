@@ -1,11 +1,11 @@
 package net.sourceforge.marathon.javafxagent.script;
 
-import java.awt.Component;
 import java.lang.reflect.Array;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.IJavaElement;
 import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.server.ExecuteMode;
@@ -73,8 +73,8 @@ public class JSONScriptRunner {
             }
             return a;
         }
-        if (jsonArg instanceof Component) {
-            IJavaElement e = session.findElement((Component) jsonArg);
+        if (jsonArg instanceof Node) {
+            IJavaElement e = session.findElement((Node) jsonArg);
             return new JSONObject().put("ELEMENT", e.getId());
         }
         return null;

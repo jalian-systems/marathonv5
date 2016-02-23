@@ -1,12 +1,13 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONArray;
+
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 
 public interface IJavaElement {
 
@@ -26,9 +27,9 @@ public interface IJavaElement {
 
     public abstract boolean isDisplayed();
 
-    public abstract Point getLocation();
+    public abstract Point2D getLocation();
 
-    public abstract Dimension getSize();
+    public abstract Dimension2D getSize();
 
     public abstract String getCssValue(String propertyName);
 
@@ -38,7 +39,7 @@ public interface IJavaElement {
 
     public abstract String getHandle();
 
-    public abstract Component getComponent();
+    public abstract Node getComponent();
 
     public abstract String getTagName();
 
@@ -66,15 +67,15 @@ public interface IJavaElement {
 
     public abstract void moveto();
 
-    public abstract void moveto(int xoffset, int yoffset);
+    public abstract void moveto(double xoffset, double yoffset);
 
-    public abstract Point getMidpoint();
+    public abstract Point2D getMidpoint();
 
-    public abstract void click(int button, int clickCount, int xoffset, int yoffset);
+    public abstract void click(int button, int clickCount, double x, double y);
 
-    public abstract void buttonDown(int button, int xoffset, int yoffset);
+    public abstract void buttonDown(int button, double xoffset, double yoffset);
 
-    public abstract void buttonUp(int button, int xoffset, int yoffset);
+    public abstract void buttonUp(int button, double xoffset, double yoffset);
 
     public abstract IJavaElement findElementByClassName(String using);
 

@@ -1,7 +1,5 @@
 package net.sourceforge.marathon.javafxagent.server;
 
-import java.awt.AWTException;
-import java.awt.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,12 +11,13 @@ import java.util.logging.Level;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.Device;
 import net.sourceforge.marathon.javafxagent.IJavaAgent;
 import net.sourceforge.marathon.javafxagent.IJavaElement;
 import net.sourceforge.marathon.javafxagent.JavaAgent;
-import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 
 public class Session {
     private String id;
@@ -159,11 +158,11 @@ public class Session {
         return agent.getWindowProperties();
     }
 
-    public IJavaElement findElement(Component component) {
+    public IJavaElement findElement(Node component) {
         return agent.findElement(component);
     }
 
-    public byte[] getScreenShot() throws AWTException, IOException {
+    public byte[] getScreenShot() throws IOException {
         return agent.getScreenShot();
     }
 

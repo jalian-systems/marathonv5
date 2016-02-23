@@ -1,9 +1,9 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.Component;
+import javafx.scene.Node;
 
 public interface IJavaElementFinder {
 
-    public abstract Class<? extends IJavaElement> get(Component component);
+    public abstract Class<? extends IJavaElement> get(Node component);
 
 }

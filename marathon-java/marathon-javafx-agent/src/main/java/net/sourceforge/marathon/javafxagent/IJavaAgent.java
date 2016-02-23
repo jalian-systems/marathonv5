@@ -1,12 +1,12 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.Component;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import org.json.JSONObject;
 
+import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 
 public interface IJavaAgent {
@@ -59,7 +59,7 @@ public interface IJavaAgent {
 
     void setImplicitWait(long implicitWait);
 
-    IJavaElement findElement(Component component);
+    IJavaElement findElement(Node component);
 
     byte[] getScreenShot() throws IOException;
 

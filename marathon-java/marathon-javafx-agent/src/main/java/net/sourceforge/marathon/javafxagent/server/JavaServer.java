@@ -1,7 +1,5 @@
 package net.sourceforge.marathon.javafxagent.server;
 
-import java.awt.AWTException;
-import java.awt.Point;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
@@ -24,6 +22,7 @@ import org.json.JSONObject;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
+import javafx.geometry.Point2D;
 import net.sourceforge.marathon.javafxagent.Device;
 import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.IJavaElement;
@@ -114,10 +113,11 @@ public class JavaServer extends NanoHTTPD {
         routes.add(new RouteMap(Method.DELETE, "/session/:sessionId/window", getMethod("closeSession")));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/size", getMethod("setWindowSize", true)));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/window/:windowHandle/size", getMethod("getWindowSize")));
-        routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/position", getMethod("setWindowPosition",
-                true)));
+        routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/position",
+                getMethod("setWindowPosition", true)));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/window/:windowHandle/position", getMethod("getWindowPosition")));
-        routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/maximize", getMethod("maximizeWindow", true)));
+        routes.add(
+                new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/maximize", getMethod("maximizeWindow", true)));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/cookie"));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/cookie"));
         routes.add(new RouteMap(Method.DELETE, "/session/:sessionId/cookie"));
@@ -145,7 +145,7 @@ public class JavaServer extends NanoHTTPD {
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/element/:id/location", getMethod("getElementLocation")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/element/:id/location_in_view"));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/element/:id/size", getMethod("getElementSize")));
-        routes.add(new RouteMap(Method.GET, "/session/:sessionId/element/:id/css/:propertyName"));
+        routes.add(new RouteMap(Method.GET, "/session/:sessionId/element/:id/css/:propertyName", getMethod("getCSSValue")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/orientation"));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/orientation"));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/alert_text"));
@@ -287,7 +287,7 @@ public class JavaServer extends NanoHTTPD {
         // query = URLDecoder.decode(query, "UTF8");
         // } catch (UnsupportedEncodingException e1) {
         // }
-        logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query  : "{}"));
+        logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
         if (query != null) {
             try {
                 jsonQuery = new JSONObject(query);
@@ -383,9 +383,8 @@ public class JavaServer extends NanoHTTPD {
         } catch (Exception e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             r.put("status", ErrorCodes.UNHANDLED_ERROR);
-            r.put("value",
-                    new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
-                            getStackTrace(e)));
+            r.put("value", new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
+                    getStackTrace(e)));
             return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } finally {
             afterEvent();
@@ -412,7 +411,8 @@ public class JavaServer extends NanoHTTPD {
         return trace;
     }
 
-    public Object invoke(Route route, JSONObject query, JSONObject uriParams, Session session, JWindow window, IJavaElement element) {
+    public Object invoke(Route route, JSONObject query, JSONObject uriParams, Session session, JWindow window,
+            IJavaElement element) {
         Object result;
         try {
             if (session == null)
@@ -567,6 +567,13 @@ public class JavaServer extends NanoHTTPD {
 
     public JSONObject getElementSize(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
         return new JSONObject(element.getSize());
+    }
+
+    public String getCSSValue(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+        String cssValue = element.getCssValue(uriParams.getString("propertyName"));
+        if (cssValue == null)
+            return NULL_OBJECT;
+        return cssValue;
     }
 
     public String getElementAttribute(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
@@ -730,8 +737,8 @@ public class JavaServer extends NanoHTTPD {
     // User Actions
     private static class ComponentState {
         public IJavaElement element;
-        public int x;
-        public int y;
+        public double x;
+        public double y;
     }
 
     private static ComponentState lastComponenet = new ComponentState();
@@ -745,14 +752,15 @@ public class JavaServer extends NanoHTTPD {
             throw new MissingCommandParametersException("Missing x-offset or y-offset. Provide both x and y offsets.", null);
         if (element == null && !hasOffset)
             throw new MissingCommandParametersException("One of the element or offset is expected.", null);
-        int xoffset, yoffset;
+        double xoffset;
+        double yoffset;
         if (hasOffset) {
             xoffset = query.getInt("xoffset");
             yoffset = query.getInt("yoffset");
         } else {
-            Point p = element.getMidpoint();
-            xoffset = p.x;
-            yoffset = p.y;
+            Point2D p = element.getMidpoint();
+            xoffset = p.getX();
+            yoffset = p.getY();
         }
         if (element == null) {
             if (hasOffset && lastComponenet.element != null) {
@@ -772,11 +780,11 @@ public class JavaServer extends NanoHTTPD {
         if (lastComponenet.element != null && lastComponenet.element.equals(element)) {
             element.click(0, 1, lastComponenet.x, lastComponenet.y);
         } else {
-            Point p = element.getMidpoint();
-            element.click(0, 1, p.x, p.y);
+            Point2D p = element.getMidpoint();
+            element.click(0, 1, p.getX(), p.getY());
             lastComponenet.element = element;
-            lastComponenet.x = p.x;
-            lastComponenet.y = p.y;
+            lastComponenet.x = p.getX();
+            lastComponenet.y = p.getY();
         }
     }
 
@@ -814,16 +822,17 @@ public class JavaServer extends NanoHTTPD {
         if (query != null && query.has("button"))
             button = query.getInt("button");
         IJavaElement element = null;
-        int xoffset, yoffset;
+        double xoffset;
+        double yoffset;
         if (lastComponenet.element != null) {
             element = lastComponenet.element;
             xoffset = lastComponenet.x;
             yoffset = lastComponenet.y;
         } else {
             element = session.getActiveElement();
-            Point p = element.getMidpoint();
-            xoffset = p.x;
-            yoffset = p.y;
+            Point2D p = element.getMidpoint();
+            xoffset = p.getX();
+            yoffset = p.getY();
         }
         element.buttonDown(button, xoffset, yoffset);
     }
@@ -833,16 +842,17 @@ public class JavaServer extends NanoHTTPD {
         if (query.has("button"))
             button = query.getInt("button");
         IJavaElement element = null;
-        int xoffset, yoffset;
+        double xoffset;
+        double yoffset;
         if (lastComponenet.element != null) {
             element = lastComponenet.element;
             xoffset = lastComponenet.x;
             yoffset = lastComponenet.y;
         } else {
             element = session.getActiveElement();
-            Point p = element.getMidpoint();
-            xoffset = p.x;
-            yoffset = p.y;
+            Point2D p = element.getMidpoint();
+            xoffset = p.getX();
+            yoffset = p.getY();
         }
         element.buttonUp(button, xoffset, yoffset);
     }
@@ -853,16 +863,17 @@ public class JavaServer extends NanoHTTPD {
 
     private void click(Session session, int button, int clickCount) {
         IJavaElement element = null;
-        int xoffset, yoffset;
+        double xoffset;
+        double yoffset;
         if (lastComponenet.element != null) {
             element = lastComponenet.element;
             xoffset = lastComponenet.x;
             yoffset = lastComponenet.y;
         } else {
             element = session.getActiveElement();
-            Point p = element.getMidpoint();
-            xoffset = p.x;
-            yoffset = p.y;
+            Point2D p = element.getMidpoint();
+            xoffset = p.getX();
+            yoffset = p.getY();
         }
         element.click(button, clickCount, xoffset, yoffset);
     }
@@ -893,7 +904,7 @@ public class JavaServer extends NanoHTTPD {
         return new Response(status, mimeType, data);
     }
 
-    public String getScreenShot(JSONObject query, JSONObject uriParams, Session session) throws AWTException, IOException {
+    public String getScreenShot(JSONObject query, JSONObject uriParams, Session session) throws IOException {
         return Base64.encodeToString(session.getScreenShot(), false);
     }
 

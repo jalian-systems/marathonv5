@@ -1,12 +1,13 @@
 package net.sourceforge.marathon.javafxagent.css;
 
-import java.awt.Component;
-import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.*;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 
@@ -77,11 +78,11 @@ public class ChildSelector implements Selector {
     protected List<IJavaElement> found(List<IJavaElement> pElements, IJavaAgent driver) {
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         for (IJavaElement je : pElements) {
-            if (!(je.getComponent() instanceof Container))
+            if (!(je.getComponent() instanceof Parent))
                 continue;
             JWindow topContainer = driver.switchTo().getTopContainer();
-            Component[] components = ((Container) je.getComponent()).getComponents();
-            for (Component c : components) {
+            ObservableList<Node> components = ((Parent) je.getComponent()).getChildrenUnmodifiable();
+            for (Node c : components) {
                 IJavaElement je2 = JavaElementFactory.createElement(c, driver, driver.switchTo().getTopContainer());
                 List<IJavaElement> matched = child.matchesSelector(je2);
                 for (IJavaElement javaElement : matched) {

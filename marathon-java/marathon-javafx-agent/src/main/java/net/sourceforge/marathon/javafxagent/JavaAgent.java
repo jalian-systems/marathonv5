@@ -1,13 +1,5 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.AWTException;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Window;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -16,10 +8,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
-
 import org.json.JSONObject;
 
+import javafx.scene.Node;
+import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Device.Type;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
@@ -82,6 +74,8 @@ public class JavaAgent implements IJavaAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#manage()
      */
     @Override public JOptions manage() {
+        if(options == null)
+            options = new JOptions(this);
         return options;
     }
 
@@ -199,8 +193,8 @@ public class JavaAgent implements IJavaAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByCssSelector(java.lang.String)
      */
     @Override public List<IJavaElement> findElementsByCssSelector(String using) {
-        Window window = targetLocator.getTopContainer().getWindow();
-        IJavaElement je = JavaElementFactory.createElement(window, this, targetLocator.getTopContainer());
+        Stage window = targetLocator.getTopContainer().getWindow();
+        IJavaElement je = JavaElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
         FindByCssSelector finder = new FindByCssSelector(je, this, implicitWait);
         return finder.findElements(using);
     }
@@ -223,8 +217,8 @@ public class JavaAgent implements IJavaAgent {
     }
 
     protected List<IJavaElement> findByCss(String css) {
-        Window window = targetLocator.getTopContainer().getWindow();
-        IJavaElement je = JavaElementFactory.createElement(window, this, targetLocator.getTopContainer());
+        Stage window = targetLocator.getTopContainer().getWindow();
+        IJavaElement je = JavaElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
         FindByCssSelector finder = new FindByCssSelector(je, this, implicitWait);
         return finder.findElements(css);
     }
@@ -243,10 +237,7 @@ public class JavaAgent implements IJavaAgent {
         this.implicitWait = implicitWait;
     }
 
-    /* (non-Javadoc)
-     * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElement(java.awt.Component)
-     */
-    @Override public IJavaElement findElement(Component component) {
+    @Override public IJavaElement findElement(Node component) {
         return targetLocator.getTopContainer().findElement(component);
     }
 
@@ -254,21 +245,7 @@ public class JavaAgent implements IJavaAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getScreenShot()
      */
     @Override public byte[] getScreenShot() throws IOException {
-        BufferedImage bufferedImage;
-        Window window = targetLocator.getTopContainer().getWindow();
-        try {
-            Dimension windowSize = window.getSize();
-            Robot robot = new Robot();
-            bufferedImage = robot.createScreenCapture(new Rectangle(window.getX(), window.getY(), windowSize.width,
-                    windowSize.height));
-        } catch (AWTException e) {
-            Rectangle rec = window.getBounds();
-            bufferedImage = new BufferedImage(rec.width, rec.height, BufferedImage.TYPE_INT_ARGB);
-            window.paint(bufferedImage.getGraphics());
-        }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", baos);
-        return baos.toByteArray();
+        return new byte[0];
     }
 
     /* (non-Javadoc)

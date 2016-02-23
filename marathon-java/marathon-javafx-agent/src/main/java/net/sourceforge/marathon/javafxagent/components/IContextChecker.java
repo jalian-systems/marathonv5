@@ -1,7 +1,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
-import java.awt.Component;
+import javafx.scene.Node;
 
 public interface IContextChecker {
-    public boolean isContext(Component c);
+    public boolean isContext(Node c);
 }

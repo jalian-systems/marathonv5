@@ -1,30 +1,11 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.AWTEvent;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Event;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.IllegalComponentStateException;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.AWTEventListener;
-import java.awt.event.ComponentEvent;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,43 +13,29 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import javax.swing.AbstractButton;
-import javax.swing.Box.Filler;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.KeyStroke;
-import javax.swing.border.Border;
-import javax.swing.table.JTableHeader;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaElementPropertyAccessor {
 
-    protected Component component;
+    protected Node node;
 
-    public JavaElementPropertyAccessor(Component component) {
-        this.component = component;
+    public JavaElementPropertyAccessor(Node component) {
+        this.node = component;
     }
 
-    public String getAttribute(final String name) {
+    public final String getAttribute(final String name) {
         return getAttribute(name, false);
     }
 
-    public String getAttribute(final String name, final boolean skipSelf) {
+    public final String getAttribute(final String name, final boolean skipSelf) {
         return EventQueueWait.exec(new Callable<String>() {
             @Override public String call() throws Exception {
                 return _getAttribute(name, skipSelf);
@@ -76,7 +43,7 @@ public class JavaElementPropertyAccessor {
         });
     }
 
-    public String _getAttribute(String name, boolean skipSelf) {
+    public final String _getAttribute(String name, boolean skipSelf) {
         if (name.startsWith("keystrokeFor-"))
             return getKeyStrokeFor(name.substring("keystrokeFor-".length()));
         String[] split = name.split("\\.");
@@ -88,9 +55,7 @@ public class JavaElementPropertyAccessor {
         } catch (UnsupportedCommandException e) {
         }
         if (attributeObject == null) {
-            Component c = component;
-            if (this instanceof IPseudoElement)
-                c = ((IPseudoElement) this).getPseudoComponent();
+            Node c = node;
             attributeObject = getAttributeObject(c, first);
             if (attributeObject == null)
                 return null;
@@ -105,14 +70,6 @@ public class JavaElementPropertyAccessor {
 
     private String getKeyStrokeFor(String action) {
         JSONArray r = new JSONArray();
-        if (component instanceof JComponent) {
-            InputMap inputMap = ((JComponent) component).getInputMap();
-            KeyStroke[] allKeys = inputMap.allKeys();
-            for (KeyStroke ks : allKeys) {
-                if (action.equals(inputMap.get(ks)))
-                    r.put(ks.toString());
-            }
-        }
         if (r.length() > 0)
             return r.toString();
         return null;
@@ -129,7 +86,7 @@ public class JavaElementPropertyAccessor {
      * net.sourceforge.marathon.javaagent.IJavaElement#getAttributeObject(java
      * .lang.String)
      */
-    public Object getAttributeObject(Object component, String name) {
+    public final Object getAttributeObject(Object component, String name) {
         String isMethod = getIsMethod(name);
         Object o = null;
         try {
@@ -217,13 +174,13 @@ public class JavaElementPropertyAccessor {
      * net.sourceforge.marathon.javaagent.IJavaElement#hasAttribue(java.lang
      * .String)
      */
-    public boolean hasAttribue(String name) {
+    public final boolean hasAttribue(String name) {
         return hasMethod(getIsMethod(name)) || hasMethod(getGetMethod(name));
     }
 
     private boolean hasMethod(String name) {
         try {
-            component.getClass().getMethod(name);
+            node.getClass().getMethod(name);
             return true;
         } catch (SecurityException e) {
         } catch (NoSuchMethodException e) {
@@ -236,7 +193,7 @@ public class JavaElementPropertyAccessor {
      * 
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getText()
      */
-    public String getText() {
+    public final String getText() {
         return EventQueueWait.exec(new Callable<String>() {
             @Override public String call() throws Exception {
                 return _getText();
@@ -245,10 +202,8 @@ public class JavaElementPropertyAccessor {
     }
 
     public String _getText() {
-        Component c = component;
-        if (this instanceof IPseudoElement)
-            c = ((IPseudoElement) this).getPseudoComponent();
-        Object attributeObject = getAttributeObject(c, c instanceof JToggleButton ? "selected" : "text");
+        Node c = node;
+        Object attributeObject = getAttributeObject(c, "text");
         if (attributeObject == null)
             return null;
         return attributeObject.toString();
@@ -264,42 +219,7 @@ public class JavaElementPropertyAccessor {
     }
 
     public boolean _isDisplayed() {
-        try {
-            component.getLocationOnScreen();
-        } catch (IllegalComponentStateException e) {
-            return false;
-        } catch (Throwable e) {
-            throw new UnsupportedCommandException("getLocationOnScreen is not supported by " + component.getClass().getName(), e);
-        }
         return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sourceforge.marathon.javaagent.IJavaElement#getLocation()
-     */
-    public Point getLocation() {
-        return EventQueueWait.call_noexc(this, "_getLocation");
-    }
-
-    public Point _getLocation() {
-        java.awt.Point p = component.getLocation();
-        return new Point(p.x, p.y);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sourceforge.marathon.javaagent.IJavaElement#getSize()
-     */
-    public Dimension getSize() {
-        return EventQueueWait.call_noexc(this, "_getSize");
-    }
-
-    public Dimension _getSize() {
-        java.awt.Dimension d = component.getSize();
-        return new Dimension(d.width, d.height);
     }
 
     /*
@@ -307,7 +227,7 @@ public class JavaElementPropertyAccessor {
      * 
      * @see net.sourceforge.marathon.javaagent.IJavaElement#isSelected()
      */
-    public boolean isSelected() {
+    public final boolean isSelected() {
         return EventQueueWait.<Boolean> call_noexc(this, "_isSelected");
     }
 
@@ -315,7 +235,7 @@ public class JavaElementPropertyAccessor {
         String selected = _getAttribute("selected", true);
         if (selected != null)
             return Boolean.parseBoolean(selected);
-        throw new UnsupportedCommandException("isSelected is not supported by " + component.getClass().getName(), null);
+        throw new UnsupportedCommandException("isSelected is not supported by " + node.getClass().getName(), null);
     }
 
     /*
@@ -328,11 +248,11 @@ public class JavaElementPropertyAccessor {
     }
 
     public boolean _isEnabled() {
-        return component.isEnabled();
+        return !node.isDisabled();
     }
 
-    public Component getComponent() {
-        return component;
+    public final Node getComponent() {
+        return node;
     }
 
     /*
@@ -340,7 +260,7 @@ public class JavaElementPropertyAccessor {
      * 
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getTagName()
      */
-    public String getTagName() {
+    public final String getTagName() {
         Class<?> javaClass = findJavaClass();
         Class<?> c = javaClass;
         String simpleName = c.getSimpleName();
@@ -353,173 +273,76 @@ public class JavaElementPropertyAccessor {
 
     private String hyphenated(Class<?> klass) {
         String r = klass.getSimpleName();
-        if ((klass.getPackage().getName().equals("javax.swing") || klass.getPackage().getName().startsWith("javax.swing."))
-                && r.charAt(0) == 'J') {
-            r = r.substring(1);
-        }
         return r.substring(0, 1).toLowerCase() + r.substring(1).replaceAll("[A-Z][A-Z]*", "-$0").toLowerCase();
     }
 
     private Class<?> findJavaClass() {
-        Class<?> c = component.getClass();
-        if (this instanceof IPseudoElement)
-            c = ((IPseudoElement) this).getPseudoComponent().getClass();
+        Class<?> c = node.getClass();
         while (c.getPackage() == null
-                || (!c.getPackage().getName().startsWith("java.awt") && !c.getPackage().getName().startsWith("javax.swing")))
+                || (!c.getPackage().getName().startsWith("javafx.scene")))
             c = c.getSuperclass();
         return c;
     }
 
-    public String getType() {
-        String name = component.getClass().getName();
-        if (name.startsWith("javax.swing")) {
-            return name.substring("javax.swing.".length());
+    public final String getType() {
+        String name = node.getClass().getName();
+        if (name.startsWith("javafx.scene.control")) {
+            return name.substring("javafx.scene.control.".length());
         }
         return name;
     }
 
-    public String getLabelText() {
-        if (component instanceof JLabel) {
-            String text = ((JLabel) component).getText();
-            if (text != null && !text.equals(""))
-                return "lbl:" + stripLastColon(text);
-        }
-        return null;
-    }
-
-    public String getInstanceOf() {
-        Class<?> klass = component.getClass();
-        while (klass != null && klass.getPackage() != null && !klass.getPackage().getName().startsWith("javax.swing")
-                && !klass.getPackage().getName().startsWith("java.awt")) {
+    public final String getInstanceOf() {
+        Class<?> klass = node.getClass();
+        while (klass != null && klass.getPackage() != null && !klass.getPackage().getName().startsWith("javafx.scene.control")) {
             klass = klass.getSuperclass();
         }
         return klass == null ? null : klass.getName();
     }
 
-    public Point getPosition() {
-        return component.getLocationOnScreen();
-    }
-
-    public String getPrecedingLabel() {
-        Container container = component.getParent();
-        if (container == null)
-            return null;
-        List<Component> allComponents = findAllComponents();
-        // Find labels in the same row (LTR)
-        // In the same row: labelx < componentx, labely >= componenty
-        Point locComponent = component.getLocationOnScreen();
-        List<Component> rowLeft = new ArrayList<Component>();
-        for (Component label : allComponents) {
-            Point locLabel = label.getLocationOnScreen();
-            if (!(label instanceof JPanel) && locLabel.getX() < locComponent.getX() && locLabel.getY() >= locComponent.getY()
-                    && locLabel.getY() <= locComponent.getY() + component.getHeight() && !(label instanceof Filler)) {
-                rowLeft.add(label);
-            }
-        }
-        Collections.sort(rowLeft, new Comparator<Component>() {
-            public int compare(Component o1, Component o2) {
-                Point locO1 = o1.getLocationOnScreen();
-                Point locO2 = o2.getLocationOnScreen();
-                return (int) (locO1.getX() - locO2.getX());
-            }
-        });
-        if (rowLeft.size() > 0 && rowLeft.get(rowLeft.size() - 1) instanceof JLabel) {
-            return stripLastColon(((JLabel) rowLeft.get(rowLeft.size() - 1)).getText().trim());
-        }
-        return null;
-    }
-
-    private List<Component> findAllComponents() {
-        Component top = getTopWindow(component);
-        List<Component> allComponents = new ArrayList<Component>();
+    private List<Node> findAllComponents() {
+        Node top = getTopWindow(node);
+        List<Node> allComponents = new ArrayList<Node>();
         if (top != null)
             fillUp(allComponents, top);
         return allComponents;
     }
 
-    private void fillUp(List<Component> allComponents, Component c) {
-        if (!c.isVisible() || !c.isShowing())
+    private void fillUp(List<Node> allComponents, Node c) {
+        if (!c.isVisible())
             return;
         allComponents.add(c);
-        if (c instanceof Container) {
-            Component[] components = ((Container) c).getComponents();
-            for (Component component : components) {
+        if (c instanceof Parent) {
+            ObservableList<Node> components = ((Parent) c).getChildrenUnmodifiable();
+            for (Node component : components) {
                 fillUp(allComponents, component);
-            }
-        }
-        if (c instanceof Window) {
-            Window[] ownedWindows = ((Window) c).getOwnedWindows();
-            for (Window window : ownedWindows) {
-                fillUp(allComponents, window);
             }
         }
     }
 
-    private Component getTopWindow(Component c) {
+    private Node getTopWindow(Node c) {
         while (c != null) {
-            if (c instanceof Window || ContextManager.isContext(c))
+            if (ContextManager.isContext(c))
                 return c;
             c = c.getParent();
         }
         return null;
     }
 
-    public String getOMapClassName() {
-        if (component instanceof Frame || component instanceof Window || component instanceof Dialog
-                || component instanceof JInternalFrame) {
-            String className = component.getClass().getName();
-            Package pkg = component.getClass().getPackage();
-            if (pkg == null)
-                return className;
-            String pkgName = pkg.getName();
-            if (!pkgName.startsWith("javax.swing") && !pkgName.startsWith("java.awt"))
-                return className;
-            if (className.equals("javax.swing.ColorChooserDialog"))
-                return className;
-            if (component instanceof JDialog) {
-                Component[] components = ((JDialog) component).getContentPane().getComponents();
-                if (components.length == 1 && components[0] instanceof JFileChooser)
-                    return JFileChooser.class.getName() + "#Dialog";
-                if (components.length == 1 && components[0] instanceof JOptionPane)
-                    return JOptionPane.class.getName() + "#Dialog_" + ((JOptionPane) components[0]).getMessageType() + "_"
-                            + ((JOptionPane) components[0]).getOptionType();
-            }
-            return null;
-        }
+    public final String getOMapClassName() {
         return null;
     }
 
-    public String getOMapClassSimpleName() {
-        if (component instanceof Frame || component instanceof Window || component instanceof Dialog
-                || component instanceof JInternalFrame) {
-            String className = component.getClass().getName();
-            String simpleName = component.getClass().getSimpleName();
-            Package pkg = component.getClass().getPackage();
-            if (pkg == null)
-                return simpleName;
-            String pkgName = pkg.getName();
-            if (!pkgName.startsWith("javax.swing") && !pkgName.startsWith("java.awt"))
-                return simpleName;
-            if (className.equals("javax.swing.ColorChooserDialog"))
-                return simpleName;
-            if (component instanceof JDialog) {
-                Component[] components = ((JDialog) component).getContentPane().getComponents();
-                if (components.length == 1 && components[0] instanceof JFileChooser)
-                    return JFileChooser.class.getSimpleName() + "#Dialog";
-                if (components.length == 1 && components[0] instanceof JOptionPane)
-                    return JOptionPane.class.getSimpleName() + "#Dialog";
-            }
-            return null;
-        }
+    final public String getOMapClassSimpleName() {
         return null;
     }
 
-    public int getIndexOfType() {
-        List<Component> allComponents = findAllComponents();
+    final public int getIndexOfType() {
+        List<Node> allComponents = findAllComponents();
         int index = 0;
-        Class<? extends Component> klass = component.getClass();
-        for (Component c : allComponents) {
-            if (c == component)
+        Class<? extends Node> klass = node.getClass();
+        for (Node c : allComponents) {
+            if (c == node)
                 return index;
             if (c.getClass().equals(klass))
                 index++;
@@ -527,24 +350,24 @@ public class JavaElementPropertyAccessor {
         return -1;
     }
 
-    public String getFieldName() {
+    final public String getFieldName() {
         List<String> fieldNames = getFieldNames();
         if (fieldNames.size() == 0)
             return null;
         return fieldNames.get(0);
     }
 
-    public List<String> getFieldNames() {
+    final public List<String> getFieldNames() {
         List<String> fieldNames = new ArrayList<String>();
-        Container container = component.getParent();
+        Parent container = node.getParent();
         while (container != null) {
-            findFields(component, container, fieldNames);
+            findFields(node, container, fieldNames);
             container = container.getParent();
         }
         return fieldNames;
     }
 
-    private void findFields(Component current, Component container, List<String> fieldNames) {
+    private void findFields(Node current, Node container, List<String> fieldNames) {
         Field[] declaredFields = container.getClass().getDeclaredFields();
         for (Field field : declaredFields) {
             boolean accessible = field.isAccessible();
@@ -560,96 +383,34 @@ public class JavaElementPropertyAccessor {
         }
     }
 
-    public String getCText() {
+    final public String getCText() {
         Object o = getAttributeObject(getComponent(), "text");
         if (o == null || !(o instanceof String) || o.equals(""))
             return null;
         return (String) o;
     }
 
-    public String getButtonText() {
-        if (component instanceof AbstractButton)
-            return getCText();
-        return null;
+    final public String getClassName() {
+        return node.getClass().getName();
     }
 
-    public String getButtonIconFile() {
-        if (component instanceof AbstractButton) {
-            return getIconFile();
-        }
-        return null;
+    final public boolean getEnabled() {
+        return !node.isDisabled();
     }
 
-    public String getIconFile() {
-        Object o = getAttributeObject(getComponent(), "icon");
-        if (o == null || !(o instanceof Icon)) {
-            return null;
-        }
-        Icon icon = (Icon) o;
-        if (icon instanceof ImageIcon) {
-            String description = ((ImageIcon) icon).getDescription();
-            if (description != null && description.length() != 0)
-                return mapFromImageDescription(description);
-        }
-        return null;
+    final public String getToolTipText() {
+        return node.getAccessibleHelp();
     }
 
-    public static String mapFromImageDescription(String description) {
-        try {
-            String name = new URL(description).getPath();
-            if (name.lastIndexOf('/') != -1)
-                name = name.substring(name.lastIndexOf('/') + 1);
-            if (name.lastIndexOf('.') != -1)
-                name = name.substring(0, name.lastIndexOf('.'));
-            return name;
-        } catch (MalformedURLException e) {
-            return description;
-        }
+    final public String getName() {
+        return getComponent().getId();
     }
 
-    public String getClassName() {
-        return component.getClass().getName();
+    final public String getAccessibleText() {
+        return node.getAccessibleText();
     }
 
-    public boolean getEnabled() {
-        return component.isEnabled();
-    }
-
-    public String getToolTipText() {
-        if (component instanceof JComponent)
-            return ((JComponent) component).getToolTipText();
-        return null;
-    }
-
-    public String getName() {
-        return getComponent().getName();
-    }
-
-    private String stripLastColon(String name) {
-        if (name.endsWith(":")) {
-            name = name.substring(0, name.length() - 1).trim();
-        }
-        if (name.length() == 0)
-            return null;
-        return name;
-    }
-
-    public String getMenuKey() {
-        int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-        if ((menuShortcutKeyMask & Event.CTRL_MASK) == Event.CTRL_MASK)
-            return "Control";
-        if ((menuShortcutKeyMask & Event.META_MASK) == Event.META_MASK)
-            return "Meta";
-        return "";
-    }
-
-    public String getAccessibleName() {
-        if (component instanceof JTabbedPane)
-            return null;
-        return component.getAccessibleContext().getAccessibleName();
-    }
-
-    public Point getMidpoint() {
+    final public Point2D getMidpoint() {
         EventQueueWait.call_noexc(this, "_makeVisible");
         return EventQueueWait.call_noexc(this, "_getMidpoint");
     }
@@ -658,22 +419,9 @@ public class JavaElementPropertyAccessor {
         return null;
     }
 
-    public Point _getMidpoint() {
-        java.awt.Dimension d = component.getSize();
-        return new Point(d.width / 2, d.height / 2);
-    }
-
-    public String getLabeledBy() {
-        if (getComponent() instanceof JComponent) {
-            try {
-                JLabel label = (JLabel) ((JComponent) getComponent()).getClientProperty("labeledBy");
-                if (label != null && label.getText() != null && !label.getText().equals("")) {
-                    return stripLastColon(label.getText().trim());
-                }
-            } catch (ClassCastException e) {
-            }
-        }
-        return null;
+    public Point2D _getMidpoint() {
+        Bounds d = node.getBoundsInParent();
+        return new Point2D(d.getWidth() / 2, d.getHeight() / 2);
     }
 
     public static final List<String> LAST_RESORT_RECOGNITION_PROPERTIES = new ArrayList<String>();
@@ -683,9 +431,9 @@ public class JavaElementPropertyAccessor {
         LAST_RESORT_RECOGNITION_PROPERTIES.add("indexOfType");
     }
 
-    public Map<String, String> findURP(List<List<String>> rp) {
-        List<Component> allComponents = findAllComponents();
-        allComponents.remove(this.component);
+    public final Map<String, String> findURP(List<List<String>> rp) {
+        List<Node> allComponents = findAllComponents();
+        allComponents.remove(this.node);
         for (List<String> list : rp) {
             Map<String, String> rpValues = findValues(list);
             if (rpValues == null)
@@ -709,15 +457,15 @@ public class JavaElementPropertyAccessor {
         return rpValues;
     }
 
-    private boolean hasAComponentsByRP(List<Component> allComponents, Map<String, String> rpValues) {
-        for (Component component : allComponents) {
+    private boolean hasAComponentsByRP(List<Node> allComponents, Map<String, String> rpValues) {
+        for (Node component : allComponents) {
             if (matchesRP(component, rpValues))
                 return true;
         }
         return false;
     }
 
-    private boolean matchesRP(Component component, Map<String, String> rpValues) {
+    private boolean matchesRP(Node component, Map<String, String> rpValues) {
         JavaElementPropertyAccessor pa = new JavaElementPropertyAccessor(component);
         Set<Entry<String, String>> entrySet = rpValues.entrySet();
         for (Entry<String, String> entry : entrySet) {
@@ -730,7 +478,7 @@ public class JavaElementPropertyAccessor {
     @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((component == null) ? 0 : component.hashCode());
+        result = prime * result + ((node == null) ? 0 : node.hashCode());
         return result;
     }
 
@@ -742,15 +490,15 @@ public class JavaElementPropertyAccessor {
         if (getClass() != obj.getClass())
             return false;
         JavaElementPropertyAccessor other = (JavaElementPropertyAccessor) obj;
-        if (component == null) {
-            if (other.component != null)
+        if (node == null) {
+            if (other.node != null)
                 return false;
-        } else if (!component.equals(other.component))
+        } else if (!node.equals(other.node))
             return false;
         return true;
     }
 
-    public Map<String, String> findAttributes(Collection<String> props) {
+    public final Map<String, String> findAttributes(Collection<String> props) {
         Map<String, String> r = new HashMap<String, String>();
         for (String prop : props) {
             String value = getAttribute(prop);
@@ -760,33 +508,7 @@ public class JavaElementPropertyAccessor {
         return r;
     }
 
-    public static class InternalFrameMonitor {
-
-        static final List<JInternalFrame> frames = new ArrayList<JInternalFrame>();
-
-        public static int getIndex(Component component) {
-            return InternalFrameMonitor.frames.indexOf(component);
-        }
-
-        public static void init() {
-            Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-                public void eventDispatched(AWTEvent event) {
-                    if (event.getSource() instanceof JInternalFrame) {
-                        if (event.getID() == ComponentEvent.COMPONENT_SHOWN)
-                            InternalFrameMonitor.frames.add((JInternalFrame) event.getSource());
-                        if (event.getID() == ComponentEvent.COMPONENT_HIDDEN)
-                            InternalFrameMonitor.frames.remove(event.getSource());
-                    }
-                }
-            }, AWTEvent.COMPONENT_EVENT_MASK);
-        }
-    }
-
-    public int getInternalFrameIndex2() {
-        return InternalFrameMonitor.getIndex(component);
-    }
-
-    public String callMethod(JSONObject callDetails) {
+    public final String callMethod(JSONObject callDetails) {
         String methodName = callDetails.getString("method");
         JSONObject parameters = callDetails.getJSONObject("parameters");
         try {
@@ -799,53 +521,6 @@ public class JavaElementPropertyAccessor {
         } catch (InvocationTargetException e) {
         }
         return null;
-    }
-
-    public Color getBackground() {
-        return component.getBackground();
-    }
-
-    public Color getForeground() {
-        return component.getForeground();
-    }
-
-    public Font getFont() {
-        return component.getFont();
-    }
-
-    public String getFontFamily() {
-        return component.getFont().getFamily();
-    }
-
-    public Border getBorder() {
-        if (component instanceof JComponent)
-            return ((JComponent) component).getBorder();
-        return null;
-    }
-
-    public Integer getColumnCount() {
-        if (component instanceof JTable)
-            return ((JTable) component).getColumnCount();
-        if (component instanceof JTableHeader)
-            return ((JTableHeader) component).getColumnModel().getColumnCount();
-        return null;
-    }
-
-    public Integer getRowCount() {
-        if (component instanceof JTable)
-            return ((JTable) component).getRowCount();
-        return null;
-    }
-
-    public String getColumnName(int c) {
-        JTable table = (JTable) component;
-        JTableHeader tableHeader = table.getTableHeader();
-        String columnName;
-        if(tableHeader != null)
-            columnName = tableHeader.getColumnModel().getColumn(c).getHeaderValue().toString();
-        else
-            columnName = table.getColumnName(c);
-        return columnName;
     }
 
     public static String removeClassName(Object object) {

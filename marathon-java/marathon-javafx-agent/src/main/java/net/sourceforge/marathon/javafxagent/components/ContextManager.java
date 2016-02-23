@@ -1,21 +1,20 @@
 package net.sourceforge.marathon.javafxagent.components;
 
-import java.awt.Component;
 import java.util.LinkedList;
 
-import javax.swing.JInternalFrame;
+import javafx.scene.Node;
 
 public class ContextManager {
 
     private static class InstanceCheck implements IContextChecker {
 
-        private Class<? extends Component> componentClass;
+        private Class<? extends Node> componentClass;
 
-        public InstanceCheck(Class<? extends Component> klass) {
+        public InstanceCheck(Class<? extends Node> klass) {
             componentClass = klass;
         }
 
-        @Override public boolean isContext(Component c) {
+        @Override public boolean isContext(Node c) {
             return componentClass.isInstance(c);
         }
 
@@ -24,10 +23,14 @@ public class ContextManager {
     private static LinkedList<IContextChecker> containers = new LinkedList<IContextChecker>();
 
     static {
-        add(JInternalFrame.class);
+        add(new IContextChecker() {
+            @Override public boolean isContext(Node c) {
+                return c.getScene().getRoot() == c;
+            }
+        });
     }
 
-    public static void add(Class<? extends Component> klass) {
+    public static void add(Class<? extends Node> klass) {
         add(new InstanceCheck(klass));
     }
 
@@ -35,7 +38,7 @@ public class ContextManager {
         containers.addFirst(e);
     }
 
-    public static boolean isContext(Component c) {
+    public static boolean isContext(Node c) {
         for (IContextChecker checker : containers) {
             if (checker.isContext(c))
                 return true;

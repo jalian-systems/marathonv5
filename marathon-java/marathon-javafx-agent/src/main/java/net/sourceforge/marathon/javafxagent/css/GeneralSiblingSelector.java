@@ -1,12 +1,13 @@
 package net.sourceforge.marathon.javafxagent.css;
 
-import java.awt.Component;
-import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.*;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 
@@ -77,16 +78,17 @@ public class GeneralSiblingSelector implements Selector {
     protected List<IJavaElement> found(List<IJavaElement> pElements, IJavaAgent driver) {
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         for (IJavaElement je : pElements) {
-            Component component = je.getComponent();
-            if (!(component instanceof Container))
+            Node component = je.getComponent();
+            if (!(component instanceof Parent))
                 continue;
             int index = getIndexOfComponentInParent(component);
             if (index < 0)
                 continue;
-            Container parent = component.getParent();
+            Parent parent = component.getParent();
             JWindow topContainer = driver.switchTo().getTopContainer();
-            for (int i = index + 1; i < parent.getComponentCount(); i++) {
-                Component c = parent.getComponent(i);
+            ObservableList<Node> children = parent.getChildrenUnmodifiable();
+            for (int i = index + 1; i < children.size(); i++) {
+                Node c = children.get(i);
                 IJavaElement je2 = JavaElementFactory.createElement(c, driver, driver.switchTo().getTopContainer());
                 if (sibling.matchesSelector(je2).size() > 0) {
                     IJavaElement e = topContainer.addElement(JavaElementFactory.createElement(c, driver, topContainer));
@@ -98,13 +100,13 @@ public class GeneralSiblingSelector implements Selector {
         return r;
     }
 
-    private int getIndexOfComponentInParent(Component component) {
-        Container parent = component.getParent();
+    private int getIndexOfComponentInParent(Node component) {
+        Parent parent = component.getParent();
         if (parent == null)
             return -1;
-        Component[] components = parent.getComponents();
-        for (int i = 0; i < components.length; i++) {
-            if (components[i] == component)
+        ObservableList<Node> components = parent.getChildrenUnmodifiable();
+        for (int i = 0; i < components.size(); i++) {
+            if (components.get(i) == component)
                 return i;
         }
         return -1;

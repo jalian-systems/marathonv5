@@ -1,27 +1,27 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
+import com.sun.javafx.stage.StageHelper;
+
+import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
 public class WindowTitle {
 
-    private Window window;
+    private Stage window;
 
-    public WindowTitle(Window window) {
+    public WindowTitle(Stage window) {
         this.window = window;
     }
 
     public String getTitle() {
         String title = getTitle(window);
-        Window[] windows = Window.getWindows();
+        ObservableList<Stage> windows = StageHelper.getStages();
         String original = title;
         int index = 1;
-        for (Window w : windows) {
+        for (Stage w : windows) {
             if (w == window)
                 return title;
-            if (!w.isVisible())
+            if (!w.isShowing())
                 continue;
             String wTitle = getTitle(w);
             if (original.equals(wTitle))
@@ -30,17 +30,10 @@ public class WindowTitle {
         return title;
     }
 
-    private String getTitle(Component component) {
-        String title = null;
-        if (component instanceof Dialog) {
-            title = ((Dialog) component).getTitle();
-        } else if (component instanceof Frame)
-            title = ((Frame) component).getTitle();
-
-        if (title == null || "".equals(title))
-            title = component.getName();
-        if (title == null || "".equals(title))
-            title = component.getClass().getName();
+    private String getTitle(Stage component) {
+        String title = component.getTitle();
+        if(title == null)
+            return component.getClass().getName();
         return title;
     }
 

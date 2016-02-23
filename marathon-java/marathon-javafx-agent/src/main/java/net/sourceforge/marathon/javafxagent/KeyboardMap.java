@@ -1,136 +1,64 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.event.KeyEvent;
-import java.awt.im.InputContext;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import javafx.scene.input.KeyCode;
 
 public class KeyboardMap {
 
     private char c;
 
-    private static Map<Character, List<CharSequence[]>> keys;
+    private static final class KeyboardMapEntry {
+        public int modifiersEx;
+        public char c;
+        public int keyCode;
+
+        public KeyboardMapEntry(int m, char c, int keyCode) {
+            modifiersEx = m;
+            this.c = c;
+            this.keyCode = keyCode;
+        }
+    }
+
+    private static Map<Character, KeyboardMapEntry> keyMap;
 
     static {
-        keys = new HashMap<Character, List<CharSequence[]>>();
-        File marathon = new File(System.getProperty("user.home"), ".marathon");
-        Locale locale = InputContext.getInstance().getLocale();
-        String fileName = locale.getLanguage() + "_" + locale.getCountry() + ".kb";
-        File kmapFile = new File(marathon, fileName);
-        if (!kmapFile.exists()) {
-            kmapFile = new File(marathon, "default.kb");
-            if (!kmapFile.exists())
-                kmapFile = null;
+        keyMap = new HashMap<Character, KeyboardMap.KeyboardMapEntry>();
+        for (char c = 'a'; c <= 'z'; c++) {
+            keyMap.put(c, new KeyboardMapEntry(0, c, KeyCode.A.impl_getCode() + (c - 'a')));
+            keyMap.put(Character.toUpperCase(c), new KeyboardMapEntry(KeyCode.SHIFT.impl_getCode(), Character.toUpperCase(c),
+                    KeyCode.A.impl_getCode() + (c - 'a')));
         }
-        InputStream is = null;
-        if (kmapFile != null) {
-            try {
-                is = new FileInputStream(kmapFile);
-            } catch (FileNotFoundException e) {
-            }
+        for (char c = '0'; c < '9'; c++) {
+            keyMap.put(c, new KeyboardMapEntry(0, c, KeyCode.DIGIT0.impl_getCode() + (c - '0')));
         }
-        if (is == null) {
-            is = KeyboardMap.class.getResourceAsStream("layouts/" + fileName);
-            if (is == null)
-                is = KeyboardMap.class.getResourceAsStream("layouts/default.kb");
-        }
-        if (is == null)
-            throw new RuntimeException("Unable to load keyboard map");
-        try {
-            loadEntries(is);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to load keyboard map", e);
-        }
+        keyMap.put('\n', new KeyboardMapEntry(0, '\n', KeyCode.ENTER.impl_getCode()));
     }
 
     public KeyboardMap(char c) {
         this.c = c;
     }
 
-    private static void loadEntries(InputStream is) throws IOException {
-        Pattern p = Pattern.compile("\\(([^\\)]*)\\)");
-        BufferedReader r = new BufferedReader(new InputStreamReader(is, Charset.forName("utf-8")));
-        String line = r.readLine();
-        while (line != null) {
-            if (line.trim().length() == 0) {
-                line = r.readLine();
-                continue;
-            }
-            char c = line.charAt(0);
-            line = line.substring(1).trim();
-            Matcher matcher = p.matcher(line);
-            List<CharSequence[]> lcs = new ArrayList<CharSequence[]>();
-            while (matcher.find()) {
-                lcs.add(getSequence(matcher.group(1)));
-            }
-            keys.put(c, lcs);
-            line = r.readLine();
-        }
-        r.close();
-        if (keys.get(' ') == null) {
-            List<CharSequence[]> lcs = new ArrayList<CharSequence[]>();
-            CharSequence[] cs = new CharSequence[] { KeyEvent.VK_SPACE + "" };
-            lcs.add(cs);
-            keys.put(' ', lcs);
-        }
-        if (keys.get('\n') == null) {
-            List<CharSequence[]> lcs = new ArrayList<CharSequence[]>();
-            CharSequence[] cs = new CharSequence[] { KeyEvent.VK_ENTER + "" };
-            lcs.add(cs);
-            keys.put('\n', lcs);
-        }
+    public int getModifiersEx() {
+        KeyboardMapEntry entry = keyMap.get(c);
+        if (entry == null)
+            return 0;
+        return entry.modifiersEx;
     }
 
-    private static CharSequence[] getSequence(String keys) {
-        List<CharSequence> lcs = new ArrayList<CharSequence>();
-        Scanner scanner = new Scanner(keys);
-        try {
-            while (scanner.hasNext()) {
-                String key = scanner.next();
-                if (key.equals("SHIFT")) {
-                    lcs.add(JavaAgentKeys.SHIFT);
-                } else if (key.equals("ALT")) {
-                    lcs.add(JavaAgentKeys.ALT);
-                } else if (key.equals("META")) {
-                    lcs.add(JavaAgentKeys.META);
-                } else if (key.equals("CONTROL")) {
-                    lcs.add(JavaAgentKeys.CONTROL);
-                } else {
-                    String vkCode = "VK_" + key;
-                    try {
-                        lcs.add(KeyEvent.class.getDeclaredField(vkCode).get(null) + "");
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } finally {
-            scanner.close();
-        }
-        return lcs.toArray(new CharSequence[lcs.size()]);
+    public char getChar() {
+        KeyboardMapEntry entry = keyMap.get(c);
+        if (entry == null)
+            return c;
+        return entry.c;
     }
 
-    public List<CharSequence[]> getKeys() {
-        return keys.get(c);
+    public int getKeyCode() {
+        KeyboardMapEntry entry = keyMap.get(c);
+        if (entry == null)
+            return KeyCode.UNDEFINED.impl_getCode();
+        return entry.keyCode;
     }
+
 }

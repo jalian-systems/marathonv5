@@ -1,17 +1,15 @@
 package net.sourceforge.marathon.javafxagent;
 
-import java.awt.AWTEvent;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.AWTEventListener;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.logging.Logger;
 
-import net.sourceforge.marathon.javafxagent.JavaElementPropertyAccessor.InternalFrameMonitor;
+import com.sun.javafx.stage.StageHelper;
+
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.server.JavaServer;
 
 public class JavaHook {
@@ -22,64 +20,40 @@ public class JavaHook {
     public static void premain(final String args) throws Exception {
         logger.info("JavaVersion: " + System.getProperty("java.version"));
         logger.info("JavaHome: " + System.getProperty("java.home"));
-        InternalFrameMonitor.init();
         final int port;
         if (args != null && args.trim().length() > 0)
             port = Integer.parseInt(args.trim());
         else
             throw new Exception("Port number not specified");
         windowTitle = System.getProperty("start.window.title", "");
-        final AWTEventListener listener = new AWTEventListener() {
+        ObservableList<Stage> stages = StageHelper.getStages();
+        stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                 if (done)
                     return;
-                logger.info("Checking for window: " + Thread.currentThread());
-                if (!"".equals(windowTitle)) {
-                    if (!isValidWindow()) {
-                        logger.info("Not a valid window");
-                        return;
+                c.next();
+                if (c.wasAdded()) {
+                    logger.info("Checking for window: " + Thread.currentThread());
+                    if (!"".equals(windowTitle)) {
+                        logger.info("Checking for windowTitle is not implemented.. ignoring and continuing...");
                     }
-                }
-                done = true;
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    @Override public Object run() {
-                        try {
-                            JavaServer server = new JavaServer(port, true);
-                            server.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        @Override public Object run() {
+                            try {
+                                JavaServer server = new JavaServer(port, true);
+                                server.start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            done = true;
+                            return null;
                         }
-                        return null;
-                    }
-                });
-            }
-
-            private boolean isValidWindow() {
-                Window[] windows = Window.getWindows();
-                for (Window window : windows) {
-                    if (windowTitle.startsWith("/")) {
-                        if (getTitle(window).matches(windowTitle.substring(1)))
-                            return true;
-                    } else {
-                        if (getTitle(window).equals(windowTitle))
-                            return true;
-                    }
+                    });
                 }
-                return false;
             }
-
-            private String getTitle(Window window) {
-                if (window instanceof Dialog)
-                    return ((Dialog) window).getTitle();
-                else if (window instanceof Frame)
-                    return ((Frame) window).getTitle();
-                return window.getClass().getName();
-            }
-
-        };
-        Toolkit.getDefaultToolkit().addAWTEventListener(listener, AWTEvent.WINDOW_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK);
+        });
     }
 
 }
