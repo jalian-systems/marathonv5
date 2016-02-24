@@ -76,4 +76,4 @@ marathon-java/marathon-javafx-recorder/.gitignore
 marathon-java/marathon-javafx-recorder/marathon-javafx-recorder-4.0.1.0.jar
 marathon-java/marathon-javafx-agent/.externalToolBuilders/
 marathon-java/marathon-javafx-recorder/.externalToolBuilders/
-
+marathon-java/marathon-javafx-agent/test-output/

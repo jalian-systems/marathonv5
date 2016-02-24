@@ -176,10 +176,13 @@ public abstract class EventQueueWait extends Wait {
             final boolean[] lock = new boolean[] { false };
             Runnable r1 = new Runnable() {
                 @Override public void run() {
-                    r.run();
-                    synchronized (lock) {
-                        lock[0] = true;
-                        lock.notifyAll();
+                    try {
+                        r.run();
+                    } finally {
+                        synchronized (lock) {
+                            lock[0] = true;
+                            lock.notifyAll();
+                        }
                     }
                 }
             };
@@ -187,7 +190,7 @@ public abstract class EventQueueWait extends Wait {
             synchronized (lock) {
                 while (true) {
                     try {
-                        if(lock[0])
+                        if (lock[0])
                             break;
                         lock.wait();
                     } catch (InterruptedException e) {

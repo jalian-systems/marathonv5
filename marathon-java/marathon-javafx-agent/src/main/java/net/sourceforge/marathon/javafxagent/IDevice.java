@@ -1,6 +1,7 @@
 package net.sourceforge.marathon.javafxagent;
 
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 
 public interface IDevice {
 
@@ -26,6 +27,15 @@ public interface IDevice {
                 return RIGHT;
             throw new JavaAgentException("JavaAgent currently does not support more than 3 mouse buttons", null);
         }
+
+        public MouseButton getMouseButton() {
+            if (button == 0)
+                return MouseButton.PRIMARY;
+            else if (button == 1)
+                return MouseButton.MIDDLE;
+            else
+                return MouseButton.SECONDARY;
+        }
     }
 
     void sendKeys(Node component, CharSequence... keysToSend);
@@ -40,7 +50,7 @@ public interface IDevice {
 
     void moveto(Node component);
 
-    void moveto(Node component, int xoffset, int yoffset);
+    void moveto(Node component, double xoffset, double yoffset);
 
     void click(Node component, Buttons button, int clickCount, double xoffset, double yoffset);
 
