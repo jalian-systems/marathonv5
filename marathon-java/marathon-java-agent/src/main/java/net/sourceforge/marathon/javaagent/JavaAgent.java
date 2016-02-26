@@ -35,12 +35,12 @@ public class JavaAgent implements IJavaAgent {
 
     public JavaAgent() {
         this(Device.Type.EVENT_QUEUE);
-        options = new JOptions(this);
     }
 
     public JavaAgent(Type type) {
         devices = Device.getDevice(type);
         targetLocator = new JavaTargetLocator(this);
+        options = new JOptions(this);
     }
 
     /* (non-Javadoc)

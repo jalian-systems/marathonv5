@@ -88,3 +88,10 @@ marathon-javafx/.gitignore
 marathon-java/marathon-java-agent/.externalToolBuilders/
 marathon-java/marathon-java-recorder/.externalToolBuilders/
 marathon-java/omap-configuration.yaml
+marathon-java/marathon-java-agent/test-output/
+marathon-java/marathon-java-driver/test-output/
+marathon-java/marathon-java-recorder/test-output/
+marathon-java/marathon-java-runtime/test-output/
+marathon-javafx/marathon-javafx-recorder/bin-test/
+marathon-javafx/marathon-javafx-recorder/bin/
+marathon-javafx/marathon-javafx-recorder/test-output/
