@@ -85,3 +85,6 @@ marathon-javafx/build/
 marathon-javafx/omap
 marathon-javafx/omap-configuration.yaml
 marathon-javafx/.gitignore
+marathon-java/marathon-java-agent/.externalToolBuilders/
+marathon-java/marathon-java-recorder/.externalToolBuilders/
+marathon-java/omap-configuration.yaml
