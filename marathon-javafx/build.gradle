@@ -10,15 +10,15 @@ dependencies {
   testCompile project(":marathon-java:marathon-test-helpers")
   testCompile project(":marathon-java")
   testCompile project(":marathon-java:marathon-java-driver")
-  testCompile project(":marathon-java:marathon-java-agent")
-  testCompile project(":marathon-java:marathon-java-recorder")
+  testCompile project(":marathon-javafx:marathon-javafx-agent")
+  testCompile project(":marathon-javafx:marathon-javafx-recorder")
   testCompile project(":marathon-java:marathon-java-runtime")
   testCompile project(":marathon:ruby-selenium-webdriver")
   runtime project(":marathon-javafx")
   runtime project(":marathon-java")
   runtime project(":marathon-java:marathon-java-driver")
-  runtime project(":marathon-java:marathon-java-agent")
-  runtime project(":marathon-java:marathon-java-recorder")
+  runtime project(":marathon-javafx:marathon-javafx-agent")
+  runtime project(":marathon-javafx:marathon-javafx-recorder")
   runtime project(":marathon-java:marathon-java-runtime")
   runtime project(":marathon:ruby-selenium-webdriver")
 }
@@ -99,8 +99,8 @@ test {
   useTestNG()
   systemProperty 'file.encoding', 'utf8'
   testLogging.showStandardStreams = true
-  systemProperty 'marathon.agent.file', project(":marathon-java:marathon-java-agent").tasks.jar.archivePath
-  systemProperty 'marathon.recorder.file', project(":marathon-java:marathon-java-recorder").tasks.jar.archivePath
+  systemProperty 'marathon.agent.file', project(":marathon-javafx:marathon-javafx-agent").tasks.jar.archivePath
+  systemProperty 'marathon.recorder.file', project(":marathon-javafx:marathon-javafx-recorder").tasks.jar.archivePath
   systemProperty 'applet.html', project(":marathon-java:marathon-test-helpers").file("swingset3/applet.html").path
   systemProperty 'SwingSet3.jnlp', project(":marathon-java:marathon-test-helpers").file("swingset3/SwingSet3.jnlp").path
 }

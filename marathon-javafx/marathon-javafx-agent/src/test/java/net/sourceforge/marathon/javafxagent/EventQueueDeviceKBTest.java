@@ -26,7 +26,7 @@ import javafx.scene.input.KeyCode;
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 try {
-                    text.append(EventQueueWait.call(textField, "getText"));
+                    text.append((String)EventQueueWait.call(textField, "getText"));
                 } catch (Exception e) {
                 }
             }
@@ -75,7 +75,7 @@ import javafx.scene.input.KeyCode;
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 try {
-                    actual.append(EventQueueWait.call(textField, "getSelectedText"));
+                    actual.append((String)EventQueueWait.call(textField, "getSelectedText"));
                 } catch (Exception e) {
                 }
             }

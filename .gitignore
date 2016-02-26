@@ -34,7 +34,7 @@ marathon-java/marathon-test-helpers/.project
 marathon-java/marathon-test-helpers/.settings/
 marathon-java/marathon-test-helpers/build/
 marathon-java/omap
-marathon-java/src/main/java/
+marathon-java/src/main/java/Version.java
 marathon/.classpath
 marathon/.project
 marathon/.settings/
@@ -77,3 +77,11 @@ marathon-java/marathon-javafx-recorder/marathon-javafx-recorder-4.0.1.0.jar
 marathon-java/marathon-javafx-agent/.externalToolBuilders/
 marathon-java/marathon-javafx-recorder/.externalToolBuilders/
 marathon-java/marathon-javafx-agent/test-output/
+marathon-javafx/src/main/java/Version.java
+marathon-javafx/.classpath
+marathon-javafx/.project
+marathon-javafx/.settings/
+marathon-javafx/build/
+marathon-javafx/omap
+marathon-javafx/omap-configuration.yaml
+marathon-javafx/.gitignore

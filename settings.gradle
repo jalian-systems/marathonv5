@@ -7,6 +7,6 @@ include 'marathon:JSON-java', 'marathon:nanohttpd-2.1.1', 'marathon:ruby-seleniu
 					 'marathon-java:marathon-java-agent', 'marathon-java:marathon-test-helpers',
 					 'marathon-java:marathon-java-driver', 'marathon-java:marathon-java-runtime',
 					 'marathon-java:marathon-java-recorder', ':marathon-java', 'marathon-java:marathon-kbmap-tool',
-                                         'marathon-java:marathon-javafx-agent', 'marathon-java:marathon-javafx-recorder',
+                                         'marathon-javafx:marathon-javafx-agent', 'marathon-javafx:marathon-javafx-recorder',
                                          ':marathon-javafx'
 

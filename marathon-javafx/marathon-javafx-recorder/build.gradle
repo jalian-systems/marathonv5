@@ -6,15 +6,30 @@ configurations {
   antBuildXML
 }
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
 dependencies {
   compile project(":marathon:JSON-java")
-  compile project(':marathon-java:marathon-javafx-agent')
+  compile project(':marathon-javafx:marathon-javafx-agent')
   compile project(":marathon:nanohttpd-2.1.1")
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-java:marathon-test-helpers")
-  testCompile project(':marathon-java:marathon-javafx-agent')
+  testCompile project(':marathon-javafx:marathon-javafx-agent')
   antBuildXML project(":marathon:JSON-java").files("bin")
-  antBuildXML project(':marathon-java:marathon-javafx-agent').files("bin")
+  antBuildXML project(':marathon-javafx:marathon-javafx-agent').files("bin")
   antBuildXML project(":marathon:nanohttpd-2.1.1").files("bin")
 }
 
@@ -31,4 +46,6 @@ jar {
 
 test {
   useTestNG()
+  if(project.properties['jdk8home'])
+     executable = project.properties['jdk8home'] + '/bin/java'
 }

@@ -9,6 +9,21 @@ configurations {
   antBuildXML
 }
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
 dependencies {
   compile project(":marathon:JSON-java")
   compile project(":marathon:nanohttpd-2.1.1")
@@ -35,4 +50,6 @@ test {
   useTestNG()
   systemProperty 'file.encoding', 'utf8'
   testLogging.showStandardStreams = true
+  if(project.properties['jdk8home'])
+     executable = project.properties['jdk8home'] + '/bin/java'
 }
