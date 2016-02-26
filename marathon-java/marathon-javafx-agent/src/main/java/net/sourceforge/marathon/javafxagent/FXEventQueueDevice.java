@@ -3,6 +3,7 @@ package net.sourceforge.marathon.javafxagent;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.event.EventTarget;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
@@ -20,10 +21,10 @@ public class FXEventQueueDevice implements IDevice {
         private boolean button1Pressed = false;
         private boolean button2Pressed = false;
         private boolean button3Pressed = false;
-        private Node node;
+        private EventTarget node;
         private double y;
         private double x;
-        private Node dragSource;
+        private EventTarget dragSource;
 
         public DeviceState() {
         }
@@ -131,7 +132,7 @@ public class FXEventQueueDevice implements IDevice {
             return MouseButton.NONE;
         }
 
-        public void setNode(Node node) {
+        public void setNode(EventTarget node) {
             if (this.node != node) {
                 x = 0;
                 y = 0;
@@ -139,7 +140,7 @@ public class FXEventQueueDevice implements IDevice {
             this.node = node;
         }
 
-        public Node getNode() {
+        public EventTarget getNode() {
             return this.node;
         }
 
@@ -148,11 +149,11 @@ public class FXEventQueueDevice implements IDevice {
             this.y = y;
         }
 
-        public void setDragSource(Node dragSource) {
+        public void setDragSource(EventTarget dragSource) {
             this.dragSource = dragSource;
         }
 
-        public Node getDragSource() {
+        public EventTarget getDragSource() {
             return dragSource;
         }
 
@@ -176,7 +177,7 @@ public class FXEventQueueDevice implements IDevice {
         FXEventQueueDevice.instance = this;
     }
 
-    @Override public void sendKeys(Node node, CharSequence... keysToSend) {
+    @Override public void sendKeys(EventTarget node, CharSequence... keysToSend) {
         for (CharSequence seq : keysToSend) {
             for (int i = 0; i < seq.length(); i++) {
                 sendKey(node, seq.charAt(i));
@@ -185,7 +186,7 @@ public class FXEventQueueDevice implements IDevice {
         EventQueueWait.empty();
     }
 
-    private void sendKey(Node node, char c) {
+    private void sendKey(EventTarget node, char c) {
         node = getActiveNode(node);
         JavaAgentKeys keys = JavaAgentKeys.getKeyFromUnicode(c);
         if (keys == null) {
@@ -207,7 +208,7 @@ public class FXEventQueueDevice implements IDevice {
         }
     }
 
-    @SuppressWarnings("deprecation") private void dispatchKeyEvent(final Node node, JavaAgentKeys keyToPress,
+    @SuppressWarnings("deprecation") private void dispatchKeyEvent(final EventTarget node, JavaAgentKeys keyToPress,
             EventType<KeyEvent> eventType, char c) {
         if (keyToPress == null) {
             KeyboardMap kbMap = new KeyboardMap(c);
@@ -237,7 +238,7 @@ public class FXEventQueueDevice implements IDevice {
         EventQueueWait.empty();
     }
 
-    private void dispatchEvent(final Event event, final Node node) {
+    private void dispatchEvent(final Event event, final EventTarget node) {
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 Event.fireEvent(node, event);
@@ -245,11 +246,11 @@ public class FXEventQueueDevice implements IDevice {
         });
     }
 
-    public static Node getActiveNode(Node node) {
+    public static EventTarget getActiveNode(EventTarget node) {
         return node;
     }
 
-    @Override public void pressKey(Node node, JavaAgentKeys keyToPress) {
+    @Override public void pressKey(EventTarget node, JavaAgentKeys keyToPress) {
         if (keyToPress == JavaAgentKeys.NULL)
             resetModifierState(node);
         else
@@ -258,12 +259,12 @@ public class FXEventQueueDevice implements IDevice {
 
     }
 
-    @Override public void releaseKey(Node node, JavaAgentKeys keyToRelease) {
+    @Override public void releaseKey(EventTarget node, JavaAgentKeys keyToRelease) {
         dispatchKeyEvent(node, keyToRelease, KeyEvent.KEY_RELEASED, KeyEvent.CHAR_UNDEFINED.charAt(0));
         EventQueueWait.empty();
     }
 
-    @Override public void buttonDown(Node node, Buttons button, double xoffset, double yoffset) {
+    @Override public void buttonDown(EventTarget node, Buttons button, double xoffset, double yoffset) {
         MouseButton mb = button.getMouseButton();
         dispatchEvent(new MouseEvent(MouseEvent.MOUSE_PRESSED, 0, 0, 0, 0, mb, 1, deviceState.shiftPressed, deviceState.ctrlPressed,
                 deviceState.altPressed, deviceState.metaPressed, true, false, false, false, false, false, null), node);
@@ -272,7 +273,7 @@ public class FXEventQueueDevice implements IDevice {
         EventQueueWait.empty();
     }
 
-    @Override public void buttonUp(Node node, Buttons button, double xoffset, double yoffset) {
+    @Override public void buttonUp(EventTarget node, Buttons button, double xoffset, double yoffset) {
         MouseButton mb = button.getMouseButton();
         dispatchEvent(
                 new MouseEvent(MouseEvent.MOUSE_RELEASED, 0, 0, 0, 0, mb, 1, deviceState.shiftPressed, deviceState.ctrlPressed,
@@ -283,12 +284,12 @@ public class FXEventQueueDevice implements IDevice {
         EventQueueWait.empty();
     }
 
-    @Override public void moveto(Node node) {
+    @Override public void moveto(EventTarget node) {
         if (node instanceof Control)
             moveto(node, ((Control) node).getWidth() / 2, ((Control) node).getHeight() / 2);
     }
 
-    @Override public void moveto(Node node, double xoffset, double yoffset) {
+    @Override public void moveto(EventTarget node, double xoffset, double yoffset) {
         MouseButton buttons = deviceState.getButtons();
         if (node != deviceState.getNode()) {
             if (deviceState.getNode() != null)
@@ -299,7 +300,7 @@ public class FXEventQueueDevice implements IDevice {
                     deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, buttons == MouseButton.PRIMARY,
                     buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false, false, false, null), node);
         }
-        Node source = node;
+        EventTarget source = node;
         EventType<MouseEvent> id = MouseEvent.MOUSE_MOVED;
         if (buttons != MouseButton.NONE) {
             id = MouseEvent.MOUSE_DRAGGED;
@@ -315,16 +316,21 @@ public class FXEventQueueDevice implements IDevice {
         deviceState.setMousePosition(xoffset, yoffset);
     }
 
-    @Override public void click(Node node, Buttons button, int clickCount, double xoffset, double yoffset) {
+    @Override public void click(EventTarget node, Buttons button, int clickCount, double xoffset, double yoffset) {
         MouseButton b = button.getMouseButton();
         dispatchMouseEvent(node, button == Buttons.RIGHT, clickCount, b, xoffset, yoffset);
         EventQueueWait.empty();
         deviceState.setNode(node);
     }
 
-    private void dispatchMouseEvent(Node node, boolean popupTrigger, int clickCount, MouseButton buttons, double x, double y) {
-        double scaleX = node.getScaleX();
-        double scaleY = node.getScaleY();
+    private void dispatchMouseEvent(EventTarget node, boolean popupTrigger, int clickCount, MouseButton buttons, double x,
+            double y) {
+        double scaleX = 1.0;
+        double scaleY = 1.0;
+        if (node instanceof Node) {
+            scaleX = ((Node) node).getScaleX();
+            scaleY = ((Node) node).getScaleY();
+        }
         if (node != deviceState.getNode()) {
             if (deviceState.getNode() != null)
                 dispatchEvent(new MouseEvent(MouseEvent.MOUSE_EXITED, x, y, scaleX, scaleY, buttons, clickCount,
@@ -347,7 +353,7 @@ public class FXEventQueueDevice implements IDevice {
         }
     }
 
-    private void resetModifierState(Node node) {
+    private void resetModifierState(EventTarget node) {
         if (deviceState.isShiftPressed())
             releaseKey(node, JavaAgentKeys.SHIFT);
         if (deviceState.isAltPressed())

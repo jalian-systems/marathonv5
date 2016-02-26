@@ -3,6 +3,9 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.LinkedList;
 
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.stage.Stage;
+import net.sourceforge.marathon.javafxagent.WindowTitle;
 
 public class ContextManager {
 
@@ -44,6 +47,14 @@ public class ContextManager {
                 return true;
         }
         return false;
+    }
+
+    public static String getWindow(Parent parent) {
+        if(parent.getScene().getRoot() == parent) {
+            WindowTitle windowTitle = new WindowTitle((Stage) parent.getScene().getWindow());
+            return windowTitle.getTitle();
+        }
+        return null;
     }
 
 }

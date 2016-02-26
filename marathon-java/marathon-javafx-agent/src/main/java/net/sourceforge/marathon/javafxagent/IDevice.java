@@ -1,6 +1,6 @@
 package net.sourceforge.marathon.javafxagent;
 
-import javafx.scene.Node;
+import javafx.event.EventTarget;
 import javafx.scene.input.MouseButton;
 
 public interface IDevice {
@@ -38,20 +38,20 @@ public interface IDevice {
         }
     }
 
-    void sendKeys(Node component, CharSequence... keysToSend);
+    void sendKeys(EventTarget component, CharSequence... keysToSend);
 
-    void pressKey(Node component, JavaAgentKeys keyToPress);
+    void pressKey(EventTarget component, JavaAgentKeys keyToPress);
 
-    void releaseKey(Node component, JavaAgentKeys keyToRelease);
+    void releaseKey(EventTarget component, JavaAgentKeys keyToRelease);
 
-    void buttonDown(Node component, Buttons button, double xoffset, double yoffset);
+    void buttonDown(EventTarget component, Buttons button, double xoffset, double yoffset);
 
-    void buttonUp(Node component, Buttons button, double xoffset, double yoffset);
+    void buttonUp(EventTarget component, Buttons button, double xoffset, double yoffset);
 
-    void moveto(Node component);
+    void moveto(EventTarget component);
 
-    void moveto(Node component, double xoffset, double yoffset);
+    void moveto(EventTarget component, double xoffset, double yoffset);
 
-    void click(Node component, Buttons button, int clickCount, double xoffset, double yoffset);
+    void click(EventTarget component, Buttons button, int clickCount, double xoffset, double yoffset);
 
 }

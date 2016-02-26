@@ -1,10 +1,5 @@
 package net.sourceforge.marathon.javafxrecorder.http;
 
-import java.awt.Container;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,20 +9,22 @@ import java.security.PrivilegedAction;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.KeyStroke;
-
-import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
-import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
-import net.sourceforge.marathon.javafxrecorder.JavaHook;
-import net.sourceforge.marathon.javafxrecorder.component.RComponent;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import sun.net.www.protocol.http.HttpURLConnection;
 import fi.iki.elonen.NanoHTTPD.Response;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
+import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
+import net.sourceforge.marathon.javafxrecorder.JavaHook;
+import net.sourceforge.marathon.javafxrecorder.component.RComponent;
+import sun.net.www.protocol.http.HttpURLConnection;
 
 public class HTTPRecorder implements IJSONRecorder {
 
@@ -39,9 +36,7 @@ public class HTTPRecorder implements IJSONRecorder {
     private Timer windowStateTimer;
 
     static {
-        timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
-        if (timerinterval == null)
-            timerinterval = Integer.valueOf(300);
+        timerinterval = Integer.valueOf(300);
     }
 
     public HTTPRecorder(int port) throws IOException {
@@ -94,7 +89,7 @@ public class HTTPRecorder implements IJSONRecorder {
         event.put("type", "click");
         event.put("button", e.getButton());
         event.put("clickCount", e.getClickCount());
-        event.put("modifiersEx", e.getModifiersEx());
+        event.put("modifiersEx", getModifiersEx(e));
         event.put("x", e.getX());
         event.put("y", e.getY());
         if (withCellInfo)
@@ -121,9 +116,10 @@ public class HTTPRecorder implements IJSONRecorder {
     @Override public void recordRawMouseEvent(final RComponent r, MouseEvent e) {
         final JSONObject event = new JSONObject();
         event.put("type", "click_raw");
-        event.put("button", e.getButton());
+        int button = e.getButton() == MouseButton.PRIMARY ? 0 : 2 ;
+        event.put("button", button);
         event.put("clickCount", e.getClickCount());
-        event.put("modifiersEx", e.getModifiersEx());
+        event.put("modifiersEx", getModifiersEx(e));
         event.put("x", e.getX());
         event.put("y", e.getY());
         final JSONObject o = new JSONObject();
@@ -145,17 +141,15 @@ public class HTTPRecorder implements IJSONRecorder {
         }
     }
 
+    private int getModifiersEx(MouseEvent e) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
     @Override public void recordRawKeyEvent(RComponent r, KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_META || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_CONTROL
-                || keyCode == KeyEvent.VK_SHIFT)
-            return;
         JSONObject event = new JSONObject();
         event.put("type", "key_raw");
-        KeyStroke ks = KeyStroke.getKeyStrokeForEvent(e);
-        String kss = ks.toString();
-        event.put("ks", kss);
-        event.put("keyChar", e.getKeyChar());
+        event.put("ks", e.toString());
         recordEvent(r, event);
     }
 
@@ -217,10 +211,10 @@ public class HTTPRecorder implements IJSONRecorder {
         recordEvent(r, event);
     }
 
-    @Override public void recordWindowState(final RComponent r, Rectangle bounds) {
+    @Override public void recordWindowState(final RComponent r, Rectangle2D bounds) {
         final JSONObject event = new JSONObject();
         event.put("type", "window_state");
-        event.put("bounds", bounds.x + ":" + bounds.y + ":" + bounds.width + ":" + bounds.height);
+        event.put("bounds", bounds.getMinX() + ":" + bounds.getMinY() + ":" + bounds.getWidth() + ":" + bounds.getHeight());
         final JSONObject o = new JSONObject();
         o.put("event", event);
         if (windowStateTimer != null)
@@ -323,7 +317,7 @@ public class HTTPRecorder implements IJSONRecorder {
 
     @Override public void recordFocusedWindow(RComponent r) throws IOException {
         JSONObject o = new JSONObject();
-        o.put("container", r.findContextHeirarchy((Container) r.getComponent()));
+        o.put("container", r.findContextHeirarchy((Parent) r.getComponent()));
         postJSON("focused_window", o);
     }
 

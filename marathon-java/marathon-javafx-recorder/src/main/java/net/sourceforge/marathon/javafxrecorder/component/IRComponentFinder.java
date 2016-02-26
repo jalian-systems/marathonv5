@@ -1,9 +1,9 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
-import java.awt.Component;
+import javafx.scene.Node;
 
 public interface IRComponentFinder {
 
-    Class<? extends RComponent> get(Component component);
+    Class<? extends RComponent> get(Node component);
 
 }

@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import net.sourceforge.marathon.javafxagent.JavaElementPropertyAccessor;
+import net.sourceforge.marathon.javafxagent.JavaFXElementPropertyAccessor;
 import net.sourceforge.marathon.javafxrecorder.component.RComponent;
 
 public class AssertionTreeNode extends DefaultMutableTreeNode {
@@ -170,7 +170,7 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
     }
 
     private String getObjectRepr() {
-        return JavaElementPropertyAccessor.removeClassName(object);
+        return JavaFXElementPropertyAccessor.removeClassName(object);
     }
 
     public Object getObject() {

@@ -20,7 +20,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
-public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaElement {
+public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaElement {
 
     private IJavaAgent driver;
     private JWindow window;
@@ -45,7 +45,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
 
         EventQueueWait.requestFocus(node);
         IDevice kb = driver.getDevices();
-        kb.sendKeys(node, keysToSend);
+        kb.sendKeys(getTarget(), keysToSend);
     }
 
     @Override public void clear() {
@@ -54,10 +54,10 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
 
     public void _clear() {
         verifyCanInteractWithElement();
-        if (node instanceof TextInputControl) {
-            ((TextInputControl) node).setText("");
+        if (getTarget() instanceof TextInputControl) {
+            ((TextInputControl) getTarget()).setText("");
         } else
-            throw new UnsupportedCommandException("Clear not supported on " + node.getClass().getName(), null);
+            throw new UnsupportedCommandException("Clear not supported on " + getTarget().getClass().getName(), null);
     }
 
     @Override public Point2D getLocation() {
@@ -110,7 +110,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
             return !isSelected();
         else if (function.equals("instance-of"))
             return isInstance((String) args[0]);
-        throw new UnsupportedCommandException("Unsupported psuedo class " + function + " node = " + node.getClass().getName(),
+        throw new UnsupportedCommandException("Unsupported psuedo class " + function + " node = " + getTarget().getClass().getName(),
                 null);
     }
 
@@ -118,7 +118,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
         try {
             @SuppressWarnings("unchecked")
             Class<? extends Node> c = (Class<? extends Node>) Class.forName(classname);
-            return c.isInstance(node);
+            return c.isInstance(getTarget());
         } catch (ClassNotFoundException e) {
             return false;
         }
@@ -126,8 +126,8 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
 
     @Override public IJavaElement[] getComponents() {
         List<IJavaElement> elements = new ArrayList<>();
-        if (node instanceof Parent) {
-            ObservableList<Node> childrenUnmodifiable = ((Parent) node).getChildrenUnmodifiable();
+        if (getTarget() instanceof Parent) {
+            ObservableList<Node> childrenUnmodifiable = ((Parent) getTarget()).getChildrenUnmodifiable();
             for (Node child : childrenUnmodifiable) {
                 elements.add(JavaElementFactory.createElement(child, driver, window));
             }
@@ -147,7 +147,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
             return Arrays.<IJavaElement> asList();
         }
         throw new UnsupportedCommandException(
-                "Pseudo element selector " + selector + " is not applicable for " + node.getClass().getName(), null);
+                "Pseudo element selector " + selector + " is not applicable for " + getTarget().getClass().getName(), null);
     }
 
     @Override public String createId() {
@@ -164,7 +164,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
     }
 
     public void _moveto() {
-        driver.getDevices().moveto(node);
+        driver.getDevices().moveto(getTarget());
     }
 
     @Override public void moveto(double xoffset, double yoffset) {
@@ -172,7 +172,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
     }
 
     public void _moveto(double xoffset, double yoffset) {
-        driver.getDevices().moveto(node, xoffset, yoffset);
+        driver.getDevices().moveto(getTarget(), xoffset, yoffset);
     }
 
     @Override public void click(int button, int clickCount, double xoffset, double yoffset) {
@@ -180,7 +180,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.click(node, Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
+        mouse.click(getTarget(), Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
     }
 
     @Override public void buttonDown(int button, double xoffset, double yoffset) {
@@ -188,7 +188,7 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.buttonDown(node, Buttons.getButtonFor(button), xoffset, yoffset);
+        mouse.buttonDown(getTarget(), Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
     @Override public void buttonUp(int button, double xoffset, double yoffset) {
@@ -196,16 +196,16 @@ public class JavaFXElement extends JavaElementPropertyAccessor implements IJavaE
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.buttonUp(node, Buttons.getButtonFor(button), xoffset, yoffset);
+        mouse.buttonUp(getTarget(), Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
     public boolean marathon_select(JSONArray jsonArray) {
         throw new UnsupportedCommandException("Select method by properties" + " is not applicable for "
-                + node.getClass().getName() + " (" + this.getClass().getName() + ")", null);
+                + getTarget().getClass().getName() + " (" + this.getClass().getName() + ")", null);
     }
 
     public boolean marathon_select(String value) {
-        throw new UnsupportedCommandException("Select method" + " is not applicable for " + node.getClass().getName() + " ("
+        throw new UnsupportedCommandException("Select method" + " is not applicable for " + getTarget().getClass().getName() + " ("
                 + this.getClass().getName() + ")", null);
     }
 

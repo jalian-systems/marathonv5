@@ -17,17 +17,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.collections.ObservableList;
+import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
-public class JavaElementPropertyAccessor {
+public class JavaFXElementPropertyAccessor {
 
     protected Node node;
 
-    public JavaElementPropertyAccessor(Node component) {
+    public JavaFXElementPropertyAccessor(Node component) {
         this.node = component;
     }
 
@@ -337,7 +338,7 @@ public class JavaElementPropertyAccessor {
         return null;
     }
 
-    final public int getIndexOfType() {
+    public int getIndexOfType() {
         List<Node> allComponents = findAllComponents();
         int index = 0;
         Class<? extends Node> klass = node.getClass();
@@ -466,7 +467,7 @@ public class JavaElementPropertyAccessor {
     }
 
     private boolean matchesRP(Node component, Map<String, String> rpValues) {
-        JavaElementPropertyAccessor pa = new JavaElementPropertyAccessor(component);
+        JavaFXElementPropertyAccessor pa = new JavaFXElementPropertyAccessor(component);
         Set<Entry<String, String>> entrySet = rpValues.entrySet();
         for (Entry<String, String> entry : entrySet) {
             if (!entry.getValue().equals(pa.getAttribute(entry.getKey())))
@@ -489,7 +490,7 @@ public class JavaElementPropertyAccessor {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        JavaElementPropertyAccessor other = (JavaElementPropertyAccessor) obj;
+        JavaFXElementPropertyAccessor other = (JavaFXElementPropertyAccessor) obj;
         if (node == null) {
             if (other.node != null)
                 return false;
@@ -545,6 +546,10 @@ public class JavaElementPropertyAccessor {
         } catch (Throwable t) {
             return object.toString();
         }
+    }
+
+    protected EventTarget getTarget() {
+        return node;
     }
 
 }

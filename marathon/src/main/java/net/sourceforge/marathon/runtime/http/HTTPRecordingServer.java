@@ -324,6 +324,7 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
     }
 
     public JSONObject record(JSONObject query, JSONObject uriParams, Session session) throws IOException {
+        System.out.println(query);
         if (paused || recorder == null)
             return new JSONObject();
         try {

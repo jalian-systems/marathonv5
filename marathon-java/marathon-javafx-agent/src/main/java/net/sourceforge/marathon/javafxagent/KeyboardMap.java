@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javafx.scene.input.KeyCode;
 
-public class KeyboardMap {
+@SuppressWarnings("deprecation") public class KeyboardMap {
 
     private char c;
 

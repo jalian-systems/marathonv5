@@ -107,7 +107,7 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
                         .append(rp.getValue().replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")).append("']");
         }
         if (visibility)
-            sb.append("[visible='true'][showing='true']");
+            sb.append("[visible='true']");
         String r = sb.toString();
         if (typeProperty != null) {
             r = "[" + typeProperty.getName() + op(typeProperty.getMethod()) + "'" + typeProperty.getValue() + "']" + sb.toString();

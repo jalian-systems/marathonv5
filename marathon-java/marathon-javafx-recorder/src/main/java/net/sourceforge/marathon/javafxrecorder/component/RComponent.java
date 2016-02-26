@@ -1,15 +1,5 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,76 +11,73 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 
-import net.sourceforge.marathon.javafxagent.JavaElementPropertyAccessor;
+import org.json.JSONObject;
+
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import net.sourceforge.marathon.javafxagent.JavaFXElementPropertyAccessor;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
-import org.json.JSONObject;
-
-public abstract class RComponent extends JavaElementPropertyAccessor {
+public abstract class RComponent extends JavaFXElementPropertyAccessor {
 
     protected IJSONRecorder recorder;
     protected JSONOMapConfig omapConfig;
 
-    public RComponent(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
+    public RComponent(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source);
         this.omapConfig = omapConfig;
         this.recorder = recorder;
     }
 
-    public void processEvent(AWTEvent event) {
+    public void processEvent(Event event) {
         setIndexOfType(super.getIndexOfType());
         if (event instanceof MouseEvent) {
             MouseEvent me = (MouseEvent) event;
 
-            switch (me.getID()) {
-            case MouseEvent.MOUSE_ENTERED:
+            EventType<? extends MouseEvent> eventType = me.getEventType();
+            if (eventType == MouseEvent.MOUSE_ENTERED)
                 mouseEntered(me);
-                break;
-            case MouseEvent.MOUSE_PRESSED:
+            else if (eventType == MouseEvent.MOUSE_PRESSED)
                 mousePressed(me);
-                break;
-            case MouseEvent.MOUSE_RELEASED:
+            else if (eventType == MouseEvent.MOUSE_RELEASED)
                 mouseReleased(me);
-                break;
-            case MouseEvent.MOUSE_CLICKED:
+            else if (eventType == MouseEvent.MOUSE_CLICKED)
                 mouseClicked(me);
-                break;
-            case MouseEvent.MOUSE_EXITED:
+            else if (eventType == MouseEvent.MOUSE_EXITED)
                 mouseExited(me);
-                break;
-            }
         } else if (event instanceof KeyEvent) {
             KeyEvent ke = (KeyEvent) event;
-            switch (ke.getID()) {
-            case KeyEvent.KEY_PRESSED:
+            EventType<KeyEvent> eventType = ke.getEventType();
+            if (eventType == KeyEvent.KEY_PRESSED)
                 keyPressed(ke);
-                break;
-            case KeyEvent.KEY_RELEASED:
+            else if (eventType == KeyEvent.KEY_RELEASED)
                 keyReleased(ke);
-                break;
-            case KeyEvent.KEY_TYPED:
+            else if (eventType == KeyEvent.KEY_TYPED)
                 keyTyped(ke);
-                break;
-            }
         }
     }
 
-    public void handleRawRecording(IJSONRecorder recorder, AWTEvent event) {
-        if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED)
+    public void handleRawRecording(IJSONRecorder recorder, Event event) {
+        if (event instanceof MouseEvent && event.getEventType() == MouseEvent.MOUSE_PRESSED)
             recorder.recordRawMouseEvent(this, (MouseEvent) event);
-        if (event instanceof KeyEvent && event.getID() == KeyEvent.KEY_PRESSED)
+        if (event instanceof KeyEvent && event.getEventType() == KeyEvent.KEY_PRESSED)
             recorder.recordRawKeyEvent(this, (KeyEvent) event);
     }
 
     @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((component == null) ? 0 : component.hashCode());
+        result = prime * result + ((node == null) ? 0 : node.hashCode());
         return result;
     }
 
@@ -102,16 +89,16 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         if (getClass() != obj.getClass())
             return false;
         RComponent other = (RComponent) obj;
-        if (component == null) {
-            if (other.component != null)
+        if (node == null) {
+            if (other.node != null)
                 return false;
-        } else if (!component.equals(other.component))
+        } else if (!node.equals(other.node))
             return false;
         return true;
     }
 
     public Map<String, String> findURP() {
-        return findURP(omapConfig.findRP(component.getClass()));
+        return findURP(omapConfig.findRP(node.getClass()));
     }
 
     public Map<String, String> findAttributes() {
@@ -119,13 +106,13 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     }
 
     public JSONObject findContextHeirarchy() {
-        return findContextHeirarchy(component.getParent());
+        return findContextHeirarchy(node.getParent());
     }
 
-    public JSONObject findContextHeirarchy(Container parent) {
+    public JSONObject findContextHeirarchy(Parent parent) {
         JSONObject r = null;
         JSONObject current = null;
-        while (parent != null && !(parent instanceof Window)) {
+        while (parent != null) {
             if (ContextManager.isContext(parent)) {
                 JSONObject pContext = getContextJSONObject(parent);
                 if (r == null)
@@ -137,27 +124,10 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
             }
             parent = parent.getParent();
         }
-        return addWindowParents(r, (Window) parent, current);
-    }
-
-    private JSONObject addWindowParents(JSONObject r, Window parent, JSONObject current) {
-        while (parent != null) {
-            if (!parent.getClass().getName().equals("javax.swing.SwingUtilities$SharedOwnerFrame")
-                    && !parent.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow") && parent.isVisible()) {
-                JSONObject pWindow = getContextJSONObject(parent);
-                if (r == null)
-                    r = pWindow;
-                if (current != null) {
-                    current.put("container", pWindow);
-                }
-                current = pWindow;
-            }
-            parent = parent.getOwner();
-        }
         return r;
     }
 
-    private JSONObject getContextJSONObject(Component parent) {
+    private JSONObject getContextJSONObject(Parent parent) {
         RComponentFactory finder = new RComponentFactory(omapConfig);
         RComponent pa = finder.findRComponent(parent, null, recorder);
         Collection<String> properties = omapConfig.findProperties();
@@ -169,12 +139,18 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         JSONObject r = new JSONObject();
         r.put("attributes", attributes);
         if (parent == null)
-            throw new RuntimeException("parent == null for " + component);
+            throw new RuntimeException("parent == null for " + node);
         List<List<String>> rp = omapConfig.findContainerRP(parent.getClass());
         r.put("containerURP", pa.findURP(rp));
         List<List<String>> np = omapConfig.findContainerNP(parent.getClass());
-        r.put("urp", pa.findURP(np));
-        r.put("is_window", parent instanceof Window);
+        Map<String, String> urp = pa.findURP(np);
+        String window = ContextManager.getWindow(parent);
+        if (window != null) {
+            r.put("is_window", true);
+            urp.put("title", window);
+        } else
+            r.put("is_window", false);
+        r.put("urp", urp);
         return r;
     }
 
@@ -256,17 +232,14 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     }
 
     @Override public int getIndexOfType() {
-        if (component instanceof JComponent) {
-            Integer index = (Integer) ((JComponent) component).getClientProperty("marathon.indexOfType");
-            if (index != null)
-                return index;
-        }
-        return super.getIndexOfType();
+        Object iot = node.getProperties().get("marathon.indexOfType");
+        if (iot == null)
+            return super.getIndexOfType();
+        return (int) iot;
     }
 
     public void setIndexOfType(int indexOfType) {
-        if (component instanceof JComponent)
-            ((JComponent) component).putClientProperty("marathon.indexOfType", indexOfType);
+        node.getProperties().put("marathon.indexOfType", indexOfType);
     }
 
     protected void mouseExited(MouseEvent me) {
@@ -279,8 +252,7 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     }
 
     protected void mousePressed(MouseEvent me) {
-        if (me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 1 && !me.isAltDown() && !me.isMetaDown()
-                && !me.isAltGraphDown() && !me.isControlDown())
+        if (me.isPrimaryButtonDown() && me.getClickCount() == 1 && !me.isAltDown() && !me.isMetaDown() && !me.isControlDown())
             mouseButton1Pressed(me);
         else {
             recorder.recordClick2(this, me, true);
@@ -314,8 +286,7 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     public void actionPerformed(ActionEvent e) {
     }
 
-    public boolean isMenuShortcutKeyDown(InputEvent event) {
-        return (event.getModifiers() & 
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) != 0;
+    public boolean isMenuShortcutKeyDown(MouseEvent event) {
+        return event.isShortcutDown();
     }
 }

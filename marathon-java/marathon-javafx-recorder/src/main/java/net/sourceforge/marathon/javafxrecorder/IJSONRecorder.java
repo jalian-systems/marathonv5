@@ -1,13 +1,13 @@
 package net.sourceforge.marathon.javafxrecorder;
 
-import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javafx.geometry.Rectangle2D;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.component.RComponent;
 
 public interface IJSONRecorder {
@@ -32,7 +32,7 @@ public interface IJSONRecorder {
 
     public abstract void recordWindowClosing(RComponent r);
 
-    public abstract void recordWindowState(RComponent r, Rectangle bounds);
+    public abstract void recordWindowState(RComponent r, Rectangle2D bounds);
 
     public abstract JSONOMapConfig getObjectMapConfiguration() throws IOException;
 

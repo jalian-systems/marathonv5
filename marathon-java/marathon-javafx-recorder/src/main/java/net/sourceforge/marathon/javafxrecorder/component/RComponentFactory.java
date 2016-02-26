@@ -1,24 +1,10 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
-import javax.swing.table.JTableHeader;
-
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -26,10 +12,10 @@ public class RComponentFactory {
     private JSONOMapConfig omapConfig;
 
     private static class InstanceCheckFinder implements IRComponentFinder {
-        private Class<? extends Component> componentKlass;
+        private Class<? extends Node> componentKlass;
         private Class<? extends RComponent> rComponentKlass;
 
-        public InstanceCheckFinder(Class<? extends Component> componentKlass, Class<? extends RComponent> javaElementKlass) {
+        public InstanceCheckFinder(Class<? extends Node> componentKlass, Class<? extends RComponent> javaElementKlass) {
             this.componentKlass = componentKlass;
             this.rComponentKlass = javaElementKlass;
         }
@@ -39,9 +25,9 @@ public class RComponentFactory {
          * 
          * @see
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
-         * .Component)
+         * .Node)
          */
-        @Override public Class<? extends RComponent> get(Component component) {
+        @Override public Class<? extends RComponent> get(Node component) {
             if (componentKlass.isInstance(component))
                 return rComponentKlass;
             return null;
@@ -53,7 +39,7 @@ public class RComponentFactory {
     static {
     }
 
-    public static void add(Class<? extends Component> componentKlass, Class<? extends RComponent> rComponentKlass) {
+    public static void add(Class<? extends Node> componentKlass, Class<? extends RComponent> rComponentKlass) {
         add(new InstanceCheckFinder(componentKlass, rComponentKlass));
     }
 
@@ -63,8 +49,7 @@ public class RComponentFactory {
 
     public static void reset() {
         entries.clear();
-        add(Component.class, RUnknownComponent.class);
-        add(JScrollBar.class, RIgnoreComponent.class);
+        add(Node.class, RUnknownComponent.class);
     }
 
     static {
@@ -75,17 +60,17 @@ public class RComponentFactory {
         this.omapConfig = objectMapConfiguration;
     }
 
-    public RComponent findRComponent(Component component, Point point, IJSONRecorder recorder) {
-        return findRawRComponent(getComponent(component, point), point, recorder);
+    public RComponent findRComponent(Node parent, Point2D point, IJSONRecorder recorder) {
+        return findRawRComponent(getComponent(parent, point), point, recorder);
     }
 
-    public RComponent findRawRComponent(Component source, Point point, IJSONRecorder recorder) {
+    public RComponent findRawRComponent(Node source, Point2D point, IJSONRecorder recorder) {
         for (IRComponentFinder entry : entries) {
             Class<? extends RComponent> k = entry.get(source);
             if (k == null)
                 continue;
             try {
-                Constructor<? extends RComponent> cons = k.getConstructor(Component.class, JSONOMapConfig.class, Point.class,
+                Constructor<? extends RComponent> cons = k.getConstructor(Node.class, JSONOMapConfig.class, Point2D.class,
                         IJSONRecorder.class);
                 return cons.newInstance(source, omapConfig, point, recorder);
             } catch (Exception e) {
@@ -95,78 +80,8 @@ public class RComponentFactory {
         return null;
     }
 
-    public Component getComponent(Component component, Point location) {
-        Component parent = component.getParent();
-        Component grandparent = parent != null ? parent.getParent() : null;
-        Component greatgrandparent = grandparent != null ? grandparent.getParent() : null;
-
-        Component realComponent = component;
-        if (getColorChooser(component) != null) {
-            realComponent = getColorChooser(component);
-        } else if (getFileChooser(component) != null) {
-            realComponent = getFileChooser(component);
-        } else if (component.getClass().getName().indexOf("ScrollableTabPanel") > 0) {
-            // See: testTabbedPaneWhenInScrollTabLayout
-            realComponent = grandparent;
-        } else if (component instanceof JTableHeader) {
-        } else if (component instanceof JProgressBar) {
-        } else if (component instanceof JSlider) {
-        } else if (parent instanceof JTable) {
-            setLocationForTable((JTable) parent, location);
-            realComponent = getComponent(parent, location);
-        } else if (parent instanceof JComboBox) {
-            realComponent = getComponent(parent, location);
-        } else if (greatgrandparent instanceof ComboPopup) {
-            realComponent = null;
-            if (greatgrandparent instanceof BasicComboPopup)
-                realComponent = getComponent(((BasicComboPopup) greatgrandparent).getInvoker(), location);
-        } else if (component instanceof ComboPopup) {
-            realComponent = null;
-            if (component instanceof BasicComboPopup)
-                realComponent = getComponent(((BasicComboPopup) component).getInvoker(), location);
-        } else if (parent instanceof JSpinner) {
-            realComponent = parent;
-        } else if (grandparent instanceof JSpinner) {
-            realComponent = grandparent;
-        } else if (grandparent instanceof JTree) {
-            realComponent = grandparent;
-        } else if (parent instanceof JTree) {
-            realComponent = parent;
-        }
-        return realComponent;
-    }
-
-    private JColorChooser getColorChooser(Component component) {
-        Component parent = component;
-        while (parent != null) {
-            if (parent instanceof JColorChooser)
-                return (JColorChooser) parent;
-            parent = parent.getParent();
-        }
-        return null;
-    }
-
-    private JFileChooser getFileChooser(Component component) {
-        Component parent = component;
-        while (parent != null) {
-            if (parent instanceof JFileChooser)
-                return (JFileChooser) parent;
-            parent = parent.getParent();
-        }
-        return null;
-    }
-
-    /**
-     * Sets the location to a point the table.
-     * 
-     * @param table
-     * @param location
-     */
-    private void setLocationForTable(JTable table, Point location) {
-        if (location != null) {
-            Rectangle cellRect = table.getCellRect(table.getEditingRow(), table.getEditingColumn(), false);
-            location.setLocation(cellRect.getLocation());
-        }
+    public Node getComponent(Node component, Point2D location) {
+        return component;
     }
 
 }
