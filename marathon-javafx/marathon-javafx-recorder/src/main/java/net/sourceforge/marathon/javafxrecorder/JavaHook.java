@@ -1,7 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.UnknownHostException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -9,29 +8,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import net.sourceforge.marathon.javafxrecorder.component.RComponent;
-import net.sourceforge.marathon.javafxrecorder.component.RComponentFactory;
-import net.sourceforge.marathon.javafxrecorder.component.RUnknownComponent;
-import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
-
-import org.json.JSONObject;
-
 import com.sun.javafx.stage.StageHelper;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.javafxrecorder.component.RComponentFactory;
+import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
+import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
 
 public class JavaHook implements EventHandler<Event> {
 
@@ -50,19 +39,12 @@ public class JavaHook implements EventHandler<Event> {
     private JSONOMapConfig objectMapConfiguration;
     private RComponentFactory finder;
     private IJSONRecorder recorder;
-    private RComponent current;
-    private boolean rawRecording;
-    private int contextMenuKeyModifiers;
-    private int contextMenuKey;
-    private int menuModifiers;
-    // private ContextMenuHandler contextMenuHandler;
 
     public JavaHook(int port) {
         try {
             logger.info("Starting HTTP Recorder on : " + port);
             recorder = new HTTPRecorder(port);
             objectMapConfiguration = recorder.getObjectMapConfiguration();
-            setContextMenuTriggers(recorder.getContextMenuTriggers());
             finder = new RComponentFactory(objectMapConfiguration);
             ObservableList<Stage> stages = StageHelper.getStages();
             for (Stage stage : stages) {
@@ -95,18 +77,12 @@ public class JavaHook implements EventHandler<Event> {
     }
 
     private void removeEventFilter(Stage stage) {
-        stage.getScene().removeEventFilter(MouseEvent.MOUSE_PRESSED, JavaHook.this);
+        stage.getScene().getRoot().removeEventFilter(Event.ANY, JavaHook.this);
     }
 
     private void addEventFilter(Stage stage) {
         logger.info("Stage.scene = " + stage.getScene());
-        stage.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, JavaHook.this);
-    }
-
-    private void setContextMenuTriggers(JSONObject jsonObject) {
-        contextMenuKeyModifiers = jsonObject.getInt("contextMenuKeyModifiers");
-        contextMenuKey = jsonObject.getInt("contextMenuKey");
-        menuModifiers = jsonObject.getInt("menuModifiers");
+        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaHook.this);
     }
 
     public static void premain(final String args) throws Exception {
@@ -124,6 +100,9 @@ public class JavaHook implements EventHandler<Event> {
             @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                 if (done)
                     return;
+                if(!"".equals(windowTitle)) {
+                    logger.warning("WindowTitle is not supported yet... Ignoring it.");
+                }
                 c.next();
                 if (c.wasAdded()) {
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
@@ -146,71 +125,8 @@ public class JavaHook implements EventHandler<Event> {
             if (event instanceof MouseEvent) {
                 point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
             }
-            RComponent c = finder.findRComponent((Node) source, point, recorder);getClass();
+            RFXComponent c = finder.findRComponent((Node) source, point, recorder);
             c.processEvent(event);
         }
     }
-
-    // @Override public void eventDispatched(final AWTEvent event) {
-    // AccessController.doPrivileged(new PrivilegedAction<Object>() {
-    // @Override public Object run() {
-    // Object source = event.getSource();
-    // if (!(source instanceof Component))
-    // return null;
-    // if (event instanceof WindowEvent) {
-    // handleWindowEvent((WindowEvent) event);
-    // return null;
-    // }
-    // // if (event instanceof KeyEvent &&
-    // // isContextMenuKeySequence((KeyEvent) event)) {
-    // // ((KeyEvent) event).consume();
-    // // contextMenuHandler.showPopup((KeyEvent) event);
-    // // return null;
-    // // }
-    // // if (event instanceof MouseEvent &&
-    // // isContextMenuSequence((MouseEvent) event)) {
-    // // ((MouseEvent) event).consume();
-    // // if (current != null &&
-    // // SwingUtilities.getWindowAncestor(current.getComponent()) !=
-    // // null)
-    // // current.focusLost(null);
-    // // contextMenuHandler.showPopup((MouseEvent) event);
-    // // return null;
-    // // }
-    // // if (contextMenuHandler.isContextMenuOn())
-    // // return null;
-    // Component component = (Component) source;
-    // if (SwingUtilities.getWindowAncestor(component) == null)
-    // return null;
-    // if (rawRecording) {
-    // new RUnknownComponent(component, objectMapConfiguration, null,
-    // recorder).handleRawRecording(recorder, event);
-    // return null;
-    // }
-    // int id = event.getID();
-    // AWTEvent eventx;
-    // if (event instanceof MouseEvent)
-    // eventx = SwingUtilities.convertMouseEvent(((MouseEvent)
-    // event).getComponent(), (MouseEvent) event,
-    // (Component) source);
-    // else
-    // eventx = event;
-    // RComponent c = finder.findRComponent(component,
-    // eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint() : null,
-    // recorder);
-    // if (isFocusChangeEvent(id) && !c.equals(current)) {
-    // if (current != null &&
-    // SwingUtilities.getWindowAncestor(current.getComponent()) != null)
-    // current.focusLost(c);
-    // c.focusGained(current);
-    // current = c;
-    // }
-    // if (c.equals(current))
-    // c = current;
-    // c.processEvent(eventx);
-    // return null;
-    // }
-    // });
-    // }
-    //
 }

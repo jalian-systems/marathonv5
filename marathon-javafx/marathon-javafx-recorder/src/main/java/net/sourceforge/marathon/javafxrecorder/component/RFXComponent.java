@@ -23,17 +23,20 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.PopupWindow;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import net.sourceforge.marathon.javafxagent.JavaFXElementPropertyAccessor;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
-public abstract class RComponent extends JavaFXElementPropertyAccessor {
+public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 
     protected IJSONRecorder recorder;
     protected JSONOMapConfig omapConfig;
 
-    public RComponent(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
+    public RFXComponent(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source);
         this.omapConfig = omapConfig;
         this.recorder = recorder;
@@ -88,7 +91,7 @@ public abstract class RComponent extends JavaFXElementPropertyAccessor {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        RComponent other = (RComponent) obj;
+        RFXComponent other = (RFXComponent) obj;
         if (node == null) {
             if (other.node != null)
                 return false;
@@ -124,12 +127,57 @@ public abstract class RComponent extends JavaFXElementPropertyAccessor {
             }
             parent = parent.getParent();
         }
+        return addWindowParents(r, current);
+    }
+
+    private JSONObject addWindowParents(JSONObject r, JSONObject current) {
+        Stage stage = getStage(node.getScene().getWindow());
+        while (stage != null) {
+            JSONObject pWindow = getContextJSONObject(stage);
+            if (r == null)
+                r = pWindow;
+            if (current != null) {
+                current.put("container", pWindow);
+            }
+            current = pWindow;
+            stage = getStage(stage.getOwner());
+        }
         return r;
+    }
+
+    private JSONObject getContextJSONObject(Stage stage) {
+        Collection<String> properties = omapConfig.findProperties();
+        Map<String, String> attributes = new HashMap<String, String>();
+        FXStagePropertyAccessor pa = new FXStagePropertyAccessor(stage);
+        for (String prop : properties) {
+            String value = pa .getAttribute(prop);
+            attributes.put(prop, value);
+        }
+        JSONObject r = new JSONObject();
+        r.put("attributes", attributes);
+        List<List<String>> rp = omapConfig.findContainerRP(stage.getClass());
+        r.put("containerURP", pa.findURP(rp));
+        List<List<String>> np = omapConfig.findContainerNP(stage.getClass());
+        Map<String, String> urp = pa.findURP(np);
+        r.put("is_window", true);
+        r.put("urp", urp);
+        return r;
+    }
+
+    private Stage getStage(Window window) {
+        if(window instanceof Stage)
+            return (Stage) window ;
+        if(window instanceof PopupWindow) {
+            Node ownerNode = ((PopupWindow)window).getOwnerNode();
+            ownerNode.getScene().getWindow();
+            return getStage(ownerNode.getScene().getWindow());
+        }
+        return null;
     }
 
     private JSONObject getContextJSONObject(Parent parent) {
         RComponentFactory finder = new RComponentFactory(omapConfig);
-        RComponent pa = finder.findRComponent(parent, null, recorder);
+        RFXComponent pa = finder.findRComponent(parent, null, recorder);
         Collection<String> properties = omapConfig.findProperties();
         Map<String, String> attributes = new HashMap<String, String>();
         for (String prop : properties) {
@@ -144,12 +192,7 @@ public abstract class RComponent extends JavaFXElementPropertyAccessor {
         r.put("containerURP", pa.findURP(rp));
         List<List<String>> np = omapConfig.findContainerNP(parent.getClass());
         Map<String, String> urp = pa.findURP(np);
-        String window = ContextManager.getWindow(parent);
-        if (window != null) {
-            r.put("is_window", true);
-            urp.put("title", window);
-        } else
-            r.put("is_window", false);
+        r.put("is_window", false);
         r.put("urp", urp);
         return r;
     }
@@ -274,10 +317,10 @@ public abstract class RComponent extends JavaFXElementPropertyAccessor {
     protected void keyPressed(KeyEvent ke) {
     }
 
-    public void focusLost(RComponent next) {
+    public void focusLost(RFXComponent next) {
     }
 
-    public void focusGained(RComponent prev) {
+    public void focusGained(RFXComponent prev) {
     }
 
     public void stateChanged(ChangeEvent e) {

@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.collections.ObservableList;
@@ -24,176 +24,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
-public class JavaFXElementPropertyAccessor {
+public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     protected Node node;
 
     public JavaFXElementPropertyAccessor(Node component) {
+        super(component);
         this.node = component;
     }
 
-    public final String getAttribute(final String name) {
-        return getAttribute(name, false);
-    }
-
-    public final String getAttribute(final String name, final boolean skipSelf) {
-        return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
-                return _getAttribute(name, skipSelf);
-            }
-        });
-    }
-
-    public final String _getAttribute(String name, boolean skipSelf) {
-        if (name.startsWith("keystrokeFor-"))
-            return getKeyStrokeFor(name.substring("keystrokeFor-".length()));
-        String[] split = name.split("\\.");
-        String first = split[0];
-        Object attributeObject = null;
-        try {
-            if (!skipSelf)
-                attributeObject = getAttributeObject(this, first);
-        } catch (UnsupportedCommandException e) {
-        }
-        if (attributeObject == null) {
-            Node c = node;
-            attributeObject = getAttributeObject(c, first);
-            if (attributeObject == null)
-                return null;
-        }
-        for (int i = 1; i < split.length; i++) {
-            attributeObject = getAttributeObject(attributeObject, split[i]);
-            if (attributeObject == null)
-                return null;
-        }
-        return toString(attributeObject);
-    }
-
-    private String getKeyStrokeFor(String action) {
-        JSONArray r = new JSONArray();
-        if (r.length() > 0)
-            return r.toString();
-        return null;
-    }
-
-    private String toString(Object attributeObject) {
-        return removeClassName(attributeObject);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * net.sourceforge.marathon.javaagent.IJavaElement#getAttributeObject(java
-     * .lang.String)
-     */
-    public final Object getAttributeObject(Object component, String name) {
-        String isMethod = getIsMethod(name);
-        Object o = null;
-        try {
-            o = EventQueueWait.call(component, isMethod);
-        } catch (Throwable e) {
-            if (!(e instanceof NoSuchMethodException))
-                return null;
-        }
-        try {
-            if (o == null) {
-                String getMethod = getGetMethod(name);
-                o = EventQueueWait.call(component, getMethod);
-            }
-        } catch (Throwable e) {
-        }
-        try {
-            if (o == null) {
-                o = EventQueueWait.call(component, name);
-            }
-        } catch (Throwable e) {
-        }
-        try {
-            if (o == null) {
-                o = getFieldValue(component, name);
-            }
-        } catch (Throwable e) {
-        }
-        if (o != null && o.getClass().isArray() && !o.getClass().getComponentType().isPrimitive()) {
-            ArrayList<Object> lo = new ArrayList<Object>();
-            Object[] oa = (Object[]) o;
-            for (Object object : oa) {
-                lo.add(object);
-            }
-            o = lo;
-        }
-        if (o == null && component instanceof Collection<?>) {
-            ArrayList<Object> lo = new ArrayList<Object>();
-            Collection<?> c = (Collection<?>) component;
-            for (Object object : c) {
-                lo.add(getAttributeObject(object, name));
-            }
-            return lo;
-        }
-        return o;
-    }
-
-    private Object getFieldValue(Object component, String name) {
-        Field f = null;
-        Class<? extends Object> klass = component.getClass();
-        while (f == null && klass != null) {
-            try {
-                f = klass.getDeclaredField(name);
-            } catch (SecurityException e) {
-                return null;
-            } catch (NoSuchFieldException e) {
-                klass = klass.getSuperclass();
-            }
-        }
-        if (f == null)
-            return null;
-        boolean accessible = f.isAccessible();
-        try {
-            f.setAccessible(true);
-            return f.get(component);
-        } catch (IllegalArgumentException e) {
-        } catch (IllegalAccessException e) {
-        } finally {
-            f.setAccessible(accessible);
-        }
-        return null;
-    }
-
-    private String getIsMethod(String name) {
-        return "is" + name.substring(0, 1).toUpperCase() + name.substring(1);
-    }
-
-    private String getGetMethod(String name) {
-        return "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * net.sourceforge.marathon.javaagent.IJavaElement#hasAttribue(java.lang
-     * .String)
-     */
-    public final boolean hasAttribue(String name) {
-        return hasMethod(getIsMethod(name)) || hasMethod(getGetMethod(name));
-    }
-
-    private boolean hasMethod(String name) {
-        try {
-            node.getClass().getMethod(name);
-            return true;
-        } catch (SecurityException e) {
-        } catch (NoSuchMethodException e) {
-        }
-        return false;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sourceforge.marathon.javaagent.IJavaElement#getText()
-     */
     public final String getText() {
         return EventQueueWait.exec(new Callable<String>() {
             @Override public String call() throws Exception {
@@ -279,14 +118,17 @@ public class JavaFXElementPropertyAccessor {
 
     private Class<?> findJavaClass() {
         Class<?> c = node.getClass();
-        while (c.getPackage() == null
-                || (!c.getPackage().getName().startsWith("javafx.scene")))
+        while (c.getPackage() == null || (!c.getPackage().getName().startsWith("javafx.scene")))
             c = c.getSuperclass();
         return c;
     }
 
     public final String getType() {
-        String name = node.getClass().getName();
+        return getType(node.getClass());
+    }
+
+    private String getType(Class<? extends Node> klass) {
+        String name = klass.getName();
         if (name.startsWith("javafx.scene.control")) {
             return name.substring("javafx.scene.control.".length());
         }
@@ -302,7 +144,7 @@ public class JavaFXElementPropertyAccessor {
     }
 
     private List<Node> findAllComponents() {
-        Node top = getTopWindow(node);
+        Node top = getTopNode(node);
         List<Node> allComponents = new ArrayList<Node>();
         if (top != null)
             fillUp(allComponents, top);
@@ -310,8 +152,6 @@ public class JavaFXElementPropertyAccessor {
     }
 
     private void fillUp(List<Node> allComponents, Node c) {
-        if (!c.isVisible())
-            return;
         allComponents.add(c);
         if (c instanceof Parent) {
             ObservableList<Node> components = ((Parent) c).getChildrenUnmodifiable();
@@ -321,9 +161,11 @@ public class JavaFXElementPropertyAccessor {
         }
     }
 
-    private Node getTopWindow(Node c) {
+    private Node getTopNode(Node c) {
         while (c != null) {
             if (ContextManager.isContext(c))
+                return c;
+            if (c.getScene().getRoot() == c)
                 return c;
             c = c.getParent();
         }
@@ -341,13 +183,15 @@ public class JavaFXElementPropertyAccessor {
     public int getIndexOfType() {
         List<Node> allComponents = findAllComponents();
         int index = 0;
-        Class<? extends Node> klass = node.getClass();
+        String type = getType();
         for (Node c : allComponents) {
             if (c == node)
                 return index;
-            if (c.getClass().equals(klass))
+            if (type.equals(getType(c.getClass())))
                 index++;
         }
+        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning("Could not find the component in allComponents");
+        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning(node.toString());
         return -1;
     }
 

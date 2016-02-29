@@ -7,9 +7,9 @@ import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
-public class RUnknownComponent extends RComponent {
+public class RFXUnknownComponent extends RFXComponent {
 
-    public RUnknownComponent(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
+    public RFXUnknownComponent(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
     }
 

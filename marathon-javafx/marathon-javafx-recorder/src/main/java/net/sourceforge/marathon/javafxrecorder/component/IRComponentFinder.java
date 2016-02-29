@@ -4,6 +4,6 @@ import javafx.scene.Node;
 
 public interface IRComponentFinder {
 
-    Class<? extends RComponent> get(Node component);
+    Class<? extends RFXComponent> get(Node component);
 
 }

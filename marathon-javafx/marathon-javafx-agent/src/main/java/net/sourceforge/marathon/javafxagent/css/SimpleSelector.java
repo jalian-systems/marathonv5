@@ -107,7 +107,7 @@ public class SimpleSelector implements Selector {
         if (tag.equals(".")) {
             cs.addAll(filterMatches(self));
         } else {
-            findByTagName(self, cs, driver, false);
+            findByTagName(self, cs, driver, true);
         }
         JWindow topContainer = driver.switchTo().getCurrentWindow();
         List<IJavaElement> r = new ArrayList<IJavaElement>();

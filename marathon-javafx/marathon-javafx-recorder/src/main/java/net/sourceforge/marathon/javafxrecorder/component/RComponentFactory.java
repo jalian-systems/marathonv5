@@ -13,9 +13,9 @@ public class RComponentFactory {
 
     private static class InstanceCheckFinder implements IRComponentFinder {
         private Class<? extends Node> componentKlass;
-        private Class<? extends RComponent> rComponentKlass;
+        private Class<? extends RFXComponent> rComponentKlass;
 
-        public InstanceCheckFinder(Class<? extends Node> componentKlass, Class<? extends RComponent> javaElementKlass) {
+        public InstanceCheckFinder(Class<? extends Node> componentKlass, Class<? extends RFXComponent> javaElementKlass) {
             this.componentKlass = componentKlass;
             this.rComponentKlass = javaElementKlass;
         }
@@ -27,7 +27,7 @@ public class RComponentFactory {
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
          * .Node)
          */
-        @Override public Class<? extends RComponent> get(Node component) {
+        @Override public Class<? extends RFXComponent> get(Node component) {
             if (componentKlass.isInstance(component))
                 return rComponentKlass;
             return null;
@@ -39,7 +39,7 @@ public class RComponentFactory {
     static {
     }
 
-    public static void add(Class<? extends Node> componentKlass, Class<? extends RComponent> rComponentKlass) {
+    public static void add(Class<? extends Node> componentKlass, Class<? extends RFXComponent> rComponentKlass) {
         add(new InstanceCheckFinder(componentKlass, rComponentKlass));
     }
 
@@ -49,7 +49,7 @@ public class RComponentFactory {
 
     public static void reset() {
         entries.clear();
-        add(Node.class, RUnknownComponent.class);
+        add(Node.class, RFXUnknownComponent.class);
     }
 
     static {
@@ -60,17 +60,17 @@ public class RComponentFactory {
         this.omapConfig = objectMapConfiguration;
     }
 
-    public RComponent findRComponent(Node parent, Point2D point, IJSONRecorder recorder) {
+    public RFXComponent findRComponent(Node parent, Point2D point, IJSONRecorder recorder) {
         return findRawRComponent(getComponent(parent, point), point, recorder);
     }
 
-    public RComponent findRawRComponent(Node source, Point2D point, IJSONRecorder recorder) {
+    public RFXComponent findRawRComponent(Node source, Point2D point, IJSONRecorder recorder) {
         for (IRComponentFinder entry : entries) {
-            Class<? extends RComponent> k = entry.get(source);
+            Class<? extends RFXComponent> k = entry.get(source);
             if (k == null)
                 continue;
             try {
-                Constructor<? extends RComponent> cons = k.getConstructor(Node.class, JSONOMapConfig.class, Point2D.class,
+                Constructor<? extends RFXComponent> cons = k.getConstructor(Node.class, JSONOMapConfig.class, Point2D.class,
                         IJSONRecorder.class);
                 return cons.newInstance(source, omapConfig, point, recorder);
             } catch (Exception e) {

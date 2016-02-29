@@ -16,7 +16,7 @@ import net.sourceforge.marathon.javafxagent.Device.Type;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
-public class JavaAgent implements IJavaAgent {
+public class JavaFXAgent implements IJavaAgent {
 
     private static final String VERSION = "1.0";
 
@@ -25,12 +25,12 @@ public class JavaAgent implements IJavaAgent {
     private JOptions options ;
     private long implicitWait;
 
-    public JavaAgent() {
+    public JavaFXAgent() {
         this(Device.Type.EVENT_QUEUE);
         options = new JOptions(this);
     }
 
-    public JavaAgent(Type type) {
+    public JavaFXAgent(Type type) {
         devices = Device.getDevice(type);
         targetLocator = new JavaTargetLocator(this);
     }

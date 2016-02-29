@@ -23,7 +23,7 @@ import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 import net.sourceforge.marathon.javafxrecorder.JavaHook;
-import net.sourceforge.marathon.javafxrecorder.component.RComponent;
+import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 public class HTTPRecorder implements IJSONRecorder {
@@ -76,15 +76,15 @@ public class HTTPRecorder implements IJSONRecorder {
         return o;
     }
 
-    @Override public void recordSelect(RComponent r, String state) {
+    @Override public void recordSelect(RFXComponent r, String state) {
         recordSelect2(r, state, false);
     }
 
-    @Override public void recordClick(RComponent r, MouseEvent e) {
+    @Override public void recordClick(RFXComponent r, MouseEvent e) {
         recordClick2(r, e, false);
     }
 
-    @Override public void recordClick2(final RComponent r, MouseEvent e, boolean withCellInfo) {
+    @Override public void recordClick2(final RFXComponent r, MouseEvent e, boolean withCellInfo) {
         final JSONObject event = new JSONObject();
         event.put("type", "click");
         event.put("button", e.getButton());
@@ -113,7 +113,7 @@ public class HTTPRecorder implements IJSONRecorder {
         }
     }
 
-    @Override public void recordRawMouseEvent(final RComponent r, MouseEvent e) {
+    @Override public void recordRawMouseEvent(final RFXComponent r, MouseEvent e) {
         final JSONObject event = new JSONObject();
         event.put("type", "click_raw");
         int button = e.getButton() == MouseButton.PRIMARY ? 0 : 2 ;
@@ -146,14 +146,14 @@ public class HTTPRecorder implements IJSONRecorder {
         return 0;
     }
 
-    @Override public void recordRawKeyEvent(RComponent r, KeyEvent e) {
+    @Override public void recordRawKeyEvent(RFXComponent r, KeyEvent e) {
         JSONObject event = new JSONObject();
         event.put("type", "key_raw");
         event.put("ks", e.toString());
         recordEvent(r, event);
     }
 
-    @Override public void recordSelect2(RComponent r, String state, boolean withCellInfo) {
+    @Override public void recordSelect2(RFXComponent r, String state, boolean withCellInfo) {
         JSONObject event = new JSONObject();
         event.put("type", "select");
         event.put("value", state);
@@ -162,7 +162,7 @@ public class HTTPRecorder implements IJSONRecorder {
         recordEvent(r, event);
     }
 
-    private void recordEvent(RComponent r, JSONObject event) {
+    private void recordEvent(RFXComponent r, JSONObject event) {
         JSONObject o = new JSONObject();
         o.put("event", event);
         fill(r, o);
@@ -178,7 +178,7 @@ public class HTTPRecorder implements IJSONRecorder {
         }
     }
 
-    private void fill(RComponent r, JSONObject o) {
+    private void fill(RFXComponent r, JSONObject o) {
         o.put("request", "record-action");
         o.put("urp", r.findURP());
         o.put("attributes", r.findAttributes());
@@ -189,7 +189,7 @@ public class HTTPRecorder implements IJSONRecorder {
         return false;
     }
 
-    @Override public void recordAction(RComponent r, String action, String property, Object value) {
+    @Override public void recordAction(RFXComponent r, String action, String property, Object value) {
         JSONObject event = new JSONObject();
         event.put("type", action);
         event.put("value", value);
@@ -198,20 +198,20 @@ public class HTTPRecorder implements IJSONRecorder {
         recordEvent(r, event);
     }
 
-    @Override public void recordSelectMenu(RComponent r, String selection) {
+    @Override public void recordSelectMenu(RFXComponent r, String selection) {
         JSONObject event = new JSONObject();
         event.put("type", "select_menu");
         event.put("value", selection);
         recordEvent(r, event);
     }
 
-    @Override public void recordWindowClosing(RComponent r) {
+    @Override public void recordWindowClosing(RFXComponent r) {
         JSONObject event = new JSONObject();
         event.put("type", "window_closed");
         recordEvent(r, event);
     }
 
-    @Override public void recordWindowState(final RComponent r, Rectangle2D bounds) {
+    @Override public void recordWindowState(final RFXComponent r, Rectangle2D bounds) {
         final JSONObject event = new JSONObject();
         event.put("type", "window_state");
         event.put("bounds", bounds.getMinX() + ":" + bounds.getMinY() + ":" + bounds.getWidth() + ":" + bounds.getHeight());
@@ -307,7 +307,7 @@ public class HTTPRecorder implements IJSONRecorder {
         return new Response(status, mimeType, data);
     }
 
-    @Override public void recordMenuItem(RComponent r) {
+    @Override public void recordMenuItem(RFXComponent r) {
         JSONObject event = new JSONObject();
         event.put("type", "menu_item");
         event.put("value", "");
@@ -315,7 +315,7 @@ public class HTTPRecorder implements IJSONRecorder {
 
     }
 
-    @Override public void recordFocusedWindow(RComponent r) throws IOException {
+    @Override public void recordFocusedWindow(RFXComponent r) throws IOException {
         JSONObject o = new JSONObject();
         o.put("container", r.findContextHeirarchy((Parent) r.getComponent()));
         postJSON("focused_window", o);

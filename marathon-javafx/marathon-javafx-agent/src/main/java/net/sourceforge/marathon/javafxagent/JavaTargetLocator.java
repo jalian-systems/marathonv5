@@ -151,7 +151,7 @@ public class JavaTargetLocator {
             String omapClassName = getOMapClassName();
             JSONObject object = new JSONObject();
             object.put("title", title).put("component.class.name", componentClassName).put("oMapClassName", omapClassName)
-                    .put("tagName", "window");
+                    .put("tagName", "window").put("type", componentClassName);
             return object;
         }
 
