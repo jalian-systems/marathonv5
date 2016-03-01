@@ -15,13 +15,14 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import net.sourceforge.marathon.javafxrecorder.component.RComponentFactory;
+import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
 
@@ -40,15 +41,16 @@ public class JavaHook implements EventHandler<Event> {
 	private static String windowTitle;
 
 	private JSONOMapConfig objectMapConfiguration;
-	private RComponentFactory finder;
+	private RFXComponentFactory finder;
 	private IJSONRecorder recorder;
+	private RFXComponent current;
 
 	public JavaHook(int port) {
 		try {
 			logger.info("Starting HTTP Recorder on : " + port);
 			recorder = new HTTPRecorder(port);
 			objectMapConfiguration = recorder.getObjectMapConfiguration();
-			finder = new RComponentFactory(objectMapConfiguration);
+			finder = new RFXComponentFactory(objectMapConfiguration);
 			ObservableList<Stage> stages = StageHelper.getStages();
 			for (Stage stage : stages) {
 				addEventFilter(stage);
@@ -131,18 +133,41 @@ public class JavaHook implements EventHandler<Event> {
 				MouseEvent me = (MouseEvent) event;
 				point = Utils.pointRelativeTo((Node) event.getSource(), (Node) event.getTarget(), HPos.LEFT, VPos.TOP,
 						me.getX(), me.getY(), false);
-				event = new MouseEvent(event.getSource(), event.getTarget(), ((MouseEvent)event).getEventType(), point.getX(), point.getY(),
-						((MouseEvent) event).getScreenX(), ((MouseEvent) event).getScreenX(),
-						((MouseEvent) event).getButton(), ((MouseEvent) event).getClickCount(),
-						((MouseEvent) event).isShiftDown(), ((MouseEvent) event).isControlDown(),
-						((MouseEvent) event).isAltDown(), ((MouseEvent) event).isMetaDown(),
-						((MouseEvent) event).isPrimaryButtonDown(), ((MouseEvent) event).isMiddleButtonDown(),
-						((MouseEvent) event).isSecondaryButtonDown(), ((MouseEvent) event).isSynthesized(),
-						((MouseEvent) event).isPopupTrigger(), false, ((MouseEvent) event).getPickResult());
+				event = new MouseEvent(event.getSource(), event.getTarget(), ((MouseEvent) event).getEventType(),
+						point.getX(), point.getY(), ((MouseEvent) event).getScreenX(),
+						((MouseEvent) event).getScreenX(), ((MouseEvent) event).getButton(),
+						((MouseEvent) event).getClickCount(), ((MouseEvent) event).isShiftDown(),
+						((MouseEvent) event).isControlDown(), ((MouseEvent) event).isAltDown(),
+						((MouseEvent) event).isMetaDown(), ((MouseEvent) event).isPrimaryButtonDown(),
+						((MouseEvent) event).isMiddleButtonDown(), ((MouseEvent) event).isSecondaryButtonDown(),
+						((MouseEvent) event).isSynthesized(), ((MouseEvent) event).isPopupTrigger(), false,
+						((MouseEvent) event).getPickResult());
 				// point = new Point2D(me.getX(), me.getY());
 			}
 			RFXComponent c = finder.findRComponent((Node) source, point, recorder);
+			if (isFocusChangeEvent(event.getEventType()) && !c.equals(current)) {
+				if (current != null && isShowing(current))
+					current.focusLost(c);
+				c.focusGained(current);
+				current = c;
+			}
+			// We Need This.
+			if (c.equals(current))
+				c = current;
 			c.processEvent(event);
 		}
+	}
+
+	private boolean isShowing(RFXComponent component) {
+		try {
+			return component.getComponent().getScene().getWindow().isShowing();
+		} catch (Throwable t) {
+			return false;
+		}
+	}
+
+	private boolean isFocusChangeEvent(EventType<? extends Event> eventType) {
+		return eventType != MouseEvent.MOUSE_ENTERED && eventType != MouseEvent.MOUSE_MOVED
+				&& eventType != MouseEvent.MOUSE_EXITED;
 	}
 }

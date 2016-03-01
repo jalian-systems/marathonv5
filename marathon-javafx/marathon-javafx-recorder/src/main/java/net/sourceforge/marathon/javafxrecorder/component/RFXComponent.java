@@ -179,7 +179,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 	}
 
 	private JSONObject getContextJSONObject(Parent parent) {
-		RComponentFactory finder = new RComponentFactory(omapConfig);
+		RFXComponentFactory finder = new RFXComponentFactory(omapConfig);
 		RFXComponent pa = finder.findRComponent(parent, null, recorder);
 		Collection<String> properties = omapConfig.findProperties();
 		Map<String, String> attributes = new HashMap<String, String>();

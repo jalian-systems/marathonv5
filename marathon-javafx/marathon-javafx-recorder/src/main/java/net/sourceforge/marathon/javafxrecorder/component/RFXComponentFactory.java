@@ -5,10 +5,11 @@ import java.util.LinkedList;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
-public class RComponentFactory {
+public class RFXComponentFactory {
     private JSONOMapConfig omapConfig;
 
     private static class InstanceCheckFinder implements IRComponentFinder {
@@ -50,13 +51,14 @@ public class RComponentFactory {
     public static void reset() {
         entries.clear();
         add(Node.class, RFXUnknownComponent.class);
+        add(TextInputControl.class, RFXTextInputControl.class);
     }
 
     static {
         reset();
     }
 
-    public RComponentFactory(JSONOMapConfig objectMapConfiguration) {
+    public RFXComponentFactory(JSONOMapConfig objectMapConfiguration) {
         this.omapConfig = objectMapConfiguration;
     }
 
