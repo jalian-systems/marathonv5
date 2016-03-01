@@ -29,7 +29,7 @@ dependencies {
   compile project(":marathon:nanohttpd-2.1.1")
   compile "org.javassist:javassist:${javassist_version}"
   testCompile "org.testng:testng:${testng_version}"
-  testCompile project(":marathon-java:marathon-test-helpers")
+  testCompile project(":marathon-javafx:marathon-fxtest-helpers")
   antBuildXML project(":marathon:JSON-java").files("bin")
   antBuildXML project(":marathon:nanohttpd-2.1.1").files("bin")
   antBuildXML "org.javassist:javassist:${javassist_version}"

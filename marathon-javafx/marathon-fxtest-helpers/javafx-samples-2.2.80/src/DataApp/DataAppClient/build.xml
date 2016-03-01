@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="DataAppClient" default="default" basedir="."
+        xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <description>Builds, tests, and runs the project DataAppClient.</description>
+    <import file="nbproject/build-impl.xml"/>
+    
+    <!-- Run using jar file so that we use preloader -->
+    <!--   <target name="run" depends="DataAppClient-impl.jar"> 
+        <java fork="true" jar="${dist.dir}/DataAppClient.jar" dir="${dist.dir}"/>
+    </target>
+    -->
+              
+    <target name="-post-jar" depends="-init-javafx, -jfx-copylibs, -check-jfx-deployment">
+                
+        <!-- Move preloader out of libs -->
+        <move file="${dist.dir}/lib/DataAppPreloader.jar" todir="${dist.dir}"/>
+        
+        <!-- Extract needed libraries into build directory -->
+        <unzip dest="${build.classes.dir}">
+            <fileset dir="${dist.dir}/lib">
+                <include name="DataAppLibrary.jar"/>
+                <include name="jersey-client*.jar"/>
+                <include name="jersey-core*.jar"/>
+                <include name="jersey-json*.jar"/>
+                <include name="jackson*.jar"/>
+                <include name="jsr311-api*.jar"/>
+            </fileset>
+        </unzip>
+        
+        <!-- delete libs dir as its not needed any more -->
+        <delete dir="${dist.dir}/lib"/>
+        
+        <!-- delete original netbeans app jar -->
+        <delete file="${dist.jar}"/>
+        
+        <!-- describe javafx app -->
+        <fx:application id="dataapp"
+                        name="${application.title}"
+                        mainClass="${javafx.main.class}"
+                        preloaderClass="dataapppreloader.DataAppPreloader"/>
+
+        <!-- build standalone jar -->
+        <fx:jar destfile="${dist.jar}">
+            <fx:application refId="dataapp"/>
+            <fileset dir="${build.classes.dir}"/>
+            <manifest>
+              <attribute name="Implementation-Vendor" value="${application.vendor}"/>
+              <attribute name="Implementation-Title" value="${application.title}"/>
+              <attribute name="Implementation-Version" value="1.0"/>
+            </manifest>
+            <fx:resources>
+                <fx:fileset requiredFor="preloader" dir="dist">
+                    <include name="DataAppPreloader.jar"/>
+                </fx:fileset>
+            </fx:resources>
+        </fx:jar>        
+        
+        <!-- Copy web images -->
+        <copy todir="${dist.dir}">
+            <fileset dir="${basedir}/web">
+                <include name="**/*.png"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.gif"/>
+            </fileset>
+        </copy>
+
+        <!-- sign application jar. Use new self signed certificate -->
+        <delete file="${build.dir}/test.keystore"/>
+        <genkey alias="TestAlias" 
+           storepass="xyz123" keystore="${build.dir}/test.keystore"
+           dname="CN=Samples, OU=JavaFX Dev, O=Oracle, C=US"/>
+        <signjar keystore="${build.dir}/test.keystore" alias="TestAlias" storepass="xyz123">
+           <fileset dir="${dist.dir}" includes="**/*.jar"/>
+        </signjar>     
+
+        <fx:deploy outdir="${basedir}/${dist.dir}" embedJNLP="true"
+                   outfile="${application.title}"
+                   width="100" height="100"
+                   updatemode="eager">
+            <fx:application refId="dataapp"/>
+            <template file="${basedir}/web/index_template.html"
+                    tofile="${dist.dir}/index2.html"/>
+            <template file="${basedir}/web/index_template.html"
+                    tofile="${dist.dir}/index.jsp"/>
+            <callbacks>
+                <callback name="onGetSplash">getSplash</callback>
+            </callbacks>
+            <fx:resources>
+                <fx:fileset file="${dist.dir}/DataAppPreloader.jar" requiredFor="preloader"/>
+                <fx:fileset file="${dist.dir}/DataAppClient.jar" requiredFor="startup"/>
+            </fx:resources> 
+            <info title="DataApp - JavaFX 2.0 Sample"
+                  vendor="Oracle"/>
+            <fx:permissions elevated="true"/>
+        </fx:deploy>  
+        
+        <!-- Workaround for bug with 100% size in templates -->
+        <replace dir="${basedir}/${dist.dir}">
+            <include name="index2.html"/>
+            <include name="index.jsp"/>
+            <replacetoken><![CDATA[: 100,]]></replacetoken>
+            <replacevalue><![CDATA[: '100%',]]></replacevalue>
+        </replace>
+    </target>
+</project>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <!-- 
+  <persistence-unit name="DataAppLibraryPU" transaction-type="JTA">
+    <non-jta-data-source>jdbc/dataapp</non-jta-data-source>
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.javafx.experiments.dataapp.model.DiscountRate</class>
+    <class>com.javafx.experiments.dataapp.model.Dealer</class>
+    <class>com.javafx.experiments.dataapp.model.Product</class>
+    <class>com.javafx.experiments.dataapp.model.SalesOrder</class>
+    <class>com.javafx.experiments.dataapp.model.Engine</class>
+    <class>com.javafx.experiments.dataapp.model.Address</class>
+    <class>com.javafx.experiments.dataapp.model.ProductType</class>
+    <class>com.javafx.experiments.dataapp.model.Customer</class>
+    <class>com.javafx.experiments.dataapp.model.Role</class>
+    <class>com.javafx.experiments.dataapp.model.Transmission</class>
+    <class>com.javafx.experiments.dataapp.model.Region</class>
+    <class>com.javafx.experiments.dataapp.model.SalesOrderLine</class>
+    <class>com.javafx.experiments.dataapp.model.ProjectedSales</class>
+    <class>com.javafx.experiments.dataapp.model.Employee</class>
+    <class>com.javafx.experiments.dataapp.model.FullProductListing</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/dataapp"/>
+      <property name="javax.persistence.jdbc.password" value="dataapp"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="javax.persistence.jdbc.user" value="dataapp"/>
+    </properties>
+  </persistence-unit> -->
+  <persistence-unit name="DataAppLibraryPU" transaction-type="JTA">
+    <jta-data-source>jdbc/dataapp</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties/>
+  </persistence-unit>
+</persistence>

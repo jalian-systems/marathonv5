@@ -1,0 +1,30 @@
+dependencies {
+    compile files('javafx-samples-2.2.80/Ensemble.jar')
+}
+
+eclipse.classpath.file {
+    withXml { root ->
+      root.asNode().depthFirst().findAll { it instanceof Node && it.name().equals('classpathentry')  }.each {
+        if(it.attribute("kind").equals("src")) {
+          def xnode = it.appendNode('attributes').appendNode('attribute')
+          xnode.attributes().put('name', 'ignore_optional_problems')
+          xnode.attributes().put('value', 'true')
+        }
+      }
+    }
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}

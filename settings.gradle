@@ -8,5 +8,5 @@ include 'marathon:JSON-java', 'marathon:nanohttpd-2.1.1', 'marathon:ruby-seleniu
 					 'marathon-java:marathon-java-driver', 'marathon-java:marathon-java-runtime',
 					 'marathon-java:marathon-java-recorder', ':marathon-java', 'marathon-java:marathon-kbmap-tool',
                                          'marathon-javafx:marathon-javafx-agent', 'marathon-javafx:marathon-javafx-recorder',
-                                         ':marathon-javafx'
+                                         ':marathon-javafx', 'marathon-javafx:marathon-fxtest-helpers'
 

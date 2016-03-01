@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2008, 2012 Oracle and/or its affiliates.
+ * All rights reserved. Use is subject to license terms.
+ *
+ * This file is available and licensed under the following license:
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the distribution.
+ *  - Neither the name of Oracle Corporation nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import java.text.*?>
+<?import javafx.collections.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.transform.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import com.javafx.experiments.dataapp.client.historytab.TimeRangeSelector?>
+<?import com.javafx.experiments.dataapp.client.historytab.SeriesChartTableCellFactory?>
+<?import com.javafx.experiments.dataapp.client.util.FormatedTableCellFactory?>
+
+<Tab text="Sales History" fx:id="historyTab" fx:controller="com.javafx.experiments.dataapp.client.historytab.HistoryTabController" xmlns:fx="http://javafx.com/fxml">
+    <content>
+        <GridPane id="HistoryTab">
+            <children>
+                <TimeRangeSelector fx:id="timeRangeSelector"    GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                <TableView fx:id="dataTable"                    GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.hgrow="always">
+                    <columns>
+                        <TableColumn text="Product Type" prefWidth="125">
+                            <cellValueFactory><PropertyValueFactory property="productType"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Prod. Cost" prefWidth="100">
+                            <cellValueFactory><PropertyValueFactory property="cost"/></cellValueFactory>
+                            <cellFactory>
+                                <FormatedTableCellFactory alignment="right" > 
+                                    <format><NumberFormat fx:factory="getCurrencyInstance" maximumFractionDigits="0"/></format>
+                                </FormatedTableCellFactory>
+                            </cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Total Revenue" prefWidth="120">
+                            <cellValueFactory><PropertyValueFactory property="sales"/></cellValueFactory>
+                            <cellFactory>
+                                <FormatedTableCellFactory alignment="right" > 
+                                    <format><NumberFormat fx:factory="getCurrencyInstance" maximumFractionDigits="0"/></format>
+                                </FormatedTableCellFactory>
+                            </cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Units Sold" prefWidth="100">
+                            <cellValueFactory><PropertyValueFactory property="units"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="right"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Sales History" minWidth="150" prefWidth="500" maxWidth="500">
+                            <cellValueFactory><PropertyValueFactory property="series"/></cellValueFactory>
+                            <cellFactory><SeriesChartTableCellFactory/></cellFactory>
+                        </TableColumn>
+                    </columns>
+<!--                    <placeholder><ProgressIndicator maxWidth="150" maxHeight="150"/></placeholder>-->
+                    <placeholder><ImageView><image><Image url="@../images/progress.gif"/></image></ImageView></placeholder>
+                </TableView>
+                <PieChart fx:id="pieChart1"                     GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="400" prefHeight="400" legendVisible="false"/>
+                <HBox spacing="5"                               GridPane.columnIndex="1" GridPane.rowIndex="2" alignment="baseline_center" >
+                    <children>
+                        <Label text="Filter Region:" id="regionLabel"/>
+                        <ChoiceBox fx:id="regionChoiceBox"/>
+                    </children>
+                </HBox>
+                <PieChart fx:id="pieChart2"                     GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="400" prefHeight="400" legendVisible="false"/>
+            </children>
+        </GridPane>
+    </content>
+</Tab>
