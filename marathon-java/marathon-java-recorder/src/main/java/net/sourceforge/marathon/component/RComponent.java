@@ -83,7 +83,7 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     public void handleRawRecording(IJSONRecorder recorder, AWTEvent event) {
         if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED)
             recorder.recordRawMouseEvent(this, (MouseEvent) event);
-        if (event instanceof KeyEvent && event.getID() == KeyEvent.KEY_PRESSED)
+        if (event instanceof KeyEvent && event.getID() != KeyEvent.KEY_RELEASED)
             recorder.recordRawKeyEvent(this, (KeyEvent) event);
     }
 
