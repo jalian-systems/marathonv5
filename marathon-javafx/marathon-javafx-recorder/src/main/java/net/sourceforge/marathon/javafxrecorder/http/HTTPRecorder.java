@@ -200,8 +200,8 @@ public class HTTPRecorder implements IJSONRecorder {
 		if (keyCode.isModifierKey())
 			return;
 		if ((keyCode.isFunctionKey() || keyCode.isArrowKey() || keyCode.isKeypadKey() || keyCode.isMediaKey()
-				|| keyCode.isNavigationKey() || e.isControlDown() || e.isMetaDown() || e.isAltDown())
-				&& e.getEventType() == KeyEvent.KEY_PRESSED) {
+				|| keyCode.isNavigationKey() || e.isControlDown() || e.isMetaDown() || e.isAltDown() || needManualRecording(keyCode))
+				&& (e.getEventType() == KeyEvent.KEY_PRESSED)) {
 			String mtext = buildModifiersText(e);
 			event.put("modifiersEx", mtext);
 			KeysMap keysMap = KeysMap.findMap(e.getCode());
@@ -213,8 +213,10 @@ public class HTTPRecorder implements IJSONRecorder {
 			else
 				keyText = keysMap.toString();
 			event.put("keyCode", keyText);
-		} else if (e.getEventType() == KeyEvent.KEY_TYPED && !e.isControlDown()) {
+		} else if (e.getEventType() == KeyEvent.KEY_TYPED && !e.isControlDown() && !needManualRecording(keyCode)) {
 			char[] cs = e.getCharacter().toCharArray();
+			if (cs.length == 0)
+				return;
 			for (char c : cs) {
 				if (Character.isISOControl(c) && hasMapping(c)) {
 					event.put("keyChar", getMapping(c));
@@ -222,11 +224,13 @@ public class HTTPRecorder implements IJSONRecorder {
 					event.put("keyChar", "" + c);
 			}
 		} else {
-			System.out.println(
-					"HTTPRecorder.recordRawKeyEvent(keyCode = " + keyCode + ", eventType = " + e.getEventType() + ")");
 			return;
 		}
 		recordEvent(r, event);
+	}
+
+	private boolean needManualRecording(KeyCode keyCode) {
+		return keyCode == KeyCode.BACK_SPACE || keyCode == KeyCode.DELETE || keyCode == KeyCode.ESCAPE;
 	}
 
 	private String getMapping(char keyChar) {
