@@ -20,4 +20,8 @@ public class RFXUnknownComponent extends RFXComponent {
     @Override protected void keyPressed(KeyEvent ke) {
         handleRawRecording(recorder, ke);
     }
+
+    @Override protected void keyTyped(KeyEvent ke) {
+        handleRawRecording(recorder, ke);
+    }
 }

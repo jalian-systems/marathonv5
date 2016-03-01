@@ -117,10 +117,8 @@ public class JavaHook implements EventHandler<Event> {
     }
 
     @Override public void handle(Event event) {
-        logger.info("JavaHook.handle(): " + event);
         Object source = event.getTarget();
         if (source instanceof Node) {
-            logger.info("Trying to process the event");
             Point2D point = null;
             if (event instanceof MouseEvent) {
                 point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
