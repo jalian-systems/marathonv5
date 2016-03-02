@@ -205,7 +205,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     }
 
     public boolean marathon_select(String value) {
-        throw new UnsupportedCommandException("Select method" + " is not applicable for " + getTarget().getClass().getName() + " ("
+        throw new UnsupportedCommandException("Select method is not applicable for " + getTarget().getClass().getName() + " ("
                 + this.getClass().getName() + ")", null);
     }
 

@@ -108,3 +108,4 @@ test {
 compileJava.dependsOn(updateVersions)
 assembleDist.dependsOn(startScripts)
 distZip.dependsOn(project(':marathon-java:marathon-kbmap-tool').tasks.build)
+tasks.eclipse.dependsOn(updateVersions)

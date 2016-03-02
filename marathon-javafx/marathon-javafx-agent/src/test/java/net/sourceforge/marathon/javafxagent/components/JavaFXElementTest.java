@@ -1,4 +1,4 @@
-package net.sourceforge.marathon.javafxrecorder.component;
+package net.sourceforge.marathon.javafxagent.components;
 
 import org.testng.annotations.BeforeMethod;
 
@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Wait;
 
-public abstract class RFXComponentTest {
+public abstract class JavaFXElementTest {
 
 	public static class ApplicationHelper extends Application {
 
@@ -27,7 +27,7 @@ public abstract class RFXComponentTest {
 		@Override
 		public void start(Stage primaryStage) throws Exception {
 			this.primaryStage = primaryStage;
-			RFXComponentTest.applicationHelper = this;
+			JavaFXElementTest.applicationHelper = this;
 		}
 
 		public void startGUI(Pane pane) {
@@ -59,7 +59,7 @@ public abstract class RFXComponentTest {
 
 	private static ApplicationHelper applicationHelper;
 
-	public RFXComponentTest() {
+	public JavaFXElementTest() {
 	}
 
 	@BeforeMethod

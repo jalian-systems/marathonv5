@@ -4,7 +4,9 @@ import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
 import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.components.JavaFXTextInputControlElement;
 
 public class JavaElementFactory {
 
@@ -49,6 +51,7 @@ public class JavaElementFactory {
 
     public static void reset() {
         add(Node.class, JavaFXElement.class);
+        add(TextInputControl.class, JavaFXTextInputControlElement.class);
     }
 
     public static Class<? extends IJavaElement> get(Node component) {
