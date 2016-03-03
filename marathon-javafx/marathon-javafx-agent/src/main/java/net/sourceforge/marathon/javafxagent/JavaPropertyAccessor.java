@@ -36,7 +36,10 @@ public class JavaPropertyAccessor {
         } catch (UnsupportedCommandException e) {
         }
         if (attributeObject == null) {
-            attributeObject = getAttributeObject(object, first);
+            Object o = object;
+            if (this instanceof IPseudoElement)
+                o = ((IPseudoElement) this).getPseudoComponent();
+            attributeObject = getAttributeObject(o, first);
             if (attributeObject == null)
                 return null;
         }

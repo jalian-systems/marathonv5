@@ -43,6 +43,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String _getText() {
         Node c = node;
+        if (this instanceof IPseudoElement)
+            c = ((IPseudoElement) this).getPseudoComponent();
         Object attributeObject = getAttributeObject(c, "text");
         if (attributeObject == null)
             return null;
@@ -118,6 +120,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     private Class<?> findJavaClass() {
         Class<?> c = node.getClass();
+        if (this instanceof IPseudoElement)
+            c = ((IPseudoElement) this).getPseudoComponent().getClass();
         while (c.getPackage() == null || (!c.getPackage().getName().startsWith("javafx.scene")))
             c = c.getSuperclass();
         return c;

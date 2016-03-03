@@ -5,8 +5,10 @@ import java.util.LinkedList;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTextInputControlElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
 
 public class JavaElementFactory {
 
@@ -52,6 +54,7 @@ public class JavaElementFactory {
     public static void reset() {
         add(Node.class, JavaFXElement.class);
         add(TextInputControl.class, JavaFXTextInputControlElement.class);
+        add(TreeView.class, JavaFXTreeViewElement.class);
     }
 
     public static Class<? extends IJavaElement> get(Node component) {

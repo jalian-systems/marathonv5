@@ -90,7 +90,7 @@ public class JavaTargetLocator {
         }
 
         public IJavaElement addElement(IJavaElement je) {
-            Node active = je.getComponent();
+            Node active = je instanceof IPseudoElement ? ((IPseudoElement) je).getParent().getComponent() : je.getComponent();
             IJavaElement found = components.get(active);
             if (found != null) {
                 je.setId(found.getId());

@@ -1,5 +1,7 @@
 package net.sourceforge.marathon.javafxagent;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,6 +88,13 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     }
 
     @Override public String getHandle() {
+        if (this instanceof IPseudoElement) {
+            try {
+                return URLEncoder.encode(((IPseudoElement) this).createHandle(), "utf8");
+            } catch (UnsupportedEncodingException e) {
+                // Can't happen
+            }
+        }
         return id.toString();
     }
 
