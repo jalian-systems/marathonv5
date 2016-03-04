@@ -406,11 +406,6 @@ public class FXEventQueueDevice implements IDevice {
 			return source;
 		ObservableList<Node> children = ((Parent) source).getChildrenUnmodifiable();
 		for (Node child : children) {
-			Bounds boundsInParent = child.getBoundsInParent();
-			x -= boundsInParent.getMinX();
-			y -= boundsInParent.getMinY();
-			if (x < 0.0 || y < 0.0)
-				continue;
 			checkHit(child, x, y, hits);
 		}
 		return hits.size() > 0 ? hits.get(hits.size() - 1) : source;
@@ -422,8 +417,6 @@ public class FXEventQueueDevice implements IDevice {
 			hits.add(child);
 			if (!(child instanceof Parent))
 				return;
-			x -= boundsInParent.getMinX();
-			y -= boundsInParent.getMinY();
 			ObservableList<Node> childrenUnmodifiable = ((Parent) child).getChildrenUnmodifiable();
 			for (Node node : childrenUnmodifiable) {
 				checkHit(node, x, y, hits);
