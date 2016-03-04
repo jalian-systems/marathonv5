@@ -56,7 +56,7 @@ public class RFXComponentFactory {
 		entries.clear();
 		add(Node.class, RFXUnknownComponent.class);
 		add(TextInputControl.class, RFXTextInputControl.class);
-		add(TreeView.class, RFXTreeView.class);
+//		add(TreeView.class, RFXTreeView.class);
 	}
 
 	static {

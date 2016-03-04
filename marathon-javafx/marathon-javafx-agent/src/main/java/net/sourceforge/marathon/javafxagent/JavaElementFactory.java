@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeView;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTextInputControlElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
 

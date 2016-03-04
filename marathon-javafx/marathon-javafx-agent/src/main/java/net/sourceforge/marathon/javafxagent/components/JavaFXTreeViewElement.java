@@ -4,18 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.IJavaAgent;
+import net.sourceforge.marathon.javafxagent.IJavaElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 
 public class JavaFXTreeViewElement extends JavaFXElement {
 
 	public JavaFXTreeViewElement(Node component, IJavaAgent driver, JWindow window) {
 		super(component, driver, window);
+	}
+
+	@Override
+	public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+		if (selector.equals("select-by-properties"))
+			return findNodeByProperties(new JSONObject((String)params[0]));
+		return super.getByPseudoElement(selector, params);
+	}
+
+	private List<IJavaElement> findNodeByProperties(JSONObject o) {
+		List<IJavaElement> r = new ArrayList<>();
+		if (o.has("select")) {
+			if (getPath((TreeView<?>) getComponent(), o.getString("select")) != null) {
+				r.add(new JavaFXTreeViewNodeElement(this, o.getString("select")));
+			}
+		}
+		return r;
 	}
 
 	@Override
@@ -27,22 +46,19 @@ public class JavaFXTreeViewElement extends JavaFXElement {
 	private boolean setSelectionPath(String value) {
 		TreeView<?> treeView = (TreeView<?>) getComponent();
 		JSONArray pathElements = new JSONArray(value);
-		List<List<TreeItem<?>>> paths = new ArrayList<>();
+		List<TreeItem<?>> paths = new ArrayList<>();
 		for (int i = 0; i < pathElements.length(); i++) {
-			paths.add(getPath(pathElements.getString(i)));
+			paths.add(getPath(treeView, pathElements.getString(i)));
 		}
 		treeView.getSelectionModel().clearSelection();
-		for (List<TreeItem<?>> path : paths) {
-			@SuppressWarnings("rawtypes")
-			TreeItem treeItem = (TreeItem<?>) path.get(path.size() - 1);
+		for (@SuppressWarnings("rawtypes") TreeItem treeItem : paths) {
 			treeView.scrollTo(treeView.getRow(treeItem));
 			treeView.getSelectionModel().select(treeItem);
 		}
 		return true;
 	}
 
-	private List<TreeItem<?>> getPath(String path) {
-		TreeView<?> treeView = (TreeView<?>) getComponent();
+	public static TreeItem<?> getPath(TreeView<?> treeView, String path) {
 		String[] tokens = path.substring(1).split("(?<!\\\\)/");
 		Object rootNode = treeView.getRoot();
 		int start = treeView.isShowRoot() ? 1 : 0;
@@ -52,11 +68,11 @@ public class JavaFXTreeViewElement extends JavaFXElement {
 		if (treeView.isShowRoot()) {
 			String rootNodeText = unescapeSpecialCharacters(tokens[0]);
 			searchedPath.append("/" + rootNodeText);
-			assertTrue("TreeView does not have a root node!", rootNode != null);
-			assertTrue(
-					"TreeView root node does not match: Expected </" + getPathText(treePath) + "> Actual: <"
-							+ searchedPath.toString() + ">",
-					searchedPath.toString().equals("/" + getPathText(treePath)));
+			if (rootNode == null)
+				throw new RuntimeException("TreeView does not have a root node!");
+			if (!searchedPath.toString().equals("/" + getPathText(treePath)))
+				throw new RuntimeException("TreeView root node does not match: Expected </" + getPathText(treePath)
+						+ "> Actual: <" + searchedPath.toString() + ">");
 		}
 		for (int i = start; i < tokens.length; i++) {
 			String childText = unescapeSpecialCharacters(tokens[i]);
@@ -77,10 +93,10 @@ public class JavaFXTreeViewElement extends JavaFXElement {
 			if (!matched)
 				return null;
 		}
-		return treePath;
+		return treePath.get(treePath.size() - 1);
 	}
 
-	private String getPathText(List<TreeItem<?>> treePath) {
+	private static String getPathText(List<TreeItem<?>> treePath) {
 		// We should be getting the *text* from the tree cell. We need to figure
 		// out how to construct
 		// a tree cell for a item that is not visible
@@ -100,12 +116,8 @@ public class JavaFXTreeViewElement extends JavaFXElement {
 		return lastPathComponent.getValue().toString();
 	}
 
-	private void assertTrue(String message, boolean b) {
-		if (!b)
-			throw new RuntimeException(message);
-	}
-
-	public String unescapeSpecialCharacters(String name) {
+	public static String unescapeSpecialCharacters(String name) {
 		return name.replaceAll("\\\\/", "/");
 	}
+	
 }

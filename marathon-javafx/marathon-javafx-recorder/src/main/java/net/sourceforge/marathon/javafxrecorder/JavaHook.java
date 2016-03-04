@@ -9,22 +9,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.javafx.stage.StageHelper;
-import com.sun.javafx.util.Utils;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
+import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
 
 public class JavaHook implements EventHandler<Event> {
@@ -136,19 +133,13 @@ public class JavaHook implements EventHandler<Event> {
 		if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node))
 			return;
 		Node target = (Node) event.getTarget();
-		Node source = (Node) event.getSource();
 		target = finder.getComponent(target);
 		Point2D point = null;
-		if (event instanceof MouseEvent) {
-			MouseEvent me = (MouseEvent) event;
-			point = Utils.pointRelativeTo(source, target, HPos.LEFT, VPos.TOP, me.getX(), me.getY(), false);
-			event = new MouseEvent(source, target, me.getEventType(), point.getX(), point.getY(), me.getScreenX(),
-					me.getScreenX(), me.getButton(), me.getClickCount(), me.isShiftDown(), me.isControlDown(),
-					me.isAltDown(), me.isMetaDown(), me.isPrimaryButtonDown(), me.isMiddleButtonDown(),
-					me.isSecondaryButtonDown(), me.isSynthesized(), me.isPopupTrigger(), false, me.getPickResult());
+		if(event instanceof MouseEvent) {
+			point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
 		}
 		RFXComponent c = finder.findRComponent((Node) target, point, recorder);
-		if (isFocusChangeEvent(event.getEventType()) && !c.equals(current)) {
+		if (!c.equals(current)) {
 			if (current != null && isShowing(current))
 				current.focusLost(c);
 			c.focusGained(current);
@@ -157,6 +148,7 @@ public class JavaHook implements EventHandler<Event> {
 		// We Need This.
 		if (c.equals(current))
 			c = current;
+		System.out.println("JavaHook.handle(): " + event);
 		c.processEvent(event);
 	}
 
@@ -168,13 +160,4 @@ public class JavaHook implements EventHandler<Event> {
 		}
 	}
 
-	private boolean isFocusChangeEvent(EventType<? extends Event> eventType) {
-		boolean b = eventType != MouseEvent.MOUSE_ENTERED && eventType != MouseEvent.MOUSE_ENTERED_TARGET
-				&& eventType != MouseEvent.MOUSE_EXITED_TARGET && eventType != MouseEvent.MOUSE_MOVED
-				&& eventType != MouseEvent.MOUSE_EXITED;
-		if (b) {
-			System.out.println("JavaHook.isFocusChangeEvent(): " + eventType);
-		}
-		return b;
-	}
 }

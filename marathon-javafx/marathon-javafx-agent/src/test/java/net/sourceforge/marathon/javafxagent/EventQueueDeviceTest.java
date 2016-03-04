@@ -3,11 +3,11 @@ package net.sourceforge.marathon.javafxagent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.application.Application;
-import javafx.application.Platform;
+import org.testng.annotations.BeforeMethod;
+
+import ensemble.Sample;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Menu;
@@ -17,12 +17,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import net.sourceforge.marathon.javafxagent.components.JavaFXElementTest;
 
-import org.testng.annotations.BeforeMethod;
-
-public class EventQueueDeviceTest {
+public class EventQueueDeviceTest extends JavaFXElementTest {
     protected static TextField textField;
     protected IDevice driver;
     public static MenuBar menuBar;
@@ -40,28 +39,14 @@ public class EventQueueDeviceTest {
         super();
     }
 
-    public static class TestApp extends Application {
+    @BeforeMethod
+    public void createDriver() {
+    	driver = new FXEventQueueDevice();
+    }
+    
+    public static class TestApp extends Sample {
 
-        public static Stage primaryStage;
-
-        @Override public void start(Stage primaryStage) throws Exception {
-            TestApp.primaryStage = primaryStage;
-        }
-
-        private static void createScene() {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-            }
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    runInAppThread();
-                }
-            });
-        }
-
-        private static void runInAppThread() {
-            primaryStage.setTitle("JavaFx Application");
+        private TestApp() {
             menuBar = new MenuBar();
             menu = new Menu("File");
             exitItem = new MenuItem("Exit");
@@ -113,31 +98,8 @@ public class EventQueueDeviceTest {
             VBox root = new VBox();
             root.setId("vBox");
             root.getChildren().addAll(button, textField, menuBar, checkBox);
-            primaryStage.setScene(new Scene(root, 250, 250));
-            primaryStage.setX(0.0);
-            primaryStage.setY(0.0);
-            primaryStage.show();
-            EventQueueWait.empty();
-            EventQueueWait.requestFocus(textField);
-            EventQueueWait.empty();
+            getChildren().add(root);
         }
-    }
-
-    @BeforeMethod public void showScene() {
-        driver = new FXEventQueueDevice();
-        launch();
-        TestApp.createScene();
-    }
-
-    private void launch() {
-        if (TestApp.primaryStage != null)
-            return;
-        Thread t = new Thread(new Runnable() {
-            @Override public void run() {
-                Application.launch(TestApp.class, new String[0]);
-            }
-        });
-        t.start();
     }
 
     protected static String getModifiersExText(MouseEvent event) {
@@ -198,4 +160,9 @@ public class EventQueueDeviceTest {
         }
         return s;
     }
+
+	@Override
+	protected Pane getMainPane() {
+		return new TestApp();
+	}
 }

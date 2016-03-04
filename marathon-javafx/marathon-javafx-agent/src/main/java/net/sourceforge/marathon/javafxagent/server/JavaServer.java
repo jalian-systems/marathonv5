@@ -37,7 +37,7 @@ import net.sourceforge.marathon.javafxagent.SessionNotCreatedException;
 import net.sourceforge.marathon.javafxagent.StaleElementReferenceException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javafxagent.Device.Type;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.script.JSONScriptRunner;
 
 public class JavaServer extends NanoHTTPD {

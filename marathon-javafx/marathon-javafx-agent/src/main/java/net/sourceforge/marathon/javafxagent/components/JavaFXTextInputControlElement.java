@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import net.sourceforge.marathon.javafxagent.IJavaAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 
 public class JavaFXTextInputControlElement extends JavaFXElement {
 

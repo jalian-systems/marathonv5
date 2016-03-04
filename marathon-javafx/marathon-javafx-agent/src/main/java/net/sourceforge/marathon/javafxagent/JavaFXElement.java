@@ -19,14 +19,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
 import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
 public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaElement {
 
-    private IJavaAgent driver;
-    private JWindow window;
-    private UUID id;
+    protected IJavaAgent driver;
+    protected JWindow window;
+    protected UUID id;
 
     public JavaFXElement(Node component, IJavaAgent driver, JWindow window) {
         super(component);
@@ -34,7 +34,14 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         this.window = window;
     }
 
-    @Override public void click() {
+    public JavaFXElement(JavaFXElement parent) {
+    	super(parent.getComponent());
+    	this.driver = parent.driver;
+    	this.window = parent.window;
+    	this.id = parent.getId();
+	}
+
+	@Override public void click() {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -47,7 +54,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
         EventQueueWait.requestFocus(node);
         IDevice kb = driver.getDevices();
-        kb.sendKeys(getTarget(), keysToSend);
+        kb.sendKeys(node, keysToSend);
     }
 
     @Override public void clear() {
@@ -56,10 +63,10 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
     public void _clear() {
         verifyCanInteractWithElement();
-        if (getTarget() instanceof TextInputControl) {
-            ((TextInputControl) getTarget()).setText("");
+        if (node instanceof TextInputControl) {
+            ((TextInputControl) node).setText("");
         } else
-            throw new UnsupportedCommandException("Clear not supported on " + getTarget().getClass().getName(), null);
+            throw new UnsupportedCommandException("Clear not supported on " + node.getClass().getName(), null);
     }
 
     @Override public Point2D getLocation() {
@@ -119,7 +126,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
             return !isSelected();
         else if (function.equals("instance-of"))
             return isInstance((String) args[0]);
-        throw new UnsupportedCommandException("Unsupported psuedo class " + function + " node = " + getTarget().getClass().getName(),
+        throw new UnsupportedCommandException("Unsupported psuedo class " + function + " node = " + node.getClass().getName(),
                 null);
     }
 
@@ -127,7 +134,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         try {
             @SuppressWarnings("unchecked")
             Class<? extends Node> c = (Class<? extends Node>) Class.forName(classname);
-            return c.isInstance(getTarget());
+            return c.isInstance(node);
         } catch (ClassNotFoundException e) {
             return false;
         }
@@ -135,8 +142,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
     @Override public IJavaElement[] getComponents() {
         List<IJavaElement> elements = new ArrayList<>();
-        if (getTarget() instanceof Parent) {
-            ObservableList<Node> childrenUnmodifiable = ((Parent) getTarget()).getChildrenUnmodifiable();
+        if (node instanceof Parent) {
+            ObservableList<Node> childrenUnmodifiable = ((Parent) node).getChildrenUnmodifiable();
             for (Node child : childrenUnmodifiable) {
                 elements.add(JavaElementFactory.createElement(child, driver, window));
             }
@@ -156,7 +163,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
             return Arrays.<IJavaElement> asList();
         }
         throw new UnsupportedCommandException(
-                "Pseudo element selector " + selector + " is not applicable for " + getTarget().getClass().getName(), null);
+                "Pseudo element selector " + selector + " is not applicable for " + node.getClass().getName(), null);
     }
 
     @Override public String createId() {
@@ -173,7 +180,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     }
 
     public void _moveto() {
-        driver.getDevices().moveto(getTarget());
+        driver.getDevices().moveto(node);
     }
 
     @Override public void moveto(double xoffset, double yoffset) {
@@ -181,7 +188,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     }
 
     public void _moveto(double xoffset, double yoffset) {
-        driver.getDevices().moveto(getTarget(), xoffset, yoffset);
+        driver.getDevices().moveto(node, xoffset, yoffset);
     }
 
     @Override public void click(int button, int clickCount, double xoffset, double yoffset) {
@@ -189,7 +196,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.click(getTarget(), Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
+        mouse.click(node, Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
     }
 
     @Override public void buttonDown(int button, double xoffset, double yoffset) {
@@ -197,7 +204,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.buttonDown(getTarget(), Buttons.getButtonFor(button), xoffset, yoffset);
+        mouse.buttonDown(node, Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
     @Override public void buttonUp(int button, double xoffset, double yoffset) {
@@ -205,16 +212,16 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.buttonUp(getTarget(), Buttons.getButtonFor(button), xoffset, yoffset);
+        mouse.buttonUp(node, Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
     public boolean marathon_select(JSONArray jsonArray) {
         throw new UnsupportedCommandException("Select method by properties" + " is not applicable for "
-                + getTarget().getClass().getName() + " (" + this.getClass().getName() + ")", null);
+                + node.getClass().getName() + " (" + this.getClass().getName() + ")", null);
     }
 
     public boolean marathon_select(String value) {
-        throw new UnsupportedCommandException("Select method is not applicable for " + getTarget().getClass().getName() + " ("
+        throw new UnsupportedCommandException("Select method is not applicable for " + node.getClass().getName() + " ("
                 + this.getClass().getName() + ")", null);
     }
 

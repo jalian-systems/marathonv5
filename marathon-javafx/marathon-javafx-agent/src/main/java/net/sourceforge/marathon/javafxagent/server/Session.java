@@ -16,7 +16,7 @@ import net.sourceforge.marathon.javafxagent.Device;
 import net.sourceforge.marathon.javafxagent.IJavaAgent;
 import net.sourceforge.marathon.javafxagent.IJavaElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 
 public class Session {

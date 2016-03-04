@@ -100,4 +100,8 @@ marathon-javafx/marathon-fxtest-helpers/.gitignore
 marathon-javafx/marathon-fxtest-helpers/.project
 marathon-javafx/marathon-fxtest-helpers/.settings/
 marathon-javafx/marathon-fxtest-helpers/build
+marathon-javafx/marathon-fxtest-helpers/bin/
+marathon-javafx/marathon-javafx-agent/bin-test/
+marathon-javafx/marathon-javafx-agent/bin/
+
 

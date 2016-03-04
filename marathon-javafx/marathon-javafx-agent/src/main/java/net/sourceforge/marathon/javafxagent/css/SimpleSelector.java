@@ -11,7 +11,7 @@ import net.sourceforge.marathon.javafxagent.IJavaAgent;
 import net.sourceforge.marathon.javafxagent.IJavaElement;
 import net.sourceforge.marathon.javafxagent.NoSuchWindowException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 
 public class SimpleSelector implements Selector {
 

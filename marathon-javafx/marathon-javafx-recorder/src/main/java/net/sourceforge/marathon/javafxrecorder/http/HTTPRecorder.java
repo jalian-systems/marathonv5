@@ -18,7 +18,9 @@ import org.json.JSONTokener;
 
 import fi.iki.elonen.NanoHTTPD.Response;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -98,8 +100,16 @@ public class HTTPRecorder implements IJSONRecorder {
 		event.put("button", e.getButton());
 		event.put("clickCount", e.getClickCount());
 		event.put("modifiersEx", buildModifiersText(e));
-		event.put("x", e.getX());
-		event.put("y", e.getY());
+		double x = e.getX();
+		double y = e.getY();
+		Node source = (Node) e.getSource();
+		Node target = r.getComponent();
+		Point2D sts = source.localToScreen(new Point2D(0,0));
+		Point2D tts = target.localToScreen(new Point2D(0, 0));
+		x = e.getX() - tts.getX() + sts.getX();
+		y = e.getY() - tts.getY() + sts.getY();
+		event.put("x", x);
+		event.put("y", y);
 		if (withCellInfo)
 			event.put("cellinfo", r.getCellInfo());
 		final JSONObject o = new JSONObject();
@@ -130,8 +140,17 @@ public class HTTPRecorder implements IJSONRecorder {
 		event.put("button", button);
 		event.put("clickCount", e.getClickCount());
 		event.put("modifiersEx", buildModifiersText(e));
-		event.put("x", e.getX());
-		event.put("y", e.getY());
+		double x = e.getX();
+		double y = e.getY();
+		Node source = (Node) e.getSource();
+		Node target = r.getComponent();
+		Point2D sts = source.localToScreen(new Point2D(0,0));
+		Point2D tts = target.localToScreen(new Point2D(0, 0));
+		System.out.println("HTTPRecorder.recordRawMouseEvent(): sts = " + sts + " tts = " + tts + " event = " + new Point2D(e.getX(), e.getY()));
+		x = e.getX() - tts.getX() + sts.getX();
+		y = e.getY() - tts.getY() + sts.getY();
+		event.put("x", x);
+		event.put("y", y);
 		final JSONObject o = new JSONObject();
 		o.put("event", event);
 		fill(r, o);

@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Device.Type;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
 public class JavaFXAgent implements IJavaAgent {
@@ -21,7 +21,7 @@ public class JavaFXAgent implements IJavaAgent {
     private static final String VERSION = "1.0";
 
     private IDevice devices;
-    private JavaTargetLocator targetLocator;
+    private JavaFXTargetLocator targetLocator;
     private JOptions options ;
     private long implicitWait;
 
@@ -32,7 +32,7 @@ public class JavaFXAgent implements IJavaAgent {
 
     public JavaFXAgent(Type type) {
         devices = Device.getDevice(type);
-        targetLocator = new JavaTargetLocator(this);
+        targetLocator = new JavaFXTargetLocator(this);
     }
 
     /* (non-Javadoc)
@@ -66,7 +66,7 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#switchTo()
      */
-    @Override public JavaTargetLocator switchTo() {
+    @Override public JavaFXTargetLocator switchTo() {
         return targetLocator;
     }
 

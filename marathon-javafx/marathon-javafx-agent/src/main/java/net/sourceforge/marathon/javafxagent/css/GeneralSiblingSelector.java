@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.*;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 
 public class GeneralSiblingSelector implements Selector {
 

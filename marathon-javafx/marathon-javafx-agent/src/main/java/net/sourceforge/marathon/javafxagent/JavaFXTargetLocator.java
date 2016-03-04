@@ -20,7 +20,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
-public class JavaTargetLocator {
+public class JavaFXTargetLocator {
 
     public static class ElementMap {
         private Map<String, IJavaElement> elements = new HashMap<String, IJavaElement>();
@@ -44,7 +44,7 @@ public class JavaTargetLocator {
 
         private JWindow(Stage window) {
             currentWindow = window;
-            currentWindowHandle = JavaTargetLocator.getWindowHandle(window);
+            currentWindowHandle = JavaFXTargetLocator.getWindowHandle(window);
         }
 
         public Stage getWindow() {
@@ -173,9 +173,9 @@ public class JavaTargetLocator {
 
     private IJavaAgent driver;
     private JWindow currentWindow;
-    private Map<Stage, JWindow> windows = new HashMap<Stage, JavaTargetLocator.JWindow>();
+    private Map<Stage, JWindow> windows = new HashMap<Stage, JavaFXTargetLocator.JWindow>();
 
-    public JavaTargetLocator(IJavaAgent driver) {
+    public JavaFXTargetLocator(IJavaAgent driver) {
         this.driver = driver;
     }
 

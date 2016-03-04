@@ -4,21 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.testng.AssertJUnit;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
 @Test public class EventQueueDeviceKBTest extends EventQueueDeviceTest {
-
-    @BeforeMethod public void waitForPrimaryStage() {
-        new WaitWithoutException() {
-            @Override public boolean until() {
-                return TestApp.primaryStage.isShowing();
-            }
-        }.wait("stage is not visible", 3000, 500);
-    }
 
     public void sendKeys() {
         driver.sendKeys(textField, "Hello ", "World");

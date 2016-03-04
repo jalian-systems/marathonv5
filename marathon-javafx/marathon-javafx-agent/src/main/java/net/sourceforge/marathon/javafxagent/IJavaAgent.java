@@ -7,7 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import javafx.scene.Node;
-import net.sourceforge.marathon.javafxagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
 
 public interface IJavaAgent {
 
@@ -19,7 +19,7 @@ public interface IJavaAgent {
 
     String getWindowHandle();
 
-    JavaTargetLocator switchTo();
+    JavaFXTargetLocator switchTo();
 
     JOptions manage();
 
