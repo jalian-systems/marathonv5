@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
@@ -376,6 +379,112 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		} catch (InvocationTargetException e) {
 		}
 		return null;
+	}
+
+	public String getTextForNode(TreeView<?> treeView, TreeItem<?> selectedItem) {
+		StringBuilder sb = new StringBuilder();
+		Object[] treePath = buildTreePath(selectedItem);
+		int start = treeView.isShowRoot() ? 0 : 1;
+		for (int i = start; i < treePath.length; i++) {
+			String pathString = escapeSpecialCharacters(getTextForNodeObject(treeView, (TreeItem<?>) treePath[i]));
+			sb.append("/").append(pathString);
+		}
+		return sb.toString();
+	}
+
+	private String getTextForNodeObject(TreeView<?> treeView, TreeItem<?> lastPathComponent) {
+		// We should be getting the *text* from the tree cell. We need to figure out how to construct
+		// a tree cell for a item that is not visible
+		// Set<Node> nodes = treeView.lookupAll(".tree-cell");
+		// for (Node node : nodes) {
+		// TreeCell<?> cell = (TreeCell<?>) node;
+		// if (lastPathComponent == cell.getTreeItem()) {
+		// RFXComponent cellComponent = new
+		// RFXComponentFactory(omapConfig).findRawRComponent(node, null,
+		// recorder);
+		// return cellComponent.getText();
+		// }
+		// }
+		if(lastPathComponent == null || lastPathComponent.getValue() == null)
+			return "" ;
+		return lastPathComponent.getValue().toString();
+	}
+
+	private String escapeSpecialCharacters(String name) {
+		return name.replaceAll("/", "\\\\/");
+	}
+
+	private Object[] buildTreePath(TreeItem<?> selectedItem) {
+		List<Object> path = new ArrayList<>();
+		path.add(selectedItem);
+		while (selectedItem.getParent() != null) {
+			path.add(selectedItem.getParent());
+			selectedItem = selectedItem.getParent();
+		}
+		Collections.reverse(path);
+		return path.toArray();
+	}
+
+	public TreeItem<?> getPath(TreeView<?> treeView, String path) {
+		String[] tokens = path.substring(1).split("(?<!\\\\)/");
+		Object rootNode = treeView.getRoot();
+		int start = treeView.isShowRoot() ? 1 : 0;
+		List<TreeItem<?>> treePath = new ArrayList<TreeItem<?>>();
+		treePath.add((TreeItem<?>) rootNode);
+		StringBuilder searchedPath = new StringBuilder();
+		if (treeView.isShowRoot()) {
+			String rootNodeText = unescapeSpecialCharacters(tokens[0]);
+			searchedPath.append("/" + rootNodeText);
+			if (rootNode == null)
+				throw new RuntimeException("TreeView does not have a root node!");
+			if (!searchedPath.toString().equals("/" + getPathText(treePath)))
+				throw new RuntimeException("TreeView root node does not match: Expected </" + getPathText(treePath)
+						+ "> Actual: <" + searchedPath.toString() + ">");
+		}
+		for (int i = start; i < tokens.length; i++) {
+			String childText = unescapeSpecialCharacters(tokens[i]);
+			searchedPath.append("/" + childText);
+			boolean matched = false;
+			TreeItem<?> item = (TreeItem<?>) treePath.get(treePath.size() - 1);
+			item.setExpanded(true);
+			for (int j = 0; j < item.getChildren().size(); j++) {
+				Object child = item.getChildren().get(j);
+				treePath.add((TreeItem<?>) child);
+				List<TreeItem<?>> childPath = treePath;
+				if (childText.equals(getPathText(childPath))) {
+					treePath = childPath;
+					matched = true;
+					break;
+				}
+			}
+			if (!matched)
+				return null;
+		}
+		return treePath.get(treePath.size() - 1);
+	}
+
+	private String getPathText(List<TreeItem<?>> treePath) {
+		// We should be getting the *text* from the tree cell. We need to figure
+		// out how to construct
+		// a tree cell for a item that is not visible
+		// Set<Node> nodes = treeView.lookupAll(".tree-cell");
+		// for (Node node : nodes) {
+		// TreeCell<?> cell = (TreeCell<?>) node;
+		// if (lastPathComponent == cell.getTreeItem()) {
+		// RFXComponent cellComponent = new
+		// RFXComponentFactory(omapConfig).findRawRComponent(node, null,
+		// recorder);
+		// return cellComponent.getText();
+		// }
+		// }
+		TreeItem<?> lastPathComponent = treePath.get(treePath.size() - 1);
+		if (lastPathComponent == null || lastPathComponent.getValue() == null)
+			return "";
+		return lastPathComponent.getValue().toString();
+	}
+
+	private String unescapeSpecialCharacters(String name) {
+		return name.replaceAll("\\\\/", "/");
 	}
 
 	public static String removeClassName(Object object) {

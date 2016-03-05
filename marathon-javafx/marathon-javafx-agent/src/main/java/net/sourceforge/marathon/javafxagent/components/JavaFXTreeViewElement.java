@@ -1,6 +1,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -23,7 +24,20 @@ public class JavaFXTreeViewElement extends JavaFXElement {
 	@Override
 	public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
 		if (selector.equals("select-by-properties"))
-			return findNodeByProperties(new JSONObject((String)params[0]));
+			return findNodeByProperties(new JSONObject((String) params[0]));
+		else if (selector.equals("root")) {
+			return Arrays.asList(new JavaFXTreeViewNodeElement(this, 0));
+		} else if (selector.equals("nth-node")) {
+			return Arrays.asList(new JavaFXTreeViewNodeElement(this, ((Integer) params[0]).intValue() - 1));
+		} else if (selector.equals("all-nodes")) {
+			TreeView<?> treeView = (TreeView<?>) getComponent();
+			ArrayList<IJavaFXElement> r = new ArrayList<>();
+			int nrows = treeView.getExpandedItemCount();
+			for (int i = 0; i < nrows; i++) {
+				r.add(new JavaFXTreeViewNodeElement(this, i));
+			}
+			return r;
+		}
 		return super.getByPseudoElement(selector, params);
 	}
 
@@ -51,73 +65,12 @@ public class JavaFXTreeViewElement extends JavaFXElement {
 			paths.add(getPath(treeView, pathElements.getString(i)));
 		}
 		treeView.getSelectionModel().clearSelection();
-		for (@SuppressWarnings("rawtypes") TreeItem treeItem : paths) {
+		for (@SuppressWarnings("rawtypes")
+		TreeItem treeItem : paths) {
 			treeView.scrollTo(treeView.getRow(treeItem));
 			treeView.getSelectionModel().select(treeItem);
 		}
 		return true;
 	}
 
-	public static TreeItem<?> getPath(TreeView<?> treeView, String path) {
-		String[] tokens = path.substring(1).split("(?<!\\\\)/");
-		Object rootNode = treeView.getRoot();
-		int start = treeView.isShowRoot() ? 1 : 0;
-		List<TreeItem<?>> treePath = new ArrayList<TreeItem<?>>();
-		treePath.add((TreeItem<?>) rootNode);
-		StringBuilder searchedPath = new StringBuilder();
-		if (treeView.isShowRoot()) {
-			String rootNodeText = unescapeSpecialCharacters(tokens[0]);
-			searchedPath.append("/" + rootNodeText);
-			if (rootNode == null)
-				throw new RuntimeException("TreeView does not have a root node!");
-			if (!searchedPath.toString().equals("/" + getPathText(treePath)))
-				throw new RuntimeException("TreeView root node does not match: Expected </" + getPathText(treePath)
-						+ "> Actual: <" + searchedPath.toString() + ">");
-		}
-		for (int i = start; i < tokens.length; i++) {
-			String childText = unescapeSpecialCharacters(tokens[i]);
-			searchedPath.append("/" + childText);
-			boolean matched = false;
-			TreeItem<?> item = (TreeItem<?>) treePath.get(treePath.size() - 1);
-			item.setExpanded(true);
-			for (int j = 0; j < item.getChildren().size(); j++) {
-				Object child = item.getChildren().get(j);
-				treePath.add((TreeItem<?>) child);
-				List<TreeItem<?>> childPath = treePath;
-				if (childText.equals(getPathText(childPath))) {
-					treePath = childPath;
-					matched = true;
-					break;
-				}
-			}
-			if (!matched)
-				return null;
-		}
-		return treePath.get(treePath.size() - 1);
-	}
-
-	private static String getPathText(List<TreeItem<?>> treePath) {
-		// We should be getting the *text* from the tree cell. We need to figure
-		// out how to construct
-		// a tree cell for a item that is not visible
-		// Set<Node> nodes = treeView.lookupAll(".tree-cell");
-		// for (Node node : nodes) {
-		// TreeCell<?> cell = (TreeCell<?>) node;
-		// if (lastPathComponent == cell.getTreeItem()) {
-		// RFXComponent cellComponent = new
-		// RFXComponentFactory(omapConfig).findRawRComponent(node, null,
-		// recorder);
-		// return cellComponent.getText();
-		// }
-		// }
-		TreeItem<?> lastPathComponent = treePath.get(treePath.size() - 1);
-		if (lastPathComponent == null || lastPathComponent.getValue() == null)
-			return "";
-		return lastPathComponent.getValue().toString();
-	}
-
-	public static String unescapeSpecialCharacters(String name) {
-		return name.replaceAll("\\\\/", "/");
-	}
-	
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
@@ -25,6 +26,20 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaFXE
 		this.path = path;
 	}
 
+	public JavaFXTreeViewNodeElement(JavaFXTreeViewElement parent, int row) {
+		super(parent);
+		this.parent = parent ;
+		this.path = rowToPath(row);
+	}
+
+	private String rowToPath(int row) {
+		TreeView<?> treeView = (TreeView<?>) getComponent();
+		TreeItem<?> treeItem = treeView.getTreeItem(row);
+		if(treeItem == null)
+			throw new RuntimeException("Trying to create a tree item for row " + row + " which is invalid");
+		return getTextForNode(treeView, treeItem);
+	}
+
 	@Override
 	public IJavaFXElement getParent() {
 		return parent;
@@ -42,7 +57,7 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaFXE
 	public Node getPseudoComponent() {
 		TreeView<?> treeView = (TreeView<?>) getComponent();
 		@SuppressWarnings("rawtypes")
-		TreeItem item = JavaFXTreeViewElement.getPath(treeView, path);
+		TreeItem item = getPath(treeView, path);
 		if (item == null)
 			return null;
 		treeView.scrollTo(treeView.getRow(item));
@@ -57,17 +72,33 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaFXE
 
 	@Override
 	public void _moveto() {
-		super._moveto();
+		Point2D midpoint = _getMidpoint();
+		parent._moveto(midpoint.getX(), midpoint.getY());
 	}
 
 	@Override
 	public void _moveto(double xoffset, double yoffset) {
-		super._moveto(xoffset, yoffset);
+		Node cell = getPseudoComponent();
+		Point2D pCoords = cell.localToParent(xoffset, yoffset);
+		parent._moveto(pCoords.getX(), pCoords.getY());
 	}
 
 	@Override
 	public Point2D _getMidpoint() {
-		return super._getMidpoint();
+		Node cell = getPseudoComponent();
+		Bounds boundsInParent = cell.getBoundsInParent();
+		double x = boundsInParent.getWidth() / 2;
+		double y = boundsInParent.getHeight() / 2;
+		return cell.localToParent(x, y);
 	}
 
+	@Override
+	public Object _makeVisible() {
+		getPseudoComponent();
+		return null;
+	}
+	
+	public String getPath() {
+		return path;
+	}
 }
