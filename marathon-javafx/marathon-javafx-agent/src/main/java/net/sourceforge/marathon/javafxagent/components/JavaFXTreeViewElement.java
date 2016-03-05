@@ -9,26 +9,26 @@ import org.json.JSONObject;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import net.sourceforge.marathon.javafxagent.IJavaAgent;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTreeViewElement extends JavaFXElement {
 
-	public JavaFXTreeViewElement(Node component, IJavaAgent driver, JWindow window) {
+	public JavaFXTreeViewElement(Node component, IJavaFXAgent driver, JFXWindow window) {
 		super(component, driver, window);
 	}
 
 	@Override
-	public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+	public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
 		if (selector.equals("select-by-properties"))
 			return findNodeByProperties(new JSONObject((String)params[0]));
 		return super.getByPseudoElement(selector, params);
 	}
 
-	private List<IJavaElement> findNodeByProperties(JSONObject o) {
-		List<IJavaElement> r = new ArrayList<>();
+	private List<IJavaFXElement> findNodeByProperties(JSONObject o) {
+		List<IJavaFXElement> r = new ArrayList<>();
 		if (o.has("select")) {
 			if (getPath((TreeView<?>) getComponent(), o.getString("select")) != null) {
 				r.add(new JavaFXTreeViewNodeElement(this, o.getString("select")));

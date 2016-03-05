@@ -2,7 +2,7 @@ package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.List;
 
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class PseudoElementFilter implements SelectorFilter {
 
@@ -32,7 +32,7 @@ public class PseudoElementFilter implements SelectorFilter {
         return sb.toString();
     }
 
-    @Override public List<IJavaElement> match(IJavaElement je) {
+    @Override public List<IJavaFXElement> match(IJavaFXElement je) {
         Object[] params = new Object[args.length];
         for (int i = 0; i < args.length; i++)
             params[i] = args[i].getValue();

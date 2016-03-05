@@ -4,6 +4,6 @@ import javafx.scene.Node;
 
 public interface IJavaElementFinder {
 
-    public abstract Class<? extends IJavaElement> get(Node component);
+    public abstract Class<? extends IJavaFXElement> get(Node component);
 
 }

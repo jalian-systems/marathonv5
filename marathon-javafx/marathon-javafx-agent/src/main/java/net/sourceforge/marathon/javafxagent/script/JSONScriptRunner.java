@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.scene.Node;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.server.ExecuteMode;
 import net.sourceforge.marathon.javafxagent.server.Session;
@@ -74,7 +74,7 @@ public class JSONScriptRunner {
             return a;
         }
         if (jsonArg instanceof Node) {
-            IJavaElement e = session.findElement((Node) jsonArg);
+            IJavaFXElement e = session.findElement((Node) jsonArg);
             return new JSONObject().put("ELEMENT", e.getId());
         }
         return null;

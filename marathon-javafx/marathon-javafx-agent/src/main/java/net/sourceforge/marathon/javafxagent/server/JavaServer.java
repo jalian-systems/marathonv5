@@ -25,7 +25,7 @@ import fi.iki.elonen.NanoHTTPD.Response.Status;
 import javafx.geometry.Point2D;
 import net.sourceforge.marathon.javafxagent.Device;
 import net.sourceforge.marathon.javafxagent.EventQueueWait;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.InvalidElementStateException;
 import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.JavaAgentKeys;
@@ -37,7 +37,7 @@ import net.sourceforge.marathon.javafxagent.SessionNotCreatedException;
 import net.sourceforge.marathon.javafxagent.StaleElementReferenceException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javafxagent.Device.Type;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.script.JSONScriptRunner;
 
 public class JavaServer extends NanoHTTPD {
@@ -339,10 +339,10 @@ public class JavaServer extends NanoHTTPD {
             }
             if (session != null)
                 r.put("sessionId", session.getID());
-            IJavaElement element = null;
+            IJavaFXElement element = null;
             if (uriParams.has("id"))
                 element = session.findElement(uriParams.getString("id"));
-            JWindow window = null;
+            JFXWindow window = null;
             if (uriParams.has("windowHandle"))
                 window = session.getWindow(uriParams.getString("windowHandle"));
             Object result;
@@ -411,8 +411,8 @@ public class JavaServer extends NanoHTTPD {
         return trace;
     }
 
-    public Object invoke(Route route, JSONObject query, JSONObject uriParams, Session session, JWindow window,
-            IJavaElement element) {
+    public Object invoke(Route route, JSONObject query, JSONObject uriParams, Session session, JFXWindow window,
+            IJavaFXElement element) {
         Object result;
         try {
             if (session == null)
@@ -541,15 +541,15 @@ public class JavaServer extends NanoHTTPD {
 
     public JSONObject findElement(JSONObject query, JSONObject uriParams, Session session) {
         checkRequiredArguments(query, "using", "value");
-        IJavaElement e = session.findElement(query.getString("using"), query.getString("value"));
+        IJavaFXElement e = session.findElement(query.getString("using"), query.getString("value"));
         return new JSONObject().put("ELEMENT", e.getHandle());
     }
 
-    public String getElementName(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public String getElementName(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         return element.getTagName();
     }
 
-    public JSONObject getElementLocation(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public JSONObject getElementLocation(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         return new JSONObject(element.getLocation());
     }
 
@@ -565,18 +565,18 @@ public class JavaServer extends NanoHTTPD {
         session.deleteWindow();
     }
 
-    public JSONObject getElementSize(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public JSONObject getElementSize(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         return new JSONObject(element.getSize());
     }
 
-    public String getCSSValue(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public String getCSSValue(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         String cssValue = element.getCssValue(uriParams.getString("propertyName"));
         if (cssValue == null)
             return NULL_OBJECT;
         return cssValue;
     }
 
-    public String getElementAttribute(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public String getElementAttribute(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         String attribute = element.getAttribute(uriParams.getString("name"));
         if (attribute == null)
             return NULL_OBJECT;
@@ -628,25 +628,25 @@ public class JavaServer extends NanoHTTPD {
         return session.getWindowHandle();
     }
 
-    public JSONObject getWindowSize(JSONObject query, JSONObject uriParams, Session session, JWindow window) {
+    public JSONObject getWindowSize(JSONObject query, JSONObject uriParams, Session session, JFXWindow window) {
         return new JSONObject(window.getSize());
     }
 
-    public JSONObject getWindowPosition(JSONObject query, JSONObject uriParams, Session session, JWindow window) {
+    public JSONObject getWindowPosition(JSONObject query, JSONObject uriParams, Session session, JFXWindow window) {
         return new JSONObject(window.getLocation());
     }
 
-    public void setWindowSize(JSONObject query, JSONObject uriParams, Session session, JWindow window) {
+    public void setWindowSize(JSONObject query, JSONObject uriParams, Session session, JFXWindow window) {
         checkRequiredArguments(query, "width", "height");
         window.setSize(query.getInt("width"), query.getInt("height"));
     }
 
-    public void setWindowPosition(JSONObject query, JSONObject uriParams, Session session, JWindow window) {
+    public void setWindowPosition(JSONObject query, JSONObject uriParams, Session session, JFXWindow window) {
         checkRequiredArguments(query, "x", "y");
         window.setLocation(query.getInt("x"), query.getInt("y"));
     }
 
-    public void maximizeWindow(JSONObject query, JSONObject uriParams, Session session, JWindow window) {
+    public void maximizeWindow(JSONObject query, JSONObject uriParams, Session session, JFXWindow window) {
         window.maximize();
     }
 
@@ -657,7 +657,7 @@ public class JavaServer extends NanoHTTPD {
         return title;
     }
 
-    public String getElementText(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public String getElementText(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         String text = element.getAttribute("text");
         if (text == null)
             return NULL_OBJECT;
@@ -667,52 +667,52 @@ public class JavaServer extends NanoHTTPD {
     public JSONArray findElements(JSONObject query, JSONObject uriParams, Session session) {
         checkRequiredArguments(query, "using", "value");
         JSONArray r = new JSONArray();
-        List<IJavaElement> es = session.findElements(query.getString("using"), query.getString("value"));
-        for (IJavaElement e : es) {
+        List<IJavaFXElement> es = session.findElements(query.getString("using"), query.getString("value"));
+        for (IJavaFXElement e : es) {
             r.put(new JSONObject().put("ELEMENT", e.getHandle()));
         }
         return r;
     }
 
     public JSONObject findActiveElement(JSONObject query, JSONObject uriParams, Session session) {
-        IJavaElement e = session.getActiveElement();
+        IJavaFXElement e = session.getActiveElement();
         return new JSONObject().put("ELEMENT", e.getHandle());
     }
 
-    public JSONObject findElementOfElement(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public JSONObject findElementOfElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         checkRequiredArguments(query, "using", "value");
-        IJavaElement e = session.findElement(element, query.getString("using"), query.getString("value"));
+        IJavaFXElement e = session.findElement(element, query.getString("using"), query.getString("value"));
         return new JSONObject().put("ELEMENT", e.getHandle());
     }
 
-    public JSONArray findElementsOfElement(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public JSONArray findElementsOfElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         checkRequiredArguments(query, "using", "value");
         JSONArray r = new JSONArray();
-        List<IJavaElement> es = session.findElements(element, query.getString("using"), query.getString("value"));
-        for (IJavaElement e : es) {
+        List<IJavaFXElement> es = session.findElements(element, query.getString("using"), query.getString("value"));
+        for (IJavaFXElement e : es) {
             r.put(new JSONObject().put("ELEMENT", e.getHandle()));
         }
         return r;
     }
 
-    public void clearElement(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public void clearElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         element.clear();
     }
 
-    public boolean isSelected(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public boolean isSelected(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         return element.isSelected();
     }
 
-    public boolean isEnabled(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public boolean isEnabled(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         return element.isEnabled();
     }
 
-    public boolean isDisplayed(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public boolean isDisplayed(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         return element.isDisplayed();
     }
 
-    public boolean elementEquals(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
-        IJavaElement other = session.findElement(uriParams.getString("other"));
+    public boolean elementEquals(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
+        IJavaFXElement other = session.findElement(uriParams.getString("other"));
         return element.equals(other);
     }
 
@@ -736,7 +736,7 @@ public class JavaServer extends NanoHTTPD {
 
     // User Actions
     private static class ComponentState {
-        public IJavaElement element;
+        public IJavaFXElement element;
         public double x;
         public double y;
     }
@@ -744,7 +744,7 @@ public class JavaServer extends NanoHTTPD {
     private static ComponentState lastComponenet = new ComponentState();
 
     public void moveto(JSONObject query, JSONObject uriParams, Session session) {
-        IJavaElement element = null;
+        IJavaFXElement element = null;
         if (query.has("element"))
             element = session.findElement(query.getString("element"));
         boolean hasOffset = query.has("xoffset");
@@ -776,7 +776,7 @@ public class JavaServer extends NanoHTTPD {
         lastComponenet.element = element;
     }
 
-    public void clickElement(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public void clickElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         if (lastComponenet.element != null && lastComponenet.element.equals(element)) {
             element.click(0, 1, lastComponenet.x, lastComponenet.y);
         } else {
@@ -795,11 +795,11 @@ public class JavaServer extends NanoHTTPD {
         click(session, button, 1);
     }
 
-    public void submitElement(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public void submitElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         element.submit();
     }
 
-    public void sendKeysElement(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
+    public void sendKeysElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         checkRequiredArguments(query, "value");
         JSONArray value = query.getJSONArray("value");
         value.put(JavaAgentKeys.NULL.subSequence(0, 1));
@@ -808,7 +808,7 @@ public class JavaServer extends NanoHTTPD {
 
     public void sendKeys(JSONObject query, JSONObject uriParams, Session session) {
         checkRequiredArguments(query, "value");
-        IJavaElement element = null;
+        IJavaFXElement element = null;
         if (lastComponenet.element != null) {
             element = lastComponenet.element;
         } else {
@@ -821,7 +821,7 @@ public class JavaServer extends NanoHTTPD {
         int button = 0;
         if (query != null && query.has("button"))
             button = query.getInt("button");
-        IJavaElement element = null;
+        IJavaFXElement element = null;
         double xoffset;
         double yoffset;
         if (lastComponenet.element != null) {
@@ -841,7 +841,7 @@ public class JavaServer extends NanoHTTPD {
         int button = 0;
         if (query.has("button"))
             button = query.getInt("button");
-        IJavaElement element = null;
+        IJavaFXElement element = null;
         double xoffset;
         double yoffset;
         if (lastComponenet.element != null) {
@@ -862,7 +862,7 @@ public class JavaServer extends NanoHTTPD {
     }
 
     private void click(Session session, int button, int clickCount) {
-        IJavaElement element = null;
+        IJavaFXElement element = null;
         double xoffset;
         double yoffset;
         if (lastComponenet.element != null) {

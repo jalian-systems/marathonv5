@@ -132,13 +132,11 @@ public class JavaHook implements EventHandler<Event> {
 	public void handle(Event event) {
 		if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node))
 			return;
-		Node target = (Node) event.getTarget();
-		target = finder.getComponent(target);
 		Point2D point = null;
 		if(event instanceof MouseEvent) {
 			point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
 		}
-		RFXComponent c = finder.findRComponent((Node) target, point, recorder);
+		RFXComponent c = finder.findRComponent((Node) (Node) event.getTarget(), point, recorder);
 		if (!c.equals(current)) {
 			if (current != null && isShowing(current))
 				current.focusLost(c);

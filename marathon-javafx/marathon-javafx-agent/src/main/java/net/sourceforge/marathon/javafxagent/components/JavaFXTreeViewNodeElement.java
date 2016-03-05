@@ -10,11 +10,11 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 
-public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaElement, IPseudoElement {
+public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaFXElement, IPseudoElement {
 
 	private JavaFXTreeViewElement parent;
 	private String path;
@@ -26,7 +26,7 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaEle
 	}
 
 	@Override
-	public IJavaElement getParent() {
+	public IJavaFXElement getParent() {
 		return parent;
 	}
 

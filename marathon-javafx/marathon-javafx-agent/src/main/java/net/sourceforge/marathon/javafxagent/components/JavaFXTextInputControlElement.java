@@ -2,13 +2,13 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
-import net.sourceforge.marathon.javafxagent.IJavaAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTextInputControlElement extends JavaFXElement {
 
-	public JavaFXTextInputControlElement(Node component, IJavaAgent driver, JWindow window) {
+	public JavaFXTextInputControlElement(Node component, IJavaFXAgent driver, JFXWindow window) {
 		super(component, driver, window);
 	}
 

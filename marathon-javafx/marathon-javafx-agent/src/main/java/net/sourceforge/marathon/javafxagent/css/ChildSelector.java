@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import net.sourceforge.marathon.javafxagent.*;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class ChildSelector implements Selector {
 
@@ -25,9 +25,9 @@ public class ChildSelector implements Selector {
         return parent + " > " + child;
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
-            final IJavaElement container, long implicitWait) {
-        final List<IJavaElement> pElements = parent.findElements(driver, container, implicitWait);
+    @SuppressWarnings("unchecked") @Override public List<IJavaFXElement> findElements(final IJavaFXAgent driver,
+            final IJavaFXElement container, long implicitWait) {
+        final List<IJavaFXElement> pElements = parent.findElements(driver, container, implicitWait);
         if (pElements.size() == 0)
             return pElements;
         final Object[] r = new Object[] { null };
@@ -48,7 +48,7 @@ public class ChildSelector implements Selector {
         } else {
             new EventQueueWait() {
                 @Override public boolean till() {
-                    List<IJavaElement> list;
+                    List<IJavaFXElement> list;
                     try {
                         list = found(pElements, driver);
                         r[0] = list;
@@ -72,21 +72,21 @@ public class ChildSelector implements Selector {
             throw (UnsupportedCommandException) r[0];
         if (r[0] instanceof JSONException)
             throw (JSONException) r[0];
-        return (List<IJavaElement>) r[0];
+        return (List<IJavaFXElement>) r[0];
     }
 
-    protected List<IJavaElement> found(List<IJavaElement> pElements, IJavaAgent driver) {
-        List<IJavaElement> r = new ArrayList<IJavaElement>();
-        for (IJavaElement je : pElements) {
+    protected List<IJavaFXElement> found(List<IJavaFXElement> pElements, IJavaFXAgent driver) {
+        List<IJavaFXElement> r = new ArrayList<IJavaFXElement>();
+        for (IJavaFXElement je : pElements) {
             if (!(je.getComponent() instanceof Parent))
                 continue;
-            JWindow topContainer = driver.switchTo().getTopContainer();
+            JFXWindow topContainer = driver.switchTo().getTopContainer();
             ObservableList<Node> components = ((Parent) je.getComponent()).getChildrenUnmodifiable();
             for (Node c : components) {
-                IJavaElement je2 = JavaElementFactory.createElement(c, driver, driver.switchTo().getTopContainer());
-                List<IJavaElement> matched = child.matchesSelector(je2);
-                for (IJavaElement javaElement : matched) {
-                    IJavaElement e = topContainer.addElement(javaElement);
+                IJavaFXElement je2 = JavaFXElementFactory.createElement(c, driver, driver.switchTo().getTopContainer());
+                List<IJavaFXElement> matched = child.matchesSelector(je2);
+                for (IJavaFXElement javaElement : matched) {
+                    IJavaFXElement e = topContainer.addElement(javaElement);
                     if (!r.contains(e))
                         r.add(e);
                 }

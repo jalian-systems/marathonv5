@@ -9,7 +9,7 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 
-public interface IJavaElement {
+public interface IJavaFXElement {
 
     public abstract void click();
 
@@ -33,9 +33,9 @@ public interface IJavaElement {
 
     public abstract String getCssValue(String propertyName);
 
-    public abstract IJavaElement findElementByName(String using);
+    public abstract IJavaFXElement findElementByName(String using);
 
-    public abstract List<IJavaElement> findElementsByName(String using);
+    public abstract List<IJavaFXElement> findElementsByName(String using);
 
     public abstract String getHandle();
 
@@ -45,21 +45,21 @@ public interface IJavaElement {
 
     public abstract UUID getId();
 
-    public abstract IJavaElement findElementByTagName(String using);
+    public abstract IJavaFXElement findElementByTagName(String using);
 
-    public abstract List<IJavaElement> findElementsByTagName(String using);
+    public abstract List<IJavaFXElement> findElementsByTagName(String using);
 
-    public abstract IJavaElement findElementByCssSelector(String using);
+    public abstract IJavaFXElement findElementByCssSelector(String using);
 
-    public abstract List<IJavaElement> findElementsByCssSelector(String using);
+    public abstract List<IJavaFXElement> findElementsByCssSelector(String using);
 
     public abstract boolean hasAttribue(String name);
 
     public abstract boolean filterByPseudoClass(String function, Object... args);
 
-    public abstract IJavaElement[] getComponents();
+    public abstract IJavaFXElement[] getComponents();
 
-    public abstract List<IJavaElement> getByPseudoElement(String function, Object[] params);
+    public abstract List<IJavaFXElement> getByPseudoElement(String function, Object[] params);
 
     public abstract String createId();
 
@@ -77,9 +77,9 @@ public interface IJavaElement {
 
     public abstract void buttonUp(int button, double xoffset, double yoffset);
 
-    public abstract IJavaElement findElementByClassName(String using);
+    public abstract IJavaFXElement findElementByClassName(String using);
 
-    public abstract List<IJavaElement> findElementsByClassName(String using);
+    public abstract List<IJavaFXElement> findElementsByClassName(String using);
 
     public abstract boolean marathon_select(String value);
 

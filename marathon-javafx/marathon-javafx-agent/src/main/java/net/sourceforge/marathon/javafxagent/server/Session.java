@@ -13,15 +13,15 @@ import org.json.JSONObject;
 
 import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.Device;
-import net.sourceforge.marathon.javafxagent.IJavaAgent;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 
 public class Session {
     private String id;
-    private IJavaAgent agent;
+    private IJavaFXAgent agent;
 
     private List<LogEntry> logEntries = new ArrayList<LogEntry>();
     private Level logLevel = Level.ALL;
@@ -64,7 +64,7 @@ public class Session {
         return agent.getTitle();
     }
 
-    public IJavaElement findElement(String using, String value) {
+    public IJavaFXElement findElement(String using, String value) {
         if ("name".equals(using)) {
             return agent.findElementByName(value);
         } else if ("tag name".equals(using)) {
@@ -79,11 +79,11 @@ public class Session {
         throw new UnsupportedCommandException("Unsupported look up strategy " + using, null);
     }
 
-    public IJavaElement findElement(String id) {
+    public IJavaFXElement findElement(String id) {
         return agent.findElement(id);
     }
 
-    public List<IJavaElement> findElements(String using, String value) {
+    public List<IJavaFXElement> findElements(String using, String value) {
         if ("name".equals(using)) {
             return agent.findElementsByName(value);
         } else if ("tag name".equals(using)) {
@@ -98,11 +98,11 @@ public class Session {
         throw new UnsupportedCommandException("Unsupported look up strategy " + using, null);
     }
 
-    public IJavaElement getActiveElement() {
+    public IJavaFXElement getActiveElement() {
         return agent.getActiveElement();
     }
 
-    public IJavaElement findElement(IJavaElement parent, String using, String value) {
+    public IJavaFXElement findElement(IJavaFXElement parent, String using, String value) {
         if ("name".equals(using)) {
             return parent.findElementByName(value);
         } else if ("tag name".equals(using)) {
@@ -117,7 +117,7 @@ public class Session {
         throw new UnsupportedCommandException("Unsupported look up strategy " + using, null);
     }
 
-    public List<IJavaElement> findElements(IJavaElement parent, String using, String value) {
+    public List<IJavaFXElement> findElements(IJavaFXElement parent, String using, String value) {
         if ("name".equals(using)) {
             return parent.findElementsByName(value);
         } else if ("tag name".equals(using)) {
@@ -144,7 +144,7 @@ public class Session {
         agent.quit();
     }
 
-    public JWindow getWindow(String windowHandle) {
+    public JFXWindow getWindow(String windowHandle) {
         if ("current".equals(windowHandle))
             return agent.getCurrentWindow();
         return agent.getWindow(windowHandle);
@@ -158,7 +158,7 @@ public class Session {
         return agent.getWindowProperties();
     }
 
-    public IJavaElement findElement(Node component) {
+    public IJavaFXElement findElement(Node component) {
         return agent.findElement(component);
     }
 

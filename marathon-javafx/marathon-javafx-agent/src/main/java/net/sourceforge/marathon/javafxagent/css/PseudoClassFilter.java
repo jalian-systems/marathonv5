@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class PseudoClassFilter implements SelectorFilter {
 
@@ -34,13 +34,13 @@ public class PseudoClassFilter implements SelectorFilter {
         return sb.toString();
     }
 
-    @Override public List<IJavaElement> match(IJavaElement je) {
+    @Override public List<IJavaFXElement> match(IJavaFXElement je) {
         if (doesMatch(je))
             return Arrays.asList(je);
-        return new ArrayList<IJavaElement>();
+        return new ArrayList<IJavaFXElement>();
     }
 
-    public boolean doesMatch(IJavaElement je) {
+    public boolean doesMatch(IJavaFXElement je) {
         if (args == null || args.length == 0)
             return je.filterByPseudoClass(function);
         Object[] params = new Object[args.length];

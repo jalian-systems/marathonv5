@@ -13,10 +13,10 @@ import org.json.JSONObject;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Device.Type;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
-public class JavaFXAgent implements IJavaAgent {
+public class JavaFXAgent implements IJavaFXAgent {
 
     private static final String VERSION = "1.0";
 
@@ -103,14 +103,14 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElement(java.lang.String)
      */
-    @Override public IJavaElement findElement(String id) {
+    @Override public IJavaFXElement findElement(String id) {
         return targetLocator.findElement(id);
     }
 
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getActiveElement()
      */
-    @Override public IJavaElement getActiveElement() {
+    @Override public IJavaFXElement getActiveElement() {
         return targetLocator.getActiveElement();
     }
 
@@ -134,22 +134,22 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindow(java.lang.String)
      */
-    @Override public JWindow getWindow(String windowHandle) {
+    @Override public JFXWindow getWindow(String windowHandle) {
         return targetLocator.getWindowForHandle(windowHandle);
     }
 
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getCurrentWindow()
      */
-    @Override public JWindow getCurrentWindow() {
+    @Override public JFXWindow getCurrentWindow() {
         return targetLocator.getCurrentWindow();
     }
 
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementByTagName(java.lang.String)
      */
-    @Override public IJavaElement findElementByTagName(String using) {
-        List<IJavaElement> elements = findElementsByTagName(using);
+    @Override public IJavaFXElement findElementByTagName(String using) {
+        List<IJavaFXElement> elements = findElementsByTagName(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using name: " + using, null);
         return elements.get(0);
@@ -158,15 +158,15 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByTagName(java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByTagName(final String using) {
+    @Override public List<IJavaFXElement> findElementsByTagName(final String using) {
         return findByCss(using);
     }
 
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementByName(java.lang.String)
      */
-    @Override public IJavaElement findElementByName(String using) {
-        List<IJavaElement> elements = findElementsByName(using);
+    @Override public IJavaFXElement findElementByName(String using) {
+        List<IJavaFXElement> elements = findElementsByName(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using name: " + using, null);
         return elements.get(0);
@@ -175,15 +175,15 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByName(java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByName(final String using) {
+    @Override public List<IJavaFXElement> findElementsByName(final String using) {
         return findByCss("#'" + using + "'");
     }
 
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementByCssSelector(java.lang.String)
      */
-    @Override public IJavaElement findElementByCssSelector(String using) {
-        List<IJavaElement> elements = findElementsByCssSelector(using);
+    @Override public IJavaFXElement findElementByCssSelector(String using) {
+        List<IJavaFXElement> elements = findElementsByCssSelector(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
         return elements.get(0);
@@ -192,9 +192,9 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByCssSelector(java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByCssSelector(String using) {
+    @Override public List<IJavaFXElement> findElementsByCssSelector(String using) {
         Stage window = targetLocator.getTopContainer().getWindow();
-        IJavaElement je = JavaElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
+        IJavaFXElement je = JavaFXElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
         FindByCssSelector finder = new FindByCssSelector(je, this, implicitWait);
         return finder.findElements(using);
     }
@@ -202,8 +202,8 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementByClassName(java.lang.String)
      */
-    @Override public IJavaElement findElementByClassName(String using) {
-        List<IJavaElement> elements = findElementsByClassName(using);
+    @Override public IJavaFXElement findElementByClassName(String using) {
+        List<IJavaFXElement> elements = findElementsByClassName(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
         return elements.get(0);
@@ -212,13 +212,13 @@ public class JavaFXAgent implements IJavaAgent {
     /* (non-Javadoc)
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByClassName(java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByClassName(String using) {
+    @Override public List<IJavaFXElement> findElementsByClassName(String using) {
         return findByCss(":instance-of('" + using + "')");
     }
 
-    protected List<IJavaElement> findByCss(String css) {
+    protected List<IJavaFXElement> findByCss(String css) {
         Stage window = targetLocator.getTopContainer().getWindow();
-        IJavaElement je = JavaElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
+        IJavaFXElement je = JavaFXElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
         FindByCssSelector finder = new FindByCssSelector(je, this, implicitWait);
         return finder.findElements(css);
     }
@@ -237,7 +237,7 @@ public class JavaFXAgent implements IJavaAgent {
         this.implicitWait = implicitWait;
     }
 
-    @Override public IJavaElement findElement(Node component) {
+    @Override public IJavaFXElement findElement(Node component) {
         return targetLocator.getTopContainer().findElement(component);
     }
 

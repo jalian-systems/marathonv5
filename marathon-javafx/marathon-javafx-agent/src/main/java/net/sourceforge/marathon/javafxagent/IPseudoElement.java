@@ -4,7 +4,7 @@ import javafx.scene.Node;
 
 public interface IPseudoElement {
 
-    public IJavaElement getParent();
+    public IJavaFXElement getParent();
 
     public String createHandle();
 

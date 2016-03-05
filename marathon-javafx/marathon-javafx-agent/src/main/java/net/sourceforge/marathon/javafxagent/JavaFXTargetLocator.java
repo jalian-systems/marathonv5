@@ -23,26 +23,26 @@ import javafx.stage.Stage;
 public class JavaFXTargetLocator {
 
     public static class ElementMap {
-        private Map<String, IJavaElement> elements = new HashMap<String, IJavaElement>();
+        private Map<String, IJavaFXElement> elements = new HashMap<String, IJavaFXElement>();
 
-        public void put(String id, IJavaElement je) {
+        public void put(String id, IJavaFXElement je) {
             elements.put(id, je);
         }
 
-        public IJavaElement get(String id) {
+        public IJavaFXElement get(String id) {
             return elements.get(id);
         }
     }
 
-    public class JWindow {
+    public class JFXWindow {
 
         private String currentWindowHandle;
         private Stage currentWindow;
 
         private ElementMap elements = new ElementMap();
-        private Map<Node, IJavaElement> components = new HashMap<Node, IJavaElement>();
+        private Map<Node, IJavaFXElement> components = new HashMap<Node, IJavaFXElement>();
 
-        private JWindow(Stage window) {
+        private JFXWindow(Stage window) {
             currentWindow = window;
             currentWindowHandle = JavaFXTargetLocator.getWindowHandle(window);
         }
@@ -89,9 +89,9 @@ public class JavaFXTargetLocator {
             }
         }
 
-        public IJavaElement addElement(IJavaElement je) {
+        public IJavaFXElement addElement(IJavaFXElement je) {
             Node active = je instanceof IPseudoElement ? ((IPseudoElement) je).getParent().getComponent() : je.getComponent();
-            IJavaElement found = components.get(active);
+            IJavaFXElement found = components.get(active);
             if (found != null) {
                 je.setId(found.getId());
                 return je;
@@ -101,7 +101,7 @@ public class JavaFXTargetLocator {
             return je;
         }
 
-        public IJavaElement findElement(String id) {
+        public IJavaFXElement findElement(String id) {
             String info = null;
             try {
                 id = URLDecoder.decode(id, "utf8");
@@ -114,7 +114,7 @@ public class JavaFXTargetLocator {
                 info = id.substring(indexOf + 1);
                 id = idPart;
             }
-            IJavaElement e = elements.get(id);
+            IJavaFXElement e = elements.get(id);
             if (e == null)
                 throw new NoSuchElementException("Could not find element for the given id in the topmost window", null);
             if (info == null) {
@@ -130,10 +130,10 @@ public class JavaFXTargetLocator {
             return e;
         }
 
-        public IJavaElement findElement(Node active) {
-            IJavaElement found = components.get(active);
+        public IJavaFXElement findElement(Node active) {
+            IJavaFXElement found = components.get(active);
             if (found == null) {
-                IJavaElement e = JavaElementFactory.createElement(active, driver, this);
+                IJavaFXElement e = JavaFXElementFactory.createElement(active, driver, this);
                 elements.put(e.createId(), e);
                 components.put(active, e);
                 found = e;
@@ -141,7 +141,7 @@ public class JavaFXTargetLocator {
             return found;
         }
 
-        public IJavaElement findElementFromMap(Node component) {
+        public IJavaFXElement findElementFromMap(Node component) {
             return components.get(component);
         }
 
@@ -171,15 +171,15 @@ public class JavaFXTargetLocator {
 
     }
 
-    private IJavaAgent driver;
-    private JWindow currentWindow;
-    private Map<Stage, JWindow> windows = new HashMap<Stage, JavaFXTargetLocator.JWindow>();
+    private IJavaFXAgent driver;
+    private JFXWindow currentWindow;
+    private Map<Stage, JFXWindow> windows = new HashMap<Stage, JavaFXTargetLocator.JFXWindow>();
 
-    public JavaFXTargetLocator(IJavaAgent driver) {
+    public JavaFXTargetLocator(IJavaFXAgent driver) {
         this.driver = driver;
     }
 
-    public IJavaAgent window(final String nameOrHandleOrTitle) {
+    public IJavaFXAgent window(final String nameOrHandleOrTitle) {
         if (driver.getImplicitWait() != 0) {
             new EventQueueWait() {
                 @Override public boolean till() {
@@ -194,8 +194,8 @@ public class JavaFXTargetLocator {
         // We need the following call (even with set implicitWait) for throwing
         // an exception on error
         try {
-            return EventQueueWait.exec(new Callable<IJavaAgent>() {
-                @Override public IJavaAgent call() {
+            return EventQueueWait.exec(new Callable<IJavaFXAgent>() {
+                @Override public IJavaFXAgent call() {
                     return window_internal(nameOrHandleOrTitle);
                 }
             });
@@ -204,7 +204,7 @@ public class JavaFXTargetLocator {
         }
     }
 
-    private IJavaAgent window_internal(String nameOrHandleOrTitle) {
+    private IJavaFXAgent window_internal(String nameOrHandleOrTitle) {
         Stage[] windows = getValidWindows();
         for (Stage window : windows) {
             if (window.getTitle().equals(nameOrHandleOrTitle)) {
@@ -213,7 +213,7 @@ public class JavaFXTargetLocator {
             }
         }
         for (Stage window : windows) {
-            JWindow jw = new JWindow(window);
+            JFXWindow jw = new JFXWindow(window);
             String title = jw.getTitle();
             if (title != null && title.equals(nameOrHandleOrTitle)) {
                 setCurrentWindow(window);
@@ -248,9 +248,9 @@ public class JavaFXTargetLocator {
     }
 
     private void setCurrentWindow(Stage window) {
-        JWindow jw = windows.get(window);
+        JFXWindow jw = windows.get(window);
         if (jw == null) {
-            jw = new JWindow(window);
+            jw = new JFXWindow(window);
             windows.put(window, jw);
         }
         currentWindow = jw;
@@ -278,7 +278,7 @@ public class JavaFXTargetLocator {
         return windowHandles;
     }
 
-    public JWindow getTopContainer() {
+    public JFXWindow getTopContainer() {
         new Wait() {
             @Override public boolean until() {
                 try {
@@ -292,7 +292,7 @@ public class JavaFXTargetLocator {
         return _getTopContainer();
     }
 
-    private JWindow _getTopContainer() {
+    private JFXWindow _getTopContainer() {
         if (currentWindow == null) {
             Stage[] windows = getValidWindows();
             if (windows.length == 1) {
@@ -308,28 +308,28 @@ public class JavaFXTargetLocator {
         return currentWindow;
     }
 
-    public JWindow getWindowForHandle(String windowHandle) {
+    public JFXWindow getWindowForHandle(String windowHandle) {
         Stage[] windows = getValidWindows();
         for (Stage window : windows) {
             if (windowHandle.equals(getWindowHandle(window)))
-                return new JWindow(window);
+                return new JFXWindow(window);
         }
         throw new NoSuchWindowException("No window found corresponding to the given window Handle", null);
     }
 
-    public IJavaElement findElement(String id) {
+    public IJavaFXElement findElement(String id) {
         return getTopContainer().findElement(id);
     }
 
-    public IJavaElement getActiveElement() {
-        JWindow top = getTopContainer();
+    public IJavaFXElement getActiveElement() {
+        JFXWindow top = getTopContainer();
         Node active = top.getWindow().getScene().getFocusOwner();
         if (active == null)
             throw new NoSuchElementException("Could not find focus owner for the topmost window", null);
         return top.findElement(active);
     }
 
-    public JWindow getCurrentWindow() {
+    public JFXWindow getCurrentWindow() {
         getTopContainer();
         return currentWindow;
     }

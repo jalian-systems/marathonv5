@@ -3,8 +3,8 @@ package net.sourceforge.marathon.javafxagent.css;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.marathon.javafxagent.IJavaAgent;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class DescendentSelector implements Selector {
 
@@ -20,12 +20,12 @@ public class DescendentSelector implements Selector {
         return parent + " " + descendent;
     }
 
-    @Override public List<IJavaElement> findElements(IJavaAgent driver, IJavaElement container, long implicitWait) {
-        List<IJavaElement> result = new ArrayList<IJavaElement>();
-        List<IJavaElement> parents = parent.findElements(driver, container, implicitWait);
-        for (IJavaElement parent : parents) {
-            List<IJavaElement> es = descendent.findElements(driver, parent, implicitWait);
-            for (IJavaElement e : es) {
+    @Override public List<IJavaFXElement> findElements(IJavaFXAgent driver, IJavaFXElement container, long implicitWait) {
+        List<IJavaFXElement> result = new ArrayList<IJavaFXElement>();
+        List<IJavaFXElement> parents = parent.findElements(driver, container, implicitWait);
+        for (IJavaFXElement parent : parents) {
+            List<IJavaFXElement> es = descendent.findElements(driver, parent, implicitWait);
+            for (IJavaFXElement e : es) {
                 if (!result.contains(e))
                     result.add(e);
             }

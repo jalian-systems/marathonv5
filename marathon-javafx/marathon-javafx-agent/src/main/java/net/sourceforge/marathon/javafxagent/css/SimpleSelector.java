@@ -7,11 +7,11 @@ import java.util.List;
 import org.json.JSONException;
 
 import net.sourceforge.marathon.javafxagent.EventQueueWait;
-import net.sourceforge.marathon.javafxagent.IJavaAgent;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.NoSuchWindowException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class SimpleSelector implements Selector {
 
@@ -45,8 +45,8 @@ public class SimpleSelector implements Selector {
         return sb.toString();
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
-            final IJavaElement container, long implicitWait) {
+    @SuppressWarnings("unchecked") @Override public List<IJavaFXElement> findElements(final IJavaFXAgent driver,
+            final IJavaFXElement container, long implicitWait) {
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
             EventQueueWait.exec(new Runnable() {
@@ -67,7 +67,7 @@ public class SimpleSelector implements Selector {
         } else {
             new EventQueueWait() {
                 @Override public boolean till() {
-                    List<IJavaElement> list;
+                    List<IJavaFXElement> list;
                     try {
                         list = found(container, driver);
                         r[0] = list;
@@ -98,53 +98,53 @@ public class SimpleSelector implements Selector {
             throw (RuntimeException) r[0];
         if (r[0] instanceof Exception)
             throw new RuntimeException(((Exception) r[0]).getMessage(), (Exception) r[0]);
-        List<IJavaElement> list = (List<IJavaElement>) r[0];
+        List<IJavaFXElement> list = (List<IJavaFXElement>) r[0];
         return list;
     }
 
-    public List<IJavaElement> found(IJavaElement self, IJavaAgent driver) {
-        List<IJavaElement> cs = new ArrayList<IJavaElement>();
+    public List<IJavaFXElement> found(IJavaFXElement self, IJavaFXAgent driver) {
+        List<IJavaFXElement> cs = new ArrayList<IJavaFXElement>();
         if (tag.equals(".")) {
             cs.addAll(filterMatches(self));
         } else {
             findByTagName(self, cs, driver, true);
         }
-        JWindow topContainer = driver.switchTo().getCurrentWindow();
-        List<IJavaElement> r = new ArrayList<IJavaElement>();
-        for (IJavaElement component : cs) {
+        JFXWindow topContainer = driver.switchTo().getCurrentWindow();
+        List<IJavaFXElement> r = new ArrayList<IJavaFXElement>();
+        for (IJavaFXElement component : cs) {
             r.add(topContainer.addElement(component));
         }
         if (nthFilter != null) {
             if (nthFilter.getNthIndex() - 1 < r.size())
                 return Arrays.asList(r.get(nthFilter.getNthIndex() - 1));
             else
-                return new ArrayList<IJavaElement>();
+                return new ArrayList<IJavaFXElement>();
         }
         return r;
     }
 
-    private void findByTagName(IJavaElement je, List<IJavaElement> cs, IJavaAgent driver, boolean addThis) {
+    private void findByTagName(IJavaFXElement je, List<IJavaFXElement> cs, IJavaFXAgent driver, boolean addThis) {
         if (addThis)
             cs.addAll(matchesSelector(je));
-        IJavaElement[] components = je.getComponents();
-        for (IJavaElement javaElement : components) {
+        IJavaFXElement[] components = je.getComponents();
+        for (IJavaFXElement javaElement : components) {
             findByTagName(javaElement, cs, driver, true);
         }
         return;
     }
 
-    public List<IJavaElement> matchesSelector(IJavaElement je) {
+    public List<IJavaFXElement> matchesSelector(IJavaFXElement je) {
         if ("*".equals(tag) || tag.equals(je.getTagName())) {
             return filterMatches(je);
         }
-        return new ArrayList<IJavaElement>();
+        return new ArrayList<IJavaFXElement>();
     }
 
-    private List<IJavaElement> filterMatches(IJavaElement je) {
-        List<IJavaElement> elements = Arrays.asList(je);
+    private List<IJavaFXElement> filterMatches(IJavaFXElement je) {
+        List<IJavaFXElement> elements = Arrays.asList(je);
         for (SelectorFilter f : filters) {
-            List<IJavaElement> toProcess = new ArrayList<IJavaElement>();
-            for (IJavaElement javaElement : elements) {
+            List<IJavaFXElement> toProcess = new ArrayList<IJavaFXElement>();
+            for (IJavaFXElement javaElement : elements) {
                 toProcess.addAll(f.match(javaElement));
             }
             elements = toProcess;

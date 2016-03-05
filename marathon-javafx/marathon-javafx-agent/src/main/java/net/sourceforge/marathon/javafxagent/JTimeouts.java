@@ -4,9 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 public class JTimeouts {
 
-    private IJavaAgent agent;
+    private IJavaFXAgent agent;
 
-    public JTimeouts(IJavaAgent agent) {
+    public JTimeouts(IJavaFXAgent agent) {
         this.agent = agent;
     }
     

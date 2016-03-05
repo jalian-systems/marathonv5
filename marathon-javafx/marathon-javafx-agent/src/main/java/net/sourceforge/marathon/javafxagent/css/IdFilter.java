@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class IdFilter implements SelectorFilter {
 
@@ -25,9 +25,9 @@ public class IdFilter implements SelectorFilter {
         return "#" + id;
     }
 
-    @Override public List<IJavaElement> match(IJavaElement je) {
+    @Override public List<IJavaFXElement> match(IJavaFXElement je) {
         if (id.equals(je.getAttribute("name")))
             return Arrays.asList(je);
-        return new ArrayList<IJavaElement>();
+        return new ArrayList<IJavaFXElement>();
     }
 }

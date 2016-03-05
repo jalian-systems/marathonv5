@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class AttributeFilter implements SelectorFilter {
 
@@ -24,13 +24,13 @@ public class AttributeFilter implements SelectorFilter {
         return "[" + name + " " + op + " " + arg + "]";
     }
 
-    @Override public List<IJavaElement> match(IJavaElement je) {
+    @Override public List<IJavaFXElement> match(IJavaFXElement je) {
         if (doesMatch(je))
             return Arrays.asList(je);
-        return new ArrayList<IJavaElement>();
+        return new ArrayList<IJavaFXElement>();
     }
 
-    public boolean doesMatch(IJavaElement je) {
+    public boolean doesMatch(IJavaFXElement je) {
         if (arg == null)
             return je.hasAttribue(name);
         String expected = je.getAttribute(name);

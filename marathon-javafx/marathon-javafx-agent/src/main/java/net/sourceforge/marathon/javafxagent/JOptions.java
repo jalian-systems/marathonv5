@@ -3,7 +3,7 @@ package net.sourceforge.marathon.javafxagent;
 public class JOptions {
 
     private JTimeouts timeouts ;
-    private IJavaAgent agent;
+    private IJavaFXAgent agent;
 
     public JTimeouts timeouts() {
         if(timeouts == null)
@@ -11,7 +11,7 @@ public class JOptions {
         return timeouts;
     }
 
-    public JOptions(IJavaAgent agent) {
+    public JOptions(IJavaFXAgent agent) {
         this.agent = agent;
     }
 }

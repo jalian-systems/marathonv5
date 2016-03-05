@@ -2,11 +2,11 @@ package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.List;
 
-import net.sourceforge.marathon.javafxagent.IJavaAgent;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public interface Selector {
 
-    List<IJavaElement> findElements(IJavaAgent driver, IJavaElement container, long implicitWait);
+    List<IJavaFXElement> findElements(IJavaFXAgent driver, IJavaFXElement container, long implicitWait);
 
 }

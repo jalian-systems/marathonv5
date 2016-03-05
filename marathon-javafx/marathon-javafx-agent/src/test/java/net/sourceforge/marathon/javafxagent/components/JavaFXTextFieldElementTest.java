@@ -7,14 +7,14 @@ import org.testng.annotations.Test;
 import ensemble.samples.controls.text.TextFieldSample;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
 import net.sourceforge.marathon.javafxagent.Wait;
 
 public class JavaFXTextFieldElementTest extends JavaFXElementTest {
 
 	private JavaFXAgent driver;
-	private IJavaElement textField;
+	private IJavaFXElement textField;
 
 	@BeforeMethod
 	public void initializeDriver() {

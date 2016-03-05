@@ -10,14 +10,14 @@ import javafx.application.Platform;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
-import net.sourceforge.marathon.javafxagent.IJavaElement;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
 import net.sourceforge.marathon.javafxagent.Wait;
 
 public class JavaFXTreeViewElementTest extends JavaFXElementTest {
 
 	private JavaFXAgent driver;
-	private IJavaElement treeView;
+	private IJavaFXElement treeView;
 
 	@BeforeMethod
 	public void initializeDriver() {
@@ -74,7 +74,7 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
 	public void marathon_get_a_node() throws Throwable {
 		JSONObject o = new JSONObject();
 		o.put("select", "/Root node/Child Node 1");
-		IJavaElement e = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
+		IJavaFXElement e = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
 		AssertJUnit.assertEquals("Child Node 1", e.getText());
 	}
 

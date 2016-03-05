@@ -19,16 +19,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
 import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
-import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JWindow;
+import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
-public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaElement {
+public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaFXElement {
 
-    protected IJavaAgent driver;
-    protected JWindow window;
+    protected IJavaFXAgent driver;
+    protected JFXWindow window;
     protected UUID id;
 
-    public JavaFXElement(Node component, IJavaAgent driver, JWindow window) {
+    public JavaFXElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component);
         this.driver = driver;
         this.window = window;
@@ -140,27 +140,27 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         }
     }
 
-    @Override public IJavaElement[] getComponents() {
-        List<IJavaElement> elements = new ArrayList<>();
+    @Override public IJavaFXElement[] getComponents() {
+        List<IJavaFXElement> elements = new ArrayList<>();
         if (node instanceof Parent) {
             ObservableList<Node> childrenUnmodifiable = ((Parent) node).getChildrenUnmodifiable();
             for (Node child : childrenUnmodifiable) {
-                elements.add(JavaElementFactory.createElement(child, driver, window));
+                elements.add(JavaFXElementFactory.createElement(child, driver, window));
             }
         }
-        return elements.toArray(new IJavaElement[elements.size()]);
+        return elements.toArray(new IJavaFXElement[elements.size()]);
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("call-select")) {
             if (marathon_select((String) params[0]))
-                return Arrays.asList((IJavaElement) this);
-            return Arrays.<IJavaElement> asList();
+                return Arrays.asList((IJavaFXElement) this);
+            return Arrays.<IJavaFXElement> asList();
         }
         if (selector.equals("call-select-by-properties")) {
             if (marathon_select(new JSONArray((String) params[0])))
-                return Arrays.asList((IJavaElement) this);
-            return Arrays.<IJavaElement> asList();
+                return Arrays.asList((IJavaFXElement) this);
+            return Arrays.<IJavaFXElement> asList();
         }
         throw new UnsupportedCommandException(
                 "Pseudo element selector " + selector + " is not applicable for " + node.getClass().getName(), null);
@@ -270,47 +270,47 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return true;
     }
 
-    @Override public IJavaElement findElementByName(String using) {
-        List<IJavaElement> elements = findElementsByName(using);
+    @Override public IJavaFXElement findElementByName(String using) {
+        List<IJavaFXElement> elements = findElementsByName(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No node found using name: " + using, null);
         return elements.get(0);
     }
 
-    @Override public IJavaElement findElementByClassName(String using) {
-        List<IJavaElement> elements = findElementsByClassName(using);
+    @Override public IJavaFXElement findElementByClassName(String using) {
+        List<IJavaFXElement> elements = findElementsByClassName(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using name: " + using, null);
         return elements.get(0);
     }
 
-    @Override public List<IJavaElement> findElementsByClassName(String using) {
+    @Override public List<IJavaFXElement> findElementsByClassName(String using) {
         return findElementsByCssSelector(":instance-of('" + using + "')");
     }
 
-    @Override public List<IJavaElement> findElementsByName(String using) {
+    @Override public List<IJavaFXElement> findElementsByName(String using) {
         return findElementsByCssSelector("#'" + using + "'");
     }
 
-    @Override public IJavaElement findElementByTagName(String using) {
-        List<IJavaElement> elements = findElementsByTagName(using);
+    @Override public IJavaFXElement findElementByTagName(String using) {
+        List<IJavaFXElement> elements = findElementsByTagName(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using name: " + using, null);
         return elements.get(0);
     }
 
-    @Override public List<IJavaElement> findElementsByTagName(String using) {
+    @Override public List<IJavaFXElement> findElementsByTagName(String using) {
         return findElementsByCssSelector(using);
     }
 
-    @Override public IJavaElement findElementByCssSelector(String using) {
-        List<IJavaElement> elements = findElementsByCssSelector(using);
+    @Override public IJavaFXElement findElementByCssSelector(String using) {
+        List<IJavaFXElement> elements = findElementsByCssSelector(using);
         if (elements.size() == 0)
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
         return elements.get(0);
     }
 
-    @Override public List<IJavaElement> findElementsByCssSelector(String using) {
+    @Override public List<IJavaFXElement> findElementsByCssSelector(String using) {
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }
