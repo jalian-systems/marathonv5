@@ -400,18 +400,29 @@ public class FXEventQueueDevice implements IDevice {
 		return instance;
 	}
 
+	private Node getTarget_source, getTarget_target;
+	private double getTarget_x, getTarget_y;
+
 	private Node getTarget(Node source, double x, double y) {
+		if (getTarget_source == source && getTarget_x == x && getTarget_y == y) {
+			return getTarget_target;
+		}
 		List<Node> hits = new ArrayList<>();
 		if (!(source instanceof Parent))
 			return source;
 		ObservableList<Node> children = ((Parent) source).getChildrenUnmodifiable();
 		for (Node child : children) {
-			checkHit(child, x, y, hits);
+			checkHit(child, x, y, hits, "");
 		}
-		return hits.size() > 0 ? hits.get(hits.size() - 1) : source;
+		Node target = hits.size() > 0 ? hits.get(hits.size() - 1) : source;
+		getTarget_source = source;
+		getTarget_target = target ;
+		getTarget_x = x ;
+		getTarget_y = y ;
+		return target;
 	}
 
-	private void checkHit(Node child, double x, double y, List<Node> hits) {
+	private void checkHit(Node child, double x, double y, List<Node> hits, String indent) {
 		Bounds boundsInParent = child.getBoundsInParent();
 		if (boundsInParent.contains(x, y)) {
 			hits.add(child);
@@ -419,7 +430,7 @@ public class FXEventQueueDevice implements IDevice {
 				return;
 			ObservableList<Node> childrenUnmodifiable = ((Parent) child).getChildrenUnmodifiable();
 			for (Node node : childrenUnmodifiable) {
-				checkHit(node, x, y, hits);
+				checkHit(node, x, y, hits, "    " + indent);
 			}
 		}
 	}

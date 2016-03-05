@@ -148,7 +148,6 @@ public class JavaHook implements EventHandler<Event> {
 		// We Need This.
 		if (c.equals(current))
 			c = current;
-		System.out.println("JavaHook.handle(): " + event);
 		c.processEvent(event);
 	}
 

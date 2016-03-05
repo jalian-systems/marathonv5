@@ -3,17 +3,13 @@ package net.sourceforge.marathon.javafxagent;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.List;
 import java.util.logging.Logger;
 
 import com.sun.javafx.stage.StageHelper;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.javafxagent.server.JavaServer;
 
 public class JavaHook {
@@ -39,21 +35,6 @@ public class JavaHook {
                     return;
                 c.next();
                 if (c.wasAdded()) {
-                	List<? extends Stage> addedSubList = c.getAddedSubList();
-                	for (Stage stage : addedSubList) {
-                		stage.setOnShown(new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								stage.getScene().getRoot().lookup(".tree-view").addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-									@Override
-									public void handle(MouseEvent event) {
-										System.out.println(
-												"JavaHook.premain(): " + event);
-									}
-								});
-							}
-                		});
-					}
                     logger.info("Checking for window: " + Thread.currentThread());
                     if (!"".equals(windowTitle)) {
                         logger.info("Checking for windowTitle is not implemented.. ignoring and continuing...");
