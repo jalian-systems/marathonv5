@@ -10,6 +10,14 @@ eclipse.classpath.file {
     }
 }
 
+eclipse {
+  jdt {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+    javaRuntimeName = 'JavaSE-1.6'
+  }
+}
+
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 

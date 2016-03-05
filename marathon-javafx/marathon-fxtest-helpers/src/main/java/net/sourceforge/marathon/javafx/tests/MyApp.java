@@ -1,19 +1,12 @@
 package net.sourceforge.marathon.javafx.tests;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 

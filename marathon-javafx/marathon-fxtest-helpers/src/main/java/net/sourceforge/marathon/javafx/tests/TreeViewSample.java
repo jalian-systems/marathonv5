@@ -32,11 +32,9 @@
 package net.sourceforge.marathon.javafx.tests;
 
 import java.io.File;
-import java.util.Set;
 
 import ensemble.Sample;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -51,13 +49,13 @@ import javafx.scene.control.cell.CheckBoxTreeCell;
  */
 public class TreeViewSample extends Sample {
 
-	private TreeView treeView;
+	private TreeView<File> treeView;
 
 	public TreeViewSample() {
 		String dir = "./src";
 		final CheckBoxTreeItem<File> treeRoot = buildRoot(dir);
 
-		treeView = new TreeView();
+		treeView = new TreeView<File>();
 		treeView.setCellFactory(CheckBoxTreeCell.<File> forTreeView());
 		treeView.setShowRoot(true);
 		treeView.setRoot(treeRoot);
@@ -83,22 +81,22 @@ public class TreeViewSample extends Sample {
 	}
 
 	public void printCells() {
-		TreeItem root = treeView.getRoot();
+		TreeItem<File> root = treeView.getRoot();
 		printCell(root, "");
 	}
 
-	private void printCell(TreeItem root, String indent) {
+	private void printCell(TreeItem<File> root, String indent) {
 		System.out.println(indent + printUsingTreeCell(root));
-		ObservableList<TreeItem> children = root.getChildren();
+		ObservableList<TreeItem<File>> children = root.getChildren();
 		if (children == null)
 			return;
-		for (TreeItem object : children) {
+		for (TreeItem<File> object : children) {
 			printCell(object, indent + "    ");
 		}
 	}
 
-	private String printUsingTreeCell(TreeItem root) {
-		TreeCell<Object> call = (TreeCell<Object>) treeView.getCellFactory().call(treeView);
+	private String printUsingTreeCell(TreeItem<File> root) {
+		TreeCell<File> call = (TreeCell<File>) treeView.getCellFactory().call(treeView);
 		call.setItem(root.getValue());
 		call.updateTreeView(treeView);
 		return call.toString();
