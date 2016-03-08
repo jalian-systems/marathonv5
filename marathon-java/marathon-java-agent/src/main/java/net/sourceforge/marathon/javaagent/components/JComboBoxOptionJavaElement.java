@@ -54,7 +54,7 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
     }
 
     @Override public void click(int button, int clickCount, int xoffset, int yoffset) {
-        long implicitWait = parent.getDriver().implicitWait;
+        long implicitWait = parent.getDriver().getImplicitWait();
         try {
             parent.getDriver().setImplicitWait(0);
             EventQueueWait.exec(new Runnable() {

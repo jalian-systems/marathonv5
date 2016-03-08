@@ -35,8 +35,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 public class SearchDialog extends EscapeDialog implements ISearchDialog {
     private static final long serialVersionUID = 1L;
-    private JComboBox findCombo;
-    private JComboBox replaceCombo;
+    private JComboBox<String> findCombo;
+    private JComboBox<String> replaceCombo;
     private JRadioButton forwardDirection;
     private JRadioButton backwardDirection;
     private JRadioButton allLines;
@@ -74,7 +74,7 @@ public class SearchDialog extends EscapeDialog implements ISearchDialog {
     }
 
     private void initComponents() {
-        findCombo = new JComboBox();
+        findCombo = new JComboBox<String>();
         findCombo.setEditable(true);
         findCombo.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
@@ -97,7 +97,7 @@ public class SearchDialog extends EscapeDialog implements ISearchDialog {
                 }
             });
         }
-        replaceCombo = new JComboBox();
+        replaceCombo = new JComboBox<String>();
         replaceCombo.setEditable(true);
         forwardDirection = new JRadioButton("Forward");
         forwardDirection.setMnemonic(KeyEvent.VK_O);
@@ -271,9 +271,9 @@ public class SearchDialog extends EscapeDialog implements ISearchDialog {
         }
     }
 
-    private void addToCombo(JComboBox combo) {
+    private void addToCombo(JComboBox<String> combo) {
         int n = combo.getItemCount();
-        Object selectedItem = combo.getSelectedItem();
+        String selectedItem = (String) combo.getSelectedItem();
         if (selectedItem == null)
             selectedItem = "";
         for (int i = 0; i < n; i++) {

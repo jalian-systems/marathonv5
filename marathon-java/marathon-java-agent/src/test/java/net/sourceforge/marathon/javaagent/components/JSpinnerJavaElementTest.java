@@ -13,6 +13,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -25,7 +26,7 @@ import org.testng.annotations.Test;
 
 @Test public class JSpinnerJavaElementTest extends JavaElementTest {
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
 
     @BeforeMethod public void showDialog() throws Throwable {

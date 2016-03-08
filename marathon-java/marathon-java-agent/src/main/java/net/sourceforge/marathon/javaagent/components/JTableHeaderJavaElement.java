@@ -10,14 +10,14 @@ import java.util.Properties;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
-import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
-import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import net.sourceforge.marathon.javaagent.AbstractJavaElement;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class JTableHeaderJavaElement extends AbstractJavaElement {
 
@@ -43,8 +43,8 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
         public boolean isValid(JTableHeaderItemJavaElement e);
     }
 
-    public JTableHeaderJavaElement(Component header, JavaAgent driver, JWindow window) {
-        super(header, driver, window);
+    public JTableHeaderJavaElement(Component header, IJavaAgent javaAgent, JWindow window) {
+        super(header, javaAgent, window);
     }
 
     @Override public String _getText() {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.sun.javafx.collections.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.transform.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <TabPane id="Tab Pane21" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+            <Tab text="Product Listings"></Tab>
+          </tabs>
+        </TabPane>
+    </top>
+    <center>
+        <TableView id="Table View20">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+            </items>
+            <columns>
+                <TableColumn text="Column1" />
+                <TableColumn text="Column2" />
+                <TableColumn text="Column3" />
+            </columns>
+        </TableView>        
+    </center>
+</BorderPane>
+
+    

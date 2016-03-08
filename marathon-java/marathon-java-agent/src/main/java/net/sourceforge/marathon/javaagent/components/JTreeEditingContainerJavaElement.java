@@ -3,12 +3,12 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaAgentKeys;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JTreeEditingContainerJavaElement extends AbstractJavaElement {
-    public JTreeEditingContainerJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JTreeEditingContainerJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

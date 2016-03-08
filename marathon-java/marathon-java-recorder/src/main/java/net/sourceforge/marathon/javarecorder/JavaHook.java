@@ -303,6 +303,7 @@ public class JavaHook implements AWTEventListener, ChangeListener, ActionListene
                     c.focusGained(current);
                     current = c;
                 }
+                // We Need This.
                 if (c.equals(current))
                     c = current;
                 c.processEvent(eventx);

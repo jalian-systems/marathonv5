@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -26,16 +25,16 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.jgoodies.forms.builder.ButtonBarBuilder;
+
 import net.sourceforge.marathon.checklist.CheckListForm.Mode;
 import net.sourceforge.marathon.runtime.api.EscapeDialog;
 import net.sourceforge.marathon.runtime.api.UIUtils;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
-
 public class MarathonCheckList extends EscapeDialog {
     private final File checklistDir;
 
-    private final class CheckListFileModel extends AbstractListModel {
+    private final class CheckListFileModel extends AbstractListModel<File> {
         private static final long serialVersionUID = 1L;
         File[] items;
 
@@ -56,7 +55,7 @@ public class MarathonCheckList extends EscapeDialog {
                 items = new File[0];
         }
 
-        public Object getElementAt(int index) {
+        public File getElementAt(int index) {
             return items[index];
         }
 
@@ -71,7 +70,7 @@ public class MarathonCheckList extends EscapeDialog {
     }
 
     private static final long serialVersionUID = 1L;
-    private JList list;
+    private JList<File> list;
     private CheckListForm formPanel;
     private JButton createButton;
     private JButton editButton;
@@ -80,7 +79,7 @@ public class MarathonCheckList extends EscapeDialog {
     private File selectedFile;
     private JSplitPane splitPane;
     private boolean ok = false;
-    private JList checkList;
+    private JList<File> checkList;
     private final boolean insert;
     private JButton cancel;
 
@@ -293,7 +292,7 @@ public class MarathonCheckList extends EscapeDialog {
 
     private CheckListForm createCheckList(File file, Mode mode) {
         try {
-            formPanel = new CheckListForm(CheckList.read(new FileInputStream(file)), mode);
+            formPanel = new CheckListForm(CheckList.read(file), mode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -301,15 +300,15 @@ public class MarathonCheckList extends EscapeDialog {
         return formPanel;
     }
 
-    private JList getCheckList() {
-        checkList = new JList();
+    private JList<File> getCheckList() {
+        checkList = new JList<File>();
         checkList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         checkList.setBorder(BorderFactory.createTitledBorder("Check Lists"));
         model = new CheckListFileModel();
         checkList.setCellRenderer(new DefaultListCellRenderer() {
             private static final long serialVersionUID = 1L;
 
-            @Override public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            @Override public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
                     boolean cellHasFocus) {
                 String name = ((File) value).getName();
                 name = name.substring(0, name.length() - 4);

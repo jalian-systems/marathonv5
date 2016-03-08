@@ -86,15 +86,15 @@ public class PropertyEditor extends EscapeDialog {
             if (property.getKlass().equals(Color.class))
                 return new ColorEditor();
             if (property.getKlass().equals(Font.class)) {
-                JComboBox box = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+                JComboBox<String> box = new JComboBox<String>(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
                 return new DefaultCellEditor(box);
             }
             if (property.getKlass().equals(Boolean.class)) {
-                JComboBox box = new JComboBox(new String[] { "true", "false" });
+                JComboBox<String> box = new JComboBox<String>(new String[] { "true", "false" });
                 return new DefaultCellEditor(box);
             }
             if (property.getKlass().equals(String[].class)) {
-                JComboBox box = new JComboBox(property.getItems());
+                JComboBox<String> box = new JComboBox<String>(property.getItems());
                 return new DefaultCellEditor(box);
             }
             if (property.getKlass().equals(Integer.class))

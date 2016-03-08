@@ -17,6 +17,7 @@ import javax.swing.*;
 import net.sourceforge.marathon.javaagent.DnDHandler;
 import net.sourceforge.marathon.javaagent.DragAndDropException;
 
+@SuppressWarnings({"unchecked", "rawtypes" })
 public class DropDemo extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JComboBox dropCombo;

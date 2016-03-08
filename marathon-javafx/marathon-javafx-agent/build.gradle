@@ -1,0 +1,70 @@
+repositories {
+  mavenCentral()
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots'
+  }
+}
+
+configurations {
+  antBuildXML
+}
+
+eclipse {
+  jdt {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    javaRuntimeName = 'JavaSE-1.8'
+
+    file {
+      withProperties { properties ->
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+      }
+    }
+  }
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
+dependencies {
+  compile project(":marathon:JSON-java")
+  compile project(":marathon:nanohttpd-2.1.1")
+  compile "org.javassist:javassist:${javassist_version}"
+  testCompile "org.testng:testng:${testng_version}"
+  testCompile project(":marathon-javafx:marathon-fxtest-helpers")
+  antBuildXML project(":marathon:JSON-java").files("bin")
+  antBuildXML project(":marathon:nanohttpd-2.1.1").files("bin")
+  antBuildXML "org.javassist:javassist:${javassist_version}"
+}
+
+jar {
+  configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
+  manifest {
+    attributes 'Manifest-Version': '1.0',
+      'Agent-Class': 'net.sourceforge.marathon.javafxagent.JavaHook',
+      'Can-Redefine-Classes': 'false',
+      'Can-Retransform-Classes': 'false',
+      'Premain-Class': 'net.sourceforge.marathon.javafxagent.JavaHook'
+  }
+}
+
+test {
+  useTestNG()
+  systemProperty 'file.encoding', 'utf8'
+  testLogging.showStandardStreams = true
+  if(project.properties['jdk8home'])
+     executable = project.properties['jdk8home'] + '/bin/java'
+}

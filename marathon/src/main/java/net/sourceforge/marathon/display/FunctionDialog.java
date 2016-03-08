@@ -39,6 +39,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import com.vlsolutions.swing.toolbars.ToolBarConstraints;
+import com.vlsolutions.swing.toolbars.ToolBarContainer;
+import com.vlsolutions.swing.toolbars.VLToolBar;
+
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.editor.IEditorProvider;
 import net.sourceforge.marathon.navigator.Icons;
@@ -50,11 +54,7 @@ import net.sourceforge.marathon.runtime.api.Module;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.UIUtils;
 
-import com.vlsolutions.swing.toolbars.ToolBarConstraints;
-import com.vlsolutions.swing.toolbars.ToolBarContainer;
-import com.vlsolutions.swing.toolbars.VLToolBar;
-
-class FunctionDialog extends EscapeDialog {
+@SuppressWarnings({ "unchecked", "rawtypes" }) class FunctionDialog extends EscapeDialog {
     private static final long serialVersionUID = 1L;
     private static final String ICON_PATH = "net/sourceforge/marathon/display/icons/enabled/";
     public static final Icon ICONS_FOLDER = new ImageIcon(Icons.class.getClassLoader().getResource(ICON_PATH + "folder.gif"));
@@ -84,8 +84,8 @@ class FunctionDialog extends EscapeDialog {
                 return;
             Component[] components = argumentPanel.getComponents();
             String[] arguments = getArguments(Arrays.asList(components));
-            window.insertScript(ScriptModel.getModel().getFunctionCallForInsertDialog((Function) functionNode.getUserObject(),
-                    arguments));
+            window.insertScript(
+                    ScriptModel.getModel().getFunctionCallForInsertDialog((Function) functionNode.getUserObject(), arguments));
             FunctionDialog.this.dispose();
         }
 
@@ -305,8 +305,7 @@ class FunctionDialog extends EscapeDialog {
             TreePath parent = new TreePath(root);
             TreeNode node = (TreeNode) parent.getLastPathComponent();
             if (node.getChildCount() >= 0) {
-                for (@SuppressWarnings("rawtypes")
-                Enumeration e = node.children(); e.hasMoreElements();) {
+                for (Enumeration e = node.children(); e.hasMoreElements();) {
                     TreeNode n = (TreeNode) e.nextElement();
                     TreePath path = parent.pathByAddingChild(n);
                     expandAll(tree, path, expand);
@@ -319,8 +318,7 @@ class FunctionDialog extends EscapeDialog {
         // Traverse children
         TreeNode node = (TreeNode) parent.getLastPathComponent();
         if (node.getChildCount() >= 0) {
-            for (@SuppressWarnings("rawtypes")
-            Enumeration e = node.children(); e.hasMoreElements();) {
+            for (Enumeration e = node.children(); e.hasMoreElements();) {
                 TreeNode n = (TreeNode) e.nextElement();
                 TreePath path = parent.pathByAddingChild(n);
                 expandAll(tree, path, expand);

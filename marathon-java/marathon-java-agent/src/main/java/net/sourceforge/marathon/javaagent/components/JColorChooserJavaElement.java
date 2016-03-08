@@ -6,12 +6,12 @@ import java.awt.Component;
 import javax.swing.JColorChooser;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JColorChooserJavaElement extends AbstractJavaElement {
 
-    public JColorChooserJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JColorChooserJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

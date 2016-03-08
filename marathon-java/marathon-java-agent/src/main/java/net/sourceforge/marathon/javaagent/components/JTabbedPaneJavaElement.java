@@ -11,14 +11,14 @@ import javax.swing.JTabbedPane;
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 import org.json.JSONArray;
 
 public class JTabbedPaneJavaElement extends AbstractJavaElement {
 
-    public JTabbedPaneJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JTabbedPaneJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

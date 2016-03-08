@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 public class FixtureSelectionDialog extends EscapeDialog {
     private static final long serialVersionUID = 1L;
-    private JList fixtureList;
+    private JList<String> fixtureList;
     protected boolean isOKSelected = false;
     private JButton okButton = UIUtils.createSelectButton();
     private JButton cancelButton = UIUtils.createCancelButton();
@@ -91,8 +91,8 @@ public class FixtureSelectionDialog extends EscapeDialog {
         return builder.getPanel();
     }
 
-    private JList getFixtureList(String[] fixtures) {
-        final JList list = new JList(fixtures);
+    private JList<String> getFixtureList(String[] fixtures) {
+        final JList<String> list = new JList<String>(fixtures);
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() > 1) {

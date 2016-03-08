@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 @Test public class FindByCssSelectorTest {
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
     protected JTextField textField;
     protected JButton button;

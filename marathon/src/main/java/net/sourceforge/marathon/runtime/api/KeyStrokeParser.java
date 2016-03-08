@@ -95,6 +95,7 @@ public class KeyStrokeParser {
         keyCodes.put("Enter", Integer.valueOf(KeyEvent.VK_ENTER));
         keyCodes.put("Command", Integer.valueOf(KeyEvent.VK_META));
         keyCodes.put("Space", Integer.valueOf(KeyEvent.VK_SPACE));
+        keyCodes.put("Escape", Integer.valueOf(KeyEvent.VK_ESCAPE));
 
         keyCodes.put(Integer.valueOf(KeyEvent.VK_CONTROL), "Ctrl");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_SHIFT), "Shift");
@@ -103,6 +104,7 @@ public class KeyStrokeParser {
         keyCodes.put(Integer.valueOf(KeyEvent.VK_ENTER), "Enter");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_META), "Command");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_SPACE), "Space");
+        keyCodes.put(Integer.valueOf(KeyEvent.VK_ESCAPE), "Escape");
     }
 
     public KeyStroke getKeyStroke() {

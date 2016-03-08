@@ -9,6 +9,21 @@ configurations {
   antBuildXML
 }
 
+eclipse {
+  jdt {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+    javaRuntimeName = 'JavaSE-1.6'
+
+    file {
+      withProperties { properties ->
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+      }
+    }
+  }
+}
+
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 

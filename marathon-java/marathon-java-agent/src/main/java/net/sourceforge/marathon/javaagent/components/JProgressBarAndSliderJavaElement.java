@@ -6,12 +6,12 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JProgressBarAndSliderJavaElement extends AbstractJavaElement {
 
-    public JProgressBarAndSliderJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JProgressBarAndSliderJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

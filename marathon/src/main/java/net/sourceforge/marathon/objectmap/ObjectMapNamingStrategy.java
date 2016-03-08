@@ -70,7 +70,7 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
     private Class<?> findClass(String cName) {
         try {
             return Class.forName(cName);
-        } catch (ClassNotFoundException e) {
+        } catch (Throwable e) {
             try {
                 return Thread.currentThread().getContextClassLoader().loadClass(cName);
             } catch (ClassNotFoundException e1) {
@@ -107,14 +107,13 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
                         .append(rp.getValue().replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")).append("']");
         }
         if (visibility)
-            sb.append("[visible='true'][showing='true']");
+            sb.append("[visible='true']");
         String r = sb.toString();
         if (typeProperty != null) {
-            r = "[" + typeProperty.getName() + op(typeProperty.getMethod()) + "'" + typeProperty.getValue() + "']" + sb.toString();
+            r = "[" + typeProperty.getName() + op(typeProperty.getMethod()) + "'" + typeProperty.getValue() + "']" + r;
         }
         if (indexProperty != null) {
-            int index = Integer.parseInt(indexProperty.getValue());
-            r = r + ":nth(" + (index + 1) + ")";
+            r = r + "[" + indexProperty.getName() + op(indexProperty.getMethod()) + "'" + indexProperty.getValue() + "']";
         }
         return r;
     }

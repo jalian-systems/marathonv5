@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.marathon.javaagent.DeviceTest;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -23,7 +24,7 @@ import org.testng.annotations.Test;
 import components.FileChooserDemo;
 
 @Test public class JFileChooserJavaElementTest extends JavaElementTest {
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
 
     @BeforeMethod public void showDialog() throws Throwable {

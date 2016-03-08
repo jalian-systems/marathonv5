@@ -1,0 +1,45 @@
+dependencies {
+    compile files('javafx-samples-2.2.80/Ensemble.jar')
+}
+
+eclipse.classpath.file {
+    withXml { root ->
+      root.asNode().depthFirst().findAll { it instanceof Node && it.name().equals('classpathentry')  }.each {
+        if(it.attribute("kind").equals("src")) {
+          def xnode = it.appendNode('attributes').appendNode('attribute')
+          xnode.attributes().put('name', 'ignore_optional_problems')
+          xnode.attributes().put('value', 'true')
+        }
+      }
+    }
+}
+
+eclipse {
+  jdt {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    javaRuntimeName = 'JavaSE-1.8'
+
+    file {
+      withProperties { properties ->
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+      }
+    }
+  }
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}
+
+compileTestJava {
+	options.fork = true
+	if(project.properties['jdk8home'])
+		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
+}

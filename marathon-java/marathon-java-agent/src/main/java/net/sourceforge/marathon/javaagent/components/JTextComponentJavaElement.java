@@ -5,13 +5,13 @@ import java.awt.Component;
 import javax.swing.text.JTextComponent;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaAgentKeys;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JTextComponentJavaElement extends AbstractJavaElement {
 
-    public JTextComponentJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JTextComponentJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

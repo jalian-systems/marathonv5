@@ -27,7 +27,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test public class JavaAgentTest {
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
     protected JTextField textField;
     protected JButton button;

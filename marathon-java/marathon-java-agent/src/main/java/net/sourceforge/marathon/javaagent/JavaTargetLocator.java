@@ -196,16 +196,16 @@ public class JavaTargetLocator {
 
     }
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     private JWindow currentWindow;
     private Map<Window, JWindow> windows = new HashMap<Window, JavaTargetLocator.JWindow>();
 
-    public JavaTargetLocator(JavaAgent driver) {
+    public JavaTargetLocator(IJavaAgent driver) {
         this.driver = driver;
     }
 
-    public JavaAgent window(final String nameOrHandleOrTitle) {
-        if (driver.implicitWait != 0) {
+    public IJavaAgent window(final String nameOrHandleOrTitle) {
+        if (driver.getImplicitWait() != 0) {
             new EventQueueWait() {
                 @Override public boolean till() {
                     try {
@@ -214,13 +214,13 @@ public class JavaTargetLocator {
                         return false;
                     }
                 }
-            }.wait_noexc("Timedout waiting for the window", driver.implicitWait, 50);
+            }.wait_noexc("Timedout waiting for the window", driver.getImplicitWait(), 50);
         }
         // We need the following call (even with set implicitWait) for throwing
         // an exception on error
         try {
-            return EventQueueWait.exec(new Callable<JavaAgent>() {
-                @Override public JavaAgent call() {
+            return EventQueueWait.exec(new Callable<IJavaAgent>() {
+                @Override public IJavaAgent call() {
                     return window_internal(nameOrHandleOrTitle);
                 }
             });
@@ -229,7 +229,7 @@ public class JavaTargetLocator {
         }
     }
 
-    private JavaAgent window_internal(String nameOrHandleOrTitle) {
+    private IJavaAgent window_internal(String nameOrHandleOrTitle) {
         Window[] windows = getValidWindows();
         for (Window window : windows) {
             if (window.getName().equals(nameOrHandleOrTitle)) {

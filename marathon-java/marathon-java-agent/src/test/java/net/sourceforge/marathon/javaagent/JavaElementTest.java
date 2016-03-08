@@ -16,7 +16,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 @Test public class JavaElementTest extends DeviceTest {
 
     private IJavaElement ejButton;
-    private JavaAgent ejDriver;
+    private IJavaAgent ejDriver;
     private IJavaElement ejText;
     private IJavaElement ejCheckbox;
     private IJavaElement ejBoxPanel;

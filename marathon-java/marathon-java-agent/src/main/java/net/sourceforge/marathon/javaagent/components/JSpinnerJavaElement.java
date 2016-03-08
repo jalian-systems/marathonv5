@@ -9,14 +9,14 @@ import javax.swing.JSpinner;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaAgentException;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JSpinnerJavaElement extends AbstractJavaElement {
 
-    public JSpinnerJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JSpinnerJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

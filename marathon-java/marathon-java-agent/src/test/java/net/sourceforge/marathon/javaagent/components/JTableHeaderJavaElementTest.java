@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.JTableHeader;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -22,7 +23,7 @@ import com.sun.swingset3.demos.table.TableDemo;
 
 @Test public class JTableHeaderJavaElementTest extends JavaElementTest {
     protected JFrame frame;
-    private JavaAgent driver;
+    private IJavaAgent driver;
 
     @BeforeMethod public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {

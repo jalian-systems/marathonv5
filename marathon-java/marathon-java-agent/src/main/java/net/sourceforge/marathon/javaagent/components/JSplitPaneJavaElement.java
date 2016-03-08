@@ -8,13 +8,13 @@ import javax.swing.JSplitPane;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JSplitPaneJavaElement extends AbstractJavaElement {
 
-    public JSplitPaneJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JSplitPaneJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

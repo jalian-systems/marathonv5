@@ -16,7 +16,7 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javaagent.components.JEditorPaneTagJavaElement;
@@ -48,7 +48,7 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
         public boolean isValid(JEditorPaneTagJavaElement e);
     }
 
-    public JEditorPaneJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JEditorPaneJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

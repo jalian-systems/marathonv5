@@ -15,7 +15,7 @@ public class DirectoryFileRenderer extends DefaultListCellRenderer {
     private ImageIcon jarIcon = new ImageIcon(getClass().getClassLoader().getResource(
             "net/sourceforge/marathon/mpf/images/jar_obj.gif"));;
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         JLabel comp = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         if (!(value instanceof File))
             return comp;
