@@ -22,6 +22,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
@@ -485,6 +486,15 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
 	private String unescapeSpecialCharacters(String name) {
 		return name.replaceAll("\\\\/", "/");
+	}
+
+	public int getSelection(CheckBox cb) {
+		int selection ;
+		if(cb.isAllowIndeterminate() && cb.isIndeterminate())
+			selection = 1 ;
+		else
+			selection = cb.isSelected() ? 2 : 0;
+		return selection;
 	}
 
 	public static String removeClassName(Object object) {
