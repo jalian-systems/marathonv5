@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.net.URL;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -14,10 +15,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafxagent.Wait;
-import net.sourceforge.marathon.javafxagent.components.JavaFXTabPaneElementTest;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXTabPaneTest extends RFXComponentTest {
+
+    public static URL imgURL = RFXTabPaneTest.class
+            .getResource("/net/sourceforge/marathon/javafxrecorder/component/middle.png");
 
     @Override protected Pane getMainPane() {
         return new TabSample();
@@ -55,7 +58,7 @@ public class RFXTabPaneTest extends RFXComponentTest {
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 Tab tab = new Tab();
-                tab.setGraphic(new ImageView(JavaFXTabPaneElementTest.imgURL.toString()));
+                tab.setGraphic(new ImageView(RFXTabPaneTest.imgURL.toString()));
                 tabPane.getTabs().add(tab);
                 tabPane.getSelectionModel().select(4);
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
