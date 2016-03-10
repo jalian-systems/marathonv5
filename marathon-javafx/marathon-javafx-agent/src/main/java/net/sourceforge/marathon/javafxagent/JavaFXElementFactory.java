@@ -5,11 +5,13 @@ import java.util.LinkedList;
 
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXTabPaneElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTextInputControlElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXToggleButtonElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
@@ -61,6 +63,7 @@ public class JavaFXElementFactory {
         add(TextInputControl.class, JavaFXTextInputControlElement.class);
         add(CheckBox.class, JavaFXCheckBoxElement.class);
         add(ToggleButton.class, JavaFXToggleButtonElement.class);
+        add(TabPane.class, JavaFXTabPaneElement.class);
         add(TreeView.class, JavaFXTreeViewElement.class);
     }
 

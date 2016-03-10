@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,8 +25,11 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
@@ -497,7 +502,60 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		return selection;
 	}
 
-	public static String removeClassName(Object object) {
+	public String getTextForTab(TabPane tabPane, Tab selectedTab) {
+	    int index = tabPane.getTabs().indexOf(selectedTab);
+	    String original = getItemText(tabPane, index);
+        String itemText = original;
+        int suffixIndex = 0;
+
+        for (int i = 0; i < index; i++) {
+            String current = getItemText(tabPane, i);
+
+            if (current.equals(original)) {
+                itemText = itemText + "(" + ++suffixIndex + ")";
+            }
+        }
+        return itemText;
+    }
+	
+	public String[][] getContent(TabPane node) {
+	    int nItems = node.getTabs().size();
+        String[][] content = new String[1][nItems];
+        for (int i = 0; i < nItems; i++) {
+            content[0][i] = getTextForTab(node, node.getTabs().get(i));
+        }
+        return content;
+    }
+
+    private static String getItemText(TabPane tabPane, int index) {
+        String titleAt = tabPane.getTabs().get(index).getText();
+        if (titleAt == null || "".equals(titleAt)) {
+            return getTabNameFromIcon(tabPane, index);
+        }
+        return titleAt;
+    }
+
+    @SuppressWarnings("deprecation") private static String getTabNameFromIcon(TabPane tabPane, int index) {
+        Node graphic = tabPane.getTabs().get(index).getGraphic();
+        if (graphic == null || !(graphic instanceof ImageView))
+            return "tabIndex-" + index;
+        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+    }
+
+    private static String nameFromImage(String description) {
+        try {
+            String name = new URL(description).getPath();
+            if (name.lastIndexOf('/') != -1)
+                name = name.substring(name.lastIndexOf('/') + 1);
+            if (name.lastIndexOf('.') != -1)
+                name = name.substring(0, name.lastIndexOf('.'));
+            return name;
+        } catch (MalformedURLException e) {
+            return description;
+        }
+    }
+
+    public static String removeClassName(Object object) {
 		if (object == null)
 			return "null";
 		if (object.getClass().isArray()) {

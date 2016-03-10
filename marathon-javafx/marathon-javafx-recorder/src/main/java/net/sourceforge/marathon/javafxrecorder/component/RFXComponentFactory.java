@@ -7,6 +7,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
@@ -81,6 +83,43 @@ public class RFXComponentFactory {
         });
         add(CheckBox.class, RFXCheckBox.class, null);
         add(ToggleButton.class, RFXToggleButton.class, null);
+        add(TabPane.class, RFXTabPane.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                if (hasTab(component)) {
+                    while (parent != null) {
+                        if (parent instanceof TabPane)
+                            return parent;
+                        parent = parent.getParent();
+                    }
+                }
+                return null;
+            }
+
+            private boolean hasTab(Node component) {
+                Node parent = component;
+                if (hasTabContiner(component)) {
+                    while (parent != null) {
+                        if (parent instanceof Label && parent.getStyleClass().contains("tab-label"))
+                            return true;
+                        parent = parent.getParent();
+                    }
+                }
+                return false;
+            }
+
+            private boolean hasTabContiner(Node component) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent.getStyleClass().contains("tab-container")) {
+                        return true;
+                    }
+                    parent = parent.getParent();
+                }
+                return false;
+            }
+        });
         add(TreeView.class, RFXTreeView.class, new IRecordOn() {
             @Override public Node getRecordOn(Node component, Point2D point) {
                 if (hasTreeCellParent(component)) {
