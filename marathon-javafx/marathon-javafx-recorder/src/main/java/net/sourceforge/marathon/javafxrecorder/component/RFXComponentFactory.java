@@ -99,7 +99,7 @@ public class RFXComponentFactory {
 
             private boolean hasTab(Node component) {
                 Node parent = component;
-                if (hasTabContiner(component)) {
+                if (hasTabContainer(component)) {
                     while (parent != null) {
                         if (parent instanceof Label && parent.getStyleClass().contains("tab-label"))
                             return true;
@@ -109,7 +109,7 @@ public class RFXComponentFactory {
                 return false;
             }
 
-            private boolean hasTabContiner(Node component) {
+            private boolean hasTabContainer(Node component) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent.getStyleClass().contains("tab-container")) {

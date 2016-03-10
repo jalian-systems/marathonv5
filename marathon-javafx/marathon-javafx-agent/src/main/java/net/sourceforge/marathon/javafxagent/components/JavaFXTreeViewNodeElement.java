@@ -15,7 +15,7 @@ import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 
-public class JavaFXTreeViewNodeElement extends JavaFXElement implements IJavaFXElement, IPseudoElement {
+public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoElement {
 
 	private JavaFXTreeViewElement parent;
 	private String path;
