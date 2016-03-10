@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
@@ -83,6 +84,18 @@ public class RFXComponentFactory {
         });
         add(CheckBox.class, RFXCheckBox.class, null);
         add(ToggleButton.class, RFXToggleButton.class, null);
+        add(Slider.class, RFXSlider.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof Slider)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
         add(TabPane.class, RFXTabPane.class, new IRecordOn() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {
