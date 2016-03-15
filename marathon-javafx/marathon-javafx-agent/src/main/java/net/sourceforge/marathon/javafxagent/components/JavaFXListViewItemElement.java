@@ -1,6 +1,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,10 +9,8 @@ import org.json.JSONObject;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.CheckBoxListCell;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
@@ -50,13 +49,13 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public void _moveto(double xoffset, double yoffset) {
-        Node cell = getPseudoComponent();
+        Node cell = getCellAt((ListView<?>) getComponent(), itemIndex);
         Point2D pCoords = cell.localToParent(xoffset, yoffset);
         parent._moveto(pCoords.getX(), pCoords.getY());
     }
 
     @Override public Point2D _getMidpoint() {
-        Node cell = getPseudoComponent();
+        Node cell = getCellAt((ListView<?>) getComponent(), itemIndex);
         Bounds boundsInParent = cell.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;
         double y = boundsInParent.getHeight() / 2;
@@ -64,44 +63,19 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public Node getPseudoComponent() {
-        ListView<?> listView = (ListView<?>) getComponent();
-        int index = getListItemIndex(listView, getListSelectionText(listView, itemIndex));
-        if (index == -1)
-            return null;
-        listView.scrollTo(index);
-        Set<Node> lookupAll = listView.lookupAll(".list-cell");
-        for (Node node : lookupAll) {
-            ListCell<?> cell = (ListCell<?>) node;
-            if (cell.getItem() == listView.getItems().get(index))
-                return cell;
-        }
-        return null;
+        return getCellAt((ListView<?>) getComponent(), itemIndex);
     }
 
-    @Override public void click() {
-        Node listCell = getPseudoComponent();
-        if (listCell != null && listCell instanceof CheckBoxListCell<?>) {
-            clickListCell(((CheckBoxListCell<?>) listCell));
-            return;
-        }
-        super.click();
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+        if (selector.equals("editor"))
+            return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
+    	return super.getByPseudoElement(selector, params);
     }
 
-    @Override public void click(int button, int clickCount, double xoffset, double yoffset) {
-        Node listCell = getPseudoComponent();
-        if (listCell != null && listCell instanceof CheckBoxListCell<?>) {
-            CheckBox cb = (CheckBox) ((CheckBoxListCell<?>) listCell).lookup(".check-box");
-            IJavaFXElement cbElement = JavaFXElementFactory.createElement(cb, driver, window);
-            cbElement.click(button, clickCount, xoffset, yoffset);
-            return;
-        }
-        super.click(button, clickCount, xoffset, yoffset);
-    }
-
-    private void clickListCell(CheckBoxListCell<?> checkBoxListCell) {
-        CheckBox cb = (CheckBox) checkBoxListCell.lookup(".check-box");
-        IJavaFXElement cbElement = JavaFXElementFactory.createElement(cb, driver, window);
-        cbElement.click();
-    }
-
+	private Node getEditor() {
+		ListCell<?> cell = (ListCell<?>) getPseudoComponent();
+		cell.startEdit();
+		return cell.getGraphic();
+	}
 }

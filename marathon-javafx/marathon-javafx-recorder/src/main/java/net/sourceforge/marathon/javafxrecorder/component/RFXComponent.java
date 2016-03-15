@@ -35,6 +35,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 
 	protected IJSONRecorder recorder;
 	protected JSONOMapConfig omapConfig;
+	private RFXComponentFactory finder;
 
 	public RFXComponent(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
 		super(source);
@@ -179,7 +180,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 	}
 
 	private JSONObject getContextJSONObject(Parent parent) {
-		RFXComponentFactory finder = new RFXComponentFactory(omapConfig);
+		RFXComponentFactory finder = getFinder();
 		RFXComponent pa = finder.findRComponent(parent, null, recorder);
 		Collection<String> properties = omapConfig.findProperties();
 		Map<String, String> attributes = new HashMap<String, String>();
@@ -336,4 +337,11 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 	public boolean isMenuShortcutKeyDown(MouseEvent event) {
 		return event.isShortcutDown();
 	}
+
+	protected RFXComponentFactory getFinder() {
+		if (finder == null)
+			finder = new RFXComponentFactory(omapConfig);
+		return finder;
+	}
+
 }
