@@ -63,19 +63,22 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public Node getPseudoComponent() {
-        return getCellAt((ListView<?>) getComponent(), itemIndex);
+        ListView<?> listView = (ListView<?>) getComponent();
+        listView.scrollTo(itemIndex);
+        return getCellAt(listView, itemIndex);
     }
 
-    @Override
-    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor"))
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
-    	return super.getByPseudoElement(selector, params);
+        return super.getByPseudoElement(selector, params);
     }
 
-	private Node getEditor() {
-		ListCell<?> cell = (ListCell<?>) getPseudoComponent();
-		cell.startEdit();
-		return cell.getGraphic();
-	}
+    private Node getEditor() {
+        ListCell<?> cell = (ListCell<?>) getPseudoComponent();
+        cell.startEdit();
+        Node cellComponent = cell.getGraphic();
+        cellComponent.getProperties().put("marathon.celleditor", true);
+        return cellComponent;
+    }
 }

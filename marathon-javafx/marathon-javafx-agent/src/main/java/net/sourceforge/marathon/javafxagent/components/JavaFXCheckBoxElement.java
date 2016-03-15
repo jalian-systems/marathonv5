@@ -1,8 +1,11 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.Arrays;
+
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
@@ -16,6 +19,8 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
 
 	@Override
 	public boolean marathon_select(String value) {
+	    if(!isValidState(value))
+	        throw new JavaAgentException(value + " is not a valid state for CheckBox.", null);
 		int selection = 0;
 		for (String state : states) {
 			if (state.equalsIgnoreCase(value))
@@ -38,5 +43,9 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
 		}
 		return true;
 	}
+
+    private boolean isValidState(String value) {
+        return Arrays.asList(states).contains(value);
+    }
 
 }

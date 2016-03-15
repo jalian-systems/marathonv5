@@ -24,7 +24,7 @@ public class RFXListViewTest extends RFXComponentTest {
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
@@ -40,7 +40,7 @@ public class RFXListViewTest extends RFXComponentTest {
             @Override public void run() {
                 listView.getSelectionModel().select(2);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
@@ -58,7 +58,7 @@ public class RFXListViewTest extends RFXComponentTest {
                 selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
                 selectionModel.selectIndices(2, 6);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
@@ -76,7 +76,7 @@ public class RFXListViewTest extends RFXComponentTest {
                 listView.getItems().add(7, " Special Characters ([],)");
                 listView.getSelectionModel().select(7);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
@@ -93,7 +93,7 @@ public class RFXListViewTest extends RFXComponentTest {
             @Override public void run() {
                 listView.getSelectionModel().select(8);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
@@ -106,7 +106,7 @@ public class RFXListViewTest extends RFXComponentTest {
                 listView.getItems().add(9, "Row 9");
                 listView.getSelectionModel().clearAndSelect(9);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         recordings = lr.waitAndGetRecordings(2);
@@ -123,7 +123,7 @@ public class RFXListViewTest extends RFXComponentTest {
             @Override public void run() {
                 listView.getSelectionModel().select(8);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
@@ -137,7 +137,7 @@ public class RFXListViewTest extends RFXComponentTest {
                 listView.getItems().add(10, "Row 9");
                 listView.getSelectionModel().clearAndSelect(10);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
-                rfxListView.focusLost(null);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
         });
         recordings = lr.waitAndGetRecordings(2);
