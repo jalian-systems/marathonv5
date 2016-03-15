@@ -8,6 +8,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputControl;
@@ -128,6 +130,30 @@ public class RFXComponentFactory {
                     if (parent.getStyleClass().contains("tab-container")) {
                         return true;
                     }
+                    parent = parent.getParent();
+                }
+                return false;
+            }
+        });
+        add(ListView.class, RFXListView.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                if (hasListCellParent(component)) {
+                    Node parent = component;
+                    while (parent != null) {
+                        if (parent instanceof ListView)
+                            return parent;
+                        parent = parent.getParent();
+                    }
+                }
+                return null;
+            }
+
+            private boolean hasListCellParent(Node component) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof ListCell<?>)
+                        return true;
                     parent = parent.getParent();
                 }
                 return false;

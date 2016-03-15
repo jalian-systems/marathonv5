@@ -45,8 +45,7 @@ public final class LoggingRecorder implements IJSONRecorder {
     }
 
     @Override public void recordClick2(RFXComponent r, MouseEvent e, boolean withCellInfo) {
-        // TODO Auto-generated method stub
-
+        recordings.add(new Recording("click", r.getCellInfo()));
     }
 
     @Override public void recordRawMouseEvent(RFXComponent r, MouseEvent e) {
