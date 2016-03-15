@@ -133,11 +133,11 @@ public class JavaHook implements EventHandler<Event> {
 		if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node))
 			return;
 		Point2D point = null;
-		if(event instanceof MouseEvent) {
+		if (event instanceof MouseEvent) {
 			point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
 		}
-		RFXComponent c = finder.findRComponent((Node) (Node) event.getTarget(), point, recorder);
-		if (!c.equals(current)) {
+		RFXComponent c = finder.findRComponent((Node) event.getTarget(), point, recorder);
+		if (!c.equals(current) && isFocusChangeEvent(event)) {
 			if (current != null && isShowing(current))
 				current.focusLost(c);
 			c.focusGained(current);
@@ -147,6 +147,10 @@ public class JavaHook implements EventHandler<Event> {
 		if (c.equals(current))
 			c = current;
 		c.processEvent(event);
+	}
+
+	private boolean isFocusChangeEvent(Event event) {
+		return event.getEventType() == MouseEvent.MOUSE_PRESSED;
 	}
 
 	private boolean isShowing(RFXComponent component) {

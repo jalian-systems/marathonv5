@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.collections.ObservableList;
@@ -25,6 +26,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
@@ -57,6 +60,25 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		Object attributeObject = getAttributeObject(c, "text");
 		if (attributeObject == null)
 			return null;
+		return attributeObject.toString();
+	}
+
+	public final String getValue() {
+		return EventQueueWait.exec(new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return _getValue();
+			}
+		});
+	}
+
+	public String _getValue() {
+		Node c = node;
+		if (this instanceof IPseudoElement)
+			c = ((IPseudoElement) this).getPseudoComponent();
+		Object attributeObject = getAttributeObject(c, "value");
+		if (attributeObject == null)
+			return _getText();
 		return attributeObject.toString();
 	}
 
@@ -282,7 +304,6 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 	public Point2D _getMidpoint() {
 		Bounds d = node.getBoundsInLocal();
 		Point2D p = new Point2D(d.getWidth() / 2, d.getHeight() / 2);
-		System.out.println("JavaFXElementPropertyAccessor._getMidpoint(" + p + ")");
 		return p;
 	}
 
@@ -399,7 +420,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 	}
 
 	private String getTextForNodeObject(TreeView<?> treeView, TreeItem<?> lastPathComponent) {
-		// We should be getting the *text* from the tree cell. We need to figure out how to construct
+		// We should be getting the *text* from the tree cell. We need to figure
+		// out how to construct
 		// a tree cell for a item that is not visible
 		// Set<Node> nodes = treeView.lookupAll(".tree-cell");
 		// for (Node node : nodes) {
@@ -411,8 +433,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		// return cellComponent.getText();
 		// }
 		// }
-		if(lastPathComponent == null || lastPathComponent.getValue() == null)
-			return "" ;
+		if (lastPathComponent == null || lastPathComponent.getValue() == null)
+			return "";
 		return lastPathComponent.getValue().toString();
 	}
 
@@ -494,68 +516,140 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 	}
 
 	public int getSelection(CheckBox cb) {
-		int selection ;
-		if(cb.isAllowIndeterminate() && cb.isIndeterminate())
-			selection = 1 ;
+		int selection;
+		if (cb.isAllowIndeterminate() && cb.isIndeterminate())
+			selection = 1;
 		else
 			selection = cb.isSelected() ? 2 : 0;
 		return selection;
 	}
 
 	public String getTextForTab(TabPane tabPane, Tab selectedTab) {
-	    int index = tabPane.getTabs().indexOf(selectedTab);
-	    String original = getItemText(tabPane, index);
-        String itemText = original;
-        int suffixIndex = 0;
+		int index = tabPane.getTabs().indexOf(selectedTab);
+		String original = getItemText(tabPane, index);
+		String itemText = original;
+		int suffixIndex = 0;
 
-        for (int i = 0; i < index; i++) {
-            String current = getItemText(tabPane, i);
+		for (int i = 0; i < index; i++) {
+			String current = getItemText(tabPane, i);
 
-            if (current.equals(original)) {
-                itemText = itemText + "(" + ++suffixIndex + ")";
-            }
-        }
-        return itemText;
-    }
-	
+			if (current.equals(original)) {
+				itemText = String.format("%s(%d)", original, ++suffixIndex);
+			}
+		}
+		return itemText;
+	}
+
 	public String[][] getContent(TabPane node) {
-	    int nItems = node.getTabs().size();
-        String[][] content = new String[1][nItems];
-        for (int i = 0; i < nItems; i++) {
-            content[0][i] = getTextForTab(node, node.getTabs().get(i));
-        }
-        return content;
-    }
+		int nItems = node.getTabs().size();
+		String[][] content = new String[1][nItems];
+		for (int i = 0; i < nItems; i++) {
+			content[0][i] = getTextForTab(node, node.getTabs().get(i));
+		}
+		return content;
+	}
 
-    private static String getItemText(TabPane tabPane, int index) {
-        String titleAt = tabPane.getTabs().get(index).getText();
-        if (titleAt == null || "".equals(titleAt)) {
-            return getTabNameFromIcon(tabPane, index);
-        }
-        return titleAt;
-    }
+	public String getListSelectionText(ListView<?> listView) {
+		ObservableList<Integer> selectedIndices = listView.getSelectionModel().getSelectedIndices();
+		JSONArray pa = new JSONArray();
+		for (int i = 0; i < selectedIndices.size(); i++) {
+			pa.put(getListSelectionText(listView, selectedIndices.get(i)));
+		}
+		return pa.toString();
+	}
 
-    @SuppressWarnings("deprecation") private static String getTabNameFromIcon(TabPane tabPane, int index) {
-        Node graphic = tabPane.getTabs().get(index).getGraphic();
-        if (graphic == null || !(graphic instanceof ImageView))
-            return "tabIndex-" + index;
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
-    }
+	public String getListSelectionText(ListView<?> listView, Integer index) {
+		String original = getListItemText(listView, index);
+		String itemText = original;
+		int suffixIndex = 0;
+		for (int i = 0; i < index; i++) {
+			String current = getListItemText(listView, i);
+			if (current.equals(original))
+				itemText = String.format("%s(%d)", original, ++suffixIndex);
+		}
+		return itemText;
+	}
 
-    private static String nameFromImage(String description) {
-        try {
-            String name = new URL(description).getPath();
-            if (name.lastIndexOf('/') != -1)
-                name = name.substring(name.lastIndexOf('/') + 1);
-            if (name.lastIndexOf('.') != -1)
-                name = name.substring(0, name.lastIndexOf('.'));
-            return name;
-        } catch (MalformedURLException e) {
-            return description;
-        }
-    }
+	public ListCell<?> getCellAt(ListView<?> listView, Integer index) {
+		Set<Node> lookupAll = listView.lookupAll(".list-cell");
+		for (Node node : lookupAll) {
+			ListCell<?> cell = (ListCell<?>) node;
+			if (cell.getIndex() == index) {
+				return cell;
+			}
+		}
+		return null;
+	}
 
-    public static String removeClassName(Object object) {
+	private String getListItemText(ListView<?> listView, Integer index) {
+		return listView.getItems().get(index).toString();
+	}
+
+	protected String[][] getContent(ListView<?> node) {
+		int nItems = ((ListView<?>) node).getItems().size();
+		String[][] content = new String[1][nItems];
+		for (int i = 0; i < nItems; i++) {
+			content[0][i] = getListSelectionText(node, i);
+		}
+		return content;
+	}
+
+	public int getListItemIndex(ListView<?> listView, String string) {
+		ObservableList<?> items = listView.getItems();
+		for (int i = 0; i < items.size(); i++) {
+			String text = getListSelectionText(listView, i);
+			if (text.equals(string))
+				return i;
+		}
+		return -1;
+	}
+
+	protected int getIndexAt(ListView<?> listView, Point2D point) {
+		point = listView.localToScene(point);
+		Set<Node> lookupAll = listView.lookupAll(".list-cell");
+		ListCell<?> selected = null;
+		for (Node cellNode : lookupAll) {
+			Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
+			if (boundsInScene.contains(point)) {
+				selected = (ListCell<?>) cellNode;
+				break;
+			}
+		}
+		if (selected == null)
+			return -1;
+		return selected.getIndex();
+	}
+
+	private static String getItemText(TabPane tabPane, int index) {
+		String titleAt = tabPane.getTabs().get(index).getText();
+		if (titleAt == null || "".equals(titleAt)) {
+			return getTabNameFromIcon(tabPane, index);
+		}
+		return titleAt;
+	}
+
+	@SuppressWarnings("deprecation")
+	private static String getTabNameFromIcon(TabPane tabPane, int index) {
+		Node graphic = tabPane.getTabs().get(index).getGraphic();
+		if (graphic == null || !(graphic instanceof ImageView))
+			return "tabIndex-" + index;
+		return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+	}
+
+	private static String nameFromImage(String description) {
+		try {
+			String name = new URL(description).getPath();
+			if (name.lastIndexOf('/') != -1)
+				name = name.substring(name.lastIndexOf('/') + 1);
+			if (name.lastIndexOf('.') != -1)
+				name = name.substring(0, name.lastIndexOf('.'));
+			return name;
+		} catch (MalformedURLException e) {
+			return description;
+		}
+	}
+
+	public static String removeClassName(Object object) {
 		if (object == null)
 			return "null";
 		if (object.getClass().isArray()) {
