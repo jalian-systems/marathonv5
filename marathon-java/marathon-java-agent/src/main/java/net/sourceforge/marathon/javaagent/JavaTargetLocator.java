@@ -240,9 +240,23 @@ public class JavaTargetLocator {
         for (Window window : windows) {
             JWindow jw = new JWindow(window);
             String title = jw.getTitle();
-            if (title != null && title.equals(nameOrHandleOrTitle)) {
-                setCurrentWindow(window);
-                return driver;
+            if (nameOrHandleOrTitle.startsWith("/") && !nameOrHandleOrTitle.startsWith("//")) {
+                if (title != null && title.matches(nameOrHandleOrTitle.substring(1))) {
+                    setCurrentWindow(window);
+                    return driver;
+                }
+            } else {
+                if (nameOrHandleOrTitle.startsWith("//")) {
+                    if (title != null && title.equals(nameOrHandleOrTitle.substring(1))) {
+                        setCurrentWindow(window);
+                        return driver;
+                    }
+                } else {
+                    if (title != null && title.equals(nameOrHandleOrTitle)) {
+                        setCurrentWindow(window);
+                        return driver;
+                    }
+                }
             }
         }
         for (Window window : windows) {
@@ -357,7 +371,8 @@ public class JavaTargetLocator {
             if (windows.length == 1) {
                 setCurrentWindow(windows[0]);
             } else if (windows.length > 1) {
-                throw new NoSuchWindowException("No top level window is set. Java driver is unable to select from multiple windows", null);
+                throw new NoSuchWindowException("No top level window is set. Java driver is unable to select from multiple windows",
+                        null);
             }
         }
         if (currentWindow == null)

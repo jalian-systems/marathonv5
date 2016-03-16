@@ -4,6 +4,8 @@ marathon-java/.project
 marathon-java/.settings/
 marathon-java/build/
 marathon-java/marathon-java-agent/.classpath
+marathon-java/marathon-java-agent/bin
+marathon-java/marathon-java-agent/bin-test
 marathon-java/marathon-java-agent/.project
 marathon-java/marathon-java-agent/.settings/
 marathon-java/marathon-java-agent/build/
