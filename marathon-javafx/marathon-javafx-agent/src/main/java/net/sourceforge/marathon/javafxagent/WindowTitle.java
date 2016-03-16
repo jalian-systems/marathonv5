@@ -32,7 +32,7 @@ public class WindowTitle {
 
     private String getTitle(Stage component) {
         String title = component.getTitle();
-        if(title == null)
+        if (title == null)
             return component.getClass().getName();
         return title;
     }

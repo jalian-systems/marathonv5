@@ -29,8 +29,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class ProjectPanel implements IPropertiesPanel, IFileSelectedAction {
-    public static final Icon ICON = new ImageIcon(ProjectPanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/prj_obj.gif"));;
+    public static final Icon ICON = new ImageIcon(
+            ProjectPanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/prj_obj.gif"));;
     // Current projectDirectory: For use in other panels
     public static String projectDir = "";
     private JTextField nameField;
@@ -75,11 +75,11 @@ public class ProjectPanel implements IPropertiesPanel, IFileSelectedAction {
             @Override public void removeUpdate(DocumentEvent e) {
                 projectDir = dirField.getText();
             }
-            
+
             @Override public void insertUpdate(DocumentEvent e) {
                 projectDir = dirField.getText();
             }
-            
+
             @Override public void changedUpdate(DocumentEvent e) {
                 projectDir = dirField.getText();
             }

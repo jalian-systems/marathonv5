@@ -20,7 +20,7 @@ public class SwingSet3TreeDemo extends JFrame {
         super(SwingSet3TreeDemo.class.getName());
         initComponents();
     }
-    
+
     private void initComponents() {
         TreeDemo demo = new TreeDemo();
         JTree tree = (JTree) ComponentUtils.findComponent(JTree.class, demo);

@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -41,14 +41,13 @@ import javax.swing.event.*;
 
 /**
  * Implements a model whose data is actually in another model (the
- * "source model").  The follower model adjusts the values obtained
- * from the source model (or set in the follower model) to be in
- * a different unit of measure.
+ * "source model"). The follower model adjusts the values obtained from the
+ * source model (or set in the follower model) to be in a different unit of
+ * measure.
  *
  */
-public class FollowerRangeModel extends ConverterRangeModel
-                                implements ChangeListener {
-    ConverterRangeModel sourceModel; //the real model
+public class FollowerRangeModel extends ConverterRangeModel implements ChangeListener {
+    ConverterRangeModel sourceModel; // the real model
 
     /** Creates a FollowerRangeModel that gets its state from sourceModel. */
     public FollowerRangeModel(ConverterRangeModel sourceModel) {
@@ -56,40 +55,35 @@ public class FollowerRangeModel extends ConverterRangeModel
         sourceModel.addChangeListener(this);
     }
 
-    //The only method in the ChangeListener interface.
+    // The only method in the ChangeListener interface.
     public void stateChanged(ChangeEvent e) {
         fireStateChanged();
     }
 
     public int getMaximum() {
         int modelMax = sourceModel.getMaximum();
-        double multiplyBy = sourceModel.getMultiplier()/this.getMultiplier();
-        return (int)(modelMax * multiplyBy);
+        double multiplyBy = sourceModel.getMultiplier() / this.getMultiplier();
+        return (int) (modelMax * multiplyBy);
     }
 
     public void setMaximum(int newMaximum) {
-        sourceModel.setMaximum((int)(newMaximum *
-                     (this.getMultiplier()/sourceModel.getMultiplier())));
+        sourceModel.setMaximum((int) (newMaximum * (this.getMultiplier() / sourceModel.getMultiplier())));
     }
 
     public int getValue() {
-        return (int)getDoubleValue();
+        return (int) getDoubleValue();
     }
 
     public void setValue(int newValue) {
-        setDoubleValue((double)newValue);
+        setDoubleValue((double) newValue);
     }
 
     public double getDoubleValue() {
-        return sourceModel.getDoubleValue()
-               * sourceModel.getMultiplier()
-               / this.getMultiplier();
+        return sourceModel.getDoubleValue() * sourceModel.getMultiplier() / this.getMultiplier();
     }
 
     public void setDoubleValue(double newValue) {
-        sourceModel.setDoubleValue(
-                     newValue * this.getMultiplier()
-                     / sourceModel.getMultiplier());
+        sourceModel.setDoubleValue(newValue * this.getMultiplier() / sourceModel.getMultiplier());
     }
 
     public int getExtent() {
@@ -100,15 +94,8 @@ public class FollowerRangeModel extends ConverterRangeModel
         super.setExtent(newExtent);
     }
 
-    public void setRangeProperties(int value,
-                                   int extent,
-                                   int min,
-                                   int max,
-                                   boolean adjusting) {
-        double multiplyBy = this.getMultiplier()/sourceModel.getMultiplier();
-        sourceModel.setRangeProperties(value*multiplyBy,
-                                     extent, min,
-                                     (int)(max*multiplyBy),
-                                     adjusting);
+    public void setRangeProperties(int value, int extent, int min, int max, boolean adjusting) {
+        double multiplyBy = this.getMultiplier() / sourceModel.getMultiplier();
+        sourceModel.setRangeProperties(value * multiplyBy, extent, min, (int) (max * multiplyBy), adjusting);
     }
 }

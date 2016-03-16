@@ -173,8 +173,8 @@ public class ObjectMapConfiguration {
     }
 
     public File getConfigFile() {
-        return new File(System.getProperty(Constants.PROP_PROJECT_DIR), System.getProperty(Constants.PROP_OMAP_CONFIGURATION_FILE,
-                Constants.FILE_OMAP_CONFIGURATION));
+        return new File(System.getProperty(Constants.PROP_PROJECT_DIR),
+                System.getProperty(Constants.PROP_OMAP_CONFIGURATION_FILE, Constants.FILE_OMAP_CONFIGURATION));
     }
 
     private void load(Reader reader) {

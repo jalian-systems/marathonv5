@@ -236,8 +236,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     private CaretListenerImpl caretListener = new CaretListenerImpl();
 
-    private class DockingListener implements DockableSelectionListener, DockableStateWillChangeListener,
-            DockableStateChangeListener {
+    private class DockingListener
+            implements DockableSelectionListener, DockableStateWillChangeListener, DockableStateChangeListener {
 
         public void selectionChanged(DockableSelectionEvent e) {
             Dockable selectedDockable = e.getSelectedDockable();
@@ -398,9 +398,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             newTestcaseAction.setEnabled(state.isStopped());
             newModuleAction.setEnabled(state.isStopped());
             newFixtureAction.setEnabled(state.isStopped());
-            insertScriptAction.setEnabled(state.isRecording()
-                    && (getModuleFunctions() != null && getModuleFunctions().getChildren() != null && getModuleFunctions()
-                            .getChildren().size() > 0));
+            insertScriptAction.setEnabled(state.isRecording() && (getModuleFunctions() != null
+                    && getModuleFunctions().getChildren() != null && getModuleFunctions().getChildren().size() > 0));
             insertChecklistAction.setEnabled(state.isRecording());
             pauseAction.setEnabled(state.isRecording());
             resumeRecordingAction.setEnabled(state.isRecordingPaused());
@@ -449,8 +448,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                 return IPlaybackListener.CONTINUE;
             callStack.update(type, line);
             BreakPoint bp = new BreakPoint(line.fileName, line.lineNumber - 1);
-            if (type == Display.LINE_REACHED
-                    && (stepIntoActive || breakpoints.contains(bp) || (breakStackDepth != -1 && callStack.getStackDepth() <= breakStackDepth))) {
+            if (type == Display.LINE_REACHED && (stepIntoActive || breakpoints.contains(bp)
+                    || (breakStackDepth != -1 && callStack.getStackDepth() <= breakStackDepth))) {
                 if (!getFilePath().equals(line.fileName)) {
                     try {
                         File file = new File(line.fileName);
@@ -713,8 +712,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         }
 
         public void updateOMapFile() {
-            File omapFile = new File(System.getProperty(Constants.PROP_PROJECT_DIR), System.getProperty(Constants.PROP_OMAP_FILE,
-                    Constants.FILE_OMAP));
+            File omapFile = new File(System.getProperty(Constants.PROP_PROJECT_DIR),
+                    System.getProperty(Constants.PROP_OMAP_FILE, Constants.FILE_OMAP));
             fileUpdated(omapFile);
         }
 
@@ -1298,8 +1297,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             setLocation(x, y);
         }
 
-        setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(
-                this.getClass().getClassLoader().getResource("net/sourceforge/marathon/display/images/logo16.gif")));
+        setIconImage(java.awt.Toolkit.getDefaultToolkit()
+                .getImage(this.getClass().getClassLoader().getResource("net/sourceforge/marathon/display/images/logo16.gif")));
         setJMenuBar(createMenuBar());
         workspace = new DockingDesktop("Marathon");
         workspace.addDockableSelectionListener(dockingListener);
@@ -1562,8 +1561,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             navigator = new Navigator(rootDirs, null, rootDesc, fileEventHandler, this);
             navigator.setInitialExpansion(Constants.getAllMarathonDirectoriesAsStringArray());
             navigator.setActions(openAction, null);
-            FileHandler fileHandler = new FileHandler(new MarathonFileFilter(scriptModel.getSuffix(), scriptModel), new File(
-                    System.getProperty(Constants.PROP_TEST_DIR)), new File(System.getProperty(Constants.PROP_FIXTURE_DIR)),
+            FileHandler fileHandler = new FileHandler(new MarathonFileFilter(scriptModel.getSuffix(), scriptModel),
+                    new File(System.getProperty(Constants.PROP_TEST_DIR)), new File(System.getProperty(Constants.PROP_FIXTURE_DIR)),
                     Constants.getMarathonDirectories(Constants.PROP_MODULE_DIRS), this);
             DisplayWindowNavigatorActions actions = new DisplayWindowNavigatorActions(this, navigator, fileHandler);
             navigator.setMenuItems(actions.getMenuItems());
@@ -2089,8 +2088,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                     offset = (int) moduleFile.length();
                 }
                 FileWriter writer = new FileWriter(moduleFile, true);
-                writer.write((offset > 0 ? EOL : "")
-                        + getModuleHeader(moduleDialog.getFunctionName(), moduleDialog.getDescription()));
+                writer.write(
+                        (offset > 0 ? EOL : "") + getModuleHeader(moduleDialog.getFunctionName(), moduleDialog.getDescription()));
                 writer.close();
                 fileUpdated(moduleFile);
                 openFile(moduleFile);
@@ -2457,8 +2456,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             newFile(getFixtureHeader(fixtureDialog.getProperties(), fixtureDialog.getSelectedLauncher()),
                     new File(System.getProperty(Constants.PROP_FIXTURE_DIR)));
             editor.setDirty(true);
-            File fixtureFile = new File(System.getProperty(Constants.PROP_FIXTURE_DIR), fixtureDialog.getFixtureName()
-                    + scriptModel.getSuffix());
+            File fixtureFile = new File(System.getProperty(Constants.PROP_FIXTURE_DIR),
+                    fixtureDialog.getFixtureName() + scriptModel.getSuffix());
             try {
                 saveTo(fixtureFile);
             } catch (IOException e) {
@@ -2691,9 +2690,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         if (e == null)
             return true;
         if (e.isDirty()) {
-            int shouldSaveFile = JOptionPane.showConfirmDialog(this, "File \"" + e.getData("filename")
-                    + "\" Modified. Do you want to save the changes ", "File \"" + e.getData("filename") + "\" Modified",
-                    JOptionPane.YES_NO_CANCEL_OPTION);
+            int shouldSaveFile = JOptionPane.showConfirmDialog(this,
+                    "File \"" + e.getData("filename") + "\" Modified. Do you want to save the changes ",
+                    "File \"" + e.getData("filename") + "\" Modified", JOptionPane.YES_NO_CANCEL_OPTION);
             if (shouldSaveFile == JOptionPane.CANCEL_OPTION)
                 return false;
             if (shouldSaveFile == JOptionPane.YES_OPTION) {
@@ -2820,8 +2819,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     private HashSet<String> importStatements;
 
-    public static final ImageIcon BREAKPOINT = new ImageIcon(DisplayWindow.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/display/icons/enabled/togglebreakpoint.gif"));
+    public static final ImageIcon BREAKPOINT = new ImageIcon(DisplayWindow.class.getClassLoader()
+            .getResource("net/sourceforge/marathon/display/icons/enabled/togglebreakpoint.gif"));
 
     public void onPlay() {
         resultPane.clear();
@@ -2881,7 +2880,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         private void initComponents() {
             Container contentPane = getContentPane();
             contentPane.setLayout(new BorderLayout());
-            contentPane.add(new JLabel(new ImageIcon(DisplayWindow.class.getResource("wait.gif"), "Wait Message")), BorderLayout.CENTER);
+            contentPane.add(new JLabel(new ImageIcon(DisplayWindow.class.getResource("wait.gif"), "Wait Message")),
+                    BorderLayout.CENTER);
             JLabel label = new JLabel("This window closes once Marathon is ready for recording");
             label.setOpaque(true);
             label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -3238,8 +3238,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     private IEditor createEditor(EditorType editorType) {
         try {
-            FileHandler fileHandler = new FileHandler(new MarathonFileFilter(scriptModel.getSuffix(), scriptModel), new File(
-                    System.getProperty(Constants.PROP_TEST_DIR)), new File(System.getProperty(Constants.PROP_FIXTURE_DIR)),
+            FileHandler fileHandler = new FileHandler(new MarathonFileFilter(scriptModel.getSuffix(), scriptModel),
+                    new File(System.getProperty(Constants.PROP_TEST_DIR)), new File(System.getProperty(Constants.PROP_FIXTURE_DIR)),
                     Constants.getMarathonDirectories(Constants.PROP_MODULE_DIRS), this);
             IEditor e = editorProvider.get(true, 1, editorType);
             e.setData("filehandler", fileHandler);

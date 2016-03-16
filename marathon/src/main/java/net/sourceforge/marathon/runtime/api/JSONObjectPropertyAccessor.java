@@ -14,7 +14,7 @@ public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serial
 
     public JSONObjectPropertyAccessor() {
     }
-    
+
     public JSONObjectPropertyAccessor(JSONObject o) {
         this.o = o;
     }
@@ -32,6 +32,6 @@ public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serial
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
-        o = new JSONObject((String)s.readObject());
+        o = new JSONObject((String) s.readObject());
     }
 }

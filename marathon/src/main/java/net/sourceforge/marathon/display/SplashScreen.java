@@ -16,8 +16,8 @@ import javax.swing.Timer;
 import net.sourceforge.marathon.Version;
 
 public class SplashScreen extends JDialog {
-    public static final Icon SPLASH = new ImageIcon(SplashScreen.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/display/images/marathon.png"));
+    public static final Icon SPLASH = new ImageIcon(
+            SplashScreen.class.getClassLoader().getResource("net/sourceforge/marathon/display/images/marathon.png"));
 
     private static final long serialVersionUID = 1L;
     private static final int SPLASH_DISPLAY_TIME = 2000;

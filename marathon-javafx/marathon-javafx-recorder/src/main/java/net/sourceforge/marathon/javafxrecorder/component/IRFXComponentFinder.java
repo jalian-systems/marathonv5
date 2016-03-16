@@ -4,5 +4,5 @@ import javafx.scene.Node;
 
 public interface IRFXComponentFinder extends IRecordOn {
 
-	Class<? extends RFXComponent> get(Node component);
+    Class<? extends RFXComponent> get(Node component);
 }

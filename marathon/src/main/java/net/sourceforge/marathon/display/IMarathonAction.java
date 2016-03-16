@@ -18,8 +18,8 @@ public interface IMarathonAction {
 
     char getMneumonic();
 
-    void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
-            int endCaretPosition, int startLine) throws Exception;
+    void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion, int endCaretPosition,
+            int startLine) throws Exception;
 
     boolean isToolBarAction();
 

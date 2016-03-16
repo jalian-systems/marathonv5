@@ -135,7 +135,8 @@ public class ObjectMapService implements IObjectMapService {
         return insertNameForComponent(name, urp, properties, container);
     }
 
-    @Override public OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer) throws ObjectMapException {
+    @Override public OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer)
+            throws ObjectMapException {
         IOMapContainer container = getContainer(urpContainer, attributesContainer);
         return findComponentByName(name, container);
     }

@@ -102,9 +102,10 @@ public class PasswordDemo extends JPanel implements ActionListener {
             passwordField.selectAll();
             resetFocus();
         } else { // The user has asked for help.
-            JOptionPane.showMessageDialog(controllingFrame, "You can get the password by searching this example's\n"
-                    + "source code for the string \"correctPassword\".\n"
-                    + "Or look at the section How to Use Password Fields in\n" + "the components section of The Java Tutorial.");
+            JOptionPane.showMessageDialog(controllingFrame,
+                    "You can get the password by searching this example's\n" + "source code for the string \"correctPassword\".\n"
+                            + "Or look at the section How to Use Password Fields in\n"
+                            + "the components section of The Java Tutorial.");
         }
     }
 

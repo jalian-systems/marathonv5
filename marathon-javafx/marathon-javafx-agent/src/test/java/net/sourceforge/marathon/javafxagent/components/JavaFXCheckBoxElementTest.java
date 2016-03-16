@@ -18,7 +18,7 @@ public class JavaFXCheckBoxElementTest extends JavaFXElementTest {
 
     private JavaFXAgent driver;
     private IJavaFXElement checkBox;
-	private IJavaFXElement triStateCheckBox;
+    private IJavaFXElement triStateCheckBox;
 
     @BeforeMethod public void initializeDriver() {
         driver = new JavaFXAgent();
@@ -98,14 +98,14 @@ public class JavaFXCheckBoxElementTest extends JavaFXElementTest {
         };
     }
 
-	private CheckBox findCheckbox(String text) {
-		Set<Node> checkBox = getPrimaryStage().getScene().getRoot().lookupAll(".check-box");
-		for (Node node : checkBox) {
-			if(((CheckBox)node).getText().equals(text)) {
-				return (CheckBox) node;
-			}
-		}
-		return null;
-	}
+    private CheckBox findCheckbox(String text) {
+        Set<Node> checkBox = getPrimaryStage().getScene().getRoot().lookupAll(".check-box");
+        for (Node node : checkBox) {
+            if (((CheckBox) node).getText().equals(text)) {
+                return (CheckBox) node;
+            }
+        }
+        return null;
+    }
 
 }

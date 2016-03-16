@@ -129,7 +129,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         if (handle == null || !handle.equals(window.getHandle()))
             throw new StaleElementReferenceException(
                     "Element appears to be stale. Did you navigate away from the window that contained it? "
-                            + " And is the current window focussed the same as the one holding this element?", null);
+                            + " And is the current window focussed the same as the one holding this element?",
+                    null);
     }
 
     /*
@@ -277,8 +278,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
             return !isSelected();
         else if (function.equals("instance-of"))
             return isInstance((String) args[0]);
-        throw new UnsupportedCommandException("Unsupported psuedo class " + function + " component = "
-                + component.getClass().getName(), null);
+        throw new UnsupportedCommandException(
+                "Unsupported psuedo class " + function + " component = " + component.getClass().getName(), null);
     }
 
     private boolean isInstance(String classname) {
@@ -361,8 +362,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
                 return Arrays.asList((IJavaElement) this);
             return Arrays.<IJavaElement> asList();
         }
-        throw new UnsupportedCommandException("Pseudo element selector " + selector + " is not applicable for "
-                + component.getClass().getName(), null);
+        throw new UnsupportedCommandException(
+                "Pseudo element selector " + selector + " is not applicable for " + component.getClass().getName(), null);
     }
 
     public boolean marathon_select(JSONArray jsonArray) {

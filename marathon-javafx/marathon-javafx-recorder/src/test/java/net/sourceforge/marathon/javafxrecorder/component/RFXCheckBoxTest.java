@@ -35,15 +35,15 @@ public class RFXCheckBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("checked", select.getParameters()[0]);
     }
 
-	private CheckBox findCheckbox(String text) {
-		Set<Node> checkBox = getPrimaryStage().getScene().getRoot().lookupAll(".check-box");
-		for (Node node : checkBox) {
-			if(((CheckBox)node).getText().equals(text)) {
-				return (CheckBox) node;
-			}
-		}
-		return null;
-	}
+    private CheckBox findCheckbox(String text) {
+        Set<Node> checkBox = getPrimaryStage().getScene().getRoot().lookupAll(".check-box");
+        for (Node node : checkBox) {
+            if (((CheckBox) node).getText().equals(text)) {
+                return (CheckBox) node;
+            }
+        }
+        return null;
+    }
 
     @Test public void selectCheckBoxNotSelected() throws Throwable {
         CheckBox checkBox = findCheckbox("Simple checkbox");
@@ -68,7 +68,7 @@ public class RFXCheckBoxTest extends RFXComponentTest {
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
             @Override public void run() {
-            	checkBox.setIndeterminate(true);
+                checkBox.setIndeterminate(true);
                 checkBox.setSelected(true);
                 RFXCheckBox rfxCheckBox = new RFXCheckBox(checkBox, null, null, lr);
                 rfxCheckBox.mouseClicked(null);

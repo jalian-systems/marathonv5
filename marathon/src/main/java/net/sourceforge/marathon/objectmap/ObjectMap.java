@@ -64,11 +64,11 @@ public class ObjectMap extends ObjectMapModel {
                 currentContainer.load();
                 logger.info(MODULE, "Setting current container to: " + currentContainer);
             } catch (FileNotFoundException e) {
-                logger.error(MODULE, "File not found for container: " + currentContainer
-                        + ". Recreating object map file for container.");
+                logger.error(MODULE,
+                        "File not found for container: " + currentContainer + ". Recreating object map file for container.");
                 data.remove(currentContainer);
-                throw new ObjectMapException("File not found for container: " + currentContainer
-                        + ". Recreating object map file for container.");
+                throw new ObjectMapException(
+                        "File not found for container: " + currentContainer + ". Recreating object map file for container.");
             }
         } else if (matched.size() == 0) {
             throw new ObjectMapException("No top level component matched for the given properties");
@@ -91,7 +91,8 @@ public class ObjectMap extends ObjectMapModel {
         return container;
     }
 
-    private List<OMapProperty> getGeneralProperties(IPropertyAccessor pa, List<String> gproperties, List<List<String>> rproperties) {
+    private List<OMapProperty> getGeneralProperties(IPropertyAccessor pa, List<String> gproperties,
+            List<List<String>> rproperties) {
         ArrayList<OMapProperty> gprops = new ArrayList<OMapProperty>();
         Set<String> props = new HashSet<String>();
         props.addAll(gproperties);
@@ -162,7 +163,8 @@ public class ObjectMap extends ObjectMapModel {
     }
 
     public OMapComponent insertNameForComponent(String name, IPropertyAccessor w, List<String> rprops,
-            List<List<String>> rproperties, List<List<String>> nproperties, List<String> gproperties, OMapContainer currentContainer) {
+            List<List<String>> rproperties, List<List<String>> nproperties, List<String> gproperties,
+            OMapContainer currentContainer) {
         logger.info(MODULE, "insertNameForComponent(" + name + "): with index of type: " + w.getProperty("indexOfType"));
         OMapComponent omapComponent = currentContainer.insertNameForComponent(name, w, rprops, rproperties, nproperties,
                 gproperties);
@@ -174,8 +176,8 @@ public class ObjectMap extends ObjectMapModel {
 
     public OMapComponent findComponentByProperties(IPropertyAccessor w, List<String> rprops, OMapContainer currentContainer) {
         OMapComponent omapComponent = currentContainer.findComponentByProperties(w, rprops);
-        logger.info(MODULE, "findComponentByProperties(" + w.getProperty("component.class.name") + ", " + rprops + "): "
-                + omapComponent);
+        logger.info(MODULE,
+                "findComponentByProperties(" + w.getProperty("component.class.name") + ", " + rprops + "): " + omapComponent);
         return omapComponent;
     }
 
@@ -212,7 +214,8 @@ public class ObjectMap extends ObjectMapModel {
         return container.findComponentsByProperties(wrapper);
     }
 
-    public OMapComponent insertNameForComponent(String name, Properties urp, Properties properties, OMapContainer currentContainer) {
+    public OMapComponent insertNameForComponent(String name, Properties urp, Properties properties,
+            OMapContainer currentContainer) {
         logger.info(MODULE, "insertNameForComponent(" + name + ")");
         OMapComponent omapComponent = currentContainer.insertNameForComponent(name, urp, properties);
         logger.info(MODULE, "insertNameForComponent(" + name + "): " + omapComponent);

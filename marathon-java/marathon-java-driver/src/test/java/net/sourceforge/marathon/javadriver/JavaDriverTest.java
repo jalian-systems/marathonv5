@@ -1464,8 +1464,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         AssertJUnit.assertTrue(buttonMouseActions.toString().contains("clicked(1)"));
         buttonMouseActions.setLength(0);
         new Actions(driver).contextClick().perform();
-        AssertJUnit.assertTrue(buttonMouseActions.toString(), buttonMouseActions.toString().contains("pressed(3-popup)") ||
-                buttonMouseActions.toString().contains("released(3-popup)"));
+        AssertJUnit.assertTrue(buttonMouseActions.toString(), buttonMouseActions.toString().contains("pressed(3-popup)")
+                || buttonMouseActions.toString().contains("released(3-popup)"));
     }
 
     public void screenshot() throws Throwable {
@@ -1477,9 +1477,9 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                     frame.setVisible(true);
                 }
             });
-            if(driver instanceof TakesScreenshot) {
+            if (driver instanceof TakesScreenshot) {
                 Thread.sleep(1000);
-                File screenshotAs = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+                File screenshotAs = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                 System.out.println(screenshotAs.getAbsolutePath());
                 Thread.sleep(20000);
             }

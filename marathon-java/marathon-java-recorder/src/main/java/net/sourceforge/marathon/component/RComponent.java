@@ -315,7 +315,6 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     }
 
     public boolean isMenuShortcutKeyDown(InputEvent event) {
-        return (event.getModifiers() & 
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) != 0;
+        return (event.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) != 0;
     }
 }

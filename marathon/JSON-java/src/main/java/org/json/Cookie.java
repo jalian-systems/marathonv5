@@ -147,9 +147,8 @@ public class Cookie {
      * convert plus to space.
      * 
      * @param string
-     *            A string that may contain <code>+</code>
-     *            &nbsp;<small>(plus)</small> and <code>%</code><i>hh</i>
-     *            sequences.
+     *            A string that may contain <code>+</code> &nbsp;
+     *            <small>(plus)</small> and <code>%</code><i>hh</i> sequences.
      * @return The unescaped string.
      */
     public static String unescape(String string) {

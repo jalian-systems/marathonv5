@@ -67,15 +67,15 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         profile.copyOutputTo(outputStream);
         return profile.asURL();
     }
-    
+
     @Override public boolean needReplaceEnviron() {
         return true;
     }
-    
+
     @Override public boolean isWebStart() {
         return false;
     }
-    
+
     @Override public boolean isApplet() {
         return false;
     }

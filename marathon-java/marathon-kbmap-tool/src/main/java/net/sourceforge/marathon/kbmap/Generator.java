@@ -43,8 +43,8 @@ import com.jgoodies.forms.layout.FormLayout;
 public class Generator extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    public static final ImageIcon BANNER = new ImageIcon(Generator.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/kbmap/banner.png"));;
+    public static final ImageIcon BANNER = new ImageIcon(
+            Generator.class.getClassLoader().getResource("net/sourceforge/marathon/kbmap/banner.png"));;
 
     private static class KeyMap implements Comparable<KeyMap> {
         private boolean shiftDown;
@@ -131,8 +131,8 @@ public class Generator extends JFrame {
             }
 
             private void outputMappings(File selectedFile) throws IOException {
-                PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(selectedFile), Charset
-                        .forName("utf-8")), true);
+                PrintWriter writer = new PrintWriter(
+                        new OutputStreamWriter(new FileOutputStream(selectedFile), Charset.forName("utf-8")), true);
                 Collections.sort(mappings);
                 for (KeyMap keyMap : mappings) {
                     String s;

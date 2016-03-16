@@ -327,8 +327,8 @@ public class Marathon {
     public void assertContentJava(String[][] expected, String actual) {
         JSONArray o = new JSONArray(actual);
         if (expected.length != o.length()) {
-            throw new AssertionFailedError("Invalid Length " + Integer.valueOf(expected.length) + " : "
-                    + Integer.valueOf(o.length()));
+            throw new AssertionFailedError(
+                    "Invalid Length " + Integer.valueOf(expected.length) + " : " + Integer.valueOf(o.length()));
         }
         for (int i = 0; i < o.length(); i++) {
             if (expected[i].length != o.getJSONArray(i).length()) {
@@ -337,8 +337,8 @@ public class Marathon {
             }
             for (int j = 0; j < expected[i].length; j++) {
                 if (!expected[i][j].equals(o.getJSONArray(i).get(j))) {
-                    throw new AssertionFailedError("Data Mismatch at (" + i + "," + j + ") " + expected[i][j] + " : "
-                            + o.getJSONArray(i).get(j));
+                    throw new AssertionFailedError(
+                            "Data Mismatch at (" + i + "," + j + ") " + expected[i][j] + " : " + o.getJSONArray(i).get(j));
                 }
             }
         }
@@ -464,7 +464,7 @@ public class Marathon {
     public void notSupported(String message) {
         errorTest(message, null);
     }
-    
+
     public boolean compareImages(String path1, String path2, double differencesInPercent) throws IOException {
         return ImageCompareAction.compare(path1, path2, differencesInPercent);
     }

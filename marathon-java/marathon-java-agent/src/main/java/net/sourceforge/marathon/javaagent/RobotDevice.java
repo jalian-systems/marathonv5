@@ -177,6 +177,7 @@ public class RobotDevice extends Device {
 
     static Map<Integer, String> keyCodeToString = new HashMap<Integer, String>();
     static Map<Integer, String> buttonToString = new HashMap<Integer, String>();
+
     static {
         Field[] declaredFields = KeyEvent.class.getDeclaredFields();
         for (Field field : declaredFields) {

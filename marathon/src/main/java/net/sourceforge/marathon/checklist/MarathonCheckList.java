@@ -115,8 +115,9 @@ public class MarathonCheckList extends EscapeDialog {
                                 file = new File(file.getParentFile(), file.getName() + ".xml");
                             }
                             if (file.exists()) {
-                                int ret = JOptionPane.showConfirmDialog(dialog, "File " + file.getName()
-                                        + " Exists. Do you want to overwrite", "Checklist Exists", JOptionPane.YES_NO_CANCEL_OPTION);
+                                int ret = JOptionPane.showConfirmDialog(dialog,
+                                        "File " + file.getName() + " Exists. Do you want to overwrite", "Checklist Exists",
+                                        JOptionPane.YES_NO_CANCEL_OPTION);
                                 if (ret == JOptionPane.CANCEL_OPTION || ret == JOptionPane.NO_OPTION)
                                     return;
                             }
@@ -167,8 +168,9 @@ public class MarathonCheckList extends EscapeDialog {
                                 file = new File(file.getParentFile(), file.getName() + ".xml");
                             }
                             if (file.exists()) {
-                                int ret = JOptionPane.showConfirmDialog(dialog, "File " + file.getName()
-                                        + " Exists. Do you want to overwrite", "Checklist Exists", JOptionPane.YES_NO_CANCEL_OPTION);
+                                int ret = JOptionPane.showConfirmDialog(dialog,
+                                        "File " + file.getName() + " Exists. Do you want to overwrite", "Checklist Exists",
+                                        JOptionPane.YES_NO_CANCEL_OPTION);
                                 if (ret == JOptionPane.CANCEL_OPTION || ret == JOptionPane.NO_OPTION)
                                     return;
                             }

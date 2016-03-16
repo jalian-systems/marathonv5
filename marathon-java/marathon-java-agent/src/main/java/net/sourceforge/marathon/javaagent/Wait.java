@@ -29,10 +29,14 @@ public abstract class Wait {
     /** Returns true when it's time to stop waiting */
     public abstract boolean until();
 
-    /** The amount of time to wait before giving up; the default is 30 seconds */
+    /**
+     * The amount of time to wait before giving up; the default is 30 seconds
+     */
     public static final long DEFAULT_TIMEOUT = 30000l;
 
-    /** The interval to pause between checking; the default is 500 milliseconds */
+    /**
+     * The interval to pause between checking; the default is 500 milliseconds
+     */
     public static final long DEFAULT_INTERVAL = 500l;
 
     /**

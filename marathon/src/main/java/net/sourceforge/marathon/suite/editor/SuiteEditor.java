@@ -49,15 +49,15 @@ import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.UIUtils;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class SuiteEditor implements IEditor {
+@SuppressWarnings({ "unchecked", "rawtypes" }) public class SuiteEditor implements IEditor {
 
     private final static class SuiteListCellRenderer extends DefaultListCellRenderer {
         private static final URL ICON_FILE = DisplayWindow.class.getResource("icons/enabled/file.gif");
         private static final URL ICON_FOLDER = DisplayWindow.class.getResource("icons/enabled/folder.gif");
         private static final long serialVersionUID = 1L;
 
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                boolean cellHasFocus) {
             if (value instanceof MarathonTestCase && ((MarathonTestCase) value).getFullName() != null) {
                 value = ((MarathonTestCase) value).getFullName();
             }
@@ -351,8 +351,8 @@ public class SuiteEditor implements IEditor {
         if (selectedIndices.length <= 0)
             return;
         int indicesLength = selectedIndices.length;
-        int highestSelIndexToBeSet = selectedIndices[indicesLength - 1] == testsInSuiteModel.getSize() - 1 ? testsInSuiteModel
-                .getSize() - 1 : selectedIndices[indicesLength - 1] + 1;
+        int highestSelIndexToBeSet = selectedIndices[indicesLength - 1] == testsInSuiteModel.getSize() - 1
+                ? testsInSuiteModel.getSize() - 1 : selectedIndices[indicesLength - 1] + 1;
 
         ArrayList<Object> selectedObjects = new ArrayList<Object>();
         for (int i = selectedIndices.length - 1; i >= 0; i--) {

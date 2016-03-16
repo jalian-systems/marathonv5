@@ -172,13 +172,13 @@ public class JSONScriptElement implements IScriptElement {
 
     private String enscriptKeystroke() {
         String keytext = null;
-        if(event.has("keyChar")) {
-        	keytext = event.getString("keyChar");
+        if (event.has("keyChar")) {
+            keytext = event.getString("keyChar");
         } else {
-        	String mtext = event.getString("modifiersEx");
-        	if(mtext.length() > 0)
-        		mtext = mtext + "+" ;
-			keytext = mtext + event.getString("keyCode");
+            String mtext = event.getString("modifiersEx");
+            if (mtext.length() > 0)
+                mtext = mtext + "+";
+            keytext = mtext + event.getString("keyCode");
         }
         return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("keystroke", name, keytext);
     }

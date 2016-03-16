@@ -855,7 +855,7 @@ public class JavaElementPropertyAccessor {
         JTable table = (JTable) component;
         JTableHeader tableHeader = table.getTableHeader();
         String columnName;
-        if(tableHeader != null)
+        if (tableHeader != null)
             columnName = tableHeader.getColumnModel().getColumn(c).getHeaderValue().toString();
         else
             columnName = table.getColumnName(c);

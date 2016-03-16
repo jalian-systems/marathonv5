@@ -83,13 +83,13 @@ public class XMLTokener extends JSONTokener {
         }
     }
 
-/**
-     * Get the next XML outer token, trimming whitespace. There are two kinds
-     * of tokens: the '<' character which begins a markup tag, and the content
-     * text between markup tags.
+    /**
+     * Get the next XML outer token, trimming whitespace. There are two kinds of
+     * tokens: the '<' character which begins a markup tag, and the content text
+     * between markup tags.
      *
-     * @return  A string, or a '<' Character, or null if there is no more
-     * source text.
+     * @return A string, or a '<' Character, or null if there is no more source
+     *         text.
      * @throws JSONException
      */
     public Object nextContent() throws JSONException {
@@ -147,8 +147,8 @@ public class XMLTokener extends JSONTokener {
     }
 
     /**
-     * Returns the next XML meta token. This is used for skipping over <!...>
-     * and <?...?> structures.
+     * Returns the next XML meta token. This is used for skipping over
+     * <!...> and <?...?> structures.
      * 
      * @return Syntax characters (<code>< > / = ! ?</code>) are returned as
      *         Character, and strings and names are returned as Boolean. We
@@ -245,7 +245,7 @@ public class XMLTokener extends JSONTokener {
         case '?':
             return XML.QUEST;
 
-            // Quoted string
+        // Quoted string
 
         case '"':
         case '\'':
@@ -352,7 +352,9 @@ public class XMLTokener extends JSONTokener {
                 return true;
             }
 
-            /* Get the next character. If there isn't one, then defeat is ours. */
+            /*
+             * Get the next character. If there isn't one, then defeat is ours.
+             */
 
             c = next();
             if (c == 0) {

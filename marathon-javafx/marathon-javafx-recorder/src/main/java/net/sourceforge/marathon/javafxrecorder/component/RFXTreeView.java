@@ -12,18 +12,17 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXTreeView extends RFXComponent {
 
-	public RFXTreeView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
-		super(source, omapConfig, point, recorder);
-	}
+    public RFXTreeView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
+        super(source, omapConfig, point, recorder);
+    }
 
-	@Override
-	public void focusLost(RFXComponent next) {
-		TreeView<?> treeView = (TreeView<?>) getComponent();
-		ObservableList<?> selectedItems = treeView.getSelectionModel().getSelectedItems();
-		JSONArray pa = new JSONArray();
-		for (Object object : selectedItems) {
-			pa.put(getTextForNode(treeView, (TreeItem<?>) object));
-		}
-		recorder.recordSelect(this, pa.toString());
-	}
+    @Override public void focusLost(RFXComponent next) {
+        TreeView<?> treeView = (TreeView<?>) getComponent();
+        ObservableList<?> selectedItems = treeView.getSelectionModel().getSelectedItems();
+        JSONArray pa = new JSONArray();
+        for (Object object : selectedItems) {
+            pa.put(getTextForNode(treeView, (TreeItem<?>) object));
+        }
+        recorder.recordSelect(this, pa.toString());
+    }
 }

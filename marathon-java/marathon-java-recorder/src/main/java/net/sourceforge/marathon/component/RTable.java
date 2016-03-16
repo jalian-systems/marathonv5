@@ -170,7 +170,7 @@ public class RTable extends RComponent {
         }
         return null;
     }
-    
+
     @Override protected void mousePressed(MouseEvent me) {
         // Ignore Ctrl+Clicks used to select the nodes
         if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me))

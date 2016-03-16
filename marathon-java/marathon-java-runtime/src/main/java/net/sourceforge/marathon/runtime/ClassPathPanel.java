@@ -11,8 +11,8 @@ import net.sourceforge.marathon.runtime.api.ISubPropertiesPanel;
 import net.sourceforge.marathon.runtime.api.ListPanel;
 
 public class ClassPathPanel extends ListPanel implements ISubPropertiesPanel {
-    public static final Icon ICON = new ImageIcon(ClassPathPanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/cp_obj.gif"));;
+    public static final Icon ICON = new ImageIcon(
+            ClassPathPanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/cp_obj.gif"));;
 
     public ClassPathPanel(JDialog parent) {
         super(parent, true);

@@ -100,6 +100,7 @@ public class Navigator implements Dockable, IFileEventListener {
 
     private static String hideFilePattern = "";
     private static FilePatternMatcher hiddenFileMatcher;
+
     static {
         Preferences prefs = Preferences.userNodeForPackage(Constants.class);
         hideFilePattern = prefs.get(Constants.PREF_NAVIGATOR_HIDEFILES, "\\..* .*\\.class \\Q__init__.py\\E");

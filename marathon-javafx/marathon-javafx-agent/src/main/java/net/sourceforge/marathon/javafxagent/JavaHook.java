@@ -60,45 +60,40 @@ public class JavaHook {
             }
         });
         EventHandler<MouseEvent> mouseEventLogger = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				logger.info(event.toString());
-			}
+            @Override public void handle(MouseEvent event) {
+                logger.info(event.toString());
+            }
         };
         EventHandler<KeyEvent> keyEventLogger = new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				logger.info(event.toString());
-			}
+            @Override public void handle(KeyEvent event) {
+                logger.info(event.toString());
+            }
         };
         stages.addListener(new ListChangeListener<Stage>() {
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
-				c.next();
-				if(c.wasAdded()) {
-					List<? extends Stage> added = c.getAddedSubList();
-					for (Stage stage : added) {
-						stage.addEventFilter(WindowEvent.WINDOW_SHOWN, new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								stage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEventLogger);
-								stage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_RELEASED, mouseEventLogger);
-								stage.getScene().getRoot().addEventFilter(KeyEvent.KEY_PRESSED, keyEventLogger);
-								stage.getScene().getRoot().addEventFilter(KeyEvent.KEY_RELEASED, keyEventLogger);
-							}
-						});
-						stage.addEventFilter(WindowEvent.WINDOW_HIDING, new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								stage.getScene().getRoot().removeEventFilter(MouseEvent.MOUSE_PRESSED, mouseEventLogger);
-								stage.getScene().getRoot().removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseEventLogger);
-								stage.getScene().getRoot().removeEventFilter(KeyEvent.KEY_PRESSED, keyEventLogger);
-								stage.getScene().getRoot().removeEventFilter(KeyEvent.KEY_RELEASED, keyEventLogger);
-							}
-						});
-					}
-				}
-			}
+            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+                c.next();
+                if (c.wasAdded()) {
+                    List<? extends Stage> added = c.getAddedSubList();
+                    for (Stage stage : added) {
+                        stage.addEventFilter(WindowEvent.WINDOW_SHOWN, new EventHandler<WindowEvent>() {
+                            @Override public void handle(WindowEvent event) {
+                                stage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEventLogger);
+                                stage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_RELEASED, mouseEventLogger);
+                                stage.getScene().getRoot().addEventFilter(KeyEvent.KEY_PRESSED, keyEventLogger);
+                                stage.getScene().getRoot().addEventFilter(KeyEvent.KEY_RELEASED, keyEventLogger);
+                            }
+                        });
+                        stage.addEventFilter(WindowEvent.WINDOW_HIDING, new EventHandler<WindowEvent>() {
+                            @Override public void handle(WindowEvent event) {
+                                stage.getScene().getRoot().removeEventFilter(MouseEvent.MOUSE_PRESSED, mouseEventLogger);
+                                stage.getScene().getRoot().removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseEventLogger);
+                                stage.getScene().getRoot().removeEventFilter(KeyEvent.KEY_PRESSED, keyEventLogger);
+                                stage.getScene().getRoot().removeEventFilter(KeyEvent.KEY_RELEASED, keyEventLogger);
+                            }
+                        });
+                    }
+                }
+            }
         });
     }
 

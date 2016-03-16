@@ -23,30 +23,30 @@ public class RecordingTest {
             @Override public void record(IScriptElement element) {
                 scriptElements.add(element);
             }
-    
+
             @Override public void abortRecording() {
             }
-    
+
             @Override public void insertChecklist(String name) {
             }
-    
+
             @Override public String recordInsertScriptElement(WindowId windowId, String script) {
                 return null;
             }
-    
+
             @Override public void recordInsertChecklistElement(WindowId windowId, String fileName) {
             }
-    
+
             @Override public void recordShowChecklistElement(WindowId windowId, String fileName) {
             }
-    
+
             @Override public boolean isCreatingObjectMap() {
                 return false;
             }
-    
+
             @Override public void updateScript() {
             }
-            
+
         });
         return port;
     }

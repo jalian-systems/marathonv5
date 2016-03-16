@@ -152,9 +152,8 @@ public class JTreeJavaElement extends AbstractJavaElement {
             String rootNodeText = unescapeSpecialCharacters(tokens[0]);
             searchedPath.append("/" + rootNodeText);
             assertTrue("JTree does not have a root node!", rootNode != null);
-            assertTrue(
-                    "JTree root node does not match: Expected </" + getPathText(tree, treePath) + "> Actual: <"
-                            + searchedPath.toString() + ">", searchedPath.toString().equals("/" + getPathText(tree, treePath)));
+            assertTrue("JTree root node does not match: Expected </" + getPathText(tree, treePath) + "> Actual: <"
+                    + searchedPath.toString() + ">", searchedPath.toString().equals("/" + getPathText(tree, treePath)));
         }
         for (int i = start; i < tokens.length; i++) {
             String childText = unescapeSpecialCharacters(tokens[i]);

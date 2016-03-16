@@ -2,11 +2,11 @@ package net.sourceforge.marathon.javaagent;
 
 public class JOptions {
 
-    private JTimeouts timeouts ;
+    private JTimeouts timeouts;
     private IJavaAgent agent;
 
     public JTimeouts timeouts() {
-        if(timeouts == null)
+        if (timeouts == null)
             timeouts = new JTimeouts(agent);
         return timeouts;
     }

@@ -31,8 +31,8 @@ public class RubyPathPanel extends ListPanel implements ISubPropertiesPanel {
         prompt.changeAlpha((float) 0.5);
     }
 
-    public static final Icon _icon = new ImageIcon(RubyPathPanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/cp_obj.gif"));
+    public static final Icon _icon = new ImageIcon(
+            RubyPathPanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/cp_obj.gif"));
 
     public String getName() {
         return "Ruby Path";

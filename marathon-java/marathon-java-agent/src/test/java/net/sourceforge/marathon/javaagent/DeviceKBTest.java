@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
     }
 
     public void sendKeysKeyboardMap() throws Throwable {
-        if(System.getProperty("java.version", "").matches("1.7.*") && isRobot()) {
+        if (System.getProperty("java.version", "").matches("1.7.*") && isRobot()) {
             throw new SkipException("Fails on Java 1.7, looks like some problem with Robot in 1.7");
         }
         kss.clear();
@@ -60,7 +60,7 @@ import org.testng.annotations.Test;
     }
 
     public void sendKeysSelectAll() throws Throwable {
-        if(System.getProperty("java.version", "").matches("1.7.*") && isRobot()) {
+        if (System.getProperty("java.version", "").matches("1.7.*") && isRobot()) {
             throw new SkipException("Fails on Java 1.7, looks like some problem with Robot in 1.7");
         }
         driver.sendKeys(textField, "Hello World");
@@ -82,7 +82,7 @@ import org.testng.annotations.Test;
     }
 
     public void sendKeysClearsModifiersWhenReceivesNull() throws Throwable {
-        if(System.getProperty("java.version", "").matches("1.7.*") && isRobot()) {
+        if (System.getProperty("java.version", "").matches("1.7.*") && isRobot()) {
             throw new SkipException("Fails on Java 1.7, looks like some problem with Robot in 1.7");
         }
         JavaAgentKeys osKey = getOSKey();

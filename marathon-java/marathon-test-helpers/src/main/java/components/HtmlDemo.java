@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -37,25 +37,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class HtmlDemo extends JPanel
-                      implements ActionListener {
+public class HtmlDemo extends JPanel implements ActionListener {
     JLabel theLabel;
     JTextArea htmlTextArea;
 
     public HtmlDemo() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
-        String initialText = "<html>\n" +
-                "Color and font test:\n" +
-                "<ul>\n" +
-                "<li><font color=red>red</font>\n" +
-                "<li><font color=blue>blue</font>\n" +
-                "<li><font color=green>green</font>\n" +
-                "<li><font size=-2>small</font>\n" +
-                "<li><font size=+2>large</font>\n" +
-                "<li><i>italic</i>\n" +
-                "<li><b>bold</b>\n" +
-                "</ul>\n";
+        String initialText = "<html>\n" + "Color and font test:\n" + "<ul>\n" + "<li><font color=red>red</font>\n"
+                + "<li><font color=blue>blue</font>\n" + "<li><font color=green>green</font>\n" + "<li><font size=-2>small</font>\n"
+                + "<li><font size=+2>large</font>\n" + "<li><i>italic</i>\n" + "<li><b>bold</b>\n" + "</ul>\n";
 
         htmlTextArea = new JTextArea(10, 20);
         htmlTextArea.setText(initialText);
@@ -70,9 +61,11 @@ public class HtmlDemo extends JPanel
             public Dimension getPreferredSize() {
                 return new Dimension(200, 200);
             }
+
             public Dimension getMinimumSize() {
                 return new Dimension(200, 200);
             }
+
             public Dimension getMaximumSize() {
                 return new Dimension(200, 200);
             }
@@ -82,58 +75,55 @@ public class HtmlDemo extends JPanel
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
-        leftPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder(
-                    "Edit the HTML, then click the button"),
-                BorderFactory.createEmptyBorder(10,10,10,10)));
+        leftPanel.setBorder(
+                BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Edit the HTML, then click the button"),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         leftPanel.add(scrollPane);
-        leftPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         leftPanel.add(changeTheLabel);
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
-        rightPanel.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("A label with HTML"),
-                        BorderFactory.createEmptyBorder(10,10,10,10)));
+        rightPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("A label with HTML"),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         rightPanel.add(theLabel);
 
-        setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(leftPanel);
-        add(Box.createRigidArea(new Dimension(10,0)));
+        add(Box.createRigidArea(new Dimension(10, 0)));
         add(rightPanel);
     }
 
-    //React to the user pushing the Change button.
+    // React to the user pushing the Change button.
     public void actionPerformed(ActionEvent e) {
         theLabel.setText(htmlTextArea.getText());
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event dispatch thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("HtmlDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Add content to the window.
+        // Add content to the window.
         frame.add(new HtmlDemo());
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event dispatch thread:
+        // creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                //Turn off metal's use of bold fonts
-	        UIManager.put("swing.boldMetal", Boolean.FALSE);
-	        createAndShowGUI();
+                // Turn off metal's use of bold fonts
+                UIManager.put("swing.boldMetal", Boolean.FALSE);
+                createAndShowGUI();
             }
         });
     }

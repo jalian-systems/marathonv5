@@ -44,8 +44,8 @@ public class MPFConfigurationUI extends EscapeDialog {
     private final static Logger logger = Logger.getLogger(MPFConfigurationUI.class.getName());
 
     private static final long serialVersionUID = 1L;
-    public static final ImageIcon BANNER = new ImageIcon(MPFConfigurationUI.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/banner.png"));;
+    public static final ImageIcon BANNER = new ImageIcon(
+            MPFConfigurationUI.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/banner.png"));;
     private IPropertiesPanel[] panels;
     private String dirName = null;
     private JTabbedPane tabbedPane;
@@ -292,8 +292,8 @@ public class MPFConfigurationUI extends EscapeDialog {
                     return name.endsWith(".xml");
                 }
             };
-            FileUtils.copyFiles(new File(System.getProperty(Constants.PROP_HOME), "Checklists"), new File(projectDir,
-                    Constants.DIR_CHECKLIST), filter);
+            FileUtils.copyFiles(new File(System.getProperty(Constants.PROP_HOME), "Checklists"),
+                    new File(projectDir, Constants.DIR_CHECKLIST), filter);
             File srcFile = new File(System.getProperty(Constants.PROP_HOME), "logging.properties");
             File destFile = new File(projectDir, "logging.properties");
             try {
@@ -318,8 +318,8 @@ public class MPFConfigurationUI extends EscapeDialog {
         }
     }
 
-    private IScriptModel getSelectedScriptModel(String selectedScript) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+    private IScriptModel getSelectedScriptModel(String selectedScript)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<?> klass = Class.forName(selectedScript);
         return (IScriptModel) klass.newInstance();
     }

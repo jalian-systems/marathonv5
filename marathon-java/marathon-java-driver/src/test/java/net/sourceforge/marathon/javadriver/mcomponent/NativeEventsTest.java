@@ -697,8 +697,8 @@ import org.testng.annotations.Test;
         checkKeyEvent(KeyEvent.KEY_TYPED, "A", KeyEvent.VK_SHIFT, KeyEvent.VK_A);
     }
 
-    private void checkKeyEvent(int eventToCheck, String keysToSend, int... keysToPress) throws InterruptedException,
-            InvocationTargetException, AWTException {
+    private void checkKeyEvent(int eventToCheck, String keysToSend, int... keysToPress)
+            throws InterruptedException, InvocationTargetException, AWTException {
         events = eventToCheck;
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override public void run() {

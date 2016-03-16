@@ -40,8 +40,8 @@ import com.jgoodies.forms.layout.FormLayout;
 public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
     private static final int MAX_SAVED_FILES = 10;
     private static final long serialVersionUID = 1L;
-    public static final ImageIcon BANNER = new ImageIcon(MPFConfigurationUI.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/banner.png"));;
+    public static final ImageIcon BANNER = new ImageIcon(
+            MPFConfigurationUI.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/banner.png"));;
     private JComboBox<String> dirName = new JComboBox<String>();
     private JButton browseButton = UIUtils.createBrowseButton();
     protected boolean isOKSelected = false;

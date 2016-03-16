@@ -35,13 +35,13 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     }
 
     public JavaFXElement(JavaFXElement parent) {
-    	super(parent.getComponent());
-    	this.driver = parent.driver;
-    	this.window = parent.window;
-    	this.id = parent.getId();
-	}
+        super(parent.getComponent());
+        this.driver = parent.driver;
+        this.window = parent.window;
+        this.id = parent.getId();
+    }
 
-	@Override public void click() {
+    @Override public void click() {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -216,13 +216,13 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     }
 
     public boolean marathon_select(JSONArray jsonArray) {
-        throw new UnsupportedCommandException("Select method by properties" + " is not applicable for "
-                + node.getClass().getName() + " (" + this.getClass().getName() + ")", null);
+        throw new UnsupportedCommandException("Select method by properties" + " is not applicable for " + node.getClass().getName()
+                + " (" + this.getClass().getName() + ")", null);
     }
 
     public boolean marathon_select(String value) {
-        throw new UnsupportedCommandException("Select method is not applicable for " + node.getClass().getName() + " ("
-                + this.getClass().getName() + ")", null);
+        throw new UnsupportedCommandException(
+                "Select method is not applicable for " + node.getClass().getName() + " (" + this.getClass().getName() + ")", null);
     }
 
     @Override public void submit() {

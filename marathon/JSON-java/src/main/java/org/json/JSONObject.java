@@ -308,8 +308,8 @@ public class JSONObject {
      * 
      * @param source
      *            A string beginning with <code>{</code>&nbsp;<small>(left
-     *            brace)</small> and ending with <code>}</code>
-     *            &nbsp;<small>(right brace)</small>.
+     *            brace)</small> and ending with <code>}</code> &nbsp;
+     *            <small>(right brace)</small>.
      * @exception JSONException
      *                If there is a syntax error in the source string or a
      *                duplicated key.
@@ -1468,9 +1468,9 @@ public class JSONObject {
                 return NULL;
             }
             if (object instanceof JSONObject || object instanceof JSONArray || NULL.equals(object) || object instanceof JSONString
-                    || object instanceof Byte || object instanceof Character || object instanceof Short
-                    || object instanceof Integer || object instanceof Long || object instanceof Boolean || object instanceof Float
-                    || object instanceof Double || object instanceof String) {
+                    || object instanceof Byte || object instanceof Character || object instanceof Short || object instanceof Integer
+                    || object instanceof Long || object instanceof Boolean || object instanceof Float || object instanceof Double
+                    || object instanceof String) {
                 return object;
             }
 

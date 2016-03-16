@@ -56,23 +56,19 @@ public class CreditsDialog extends EscapeDialog {
         		        "</body></html>";
         // @formatter:on
         StringBuffer content = new StringBuffer(prefix);
-        content.append(getCredit(
-                "Eclipse",
+        content.append(getCredit("Eclipse",
                 "Great platform to work with.<br>The navigator and junit interfaces as well as most of the icons<br> are picked up from eclipse package. Hopefully, we will have Marathon as eclipse package sometime",
                 "http://eclipse.org"));
-        content.append(getCredit(
-                "JRuby",
+        content.append(getCredit("JRuby",
                 "JRuby is an 100% pure-Java implementation of the Ruby programming language.<br>Marathon Ruby scripting model uses JRuby.",
                 "http://jruby.codehaus.org"));
-        content.append(getCredit(
-                "jEdit",
+        content.append(getCredit("jEdit",
                 "Programmer's text editor.<br>Marathon uses jEdit's excellent text area component to provide a comprehensive editing environment.",
                 "http://www.jedit.org"));
-        content.append(getCredit("Looks and Forms",
-                "The good looks of Marathon are derived from these two packages from jgoodies.", "http://www.jgoodies.com"));
+        content.append(getCredit("Looks and Forms", "The good looks of Marathon are derived from these two packages from jgoodies.",
+                "http://www.jgoodies.com"));
         content.append(getCredit("JUnit", "The original Java unit testing framework", "http://www.junit.org"));
-        content.append(getCredit(
-                "VL Docking",
+        content.append(getCredit("VL Docking",
                 "VLDocking Framework is a set of Java Swing Components providing a simple and coherent API to bring docking capabilities to "
                         + "any Swing application. "
                         + "<p>VLDocking Framework (www.vlsolutions.com), is the property of VLSolutions, and "
@@ -84,8 +80,8 @@ public class CreditsDialog extends EscapeDialog {
     }
 
     private String getCredit(String name, String blurb, String website) {
-        String string = "<tr>" + "<td valign=\"center\" nowrap>" + name + "</td>" + "<td width=\"250px\" valign=\"center\">"
-                + blurb + "</td>" + "<td valign=\"center\" nowrap><a href=\"" + website + "\">" + website + "</a>" + "</tr>";
+        String string = "<tr>" + "<td valign=\"center\" nowrap>" + name + "</td>" + "<td width=\"250px\" valign=\"center\">" + blurb
+                + "</td>" + "<td valign=\"center\" nowrap><a href=\"" + website + "\">" + website + "</a>" + "</tr>";
         return string;
     }
 

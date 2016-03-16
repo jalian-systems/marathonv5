@@ -143,8 +143,8 @@ public class MPFUtils {
     }
 
     public static String decodeProjectDir(String fileName, Properties props) {
-        fileName = fileName.replaceAll("%" + Constants.PROP_PROJECT_DIR + "%", props.getProperty(Constants.PROP_PROJECT_DIR)
-                .replace(File.separatorChar, '/'));
+        fileName = fileName.replaceAll("%" + Constants.PROP_PROJECT_DIR + "%",
+                props.getProperty(Constants.PROP_PROJECT_DIR).replace(File.separatorChar, '/'));
         fileName = fileName.replace('/', File.separatorChar);
         try {
             return new File(fileName).getCanonicalPath().replace(File.separatorChar, '/');

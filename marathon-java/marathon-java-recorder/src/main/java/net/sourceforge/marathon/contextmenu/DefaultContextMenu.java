@@ -52,7 +52,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         public PlaceHolderTextField(String placeholder) {
             this.placeholder = placeholder;
         }
-        
+
         @Override protected void paintComponent(final Graphics pG) {
             super.paintComponent(pG);
 

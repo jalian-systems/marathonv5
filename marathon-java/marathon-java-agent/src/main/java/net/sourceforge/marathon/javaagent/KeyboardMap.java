@@ -24,6 +24,7 @@ public class KeyboardMap {
     private char c;
 
     private static Map<Character, List<CharSequence[]>> keys;
+
     static {
         keys = new HashMap<Character, List<CharSequence[]>>();
         File marathon = new File(System.getProperty("user.home"), ".marathon");

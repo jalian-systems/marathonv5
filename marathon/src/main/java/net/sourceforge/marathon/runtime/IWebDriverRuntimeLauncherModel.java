@@ -12,7 +12,8 @@ public interface IWebDriverRuntimeLauncherModel extends IRuntimeLauncherModel {
 
     public abstract IWebdriverProxy createDriver(Map<String, Object> props, int recordingPort, OutputStream outputStream);
 
-    public abstract URL getProfileAsURL(Map<String, Object> props, int recordingPort, OutputStream outputStream) throws URISyntaxException, IOException;
+    public abstract URL getProfileAsURL(Map<String, Object> props, int recordingPort, OutputStream outputStream)
+            throws URISyntaxException, IOException;
 
     public abstract boolean needReplaceEnviron();
 

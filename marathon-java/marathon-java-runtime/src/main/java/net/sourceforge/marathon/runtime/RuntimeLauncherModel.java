@@ -15,8 +15,8 @@ import net.sourceforge.marathon.runtime.api.IRuntimeFactory;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.ISubPropertiesPanel;
 
-public class RuntimeLauncherModel extends AbstractJavaDriverRuntimeLauncherModel implements IRuntimeLauncherModel,
-        IJavaDriverRuntimeLauncherModel {
+public class RuntimeLauncherModel extends AbstractJavaDriverRuntimeLauncherModel
+        implements IRuntimeLauncherModel, IJavaDriverRuntimeLauncherModel {
     public ISubPropertiesPanel[] getSubPanels(JDialog parent) {
         return new ISubPropertiesPanel[] { new MainPanel(parent), new ClassPathPanel(parent) };
     }

@@ -142,8 +142,9 @@ class CustomDialog extends JDialog implements ActionListener, PropertyChangeList
                 } else {
                     // text was invalid
                     textField.selectAll();
-                    JOptionPane.showMessageDialog(CustomDialog.this, "Sorry, \"" + typedText + "\" " + "isn't a valid response.\n"
-                            + "Please enter " + magicWord + ".", "Try again", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(CustomDialog.this,
+                            "Sorry, \"" + typedText + "\" " + "isn't a valid response.\n" + "Please enter " + magicWord + ".",
+                            "Try again", JOptionPane.ERROR_MESSAGE);
                     typedText = null;
                     textField.requestFocusInWindow();
                 }

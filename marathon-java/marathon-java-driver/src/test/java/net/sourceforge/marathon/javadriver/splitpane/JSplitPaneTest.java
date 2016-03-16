@@ -57,8 +57,8 @@ import components.SplitPaneDemo;
         driver = new JavaDriver();
         WebElement splitPane = driver.findElement(By.cssSelector("split-pane"));
         AssertJUnit.assertEquals("150", splitPane.getAttribute("dividerLocation"));
-        WebElement splitpaneDivider = driver.findElement(By
-                .cssSelector(":instance-of('javax.swing.plaf.basic.BasicSplitPaneDivider')"));
+        WebElement splitpaneDivider = driver
+                .findElement(By.cssSelector(":instance-of('javax.swing.plaf.basic.BasicSplitPaneDivider')"));
         new Actions(driver).moveToElement(splitpaneDivider).dragAndDropBy(splitpaneDivider, 25, 25).perform();
         AssertJUnit.assertEquals("175", splitPane.getAttribute("dividerLocation"));
     }

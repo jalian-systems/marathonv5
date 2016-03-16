@@ -12,8 +12,8 @@ import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 
 public class ApplicationPanel extends CompositePanel implements IPropertiesPanel {
 
-    public static final Icon ICON = new ImageIcon(ProjectPanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/app_obj.gif"));
+    public static final Icon ICON = new ImageIcon(
+            ProjectPanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/app_obj.gif"));
 
     public static final String NODIALOGBORDER = "no-dialog-border";
 

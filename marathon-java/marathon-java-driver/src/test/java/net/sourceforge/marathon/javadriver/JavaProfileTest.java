@@ -135,7 +135,8 @@ import com.thoughtworks.selenium.Wait;
 
     public void convertURIJavaAppletCommand() throws Throwable {
         JavaProfile expected = new JavaProfile(LaunchMode.JAVA_APPLET).setJavaCommand("/usr/bin/java")
-                .setJavaHome("/usr/bin/javahome").addVMArgument("-Xmx512m", "-Xms512m").setStartWindowTitle("The World Is Huge").setAppletURL("http://google.com");
+                .setJavaHome("/usr/bin/javahome").addVMArgument("-Xmx512m", "-Xms512m").setStartWindowTitle("The World Is Huge")
+                .setAppletURL("http://google.com");
         JavaProfile actual = new JavaProfile(expected.asURL());
         AssertJUnit.assertEquals(expected, actual);
     }

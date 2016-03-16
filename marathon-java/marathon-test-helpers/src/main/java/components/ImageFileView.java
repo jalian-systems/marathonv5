@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -43,15 +43,15 @@ public class ImageFileView extends FileView {
     ImageIcon pngIcon = Utils.createImageIcon("images/pngIcon.png");
 
     public String getName(File f) {
-        return null; //let the L&F FileView figure this out
+        return null; // let the L&F FileView figure this out
     }
 
     public String getDescription(File f) {
-        return null; //let the L&F FileView figure this out
+        return null; // let the L&F FileView figure this out
     }
 
     public Boolean isTraversable(File f) {
-        return null; //let the L&F FileView figure this out
+        return null; // let the L&F FileView figure this out
     }
 
     public String getTypeDescription(File f) {
@@ -59,15 +59,13 @@ public class ImageFileView extends FileView {
         String type = null;
 
         if (extension != null) {
-            if (extension.equals(Utils.jpeg) ||
-                extension.equals(Utils.jpg)) {
+            if (extension.equals(Utils.jpeg) || extension.equals(Utils.jpg)) {
                 type = "JPEG Image";
-            } else if (extension.equals(Utils.gif)){
+            } else if (extension.equals(Utils.gif)) {
                 type = "GIF Image";
-            } else if (extension.equals(Utils.tiff) ||
-                       extension.equals(Utils.tif)) {
+            } else if (extension.equals(Utils.tiff) || extension.equals(Utils.tif)) {
                 type = "TIFF Image";
-            } else if (extension.equals(Utils.png)){
+            } else if (extension.equals(Utils.png)) {
                 type = "PNG Image";
             }
         }
@@ -79,13 +77,11 @@ public class ImageFileView extends FileView {
         Icon icon = null;
 
         if (extension != null) {
-            if (extension.equals(Utils.jpeg) ||
-                extension.equals(Utils.jpg)) {
+            if (extension.equals(Utils.jpeg) || extension.equals(Utils.jpg)) {
                 icon = jpgIcon;
             } else if (extension.equals(Utils.gif)) {
                 icon = gifIcon;
-            } else if (extension.equals(Utils.tiff) ||
-                       extension.equals(Utils.tif)) {
+            } else if (extension.equals(Utils.tiff) || extension.equals(Utils.tif)) {
                 icon = tiffIcon;
             } else if (extension.equals(Utils.png)) {
                 icon = pngIcon;

@@ -39,11 +39,10 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
         super();
     }
 
-    @BeforeMethod
-    public void createDriver() {
-    	driver = new FXEventQueueDevice();
+    @BeforeMethod public void createDriver() {
+        driver = new FXEventQueueDevice();
     }
-    
+
     public static class TestApp extends Sample {
 
         private TestApp() {
@@ -161,8 +160,7 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
         return s;
     }
 
-	@Override
-	protected Pane getMainPane() {
-		return new TestApp();
-	}
+    @Override protected Pane getMainPane() {
+        return new TestApp();
+    }
 }

@@ -101,8 +101,8 @@ public class TableRenderDemo extends JPanel {
             cellWidth = comp.getPreferredSize().width;
 
             if (DEBUG) {
-                System.out.println("Initializing width of column " + i + ". " + "headerWidth = " + headerWidth + "; cellWidth = "
-                        + cellWidth);
+                System.out.println(
+                        "Initializing width of column " + i + ". " + "headerWidth = " + headerWidth + "; cellWidth = " + cellWidth);
             }
 
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
@@ -180,8 +180,8 @@ public class TableRenderDemo extends JPanel {
          */
         public void setValueAt(Object value, int row, int col) {
             if (DEBUG) {
-                System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of " + value.getClass()
-                        + ")");
+                System.out.println(
+                        "Setting value at " + row + "," + col + " to " + value + " (an instance of " + value.getClass() + ")");
             }
 
             data[row][col] = value;

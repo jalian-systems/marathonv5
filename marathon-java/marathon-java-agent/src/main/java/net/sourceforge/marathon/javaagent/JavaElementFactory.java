@@ -54,7 +54,8 @@ public class JavaElementFactory {
         if (klass == null)
             return new JavaElement(component, driver, window);
         try {
-            Constructor<? extends IJavaElement> constructor = klass.getConstructor(Component.class, IJavaAgent.class, JWindow.class);
+            Constructor<? extends IJavaElement> constructor = klass.getConstructor(Component.class, IJavaAgent.class,
+                    JWindow.class);
             IJavaElement newInstance = constructor.newInstance(component, driver, window);
             return newInstance;
         } catch (Exception e) {

@@ -18,7 +18,7 @@ public class JSliderJavaElement extends AbstractJavaElement {
         JSlider slider = (JSlider) component;
         return getCurrentValue(slider);
     }
-    
+
     public static String getCurrentValue(JSlider slider) {
         return Integer.toString(slider.getValue());
     }

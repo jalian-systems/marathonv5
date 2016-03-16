@@ -50,7 +50,7 @@ public class FXStagePropertyAccessor extends JavaPropertyAccessor {
     public String getTitle() {
         return new WindowTitle(stage).getTitle();
     }
-    
+
     public String getType() {
         return stage.getClass().getName();
     }

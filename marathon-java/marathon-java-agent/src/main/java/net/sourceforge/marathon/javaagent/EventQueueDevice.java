@@ -212,9 +212,8 @@ public class EventQueueDevice extends Device {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * net.sourceforge.marathon.javaagent.Device#pressKey(net.sourceforge.marathon
-     * .javaagent.Keys)
+     * @see net.sourceforge.marathon.javaagent.Device#pressKey(net.sourceforge.
+     * marathon .javaagent.Keys)
      */
     @Override public void pressKey(Component component, JavaAgentKeys keyToPress) {
         if (keyToPress == JavaAgentKeys.NULL)
@@ -283,8 +282,8 @@ public class EventQueueDevice extends Device {
     }
 
     @Override public void buttonDown(Component component, Buttons button, int xoffset, int yoffset) {
-        dispatchEvent(new MouseEvent(component, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), deviceState.getModifierEx()
-                | MouseEvent.BUTTON1_DOWN_MASK, xoffset, yoffset, 1, false, MouseEvent.BUTTON1));
+        dispatchEvent(new MouseEvent(component, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(),
+                deviceState.getModifierEx() | MouseEvent.BUTTON1_DOWN_MASK, xoffset, yoffset, 1, false, MouseEvent.BUTTON1));
         deviceState.storeMouseDown(MouseEvent.BUTTON1);
         deviceState.setDragSource(component);
         EventQueueWait.empty();

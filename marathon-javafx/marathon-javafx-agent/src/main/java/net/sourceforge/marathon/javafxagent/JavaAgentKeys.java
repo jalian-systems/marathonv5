@@ -4,8 +4,8 @@ package net.sourceforge.marathon.javafxagent;
  * Representations of pressable keys that aren't text. These are stored in the
  * Unicode PUA (Private Use Area) code points, 0xE000-0xF8FF.
  * 
- * @see <a
- *      href="http://www.google.com.au/search?&q=unicode+pua&btnG=Search">http://www.google.com.au/search?&q=unicode+pua&btnG=Search</a>
+ * @see <a href="http://www.google.com.au/search?&q=unicode+pua&btnG=Search">
+ *      http://www.google.com.au/search?&q=unicode+pua&btnG=Search</a>
  */
 public enum JavaAgentKeys implements CharSequence {
 

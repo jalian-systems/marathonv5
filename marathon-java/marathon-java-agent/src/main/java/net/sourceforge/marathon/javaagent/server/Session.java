@@ -135,8 +135,8 @@ public class Session {
 
     public void fillLog(JSONArray dest) {
         for (LogEntry logEntry : logEntries) {
-            dest.put(new JSONObject().put("level", logEntry.getLevel()).put("timestamp", logEntry.getTimestamp())
-                    .put("message", logEntry.getMessage()));
+            dest.put(new JSONObject().put("level", logEntry.getLevel()).put("timestamp", logEntry.getTimestamp()).put("message",
+                    logEntry.getMessage()));
         }
         logEntries.clear();
     }

@@ -12,9 +12,11 @@ import javax.swing.KeyStroke;
 public class KeyStrokeParser {
 
     private static Map<Object, Object> keyCodes;
+
     static {
         initKeyCodes();
     }
+
     private char keyChar;
     private KeyStroke keyStroke;
 

@@ -54,8 +54,8 @@ public class JTableJavaElement extends AbstractJavaElement {
 
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("header"))
-            return Arrays.asList((IJavaElement) new JTableHeaderJavaElement(((JTable) getComponent()).getTableHeader(),
-                    getDriver(), getWindow()));
+            return Arrays.asList((IJavaElement) new JTableHeaderJavaElement(((JTable) getComponent()).getTableHeader(), getDriver(),
+                    getWindow()));
         else if (selector.equals("mnth-cell"))
             return Arrays.asList((IJavaElement) new JTableCellJavaElement(this, ((Integer) params[0]).intValue() - 1,
                     ((Integer) params[1]).intValue() - 1));
@@ -140,7 +140,8 @@ public class JTableJavaElement extends AbstractJavaElement {
                 if (table.isCellEditable(viewRow, viewCol))
                     return;
                 else
-                    throw new NoSuchElementException("The cell is not editable on JTable: (" + viewRow + ", " + viewCol + ")", null);
+                    throw new NoSuchElementException("The cell is not editable on JTable: (" + viewRow + ", " + viewCol + ")",
+                            null);
         } catch (IndexOutOfBoundsException e) {
         }
         throw new NoSuchElementException("Invalid row/col for JTable: (" + viewRow + ", " + viewCol + ")", null);

@@ -1,6 +1,5 @@
 package net.sourceforge.marathon.api;
 
-
 public class JavaVersion {
 
     private static String version = System.getProperty("java.version");
@@ -8,8 +7,8 @@ public class JavaVersion {
     public static boolean atLeast(String target) {
         int[] current = makeParts(version);
         int[] expected = makeParts(target);
-        for(int i = 0; i < 4; i++) {
-            if(expected[i] > current[i])
+        for (int i = 0; i < 4; i++) {
+            if (expected[i] > current[i])
                 return false;
         }
         return true;
@@ -29,7 +28,7 @@ public class JavaVersion {
             if (minors.length > 1)
                 r[3] = Integer.parseInt(minors[1]);
         }
-        return r ;
+        return r;
     }
 
 }

@@ -330,7 +330,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
                 runtime = rf.createRuntime();
             }
         }
-        script = runtime
-                .createScript(MarathonMode.PLAYING, console, scriptText, file.getAbsolutePath(), false, true, dataVariables);
+        script = runtime.createScript(MarathonMode.PLAYING, console, scriptText, file.getAbsolutePath(), false, true,
+                dataVariables);
     }
 }

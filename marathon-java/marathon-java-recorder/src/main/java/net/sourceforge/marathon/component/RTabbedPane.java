@@ -28,7 +28,7 @@ public class RTabbedPane extends RComponent {
     @Override public String[][] getContent() {
         return JTabbedPaneJavaElement.getContent((JTabbedPane) component);
     }
-    
+
     @Override public String getText() {
         return JTabbedPaneJavaElement.getSelectedItemText((JTabbedPane) component);
     }

@@ -82,8 +82,8 @@ public class MarathonModuleDialog extends EscapeDialog {
 
         errorMessage = "";
         errorMsgLabel = new JLabel("");
-        errorMsgLabel.setIcon(new ImageIcon(MarathonModuleDialog.class.getClassLoader().getResource(
-                "net/sourceforge/marathon/display/icons/enabled/error.gif")));
+        errorMsgLabel.setIcon(new ImageIcon(MarathonModuleDialog.class.getClassLoader()
+                .getResource("net/sourceforge/marathon/display/icons/enabled/error.gif")));
         errorMsgLabel.setVisible(false);
 
         int row = 1;
@@ -224,7 +224,8 @@ public class MarathonModuleDialog extends EscapeDialog {
         }
     }
 
-    private static class ModuleDirComboModel extends AbstractListModel<ModuleDirElement> implements ComboBoxModel<ModuleDirElement> {
+    private static class ModuleDirComboModel extends AbstractListModel<ModuleDirElement>
+            implements ComboBoxModel<ModuleDirElement> {
         private static final long serialVersionUID = 1L;
 
         private Object selectedItem;

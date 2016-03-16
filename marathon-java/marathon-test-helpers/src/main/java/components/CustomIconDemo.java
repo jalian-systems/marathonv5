@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -40,14 +40,12 @@ import javax.swing.*;
  *    ArrowIcon.java
  *    images/middle.gif
  */
-public class CustomIconDemo extends JPanel
-                            implements ActionListener {
+public class CustomIconDemo extends JPanel implements ActionListener {
     protected JButton b1, b2, b3;
 
     public CustomIconDemo() {
         Icon leftButtonIcon = new ArrowIcon(SwingConstants.RIGHT);
-        Icon middleButtonIcon = createImageIcon("images/middle.gif",
-                                                "the middle button");
+        Icon middleButtonIcon = createImageIcon("images/middle.gif", "the middle button");
         Icon rightButtonIcon = new ArrowIcon(SwingConstants.LEFT);
 
         b1 = new JButton("Disable middle button", leftButtonIcon);
@@ -62,12 +60,12 @@ public class CustomIconDemo extends JPanel
         b2.setMnemonic(KeyEvent.VK_M);
 
         b3 = new JButton("Enable middle button", rightButtonIcon);
-        //Use the default text position of CENTER, TRAILING (RIGHT).
+        // Use the default text position of CENTER, TRAILING (RIGHT).
         b3.setMnemonic(KeyEvent.VK_E);
         b3.setActionCommand("enable");
         b3.setEnabled(false);
 
-        //Listen for actions on buttons 1 and 3.
+        // Listen for actions on buttons 1 and 3.
         b1.addActionListener(this);
         b3.addActionListener(this);
 
@@ -75,7 +73,7 @@ public class CustomIconDemo extends JPanel
         b2.setToolTipText("This middle button does nothing when you click it.");
         b3.setToolTipText("Click this button to enable the middle button.");
 
-        //Add Components to this container, using the default FlowLayout. 
+        // Add Components to this container, using the default FlowLayout.
         add(b1);
         add(b2);
         add(b3);
@@ -86,7 +84,7 @@ public class CustomIconDemo extends JPanel
             b2.setEnabled(false);
             b1.setEnabled(false);
             b3.setEnabled(true);
-        } else { 
+        } else {
             b2.setEnabled(true);
             b1.setEnabled(true);
             b3.setEnabled(false);
@@ -94,8 +92,7 @@ public class CustomIconDemo extends JPanel
     }
 
     /** Returns an ImageIcon, or null if the path was invalid. */
-    protected static ImageIcon createImageIcon(String path, 
-                                               String description) {
+    protected static ImageIcon createImageIcon(String path, String description) {
         java.net.URL imgURL = CustomIconDemo.class.getResource(path);
         if (imgURL != null) {
             return new ImageIcon(imgURL, description);
@@ -104,30 +101,29 @@ public class CustomIconDemo extends JPanel
             return null;
         }
     }
-    
+
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("CustomIconDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Set up the content pane.
+        // Set up the content pane.
         JComponent newContentPane = new CustomIconDemo();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

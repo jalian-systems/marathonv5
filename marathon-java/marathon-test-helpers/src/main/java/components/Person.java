@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -46,15 +46,16 @@ public class Person {
     }
 
     /**
-    *   Link together all members of a family.
-    *
-    *   @param pa the father
-    *   @param ma the mother
-    *   @param kids the children
-    */
-    public static void linkFamily(Person pa,
-                                  Person ma,
-                                  Person[] kids) {
+     * Link together all members of a family.
+     *
+     * @param pa
+     *            the father
+     * @param ma
+     *            the mother
+     * @param kids
+     *            the children
+     */
+    public static void linkFamily(Person pa, Person ma, Person[] kids) {
         for (Person kid : kids) {
             pa.children.addElement(kid);
             ma.children.addElement(kid);
@@ -63,16 +64,32 @@ public class Person {
         }
     }
 
-/// getter methods ///////////////////////////////////
+    /// getter methods ///////////////////////////////////
 
-    public String toString() { return name; }
-    public String getName() { return name; }
-    public Person getFather() { return father; }
-    public Person getMother() { return mother; }
-    public int getChildCount() { return children.size(); }
-    public Person getChildAt(int i) {
-        return (Person)children.elementAt(i);
+    public String toString() {
+        return name;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Person getFather() {
+        return father;
+    }
+
+    public Person getMother() {
+        return mother;
+    }
+
+    public int getChildCount() {
+        return children.size();
+    }
+
+    public Person getChildAt(int i) {
+        return (Person) children.elementAt(i);
+    }
+
     public int getIndexOfChild(Person kid) {
         return children.indexOf(kid);
     }

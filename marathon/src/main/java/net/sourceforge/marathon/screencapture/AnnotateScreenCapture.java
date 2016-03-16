@@ -84,7 +84,8 @@ public class AnnotateScreenCapture extends EscapeDialog {
             public void actionPerformed(ActionEvent e) {
                 if (imagePanel.isDirty()) {
                     if (JOptionPane.showConfirmDialog(AnnotateScreenCapture.this,
-                            "Your modifications will be lost. Do you want to continue?", "Abort", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
+                            "Your modifications will be lost. Do you want to continue?", "Abort",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
                         return;
                 }
                 returnValue = CANCEL_OPTION;

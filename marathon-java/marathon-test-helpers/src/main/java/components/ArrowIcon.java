@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -49,18 +49,18 @@ public class ArrowIcon implements Icon, SwingConstants {
             xPoints[1] = width;
             yPoints[1] = height;
             xPoints[2] = 0;
-            yPoints[2] = height/2;
+            yPoints[2] = height / 2;
             xPoints[3] = 0;
-            yPoints[3] = height/2 - 1;
+            yPoints[3] = height / 2 - 1;
         } else /* direction == TRAILING */ {
             xPoints[0] = 0;
             yPoints[0] = -1;
             xPoints[1] = 0;
             yPoints[1] = height;
             xPoints[2] = width;
-            yPoints[2] = height/2;
+            yPoints[2] = height / 2;
             xPoints[3] = width;
-            yPoints[3] = height/2 - 1;
+            yPoints[3] = height / 2 - 1;
         }
     }
 
@@ -81,6 +81,6 @@ public class ArrowIcon implements Icon, SwingConstants {
 
         g.translate(x, y);
         g.fillPolygon(xPoints, yPoints, xPoints.length);
-        g.translate(-x, -y);   //Restore graphics object
+        g.translate(-x, -y); // Restore graphics object
     }
 }

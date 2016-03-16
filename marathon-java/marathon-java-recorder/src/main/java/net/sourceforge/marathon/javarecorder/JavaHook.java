@@ -295,8 +295,8 @@ public class JavaHook implements AWTEventListener, ChangeListener, ActionListene
                             (Component) source);
                 else
                     eventx = event;
-                RComponent c = finder.findRComponent(component, eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint()
-                        : null, recorder);
+                RComponent c = finder.findRComponent(component,
+                        eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint() : null, recorder);
                 if (isFocusChangeEvent(id) && !c.equals(current)) {
                     if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
                         current.focusLost(c);

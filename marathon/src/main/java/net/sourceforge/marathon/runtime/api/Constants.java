@@ -40,7 +40,8 @@ public class Constants {
 
     public static String[] getAllMarathonDirectoriesAsStringArray() {
         ArrayList<String> dirs = new ArrayList<String>();
-        String[] propKeys = { PROP_TEST_DIR, PROP_FIXTURE_DIR, PROP_MODULE_DIRS, PROP_CHECKLIST_DIR, PROP_DATA_DIR, PROP_SUITE_DIR };
+        String[] propKeys = { PROP_TEST_DIR, PROP_FIXTURE_DIR, PROP_MODULE_DIRS, PROP_CHECKLIST_DIR, PROP_DATA_DIR,
+                PROP_SUITE_DIR };
         for (int i = 0; i < propKeys.length; i++) {
             dirs.addAll(Arrays.asList(getMarathonDirectoriesAsStringArray(propKeys[i])));
         }
@@ -57,6 +58,7 @@ public class Constants {
     static {
         PROJECT_FILE = System.getProperty("marathon.project.file", ".project");
     }
+
     public static final String PROP_PROJECT_DIR = "marathon.project.dir";
     public static final String PROP_PROJECT_SCRIPT_MODEL = "marathon.project.script.model";
     public static final String PROP_IMAGE_CAPTURE_DIR = "marathon.image.capture.dir";

@@ -32,7 +32,7 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
             }
         };
     }
-    
+
     @Test public void selectForSingleItem() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(() -> listView.marathon_select("[\"Row 2\"]"));
@@ -42,11 +42,10 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
             }
         };
     }
-    
+
     @Test public void selectForMultipleItems() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
-        Platform.runLater(() -> listView.marathon_select("[\"Row 2\",\"Row 20\"]")
-                );
+        Platform.runLater(() -> listView.marathon_select("[\"Row 2\",\"Row 20\"]"));
         new Wait("Waiting for list item to be select") {
             @Override public boolean until() {
                 ObservableList<Integer> selectedIndices = listViewNode.getSelectionModel().getSelectedIndices();
@@ -54,11 +53,12 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
             }
         };
     }
-    
+
     @Test public void selectForDuplicateItems() {
-        @SuppressWarnings("unchecked") ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        @SuppressWarnings("unchecked")
+        ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(new Runnable() {
-            
+
             @Override public void run() {
                 listViewNode.getItems().add(2, "Row 2");
             }
@@ -70,11 +70,12 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
             }
         };
     }
-    
+
     @Test public void selectForMultipleDuplicates() {
-        @SuppressWarnings("unchecked") ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        @SuppressWarnings("unchecked")
+        ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(new Runnable() {
-            
+
             @Override public void run() {
                 listViewNode.getItems().add(2, "Row 2");
                 listViewNode.getItems().add(9, "Row 2");
@@ -88,8 +89,8 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
             }
         };
     }
-    
-    @Test public void clickNthelement(){
+
+    @Test public void clickNthelement() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         IJavaFXElement item = listView.findElementByCssSelector(".::nth-item(3)");
         item.click();
@@ -99,16 +100,17 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
             }
         };
     }
-    
-    @Test public void assertContent(){
+
+    @Test public void assertContent() {
         String expected = "[[\"Row 1\",\"Row 2\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]";
         AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
     }
-    
-    @Test public void assertContentWithDuplicates(){
-        @SuppressWarnings("unchecked") ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+
+    @Test public void assertContentWithDuplicates() {
+        @SuppressWarnings("unchecked")
+        ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(new Runnable() {
-            
+
             @Override public void run() {
                 listViewNode.getItems().add(2, "Row 2");
             }
@@ -116,11 +118,12 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
         String expected = "[[\"Row 1\",\"Row 2\",\"Row 2(1)\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]";
         AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
     }
-    
-    @Test public void assertContentWithMultipleDuplicates(){
-        @SuppressWarnings("unchecked") ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+
+    @Test public void assertContentWithMultipleDuplicates() {
+        @SuppressWarnings("unchecked")
+        ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(new Runnable() {
-            
+
             @Override public void run() {
                 listViewNode.getItems().add(2, "Row 2");
                 listViewNode.getItems().add(9, "Row 2");

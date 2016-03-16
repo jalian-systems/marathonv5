@@ -292,12 +292,14 @@ import components.MenuDemo;
         textArea.click();
 
         textArea.sendKeys(Keys.chord(Keys.ALT, "1"));
-        AssertJUnit.assertTrue("Error:Expected to end with:\n" + "Event source: A text-only menu item (an instance of JMenuItem)\n"
-                + "\nActual:\n" + textArea.getText().trim(),
+        AssertJUnit.assertTrue(
+                "Error:Expected to end with:\n" + "Event source: A text-only menu item (an instance of JMenuItem)\n" + "\nActual:\n"
+                        + textArea.getText().trim(),
                 textArea.getText().trim().endsWith("Event source: A text-only menu item (an instance of JMenuItem)\n".trim()));
         textArea.sendKeys(Keys.chord(Keys.ALT, "2"));
-        AssertJUnit.assertTrue("Error:Expected to end with:\n" + "Event source: A text-only menu item (an instance of JMenuItem)\n"
-                + "\nActual:\n" + textArea.getText().trim(),
+        AssertJUnit.assertTrue(
+                "Error:Expected to end with:\n" + "Event source: A text-only menu item (an instance of JMenuItem)\n" + "\nActual:\n"
+                        + textArea.getText().trim(),
                 textArea.getText().trim().endsWith("Event source: An item in the submenu (an instance of JMenuItem)\n".trim()));
     }
 

@@ -38,8 +38,8 @@ public class ActionInjector {
         }
     }
 
-    private AbstractSimpleAction createAction(String fieldName, ISimpleAction annotation) throws SecurityException,
-            NoSuchMethodException {
+    private AbstractSimpleAction createAction(String fieldName, ISimpleAction annotation)
+            throws SecurityException, NoSuchMethodException {
         String name = findName(fieldName);
         String commandName = annotation.value();
         if (commandName.equals("")) {

@@ -201,8 +201,9 @@ public class ImagePanel extends JPanel {
                             Pattern p = Pattern.compile("a1810-(\\d+)-(\\d+)-(\\d+)-(\\d+)-(\\d+)");
                             Matcher matcher = p.matcher(kw);
                             if (matcher.matches()) {
-                                Rectangle rect = new Rectangle(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher
-                                        .group(3)), Integer.parseInt(matcher.group(4)), Integer.parseInt(matcher.group(5)));
+                                Rectangle rect = new Rectangle(Integer.parseInt(matcher.group(2)),
+                                        Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)),
+                                        Integer.parseInt(matcher.group(5)));
                                 int index = Integer.parseInt(matcher.group(1));
                                 Annotation annotation = new Annotation(index, rect);
                                 annotation.setText(value);

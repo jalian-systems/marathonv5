@@ -73,7 +73,6 @@ import com.sun.swingset3.SwingSet3;
         AssertJUnit.assertTrue(scriptElements.size() > 0);
     }
 
-
     private File findFile() {
         File f = new File(new File(ClassPathHelper.getClassPath(SwingSet3.class)).getParentFile(), "applet.html");
         if (f.exists())

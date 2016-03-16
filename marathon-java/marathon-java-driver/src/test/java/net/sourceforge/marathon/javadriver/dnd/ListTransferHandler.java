@@ -12,8 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.TransferHandler;
 
-@SuppressWarnings({"unchecked", "rawtypes" })
-public class ListTransferHandler extends TransferHandler {
+@SuppressWarnings({ "unchecked", "rawtypes" }) public class ListTransferHandler extends TransferHandler {
     private static final long serialVersionUID = 1L;
 
     private int[] indices = null;
@@ -74,7 +73,8 @@ public class ListTransferHandler extends TransferHandler {
     protected String exportString(JComponent c) {
         JList list = (JList) c;
         indices = list.getSelectedIndices();
-        @SuppressWarnings("deprecation") Object[] values = list.getSelectedValues();
+        @SuppressWarnings("deprecation")
+        Object[] values = list.getSelectedValues();
 
         StringBuffer buff = new StringBuffer();
 

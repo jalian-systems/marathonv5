@@ -79,15 +79,15 @@ import org.jruby.runtime.builtin.IRubyObject;
 
     public void resultsLoaded() throws Throwable {
         try {
-            RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_RUBY), new File(
-                    System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null);
+            RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_RUBY),
+                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null);
             script.setDriverURL("");
             Ruby interpreter = script.getInterpreter();
             assertTrue("Collector not defined", interpreter.isClassDefined("Collector"));
             RubyClass collectorClass = interpreter.getClass("Collector");
             IRubyObject presult = JavaEmbedUtils.javaToRuby(interpreter, result);
-            IRubyObject collector = collectorClass
-                    .newInstance(interpreter.getCurrentContext(), new IRubyObject[] { null }, new Block(null));
+            IRubyObject collector = collectorClass.newInstance(interpreter.getCurrentContext(), new IRubyObject[] { null },
+                    new Block(null));
             IRubyObject rubyObject = interpreter.evalScriptlet("proc { my_function }");
             try {
                 collector.callMethod(interpreter.getCurrentContext(), "callprotected", new IRubyObject[] { rubyObject, presult });
@@ -108,8 +108,8 @@ import org.jruby.runtime.builtin.IRubyObject;
     }
 
     @Test(enabled = false) public void resultsCapturesJavaError() throws Exception {
-        RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_JAVA), new File(
-                System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null);
+        RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_JAVA),
+                new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null);
         script.setDriverURL("");
         Ruby interpreter = script.getInterpreter();
         assertTrue("Collector not defined", interpreter.isClassDefined("Collector"));

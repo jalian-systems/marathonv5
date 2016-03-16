@@ -178,7 +178,7 @@ public class RFXComponentFactory {
             }
         });
         add(DatePicker.class, RFXDatePicker.class, new IRecordOn() {
-            
+
             @Override public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {

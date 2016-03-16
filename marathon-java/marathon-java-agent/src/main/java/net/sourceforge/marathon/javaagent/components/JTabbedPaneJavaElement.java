@@ -23,12 +23,12 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
     }
 
     @Override public String _getText() {
-        return getSelectedItemText((JTabbedPane)component);
+        return getSelectedItemText((JTabbedPane) component);
     }
 
     public static String getSelectedItemText(JTabbedPane component) {
         int selectedIndex = component.getSelectedIndex();
-        if(selectedIndex != -1)
+        if (selectedIndex != -1)
             return JTabbedPaneTabJavaElement.getText(component, selectedIndex);
         return "";
     }
