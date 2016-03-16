@@ -1,10 +1,17 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.Set;
+
 import org.testng.annotations.BeforeMethod;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Wait;
@@ -89,5 +96,28 @@ public abstract class RFXComponentTest {
 	public Stage getPrimaryStage() {
 		return applicationHelper.getPrimaryStage();
 	}
+
+    public Point2D getPoint(ListView<?> listView, int index) {
+        Set<Node> cells = listView.lookupAll(".list-cell");
+        for (Node node : cells) {
+            ListCell<?> cell = (ListCell<?>) node;
+            if (cell.getIndex() == index) {
+                Bounds bounds = cell.getBoundsInParent();
+                return cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
+            }
+        }
+        return null;
+    }
+
+    public ListCell<?> getCellAt(ListView<?> listView, Integer index) {
+        Set<Node> lookupAll = listView.lookupAll(".list-cell");
+        for (Node node : lookupAll) {
+            ListCell<?> cell = (ListCell<?>) node;
+            if (cell.getIndex() == index) {
+                return cell;
+            }
+        }
+        return null;
+    }
 
 }

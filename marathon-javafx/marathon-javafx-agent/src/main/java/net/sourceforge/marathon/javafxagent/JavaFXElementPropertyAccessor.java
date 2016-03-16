@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,6 +29,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -33,6 +38,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
@@ -46,8 +52,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
 	public final String getText() {
 		return EventQueueWait.exec(new Callable<String>() {
-			@Override
-			public String call() throws Exception {
+			@Override public String call() throws Exception {
 				return _getText();
 			}
 		});
@@ -65,8 +70,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
 	public final String getValue() {
 		return EventQueueWait.exec(new Callable<String>() {
-			@Override
-			public String call() throws Exception {
+			@Override public String call() throws Exception {
 				return _getValue();
 			}
 		});
@@ -172,8 +176,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
 	public final String getInstanceOf() {
 		Class<?> klass = node.getClass();
-		while (klass != null && klass.getPackage() != null
-				&& !klass.getPackage().getName().startsWith("javafx.scene.control")) {
+		while (klass != null && klass.getPackage() != null && !klass.getPackage().getName().startsWith("javafx.scene.control")) {
 			klass = klass.getSuperclass();
 		}
 		return klass == null ? null : klass.getName();
@@ -226,8 +229,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 			if (type.equals(getType(c.getClass())))
 				index++;
 		}
-		Logger.getLogger(JavaFXElementPropertyAccessor.class.getName())
-				.warning("Could not find the component in allComponents");
+		Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning("Could not find the component in allComponents");
 		Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning(node.toString());
 		return -1;
 	}
@@ -358,16 +360,14 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
+	@Override public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((node == null) ? 0 : node.hashCode());
 		return result;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
+	@Override public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -466,8 +466,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 			if (rootNode == null)
 				throw new RuntimeException("TreeView does not have a root node!");
 			if (!searchedPath.toString().equals("/" + getPathText(treePath)))
-				throw new RuntimeException("TreeView root node does not match: Expected </" + getPathText(treePath)
-						+ "> Actual: <" + searchedPath.toString() + ">");
+				throw new RuntimeException("TreeView root node does not match: Expected </" + getPathText(treePath) + "> Actual: <"
+						+ searchedPath.toString() + ">");
 		}
 		for (int i = start; i < tokens.length; i++) {
 			String childText = unescapeSpecialCharacters(tokens[i]);
@@ -620,6 +620,74 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		return selected.getIndex();
 	}
 
+	public String getComboBoxText(ComboBox<?> comboBox, int index, boolean appendText) {
+		if (index == -1)
+			return null;
+		String original = getComboBoxItemText(comboBox, index);
+		String itemText = original;
+		int suffixIndex = 0;
+		for (int i = 0; i < index; i++) {
+			String current = getComboBoxItemText(comboBox, i);
+			if (current.equals(original)) {
+				if (appendText)
+					itemText = String.format("%s(%d)", original, ++suffixIndex);
+				else
+					itemText = original;
+			}
+		}
+		return itemText;
+	}
+
+	private String getComboBoxItemText(ComboBox<?> comboBox, int index) {
+		return stripComboBoxHTMLTags(comboBox.getItems().get(index).toString());
+	}
+
+	public String stripComboBoxHTMLTags(String text) {
+		Pattern p = Pattern.compile("(<\\s*html\\s*>)(.*)(<\\s*/html\\s*>)");
+		Matcher m = p.matcher(text);
+		if (m.matches())
+			text = stripTags(m.group(2));
+		return text;
+	}
+
+	private String stripTags(String text) {
+		text = text.trim();
+		int indexOfGT = text.indexOf("<");
+		int indexOfLT = text.indexOf(">");
+		if (indexOfGT != -1 && indexOfLT != -1 && indexOfLT > indexOfGT) {
+			text = text.replace(text.substring(indexOfGT, indexOfLT + 1), "");
+			text = stripTags(text);
+		}
+		return text;
+	}
+
+	public String[][] getContent(ComboBox<?> comboBox) {
+		int nOptions = ((ComboBox<?>) comboBox).getItems().size();
+		String[][] content = new String[1][nOptions];
+		for (int i = 0; i < nOptions; i++) {
+			content[0][i] = getComboBoxText(comboBox, i, true);
+		}
+		return content;
+	}
+
+	public int getComboBoxItemIndex(ComboBox<?> comboBox, String value) {
+		ObservableList<?> items = comboBox.getItems();
+		for (int i = 0; i < items.size(); i++) {
+			String text = getComboBoxText(comboBox, i, true);
+			if (text.equals(value))
+				return i;
+		}
+		return -1;
+	}
+
+	public String getColorCode(Color c) {
+		return String.format("#%02x%02x%02x", (int) (c.getRed() * 255), (int) (c.getGreen() * 255), (int) (c.getBlue() * 255));
+	}
+
+	public String getDatePickerText(DatePicker datePicker, LocalDate value) {
+		return datePicker.getConverter().toString(value);
+	}
+
 	private static String getItemText(TabPane tabPane, int index) {
 		String titleAt = tabPane.getTabs().get(index).getText();
 		if (titleAt == null || "".equals(titleAt)) {
@@ -628,8 +696,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 		return titleAt;
 	}
 
-	@SuppressWarnings("deprecation")
-	private static String getTabNameFromIcon(TabPane tabPane, int index) {
+	@SuppressWarnings("deprecation") private static String getTabNameFromIcon(TabPane tabPane, int index) {
 		Node graphic = tabPane.getTabs().get(index).getGraphic();
 		if (graphic == null || !(graphic instanceof ImageView))
 			return "tabIndex-" + index;
