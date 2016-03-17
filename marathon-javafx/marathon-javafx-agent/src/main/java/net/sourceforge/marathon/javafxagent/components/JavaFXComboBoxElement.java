@@ -36,7 +36,7 @@ public class JavaFXComboBoxElement extends JavaFXElement {
 
     @Override public boolean marathon_select(String value) {
         ComboBox<?> comboBox = (ComboBox<?>) getComponent();
-        String text = stripComboBoxHTMLTags(value);
+        String text = stripHTMLTags(value);
         int selectedItem = getComboBoxItemIndex(comboBox, text);
         if (selectedItem == -1) {
             if (comboBox.isEditable()) {

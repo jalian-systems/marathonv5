@@ -17,7 +17,7 @@ import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
 import net.sourceforge.marathon.javafxagent.Wait;
 
-public class JavaFXComboBoxBaseTest extends JavaFXElementTest {
+public class JavaFXComboBoxTest extends JavaFXElementTest {
 
     private JavaFXAgent driver;
     private List<IJavaFXElement> combos;

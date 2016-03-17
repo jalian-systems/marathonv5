@@ -33,8 +33,7 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
         DatePicker datePickerNode = (DatePicker) getPrimaryStage().getScene().getRoot().lookup(".date-picker");
         IJavaFXElement datePicker = datePickers.get(0);
         Platform.runLater(() -> {
-            LocalDate date = (LocalDate) datePickerNode.getChronology().date(LocalDate.now());
-            datePicker.marathon_select(datePickerNode.getConverter().toString(date));
+            datePicker.marathon_select("3/16/2016");
         });
         List<Object> dates = new ArrayList<>();
         Platform.runLater(() -> {
@@ -55,8 +54,7 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
         DatePicker datePickerNode = (DatePicker) pickers.get(1);
         IJavaFXElement datePicker = datePickers.get(1);
         Platform.runLater(() -> {
-            LocalDate date = (LocalDate) datePickerNode.getChronology().date(LocalDate.now());
-            datePicker.marathon_select(datePickerNode.getConverter().toString(date));
+            datePicker.marathon_select("3/16/2016");
         });
         List<Object> dates = new ArrayList<>();
         Platform.runLater(() -> {

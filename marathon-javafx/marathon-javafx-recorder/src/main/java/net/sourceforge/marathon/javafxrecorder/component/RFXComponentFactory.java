@@ -7,6 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -21,6 +22,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.control.cell.ChoiceBoxListCell;
 import javafx.scene.control.cell.ComboBoxListCell;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -141,6 +143,18 @@ public class RFXComponentFactory {
                 return false;
             }
         });
+        add(ChoiceBox.class, RFXChoiceBox.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof ChoiceBox<?>)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
         add(ComboBox.class, RFXComboBox.class, new IRecordOn() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {
@@ -236,6 +250,7 @@ public class RFXComponentFactory {
                 return false;
             }
         });
+        add(ChoiceBoxListCell.class, RFXChoiceBoxListCell.class, null);
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
     }

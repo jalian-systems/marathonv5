@@ -29,6 +29,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
@@ -39,6 +40,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
@@ -639,10 +641,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     private String getComboBoxItemText(ComboBox<?> comboBox, int index) {
-        return stripComboBoxHTMLTags(comboBox.getItems().get(index).toString());
+        return stripHTMLTags(comboBox.getItems().get(index).toString());
     }
 
-    public String stripComboBoxHTMLTags(String text) {
+    public String stripHTMLTags(String text) {
         Pattern p = Pattern.compile("(<\\s*html\\s*>)(.*)(<\\s*/html\\s*>)");
         Matcher m = p.matcher(text);
         if (m.matches())
@@ -686,6 +688,51 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String getDatePickerText(DatePicker datePicker, LocalDate value) {
         return datePicker.getConverter().toString(value);
+    }
+
+    public String getChoiceBoxText(ChoiceBox<?> choiceBox, int index) {
+        if (index == -1)
+            return null;
+        String original = getChoiceBoxItemText(choiceBox, index);
+        String itemText = original;
+        int suffixIndex = 0;
+        for (int i = 0; i < index; i++) {
+            String current = getChoiceBoxItemText(choiceBox, i);
+            if (current.equals(original))
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+        }
+        return itemText;
+    }
+
+    @SuppressWarnings("unchecked") private String getChoiceBoxItemText(@SuppressWarnings("rawtypes") ChoiceBox choiceBox,
+            int index) {
+        @SuppressWarnings("rawtypes")
+        StringConverter converter = choiceBox.getConverter();
+        String text = null;
+        if (converter == null)
+            text = (choiceBox.getItems().get(index)).toString();
+        else
+            text = converter.toString(choiceBox.getItems().get(index));
+        return stripHTMLTags(text);
+    }
+
+    public String[][] getContent(ChoiceBox<?> choiceBox) {
+        int nOptions = choiceBox.getItems().size();
+        String[][] content = new String[1][nOptions];
+        for (int i = 0; i < nOptions; i++) {
+            content[0][i] = getChoiceBoxText(choiceBox, i);
+        }
+        return content;
+    }
+
+    public int getChoiceBoxItemIndex(ChoiceBox<?> choiceBox, String value) {
+        ObservableList<?> items = choiceBox.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            String text = getChoiceBoxText(choiceBox, i);
+            if (text.equals(value))
+                return i;
+        }
+        return -1;
     }
 
     private static String getItemText(TabPane tabPane, int index) {

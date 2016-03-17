@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -16,6 +17,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXColorPickerElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDatePickerElement;
@@ -74,6 +76,7 @@ public class JavaFXElementFactory {
         add(CheckBox.class, JavaFXCheckBoxElement.class);
         add(ToggleButton.class, JavaFXToggleButtonElement.class);
         add(Slider.class, JavaFXSliderElement.class);
+        add(ChoiceBox.class, JavaFXChoiceBoxElement.class);
         add(ColorPicker.class, JavaFXColorPickerElement.class);
         add(ComboBox.class, JavaFXComboBoxElement.class);
         add(DatePicker.class, JavaFXDatePickerElement.class);
