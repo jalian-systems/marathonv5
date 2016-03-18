@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
@@ -103,6 +104,18 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof Slider)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
+        add(Spinner.class, RFXSpinner.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof Spinner)
                         return parent;
                     parent = parent.getParent();
                 }

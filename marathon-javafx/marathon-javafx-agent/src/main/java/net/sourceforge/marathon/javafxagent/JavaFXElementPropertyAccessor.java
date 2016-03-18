@@ -34,6 +34,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeCell;
@@ -780,6 +781,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             pa.put(getTextForNode(treeView, (TreeItem<?>) object));
         }
         return pa.toString();
+    }
+
+    public String getSpinnerText(Spinner<?> spinner) {
+        return spinner.getEditor().getText();
     }
 
     private static String getItemText(TabPane tabPane, int index) {
