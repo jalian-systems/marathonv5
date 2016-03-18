@@ -34,6 +34,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -790,6 +791,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String getDividerLocations(SplitPane splitPane) {
         return new JSONArray(splitPane.getDividerPositions()).toString();
+    }
+
+    public String getProgressText(ProgressBar progressBar) {
+        return progressBar.getProgress() + "";
     }
 
     private static String getItemText(TabPane tabPane, int index) {

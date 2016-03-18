@@ -14,6 +14,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
@@ -129,6 +130,18 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof SplitPane)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
+        add(ProgressBar.class, RFXProgressBar.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof ProgressBar)
                         return parent;
                     parent = parent.getParent();
                 }
