@@ -35,6 +35,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeCell;
@@ -785,6 +786,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String getSpinnerText(Spinner<?> spinner) {
         return spinner.getEditor().getText();
+    }
+
+    public String getDividerLocations(SplitPane splitPane) {
+        return new JSONArray(splitPane.getDividerPositions()).toString();
     }
 
     private static String getItemText(TabPane tabPane, int index) {
