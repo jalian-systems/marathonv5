@@ -22,17 +22,11 @@ public class RFXTreeViewTest extends RFXComponentTest {
     @Test public void select() throws InterruptedException {
         @SuppressWarnings("rawtypes")
         final TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                treeView.getSelectionModel().select(2);
-            }
-        });
         LoggingRecorder lr = new LoggingRecorder();
-        RFXComponent rTreeView = new RFXTreeView(treeView, null, null, lr);
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                rTreeView.focusLost(null);
-            }
+        Platform.runLater(() -> {
+            RFXComponent rTreeView = new RFXTreeView(treeView, null, null, lr);
+            treeView.getSelectionModel().select(2);
+            rTreeView.focusLost(new RFXTreeView(null, null, null, null));
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording select = recordings.get(0);
@@ -43,20 +37,14 @@ public class RFXTreeViewTest extends RFXComponentTest {
     @Test public void select_multiple() throws InterruptedException {
         @SuppressWarnings("rawtypes")
         final TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                MultipleSelectionModel<?> selectionModel = treeView.getSelectionModel();
-                selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
-                treeView.getSelectionModel().select(1);
-                treeView.getSelectionModel().select(2);
-            }
-        });
         LoggingRecorder lr = new LoggingRecorder();
-        RFXComponent rTreeView = new RFXTreeView(treeView, null, null, lr);
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                rTreeView.focusLost(null);
-            }
+        Platform.runLater(() -> {
+            RFXComponent rTreeView = new RFXTreeView(treeView, null, null, lr);
+            MultipleSelectionModel<?> selectionModel = treeView.getSelectionModel();
+            selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+            treeView.getSelectionModel().select(1);
+            treeView.getSelectionModel().select(2);
+            rTreeView.focusLost(new RFXTreeView(null, null, null, null));
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording select = recordings.get(0);
@@ -67,17 +55,11 @@ public class RFXTreeViewTest extends RFXComponentTest {
     @Test public void select_none() throws InterruptedException {
         @SuppressWarnings("rawtypes")
         final TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                treeView.getSelectionModel().clearSelection();
-            }
-        });
         LoggingRecorder lr = new LoggingRecorder();
-        RFXComponent rTreeView = new RFXTreeView(treeView, null, null, lr);
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                rTreeView.focusLost(null);
-            }
+        Platform.runLater(() -> {
+            RFXComponent rTreeView = new RFXTreeView(treeView, null, null, lr);
+            treeView.getSelectionModel().clearSelection();
+            rTreeView.focusLost(new RFXTreeView(null, null, null, null));
         });
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording select = recordings.get(0);

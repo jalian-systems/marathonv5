@@ -1,6 +1,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
+import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 
 public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoElement {
 
@@ -30,14 +32,6 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         super(parent);
         this.parent = parent;
         this.path = rowToPath(row);
-    }
-
-    private String rowToPath(int row) {
-        TreeView<?> treeView = (TreeView<?>) getComponent();
-        TreeItem<?> treeItem = treeView.getTreeItem(row);
-        if (treeItem == null)
-            throw new RuntimeException("Trying to create a tree item for row " + row + " which is invalid");
-        return getTextForNode(treeView, treeItem);
     }
 
     @Override public IJavaFXElement getParent() {
@@ -57,13 +51,21 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         if (item == null)
             return null;
         treeView.scrollTo(treeView.getRow(item));
-        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
-        for (Node node : lookupAll) {
-            TreeCell<?> cell = (TreeCell<?>) node;
-            if (cell.getTreeItem() == item)
-                return cell;
-        }
-        return null;
+        return getCellAt(treeView, item);
+    }
+
+    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+        if (selector.equals("editor"))
+            return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
+        return super.getByPseudoElement(selector, params);
+    }
+
+    private Node getEditor() {
+        TreeCell<?> cell = (TreeCell<?>) getPseudoComponent();
+        cell.startEdit();
+        Node cellComponent = cell.getGraphic();
+        cellComponent.getProperties().put("marathon.celleditor", true);
+        return cellComponent;
     }
 
     @Override public void _moveto() {

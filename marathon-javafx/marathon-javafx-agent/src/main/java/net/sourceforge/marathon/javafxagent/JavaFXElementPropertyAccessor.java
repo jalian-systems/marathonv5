@@ -36,6 +36,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -583,6 +584,28 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return null;
     }
 
+    public TreeCell<?> getCellAt(TreeView<?> treeView, int index) {
+        return (TreeCell<?>) getCellAt(treeView, getPath(treeView, rowToPath(index)));
+    }
+
+    public Node getCellAt(TreeView<?> treeView, TreeItem<?> item) {
+        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        for (Node node : lookupAll) {
+            TreeCell<?> cell = (TreeCell<?>) node;
+            if (cell.getTreeItem() == item)
+                return cell;
+        }
+        return null;
+    }
+
+    public String rowToPath(int row) {
+        TreeView<?> treeView = (TreeView<?>) getComponent();
+        TreeItem<?> treeItem = treeView.getTreeItem(row);
+        if (treeItem == null)
+            throw new RuntimeException("Trying to create a tree item for row " + row + " which is invalid");
+        return getTextForNode(treeView, treeItem);
+    }
+
     private String getListItemText(ListView<?> listView, Integer index) {
         return listView.getItems().get(index).toString();
     }
@@ -614,6 +637,22 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
             if (boundsInScene.contains(point)) {
                 selected = (ListCell<?>) cellNode;
+                break;
+            }
+        }
+        if (selected == null)
+            return -1;
+        return selected.getIndex();
+    }
+
+    public int getRowAt(TreeView<?> treeView, Point2D point) {
+        point = treeView.localToScene(point);
+        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        TreeCell<?> selected = null;
+        for (Node cellNode : lookupAll) {
+            Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
+            if (boundsInScene.contains(point)) {
+                selected = (TreeCell<?>) cellNode;
                 break;
             }
         }
@@ -733,6 +772,14 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 return i;
         }
         return -1;
+    }
+
+    public String getSelectedTreeNodeText(TreeView<?> treeView, ObservableList<?> selectedItems) {
+        JSONArray pa = new JSONArray();
+        for (Object object : selectedItems) {
+            pa.put(getTextForNode(treeView, (TreeItem<?>) object));
+        }
+        return pa.toString();
     }
 
     private static String getItemText(TabPane tabPane, int index) {

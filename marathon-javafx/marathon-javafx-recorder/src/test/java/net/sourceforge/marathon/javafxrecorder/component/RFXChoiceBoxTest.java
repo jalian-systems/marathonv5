@@ -87,12 +87,6 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         recording = recordings.get(1);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("Cat(1)", recording.getParameters()[0]);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     @Test public void selectMultipleDuplicateOption() {

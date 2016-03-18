@@ -22,8 +22,11 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.ChoiceBoxListCell;
+import javafx.scene.control.cell.ChoiceBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.control.cell.ComboBoxTreeCell;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -253,6 +256,9 @@ public class RFXComponentFactory {
         add(ChoiceBoxListCell.class, RFXChoiceBoxListCell.class, null);
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
+        add(ChoiceBoxTreeCell.class, RFXChoiceBoxTreeCell.class, null);
+        add(CheckBoxTreeCell.class, RFXCheckBoxTreeCell.class, null);
+        add(ComboBoxTreeCell.class, RFXComboBoxTreeCell.class, null);
     }
 
     static {

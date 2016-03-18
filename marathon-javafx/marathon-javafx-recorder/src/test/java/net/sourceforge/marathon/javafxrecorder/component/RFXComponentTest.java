@@ -12,6 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Wait;
@@ -108,6 +110,29 @@ public abstract class RFXComponentTest {
             ListCell<?> cell = (ListCell<?>) node;
             if (cell.getIndex() == index) {
                 return cell;
+            }
+        }
+        return null;
+    }
+
+    public Point2D getPoint(TreeView<?> treeView, int index) {
+        Set<Node> cells = treeView.lookupAll(".tree-cell");
+        for (Node node : cells) {
+            TreeCell<?> cell = (TreeCell<?>) node;
+            if (cell.getIndex() == index) {
+                Bounds bounds = cell.getBoundsInParent();
+                return cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
+            }
+        }
+        return null;
+    }
+
+    public TreeCell<?> getCellAt(TreeView<?> treeView, int index) {
+        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        for (Node node : lookupAll) {
+            TreeCell<?> cell = (TreeCell<?>) node;
+            if (cell.getIndex() == index) {
+                return (TreeCell<?>) cell;
             }
         }
         return null;

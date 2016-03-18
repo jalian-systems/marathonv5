@@ -70,7 +70,6 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
 
     @Test public void marathon_click_test() throws Throwable {
         treeView.click(0, 1, 56, 10);
-        Thread.sleep(3000);
     }
 
     @Override protected Pane getMainPane() {
