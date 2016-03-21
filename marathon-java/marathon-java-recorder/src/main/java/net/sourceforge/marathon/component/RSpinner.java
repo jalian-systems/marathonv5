@@ -25,7 +25,7 @@ public class RSpinner extends RComponent {
 
     @Override public void focusLost(RComponent next) {
         String newValue = getSpinnerText();
-        if (!oldValue.equals(newValue)) {
+        if (oldValue == null || !oldValue.equals(newValue)) {
             recorder.recordSelect(this, newValue);
         }
     }
