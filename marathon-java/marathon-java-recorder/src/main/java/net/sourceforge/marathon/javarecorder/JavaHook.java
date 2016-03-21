@@ -258,58 +258,63 @@ public class JavaHook implements AWTEventListener, ChangeListener, ActionListene
     }
 
     @Override public void eventDispatched(final AWTEvent event) {
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
-            @Override public Object run() {
-                Object source = event.getSource();
-                if (!(source instanceof Component))
-                    return null;
-                if (event instanceof WindowEvent) {
-                    handleWindowEvent((WindowEvent) event);
+        try {
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                @Override public Object run() {
+                    Object source = event.getSource();
+                    if (!(source instanceof Component))
+                        return null;
+                    if (event instanceof WindowEvent) {
+                        handleWindowEvent((WindowEvent) event);
+                        return null;
+                    }
+                    if (event instanceof KeyEvent && isContextMenuKeySequence((KeyEvent) event)) {
+                        ((KeyEvent) event).consume();
+                        contextMenuHandler.showPopup((KeyEvent) event);
+                        return null;
+                    }
+                    if (event instanceof MouseEvent && isContextMenuSequence((MouseEvent) event)) {
+                        ((MouseEvent) event).consume();
+                        if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
+                            current.focusLost(null);
+                        contextMenuHandler.showPopup((MouseEvent) event);
+                        return null;
+                    }
+                    if (contextMenuHandler.isContextMenuOn())
+                        return null;
+                    Component component = (Component) source;
+                    if (SwingUtilities.getWindowAncestor(component) == null)
+                        return null;
+                    if (rawRecording) {
+                        new RUnknownComponent(component, objectMapConfiguration, null, recorder)
+                                .handleRawRecording(recorder, event);
+                        return null;
+                    }
+                    int id = event.getID();
+                    AWTEvent eventx;
+                    if (event instanceof MouseEvent)
+                        eventx = SwingUtilities.convertMouseEvent(((MouseEvent) event).getComponent(), (MouseEvent) event,
+                                (Component) source);
+                    else
+                        eventx = event;
+                    RComponent c = finder.findRComponent(component, eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint()
+                            : null, recorder);
+                    if (isFocusChangeEvent(id) && !c.equals(current)) {
+                        if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
+                            current.focusLost(c);
+                        c.focusGained(current);
+                        current = c;
+                    }
+                    // We need this. Note that c.equals(current) is not same as c == current
+                    if (c.equals(current))
+                        c = current;
+                    c.processEvent(eventx);
                     return null;
                 }
-                if (event instanceof KeyEvent && isContextMenuKeySequence((KeyEvent) event)) {
-                    ((KeyEvent) event).consume();
-                    contextMenuHandler.showPopup((KeyEvent) event);
-                    return null;
-                }
-                if (event instanceof MouseEvent && isContextMenuSequence((MouseEvent) event)) {
-                    ((MouseEvent) event).consume();
-                    if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
-                        current.focusLost(null);
-                    contextMenuHandler.showPopup((MouseEvent) event);
-                    return null;
-                }
-                if (contextMenuHandler.isContextMenuOn())
-                    return null;
-                Component component = (Component) source;
-                if (SwingUtilities.getWindowAncestor(component) == null)
-                    return null;
-                if (rawRecording) {
-                    new RUnknownComponent(component, objectMapConfiguration, null, recorder).handleRawRecording(recorder, event);
-                    return null;
-                }
-                int id = event.getID();
-                AWTEvent eventx;
-                if (event instanceof MouseEvent)
-                    eventx = SwingUtilities.convertMouseEvent(((MouseEvent) event).getComponent(), (MouseEvent) event,
-                            (Component) source);
-                else
-                    eventx = event;
-                RComponent c = finder.findRComponent(component,
-                        eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint() : null, recorder);
-                if (isFocusChangeEvent(id) && !c.equals(current)) {
-                    if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
-                        current.focusLost(c);
-                    c.focusGained(current);
-                    current = c;
-                }
-                // We Need This.
-                if (c.equals(current))
-                    c = current;
-                c.processEvent(eventx);
-                return null;
-            }
-        });
+            });
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     private void handleWindowEvent(WindowEvent event) {
