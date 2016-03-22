@@ -3,6 +3,7 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
+import ensemble.samples.controls.table.TableCellFactorySample.CheckBoxTableCell;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
@@ -19,6 +20,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
@@ -27,8 +30,10 @@ import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.ChoiceBoxListCell;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.ChoiceBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -292,12 +297,40 @@ public class RFXComponentFactory {
                 return false;
             }
         });
+        add(TableView.class, RFXTableView.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                if (hasTableCellParent(component)) {
+                    Node parent = component;
+                    while (parent != null) {
+                        if (parent instanceof TableView)
+                            return parent;
+                        parent = parent.getParent();
+                    }
+                }
+                return null;
+            }
+
+            private boolean hasTableCellParent(Node component) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof TableCell<?, ?>)
+                        return true;
+                    parent = parent.getParent();
+                }
+                return false;
+            }
+        });
         add(ChoiceBoxListCell.class, RFXChoiceBoxListCell.class, null);
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
         add(ChoiceBoxTreeCell.class, RFXChoiceBoxTreeCell.class, null);
         add(CheckBoxTreeCell.class, RFXCheckBoxTreeCell.class, null);
         add(ComboBoxTreeCell.class, RFXComboBoxTreeCell.class, null);
+        add(CheckBoxTableCell.class, RFXCheckBoxTableCell.class, null);
+        add(ComboBoxTableCell.class, RFXComboBoxTableCell.class, null);
+        add(ChoiceBoxTableCell.class, RFXChoiceBoxTableCell.class, null);
+        add(TableCell.class, RFXTableCell.class, null);
     }
 
     static {

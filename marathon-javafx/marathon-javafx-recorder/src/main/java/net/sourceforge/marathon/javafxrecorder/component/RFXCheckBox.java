@@ -27,4 +27,9 @@ public class RFXCheckBox extends RFXComponent {
             recorder.recordSelect(this, JavaFXCheckBoxElement.states[selection]);
         prevSelection = selection;
     }
+
+    @Override public String _getValue() {
+        int selection = getSelection((CheckBox) node);
+        return JavaFXCheckBoxElement.states[selection];
+    }
 }
