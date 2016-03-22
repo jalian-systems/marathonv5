@@ -15,6 +15,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeView;
@@ -30,6 +31,7 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXSliderElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXSpinnerElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXSplitPaneElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTabPaneElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXTableViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTextInputControlElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXToggleButtonElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
@@ -92,6 +94,7 @@ public class JavaFXElementFactory {
         add(TabPane.class, JavaFXTabPaneElement.class);
         add(ListView.class, JavaFXListViewElement.class);
         add(TreeView.class, JavaFXTreeViewElement.class);
+        add(TableView.class, JavaFXTableViewElement.class);
     }
 
     public static Class<? extends IJavaFXElement> get(Node component) {

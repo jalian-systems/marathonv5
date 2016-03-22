@@ -12,6 +12,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
@@ -134,6 +137,48 @@ public abstract class RFXComponentTest {
             if (cell.getIndex() == index) {
                 return (TreeCell<?>) cell;
             }
+        }
+        return null;
+    }
+
+    public Point2D getPoint(TableView<?> tableView, int columnIndex, int rowIndex) {
+        Set<Node> tableRowCell = tableView.lookupAll(".table-row-cell");
+        TableRow<?> row = null;
+        for (Node tableRow : tableRowCell) {
+            TableRow<?> r = (TableRow<?>) tableRow;
+            if (r.getIndex() == rowIndex) {
+                row = r;
+                break;
+            }
+        }
+        Set<Node> cells = row.lookupAll(".table-cell");
+        for (Node node : cells) {
+            TableCell<?, ?> cell = (TableCell<?, ?>) node;
+            if (tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex) {
+                Bounds bounds = cell.getBoundsInParent();
+                Point2D localToParent = cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
+                Point2D rowLocal = row.localToScene(localToParent, true);
+                return rowLocal;
+            }
+        }
+        return null;
+    }
+
+    public TableCell<?, ?> getCellAt(TableView<?> tableView, int rowIndex, int columnIndex) {
+        Set<Node> tableRowCell = tableView.lookupAll(".table-row-cell");
+        TableRow<?> row = null;
+        for (Node tableRow : tableRowCell) {
+            TableRow<?> r = (TableRow<?>) tableRow;
+            if (r.getIndex() == rowIndex) {
+                row = r;
+                break;
+            }
+        }
+        Set<Node> lookupAll = row.lookupAll(".table-cell");
+        for (Node node : lookupAll) {
+            TableCell<?, ?> cell = (TableCell<?, ?>) node;
+            if (tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex)
+                return cell;
         }
         return null;
     }

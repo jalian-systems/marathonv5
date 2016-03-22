@@ -39,6 +39,12 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -795,6 +801,170 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String getProgressText(ProgressBar progressBar) {
         return progressBar.getProgress() + "";
+    }
+
+    public int getColumnAt(TableView<?> tableView, Point2D point) {
+        TableCell<?, ?> selected = getTableCellAt(tableView, point);
+        if (selected == null)
+            return -1;
+        return tableView.getColumns().indexOf(selected.getTableColumn());
+    }
+
+    public int getRowAt(TableView<?> tableView, Point2D point) {
+        TableCell<?, ?> selected = getTableCellAt(tableView, point);
+        if (selected == null)
+            return -1;
+        return selected.getTableRow().getIndex();
+    }
+
+    private TableCell<?, ?> getTableCellAt(TableView<?> tableView, Point2D point) {
+        point = tableView.localToScene(point);
+        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
+        TableCell<?, ?> selected = null;
+        for (Node cellNode : lookupAll) {
+            Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
+            if (boundsInScene.contains(point)) {
+                selected = (TableCell<?, ?>) cellNode;
+                break;
+            }
+        }
+        return selected;
+    }
+
+    public String getColumnName(TableView<?> tableView, int i) {
+        ObservableList<?> columns = tableView.getColumns();
+        TableColumn<?, ?> tableColumn = (TableColumn<?, ?>) columns.get(i);
+        return tableColumn.getText();
+    }
+
+    public String escape(String columnName) {
+        return columnName.replaceAll("#", "##").replaceAll(",", "#;");
+    }
+
+    public String getTableCellText(TableView<?> tableView, int row, int column) {
+        if (column == -1 || row == -1)
+            return null;
+        String scolumn = getColumnName(tableView, column);
+        if (scolumn == null || "".equals(scolumn))
+            scolumn = "" + column;
+        return new JSONObject().put("cell", new JSONArray().put(row).put(getColumnName(tableView, column))).toString();
+    }
+
+    public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
+        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
+        for (Node node : lookupAll) {
+            TableCell<?, ?> cell = (TableCell<?, ?>) node;
+            TableRow<?> tableRow = cell.getTableRow();
+            TableColumn<?, ?> tableColumn = cell.getTableColumn();
+            if (tableRow.getIndex() == row && tableColumn == tableView.getColumns().get(column))
+                return cell;
+        }
+        return null;
+    }
+
+    public String getSelection(TableView<?> tableView) {
+        TableViewSelectionModel<?> selectionModel = tableView.getSelectionModel();
+        if (!selectionModel.isCellSelectionEnabled()) {
+            ObservableList<Integer> selectedIndices = selectionModel.getSelectedIndices();
+            if (tableView.getItems().size() == selectedIndices.size())
+                return "all";
+            if (selectedIndices.size() == 0)
+                return "";
+            return getRowSelectionText(selectedIndices);
+        }
+
+        @SuppressWarnings("rawtypes")
+        ObservableList<TablePosition> selectedCells = selectionModel.getSelectedCells();
+        int[] rows = new int[selectedCells.size()];
+        int[] columns = new int[selectedCells.size()];
+        int rowCount = tableView.getItems().size();
+        int columnCount = tableView.getColumns().size();
+
+        if (selectedCells.size() == (rowCount * columnCount))
+            return "all";
+
+        if (selectedCells.size() == 0)
+            return "";
+        JSONObject cells = new JSONObject();
+        JSONArray value = new JSONArray();
+        for (int i = 0; i < selectedCells.size(); i++) {
+            TablePosition<?, ?> cell = selectedCells.get(i);
+            rows[i] = cell.getRow();
+            columns[i] = cell.getColumn();
+            List<String> cellValue = new ArrayList<>();
+            cellValue.add(cell.getRow() + "");
+            cellValue.add(getColumnName(tableView, cell.getColumn()));
+            value.put(cellValue);
+        }
+        cells.put("cells", value);
+        return cells.toString();
+    }
+
+    public List<String> getSelectedColumnText(TableView<?> tableView, int[] columns) {
+        List<String> text = new ArrayList<String>();
+        for (int i = 0; i < columns.length; i++) {
+            String columnName = getColumnName(tableView, columns[i]);
+            text.add(escape(columnName));
+        }
+        return text;
+    }
+
+    public String getRowSelectionText(ObservableList<Integer> selectedIndices) {
+        JSONObject pa = new JSONObject();
+        return pa.put("rows", selectedIndices).toString();
+    }
+
+    public int getColumnIndex(String columnName) {
+        TableView<?> table = (TableView<?>) node;
+        ObservableList<?> columns = table.getColumns();
+        int ncolumns = columns.size();
+        for (int i = 0; i < ncolumns; i++) {
+            @SuppressWarnings("rawtypes")
+            String column = ((TableColumn) columns.get(i)).getText();
+            if (columnName.equals(escape(column)))
+                return i;
+        }
+        throw new RuntimeException("Could not find column " + columnName + " in table");
+    }
+
+    public int[] getCellRows(JSONObject rowObject) {
+        JSONArray x = (JSONArray) rowObject.get("rows");
+        int[] rows = new int[x.length()];
+        for (int i = 0; i < x.length(); i++) {
+            rows[i] = x.getInt(i);
+        }
+        return rows;
+    }
+
+    public int[] getCellColumns(JSONObject columnObject) {
+        JSONArray x = (JSONArray) columnObject.get("columns");
+        int[] columnIndex = new int[x.length()];
+        for (int i = 0; i < x.length(); i++) {
+            columnIndex[i] = getColumnIndex(x.getString(i));
+        }
+        return columnIndex;
+    }
+
+    public int[] getSelectedRows(String value) {
+        JSONArray x = (JSONArray) new JSONObject(value).get("rows");
+        int[] rows = new int[x.length()];
+        for (int i = 0; i < x.length(); i++) {
+            rows[i] = x.getInt(i);
+        }
+        return rows;
+    }
+
+    @SuppressWarnings("unchecked") public void selectCells(TableView<?> tableView, String value) {
+        @SuppressWarnings("rawtypes")
+        TableViewSelectionModel selectionModel = tableView.getSelectionModel();
+        selectionModel.clearSelection();
+        JSONObject cells = new JSONObject(value);
+        JSONArray object = (JSONArray) cells.get("cells");
+        for (int i = 0; i < object.length(); i++) {
+            JSONArray jsonArray = object.getJSONArray(i);
+            selectionModel.select(Integer.parseInt(jsonArray.getString(0)),
+                    tableView.getColumns().get(getColumnIndex(jsonArray.getString(1))));
+        }
     }
 
     private static String getItemText(TabPane tabPane, int index) {
