@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -47,6 +48,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTablePosition;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.control.TreeTableView.TreeTableViewSelectionModel;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -450,11 +457,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return lastPathComponent.getValue().toString();
     }
 
-    private String escapeSpecialCharacters(String name) {
+    protected String escapeSpecialCharacters(String name) {
         return name.replaceAll("/", "\\\\/");
     }
 
-    private Object[] buildTreePath(TreeItem<?> selectedItem) {
+    protected Object[] buildTreePath(TreeItem<?> selectedItem) {
         List<Object> path = new ArrayList<>();
         path.add(selectedItem);
         while (selectedItem.getParent() != null) {
@@ -503,7 +510,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return treePath.get(treePath.size() - 1);
     }
 
-    private String getPathText(List<TreeItem<?>> treePath) {
+    protected String getPathText(List<TreeItem<?>> treePath) {
         // We should be getting the *text* from the tree cell. We need to figure
         // out how to construct
         // a tree cell for a item that is not visible
@@ -523,7 +530,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return lastPathComponent.getValue().toString();
     }
 
-    private String unescapeSpecialCharacters(String name) {
+    protected String unescapeSpecialCharacters(String name) {
         return name.replaceAll("\\\\/", "/");
     }
 
@@ -837,10 +844,6 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return tableColumn.getText();
     }
 
-    public String escape(String columnName) {
-        return columnName.replaceAll("#", "##").replaceAll(",", "#;");
-    }
-
     public String getTableCellText(TableView<?> tableView, int row, int column) {
         if (column == -1 || row == -1)
             return null;
@@ -904,7 +907,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         List<String> text = new ArrayList<String>();
         for (int i = 0; i < columns.length; i++) {
             String columnName = getColumnName(tableView, columns[i]);
-            text.add(escape(columnName));
+            text.add(escapeSpecialCharacters(columnName));
         }
         return text;
     }
@@ -921,7 +924,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         for (int i = 0; i < ncolumns; i++) {
             @SuppressWarnings("rawtypes")
             String column = ((TableColumn) columns.get(i)).getText();
-            if (columnName.equals(escape(column)))
+            if (columnName.equals(escapeSpecialCharacters(column)))
                 return i;
         }
         throw new RuntimeException("Could not find column " + columnName + " in table");
@@ -965,6 +968,221 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             selectionModel.select(Integer.parseInt(jsonArray.getString(0)),
                     tableView.getColumns().get(getColumnIndex(jsonArray.getString(1))));
         }
+    }
+
+    public String getTreeTableCellText(TreeTableView<?> treeTableView, int row, int column) {
+        if (column == -1 || row == -1)
+            return null;
+        String scolumn = getTreeTableColumnName(treeTableView, column);
+        if (scolumn == null || "".equals(scolumn))
+            scolumn = "" + column;
+        return new JSONObject()
+                .put("cell", new JSONArray()
+                        .put(getTreeTableNodePath(treeTableView, treeTableView.getSelectionModel().getModelItem(row))).put(scolumn))
+                .toString();
+    }
+
+    public TreeTableCell<?, ?> getTreeTableCellAt(TreeTableView<?> treeTableView, Point2D point) {
+        point = treeTableView.localToScene(point);
+        Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
+        TreeTableCell<?, ?> selected = null;
+        for (Node cellNode : lookupAll) {
+            Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
+            if (boundsInScene.contains(point)) {
+                selected = (TreeTableCell<?, ?>) cellNode;
+                break;
+            }
+        }
+        return selected;
+    }
+
+    protected int getTreeTableColumnAt(TreeTableView<?> treeTableView, Point2D point) {
+        TreeTableCell<?, ?> selected = getTreeTableCellAt(treeTableView, point);
+        if (selected == null)
+            return -1;
+        return treeTableView.getColumns().indexOf(selected.getTableColumn());
+    }
+
+    protected int getTreeTableRowAt(TreeTableView<?> treeTableView, Point2D point) {
+        TreeTableCell<?, ?> selected = getTreeTableCellAt(treeTableView, point);
+        if (selected == null)
+            return -1;
+        return selected.getTreeTableRow().getIndex();
+    }
+
+    protected TreeTableCell<?, ?> getTreeTableCellAt(TreeTableView<?> treeTableView, int row, int column) {
+        Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
+        for (Node node : lookupAll) {
+            TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) node;
+            TreeTableRow<?> tableRow = cell.getTreeTableRow();
+            TreeTableColumn<?, ?> tableColumn = cell.getTableColumn();
+            if (tableRow.getIndex() == row && tableColumn == treeTableView.getColumns().get(column))
+                return cell;
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked") public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView,
+            TreeItem<?> lastPathComponent) {
+        if (lastPathComponent == null || lastPathComponent.getValue() == null)
+            return "";
+        @SuppressWarnings("rawtypes")
+        TreeTableColumn treeTableColumn = treeTableView.getTreeColumn();
+        if (treeTableColumn == null)
+            treeTableColumn = treeTableView.getColumns().get(0);
+        ObservableValue<?> cellObservableValue = treeTableColumn.getCellObservableValue(lastPathComponent);
+        String text = cellObservableValue.getValue().toString();
+        if (text != null)
+            return text;
+        return lastPathComponent.getValue().toString();
+    }
+
+    public String getTextForTreeTableNode(TreeTableView<?> treeTableView, TreeItem<?> selectedItem) {
+        StringBuilder sb = new StringBuilder();
+        Object[] treePath = buildTreePath(selectedItem);
+        int start = treeTableView.isShowRoot() ? 0 : 1;
+        for (int i = start; i < treePath.length; i++) {
+            String pathString = escapeSpecialCharacters(getTextForTreeTableNodeObject(treeTableView, (TreeItem<?>) treePath[i]));
+            sb.append("/").append(pathString);
+        }
+        return sb.toString();
+    }
+
+    public JSONArray getTreeTableNodeText(TreeTableView<?> treeTableView, ObservableList<?> selectedItems) {
+        JSONArray pa = new JSONArray();
+        for (Object object : selectedItems) {
+            pa.put(getTextForTreeTableNode(treeTableView, (TreeItem<?>) object));
+        }
+        return pa;
+    }
+
+    public String getTreeTableRowSelectionText(TreeTableView<?> treeTableView, ObservableList<?> selectedItems) {
+        JSONObject pa = new JSONObject();
+        return pa.put("rows", getTreeTableNodeText(treeTableView, selectedItems)).toString();
+    }
+
+    public String getTreeTableSelection(TreeTableView<?> treeTableView) {
+        TreeTableViewSelectionModel<?> selectionModel = treeTableView.getSelectionModel();
+        ObservableList<Integer> selectedIndices = selectionModel.getSelectedIndices();
+        ObservableList<?> selectedCells = selectionModel.getSelectedCells();
+        int rowCount = treeTableView.getExpandedItemCount();
+        int columnCount = treeTableView.getColumns().size();
+        if (selectedIndices.size() == 0 || selectedCells.size() == 0)
+            return "";
+        else if ((!selectionModel.isCellSelectionEnabled() && selectedIndices.size() == treeTableView.getExpandedItemCount())
+                || (selectionModel.isCellSelectionEnabled() && selectedCells.size() == (rowCount * columnCount)))
+            return "all";
+        else if (!selectionModel.isCellSelectionEnabled()) {
+            return getTreeTableRowSelectionText(treeTableView, selectionModel.getSelectedItems());
+        } else {
+            int[] rows = new int[selectedCells.size()];
+            int[] columns = new int[selectedCells.size()];
+            JSONObject cells = new JSONObject();
+            JSONArray value = new JSONArray();
+            for (int i = 0; i < selectedCells.size(); i++) {
+                TreeTablePosition<?, ?> cell = (TreeTablePosition<?, ?>) selectedCells.get(i);
+                rows[i] = cell.getRow();
+                columns[i] = cell.getColumn();
+                List<String> cellValue = new ArrayList<>();
+                cellValue.add(getTreeTableNodePath(treeTableView, selectionModel.getModelItem(cell.getRow())));
+                cellValue.add(getTreeTableColumnName(treeTableView, cell.getColumn()));
+                value.put(cellValue);
+            }
+            cells.put("cells", value);
+            return cells.toString();
+        }
+    }
+
+    private String getTreeTableNodePath(TreeTableView<?> treeTableView, TreeItem<?> treeItem) {
+        return getTextForTreeTableNode(treeTableView, treeItem);
+    }
+
+    protected String getTreeTableColumnName(TreeTableView<?> treeTableView, int columnIndex) {
+        ObservableList<?> columns = treeTableView.getColumns();
+        TreeTableColumn<?, ?> tableColumn = (TreeTableColumn<?, ?>) columns.get(columnIndex);
+        return tableColumn.getText();
+    }
+
+    protected int getTreeTableColumnIndex(TreeTableView<?> treeTableView, String columnName) {
+        ObservableList<?> columns = treeTableView.getColumns();
+        int ncolumns = columns.size();
+        for (int i = 0; i < ncolumns; i++) {
+            @SuppressWarnings("rawtypes")
+            String column = ((TreeTableColumn) columns.get(i)).getText();
+            if (columnName.equals(escapeSpecialCharacters(column)))
+                return i;
+        }
+        throw new RuntimeException("Could not find column " + columnName + " in tree table");
+    }
+
+    @SuppressWarnings("unchecked") protected int getTreeTableNodeIndex(TreeTableView<?> treeTableView, String path) {
+        String[] tokens = path.substring(1).split("(?<!\\\\)/");
+        Object rootNode = treeTableView.getRoot();
+        int start = treeTableView.isShowRoot() ? 1 : 0;
+        List<TreeItem<?>> treePath = new ArrayList<TreeItem<?>>();
+        treePath.add((TreeItem<?>) rootNode);
+        StringBuilder searchedPath = new StringBuilder();
+        if (treeTableView.isShowRoot()) {
+            String rootNodeText = unescapeSpecialCharacters(tokens[0]);
+            searchedPath.append("/" + rootNodeText);
+            if (rootNode == null)
+                throw new RuntimeException("TreeTableView does not have a root node!");
+            if (!searchedPath.toString()
+                    .equals("/" + getTextForTreeTableNodeObject(treeTableView, treePath.get(treePath.size() - 1))))
+                throw new RuntimeException("TreeTableView root node does not match: Expected </"
+                        + getTextForTreeTableNodeObject(treeTableView, treePath.get(treePath.size() - 1)) + "> Actual: <"
+                        + searchedPath.toString() + ">");
+        }
+        for (int i = start; i < tokens.length; i++) {
+            String childText = unescapeSpecialCharacters(tokens[i]);
+            searchedPath.append("/" + childText);
+            boolean matched = false;
+            TreeItem<?> item = (TreeItem<?>) treePath.get(treePath.size() - 1);
+            item.setExpanded(true);
+            for (int j = 0; j < item.getChildren().size(); j++) {
+                Object child = item.getChildren().get(j);
+                treePath.add((TreeItem<?>) child);
+                List<TreeItem<?>> childPath = treePath;
+                if (childText.equals(getTextForTreeTableNodeObject(treeTableView, childPath.get(childPath.size() - 1)))) {
+                    treePath = childPath;
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched)
+                return -1;
+        }
+        @SuppressWarnings("rawtypes")
+        TreeItem treeItem = treePath.get(treePath.size() - 1);
+        return treeTableView.getRow(treeItem);
+    }
+
+    protected int[] getTreeTableSelectedRows(TreeTableView<?> treeTableView, String value) {
+        JSONArray o = new JSONObject(value).getJSONArray("rows");
+        int[] rows = new int[o.length()];
+        for (int i = 0; i < o.length(); i++)
+            rows[i] = getTreeTableNodeIndex(treeTableView, o.getString(i));
+        return rows;
+    }
+
+    @SuppressWarnings("unchecked") protected void selectTreeTableCells(TreeTableView<?> treeTableView, String value) {
+        @SuppressWarnings("rawtypes")
+        TreeTableViewSelectionModel selectionModel = treeTableView.getSelectionModel();
+        JSONObject cells = new JSONObject(value);
+        JSONArray object = (JSONArray) cells.get("cells");
+        for (int i = 0; i < object.length(); i++) {
+            JSONArray jsonArray = object.getJSONArray(i);
+            int rowIndex = getTreeTableNodeIndex(treeTableView, jsonArray.getString(0));
+            @SuppressWarnings("rawtypes")
+            TreeTableColumn column = treeTableView.getColumns().get(getTreeTableColumnIndex(treeTableView, jsonArray.getString(1)));
+            treeTableView.scrollToColumn(column);
+            treeTableView.scrollTo(rowIndex);
+            selectionModel.select(rowIndex, column);
+        }
+    }
+
+    @SuppressWarnings("rawtypes") protected TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
+        return treeTableView.getColumns().get(index);
     }
 
     private static String getItemText(TabPane tabPane, int index) {

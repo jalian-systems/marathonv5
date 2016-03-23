@@ -26,15 +26,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.CheckBoxTreeCell;
+import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.control.cell.ChoiceBoxListCell;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.ChoiceBoxTreeCell;
+import javafx.scene.control.cell.ChoiceBoxTreeTableCell;
 import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
+import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -321,6 +326,30 @@ public class RFXComponentFactory {
                 return false;
             }
         });
+        add(TreeTableView.class, RFXTreeTableView.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                if (hasTreeTableCellParent(component)) {
+                    Node parent = component;
+                    while (parent != null) {
+                        if (parent instanceof TreeTableView)
+                            return parent;
+                        parent = parent.getParent();
+                    }
+                }
+                return null;
+            }
+
+            private boolean hasTreeTableCellParent(Node component) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof TreeTableCell<?, ?>)
+                        return true;
+                    parent = parent.getParent();
+                }
+                return false;
+            }
+        });
         add(ChoiceBoxListCell.class, RFXChoiceBoxListCell.class, null);
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
@@ -331,6 +360,10 @@ public class RFXComponentFactory {
         add(ComboBoxTableCell.class, RFXComboBoxTableCell.class, null);
         add(ChoiceBoxTableCell.class, RFXChoiceBoxTableCell.class, null);
         add(TableCell.class, RFXTableCell.class, null);
+        add(CheckBoxTreeTableCell.class, RFXCheckBoxTreeTableCell.class, null);
+        add(ComboBoxTreeTableCell.class, RFXComboBoxTreeTableCell.class, null);
+        add(ChoiceBoxTreeTableCell.class, RFXChoiceBoxTreeTableCell.class, null);
+        add(TreeTableCell.class, RFXTreeTableCell.class, null);
     }
 
     static {

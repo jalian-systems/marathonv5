@@ -16,6 +16,9 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -183,4 +186,26 @@ public abstract class RFXComponentTest {
         return null;
     }
 
+    protected Point2D getPoint(TreeTableView<?> treeTableView, int rowIndex, int columnIndex) {
+        Set<Node> treeTableRowCell = treeTableView.lookupAll(".tree-table-row-cell");
+        TreeTableRow<?> row = null;
+        for (Node tableRow : treeTableRowCell) {
+            TreeTableRow<?> r = (TreeTableRow<?>) tableRow;
+            if (r.getIndex() == rowIndex) {
+                row = r;
+                break;
+            }
+        }
+        Set<Node> cells = row.lookupAll(".tree-table-cell");
+        for (Node node : cells) {
+            TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) node;
+            if (treeTableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex) {
+                Bounds bounds = cell.getBoundsInParent();
+                Point2D localToParent = cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
+                Point2D rowLocal = row.localToScene(localToParent, true);
+                return rowLocal;
+            }
+        }
+        return null;
+    }
 }
