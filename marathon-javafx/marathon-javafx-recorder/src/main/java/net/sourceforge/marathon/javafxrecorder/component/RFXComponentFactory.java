@@ -24,6 +24,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeTableCell;
@@ -40,6 +41,7 @@ import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
+import javafx.scene.layout.StackPane;
 import javafx.scene.web.HTMLEditor;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -147,16 +149,52 @@ public class RFXComponentFactory {
                 return null;
             }
         });
+        add(TitledPane.class, RFXTitledPane.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                if (hasTitleRegion(component)) {
+                    while (parent != null) {
+                        if (parent instanceof TitledPane)
+                            return parent;
+                        parent = parent.getParent();
+                    }
+                }
+                return null;
+            }
+
+            private boolean hasTitleRegion(Node component) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof StackPane && parent.getStyleClass().contains("title"))
+                        return true;
+                    parent = parent.getParent();
+                }
+                return false;
+            }
+        });
         add(SplitPane.class, RFXSplitPane.class, new IRecordOn() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
-                while (parent != null) {
-                    if (parent instanceof SplitPane)
-                        return parent;
-                    parent = parent.getParent();
+                if (hasDivider(component)) {
+                    while (parent != null) {
+                        if (parent instanceof SplitPane)
+                            return parent;
+                        parent = parent.getParent();
+                    }
                 }
                 return null;
+            }
+
+            private boolean hasDivider(Node component) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof StackPane && parent.getStyleClass().contains("split-pane-divider"))
+                        return true;
+                    parent = parent.getParent();
+                }
+                return false;
             }
         });
         add(ProgressBar.class, RFXProgressBar.class, new IRecordOn() {
