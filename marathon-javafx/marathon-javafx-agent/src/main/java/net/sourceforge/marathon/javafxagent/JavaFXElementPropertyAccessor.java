@@ -156,7 +156,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
      * 
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getTagName()
      */
-    public final String getTagName() {
+    public String getTagName() {
         Class<?> javaClass = findJavaClass();
         Class<?> c = javaClass;
         String simpleName = c.getSimpleName();

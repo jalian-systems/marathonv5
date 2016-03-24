@@ -20,12 +20,14 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
+import javafx.scene.web.HTMLEditor;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXColorPickerElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDatePickerElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXHTMLEditor;
 import net.sourceforge.marathon.javafxagent.components.JavaFXListViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXProgressBarElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXSliderElement;
@@ -83,6 +85,7 @@ public class JavaFXElementFactory {
     public static void reset() {
         add(Node.class, JavaFXElement.class);
         add(TextInputControl.class, JavaFXTextInputControlElement.class);
+        add(HTMLEditor.class, JavaFXHTMLEditor.class);
         add(CheckBox.class, JavaFXCheckBoxElement.class);
         add(ToggleButton.class, JavaFXToggleButtonElement.class);
         add(Slider.class, JavaFXSliderElement.class);

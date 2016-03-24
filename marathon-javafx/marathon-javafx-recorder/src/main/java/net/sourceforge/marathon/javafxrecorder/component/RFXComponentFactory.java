@@ -40,6 +40,7 @@ import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
+import javafx.scene.web.HTMLEditor;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -96,6 +97,18 @@ public class RFXComponentFactory {
         entries.clear();
         add(Node.class, RFXUnknownComponent.class, null);
         add(TextInputControl.class, RFXTextInputControl.class, null);
+        add(HTMLEditor.class, RFXHTMLEditor.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof HTMLEditor)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
         add(ButtonBase.class, RFXButtonBase.class, new IRecordOn() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {
