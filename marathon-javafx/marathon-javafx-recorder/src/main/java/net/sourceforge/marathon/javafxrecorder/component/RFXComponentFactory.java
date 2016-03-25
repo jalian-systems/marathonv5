@@ -3,7 +3,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
-import ensemble.samples.controls.table.TableCellFactorySample.CheckBoxTableCell;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
@@ -31,6 +30,7 @@ import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.control.cell.ChoiceBoxListCell;
