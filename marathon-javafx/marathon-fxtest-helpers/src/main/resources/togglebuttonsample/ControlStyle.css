@@ -1,0 +1,11 @@
+.toggle-button1{
+    -fx-base: lightgreen;   
+}
+
+.toggle-button2{
+    -fx-base: lightblue;  
+}
+
+.toggle-button3{
+    -fx-base: salmon;   
+}

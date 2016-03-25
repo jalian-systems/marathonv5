@@ -1,0 +1,7 @@
+/*controlStyle1.css */
+
+.separator .line {
+    -fx-border-color: #e79423;
+    -fx-border-width: 2;    
+}
+
