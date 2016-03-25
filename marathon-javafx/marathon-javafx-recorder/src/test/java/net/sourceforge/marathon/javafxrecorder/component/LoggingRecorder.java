@@ -126,4 +126,14 @@ public final class LoggingRecorder implements IJSONRecorder {
         };
         return recordings;
     }
+
+    @Override public void recordFileChooser(String state) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override public void recordFolderChooser(String state) {
+        // TODO Auto-generated method stub
+        
+    }
 }

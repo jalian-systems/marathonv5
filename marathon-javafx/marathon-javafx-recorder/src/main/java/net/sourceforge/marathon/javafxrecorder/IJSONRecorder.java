@@ -44,4 +44,8 @@ public interface IJSONRecorder {
 
     public abstract void recordFocusedWindow(RFXComponent r) throws IOException;
 
+    public abstract void recordFileChooser(String state);
+
+    public abstract void recordFolderChooser(String state);
+
 }

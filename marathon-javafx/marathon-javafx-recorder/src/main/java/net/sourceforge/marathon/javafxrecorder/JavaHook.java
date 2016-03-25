@@ -1,13 +1,17 @@
 package net.sourceforge.marathon.javafxrecorder;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.instrument.Instrumentation;
 import java.net.UnknownHostException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.sun.glass.ui.CommonDialogs;
 import com.sun.javafx.stage.StageHelper;
 
 import javafx.collections.ListChangeListener;
@@ -20,8 +24,11 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.javafxrecorder.component.FileChooserTransformer;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
+import net.sourceforge.marathon.javafxrecorder.component.RFXFileChooser;
+import net.sourceforge.marathon.javafxrecorder.component.RFXFolderChooser;
 import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
 
 public class JavaHook implements EventHandler<Event> {
@@ -83,18 +90,15 @@ public class JavaHook implements EventHandler<Event> {
             KeyEvent.KEY_PRESSED, KeyEvent.KEY_RELEASED, KeyEvent.KEY_TYPED };
 
     private void removeEventFilter(Stage stage) {
-        for (EventType<?> eventType : events) {
-            stage.getScene().getRoot().removeEventFilter(eventType, JavaHook.this);
-        }
+        stage.getScene().getRoot().removeEventFilter(Event.ANY, JavaHook.this);
     }
 
     private void addEventFilter(Stage stage) {
-        for (EventType<?> eventType : events) {
-            stage.getScene().getRoot().addEventFilter(eventType, JavaHook.this);
-        }
+        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaHook.this);
     }
 
-    public static void premain(final String args) throws Exception {
+    public static void premain(final String args, Instrumentation instrumentation) throws Exception {
+        instrumentation.addTransformer(new FileChooserTransformer());
         logger.info("JavaVersion: " + System.getProperty("java.version"));
         final int port;
         if (args != null && args.trim().length() > 0)
@@ -126,6 +130,16 @@ public class JavaHook implements EventHandler<Event> {
     }
 
     @Override public void handle(Event event) {
+        if (event.getEventType().getName().equals("filechooser")) {
+            handleFileChooser(event);
+            return;
+        }
+        if (event.getEventType().getName().equals("folderchooser")) {
+            handleFolderChooser(event);
+            return;
+        }
+        if (!isVaildEvent(event.getEventType()))
+            return;
         if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node))
             return;
         Point2D point = null;
@@ -143,6 +157,27 @@ public class JavaHook implements EventHandler<Event> {
         if (c.equals(current))
             c = current;
         c.processEvent(event);
+    }
+
+    private void handleFolderChooser(Event event) {
+        Node source = (Node) event.getSource();
+        File folder = (File) source.getProperties().get("selctedFolder");
+        if (folder != null) {
+            new RFXFolderChooser(recorder).record(folder);
+        }
+    }
+
+    private void handleFileChooser(Event event) {
+        Node source = (Node) event.getSource();
+        CommonDialogs.FileChooserResult files = (CommonDialogs.FileChooserResult) source.getProperties().get("selctedFiles");
+        List<File> selectedFiles = files.getFiles();
+        if (selectedFiles.size() != 0) {
+            new RFXFileChooser(recorder).record(selectedFiles);
+        }
+    }
+
+    private boolean isVaildEvent(EventType<? extends Event> eventType) {
+        return Arrays.asList(events).contains(eventType);
     }
 
     private boolean isFocusChangeEvent(Event event) {

@@ -275,6 +275,24 @@ public class HTTPRecorder implements IJSONRecorder {
         sendRecordMessage(o);
     }
 
+    @Override public void recordFileChooser(String state) {
+        JSONObject event = new JSONObject();
+        event.put("type", "select_file_chooser");
+        event.put("value", state);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        sendRecordMessage(o);
+    }
+
+    @Override public void recordFolderChooser(String state) {
+        JSONObject event = new JSONObject();
+        event.put("type", "select_folder_chooser");
+        event.put("value", state);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        sendRecordMessage(o);
+    }
+
     private void sendRecordMessage(JSONObject o) {
         try {
             postJSON("record", o);

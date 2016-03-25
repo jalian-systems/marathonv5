@@ -13,6 +13,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.NanoHTTPD.Response.Status;
 import net.sourceforge.marathon.api.INamingStrategy;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration;
 import net.sourceforge.marathon.objectmap.ObjectMapException;
@@ -26,14 +32,40 @@ import net.sourceforge.marathon.runtime.api.Indent;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import fi.iki.elonen.NanoHTTPD;
-import fi.iki.elonen.NanoHTTPD.Response.Status;
-
 public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
+
+    private static final class ChooserScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String type;
+        private String value;
+
+        public ChooserScriptElement(JSONObject o) {
+            type = o.getString("type");
+            value = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            String text = "";
+            if (type.equals("select_file_chooser"))
+                text = type + "(\"#filechooser\", " + "\"" + value + "\"" + ")\n";
+            else if (type.equals("select_folder_chooser"))
+                text = type + "(\"#folderchooser\", " + "\"" + value + "\"" + ")\n";
+            return Indent.getIndent() + text;
+        }
+
+        @Override public WindowId getWindowId() {
+            return null;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
 
     private final class JavaVersionScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
@@ -333,6 +365,12 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
             try {
                 name = query.getJSONObject("attributes").getString("suggestedName");
             } catch (JSONException e) {
+            }
+            JSONObject jsonObject = query.getJSONObject("event");
+            String type = jsonObject.getString("type");
+            if (type.equals("select_file_chooser") || type.equals("select_folder_chooser")) {
+                recorder.record(new ChooserScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
             }
             recorder.record(new JSONScriptElement(createWindowId(query.getJSONObject("container")), ns.getName(query, name),
                     query.getJSONObject("event")));
