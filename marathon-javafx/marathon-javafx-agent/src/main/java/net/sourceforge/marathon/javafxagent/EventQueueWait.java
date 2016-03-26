@@ -119,17 +119,6 @@ public abstract class EventQueueWait extends Wait {
     }
 
     /**
-     * Wait till the event queue is empty.
-     */
-    public static void empty() {
-        new EventQueueWait() {
-            @Override public boolean till() {
-                return true;
-            }
-        }.wait("Waiting for the EventQueue to be empty");
-    }
-
-    /**
      * Requests for the focus of the component and waits till the component
      * receives focus.
      * 

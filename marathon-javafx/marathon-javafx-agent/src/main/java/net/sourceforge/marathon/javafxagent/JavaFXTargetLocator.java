@@ -19,6 +19,7 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.javafxagent.components.JavaFXFileChooserElement;
 
 public class JavaFXTargetLocator {
 
@@ -168,6 +169,12 @@ public class JavaFXTargetLocator {
             }
             return null;
         }
+
+		public IJavaFXElement findFileChooserElement() {
+            IJavaFXElement e = new JavaFXFileChooserElement(driver, this);
+            elements.put(e.createId(), e);
+			return e;
+		}
 
     }
 

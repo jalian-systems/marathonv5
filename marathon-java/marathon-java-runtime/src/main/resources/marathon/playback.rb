@@ -10,6 +10,7 @@
 java_import 'java.lang.System'
 java_import 'net.sourceforge.marathon.runtime.api.ComponentId'
 java_import 'net.sourceforge.marathon.ruby.MarathonRuby'
+java_import 'net.sourceforge.marathon.runtime.api.ChooserHelper'
 java_import 'net.sourceforge.marathon.runtime.api.Constants'
 java_import 'net.sourceforge.marathon.api.TestAttributes'
 
@@ -316,6 +317,12 @@ class RubyMarathon < MarathonRuby
     end
     
     def hover
+    end
+    
+    def select_file_chooser(name, s)
+      e = driver.find_element(:tag_name, name)
+      s = ChooserHelper.decode(s)
+      e.send_keys(s)
     end
 end
 
@@ -659,6 +666,14 @@ end
 
 def features(s, *others)
   TestAttributes.put("marathon.test.features", [ s, others ].flatten.to_java(:String))
+end
+
+def select_file_chooser(name, s)
+  $marathon.select_file_chooser(name, s)
+end
+
+def select_folder_chooser(name, s)
+  $marathon.select_file_chooser(name, s)
 end
 
 def marathon_help

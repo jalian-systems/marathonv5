@@ -1,7 +1,9 @@
-package net.sourceforge.marathon.javafxrecorder.component;
+package net.sourceforge.marathon.javafxagent.components;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.json.JSONArray;
 
 public class ChooserHelper {
 
@@ -26,15 +28,13 @@ public class ChooserHelper {
     }
 
     public static String encode(File[] selectedfiles) {
-        StringBuffer buffer = new StringBuffer();
+    	JSONArray r = new JSONArray();
         for (int i = 0; i < selectedfiles.length; i++) {
             String encode = encode(selectedfiles[i]);
             if (encode != null)
-                buffer.append(encode);
-            if (i < selectedfiles.length - 1)
-                buffer.append(File.pathSeparator);
+                r.put(encode);
         }
-        return buffer.toString();
+        return r.toString();
     }
 
     public static String encode(File file) {
@@ -54,7 +54,6 @@ public class ChooserHelper {
                 path = path.substring(homeDir.length());
             }
             return (prefix + path).replace(File.separatorChar, '/');
-
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -190,7 +190,6 @@ public class FXEventQueueDevice implements IDevice {
                 sendKey(node, seq.charAt(i));
             }
         }
-        EventQueueWait.empty();
     }
 
     private void sendKey(Node node, char c) {
@@ -232,7 +231,6 @@ public class FXEventQueueDevice implements IDevice {
                 dispatchEvent(new KeyEvent(eventType, char1 + "", char1 + "", keyCode, deviceState.isShiftPressed(),
                         deviceState.isCtrlPressed(), deviceState.isAltPressed(), deviceState.isMetaPressed()), node);
             }
-            EventQueueWait.empty();
             return;
         }
         final KeysMap keysMap = KeysMap.findMap(keyToPress);
@@ -242,7 +240,6 @@ public class FXEventQueueDevice implements IDevice {
         dispatchEvent(new KeyEvent(eventType, KeyCode.UNDEFINED.impl_getChar(), KeyCode.UNDEFINED.impl_getChar(), keysMap.getCode(),
                 deviceState.isShiftPressed(), deviceState.isCtrlPressed(), deviceState.isAltPressed(), deviceState.isMetaPressed()),
                 node);
-        EventQueueWait.empty();
     }
 
     private void dispatchEvent(final Event event, final Node node) {
@@ -270,13 +267,11 @@ public class FXEventQueueDevice implements IDevice {
             resetModifierState(node);
         else
             dispatchKeyEvent(node, keyToPress, KeyEvent.KEY_PRESSED, KeyEvent.CHAR_UNDEFINED.charAt(0));
-        EventQueueWait.empty();
 
     }
 
     @Override public void releaseKey(Node node, JavaAgentKeys keyToRelease) {
         dispatchKeyEvent(node, keyToRelease, KeyEvent.KEY_RELEASED, KeyEvent.CHAR_UNDEFINED.charAt(0));
-        EventQueueWait.empty();
     }
 
     @Override public void buttonDown(Node node, Buttons button, double xoffset, double yoffset) {
@@ -286,7 +281,6 @@ public class FXEventQueueDevice implements IDevice {
                 node));
         deviceState.storeMouseDown(mb);
         deviceState.setDragSource(node);
-        EventQueueWait.empty();
     }
 
     @Override public void buttonUp(Node node, Buttons button, double xoffset, double yoffset) {
@@ -296,7 +290,6 @@ public class FXEventQueueDevice implements IDevice {
                 node));
         deviceState.storeMouseUp(mb);
         deviceState.setDragSource(null);
-        EventQueueWait.empty();
     }
 
     @Override public void moveto(Node node) {
@@ -326,7 +319,6 @@ public class FXEventQueueDevice implements IDevice {
         dispatchEvent(createMouseEvent(id, xoffset, yoffset, 0, 0, buttons, 0, deviceState.shiftPressed, deviceState.ctrlPressed,
                 deviceState.altPressed, deviceState.metaPressed, modifierEx == MouseButton.PRIMARY,
                 modifierEx == MouseButton.MIDDLE, modifierEx == MouseButton.SECONDARY, false, false, false, source));
-        EventQueueWait.empty();
         deviceState.setNode(node);
         deviceState.setMousePosition(xoffset, yoffset);
     }
@@ -334,7 +326,6 @@ public class FXEventQueueDevice implements IDevice {
     @Override public void click(Node node, Buttons button, int clickCount, double xoffset, double yoffset) {
         MouseButton b = button.getMouseButton();
         dispatchMouseEvent(node, button == Buttons.RIGHT, clickCount, b, xoffset, yoffset);
-        EventQueueWait.empty();
         deviceState.setNode(node);
     }
 

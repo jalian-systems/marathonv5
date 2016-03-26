@@ -30,6 +30,7 @@ import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
+import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
@@ -40,17 +41,12 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
         private String value;
 
         public ChooserScriptElement(JSONObject o) {
-            type = o.getString("type");
+            type = o.getString("type").equals("select_file_chooser") ? "#filechooser" : "#folderchooser";
             value = o.getString("value");
         }
 
         @Override public String toScriptCode() {
-            String text = "";
-            if (type.equals("select_file_chooser"))
-                text = type + "(\"#filechooser\", " + "\"" + value + "\"" + ")\n";
-            else if (type.equals("select_folder_chooser"))
-                text = type + "(\"#folderchooser\", " + "\"" + value + "\"" + ")\n";
-            return Indent.getIndent() + text;
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select_file_chooser", type, value);
         }
 
         @Override public WindowId getWindowId() {

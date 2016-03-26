@@ -43,6 +43,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 	public static String OS_ARCH = System.getProperty("os.arch");
 	public static String OS_VERSION = System.getProperty("os.version");
 
+	public static EventType<Event> fileChooserEventType = new EventType<Event>("filechooser");
+	public static EventType<Event> folderChooserEventType = new EventType<Event>("folderchooser");
+
 	private static String windowTitle;
 
 	private JSONOMapConfig objectMapConfiguration;
@@ -95,6 +98,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 	}
 
 	private void addEventFilter(Stage stage) {
+		stage.getScene().getRoot().getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
+		stage.getScene().getRoot().getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
 		stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
 	}
 
