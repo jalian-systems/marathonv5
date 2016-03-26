@@ -34,9 +34,9 @@ import net.sourceforge.marathon.javarecorder.http.HTTPRecorder;
 
 import org.json.JSONObject;
 
-public class JavaHook implements AWTEventListener, ChangeListener, ActionListener {
+public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
 
-    private static final Logger logger = Logger.getLogger(JavaHook.class.getName());
+    private static final Logger logger = Logger.getLogger(JavaRecorderHook.class.getName());
 
     public static String DRIVER = "Java";
     public static String DRIVER_VERSION = "1.0";
@@ -58,7 +58,7 @@ public class JavaHook implements AWTEventListener, ChangeListener, ActionListene
     private int menuModifiers;
     private ContextMenuHandler contextMenuHandler;
 
-    public JavaHook(int port) {
+    public JavaRecorderHook(int port) {
         try {
             recorder = new HTTPRecorder(port);
             objectMapConfiguration = recorder.getObjectMapConfiguration();
@@ -226,7 +226,7 @@ public class JavaHook implements AWTEventListener, ChangeListener, ActionListene
                 done = true;
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
                     @Override public Object run() {
-                        return new JavaHook(port);
+                        return new JavaRecorderHook(port);
                     }
                 });
             }

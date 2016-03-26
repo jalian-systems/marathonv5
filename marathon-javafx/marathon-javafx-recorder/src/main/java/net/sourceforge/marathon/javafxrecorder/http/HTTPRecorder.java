@@ -29,7 +29,7 @@ import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxagent.KeysMap;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
-import net.sourceforge.marathon.javafxrecorder.JavaHook;
+import net.sourceforge.marathon.javafxrecorder.JavaFxRecorderHook;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import sun.net.www.protocol.http.HttpURLConnection;
 
@@ -73,13 +73,13 @@ public class HTTPRecorder implements IJSONRecorder {
 
     private JSONObject createTargetDetailsObject() {
         JSONObject o = new JSONObject();
-        o.put("driver", JavaHook.DRIVER);
-        o.put("driver.version", JavaHook.DRIVER_VERSION);
-        o.put("platform", JavaHook.PLATFORM);
-        o.put("platform.version", JavaHook.PLATFORM_VERSION);
-        o.put("os", JavaHook.OS);
-        o.put("os.version", JavaHook.OS_VERSION);
-        o.put("os.arch", JavaHook.OS_ARCH);
+        o.put("driver", JavaFxRecorderHook.DRIVER);
+        o.put("driver.version", JavaFxRecorderHook.DRIVER_VERSION);
+        o.put("platform", JavaFxRecorderHook.PLATFORM);
+        o.put("platform.version", JavaFxRecorderHook.PLATFORM_VERSION);
+        o.put("os", JavaFxRecorderHook.OS);
+        o.put("os.version", JavaFxRecorderHook.OS_VERSION);
+        o.put("os.arch", JavaFxRecorderHook.OS_ARCH);
         return o;
     }
 

@@ -17,9 +17,9 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.javafxagent.server.JavaServer;
 
-public class JavaHook {
+public class JavaFxAgentHook {
 
-    private static final Logger logger = Logger.getLogger(JavaHook.class.getName());
+    private static final Logger logger = Logger.getLogger(JavaFxAgentHook.class.getName());
     protected static String windowTitle;
 
     public static void premain(final String args) throws Exception {

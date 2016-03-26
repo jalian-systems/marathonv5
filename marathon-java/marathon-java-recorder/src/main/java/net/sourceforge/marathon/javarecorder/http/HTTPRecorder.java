@@ -28,7 +28,7 @@ import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.javaagent.KeysMap;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
-import net.sourceforge.marathon.javarecorder.JavaHook;
+import net.sourceforge.marathon.javarecorder.JavaRecorderHook;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 public class HTTPRecorder implements IJSONRecorder {
@@ -73,13 +73,13 @@ public class HTTPRecorder implements IJSONRecorder {
 
     private JSONObject createTargetDetailsObject() {
         JSONObject o = new JSONObject();
-        o.put("driver", JavaHook.DRIVER);
-        o.put("driver.version", JavaHook.DRIVER_VERSION);
-        o.put("platform", JavaHook.PLATFORM);
-        o.put("platform.version", JavaHook.PLATFORM_VERSION);
-        o.put("os", JavaHook.OS);
-        o.put("os.version", JavaHook.OS_VERSION);
-        o.put("os.arch", JavaHook.OS_ARCH);
+        o.put("driver", JavaRecorderHook.DRIVER);
+        o.put("driver.version", JavaRecorderHook.DRIVER_VERSION);
+        o.put("platform", JavaRecorderHook.PLATFORM);
+        o.put("platform.version", JavaRecorderHook.PLATFORM_VERSION);
+        o.put("os", JavaRecorderHook.OS);
+        o.put("os.version", JavaRecorderHook.OS_VERSION);
+        o.put("os.arch", JavaRecorderHook.OS_ARCH);
         return o;
     }
 
