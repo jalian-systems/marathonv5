@@ -321,7 +321,11 @@ class RubyMarathon < MarathonRuby
     
     def select_file_chooser(name, s)
       e = driver.find_element(:tag_name, name)
-      s = ChooserHelper.decode(s)
+      if(name.eql?("#filechooser"))
+      	s = ChooserHelper.decode(s)
+      else
+      	s = ChooserHelper.decodeFile(s)
+      end
       e.send_keys(s)
     end
 end

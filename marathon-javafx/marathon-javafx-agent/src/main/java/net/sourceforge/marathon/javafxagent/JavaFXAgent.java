@@ -198,10 +198,13 @@ public class JavaFXAgent implements IJavaFXAgent {
      * lang.String)
      */
     @Override public List<IJavaFXElement> findElementsByTagName(final String using) {
-    	if(using.equals("#filechooser")) {
+        if (using.equals("#filechooser")) {
             JFXWindow topContainer = targetLocator.getTopContainer();
             return Arrays.asList(topContainer.findFileChooserElement());
-    	}
+        } else if (using.equals("#folderchooser")) {
+            JFXWindow topContainer = targetLocator.getTopContainer();
+            return Arrays.asList(topContainer.findDirectoryChooserElement());
+        }
         return findByCss(using);
     }
 

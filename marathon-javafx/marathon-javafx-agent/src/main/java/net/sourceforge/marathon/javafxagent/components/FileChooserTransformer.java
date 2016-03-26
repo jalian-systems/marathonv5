@@ -42,6 +42,22 @@ public class FileChooserTransformer implements ClassFileTransformer {
 						"  }" +
 						"}" ;
 				showFileChooser.insertBefore(code);
+				CtMethod showFolderChooser = cl.getDeclaredMethod("showFolderChooser");
+				code =  "{" +
+                        "  if(System.getProperty(\"marathon.mode\").equals(\"playing\")) {" +
+                        "    synchronized (javafx.stage.DirectoryChooser.class) {" +
+                        "      try {" +
+                        "          javafx.stage.DirectoryChooser.class.wait(5000L);" +
+                        "      } catch (InterruptedException e) {" +
+                        "          e.printStackTrace();" +
+                        "      }" +
+                        "    }" +
+                        "    javafx.scene.Node m$r = ((javafx.stage.Stage)com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene().getRoot();" +
+                        "    java.io.File folder = (java.io.File) m$r.getProperties().get(\"marathon.play.selectedFolder\");" +
+                        "    return folder;" +
+                        "  }" +
+                        "}" ;
+				showFolderChooser.insertBefore(code);
 			}
 			b = cl.toBytecode();
 		} catch (Exception e) {
