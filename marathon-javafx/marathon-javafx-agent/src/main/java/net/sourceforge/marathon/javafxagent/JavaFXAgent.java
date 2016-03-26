@@ -3,6 +3,7 @@ package net.sourceforge.marathon.javafxagent;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
@@ -197,6 +198,13 @@ public class JavaFXAgent implements IJavaFXAgent {
      * lang.String)
      */
     @Override public List<IJavaFXElement> findElementsByTagName(final String using) {
+        if (using.equals("#filechooser")) {
+            JFXWindow topContainer = targetLocator.getTopContainer();
+            return Arrays.asList(topContainer.findFileChooserElement());
+        } else if (using.equals("#folderchooser")) {
+            JFXWindow topContainer = targetLocator.getTopContainer();
+            return Arrays.asList(topContainer.findDirectoryChooserElement());
+        }
         return findByCss(using);
     }
 

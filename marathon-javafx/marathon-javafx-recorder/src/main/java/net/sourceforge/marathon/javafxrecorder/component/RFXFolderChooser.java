@@ -2,6 +2,7 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.io.File;
 
+import net.sourceforge.marathon.javafxagent.components.ChooserHelper;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 
 public class RFXFolderChooser extends ChooserHelper {
@@ -13,6 +14,9 @@ public class RFXFolderChooser extends ChooserHelper {
     }
 
     public void record(File folder) {
-        recorder.recordFolderChooser(encode(folder));
+        if (folder == null)
+            recorder.recordFolderChooser("");
+        else
+            recorder.recordFolderChooser(encode(folder));
     }
 }

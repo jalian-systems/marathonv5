@@ -228,6 +228,7 @@ public class JavaProfile {
     private String getToolOptions() {
         StringBuilder java_tool_options = new StringBuilder();
         java_tool_options.append("-Dmarathon.launch.mode=" + launchMode.getName()).append(" ");
+        java_tool_options.append("-Dmarathon.mode=" + (recordingPort != -1 ? "recording" : "playing")).append(" ");
         if (startWindowTitle != null)
             java_tool_options.append("-Dstart.window.title=\"" + startWindowTitle).append("\" ");
         java_tool_options.append("-D" + MARATHON_AGENT + "=" + getAgentJarURL()).append(" ");

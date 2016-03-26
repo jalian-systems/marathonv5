@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor.InternalFrameMonitor;
 import net.sourceforge.marathon.javaagent.server.JavaServer;
 
-public class JavaHook {
+public class JavaAgentHook {
 
-    private static final Logger logger = Logger.getLogger(JavaHook.class.getName());
+    private static final Logger logger = Logger.getLogger(JavaAgentHook.class.getName());
     protected static String windowTitle;
 
     public static void premain(final String args) throws Exception {
