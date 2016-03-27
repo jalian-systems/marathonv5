@@ -105,5 +105,9 @@ marathon-javafx/marathon-fxtest-helpers/build
 marathon-javafx/marathon-fxtest-helpers/bin/
 marathon-javafx/marathon-javafx-agent/bin-test/
 marathon-javafx/marathon-javafx-agent/bin/
-
-
+marathon-javafx/marathon-javafx-runtime/.classpath
+marathon-javafx/marathon-javafx-runtime/.project
+marathon-javafx/marathon-javafx-runtime/.settings/
+marathon-javafx/marathon-javafx-runtime/build/
+marathon-javafx/marathon-javafx-runtime/.gitignore
+marathon-javafx/marathon-javafx-runtime/test-output/

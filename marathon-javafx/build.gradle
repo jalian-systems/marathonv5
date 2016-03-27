@@ -12,12 +12,14 @@ dependencies {
   testCompile project(":marathon-javafx:marathon-javafx-agent")
   testCompile project(":marathon-javafx:marathon-javafx-recorder")
   testCompile project(":marathon-java:marathon-java-runtime")
+  testCompile project(":marathon-javafx:marathon-javafx-runtime")
   testCompile project(":marathon:ruby-selenium-webdriver")
   runtime project(":marathon-javafx")
   runtime project(":marathon-java:marathon-java-driver")
   runtime project(":marathon-javafx:marathon-javafx-agent")
   runtime project(":marathon-javafx:marathon-javafx-recorder")
   runtime project(":marathon-java:marathon-java-runtime")
+  runtime project(":marathon-javafx:marathon-javafx-runtime")
   runtime project(":marathon:ruby-selenium-webdriver")
 }
 
