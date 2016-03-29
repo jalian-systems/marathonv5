@@ -230,14 +230,6 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return null;
     }
 
-    public final String getOMapClassName() {
-        return null;
-    }
-
-    final public String getOMapClassSimpleName() {
-        return null;
-    }
-
     public int getIndexOfType() {
         List<Node> allComponents = findAllComponents();
         int index = 0;
@@ -311,6 +303,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     final public String getAccessibleText() {
         return node.getAccessibleText();
+    }
+
+    final public String getAccessibleName() {
+        return node.getAccessibleRole().name();
     }
 
     final public Point2D getMidpoint() {

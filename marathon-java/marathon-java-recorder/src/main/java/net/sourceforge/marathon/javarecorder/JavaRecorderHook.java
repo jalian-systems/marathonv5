@@ -346,11 +346,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     public boolean isContextMenuSequence(MouseEvent e) {
-        return (e.getID() == MouseEvent.MOUSE_PRESSED) && (e.getModifiersEx() == getContextMenuModifiers());
-    }
-
-    private int getContextMenuModifiers() {
-        return menuModifiers;
+        return (e.getID() == MouseEvent.MOUSE_PRESSED) && (e.getModifiersEx() == menuModifiers);
     }
 
     public boolean isContextMenuKeySequence(KeyEvent event) {
@@ -358,15 +354,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     public boolean isContextMenuKey(KeyEvent event) {
-        return event.getKeyCode() == getContextMenuKeyCode() && event.getModifiersEx() == getContextMenuKeyModifiers();
-    }
-
-    private int getContextMenuKeyModifiers() {
-        return contextMenuKeyModifiers;
-    }
-
-    private int getContextMenuKeyCode() {
-        return contextMenuKey;
+        return event.getKeyCode() == contextMenuKey && event.getModifiersEx() == contextMenuKeyModifiers;
     }
 
     @Override public void stateChanged(ChangeEvent e) {

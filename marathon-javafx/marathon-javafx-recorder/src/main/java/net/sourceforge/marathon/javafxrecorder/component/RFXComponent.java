@@ -207,13 +207,11 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         return findURP().toString();
     }
 
-    public List<Method> getMethods() {
+    public ArrayList<Method> getMethods() {
         // @formatter:off
-		String[] methods = new String[] { "isEnabled", "getBackground", "getForeground", "getRowCount",
-				"getColumnCount", "getItemCount", "getModelSize", "getFont", "getFontFamily", "getBorder", "getTagName",
-				"getInstanceOf", "getType", "getSize", "getLocation", "getPosition", "getPrecedingLabel",
-				"getFieldName", "getFieldNames", "getTooltipText", "getAccessibleName", "getLabeledBy", "getLabelText",
-				"getIconFile", "getOMapClassName" };
+		String[] methods = new String[] { "isEnabled", "getRowCount", "getColumnCount", "getItemCount", "getModelSize",
+				"getTagName", "getInstanceOf", "getType", "getFieldName", "getFieldNames", "getTooltipText",
+				"getAccessibleName" };
 		// @formatter:on
         ArrayList<Method> l = new ArrayList<Method>();
         if (getText() != null)
@@ -314,7 +312,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
     }
 
     protected void keyPressed(KeyEvent ke) {
-        System.out.println("RFXComponent.keyPressed()");
     }
 
     public void focusLost(RFXComponent next) {

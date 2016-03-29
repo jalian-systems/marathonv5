@@ -1,5 +1,7 @@
 package net.sourceforge.marathon.javafxrecorder;
 
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
@@ -10,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.json.JSONObject;
 
 import com.sun.glass.ui.CommonDialogs;
 import com.sun.javafx.stage.StageHelper;
@@ -24,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fxcontextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javafxrecorder.component.FileChooserTransformer;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
@@ -53,12 +58,16 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 	private IJSONRecorder recorder;
 	private RFXComponent current;
 
+	ContextMenuHandler contextMenuHandler;
+
 	public JavaFxRecorderHook(int port) {
 		try {
 			logger.info("Starting HTTP Recorder on : " + port);
 			recorder = new HTTPRecorder(port);
 			objectMapConfiguration = recorder.getObjectMapConfiguration();
+			setContextMenuTriggers(recorder.getContextMenuTriggers());
 			finder = new RFXComponentFactory(objectMapConfiguration);
+			contextMenuHandler = new ContextMenuHandler(recorder, finder);
 			ObservableList<Stage> stages = StageHelper.getStages();
 			for (Stage stage : stages) {
 				addEventFilter(stage);
@@ -88,6 +97,76 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 		} catch (IOException e) {
 			logger.log(Level.WARNING, "Error in Recorder startup", e);
 		}
+	}
+
+	private static class ContextMenuTriggerCheck {
+		private int keyModifiers;
+		private int key;
+		private int mouseModifiers;
+
+		public ContextMenuTriggerCheck(int contextMenuKeyModifiers, int contextMenuKey, int menuModifiers) {
+			this.keyModifiers = contextMenuKeyModifiers;
+			this.key = contextMenuKey;
+			this.mouseModifiers = menuModifiers;
+		}
+
+		public boolean isContextMenuEvent(Event event) {
+			if (event instanceof MouseEvent)
+				return isContextMenuMouseEvent((MouseEvent) event);
+			else if (event instanceof KeyEvent)
+				return isContextMenuKeyEvent((KeyEvent) event);
+			return false;
+		}
+
+		@SuppressWarnings("deprecation")
+		private boolean isContextMenuKeyEvent(KeyEvent event) {
+			if (!event.getEventType().equals(KeyEvent.KEY_PRESSED))
+				return false;
+			if (isModifierKeyPressed(keyModifiers, InputEvent.ALT_DOWN_MASK) && !event.isAltDown())
+				return false;
+			if (isModifierKeyPressed(keyModifiers, InputEvent.META_DOWN_MASK) && !event.isMetaDown())
+				return false;
+			if (isModifierKeyPressed(keyModifiers, InputEvent.CTRL_DOWN_MASK) && !event.isControlDown())
+				return false;
+			if (isModifierKeyPressed(keyModifiers, InputEvent.SHIFT_DOWN_MASK) && !event.isShiftDown())
+				return false;
+			if (event.getCode().impl_getCode() != key)
+				return false;
+			return true;
+		}
+
+		private boolean isContextMenuMouseEvent(MouseEvent event) {
+			if (!event.getEventType().equals(MouseEvent.MOUSE_PRESSED))
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.ALT_DOWN_MASK) && !event.isAltDown())
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.META_DOWN_MASK) && !event.isMetaDown())
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.CTRL_DOWN_MASK) && !event.isControlDown())
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.SHIFT_DOWN_MASK) && !event.isShiftDown())
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.BUTTON1_DOWN_MASK) && !event.isPrimaryButtonDown())
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.BUTTON2_DOWN_MASK) && !event.isMiddleButtonDown())
+				return false;
+			if (isModifierKeyPressed(mouseModifiers, InputEvent.BUTTON3_DOWN_MASK) && !event.isSecondaryButtonDown())
+				return false;
+			return true;
+		}
+
+		private boolean isModifierKeyPressed(int menuModifiers, int mkey) {
+			return (menuModifiers & mkey) == mkey;
+		}
+	}
+
+	private ContextMenuTriggerCheck contextMenuTriggerCheck;
+
+	private void setContextMenuTriggers(JSONObject jsonObject) {
+		int contextMenuKeyModifiers = jsonObject.getInt("contextMenuKeyModifiers");
+		int contextMenuKey = jsonObject.getInt("contextMenuKey");
+		int menuModifiers = jsonObject.getInt("menuModifiers");
+		contextMenuTriggerCheck = new ContextMenuTriggerCheck(contextMenuKeyModifiers, contextMenuKey, menuModifiers);
 	}
 
 	private static final EventType<?> events[] = { MouseEvent.MOUSE_PRESSED, MouseEvent.MOUSE_RELEASED,
@@ -139,6 +218,11 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
 	@Override
 	public void handle(Event event) {
+		if (contextMenuTriggerCheck.isContextMenuEvent(event) || contextMenuHandler.isShowing()) {
+			event.consume();
+			contextMenuHandler.showPopup(event);
+			return;
+		}
 		if (event.getEventType().getName().equals("filechooser")) {
 			handleFileChooser(event);
 			return;
@@ -198,6 +282,44 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 		} catch (Throwable t) {
 			return false;
 		}
+	}
+
+	public static String getModifiersExText(int modifiers) {
+		StringBuilder buf = new StringBuilder();
+		if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
+			buf.append("Meta");
+			buf.append("+");
+		}
+		if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
+			buf.append("Ctrl");
+			buf.append("+");
+		}
+		if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
+			buf.append("Alt");
+			buf.append("+");
+		}
+		if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
+			buf.append("Shift");
+			buf.append("+");
+		}
+		if ((modifiers & InputEvent.ALT_GRAPH_DOWN_MASK) != 0) {
+			buf.append("Alt Graph");
+			buf.append("+");
+		}
+
+		int buttonNumber = 1;
+		for (int mask : new int[] { InputEvent.BUTTON1_DOWN_MASK, InputEvent.BUTTON2_DOWN_MASK,
+				InputEvent.BUTTON3_DOWN_MASK }) {
+			if ((modifiers & mask) != 0) {
+				buf.append(Toolkit.getProperty("AWT.button" + buttonNumber, "Button" + buttonNumber));
+				buf.append("+");
+			}
+			buttonNumber++;
+		}
+		if (buf.length() > 0) {
+			buf.setLength(buf.length() - 1); // remove trailing '+'
+		}
+		return buf.toString();
 	}
 
 }
