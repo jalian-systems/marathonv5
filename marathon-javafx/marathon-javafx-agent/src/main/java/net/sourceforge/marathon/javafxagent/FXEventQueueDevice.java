@@ -12,6 +12,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Control;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -216,6 +217,7 @@ public class FXEventQueueDevice implements IDevice {
 
     @SuppressWarnings("deprecation") private void dispatchKeyEvent(final Node node, JavaAgentKeys keyToPress,
             EventType<KeyEvent> eventType, char c) {
+        ensureVisible(node);
         if (keyToPress == null) {
             KeyboardMap kbMap = new KeyboardMap(c);
             KeyCode keyCode = KeyCode.getKeyCode((kbMap.getChar() + "").toUpperCase());
@@ -330,6 +332,7 @@ public class FXEventQueueDevice implements IDevice {
     }
 
     private void dispatchMouseEvent(Node node, boolean popupTrigger, int clickCount, MouseButton buttons, double x, double y) {
+        ensureVisible(node);
         Point2D screenXY = node.localToScreen(new Point2D(x, y));
         if (node != deviceState.getNode()) {
             if (deviceState.getNode() != null)
@@ -416,6 +419,31 @@ public class FXEventQueueDevice implements IDevice {
         return new MouseEvent(source, target, eventType, x, y, screenX, screenY, button, clickCount, shiftDown, controlDown,
                 altDown, metaDown, primaryButtonDown, middleButtonDown, secondaryButtonDown, synthesized, popupTrigger,
                 stillSincePress, pickResult);
+    }
+
+    protected void ensureVisible(Node target) {
+        ScrollPane scrollPane = getParentScrollPane(target);
+        if (scrollPane == null)
+            return;
+        Node content = scrollPane.getContent();
+        Bounds contentBounds = content.localToScene(content.getBoundsInLocal());
+        Bounds viewportBounds = scrollPane.getViewportBounds();
+        Bounds nodeBounds = target.localToScene(target.getBoundsInLocal());
+        if (scrollPane.contains(nodeBounds.getMinX() - contentBounds.getMinX(), nodeBounds.getMinY() - contentBounds.getMinY()))
+            return;
+        double toVScroll = (nodeBounds.getMinY() - contentBounds.getMinY())
+                * ((scrollPane.getVmax() - scrollPane.getVmin()) / (contentBounds.getHeight() - viewportBounds.getHeight()));
+        scrollPane.setVvalue(toVScroll);
+        double toHScroll = (nodeBounds.getMinX() - contentBounds.getMinX())
+                * ((scrollPane.getHmax() - scrollPane.getHmin()) / (contentBounds.getWidth() - viewportBounds.getWidth()));
+        scrollPane.setHvalue(toHScroll);
+    }
+
+    private ScrollPane getParentScrollPane(Node target) {
+        Parent p = target.getParent();
+        while (p != null && !(p instanceof ScrollPane))
+            p = p.getParent();
+        return (ScrollPane) p;
     }
 
 }

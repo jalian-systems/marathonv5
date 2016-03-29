@@ -39,8 +39,13 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
     }
 
     @Override public Node getPseudoComponent() {
-        Node tableView = parent.getComponent();
-        return getCellAt((TableView<?>) tableView, viewRow, viewColumn);
+        TableView<?> tableView = (TableView<?>) parent.getComponent();
+        TableCell<?, ?> cell = getCellAt(tableView, viewRow, viewColumn);
+        if (cell != null) {
+            tableView.scrollTo(viewRow - 1);
+            tableView.scrollToColumnIndex(viewColumn - 1);
+        }
+        return cell;
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {

@@ -98,7 +98,18 @@ public class RFXComponentFactory {
     public static void reset() {
         entries.clear();
         add(Node.class, RFXUnknownComponent.class, null);
-        add(TextInputControl.class, RFXTextInputControl.class, null);
+        add(TextInputControl.class, RFXTextInputControl.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof TextInputControl)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
         add(HTMLEditor.class, RFXHTMLEditor.class, new IRecordOn() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {

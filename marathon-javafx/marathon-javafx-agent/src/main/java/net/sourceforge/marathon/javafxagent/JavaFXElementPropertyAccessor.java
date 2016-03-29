@@ -965,8 +965,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         JSONArray object = (JSONArray) cells.get("cells");
         for (int i = 0; i < object.length(); i++) {
             JSONArray jsonArray = object.getJSONArray(i);
-            selectionModel.select(Integer.parseInt(jsonArray.getString(0)),
-                    tableView.getColumns().get(getColumnIndex(jsonArray.getString(1))));
+            int rowIndex = Integer.parseInt(jsonArray.getString(0));
+            @SuppressWarnings("rawtypes")
+            TableColumn column = tableView.getColumns().get(getColumnIndex(jsonArray.getString(1)));
+            tableView.scrollTo(rowIndex);
+            tableView.scrollToColumn(column);
+            selectionModel.select(rowIndex, column);
         }
     }
 

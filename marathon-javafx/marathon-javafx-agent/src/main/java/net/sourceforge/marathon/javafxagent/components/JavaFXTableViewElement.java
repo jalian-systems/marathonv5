@@ -69,8 +69,11 @@ public class JavaFXTableViewElement extends JavaFXElement {
         } else {
             int[] selectedRows = getSelectedRows(value);
             selectionModel.clearSelection();
-            for (int i = 0; i < selectedRows.length; i++)
-                selectionModel.selectIndices(selectedRows[i]);
+            for (int i = 0; i < selectedRows.length; i++) {
+                int rowIndex = selectedRows[i];
+                tableView.scrollTo(rowIndex);
+                selectionModel.selectIndices(rowIndex);
+            }
             return true;
         }
     }
