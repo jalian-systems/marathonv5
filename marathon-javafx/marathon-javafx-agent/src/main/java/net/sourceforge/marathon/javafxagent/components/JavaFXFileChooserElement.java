@@ -20,51 +20,45 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXFileChooserElement extends JavaFXElement {
 
-	public static class FileChooserNode extends Node {
+    public static class FileChooserNode extends Node {
 
-		@Override
-		protected NGNode impl_createPeer() {
-			return null;
-		}
+        @Override protected NGNode impl_createPeer() {
+            return null;
+        }
 
-		@Override
-		public BaseBounds impl_computeGeomBounds(BaseBounds bounds, BaseTransform tx) {
-			return null;
-		}
+        @Override public BaseBounds impl_computeGeomBounds(BaseBounds bounds, BaseTransform tx) {
+            return null;
+        }
 
-		@Override
-		protected boolean impl_computeContains(double localX, double localY) {
-			return false;
-		}
+        @Override protected boolean impl_computeContains(double localX, double localY) {
+            return false;
+        }
 
-		@Override
-		public Object impl_processMXNode(MXNodeAlgorithm alg, MXNodeAlgorithmContext ctx) {
-			return null;
-		}
+        @Override public Object impl_processMXNode(MXNodeAlgorithm alg, MXNodeAlgorithmContext ctx) {
+            return null;
+        }
 
-	}
+    }
 
-	public JavaFXFileChooserElement(IJavaFXAgent driver, JFXWindow window) {
-		super(new FileChooserNode(), driver, window);
-	}
+    public JavaFXFileChooserElement(IJavaFXAgent driver, JFXWindow window) {
+        super(new FileChooserNode(), driver, window);
+    }
 
-	@Override
-	public void sendKeys(CharSequence... keysToSend) {
-		String value = (String) keysToSend[0];
-		javafx.scene.Node m$r = ((javafx.stage.Stage) com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene()
-				.getRoot();
-		FileChooserResult fcr = null;
-		if (!"".equals(value)) {
-			fcr = new FileChooserResult();
-			List<File> files = fcr.getFiles();
-			JSONArray ja = new JSONArray(value);
-			for (int i = 0; i < ja.length(); i++) {
-				files.add(new File(ja.getString(i)));
-			}
-		}
-		m$r.getProperties().put("marathon.play.selectedFiles", fcr);
-		synchronized (FileChooser.class) {
-			FileChooser.class.notifyAll();
-		}
-	}
+    @Override public void sendKeys(CharSequence... keysToSend) {
+        String value = (String) keysToSend[0];
+        javafx.scene.Node m$r = ((javafx.stage.Stage) com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene().getRoot();
+        FileChooserResult fcr = null;
+        if (!"".equals(value)) {
+            fcr = new FileChooserResult();
+            List<File> files = fcr.getFiles();
+            JSONArray ja = new JSONArray(value);
+            for (int i = 0; i < ja.length(); i++) {
+                files.add(new File(ja.getString(i)));
+            }
+        }
+        m$r.getProperties().put("marathon.play.selectedFiles", fcr);
+        synchronized (FileChooser.class) {
+            FileChooser.class.notifyAll();
+        }
+    }
 }

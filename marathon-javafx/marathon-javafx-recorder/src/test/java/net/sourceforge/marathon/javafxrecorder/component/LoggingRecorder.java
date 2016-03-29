@@ -134,6 +134,6 @@ public final class LoggingRecorder implements IJSONRecorder {
 
     @Override public void recordFolderChooser(String state) {
         // TODO Auto-generated method stub
-        
+
     }
 }

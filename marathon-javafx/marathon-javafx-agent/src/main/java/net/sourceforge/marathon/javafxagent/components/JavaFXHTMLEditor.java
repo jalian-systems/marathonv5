@@ -21,9 +21,8 @@ public class JavaFXHTMLEditor extends JavaFXElement {
     @Override public String getTagName() {
         return "html-editor";
     }
-    
-    @Override
-    public String _getText() {
-    	return ((HTMLEditor) getComponent()).getHtmlText();
+
+    @Override public String _getText() {
+        return ((HTMLEditor) getComponent()).getHtmlText();
     }
 }

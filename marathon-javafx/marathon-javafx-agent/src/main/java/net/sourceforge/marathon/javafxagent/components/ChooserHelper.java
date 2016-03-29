@@ -28,7 +28,7 @@ public class ChooserHelper {
     }
 
     public static String encode(File[] selectedfiles) {
-    	JSONArray r = new JSONArray();
+        JSONArray r = new JSONArray();
         for (int i = 0; i < selectedfiles.length; i++) {
             String encode = encode(selectedfiles[i]);
             if (encode != null)
