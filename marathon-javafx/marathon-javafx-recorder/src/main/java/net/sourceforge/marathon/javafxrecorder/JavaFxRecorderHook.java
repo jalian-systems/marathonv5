@@ -30,7 +30,9 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.fxcontextmenu.ContextMenuHandler;
+import net.sourceforge.marathon.javafxagent.WindowTitle;
 import net.sourceforge.marathon.javafxrecorder.component.FileChooserTransformer;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
@@ -165,6 +167,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     protected boolean rawRecording;
 
+    protected Stage recordWindowState;
+
     private void setContextMenuTriggers(JSONObject jsonObject) {
         int contextMenuKeyModifiers = jsonObject.getInt("contextMenuKeyModifiers");
         int contextMenuKey = jsonObject.getInt("contextMenuKey");
@@ -191,6 +195,31 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+            }
+        });
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
+            @Override public void handle(WindowEvent event) {
+                recorder.recordWindowClosing(new WindowTitle(stage).getTitle());
+            }
+        });
+        stage.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                recordWindowState = stage ;
+            }
+        });
+        stage.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                recordWindowState = stage ;
+            }
+        });
+        stage.xProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                recordWindowState = stage ;
+            }
+        });
+        stage.yProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                recordWindowState = stage ;
             }
         });
     }
@@ -243,6 +272,12 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
         if (!isVaildEvent(event.getEventType()))
             return;
+        if(recordWindowState != null) {
+            recorder.recordWindowState(new WindowTitle(recordWindowState).getTitle(), recordWindowState.xProperty().intValue(),
+                    recordWindowState.yProperty().intValue(), recordWindowState.widthProperty().intValue(),
+                    recordWindowState.heightProperty().intValue());
+            recordWindowState = null;
+        }
         if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node))
             return;
         Point2D point = null;

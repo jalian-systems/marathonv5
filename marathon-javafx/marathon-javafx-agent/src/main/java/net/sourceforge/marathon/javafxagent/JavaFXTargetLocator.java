@@ -78,11 +78,21 @@ public class JavaFXTargetLocator {
         }
 
         public void setSize(int width, int height) {
-            EventQueueWait.call_noexc(currentWindow, "setSize", width, height);
+            javafx.application.Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    currentWindow.setWidth(width);
+                    currentWindow.setHeight(height);
+                }
+            });
         }
 
         public void setLocation(int x, int y) {
-            EventQueueWait.call_noexc(currentWindow, "setLocation", x, y);
+            javafx.application.Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    currentWindow.setX(x);
+                    currentWindow.setY(y);
+                }
+            });
         }
 
         public void maximize() {
@@ -221,7 +231,7 @@ public class JavaFXTargetLocator {
     private IJavaFXAgent window_internal(String nameOrHandleOrTitle) {
         Stage[] windows = getValidWindows();
         for (Stage window : windows) {
-            if (window.getTitle().equals(nameOrHandleOrTitle)) {
+            if (nameOrHandleOrTitle.equals(window.getTitle())) {
                 setCurrentWindow(window);
                 return driver;
             }

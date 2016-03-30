@@ -63,6 +63,68 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
 
     }
 
+    private static final class WindowClosingScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String title;
+
+        public WindowClosingScriptElement(JSONObject o) {
+            title = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("window_closed", title);
+        }
+
+        @Override public WindowId getWindowId() {
+            return null;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
+    private static final class WindowStateScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String title;
+        private int x;
+        private int y;
+        private int width;
+        private int height;
+
+        public WindowStateScriptElement(JSONObject o) {
+            JSONObject value = o.getJSONObject("value");
+            title = value.getString("title");
+            x = value.getInt("x");
+            y = value.getInt("y");
+            width = value.getInt("width");
+            height = value.getInt("height");
+        }
+
+        @Override public String toScriptCode() {
+            String bounds = "" + x + ":" + y + ":" + width + ":" + height ;
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("window_changed", bounds);
+        }
+
+        @Override public WindowId getWindowId() {
+            return new WindowId(title, null, false);
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
     private final class JavaVersionScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
 
@@ -366,6 +428,14 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
             String type = jsonObject.getString("type");
             if (type.equals("select_file_chooser") || type.equals("select_folder_chooser")) {
                 recorder.record(new ChooserScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            }
+            if (type.equals("window_closing_with_title")) {
+                recorder.record(new WindowClosingScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            }
+            if (type.equals("window_state_with_title")) {
+                recorder.record(new WindowStateScriptElement(query.getJSONObject("event")));
                 return new JSONObject();
             }
             recorder.record(new JSONScriptElement(createWindowId(query.getJSONObject("container")), ns.getName(query, name),

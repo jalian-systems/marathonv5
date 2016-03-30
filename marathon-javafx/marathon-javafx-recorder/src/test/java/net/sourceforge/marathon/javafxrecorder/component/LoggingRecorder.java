@@ -49,13 +49,9 @@ public final class LoggingRecorder implements IJSONRecorder {
     }
 
     @Override public void recordRawMouseEvent(RFXComponent r, MouseEvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordRawKeyEvent(RFXComponent r, KeyEvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordSelect2(RFXComponent r, String state, boolean withCellInfo) {
@@ -63,53 +59,37 @@ public final class LoggingRecorder implements IJSONRecorder {
     }
 
     @Override public boolean isCreatingObjectMap() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override public void recordAction(RFXComponent r, String action, String property, Object value) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordSelectMenu(RFXComponent r, String selection) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordWindowClosing(RFXComponent r) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordWindowState(RFXComponent r, Rectangle2D bounds) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public JSONOMapConfig getObjectMapConfiguration() throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override public JSONObject getContextMenuTriggers() throws JSONException, IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override public boolean isRawRecording() throws IOException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override public void recordMenuItem(RFXComponent rComponent) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordFocusedWindow(RFXComponent r) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     public List<Recording> getRecordings() {
@@ -128,12 +108,14 @@ public final class LoggingRecorder implements IJSONRecorder {
     }
 
     @Override public void recordFileChooser(String state) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override public void recordFolderChooser(String state) {
-        // TODO Auto-generated method stub
+    }
 
+    @Override public void recordWindowClosing(String title) {
+    }
+
+    @Override public void recordWindowState(String title, int x, int y, int width, int height) {
     }
 }

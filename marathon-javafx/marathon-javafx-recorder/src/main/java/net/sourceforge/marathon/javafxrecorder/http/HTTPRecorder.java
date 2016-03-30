@@ -445,4 +445,28 @@ public class HTTPRecorder implements IJSONRecorder {
         postJSON("focused_window", o);
     }
 
+    @Override public void recordWindowClosing(String title) {
+        JSONObject event = new JSONObject();
+        event.put("type", "window_closing_with_title");
+        event.put("value", title);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        sendRecordMessage(o);
+    }
+
+    @Override public void recordWindowState(String title, int x, int y, int width, int height) {
+        JSONObject event = new JSONObject();
+        event.put("type", "window_state_with_title");
+        JSONObject value = new JSONObject();
+        value.put("title", title);
+        value.put("x", x);
+        value.put("y", y);
+        value.put("width", width);
+        value.put("height", height);
+        event.put("value", value);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        sendRecordMessage(o);
+    }
+
 }

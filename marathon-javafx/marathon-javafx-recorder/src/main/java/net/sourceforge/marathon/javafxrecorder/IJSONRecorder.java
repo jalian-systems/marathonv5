@@ -48,4 +48,8 @@ public interface IJSONRecorder {
 
     public abstract void recordFolderChooser(String state);
 
+    public abstract void recordWindowClosing(String title);
+
+    public abstract void recordWindowState(String title, int x, int y, int width, int height);
+
 }
