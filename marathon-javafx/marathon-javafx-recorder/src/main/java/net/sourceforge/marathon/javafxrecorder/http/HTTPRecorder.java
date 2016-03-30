@@ -94,7 +94,7 @@ public class HTTPRecorder implements IJSONRecorder {
     @Override public void recordClick2(final RFXComponent r, MouseEvent e, boolean withCellInfo) {
         final JSONObject event = new JSONObject();
         event.put("type", "click");
-        int button = e.getButton() == MouseButton.PRIMARY ? 0 : 2;
+        int button = e.getButton() == MouseButton.PRIMARY ? java.awt.event.MouseEvent.BUTTON1 : java.awt.event.MouseEvent.BUTTON3;
         event.put("button", button);
         event.put("clickCount", e.getClickCount());
         event.put("modifiersEx", buildModifiersText(e));
@@ -132,7 +132,7 @@ public class HTTPRecorder implements IJSONRecorder {
     @Override public void recordRawMouseEvent(final RFXComponent r, MouseEvent e) {
         final JSONObject event = new JSONObject();
         event.put("type", "click_raw");
-        int button = e.getButton() == MouseButton.PRIMARY ? 0 : 2;
+        int button = e.getButton() == MouseButton.PRIMARY ? java.awt.event.MouseEvent.BUTTON1 : java.awt.event.MouseEvent.BUTTON3;
         event.put("button", button);
         event.put("clickCount", e.getClickCount());
         event.put("modifiersEx", buildModifiersText(e));
