@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import com.sun.glass.ui.CommonDialogs;
 import com.sun.javafx.stage.StageHelper;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -34,6 +36,7 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 import net.sourceforge.marathon.javafxrecorder.component.RFXFileChooser;
 import net.sourceforge.marathon.javafxrecorder.component.RFXFolderChooser;
+import net.sourceforge.marathon.javafxrecorder.component.RFXUnknownComponent;
 import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
 
 public class JavaFxRecorderHook implements EventHandler<Event> {
@@ -160,6 +163,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     private ContextMenuTriggerCheck contextMenuTriggerCheck;
 
+    protected boolean rawRecording;
+
     private void setContextMenuTriggers(JSONObject jsonObject) {
         int contextMenuKeyModifiers = jsonObject.getInt("contextMenuKeyModifiers");
         int contextMenuKey = jsonObject.getInt("contextMenuKey");
@@ -178,6 +183,16 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         stage.getScene().getRoot().getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
         stage.getScene().getRoot().getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
         stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
+        stage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue && recorder != null)
+                    try {
+                        rawRecording = recorder.isRawRecording();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+        });
     }
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
@@ -233,6 +248,11 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         Point2D point = null;
         if (event instanceof MouseEvent) {
             point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
+        }
+        if (rawRecording) {
+            new RFXUnknownComponent((Node) event.getTarget(), objectMapConfiguration, null, recorder).handleRawRecording(recorder,
+                    event);
+            return;
         }
         RFXComponent c = finder.findRComponent((Node) event.getTarget(), point, recorder);
         if (!c.equals(current) && isFocusChangeEvent(event)) {
