@@ -21,16 +21,34 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
         public PropertyWrapper(Object value, String property) {
             this.value = value;
             this.property = property;
+            this.displayValue = this.value;
+            if(this.value.getClass().isArray())
+                this.displayValue = unboxPremitiveArray(this.value);
         }
 
         String property;
         Object value;
+        Object displayValue ;
 
         @Override public String toString() {
             if (property == null)
-                return "root" + " (" + value + ")";
-            return property + " (" + value + ")";
+                return "root" + " (" + displayValue + ")";
+            return property + " (" + displayValue + ")";
         }
+
+        private Object unboxPremitiveArray(Object r) {
+            int length = Array.getLength(r);
+            ArrayList<Object> list = new ArrayList<Object>();
+            for (int i = 0; i < length; i++) {
+                Object e = Array.get(r, i);
+                if (e != null && e.getClass().isArray())
+                    list.add(unboxPremitiveArray(e));
+                else
+                    list.add(e);
+            }
+            return list;
+        }
+
     }
 
     public static class AssertionTreeItem extends TreeItem<AssertionTreeView.PropertyWrapper> {

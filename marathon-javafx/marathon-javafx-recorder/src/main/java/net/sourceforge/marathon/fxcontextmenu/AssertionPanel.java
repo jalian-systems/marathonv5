@@ -89,7 +89,7 @@ public class AssertionPanel extends GridPane {
             @Override public void changed(ObservableValue<? extends TreeItem<PropertyWrapper>> observable,
                     TreeItem<PropertyWrapper> oldValue, TreeItem<PropertyWrapper> newValue) {
                 if (newValue != null)
-                    textArea.setText(newValue.getValue().value.toString());
+                    textArea.setText(newValue.getValue().displayValue.toString());
             }
         });
         ButtonBar bar = new ButtonBar();
