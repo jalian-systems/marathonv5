@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javafx.application.Platform;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -35,7 +36,7 @@ public class JavaFXTextFieldElementScrollTest extends JavaFXElementTest {
                 return getPrimaryStage().getHeight() == 150;
             }
         };
-        textField.marathon_select("Hello World");
+        Platform.runLater(() -> textField.marathon_select("Hello World"));
     }
 
     @Test public void click() {

@@ -35,6 +35,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
@@ -1211,6 +1213,69 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         } catch (MalformedURLException e) {
             return description;
         }
+    }
+
+    public String parentMenuText(ObservableList<Menu> menus, int index) {
+        String original = getMenuText(menus, index);
+        String itemText = original;
+        int suffixIndex = 0;
+        for (int i = 0; i < index; i++) {
+            String current = getMenuText(menus, i);
+            if (current.equals(original)) {
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
+        }
+        return itemText;
+    }
+
+    private String getMenuText(ObservableList<Menu> menus, int index) {
+        Menu menu = menus.get(index);
+        String text = menu.getText();
+        if (text == null || "".equals(text))
+            return getMenuTextFromIcon(menu, index);
+        return text;
+    }
+
+    @SuppressWarnings("deprecation") private String getMenuTextFromIcon(Menu menu, int index) {
+        Node graphic = menu.getGraphic();
+        if (graphic == null || !(graphic instanceof ImageView)) {
+            return "menuindex-" + index;
+        }
+        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+    }
+
+    public String getTextForMenuItem(MenuItem menuItem, Menu parentMenu) {
+        int index = parentMenu.getItems().indexOf(menuItem);
+        String original = getMenuItemText(parentMenu, index);
+        String itemText = original;
+        int suffixIndex = 0;
+
+        for (int i = 0; i < index; i++) {
+            String current = getMenuItemText(parentMenu, i);
+
+            if (current.equals(original)) {
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
+        }
+        return itemText;
+    }
+
+    public String getMenuItemText(Menu parentMenu, int index) {
+        MenuItem menuItem = parentMenu.getItems().get(index);
+        String text = menuItem.getText();
+        if (text == null || "".equals(text))
+            return getTextFromIcon(menuItem, index);
+        return text;
+    }
+
+    @SuppressWarnings("deprecation") protected String getTextFromIcon(MenuItem menuItem, int index) {
+        Node graphic = menuItem.getGraphic();
+        if (graphic == null || !(graphic instanceof ImageView)) {
+            if (index == -1)
+                return "EmptyTitleMenu";
+            return "MenuItemIndex-" + index;
+        }
+        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
     }
 
     public static String removeClassName(Object object) {

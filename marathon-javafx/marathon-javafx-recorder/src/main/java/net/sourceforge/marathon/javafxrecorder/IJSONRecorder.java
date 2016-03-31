@@ -28,8 +28,6 @@ public interface IJSONRecorder {
 
     public abstract void recordAction(RFXComponent r, String action, String property, Object value);
 
-    public abstract void recordSelectMenu(RFXComponent r, String selection);
-
     public abstract void recordWindowClosing(RFXComponent r);
 
     public abstract void recordWindowState(RFXComponent r, Rectangle2D bounds);
@@ -52,4 +50,5 @@ public interface IJSONRecorder {
 
     public abstract void recordWindowState(String title, int x, int y, int width, int height);
 
+    public abstract void recordSelectMenu(RFXComponent r, String menuType, String menuPath);
 }

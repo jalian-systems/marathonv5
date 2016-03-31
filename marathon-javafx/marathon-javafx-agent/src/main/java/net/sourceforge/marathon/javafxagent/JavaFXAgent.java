@@ -204,6 +204,12 @@ public class JavaFXAgent implements IJavaFXAgent {
         } else if (using.equals("#folderchooser")) {
             JFXWindow topContainer = targetLocator.getTopContainer();
             return Arrays.asList(topContainer.findDirectoryChooserElement());
+        } else if (using.equals("#menu")) {
+            JFXWindow topContainer = targetLocator.getTopContainer();
+            return Arrays.asList(topContainer.findMenuBarElement());
+        } else if (using.equals("#contextmenu")) {
+            JFXWindow topContainer = targetLocator.getTopContainer();
+            return Arrays.asList(topContainer.findContextMenuElement());
         }
         return findByCss(using);
     }

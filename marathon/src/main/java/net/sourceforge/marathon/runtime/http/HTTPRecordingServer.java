@@ -35,6 +35,36 @@ import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
 
+    private static class MenuItemScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String type;
+        private String value;
+        private WindowId windowId;
+
+        public MenuItemScriptElement(JSONObject o, WindowId windowId) {
+            this.windowId = windowId;
+            type = o.getString("menu_type");
+            value = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select_fx_menu", type, value);
+        }
+
+        @Override public WindowId getWindowId() {
+            return windowId;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
     private static final class ChooserScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
         private String type;
@@ -428,6 +458,10 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
             String type = jsonObject.getString("type");
             if (type.equals("select_file_chooser") || type.equals("select_folder_chooser")) {
                 recorder.record(new ChooserScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            } else if (type.equals("select_fx_menu")) {
+                recorder.record(
+                        new MenuItemScriptElement(query.getJSONObject("event"), createWindowId(query.getJSONObject("container"))));
                 return new JSONObject();
             }
             if (type.equals("window_closing_with_title")) {

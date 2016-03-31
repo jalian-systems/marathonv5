@@ -1,6 +1,5 @@
 package net.sourceforge.marathon.javafxrecorder;
 
-import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +21,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Menu;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -34,11 +35,13 @@ import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.fxcontextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javafxagent.WindowTitle;
 import net.sourceforge.marathon.javafxrecorder.component.FileChooserTransformer;
+import net.sourceforge.marathon.javafxrecorder.component.MenuItemTransformer;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 import net.sourceforge.marathon.javafxrecorder.component.RFXFileChooser;
 import net.sourceforge.marathon.javafxrecorder.component.RFXFolderChooser;
 import net.sourceforge.marathon.javafxrecorder.component.RFXUnknownComponent;
+import net.sourceforge.marathon.javafxrecorder.component.RFXMenuItem;
 import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
 
 public class JavaFxRecorderHook implements EventHandler<Event> {
@@ -55,6 +58,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     public static EventType<Event> fileChooserEventType = new EventType<Event>("filechooser");
     public static EventType<Event> folderChooserEventType = new EventType<Event>("folderchooser");
+    public EventHandler<ActionEvent> menuEvent = new MenuEventHandler();
 
     private static String windowTitle;
 
@@ -64,7 +68,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     private RFXComponent current;
 
     ContextMenuHandler contextMenuHandler;
-
     public JavaFxRecorderHook(int port) {
         try {
             logger.info("Starting HTTP Recorder on : " + port);
@@ -222,9 +225,12 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 recordWindowState = stage ;
             }
         });
+        stage.getScene().getRoot().getProperties().put("marathon.menu.handler", menuEvent);
+        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
     }
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
+        instrumentation.addTransformer(new MenuItemTransformer());
         instrumentation.addTransformer(new FileChooserTransformer());
         logger.info("JavaVersion: " + System.getProperty("java.version"));
         final int port;
@@ -334,41 +340,11 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
     }
 
-    public static String getModifiersExText(int modifiers) {
-        StringBuilder buf = new StringBuilder();
-        if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
-            buf.append("Meta");
-            buf.append("+");
+    public class MenuEventHandler implements EventHandler<ActionEvent> {
+        @Override public void handle(ActionEvent event) {
+            if (event.getSource() instanceof Menu)
+                return;
+            new RFXMenuItem(recorder, objectMapConfiguration).record(event);
         }
-        if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
-            buf.append("Ctrl");
-            buf.append("+");
-        }
-        if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
-            buf.append("Alt");
-            buf.append("+");
-        }
-        if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
-            buf.append("Shift");
-            buf.append("+");
-        }
-        if ((modifiers & InputEvent.ALT_GRAPH_DOWN_MASK) != 0) {
-            buf.append("Alt Graph");
-            buf.append("+");
-        }
-
-        int buttonNumber = 1;
-        for (int mask : new int[] { InputEvent.BUTTON1_DOWN_MASK, InputEvent.BUTTON2_DOWN_MASK, InputEvent.BUTTON3_DOWN_MASK }) {
-            if ((modifiers & mask) != 0) {
-                buf.append(Toolkit.getProperty("AWT.button" + buttonNumber, "Button" + buttonNumber));
-                buf.append("+");
-            }
-            buttonNumber++;
-        }
-        if (buf.length() > 0) {
-            buf.setLength(buf.length() - 1); // remove trailing '+'
-        }
-        return buf.toString();
     }
-
 }

@@ -293,6 +293,17 @@ public class HTTPRecorder implements IJSONRecorder {
         sendRecordMessage(o);
     }
 
+    @Override public void recordSelectMenu(RFXComponent r, String menuType, String selection) {
+        JSONObject event = new JSONObject();
+        event.put("type", "select_fx_menu");
+        event.put("value", selection);
+        event.put("menu_type", menuType);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        o.put("container", r.findContextHeirarchy());
+        sendRecordMessage(o);
+    }
+
     private void sendRecordMessage(JSONObject o) {
         try {
             postJSON("record", o);
@@ -319,13 +330,6 @@ public class HTTPRecorder implements IJSONRecorder {
         event.put("value", value);
         event.put("property", property);
         event.put("cellinfo", r.getCellInfo());
-        recordEvent(r, event);
-    }
-
-    @Override public void recordSelectMenu(RFXComponent r, String selection) {
-        JSONObject event = new JSONObject();
-        event.put("type", "select_menu");
-        event.put("value", selection);
         recordEvent(r, event);
     }
 

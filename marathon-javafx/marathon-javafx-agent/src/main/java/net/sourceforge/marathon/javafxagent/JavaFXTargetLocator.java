@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -18,9 +19,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import net.sourceforge.marathon.javafxagent.components.JavaFXContextMenuElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDirectoryChooserElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXFileChooserElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXMenuBarElement;
 
 public class JavaFXTargetLocator {
 
@@ -191,6 +197,51 @@ public class JavaFXTargetLocator {
             IJavaFXElement e = new JavaFXDirectoryChooserElement(driver, this);
             elements.put(e.createId(), e);
             return e;
+        }
+
+        public IJavaFXElement findMenuBarElement() {
+            MenuBar menuBar = (MenuBar) getMenuBar().get(0);
+            IJavaFXElement e = new JavaFXMenuBarElement(menuBar, driver, this);
+            elements.put(e.createId(), e);
+            return e;
+        }
+
+        private List<Node> getMenuBar() {
+            List<Node> nodes = new ArrayList<>();
+            new Wait("Unable to find menu bar component") {
+                @Override public boolean until() {
+                    Node menubar = currentWindow.getScene().getRoot().lookup(".menu-bar");
+                    if (menubar != null)
+                        nodes.add((MenuBar) menubar);
+                    return nodes.size() > 0;
+                }
+            };
+            ;
+            return nodes;
+        }
+
+        public IJavaFXElement findContextMenuElement() {
+            IJavaFXElement e = new JavaFXContextMenuElement((ContextMenu) getContextMenu().get(0), driver, this);
+            elements.put(e.createId(), e);
+            return e;
+        }
+
+        private List<Window> getContextMenu() {
+            List<Window> contextMenus = new ArrayList<>();
+            new Wait("Unable to context menu") {
+                @Override public boolean until() {
+                    @SuppressWarnings({ "deprecation", "static-access" })
+                    Iterator<Window> windows = currentWindow.impl_getWindows();
+                    while (windows.hasNext()) {
+                        Window window = (Window) windows.next();
+                        if (window instanceof ContextMenu)
+                            contextMenus.add((ContextMenu) window);
+                    }
+                    return contextMenus.size() > 0;
+                }
+            };
+            ;
+            return contextMenus;
         }
 
     }

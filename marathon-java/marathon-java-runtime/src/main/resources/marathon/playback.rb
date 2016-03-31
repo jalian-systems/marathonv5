@@ -328,6 +328,11 @@ class RubyMarathon < MarathonRuby
       end
       e.send_keys(s)
     end
+    
+    def select_fx_menu(name, s)
+      e = driver.find_element(:tag_name, name)
+      e.find_element(:css, ".::call-select('" + s.gsub("\\", "\\\\\\\\").gsub("'", "\\\\'") + "')");
+    end
 end
 
 # Wait for a window to appear. The default timeout is 30seconds
@@ -678,6 +683,10 @@ end
 
 def select_folder_chooser(name, s)
   $marathon.select_file_chooser(name, s)
+end
+
+def select_fx_menu(name, s)
+  $marathon.select_fx_menu(name, s)
 end
 
 def marathon_help

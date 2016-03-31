@@ -14,6 +14,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
@@ -128,6 +129,18 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ButtonBase)
+                        return parent;
+                    parent = parent.getParent();
+                }
+                return null;
+            }
+        });
+        add(MenuBar.class, RFXMenuBar.class, new IRecordOn() {
+
+            @Override public Node getRecordOn(Node component, Point2D point) {
+                Node parent = component;
+                while (parent != null) {
+                    if (parent instanceof MenuBar)
                         return parent;
                     parent = parent.getParent();
                 }
@@ -465,6 +478,5 @@ public class RFXComponentFactory {
                 return recordOn;
         }
         return component;
-
     }
 }

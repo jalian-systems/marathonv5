@@ -65,7 +65,9 @@ public final class LoggingRecorder implements IJSONRecorder {
     @Override public void recordAction(RFXComponent r, String action, String property, Object value) {
     }
 
-    @Override public void recordSelectMenu(RFXComponent r, String selection) {
+    @Override public void recordSelectMenu(RFXComponent r, String menuType, String selection) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override public void recordWindowClosing(RFXComponent r) {
