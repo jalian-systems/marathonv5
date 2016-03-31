@@ -341,7 +341,7 @@ public class Marathon {
 						+ Integer.valueOf(expected[i].length) + " : " + Integer.valueOf(o.getJSONArray(i).length()));
 			}
 			for (int j = 0; j < expected[i].length; j++) {
-				if (!expected[i][j].equals(o.getJSONArray(i).get(j))) {
+				if (expected[i][j] != null && !expected[i][j].equals(o.getJSONArray(i).get(j))) {
 					throw new AssertionFailedError("Data Mismatch at (" + i + "," + j + ") " + expected[i][j] + " : "
 							+ o.getJSONArray(i).get(j));
 				}
