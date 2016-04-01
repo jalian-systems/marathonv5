@@ -35,7 +35,10 @@ class RubyMarathon < MarathonRuby
         @collector = Collector.new(self)
         @no_fail_on_exit = false
         @dndCopyKey = :control
-        @dndCopyKey = :alt if /Darwin/.match(`uname`) 
+        begin
+          @dndCopyKey = :alt if /Darwin/.match(`uname`) 
+        rescue
+        end
     end
 
     def driver()
