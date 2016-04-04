@@ -34,6 +34,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -46,6 +47,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -64,6 +66,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
@@ -84,6 +87,14 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         });
     }
 
+    public final String getId() {
+        return EventQueueWait.exec(new Callable<String>() {
+            @Override public String call() throws Exception {
+                return node.getId();
+            }
+        });
+    }
+    
     public String _getText() {
         Node c = node;
         if (this instanceof IPseudoElement)
@@ -1344,4 +1355,15 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
+    public final String getLabeledBy() {
+        Parent root = node.getScene().getRoot();
+        Set<Node> allLabels = root.lookupAll(".label");
+        for (Node node2 : allLabels) {
+            Label label = (Label) node2 ;
+            if(label.getLabelFor() == node) {
+                return label.getText();
+            }
+        }
+        return null;
+    }
 }

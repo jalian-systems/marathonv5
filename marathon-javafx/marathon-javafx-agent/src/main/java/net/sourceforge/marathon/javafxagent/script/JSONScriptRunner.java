@@ -75,7 +75,7 @@ public class JSONScriptRunner {
         }
         if (jsonArg instanceof Node) {
             IJavaFXElement e = session.findElement((Node) jsonArg);
-            return new JSONObject().put("ELEMENT", e.getId());
+            return new JSONObject().put("ELEMENT", e.getElementId());
         }
         return null;
     }

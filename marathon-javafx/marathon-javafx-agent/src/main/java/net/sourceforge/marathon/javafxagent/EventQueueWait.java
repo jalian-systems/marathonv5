@@ -118,6 +118,45 @@ public abstract class EventQueueWait extends Wait {
         return (T) r[0];
     }
 
+    @SuppressWarnings("unchecked") public static <T> T call_force(final Object o, String f, final Object... args)
+            throws NoSuchMethodException {
+        Class<?>[] params = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Integer)
+                params[i] = Integer.TYPE;
+            else
+                params[i] = args[i].getClass();
+        }
+        final Method method;
+        try {
+            method = o.getClass().getMethod(f, params);
+        } catch (SecurityException e1) {
+            throw new JavaAgentException("Method " + f + " could not be found: " + e1.getMessage(), e1);
+        }
+        final Object[] r = new Object[] { null };
+        invokeAndWait(new Runnable() {
+            @Override public void run() {
+                boolean accessible = method.isAccessible();
+                try {
+                    method.setAccessible(true);
+                    r[0] = method.invoke(o, args);
+                } catch (Exception e) {
+                    r[0] = e;
+                } finally {
+                    method.setAccessible(accessible);
+                }
+            }
+        });
+        if (r[0] instanceof InvocationTargetException) {
+            r[0] = ((InvocationTargetException) r[0]).getCause();
+        }
+        if (r[0] instanceof RuntimeException)
+            throw ((RuntimeException) r[0]);
+        else if (r[0] instanceof Exception)
+            throw new RuntimeException(((Exception) r[0]).getMessage(), (Exception) r[0]);
+        return (T) r[0];
+    }
+
     /**
      * Requests for the focus of the component and waits till the component
      * receives focus.
@@ -193,6 +232,14 @@ public abstract class EventQueueWait extends Wait {
     public static <T> T call_noexc(final Object o, String f, final Object... args) {
         try {
             return call(o, f, args);
+        } catch (NoSuchMethodException e) {
+        }
+        return null;
+    }
+
+    public static <T> T call_noexc_force(final Object o, String f, final Object... args) {
+        try {
+            return call_force(o, f, args);
         } catch (NoSuchMethodException e) {
         }
         return null;

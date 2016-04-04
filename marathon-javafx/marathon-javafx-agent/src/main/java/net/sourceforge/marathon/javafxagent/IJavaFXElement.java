@@ -43,7 +43,7 @@ public interface IJavaFXElement {
 
     public abstract String getTagName();
 
-    public abstract UUID getId();
+    public abstract UUID getElementId();
 
     public abstract IJavaFXElement findElementByTagName(String using);
 

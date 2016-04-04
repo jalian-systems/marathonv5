@@ -22,7 +22,8 @@ public class RFXTableCell extends RFXComponent {
         if (component != null)
             return component._getValue();
         if (graphic == null && !cell.isEditing())
-            return cell.getItem().toString();
+            return cell.getItem() != null ? cell.getItem().toString() : null;
         return null;
     }
+    
 }

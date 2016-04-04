@@ -111,7 +111,7 @@ public class JavaFXTargetLocator {
             Node active = je instanceof IPseudoElement ? ((IPseudoElement) je).getParent().getComponent() : je.getComponent();
             IJavaFXElement found = components.get(active);
             if (found != null) {
-                je.setId(found.getId());
+                je.setId(found.getElementId());
                 return je;
             }
             elements.put(je.createId(), je);

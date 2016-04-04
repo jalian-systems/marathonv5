@@ -38,7 +38,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         super(parent.getComponent());
         this.driver = parent.driver;
         this.window = parent.window;
-        this.id = parent.getId();
+        this.id = parent.getElementId();
     }
 
     @Override public void click() {
@@ -105,7 +105,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return id.toString();
     }
 
-    @Override public UUID getId() {
+    @Override public UUID getElementId() {
         return id;
     }
 
@@ -263,7 +263,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
             return false;
         JavaFXElement other = (JavaFXElement) obj;
         if (id == null) {
-            if (other.getId() != null)
+            if (other.getElementId() != null)
                 return false;
         } else if (!getHandle().equals(other.getHandle()))
             return false;
@@ -314,4 +314,5 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }
+
 }
