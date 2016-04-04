@@ -49,6 +49,11 @@ public class JavaFXComboBoxElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getComboBoxText((ComboBox<?>) getComponent(), ((ComboBox<?>) getComponent()).getSelectionModel().getSelectedIndex(),
+                true);
+    }
+
     public String getContent() {
         return new JSONArray(getContent((ComboBox<?>) getComponent())).toString();
     }

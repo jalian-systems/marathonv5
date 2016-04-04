@@ -40,6 +40,20 @@ public class JavaFXTabPaneElementTest extends JavaFXElementTest {
         };
     }
 
+    @Test public void getText() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            tabPane.marathon_select("Tab 2");
+            text.add(tabPane.getAttribute("text"));
+        });
+        new Wait("Waiting for the tab selection.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Tab 2", text.get(0));
+    }
+
     @Test public void selectAnInvalidTab() {
         AssertJUnit.assertEquals("0", tabPane.getAttribute("selectionModel.getSelectedIndex"));
         tabPane.marathon_select("Tab 21");

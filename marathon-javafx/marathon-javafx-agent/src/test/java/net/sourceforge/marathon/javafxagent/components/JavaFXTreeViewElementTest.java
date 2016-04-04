@@ -1,5 +1,8 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
@@ -61,6 +64,36 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
         };
     }
 
+    @Test public void getText() throws Throwable {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            treeView.marathon_select("[\"/Root node/Child Node 2\"]");
+            text.add(treeView.getAttribute("text"));
+        });
+        new Wait("Waiting tree view text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[\"/Root node/Child Node 2\"]", text.get(0));
+    }
+
+    @Test public void getTextForMultiple() throws Throwable {
+        TreeView<?> treeViewNode = (TreeView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            treeViewNode.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            treeView.marathon_select("[\"/Root node/Child Node 1\",\"/Root node/Child Node 3/Child Node 7\"]");
+            text.add(treeView.getAttribute("text"));
+        });
+        new Wait("Waiting tree view text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[\"/Root node/Child Node 1\",\"/Root node/Child Node 3/Child Node 7\"]", text.get(0));
+    }
+
     @Test public void marathon_get_a_node() throws Throwable {
         JSONObject o = new JSONObject();
         o.put("select", "/Root node/Child Node 1");
@@ -68,8 +101,29 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals("Child Node 1", e.getText());
     }
 
+    @Test public void getTextnode() throws Throwable {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            JSONObject o = new JSONObject();
+            o.put("select", "/Root node/Child Node 1");
+            IJavaFXElement e = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
+            text.add(e.getAttribute("text"));
+        });
+        new Wait("Waiting tree view text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Child Node 1", text.get(0));
+    }
+
     @Test public void marathon_click_test() throws Throwable {
         treeView.click(0, 1, 56, 10);
+    }
+
+    @Test public void assertContent() {
+        String expected = "[[\"Root node\",\"Child Node 1\",\"Child Node 2\",\"Child Node 3\"]]";
+        AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
     }
 
     @Override protected Pane getMainPane() {

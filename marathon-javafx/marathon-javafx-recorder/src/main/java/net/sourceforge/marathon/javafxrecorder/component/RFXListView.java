@@ -59,6 +59,10 @@ public class RFXListView extends RFXComponent {
         return getContent((ListView<?>) node);
     }
 
+    @Override public String _getText() {
+        return getListSelectionText((ListView<?>) node);
+    }
+
     @Override public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();

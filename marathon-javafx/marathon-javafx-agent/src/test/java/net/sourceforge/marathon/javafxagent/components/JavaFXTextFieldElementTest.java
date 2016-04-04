@@ -5,6 +5,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import ensemble.samples.controls.text.TextFieldSample;
+import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
@@ -57,6 +58,19 @@ public class JavaFXTextFieldElementTest extends JavaFXElementTest {
             }
         };
         AssertJUnit.assertEquals("Hello World", textField.getText());
+    }
+
+    @Test public void getAttributeText() {
+        AssertJUnit.assertEquals("Text", textField.getText());
+        Platform.runLater(() -> {
+            textField.marathon_select("Hello World");
+        });
+        new Wait("Waiting for the text field text") {
+            @Override public boolean until() {
+                return textField.getAttribute("text").equals("Hello World");
+            }
+        };
+        AssertJUnit.assertEquals("Hello World", textField.getAttribute("text"));
     }
 
     @Override protected Pane getMainPane() {

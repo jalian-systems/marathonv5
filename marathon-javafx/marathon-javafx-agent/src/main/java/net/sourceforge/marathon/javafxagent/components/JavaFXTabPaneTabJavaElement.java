@@ -22,8 +22,7 @@ public class JavaFXTabPaneTabJavaElement extends JavaFXElement {
     }
 
     @Override public String _getText() {
-        TabPane tabPane = (TabPane) parent.getComponent();
-        return getTextForTab(tabPane, tabPane.getTabs().get(tabIndex));
+        return getTextForTab((TabPane) parent.getComponent(), ((TabPane) parent.getComponent()).getTabs().get(tabIndex));
     }
 
     @Override public Point2D _getMidpoint() {

@@ -1,5 +1,9 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -29,6 +33,20 @@ public class JavaFXColorPickerElementTest extends JavaFXElementTest {
                 return colorPickerNode.getValue().toString().equals("0xff0000ff");
             }
         };
+    }
+
+    @Test public void getText() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            colorpicker.marathon_select("#ff0000");
+            text.add(colorpicker.getAttribute("text"));
+        });
+        new Wait("Waiting for color picker text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("#ff0000", text.get(0));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class) public void colorPickerWithInvalidColorCode() {

@@ -25,4 +25,7 @@ public class JavaFXSplitPaneElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getDividerLocations((SplitPane) getComponent());
+    }
 }

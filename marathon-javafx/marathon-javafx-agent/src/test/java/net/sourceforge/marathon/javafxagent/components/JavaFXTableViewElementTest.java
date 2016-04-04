@@ -50,6 +50,20 @@ public class JavaFXTableViewElementTest extends JavaFXElementTest {
         };
     }
 
+    @Test public void getText() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            tableView.marathon_select("{\"rows\":[1]}");
+            text.add(tableView.getAttribute("text"));
+        });
+        new Wait("Wating for table text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("{\"rows\":[1]}", text.get(0));
+    }
+
     @Test public void selectMultipleRows() {
         TableView<?> tableViewNode = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         Platform.runLater(() -> {
@@ -156,6 +170,11 @@ public class JavaFXTableViewElementTest extends JavaFXElementTest {
                 return tableViewNode.getSelectionModel().getSelectedIndices().size() > 1;
             }
         };
+    }
+
+    @Test public void assertContent() {
+        String expected = "[[\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
+        AssertJUnit.assertEquals(expected, tableView.getAttribute("content"));
     }
 
     @Override protected Pane getMainPane() {

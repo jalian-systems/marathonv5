@@ -25,4 +25,8 @@ public class RFXToggleButton extends RFXComponent {
             recorder.recordSelect(this, Boolean.toString(selected));
         prevSelection = selected;
     }
+
+    @Override public String _getText() {
+        return getToggleText((ToggleButton) node);
+    }
 }

@@ -78,4 +78,31 @@ public class JavaFXTableViewElement extends JavaFXElement {
         }
     }
 
+    @Override public String _getText() {
+        return getSelection((TableView<?>) getComponent());
+    }
+
+    public String getContent() {
+        return new JSONArray(getContent((TableView<?>) getComponent())).toString();
+    }
+
+    /*
+     * NOTE: Same code exits in RFXTableView class. So in case if you want to
+     * modify. Modify both.
+     */
+    private String[][] getContent(TableView<?> tableView) {
+        int rows = tableView.getItems().size();
+        int cols = tableView.getColumns().size();
+        String[][] content = new String[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                String valueAt = new JavaFXTableCellElement(this, i, j)._getText();
+                if (valueAt == null)
+                    valueAt = "";
+                content[i][j] = valueAt;
+            }
+        }
+        return content;
+    }
+
 }

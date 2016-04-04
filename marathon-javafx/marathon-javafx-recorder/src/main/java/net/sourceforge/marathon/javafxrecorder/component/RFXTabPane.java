@@ -25,4 +25,7 @@ public class RFXTabPane extends RFXComponent {
         return getContent((TabPane) node);
     }
 
+    @Override public String _getText() {
+        return getTextForTab(((TabPane) node), ((TabPane) node).getSelectionModel().getSelectedItem());
+    }
 }

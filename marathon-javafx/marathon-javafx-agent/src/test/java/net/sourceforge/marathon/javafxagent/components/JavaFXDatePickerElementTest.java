@@ -48,6 +48,21 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals("3/16/2016", dates.get(0));
     }
 
+    @Test public void getText() {
+        IJavaFXElement datePicker = datePickers.get(0);
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            datePicker.marathon_select("3/16/2016");
+            text.add(datePicker.getAttribute("text"));
+        });
+        new Wait("Waiting for date picker text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("3/16/2016", text.get(0));
+    }
+
     @Test public void selectEdiotrDate() {
         Set<Node> datePickerNodes = getPrimaryStage().getScene().getRoot().lookupAll(".date-picker");
         List<Node> pickers = new ArrayList<>(datePickerNodes);

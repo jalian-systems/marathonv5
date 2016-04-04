@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.testng.AssertJUnit;
@@ -9,6 +10,7 @@ import ensemble.samples.controls.text.TextFieldSample;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXTextFieldTest extends RFXComponentTest {
@@ -35,6 +37,24 @@ public class RFXTextFieldTest extends RFXComponentTest {
         Recording select = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", select.getCall());
         AssertJUnit.assertEquals("Hello World", select.getParameters()[0]);
+    }
+
+    @Test public void getText() {
+        final TextField textField = (TextField) getPrimaryStage().getScene().getRoot().lookup(".text-field");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<Object> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            RFXComponent rTextField = new RFXTextInputControl(textField, null, null, lr);
+            textField.setText("Hello World");
+            rTextField.focusLost(null);
+            text.add(rTextField.getAttribute("text"));
+        });
+        new Wait("Waiting for text field text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Hello World", text.get(0));
     }
 
     @Test public void selectWithSpecialChars() throws InterruptedException {

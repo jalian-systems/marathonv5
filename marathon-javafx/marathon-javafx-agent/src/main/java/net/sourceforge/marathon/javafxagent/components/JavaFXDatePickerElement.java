@@ -29,4 +29,7 @@ public class JavaFXDatePickerElement extends JavaFXElement {
         return false;
     }
 
+    @Override public String _getText() {
+        return getDatePickerText((DatePicker) getComponent(), ((DatePicker) getComponent()).getValue());
+    }
 }

@@ -29,6 +29,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -38,6 +39,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -48,6 +50,8 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
@@ -59,6 +63,7 @@ import javafx.scene.control.TreeTableView.TreeTableViewSelectionModel;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.web.HTMLEditor;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
@@ -1276,6 +1281,40 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             return "MenuItemIndex-" + index;
         }
         return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+    }
+
+    protected String getButtonText(ButtonBase button) {
+        return button.getText();
+    }
+
+    protected String getCheckBoxText(CheckBox checkBox) {
+        return getButtonText(checkBox);
+    }
+
+    protected String getToggleText(ToggleButton toggleButton) {
+        return getButtonText(toggleButton);
+    }
+
+    protected String getSliderValue(Slider slider) {
+        return slider.getValue() + "";
+    }
+
+    protected String getHTMLEditorText(HTMLEditor htmlEditor) {
+        return htmlEditor.getHtmlText();
+    }
+
+    protected String getTitledPaneText(TitledPane titledPane) {
+        return titledPane.getText();
+    }
+
+    public String[][] getContent(TreeView<?> treeView) {
+        int rowCount = treeView.getExpandedItemCount();
+        String[][] content = new String[1][rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            TreeItem<?> treeItem = treeView.getTreeItem(i);
+            content[0][i] = getTextForNodeObject(treeView, treeItem);
+        }
+        return content;
     }
 
     public static String removeClassName(Object object) {

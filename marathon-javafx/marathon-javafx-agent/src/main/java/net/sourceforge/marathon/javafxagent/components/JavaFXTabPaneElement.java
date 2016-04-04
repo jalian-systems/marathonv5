@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.json.JSONArray;
+
 import javafx.scene.Node;
 import javafx.scene.control.TabPane;
 import net.sourceforge.marathon.javafxagent.EventQueueWait;
@@ -60,4 +62,11 @@ public class JavaFXTabPaneElement extends JavaFXElement {
         return false;
     }
 
+    @Override public String _getText() {
+        return getTextForTab(((TabPane) getComponent()), ((TabPane) getComponent()).getSelectionModel().getSelectedItem());
+    }
+
+    public String getContent() {
+        return new JSONArray(getContent((TabPane) getComponent())).toString();
+    }
 }

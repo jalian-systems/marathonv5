@@ -64,6 +64,21 @@ public class JavaFXComboBoxTest extends JavaFXElementTest {
         AssertJUnit.assertEquals("Option 3", texts.get(0));
     }
 
+    @Test public void getText() {
+        IJavaFXElement comboBox = combos.get(0);
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            comboBox.marathon_select("Option 4");
+            text.add(comboBox.getAttribute("text"));
+        });
+        new Wait("Waiting for combo box text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Option 4", text.get(0));
+    }
+
     @Test public void editorSelection() {
         IJavaFXElement comboBox = combos.get(1);
         Platform.runLater(() -> {

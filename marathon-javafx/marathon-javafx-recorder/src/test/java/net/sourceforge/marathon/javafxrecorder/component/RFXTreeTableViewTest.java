@@ -1,7 +1,9 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -13,6 +15,7 @@ import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeTableView.TreeTableViewSelectionModel;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.TreeTableSample;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXTreeTableViewTest extends RFXComponentTest {
@@ -150,6 +153,42 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("all", recording.getParameters()[0]);
+    }
+
+    @Test public void getText() {
+        TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            RFXTreeTableView rfxTreeTableView = new RFXTreeTableView(treeTableView, null, null, lr);
+            treeTableView.getSelectionModel().select(2);
+            rfxTreeTableView.focusLost(null);
+            text.add(rfxTreeTableView.getAttribute("text"));
+        });
+        new Wait("Waiting for tree table view text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\"]}", text.get(0));
+    }
+
+    @Test public void getContent() {
+        TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
+        final Object[] content = new Object[] { null };
+        Platform.runLater(() -> {
+            Point2D point = getPoint(treeTableView, 1, 1);
+            RFXTreeTableView rfxTreeTableView = new RFXTreeTableView(treeTableView, null, point, null);
+            content[0] = rfxTreeTableView.getContent();
+        });
+        new Wait("Wating for contents") {
+            @Override public boolean until() {
+                return content[0] != null;
+            }
+        };
+        JSONArray a = new JSONArray(content[0]);
+        String expected = "[[\"Sales Department\",\"\"],[\"Ethan Williams\",\"ethan.williams@example.com\"],[\"Emma Jones\",\"emma.jones@example.com\"],[\"Michael Brown\",\"michael.brown@example.com\"],[\"Anna Black\",\"anna.black@example.com\"],[\"Rodger York\",\"roger.york@example.com\"],[\"Susan Collins\",\"susan.collins@example.com\"]]";
+        AssertJUnit.assertEquals(expected, a.toString());
     }
 
     @SuppressWarnings("rawtypes") private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {

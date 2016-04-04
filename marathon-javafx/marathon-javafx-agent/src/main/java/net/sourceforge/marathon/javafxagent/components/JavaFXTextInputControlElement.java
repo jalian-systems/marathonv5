@@ -24,4 +24,8 @@ public class JavaFXTextInputControlElement extends JavaFXElement {
         }
         return true;
     }
+
+    @Override public String _getText() {
+        return ((TextInputControl) getComponent()).getText();
+    }
 }

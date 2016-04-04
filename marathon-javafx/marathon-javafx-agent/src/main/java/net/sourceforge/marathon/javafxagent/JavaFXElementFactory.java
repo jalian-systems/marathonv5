@@ -3,6 +3,7 @@ package net.sourceforge.marathon.javafxagent;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
+import ensemble.samples.controls.table.TableCellFactorySample.CheckBoxTableCell;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -20,12 +21,23 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.CheckBoxTreeTableCell;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
+import javafx.scene.control.cell.ChoiceBoxTreeTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.web.HTMLEditor;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxTableCellElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxTreeTableCell;
 import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxTableCellElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxTreeTableCell;
 import net.sourceforge.marathon.javafxagent.components.JavaFXColorPickerElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxTableCellElemnt;
+import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxTreeTableCell;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDatePickerElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXHTMLEditor;
 import net.sourceforge.marathon.javafxagent.components.JavaFXListViewElement;
@@ -101,6 +113,12 @@ public class JavaFXElementFactory {
         add(TreeView.class, JavaFXTreeViewElement.class);
         add(TableView.class, JavaFXTableViewElement.class);
         add(TreeTableView.class, JavaFXTreeTableViewElement.class);
+        add(CheckBoxTableCell.class, JavaFXCheckBoxTableCellElement.class);
+        add(ChoiceBoxTableCell.class, JavaFXChoiceBoxTableCellElement.class);
+        add(ComboBoxTableCell.class, JavaFXComboBoxTableCellElemnt.class);
+        add(CheckBoxTreeTableCell.class, JavaFXCheckBoxTreeTableCell.class);
+        add(ChoiceBoxTreeTableCell.class, JavaFXChoiceBoxTreeTableCell.class);
+        add(ComboBoxTreeTableCell.class, JavaFXComboBoxTreeTableCell.class);
     }
 
     public static Class<? extends IJavaFXElement> get(Node component) {

@@ -32,4 +32,8 @@ public class RFXCheckBox extends RFXComponent {
         int selection = getSelection((CheckBox) node);
         return JavaFXCheckBoxElement.states[selection];
     }
+
+    @Override public String _getText() {
+        return getCheckBoxText((CheckBox) node);
+    }
 }

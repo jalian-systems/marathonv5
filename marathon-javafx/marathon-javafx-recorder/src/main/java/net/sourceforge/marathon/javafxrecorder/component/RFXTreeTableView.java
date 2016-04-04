@@ -101,4 +101,31 @@ public class RFXTreeTableView extends RFXComponent {
     @Override public String getCellInfo() {
         return cellText;
     }
+
+    @Override public String _getText() {
+        return getTreeTableSelection((TreeTableView<?>) node);
+    }
+
+    @Override public String[][] getContent() {
+        return getContent((TreeTableView<?>) getComponent());
+    }
+
+    /*
+     * NOTE: Same code exits in JavaFXTreeTableViewElement class. So in case if
+     * you want to modify. Modify both.
+     */
+    private String[][] getContent(TreeTableView<?> treeTableView) {
+        int rows = treeTableView.getExpandedItemCount();
+        int cols = treeTableView.getColumns().size();
+        String[][] content = new String[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                String valueAt = getTreeTableCellValueAt(treeTableView, i, j);
+                if (valueAt == null)
+                    valueAt = "";
+                content[i][j] = valueAt;
+            }
+        }
+        return content;
+    }
 }

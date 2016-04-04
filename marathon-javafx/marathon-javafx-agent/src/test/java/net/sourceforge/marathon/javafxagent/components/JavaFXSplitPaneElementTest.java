@@ -1,5 +1,8 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
@@ -36,6 +39,20 @@ public class JavaFXSplitPaneElementTest extends JavaFXElementTest {
         };
         JSONArray pa = new JSONArray(splitPaneNode.getDividerPositions());
         AssertJUnit.assertEquals(0.6, pa.getDouble(0), 0.2);
+    }
+
+    @Test public void getText() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            splitPane.marathon_select("[0.6]");
+            text.add(splitPane.getAttribute("text"));
+        });
+        new Wait("Waiting for split pane text") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[0.6,0.6008064516129032]", text.get(0));
     }
 
     @Test public void select2() {

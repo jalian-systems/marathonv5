@@ -4,6 +4,7 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.TextAreaSample;
@@ -57,6 +58,18 @@ public class JavaFXTextAreaElementTest extends JavaFXElementTest {
             }
         };
         AssertJUnit.assertEquals("Hello World", textarea.getText());
+    }
+
+    @Test public void getAttributeText() {
+        Platform.runLater(() -> {
+            textarea.marathon_select("Hello World");
+        });
+        new Wait("Waiting for the text area text") {
+            @Override public boolean until() {
+                return textarea.getAttribute("text").equals("Hello World");
+            }
+        };
+        AssertJUnit.assertEquals("Hello World", textarea.getAttribute("text"));
     }
 
     @Override protected Pane getMainPane() {

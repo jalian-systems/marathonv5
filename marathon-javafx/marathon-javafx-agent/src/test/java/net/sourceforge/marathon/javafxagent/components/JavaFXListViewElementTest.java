@@ -1,5 +1,8 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -41,6 +44,34 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
                 return listViewNode.getSelectionModel().getSelectedIndex() == 1;
             }
         };
+    }
+
+    @Test public void getText() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            listView.marathon_select("[\"Row 2\"]");
+            text.add(listView.getAttribute("text"));
+        });
+        new Wait("Waiting for list item text") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[\"Row 2\"]", text.get(0));
+    }
+
+    @Test public void getTextForMultipleSelection() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            listView.marathon_select("[\"Row 2\",\"Row 20\"]");
+            text.add(listView.getAttribute("text"));
+        });
+        new Wait("Waiting for list item text") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[\"Row 2\",\"Row 20\"]", text.get(0));
     }
 
     @Test public void selectForMultipleItems() {
@@ -99,6 +130,22 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
                 return listViewNode.getSelectionModel().getSelectedIndex() == 2;
             }
         };
+    }
+
+    @Test public void getTextNthelement() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            IJavaFXElement item = listView.findElementByCssSelector(".::nth-item(3)");
+            item.click();
+            text.add(item.getAttribute("text"));
+
+        });
+        new Wait("Waiting for list item text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Long Row 3", text.get(0));
     }
 
     @Test public void assertContent() {

@@ -26,4 +26,8 @@ public class RFXSplitPane extends RFXComponent {
         if (!currentDividerLoctions.equals(prevLocations))
             recorder.recordSelect(this, currentDividerLoctions);
     }
+
+    @Override public String _getText() {
+        return getDividerLocations((SplitPane) node);
+    }
 }

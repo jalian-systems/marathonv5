@@ -15,15 +15,16 @@ public class RFXHTMLEditor extends RFXComponent {
     }
 
     @Override public void focusGained(RFXComponent prev) {
-        HTMLEditor htmlEditor = (HTMLEditor) node;
-        prevText = htmlEditor.getHtmlText();
+        prevText = getHTMLEditorText((HTMLEditor) node);
     }
 
     @Override public void focusLost(RFXComponent next) {
-        HTMLEditor htmlEditor = (HTMLEditor) node;
-        String currentText = htmlEditor.getHtmlText();
+        String currentText = getHTMLEditorText((HTMLEditor) node);
         if (currentText != null && !currentText.equals(prevText))
             recorder.recordSelect(this, currentText);
     }
 
+    @Override public String _getText() {
+        return getHTMLEditorText((HTMLEditor) node);
+    }
 }

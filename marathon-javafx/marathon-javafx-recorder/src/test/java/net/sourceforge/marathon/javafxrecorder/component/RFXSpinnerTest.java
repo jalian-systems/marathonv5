@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.testng.AssertJUnit;
@@ -9,6 +10,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.SpinnerSample;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXSpinnerTest extends RFXComponentTest {
@@ -25,6 +27,24 @@ public class RFXSpinnerTest extends RFXComponentTest {
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("March", recording.getParameters()[0]);
+    }
+
+    @Test public void getText() {
+        Spinner<?> spinner = (Spinner<?>) getPrimaryStage().getScene().getRoot().lookup(".spinner");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            RFXSpinner rfxSpinner = new RFXSpinner(spinner, null, null, lr);
+            spinner.getEditor().setText("March");
+            rfxSpinner.focusLost(null);
+            text.add(rfxSpinner.getAttribute("text"));
+        });
+        new Wait("Waiting for spinner text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("March", text.get(0));
     }
 
     @Test public void selectListEditableSpinner() {

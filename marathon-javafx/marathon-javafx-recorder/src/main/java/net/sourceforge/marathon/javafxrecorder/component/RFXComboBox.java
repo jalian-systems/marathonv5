@@ -39,4 +39,8 @@ public class RFXComboBox extends RFXComponent {
         return getContent((ComboBox<?>) node);
     }
 
+    @Override public String _getText() {
+        return getComboBoxText((ComboBox<?>) node, ((ComboBox<?>) node).getSelectionModel().getSelectedIndex(), true);
+    }
+
 }

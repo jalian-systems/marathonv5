@@ -9,6 +9,10 @@ import javafx.scene.control.TableView;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
+/**
+ * @author vinay
+ *
+ */
 public class RFXTableView extends RFXComponent {
 
     private int column = -1;
@@ -100,6 +104,33 @@ public class RFXTableView extends RFXComponent {
 
     @Override public String getCellInfo() {
         return cellText;
+    }
+
+    @Override public String _getText() {
+        return getSelection((TableView<?>) getComponent());
+    }
+
+    @Override public String[][] getContent() {
+        return getContent((TableView<?>) node);
+    }
+
+    /*
+     * NOTE: Same code exits in JavaFXTableViewElement class. So in case if you
+     * want to modify. Modify both.
+     */
+    protected String[][] getContent(TableView<?> tableView) {
+        int rows = tableView.getItems().size();
+        int cols = tableView.getColumns().size();
+        String[][] content = new String[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                String valueAt = getTableCellValueAt(tableView, i, j);
+                if (valueAt == null)
+                    valueAt = "";
+                content[i][j] = valueAt;
+            }
+        }
+        return content;
     }
 
 }

@@ -42,8 +42,8 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         TableView<?> tableView = (TableView<?>) parent.getComponent();
         TableCell<?, ?> cell = getCellAt(tableView, viewRow, viewColumn);
         if (cell != null) {
-            tableView.scrollTo(viewRow - 1);
-            tableView.scrollToColumnIndex(viewColumn - 1);
+            tableView.scrollTo(viewRow);
+            tableView.scrollToColumnIndex(viewColumn);
         }
         return cell;
     }
@@ -90,6 +90,18 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
 
     public int getCol() {
         return viewColumn;
+    }
+
+    @Override public String _getText() {
+        TableCell<?, ?> cell = (TableCell<?, ?>) getPseudoComponent();
+        Node graphic = cell.getGraphic();
+        JavaFXElement graphicElement = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);
+        if (graphic != null && graphicElement != null) {
+            return graphicElement._getValue();
+        } else if (graphic == null && !cell.isEditing())
+            return cell.getItem().toString();
+        JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
+        return cellElement._getValue();
     }
 
 }

@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -47,6 +48,48 @@ public class RFXListViewTest extends RFXComponentTest {
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("[\"Long Row 3\"]", recording.getParameters()[0]);
+    }
+
+    @Test public void getText() {
+        ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                listView.getSelectionModel().select(2);
+                RFXListView rfxListView = new RFXListView(listView, null, null, lr);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
+                text.add(rfxListView.getAttribute("text"));
+            }
+        });
+        new Wait("Waiting for list text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[\"Long Row 3\"]", text.get(0));
+    }
+
+    @Test public void getTextForMultipleSelection() {
+        ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                MultipleSelectionModel<?> selectionModel = listView.getSelectionModel();
+                selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+                selectionModel.selectIndices(2, 8);
+                RFXListView rfxListView = new RFXListView(listView, null, null, lr);
+                rfxListView.focusLost(new RFXListView(null, null, null, lr));
+                text.add(rfxListView.getAttribute("text"));
+            }
+        });
+        new Wait("Waiting for list text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("[\"Long Row 3\",\"Row 9\"]", text.get(0));
     }
 
     @Test public void selectMultipleItemSelection() {

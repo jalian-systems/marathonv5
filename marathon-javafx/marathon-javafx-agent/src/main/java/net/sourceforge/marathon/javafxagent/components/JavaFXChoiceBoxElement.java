@@ -28,4 +28,8 @@ public class JavaFXChoiceBoxElement extends JavaFXElement {
         return new JSONArray(getContent((ChoiceBox<?>) getComponent())).toString();
     }
 
+    @Override public String _getText() {
+        return getChoiceBoxText((ChoiceBox<?>) getComponent(),
+                ((ChoiceBox<?>) getComponent()).getSelectionModel().getSelectedIndex());
+    }
 }
