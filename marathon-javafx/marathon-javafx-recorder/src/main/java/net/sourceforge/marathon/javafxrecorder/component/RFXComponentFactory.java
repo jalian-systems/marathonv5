@@ -42,6 +42,7 @@ import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.HTMLEditor;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
@@ -75,7 +76,7 @@ public class RFXComponentFactory {
             return null;
         }
 
-        @Override public Node getRecordOn(Node component, Point2D point) {
+        public Node getRecordOn(Node component, Point2D point) {
             if (recordOn != null)
                 return recordOn.getRecordOn(component, point);
             return null;
@@ -99,6 +100,7 @@ public class RFXComponentFactory {
     public static void reset() {
         entries.clear();
         add(Node.class, RFXUnknownComponent.class, null);
+        add(Pane.class, RFXIgnoreComponent.class, null);
         add(TextInputControl.class, RFXTextInputControl.class, new IRecordOn() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {
