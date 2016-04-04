@@ -111,3 +111,6 @@ marathon-javafx/marathon-javafx-runtime/.settings/
 marathon-javafx/marathon-javafx-runtime/build/
 marathon-javafx/marathon-javafx-runtime/.gitignore
 marathon-javafx/marathon-javafx-runtime/test-output/
+marathon-java/marathon-java-recorder/bin-test/
+marathon-javafx/bin/
+marathon/ruby-selenium-webdriver/bin/
