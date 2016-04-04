@@ -3,6 +3,8 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
@@ -36,4 +38,11 @@ public class RFXCheckBox extends RFXComponent {
     @Override public String _getText() {
         return getCheckBoxText((CheckBox) node);
     }
+
+    @Override protected void keyPressed(KeyEvent ke) {
+        if (ke.getCode() == KeyCode.SPACE) {
+            recorder.recordRawKeyEvent(this, ke);
+        }
+    }
+    
 }

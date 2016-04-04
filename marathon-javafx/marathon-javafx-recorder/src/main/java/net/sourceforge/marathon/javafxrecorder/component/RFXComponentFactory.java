@@ -452,7 +452,10 @@ public class RFXComponentFactory {
     }
 
     public RFXComponent findRComponent(Node parent, Point2D point, IJSONRecorder recorder) {
-        return findRawRComponent(getComponent(parent, point), point, recorder);
+        RFXComponent r = findRawRComponent(getComponent(parent, point), point, recorder);
+        System.out.println("RFXComponentFactory.findRComponent(node = " + parent.getClass().getName() + ", rfxComponent = "
+                + r.getClass().getName() + ")");
+        return r;
     }
 
     public RFXComponent findRawRComponent(Node source, Point2D point, IJSONRecorder recorder) {

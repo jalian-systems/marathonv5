@@ -263,6 +263,14 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     @Override public void handle(Event event) {
+        try {
+            handle_internal(event);
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+    private void handle_internal(Event event) {
         if (contextMenuTriggerCheck.isContextMenuEvent(event) || contextMenuHandler.isShowing()) {
             event.consume();
             contextMenuHandler.showPopup(event);
@@ -329,7 +337,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     private boolean isFocusChangeEvent(Event event) {
-        return event.getEventType() == MouseEvent.MOUSE_PRESSED;
+        return event.getEventType().equals(MouseEvent.MOUSE_PRESSED) || event.getEventType().equals(KeyEvent.KEY_PRESSED);
     }
 
     private boolean isShowing(RFXComponent component) {

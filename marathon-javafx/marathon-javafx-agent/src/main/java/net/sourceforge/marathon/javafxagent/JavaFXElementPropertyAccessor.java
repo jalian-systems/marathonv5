@@ -649,6 +649,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     protected int getIndexAt(ListView<?> listView, Point2D point) {
+        if(point == null) {
+            return listView.getSelectionModel().getSelectedIndex();
+        }
         point = listView.localToScene(point);
         Set<Node> lookupAll = listView.lookupAll(".list-cell");
         ListCell<?> selected = null;

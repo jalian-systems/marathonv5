@@ -238,7 +238,7 @@ public class HTTPRecorder implements IJSONRecorder {
     }
 
     private boolean needManualRecording(KeyCode keyCode) {
-        return keyCode == KeyCode.BACK_SPACE || keyCode == KeyCode.DELETE || keyCode == KeyCode.ESCAPE;
+        return keyCode == KeyCode.BACK_SPACE || keyCode == KeyCode.DELETE || keyCode == KeyCode.ESCAPE || keyCode == KeyCode.SPACE;
     }
 
     private String getMapping(char keyChar) {
