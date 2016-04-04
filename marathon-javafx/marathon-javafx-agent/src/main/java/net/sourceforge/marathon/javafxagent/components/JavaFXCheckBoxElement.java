@@ -47,4 +47,12 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
         return Arrays.asList(states).contains(value);
     }
 
+    @Override public String _getText() {
+        return getCheckBoxText((CheckBox) getComponent());
+    }
+
+    @Override public String _getValue() {
+        int selection = getSelection((CheckBox) node);
+        return JavaFXCheckBoxElement.states[selection];
+    }
 }

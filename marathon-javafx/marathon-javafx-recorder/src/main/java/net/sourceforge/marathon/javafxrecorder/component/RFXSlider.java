@@ -24,4 +24,7 @@ public class RFXSlider extends RFXComponent {
             recorder.recordSelect(this, "" + current);
     }
 
+    @Override public String _getText() {
+        return getSliderValue((Slider) node);
+    }
 }

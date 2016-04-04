@@ -28,6 +28,10 @@ public class RFXChoiceBox extends RFXComponent {
             recorder.recordSelect(this, text);
     }
 
+    @Override public String _getText() {
+        return getChoiceBoxText((ChoiceBox<?>) node, ((ChoiceBox<?>) node).getSelectionModel().getSelectedIndex());
+    }
+
     @Override public String[][] getContent() {
         return getContent((ChoiceBox<?>) node);
     }

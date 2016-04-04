@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,7 +29,8 @@ public class RFXMenuItem extends RFXComponent {
         MenuItem source = (MenuItem) event.getSource();
         String tagForMenu = getTagForMenu(source);
         String menuPath = getSelectedMenuPath((MenuItem) source);
-        recorder.recordSelectMenu(new RFXUnknownComponent(ownerNode, oMapConfig, null, recorder), tagForMenu, menuPath);
+        if (!(ownerNode instanceof ChoiceBox<?>))
+            recorder.recordSelectMenu(new RFXUnknownComponent(ownerNode, oMapConfig, null, recorder), tagForMenu, menuPath);
     }
 
     private String getTagForMenu(MenuItem source) {

@@ -68,6 +68,10 @@ public class JavaFXListViewElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getListSelectionText((ListView<?>) getComponent());
+    }
+
     public String getContent() {
         return new JSONArray(getContent((ListView<?>) getComponent())).toString();
     }

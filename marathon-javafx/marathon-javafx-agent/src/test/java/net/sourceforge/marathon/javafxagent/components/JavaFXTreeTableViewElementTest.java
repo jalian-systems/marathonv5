@@ -156,6 +156,27 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals("Email", columnName.get(0));
     }
 
+    @Test public void getText() {
+        TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            treeTableNode.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            treeTable.marathon_select("{\"rows\":[\"/Sales Department/Emma Jones\",\"/Sales Department/Anna Black\"]}");
+            text.add(treeTable.getAttribute("text"));
+        });
+        new Wait("Waiting for tree table text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\",\"/Sales Department/Anna Black\"]}", text.get(0));
+    }
+
+    @Test public void assertContent() {
+        String expected = "[[\"Sales Department\",\"\"],[\"Ethan Williams\",\"ethan.williams@example.com\"],[\"Emma Jones\",\"emma.jones@example.com\"],[\"Michael Brown\",\"michael.brown@example.com\"],[\"Anna Black\",\"anna.black@example.com\"],[\"Rodger York\",\"roger.york@example.com\"],[\"Susan Collins\",\"susan.collins@example.com\"]]";
+        AssertJUnit.assertEquals(expected, treeTable.getAttribute("content"));
+    }
+
     @SuppressWarnings("rawtypes") private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
         return treeTableView.getColumns().get(index);
     }

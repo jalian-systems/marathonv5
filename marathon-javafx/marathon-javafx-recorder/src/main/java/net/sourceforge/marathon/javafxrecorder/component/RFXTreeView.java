@@ -76,4 +76,12 @@ public class RFXTreeView extends RFXComponent {
             return false;
         return true;
     }
+
+    @Override public String _getText() {
+        return getSelectedTreeNodeText((TreeView<?>) node, ((TreeView<?>) node).getSelectionModel().getSelectedItems());
+    }
+
+    @Override public String[][] getContent() {
+        return getContent((TreeView<?>) node);
+    }
 }

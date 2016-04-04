@@ -23,4 +23,8 @@ public class RFXTextInputControl extends RFXComponent {
         if (!text.equals(prevText))
             recorder.recordSelect(this, text);
     }
+
+    @Override public String _getText() {
+        return ((TextInputControl) getComponent()).getText();
+    }
 }

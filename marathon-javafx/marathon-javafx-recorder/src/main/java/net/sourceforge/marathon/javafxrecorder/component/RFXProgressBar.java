@@ -20,4 +20,7 @@ public class RFXProgressBar extends RFXComponent {
             recorder.recordSelect(this, currentValue);
     }
 
+    @Override public String _getText() {
+        return getProgressText((ProgressBar) node);
+    }
 }

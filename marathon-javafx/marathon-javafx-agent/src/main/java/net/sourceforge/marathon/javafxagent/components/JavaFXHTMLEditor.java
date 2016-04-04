@@ -23,6 +23,6 @@ public class JavaFXHTMLEditor extends JavaFXElement {
     }
 
     @Override public String _getText() {
-        return ((HTMLEditor) getComponent()).getHtmlText();
+        return getHTMLEditorText((HTMLEditor) getComponent());
     }
 }

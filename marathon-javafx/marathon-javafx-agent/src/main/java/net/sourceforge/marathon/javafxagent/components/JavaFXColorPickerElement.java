@@ -25,4 +25,8 @@ public class JavaFXColorPickerElement extends JavaFXElement {
         }
         return false;
     }
+
+    @Override public String _getText() {
+        return getColorCode(((ColorPicker) getComponent()).getValue());
+    }
 }

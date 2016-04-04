@@ -37,6 +37,20 @@ public class JavaFXChoiceBoxElementTest extends JavaFXElementTest {
         };
     }
 
+    @Test public void getText() {
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            choiceBox.marathon_select("Horse");
+            text.add(choiceBox.getAttribute("text"));
+        });
+        new Wait("Waiting for choice box text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Horse", text.get(0));
+    }
+
     @Test public void assertContent() {
         List<String> contents = new ArrayList<>();
         Platform.runLater(() -> {

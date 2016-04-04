@@ -18,4 +18,7 @@ public class JavaFXProgressBarElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getProgressText((ProgressBar) getComponent());
+    }
 }

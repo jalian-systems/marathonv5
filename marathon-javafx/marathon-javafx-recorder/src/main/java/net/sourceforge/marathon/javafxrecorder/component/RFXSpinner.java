@@ -25,4 +25,7 @@ public class RFXSpinner extends RFXComponent {
             recorder.recordSelect(this, currentValue);
     }
 
+    @Override public String _getText() {
+        return getSpinnerText((Spinner<?>) node);
+    }
 }

@@ -1,5 +1,8 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -76,6 +79,21 @@ public class JavaFXSpinnerElementTest extends JavaFXElementTest {
                 return value == 35;
             }
         };
+    }
+
+    @Test public void getText() {
+        IJavaFXElement spinner = driver.findElementByName("integer-spinner");
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            spinner.marathon_select("35");
+            text.add(spinner.getAttribute("text"));
+        });
+        new Wait("Waiting for the spinner text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("35", text.get(0));
     }
 
     @Test public void selectEditableIntegerSpinner() {

@@ -20,4 +20,8 @@ public class JavaFXToggleButtonElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getToggleText((ToggleButton) getComponent());
+    }
+
 }

@@ -205,6 +205,24 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals(expected, a.toString());
     }
 
+    @Test public void getText() {
+        ComboBox<?> comboBox = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            RFXComboBox rfxComboBoxBase = new RFXComboBox(comboBox, null, null, lr);
+            comboBox.getSelectionModel().select(1);
+            rfxComboBoxBase.focusLost(null);
+            text.add(rfxComboBoxBase._getText());
+        });
+        new Wait("Waiting for combo box text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Option 2", text.get(0));
+    }
+
     @Override protected Pane getMainPane() {
         return new ComboBoxSample();
     }

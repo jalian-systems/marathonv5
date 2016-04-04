@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.DatePickerSample;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXDatePickerTest extends RFXComponentTest {
@@ -30,6 +31,23 @@ public class RFXDatePickerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         LocalDate date = (LocalDate) datePicker.getChronology().date(LocalDate.now());
         AssertJUnit.assertEquals(datePicker.getConverter().toString(date), recording.getParameters()[0]);
+    }
+
+    @Test public void getText() {
+        DatePicker datePicker = (DatePicker) getPrimaryStage().getScene().getRoot().lookup(".date-picker");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        RFXDatePicker rfxDatePicker = new RFXDatePicker(datePicker, null, null, lr);
+        Platform.runLater(() -> {
+            datePicker.setValue(LocalDate.now());
+            text.add(rfxDatePicker._getText());
+        });
+        new Wait("Waiting for date picker text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals(datePicker.getConverter().toString(LocalDate.now()), text.get(0));
     }
 
     @Test public void pickEditorDate() {

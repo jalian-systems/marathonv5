@@ -1,5 +1,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.testng.AssertJUnit;
@@ -7,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import ensemble.samples.controls.buttons.CheckBoxes;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
@@ -96,6 +99,20 @@ public class JavaFXCheckBoxElementTest extends JavaFXElementTest {
                 return !checkBoxNode.isIndeterminate() && checkBoxNode.isSelected();
             }
         };
+    }
+
+    @Test public void getText() throws Throwable {
+        CheckBox checkBoxNode = (CheckBox) getPrimaryStage().getScene().getRoot().lookup(".check-box");
+        AssertJUnit.assertEquals(false, checkBoxNode.isSelected());
+        checkBox.marathon_select("checked");
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> text.add(checkBox.getAttribute("text")));
+        new Wait("Waiting for the check box text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Simple checkbox", text.get(0));
     }
 
     private CheckBox findCheckbox(String text) {

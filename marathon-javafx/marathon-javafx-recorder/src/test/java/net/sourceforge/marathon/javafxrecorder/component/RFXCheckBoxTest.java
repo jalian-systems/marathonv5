@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXCheckBoxTest extends RFXComponentTest {
@@ -78,6 +80,26 @@ public class RFXCheckBoxTest extends RFXComponentTest {
         Recording select = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", select.getCall());
         AssertJUnit.assertEquals("indeterminate", select.getParameters()[0]);
+    }
+
+    @Test public void getText() throws Throwable {
+        CheckBox checkBox = findCheckbox("Simple checkbox");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                checkBox.setSelected(true);
+                RFXCheckBox rfxCheckBox = new RFXCheckBox(checkBox, null, null, lr);
+                rfxCheckBox.mouseClicked(null);
+                text.add(rfxCheckBox._getText());
+            }
+        });
+        new Wait("Waiting for checkbox text") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Simple checkbox", text.get(0));
     }
 
 }

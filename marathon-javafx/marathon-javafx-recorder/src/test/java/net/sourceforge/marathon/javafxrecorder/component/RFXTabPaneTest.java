@@ -1,6 +1,7 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -49,6 +50,26 @@ public class RFXTabPaneTest extends RFXComponentTest {
         select = recordings.get(1);
         AssertJUnit.assertEquals("recordSelect", select.getCall());
         AssertJUnit.assertEquals("Tab 2", select.getParameters()[0]);
+    }
+
+    @Test public void getText() throws Throwable {
+        TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
+                tabPane.getSelectionModel().select(1);
+                rfxTabPane.mouseClicked(null);
+                text.add(rfxTabPane.getAttribute("text"));
+            }
+        });
+        new Wait("Waiting for tab pane text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Tab 2", text.get(0));
     }
 
     @Test public void selectNoTextTab() {

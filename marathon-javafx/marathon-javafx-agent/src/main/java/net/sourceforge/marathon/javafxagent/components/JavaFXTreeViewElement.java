@@ -70,4 +70,12 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getSelectedTreeNodeText((TreeView<?>) getComponent(),
+                ((TreeView<?>) getComponent()).getSelectionModel().getSelectedItems());
+    }
+
+    public String getContent() {
+        return new JSONArray(getContent((TreeView<?>) getComponent())).toString();
+    }
 }

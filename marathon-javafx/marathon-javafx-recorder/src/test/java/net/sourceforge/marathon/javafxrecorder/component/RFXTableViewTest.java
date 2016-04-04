@@ -1,7 +1,9 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -12,6 +14,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXTableViewTest extends RFXComponentTest {
@@ -169,6 +172,47 @@ public class RFXTableViewTest extends RFXComponentTest {
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("all", recording.getParameters()[0]);
+    }
+
+    @SuppressWarnings("unchecked") @Test public void getText() {
+        TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<Object> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            tableView.getSelectionModel().setCellSelectionEnabled(true);
+            Point2D point = getPoint(tableView, 1, 1);
+            RFXTableView rfxTableView = new RFXTableView(tableView, null, point, lr);
+            rfxTableView.focusGained(null);
+            @SuppressWarnings("rawtypes")
+            TableColumn column = getTableColumnAt(tableView, 1);
+            tableView.getSelectionModel().select(1, column);
+            rfxTableView.focusLost(null);
+            text.add(rfxTableView.getAttribute("text"));
+        });
+        new Wait("Waiting for table text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("{\"cells\":[[\"1\",\"Last\"]]}", text.get(0));
+    }
+
+    @Test public void getContent() {
+        TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
+        final Object[] content = new Object[] { null };
+        Platform.runLater(() -> {
+            Point2D point = getPoint(tableView, 1, 1);
+            RFXTableView rfxTableView = new RFXTableView(tableView, null, point, null);
+            content[0] = rfxTableView.getContent();
+        });
+        new Wait("Wating for contents") {
+            @Override public boolean until() {
+                return content[0] != null;
+            }
+        };
+        JSONArray a = new JSONArray(content[0]);
+        String expected = "[[\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
+        AssertJUnit.assertEquals(expected, a.toString());
     }
 
     @SuppressWarnings("rawtypes") private TableColumn getTableColumnAt(TableView<?> tableView, int i) {

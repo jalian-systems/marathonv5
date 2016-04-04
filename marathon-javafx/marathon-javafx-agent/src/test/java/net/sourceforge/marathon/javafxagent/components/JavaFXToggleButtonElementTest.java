@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import ensemble.samples.controls.buttons.RadioButtons;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.Pane;
@@ -75,6 +76,22 @@ public class JavaFXToggleButtonElementTest extends JavaFXElementTest {
                 return !radioButtonNode.isSelected();
             }
         };
+    }
+
+    @Test public void getText() {
+        RadioButton radioButtonNode = (RadioButton) getPrimaryStage().getScene().getRoot().lookup(".radio-button");
+        AssertJUnit.assertEquals(false, radioButtonNode.isSelected());
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            radioButton.marathon_select("true");
+            text.add(radioButton.getAttribute("text"));
+        });
+        new Wait("Waiting for the toggle button text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Hello", text.get(0));
     }
 
 }

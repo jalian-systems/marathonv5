@@ -22,4 +22,8 @@ public class RFXDatePicker extends RFXComponent {
         else
             recorder.recordSelect(this, getDatePickerText(datePicker, value));
     }
+
+    @Override public String _getText() {
+        return getDatePickerText((DatePicker) node, ((DatePicker) node).getValue());
+    }
 }

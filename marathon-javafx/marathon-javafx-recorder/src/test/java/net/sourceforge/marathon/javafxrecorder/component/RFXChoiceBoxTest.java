@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -152,6 +153,24 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         JSONArray a = new JSONArray(content[0]);
         String expected = "[[\"Dog\",\"Cat\",\"Horse\",\"Cat(1)\"]]";
         AssertJUnit.assertEquals(expected, a.toString());
+    }
+
+    @Test public void getText() {
+        ChoiceBox<?> choiceBox = (ChoiceBox<?>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
+        LoggingRecorder lr = new LoggingRecorder();
+        List<String> text = new ArrayList<>();
+        Platform.runLater(() -> {
+            RFXChoiceBox rfxChoiceBox = new RFXChoiceBox(choiceBox, null, null, lr);
+            choiceBox.getSelectionModel().select(1);
+            rfxChoiceBox.focusLost(null);
+            text.add(rfxChoiceBox._getText());
+        });
+        new Wait("Waiting for choice box text.") {
+            @Override public boolean until() {
+                return text.size() > 0;
+            }
+        };
+        AssertJUnit.assertEquals("Cat", text.get(0));
     }
 
     @Override protected Pane getMainPane() {

@@ -25,4 +25,8 @@ public class RFXColorPicker extends RFXComponent {
             recorder.recordSelect(this, currentColor);
         }
     }
+
+    @Override public String _getText() {
+        return getColorCode(((ColorPicker) node).getValue());
+    }
 }

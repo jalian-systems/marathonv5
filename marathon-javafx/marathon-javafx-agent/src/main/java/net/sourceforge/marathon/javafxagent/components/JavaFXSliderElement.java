@@ -17,4 +17,7 @@ public class JavaFXSliderElement extends JavaFXElement {
         return true;
     }
 
+    @Override public String _getText() {
+        return getSliderValue((Slider) getComponent());
+    }
 }

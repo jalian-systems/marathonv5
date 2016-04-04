@@ -81,4 +81,8 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         cellComponent.getProperties().put("marathon.celleditor", true);
         return cellComponent;
     }
+
+    @Override public String _getText() {
+        return getListSelectionText((ListView<?>) getParent().getComponent(), itemIndex);
+    }
 }

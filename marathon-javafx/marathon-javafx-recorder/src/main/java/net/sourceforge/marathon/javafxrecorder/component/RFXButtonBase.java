@@ -2,6 +2,7 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -17,4 +18,7 @@ public class RFXButtonBase extends RFXComponent {
             recorder.recordClick(this, me);
     }
 
+    @Override public String _getText() {
+        return getButtonText((ButtonBase) node);
+    }
 }
