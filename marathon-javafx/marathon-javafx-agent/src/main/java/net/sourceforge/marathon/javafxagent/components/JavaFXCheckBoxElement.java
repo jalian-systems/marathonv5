@@ -18,6 +18,12 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
     }
 
     @Override public boolean marathon_select(String value) {
+        CheckBox cb = (CheckBox) node;
+        boolean isCellEditor = (boolean) cb.getProperties().get("marathon.celleditor");
+        if (isCellEditor) {
+            String[] split = value.split(":");
+            value = split[1];
+        }
         if (!isValidState(value))
             throw new JavaAgentException(value + " is not a valid state for CheckBox.", null);
         int selection = 0;
@@ -26,7 +32,6 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
                 break;
             selection++;
         }
-        CheckBox cb = (CheckBox) node;
         int current = getSelection(cb);
         if (cb.isAllowIndeterminate()) {
             if (current != selection) {

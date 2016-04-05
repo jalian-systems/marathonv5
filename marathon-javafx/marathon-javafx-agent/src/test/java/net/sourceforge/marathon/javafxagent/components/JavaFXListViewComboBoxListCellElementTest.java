@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxagent.components;
 
+import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -32,6 +33,11 @@ public class JavaFXListViewComboBoxListCellElementTest extends JavaFXElementTest
                 return selected.equals("2");
             }
         };
+    }
+
+    @Test public void assertContent() {
+        String expected = "[[\"Option 1\",\"Option 2\",\"Option 3\",\"Option 4\",\"Option 5\",\"Option 6\"]]";
+        AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
     }
 
     @Override protected Pane getMainPane() {

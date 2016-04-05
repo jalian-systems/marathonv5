@@ -2,6 +2,8 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -11,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.CheckBoxListViewSample;
 import net.sourceforge.marathon.javafx.tests.CheckBoxListViewSample.Item;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
 public class RFXListViewCheckBoxListCellTest extends RFXComponentTest {
@@ -31,7 +34,7 @@ public class RFXListViewCheckBoxListCellTest extends RFXComponentTest {
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
-        AssertJUnit.assertEquals("checked", recording.getParameters()[0]);
+        AssertJUnit.assertEquals("Item 6:checked", recording.getParameters()[0]);
     }
 
     @Test public void selectSelectedListItemCheckBox() {
@@ -51,7 +54,27 @@ public class RFXListViewCheckBoxListCellTest extends RFXComponentTest {
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
-        AssertJUnit.assertEquals("unchecked", recording.getParameters()[0]);
+        AssertJUnit.assertEquals("Item 7:unchecked", recording.getParameters()[0]);
+    }
+
+    @Test public void assertContent() {
+        ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        final Object[] content = new Object[] { null };
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                RFXListView rfxListView = new RFXListView(listView, null, null, new LoggingRecorder());
+                content[0] = rfxListView.getContent();
+            }
+        });
+        new Wait("Waiting for contens.") {
+            @Override public boolean until() {
+                return content[0] != null;
+            }
+        };
+        JSONArray a = new JSONArray(content[0]);
+        Assert.assertEquals(
+                "[[\"Item 1:unchecked\",\"Item 2:unchecked\",\"Item 3:unchecked\",\"Item 4:unchecked\",\"Item 5:unchecked\",\"Item 6:unchecked\",\"Item 7:unchecked\",\"Item 8:unchecked\",\"Item 9:unchecked\",\"Item 10:unchecked\",\"Item 11:unchecked\",\"Item 12:unchecked\",\"Item 13:unchecked\",\"Item 14:unchecked\",\"Item 15:unchecked\",\"Item 16:unchecked\",\"Item 17:unchecked\",\"Item 18:unchecked\",\"Item 19:unchecked\",\"Item 20:unchecked\"]]",
+                a.toString());
     }
 
     @Override protected Pane getMainPane() {

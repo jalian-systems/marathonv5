@@ -153,34 +153,6 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
     }
 
-    @Test public void assertContentWithDuplicates() {
-        @SuppressWarnings("unchecked")
-        ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
-        Platform.runLater(new Runnable() {
-
-            @Override public void run() {
-                listViewNode.getItems().add(2, "Row 2");
-            }
-        });
-        String expected = "[[\"Row 1\",\"Row 2\",\"Row 2(1)\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]";
-        AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
-    }
-
-    @Test public void assertContentWithMultipleDuplicates() {
-        @SuppressWarnings("unchecked")
-        ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
-        Platform.runLater(new Runnable() {
-
-            @Override public void run() {
-                listViewNode.getItems().add(2, "Row 2");
-                listViewNode.getItems().add(9, "Row 2");
-                listViewNode.getItems().add(10, "Row 2");
-            }
-        });
-        String expected = "[[\"Row 1\",\"Row 2\",\"Row 2(1)\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 2(2)\",\"Row 2(3)\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]";
-        AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
-    }
-
     @Override protected Pane getMainPane() {
         return new SimpleListViewSample();
     }

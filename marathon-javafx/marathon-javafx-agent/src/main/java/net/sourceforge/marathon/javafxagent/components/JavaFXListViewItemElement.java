@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
@@ -83,6 +84,16 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public String _getText() {
-        return getListSelectionText((ListView<?>) getParent().getComponent(), itemIndex);
+        ListCell<?> cell = (ListCell<?>) getPseudoComponent();
+        Node graphic = cell.getGraphic();
+        JavaFXElement graphicElement = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);
+        if (graphic != null && graphicElement != null) {
+            if (graphic instanceof CheckBox)
+                return cell.getText() + ":" + graphicElement._getValue();
+            else
+                return graphicElement._getValue();
+        }
+        JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
+        return cellElement._getValue();
     }
 }

@@ -75,4 +75,17 @@ public class JavaFXListViewElement extends JavaFXElement {
     public String getContent() {
         return new JSONArray(getContent((ListView<?>) getComponent())).toString();
     }
+    
+    /*
+     * NOTE: Same code exits in RXFXListView class. So in case if you
+     * want to modify. Modify both.
+     */
+    private String[][] getContent(ListView<?> listView) {
+        int nItems = listView.getItems().size();
+        String[][] content = new String[1][nItems];
+        for (int i = 0; i < nItems; i++) {
+            content[0][i] = new JavaFXListViewItemElement(this, i)._getText();
+        }
+        return content;
+    }
 }

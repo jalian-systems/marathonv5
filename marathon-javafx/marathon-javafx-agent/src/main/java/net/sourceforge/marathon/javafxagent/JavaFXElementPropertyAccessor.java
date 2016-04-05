@@ -680,15 +680,6 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return listView.getItems().get(index).toString();
     }
 
-    protected String[][] getContent(ListView<?> node) {
-        int nItems = ((ListView<?>) node).getItems().size();
-        String[][] content = new String[1][nItems];
-        for (int i = 0; i < nItems; i++) {
-            content[0][i] = getListSelectionText(node, i);
-        }
-        return content;
-    }
-
     public int getListItemIndex(ListView<?> listView, String string) {
         ObservableList<?> items = listView.getItems();
         for (int i = 0; i < items.size(); i++) {
