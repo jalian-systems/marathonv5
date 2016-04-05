@@ -23,8 +23,11 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
 
     private JavaFXAgent driver;
     private List<IJavaFXElement> datePickers;
+    private String dateString;
 
     @BeforeMethod public void initializeDriver() {
+        LocalDate d = LocalDate.of(2016, 3, 16);
+        dateString = new DatePicker(d).getConverter().toString(d);
         driver = new JavaFXAgent();
         datePickers = driver.findElementsByTagName("date-picker");
     }
@@ -33,7 +36,7 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
         DatePicker datePickerNode = (DatePicker) getPrimaryStage().getScene().getRoot().lookup(".date-picker");
         IJavaFXElement datePicker = datePickers.get(0);
         Platform.runLater(() -> {
-            datePicker.marathon_select("3/16/2016");
+            datePicker.marathon_select(dateString);
         });
         List<Object> dates = new ArrayList<>();
         Platform.runLater(() -> {
@@ -45,14 +48,14 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
                 return dates.size() > 0;
             }
         };
-        AssertJUnit.assertEquals("3/16/2016", dates.get(0));
+        AssertJUnit.assertEquals(dateString, dates.get(0));
     }
 
     @Test public void getText() {
         IJavaFXElement datePicker = datePickers.get(0);
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
-            datePicker.marathon_select("3/16/2016");
+            datePicker.marathon_select(dateString);
             text.add(datePicker.getAttribute("text"));
         });
         new Wait("Waiting for date picker text.") {
@@ -60,7 +63,7 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
                 return text.size() > 0;
             }
         };
-        AssertJUnit.assertEquals("3/16/2016", text.get(0));
+        AssertJUnit.assertEquals(dateString, text.get(0));
     }
 
     @Test public void selectEdiotrDate() {
@@ -69,7 +72,7 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
         DatePicker datePickerNode = (DatePicker) pickers.get(1);
         IJavaFXElement datePicker = datePickers.get(1);
         Platform.runLater(() -> {
-            datePicker.marathon_select("3/16/2016");
+            datePicker.marathon_select(dateString);
         });
         List<Object> dates = new ArrayList<>();
         Platform.runLater(() -> {
@@ -81,7 +84,7 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
                 return dates.size() > 0;
             }
         };
-        AssertJUnit.assertEquals("3/16/2016", dates.get(0));
+        AssertJUnit.assertEquals(dateString, dates.get(0));
     }
 
     @Test(expectedExceptions = DateTimeException.class) public void datePickerWithInvalidDateFormat() {

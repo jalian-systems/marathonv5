@@ -48,6 +48,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TitledPane;
@@ -64,6 +65,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
@@ -600,7 +602,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return itemText;
     }
 
-    public ListCell<?> getCellAt(ListView<?> listView, Integer index) {
+    @SuppressWarnings({ "rawtypes", "unchecked" }) public ListCell getCellAt(ListView listView, Integer index) {
         Set<Node> lookupAll = listView.lookupAll(".list-cell");
         for (Node node : lookupAll) {
             ListCell<?> cell = (ListCell<?>) node;
@@ -608,7 +610,48 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 return cell;
             }
         }
-        return null;
+        try {
+            Callback<ListView, ListCell> cellFactory = listView.getCellFactory();
+            ListCell listCell = null;
+            if (cellFactory == null) {
+                listCell = new ListCell() {
+                    @Override public void updateItem(Object item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (empty) {
+                            setText(null);
+                            setGraphic(null);
+                        } else if (item instanceof Node) {
+                            setText(null);
+                            Node currentNode = getGraphic();
+                            Node newNode = (Node) item;
+                            if (currentNode == null || !currentNode.equals(newNode)) {
+                                setGraphic(newNode);
+                            }
+                        } else {
+                            /**
+                             * This label is used if the item associated
+                             * with this cell is to be represented as a
+                             * String. While we will lazily instantiate it
+                             * we never clear it, being more afraid of
+                             * object churn than a minor "leak" (which will
+                             * not become a "major" leak).
+                             */
+                            setText(item == null ? "null" : item.toString());
+                            setGraphic(null);
+                        }
+                    }
+                };
+            } else {
+                listCell = cellFactory.call(listView);
+            }
+            Object value = listView.getItems().get(index);
+            Method updateItem = listCell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
+            updateItem.invoke(listCell, value, false);
+            return listCell;
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     public TreeCell<?> getCellAt(TreeView<?> treeView, int index) {
@@ -868,6 +911,14 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
+        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
+        for (Node node : lookupAll) {
+            TableCell<?, ?> cell = (TableCell<?, ?>) node;
+            TableRow<?> tableRow = cell.getTableRow();
+            TableColumn<?, ?> tableColumn = cell.getTableColumn();
+            if (tableRow.getIndex() == row && tableColumn == tableView.getColumns().get(column))
+                return cell;
+        }
         TableColumn tableColumn = (TableColumn) tableView.getColumns().get(column);
         TableCell cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
         Object value = tableColumn.getCellObservableValue(row).getValue();

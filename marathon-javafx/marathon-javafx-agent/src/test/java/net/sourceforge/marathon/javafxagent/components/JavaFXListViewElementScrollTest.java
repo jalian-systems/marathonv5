@@ -72,11 +72,10 @@ public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
         });
         new Wait("Waiting for the point to be in viewport") {
             @Override public boolean until() {
-                return getPoint(listViewNode, 22) != null;
+                Point2D point = getPoint(listViewNode, 22);
+                return listViewNode.getBoundsInLocal().contains(point);
             }
         };
-        Point2D point = getPoint(listViewNode, 22);
-        AssertJUnit.assertTrue(listViewNode.getBoundsInLocal().contains(point));
     }
 
     @Override protected Pane getMainPane() {

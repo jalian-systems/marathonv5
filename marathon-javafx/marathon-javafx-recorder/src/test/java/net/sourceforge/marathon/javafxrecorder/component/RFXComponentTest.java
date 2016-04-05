@@ -52,15 +52,18 @@ public abstract class RFXComponentTest {
                     primaryStage.show();
                 }
             });
-            new Wait("Waiting for applicationHelper to be initialized") {
-                @Override public boolean until() {
-                    try {
-                        return primaryStage.getScene().getRoot() == pane;
-                    } catch (Throwable t) {
-                        return false;
+            try {
+                new Wait("Waiting for applicationHelper to be initialized") {
+                    @Override public boolean until() {
+                        try {
+                            return primaryStage.getScene().getRoot() == pane;
+                        } catch (Throwable t) {
+                            return false;
+                        }
                     }
-                }
-            };
+                };
+            } catch (Throwable t) {
+            }
         }
 
         public Stage getPrimaryStage() {
@@ -85,11 +88,14 @@ public abstract class RFXComponentTest {
             throw new RuntimeException("Application Helper = null");
         }
         applicationHelper.startGUI(getMainPane());
-        new Wait() {
-            @Override public boolean until() {
-                return applicationHelper.getPrimaryStage().isShowing();
-            }
-        }.wait("Waiting for the primary stage to be displayed.", 10000);
+        try {
+            new Wait() {
+                @Override public boolean until() {
+                    return applicationHelper.getPrimaryStage().isShowing();
+                }
+            }.wait("Waiting for the primary stage to be displayed.", 10000);
+        } catch (Throwable t) {
+        }
     }
 
     protected abstract Pane getMainPane();

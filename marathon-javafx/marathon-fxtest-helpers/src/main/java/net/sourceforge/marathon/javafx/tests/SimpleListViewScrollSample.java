@@ -31,10 +31,22 @@
  */
 package net.sourceforge.marathon.javafx.tests;
 
+import java.lang.reflect.Method;
+
 import ensemble.Sample;
+import javafx.application.Application;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * A simple implementation of the ListView control, in which a list of items is
@@ -58,4 +70,107 @@ public class SimpleListViewScrollSample extends Sample {
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         getChildren().add(listView);
     }
+
+    public static class SimpleListViewScrollSampleApp extends Application {
+
+        @Override public void start(Stage primaryStage) throws Exception {
+            final ListView<String> listView = new ListView<String>();
+            listView.setItems(FXCollections.observableArrayList("Row 1", "Row 2", "Long Row 3", "Row 4", "Row 5", "Row 6", "Row 7",
+                    "Row 8", "Row 9", "Row 10", "Row 11", "Row 12", "Row 13", "Row 14", "Row 15", "Row 16", "Row 17", "Row 18",
+                    "Row 19", "Row 20", "Row 21", "Row 22", "Row 23", "Row 24", "Row 25"));
+            listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            Button button = new Button("Debug");
+            button.setOnAction((e) -> {
+                ObservableList<Integer> selectedIndices = listView.getSelectionModel().getSelectedIndices();
+                for (Integer index : selectedIndices) {
+                    ListCell cellAt = getCellAt(listView, index);
+                    System.out.println("SimpleListViewScrollSample.SimpleListViewScrollSampleApp.start(" + cellAt + ")");
+                }
+            });
+            VBox root = new VBox(listView, button);
+            primaryStage.setScene(new Scene(root, 300, 400));
+            primaryStage.show();
+        }
+
+        public ListCell getCellAt(ListView listView, Integer index) {
+            try {
+                Callback<ListView, ListCell> cellFactory = listView.getCellFactory();
+                ListCell listCell = null;
+                if (cellFactory == null) {
+                    listCell = new ListCell() {
+                        @Override public void updateItem(Object item, boolean empty) {
+                            super.updateItem(item, empty);
+
+                            if (empty) {
+                                setText(null);
+                                setGraphic(null);
+                            } else if (item instanceof Node) {
+                                setText(null);
+                                Node currentNode = getGraphic();
+                                Node newNode = (Node) item;
+                                if (currentNode == null || !currentNode.equals(newNode)) {
+                                    setGraphic(newNode);
+                                }
+                            } else {
+                                /**
+                                 * This label is used if the item associated
+                                 * with this cell is to be represented as a
+                                 * String. While we will lazily instantiate it
+                                 * we never clear it, being more afraid of
+                                 * object churn than a minor "leak" (which will
+                                 * not become a "major" leak).
+                                 */
+                                setText(item == null ? "null" : item.toString());
+                                setGraphic(null);
+                            }
+                        }
+                    };
+                } else {
+                    listCell = cellFactory.call(listView);
+                }
+                Object value = listView.getItems().get(index);
+                Method updateItem = listCell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
+                updateItem.invoke(listCell, value, false);
+                return listCell;
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+
+        private static <T> ListCell<T> createDefaultCellImpl() {
+            return new ListCell<T>() {
+                @Override public void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else if (item instanceof Node) {
+                        setText(null);
+                        Node currentNode = getGraphic();
+                        Node newNode = (Node) item;
+                        if (currentNode == null || !currentNode.equals(newNode)) {
+                            setGraphic(newNode);
+                        }
+                    } else {
+                        /**
+                         * This label is used if the item associated with this
+                         * cell is to be represented as a String. While we will
+                         * lazily instantiate it we never clear it, being more
+                         * afraid of object churn than a minor "leak" (which
+                         * will not become a "major" leak).
+                         */
+                        setText(item == null ? "null" : item.toString());
+                        setGraphic(null);
+                    }
+                }
+            };
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Application.launch(SimpleListViewScrollSampleApp.class, args);
+    }
+
 }
