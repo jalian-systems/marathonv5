@@ -61,7 +61,12 @@ public class RFXTableView extends RFXComponent {
         if (row == -1 || column == -1)
             return null;
         TableCell<?, ?> tableCell = getCellAt(tableView, row, column);
+        if(tableCell == null) {
+            throw new RuntimeException("Got a null tableCell for " + new Point2D(row, column));
+        }
         RFXComponent cellComponent = getFinder().findRawRComponent(tableCell, null, recorder);
+        if(cellComponent == null)
+            throw new RuntimeException("Got a null RFXComponent for " + tableCell.getClass().getName());
         String ctext = cellComponent.getValue();
         return ctext;
     }

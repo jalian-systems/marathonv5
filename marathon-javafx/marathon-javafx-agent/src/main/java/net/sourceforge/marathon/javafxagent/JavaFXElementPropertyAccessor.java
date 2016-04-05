@@ -47,9 +47,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TitledPane;
@@ -66,7 +64,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
@@ -870,16 +867,19 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return new JSONObject().put("cell", new JSONArray().put(row).put(getColumnName(tableView, column))).toString();
     }
 
-    public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
-        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
-        for (Node node : lookupAll) {
-            TableCell<?, ?> cell = (TableCell<?, ?>) node;
-            TableRow<?> tableRow = cell.getTableRow();
-            TableColumn<?, ?> tableColumn = cell.getTableColumn();
-            if (tableRow.getIndex() == row && tableColumn == tableView.getColumns().get(column))
-                return cell;
+    @SuppressWarnings({ "rawtypes", "unchecked" }) public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
+        TableColumn tableColumn = (TableColumn) tableView.getColumns().get(column);
+        TableCell cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
+        Object value = tableColumn.getCellObservableValue(row).getValue();
+        Method updateItem;
+        try {
+            updateItem = cell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
+            updateItem.setAccessible(true);
+            updateItem.invoke(cell, value, false);
+            return cell;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public String getSelection(TableView<?> tableView) {
