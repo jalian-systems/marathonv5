@@ -7,7 +7,7 @@ end
 
 Gem::Specification.new do |s|
   s.name    = "marathon-javadriver"
-  s.version = "4.0.0.1"
+  s.version = "4.1.0.0"
 
   s.authors     = ["Jalian Systems Pvt. Ltd."]
   s.email       = "info@jaliansystems.com"
