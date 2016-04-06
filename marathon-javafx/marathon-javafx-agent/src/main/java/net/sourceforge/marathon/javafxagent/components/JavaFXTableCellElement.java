@@ -94,14 +94,7 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
 
     @Override public String _getText() {
         TableCell<?, ?> cell = (TableCell<?, ?>) getPseudoComponent();
-        Node graphic = cell.getGraphic();
-        JavaFXElement graphicElement = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);
-        if (graphic != null && graphicElement != null) {
-            return graphicElement._getValue();
-        } else if (graphic == null && !cell.isEditing())
-            return cell.getItem().toString();
         JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
         return cellElement._getValue();
     }
-
 }

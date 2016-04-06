@@ -4,6 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.cell.CheckBoxTreeTableCell;
+import javafx.util.Callback;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -14,13 +15,24 @@ public class RFXCheckBoxTreeTableCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public String _getValue() {
-        @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" }) @Override public String _getValue() {
         CheckBoxTreeTableCell cell = (CheckBoxTreeTableCell) node;
-        @SuppressWarnings("unchecked")
-        ObservableValue<Boolean> call = (ObservableValue<Boolean>) cell.getSelectedStateCallback().call(cell.getItem());
-        int selection = call.getValue() ? 2 : 0;
-        return JavaFXCheckBoxElement.states[selection];
-    }
+        Callback selectedStateCallback = cell.getSelectedStateCallback();
+        String cbText;
+        if (selectedStateCallback != null) {
+            ObservableValue<Boolean> call = (ObservableValue<Boolean>) selectedStateCallback.call(cell.getItem());
+            int selection = call.getValue() ? 2 : 0;
+            cbText = JavaFXCheckBoxElement.states[selection];
+        } else {
+            Node cb = cell.getGraphic();
+            RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
+            cbText = comp._getValue();
 
+        }
+        String cellText = cell.getText();
+        if (cellText == null)
+            cellText = "";
+        String text = cellText + ":" + cbText;
+        return text;
+    }
 }

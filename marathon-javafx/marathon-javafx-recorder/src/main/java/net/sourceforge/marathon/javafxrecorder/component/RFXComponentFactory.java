@@ -434,14 +434,14 @@ public class RFXComponentFactory {
         add(TreeCell.class, RFXTreeCell.class, null);
         add(CheckBoxTreeCell.class, RFXCheckBoxTreeCell.class, null);
         add(ComboBoxTreeCell.class, RFXComboBoxTreeCell.class, null);
+        add(TableCell.class, RFXTableCell.class, null);
         add(CheckBoxTableCell.class, RFXCheckBoxTableCell.class, null);
         add(ComboBoxTableCell.class, RFXComboBoxTableCell.class, null);
         add(ChoiceBoxTableCell.class, RFXChoiceBoxTableCell.class, null);
-        add(TableCell.class, RFXTableCell.class, null);
+        add(TreeTableCell.class, RFXTreeTableCell.class, null);
         add(CheckBoxTreeTableCell.class, RFXCheckBoxTreeTableCell.class, null);
         add(ComboBoxTreeTableCell.class, RFXComboBoxTreeTableCell.class, null);
         add(ChoiceBoxTreeTableCell.class, RFXChoiceBoxTreeTableCell.class, null);
-        add(TreeTableCell.class, RFXTreeTableCell.class, null);
     }
 
     static {

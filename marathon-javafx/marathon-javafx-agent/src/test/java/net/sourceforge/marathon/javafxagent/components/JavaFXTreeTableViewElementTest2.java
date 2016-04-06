@@ -43,7 +43,7 @@ public class JavaFXTreeTableViewElementTest2 extends JavaFXElementTest {
     }
 
     @Test public void assertContent() {
-        String expected = "[[\"Sales Department\",\"\",\"unchecked\"],[\"Ethan Williams\",\"ethan.williams@example.com\",\"unchecked\"],[\"Emma Jones\",\"emma.jones@example.com\",\"unchecked\"],[\"Michael Brown\",\"michael.brown@example.com\",\"unchecked\"],[\"Anna Black\",\"anna.black@example.com\",\"unchecked\"],[\"Rodger York\",\"roger.york@example.com\",\"unchecked\"],[\"Susan Collins\",\"susan.collins@example.com\",\"unchecked\"]]";
+        String expected = "[[\"Sales Department\",\"\",\":unchecked\"],[\"Ethan Williams\",\"ethan.williams@example.com\",\":unchecked\"],[\"Emma Jones\",\"emma.jones@example.com\",\":unchecked\"],[\"Michael Brown\",\"michael.brown@example.com\",\":unchecked\"],[\"Anna Black\",\"anna.black@example.com\",\":unchecked\"],[\"Rodger York\",\"roger.york@example.com\",\":unchecked\"],[\"Susan Collins\",\"susan.collins@example.com\",\":unchecked\"]]";
         AssertJUnit.assertEquals(expected, treeTable.getAttribute("content"));
     }
 

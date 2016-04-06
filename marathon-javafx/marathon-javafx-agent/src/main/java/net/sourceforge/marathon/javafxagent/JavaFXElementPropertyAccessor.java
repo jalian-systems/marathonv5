@@ -1175,7 +1175,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return selected.getTreeTableRow().getIndex();
     }
 
-    protected TreeTableCell<?, ?> getTreeTableCellAt(TreeTableView<?> treeTableView, int row, int column) {
+    @SuppressWarnings({ "unchecked", "rawtypes" }) protected TreeTableCell<?, ?> getTreeTableCellAt(TreeTableView<?> treeTableView,
+            int row, int column) {
         Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
         for (Node node : lookupAll) {
             TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) node;
@@ -1184,7 +1185,18 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             if (tableRow.getIndex() == row && tableColumn == treeTableView.getColumns().get(column))
                 return cell;
         }
-        return null;
+        try {
+            TreeTableColumn treeTableColumn = treeTableView.getColumns().get(column);
+            Callback cellFactory = treeTableColumn.getCellFactory();
+            TreeTableCell cell = (TreeTableCell) cellFactory.call(treeTableColumn);
+            Object value = treeTableColumn.getCellObservableValue(row).getValue();
+            Method updateItem = cell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
+            updateItem.setAccessible(true);
+            updateItem.invoke(cell, value, false);
+            return cell;
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked") public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView,

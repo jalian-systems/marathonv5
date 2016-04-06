@@ -2,6 +2,7 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TreeTableCell;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
@@ -16,11 +17,13 @@ public class RFXTreeTableCell extends RFXComponent {
         TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) node;
         Node graphic = cell.getGraphic();
         RFXComponent component = getFinder().findRawRComponent(graphic, null, recorder);
-        if (component != null)
+        if (graphic != null && component != null) {
+            if (graphic instanceof CheckBox) {
+                String cellText = cell.getText() == null ? "" : cell.getText();
+                return cellText + ":" + component._getValue();
+            }
             return component._getValue();
-        if (graphic == null && !cell.isEditing())
-            return cell.getTableColumn().getCellObservableValue(cell.getIndex()).getValue().toString();
-        return null;
+        }
+        return super._getValue();
     }
-
 }
