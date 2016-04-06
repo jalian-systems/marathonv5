@@ -681,7 +681,7 @@ public class JavaElementPropertyAccessor {
     public static final List<String> LAST_RESORT_RECOGNITION_PROPERTIES = new ArrayList<String>();
 
     static {
-        LAST_RESORT_RECOGNITION_PROPERTIES.add("type");
+        LAST_RESORT_RECOGNITION_PROPERTIES.add("tagName");
         LAST_RESORT_RECOGNITION_PROPERTIES.add("indexOfType");
     }
 

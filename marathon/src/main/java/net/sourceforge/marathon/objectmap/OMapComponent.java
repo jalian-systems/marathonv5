@@ -23,9 +23,9 @@ public class OMapComponent implements TreeNode, Serializable {
     public static final List<String> LAST_RESORT_RECOGNITION_PROPERTIES = new ArrayList<String>();
 
     static {
-        OMapComponent.LAST_RESORT_NAMING_PROPERTIES.add("type");
+        OMapComponent.LAST_RESORT_NAMING_PROPERTIES.add("tagName");
         OMapComponent.LAST_RESORT_NAMING_PROPERTIES.add("indexOfType");
-        OMapComponent.LAST_RESORT_RECOGNITION_PROPERTIES.add("type");
+        OMapComponent.LAST_RESORT_RECOGNITION_PROPERTIES.add("tagName");
         OMapComponent.LAST_RESORT_RECOGNITION_PROPERTIES.add("indexOfType");
     }
 

@@ -37,6 +37,7 @@ public class JSONOMapConfig {
         collectProperties(allProps, config.getJSONArray("containerNamingProperties"));
         collectProperties(allProps, config.getJSONArray("containerRecognitionProperties"));
         allProps.add("type");
+        allProps.add("tagName");
         allProps.add("indexOfType");
         return allProps;
     }

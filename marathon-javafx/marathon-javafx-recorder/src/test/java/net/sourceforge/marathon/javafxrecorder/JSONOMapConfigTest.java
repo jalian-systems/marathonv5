@@ -331,7 +331,7 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
     public void collectProperties() {
         Collection<String> allProps = config.findProperties();
-        AssertJUnit.assertEquals(28, allProps.size());
+        AssertJUnit.assertEquals(29, allProps.size());
         AssertJUnit.assertTrue(allProps.contains("labelText"));
         AssertJUnit.assertTrue(allProps.contains("actionCommand"));
         AssertJUnit.assertTrue(allProps.contains("component.class.simpleName"));
