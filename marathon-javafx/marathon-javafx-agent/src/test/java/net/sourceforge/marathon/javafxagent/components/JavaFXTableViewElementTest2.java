@@ -39,7 +39,7 @@ public class JavaFXTableViewElementTest2 extends JavaFXElementTest {
     }
 
     @Test public void assertContent() {
-        String expected = "[[\"checked\",\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\"unchecked\",\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\"checked\",\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\"checked\",\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\"unchecked\",\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
+        String expected = "[[\":checked\",\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\":unchecked\",\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\":checked\",\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\":checked\",\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\":unchecked\",\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
         AssertJUnit.assertEquals(expected, tableView.getAttribute("content"));
     }
 
