@@ -29,10 +29,10 @@ public class RFXTreeView extends RFXComponent {
         treeText = getSelectedTreeNodeText(treeView, treeView.getSelectionModel().getSelectedItems());
     }
 
-    private String getTreeCellValue(TreeView<?> treeView, int index2) {
-        if (row == -1)
+    private String getTreeCellValue(TreeView<?> treeView, int index) {
+        if (index == -1)
             return null;
-        TreeCell<?> treeCell = getCellAt(treeView, row);
+        TreeCell<?> treeCell = getCellAt(treeView, index);
         RFXComponent cellComponent = getFinder().findRawRComponent(treeCell, null, recorder);
         String ctext = cellComponent.getValue();
         return ctext;
@@ -83,5 +83,18 @@ public class RFXTreeView extends RFXComponent {
 
     @Override public String[][] getContent() {
         return getContent((TreeView<?>) node);
+    }
+
+    /*
+     * NOTE: Same code exits in JavaFXTreeViewElement class. So in case if you
+     * want to modify. Modify both.
+     */
+    public String[][] getContent(TreeView<?> treeView) {
+        int rowCount = treeView.getExpandedItemCount();
+        String[][] content = new String[1][rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            content[0][i] = getTreeCellValue(treeView, i);
+        }
+        return content;
     }
 }

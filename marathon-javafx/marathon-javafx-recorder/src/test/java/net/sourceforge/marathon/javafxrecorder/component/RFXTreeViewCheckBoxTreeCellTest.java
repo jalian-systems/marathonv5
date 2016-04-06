@@ -2,6 +2,8 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -11,9 +13,10 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.CheckBoxTreeViewSample;
+import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
 
-public class RFXTreeViewCheckBoxListCellTest extends RFXComponentTest {
+public class RFXTreeViewCheckBoxTreeCellTest extends RFXComponentTest {
 
     @Test public void select() {
         TreeView<?> treeView = (TreeView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
@@ -31,7 +34,7 @@ public class RFXTreeViewCheckBoxListCellTest extends RFXComponentTest {
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
-        AssertJUnit.assertEquals("checked", recording.getParameters()[0]);
+        AssertJUnit.assertEquals("Child Node 1:checked", recording.getParameters()[0]);
     }
 
     @Test public void selectSelectedTreeItemCheckBox() {
@@ -51,7 +54,28 @@ public class RFXTreeViewCheckBoxListCellTest extends RFXComponentTest {
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
-        AssertJUnit.assertEquals("unchecked", recording.getParameters()[0]);
+        AssertJUnit.assertEquals("Child Node 1:unchecked", recording.getParameters()[0]);
+    }
+
+    @Test public void assertContent() {
+        @SuppressWarnings("rawtypes")
+        TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
+        final Object[] content = new Object[] { null };
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                RFXTreeView rTreeView = new RFXTreeView(treeView, null, null, null);
+                content[0] = rTreeView.getContent();
+            }
+        });
+        new Wait("Waiting for contents.") {
+            @Override public boolean until() {
+                return content[0] != null;
+            }
+        };
+        JSONArray a = new JSONArray(content[0]);
+        Assert.assertEquals(
+                "[[\"Root node:unchecked\",\"Child Node 1:unchecked\",\"Child Node 2:unchecked\",\"Child Node 3:unchecked\"]]",
+                a.toString());
     }
 
     @Override protected Pane getMainPane() {

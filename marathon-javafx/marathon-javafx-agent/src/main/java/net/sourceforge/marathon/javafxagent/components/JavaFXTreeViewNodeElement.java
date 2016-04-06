@@ -95,4 +95,10 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
     public String getPath() {
         return path;
     }
+
+    @Override public String _getText() {
+        TreeCell<?> cell = (TreeCell<?>) getPseudoComponent();
+        JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
+        return cellElement._getValue();
+    }
 }

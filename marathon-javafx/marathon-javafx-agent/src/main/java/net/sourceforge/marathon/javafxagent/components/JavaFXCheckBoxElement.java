@@ -19,8 +19,8 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
 
     @Override public boolean marathon_select(String value) {
         CheckBox cb = (CheckBox) node;
-        boolean isCellEditor = (boolean) cb.getProperties().get("marathon.celleditor");
-        if (isCellEditor) {
+        Boolean isCellEditor = (Boolean) cb.getProperties().get("marathon.celleditor");
+        if (isCellEditor != null && isCellEditor) {
             String[] split = value.split(":");
             value = split[1];
         }

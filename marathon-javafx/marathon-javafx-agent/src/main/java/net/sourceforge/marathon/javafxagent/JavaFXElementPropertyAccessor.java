@@ -1,5 +1,6 @@
 package net.sourceforge.marathon.javafxagent;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +24,9 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -63,6 +67,7 @@ import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeTableView.TreeTableViewSelectionModel;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
 import javafx.util.Callback;
@@ -93,7 +98,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             }
         });
     }
-    
+
     public String _getText() {
         Node c = node;
         if (this instanceof IPseudoElement)
@@ -630,12 +635,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                             }
                         } else {
                             /**
-                             * This label is used if the item associated
-                             * with this cell is to be represented as a
-                             * String. While we will lazily instantiate it
-                             * we never clear it, being more afraid of
-                             * object churn than a minor "leak" (which will
-                             * not become a "major" leak).
+                             * This label is used if the item associated with
+                             * this cell is to be represented as a String. While
+                             * we will lazily instantiate it we never clear it,
+                             * being more afraid of object churn than a minor
+                             * "leak" (which will not become a "major" leak).
                              */
                             setText(item == null ? "null" : item.toString());
                             setGraphic(null);
@@ -658,14 +662,108 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return (TreeCell<?>) getCellAt(treeView, getPath(treeView, rowToPath(index)));
     }
 
-    public Node getCellAt(TreeView<?> treeView, TreeItem<?> item) {
+    @SuppressWarnings({ "rawtypes", "unchecked" }) public Node getCellAt(TreeView treeView, TreeItem<?> treeItem1) {
         Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
         for (Node node : lookupAll) {
-            TreeCell<?> cell = (TreeCell<?>) node;
-            if (cell.getTreeItem() == item)
+            TreeCell cell = (TreeCell) node;
+            if (cell.getTreeItem() == treeItem1)
                 return cell;
         }
-        return null;
+        try {
+            Callback<TreeView, TreeCell> cellFactory = treeView.getCellFactory();
+            TreeCell treeCell = null;
+            if (cellFactory == null) {
+                treeCell = new TreeCell<Object>() {
+                    private HBox hbox;
+
+                    private WeakReference<TreeItem<Object>> treeItemRef;
+
+                    private InvalidationListener treeItemGraphicListener = observable -> {
+                        updateDisplay(getItem(), isEmpty());
+                    };
+
+                    private InvalidationListener treeItemListener = new InvalidationListener() {
+                        @Override public void invalidated(Observable observable) {
+                            TreeItem<Object> oldTreeItem = treeItemRef == null ? null : treeItemRef.get();
+                            if (oldTreeItem != null) {
+                                oldTreeItem.graphicProperty().removeListener(weakTreeItemGraphicListener);
+                            }
+
+                            TreeItem<Object> newTreeItem = getTreeItem();
+                            if (newTreeItem != null) {
+                                newTreeItem.graphicProperty().addListener(weakTreeItemGraphicListener);
+                                treeItemRef = new WeakReference<TreeItem<Object>>(newTreeItem);
+                            }
+                        }
+                    };
+
+                    private WeakInvalidationListener weakTreeItemGraphicListener = new WeakInvalidationListener(
+                            treeItemGraphicListener);
+
+                    private WeakInvalidationListener weakTreeItemListener = new WeakInvalidationListener(treeItemListener);
+
+                    {
+                        treeItemProperty().addListener(weakTreeItemListener);
+                        if (getTreeItem() != null) {
+                            getTreeItem().graphicProperty().addListener(weakTreeItemGraphicListener);
+                        }
+                    }
+
+                    private void updateDisplay(Object item, boolean empty) {
+                        if (item == null || empty) {
+                            hbox = null;
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            // update the graphic if one is set in the TreeItem
+                            TreeItem<Object> treeItem = getTreeItem();
+                            Node graphic = treeItem == null ? null : treeItem.getGraphic();
+                            if (graphic != null) {
+                                if (item instanceof Node) {
+                                    setText(null);
+
+                                    // the item is a Node, and the graphic
+                                    // exists, so
+                                    // we must insert both into an HBox and
+                                    // present that
+                                    // to the user (see RT-15910)
+                                    if (hbox == null) {
+                                        hbox = new HBox(3);
+                                    }
+                                    hbox.getChildren().setAll(graphic, (Node) item);
+                                    setGraphic(hbox);
+                                } else {
+                                    hbox = null;
+                                    setText(item.toString());
+                                    setGraphic(graphic);
+                                }
+                            } else {
+                                hbox = null;
+                                if (item instanceof Node) {
+                                    setText(null);
+                                    setGraphic((Node) item);
+                                } else {
+                                    setText(item.toString());
+                                    setGraphic(null);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override public void updateItem(Object item, boolean empty) {
+                        super.updateItem(item, empty);
+                        updateDisplay(item, empty);
+                    }
+                };
+            } else {
+                treeCell = cellFactory.call(treeView);
+            }
+            Method updateItem = treeCell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
+            updateItem.invoke(treeCell, treeItem1.getValue(), false);
+            return treeCell;
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     public String rowToPath(int row) {
@@ -691,7 +789,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     protected int getIndexAt(ListView<?> listView, Point2D point) {
-        if(point == null) {
+        if (point == null) {
             return listView.getSelectionModel().getSelectedIndex();
         }
         point = listView.localToScene(point);
@@ -711,9 +809,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public int getRowAt(TreeView<?> treeView, Point2D point) {
         point = treeView.localToScene(point);
-        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        int itemCount = treeView.getExpandedItemCount();
+        @SuppressWarnings("rawtypes") List<TreeCell> cells = new ArrayList<>();
+        for (int i = 0; i < itemCount; i++) {
+            cells.add(getCellAt(treeView, i));
+        }
         TreeCell<?> selected = null;
-        for (Node cellNode : lookupAll) {
+        for (Node cellNode : cells) {
             Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
             if (boundsInScene.contains(point)) {
                 selected = (TreeCell<?>) cellNode;
@@ -1363,16 +1465,6 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return titledPane.getText();
     }
 
-    public String[][] getContent(TreeView<?> treeView) {
-        int rowCount = treeView.getExpandedItemCount();
-        String[][] content = new String[1][rowCount];
-        for (int i = 0; i < rowCount; i++) {
-            TreeItem<?> treeItem = treeView.getTreeItem(i);
-            content[0][i] = getTextForNodeObject(treeView, treeItem);
-        }
-        return content;
-    }
-
     public static String removeClassName(Object object) {
         if (object == null)
             return "null";
@@ -1401,8 +1493,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Parent root = node.getScene().getRoot();
         Set<Node> allLabels = root.lookupAll(".label");
         for (Node node2 : allLabels) {
-            Label label = (Label) node2 ;
-            if(label.getLabelFor() == node) {
+            Label label = (Label) node2;
+            if (label.getLabelFor() == node) {
                 return label.getText();
             }
         }

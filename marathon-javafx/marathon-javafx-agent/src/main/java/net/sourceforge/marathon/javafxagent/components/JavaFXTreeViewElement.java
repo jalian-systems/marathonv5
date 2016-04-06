@@ -78,4 +78,17 @@ public class JavaFXTreeViewElement extends JavaFXElement {
     public String getContent() {
         return new JSONArray(getContent((TreeView<?>) getComponent())).toString();
     }
+
+    /*
+     * NOTE: Same code exits in RFXTreeView class. So in case if you want to
+     * modify. Modify both.
+     */
+    public String[][] getContent(TreeView<?> treeView) {
+        int rowCount = treeView.getExpandedItemCount();
+        String[][] content = new String[1][rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            content[0][i] = new JavaFXTreeViewNodeElement(this, i)._getText();
+        }
+        return content;
+    }
 }

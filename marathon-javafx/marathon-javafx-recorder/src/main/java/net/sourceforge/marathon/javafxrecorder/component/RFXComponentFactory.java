@@ -431,6 +431,7 @@ public class RFXComponentFactory {
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
         add(ChoiceBoxTreeCell.class, RFXChoiceBoxTreeCell.class, null);
+        add(TreeCell.class, RFXTreeCell.class, null);
         add(CheckBoxTreeCell.class, RFXCheckBoxTreeCell.class, null);
         add(ComboBoxTreeCell.class, RFXComboBoxTreeCell.class, null);
         add(CheckBoxTableCell.class, RFXCheckBoxTableCell.class, null);

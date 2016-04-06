@@ -126,7 +126,7 @@ public class RFXTreeViewTest extends RFXComponentTest {
                 content[0] = rTreeView.getContent();
             }
         });
-        new Wait("Waiting for contens.") {
+        new Wait("Waiting for contents.") {
             @Override public boolean until() {
                 return content[0] != null;
             }
