@@ -115,7 +115,7 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         String r = sb.toString();
         if (tagNameProperty != null) {
             if (tagNameProperty.getMethod().equals("equals"))
-                r = tagNameProperty.getValue();
+                r = tagNameProperty.getValue() + r;
             else
                 r = "[" + tagNameProperty.getName() + op(tagNameProperty.getMethod()) + "'" + tagNameProperty.getValue() + "']" + r;
         }

@@ -21,13 +21,17 @@ namingProperties:
     -   priority: 90
         properties: [id]
     -   priority: 80
-        properties: [accessibleName]
+        properties: [cText]
+    -   priority: 70
+        properties: [accessibleText]
+    -   priority: 60
+        properties: [accessibleHelp]
 recognitionProperties:
 -   className: javafx.scene.Node
     propertyLists:
     -   priority: 100
         properties: [tagName, Id]
     -   priority: 90
-        properties: [tagName, text]
-    -   priority: 80
         properties: [tagName, fieldName]
+    -   priority: 80
+        properties: [tagName, cText]
