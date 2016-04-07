@@ -1075,10 +1075,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Bounds localToScreen = cell.localToScreen(boundsInLocal);
         Window w = cell.getScene().getWindow();
         BoundingBox screenBounds = new BoundingBox(w.getX(), w.getY(), w.getWidth(), w.getHeight());
-        System.out.println("JavaFXElementPropertyAccessor.getVisibleCellAt(" + localToScreen + ")");
-        System.out.println("JavaFXElementPropertyAccessor.getVisibleCellAt(" + screenBounds + ")");
         if (screenBounds.contains(localToScreen)) {
-            System.out.println("JavaFXElementPropertyAccessor.getVisibleCellAt(" + cell + ")");
             isShowing = true;
         }
         return isShowing;

@@ -54,11 +54,12 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         return super.getByPseudoElement(selector, params);
     }
 
-    private Node getEditor() {
-        TableCell<?, ?> cell = (TableCell<?, ?>) getPseudoComponent();
-        cell.startEdit();
+    @SuppressWarnings({ "unchecked", "rawtypes" }) private Node getEditor() {
+        TableCell cell = (TableCell) getPseudoComponent();
+        cell.getTableView().edit(viewRow, cell.getTableColumn());
         Node cellComponent = cell.getGraphic();
         cellComponent.getProperties().put("marathon.celleditor", true);
+        cellComponent.getProperties().put("marathon.cell", cell);
         return cellComponent;
     }
 
