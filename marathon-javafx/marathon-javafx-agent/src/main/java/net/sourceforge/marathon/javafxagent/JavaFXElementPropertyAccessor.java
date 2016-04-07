@@ -670,12 +670,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public Node getCellAt(TreeView treeView, TreeItem<?> treeItem1) {
-        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
-        for (Node node : lookupAll) {
-            TreeCell cell = (TreeCell) node;
-            if (cell.getTreeItem() == treeItem1)
-                return cell;
-        }
+        TreeCell visibleCell = getVisibleCellAt(treeView, treeItem1);
+        if (visibleCell != null)
+            return visibleCell;
         try {
             Callback<TreeView, TreeCell> cellFactory = treeView.getCellFactory();
             TreeCell treeCell = null;
@@ -771,6 +768,18 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         } catch (Throwable t) {
             return null;
         }
+    }
+
+    @SuppressWarnings("rawtypes") public TreeCell getVisibleCellAt(TreeView treeView, TreeItem<?> treeItem1) {
+        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        TreeCell cell = null;
+        for (Node treeNode : lookupAll) {
+            if (((TreeCell) treeNode).getTreeItem() == treeItem1) {
+                cell = (TreeCell) treeNode;
+                break;
+            }
+        }
+        return cell;
     }
 
     public String rowToPath(int row) {

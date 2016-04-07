@@ -64,7 +64,8 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         treeView.getSelectionModel().clearSelection();
         for (@SuppressWarnings("rawtypes")
         TreeItem treeItem : paths) {
-            treeView.scrollTo(treeView.getRow(treeItem));
+            if (getVisibleCellAt(treeView, treeItem) == null)
+                treeView.scrollTo(treeView.getRow(treeItem));
             treeView.getSelectionModel().select(treeItem);
         }
         return true;
