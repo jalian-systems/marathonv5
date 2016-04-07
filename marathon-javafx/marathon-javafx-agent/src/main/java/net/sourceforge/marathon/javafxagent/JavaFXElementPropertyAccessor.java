@@ -55,6 +55,7 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
@@ -179,8 +180,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getTagName()
      */
     public String getTagName() {
-        Class<?> javaClass = findJavaClass();
-        Class<?> c = javaClass;
+        return getTagName(node);
+    }
+
+    private String getTagName(Node n) {
+        Class<?> c = findJavaClass(n);
         String simpleName = c.getSimpleName();
         while ("".equals(simpleName)) {
             c = c.getSuperclass();
@@ -194,8 +198,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return r.substring(0, 1).toLowerCase() + r.substring(1).replaceAll("[A-Z][A-Z]*", "-$0").toLowerCase();
     }
 
-    private Class<?> findJavaClass() {
-        Class<?> c = node.getClass();
+    private Class<?> findJavaClass(Node n) {
+        Class<?> c = n.getClass();
         if (this instanceof IPseudoElement)
             c = ((IPseudoElement) this).getPseudoComponent().getClass();
         while (c.getPackage() == null || (!c.getPackage().getName().startsWith("javafx.scene")))
@@ -204,15 +208,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public final String getType() {
-        return getType(node.getClass());
-    }
-
-    private String getType(Class<? extends Node> klass) {
-        String name = klass.getName();
-        if (name.startsWith("javafx.scene.control")) {
-            return name.substring("javafx.scene.control.".length());
-        }
-        return name;
+        return getTagName();
     }
 
     public final String getInstanceOf() {
@@ -226,8 +222,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     private List<Node> findAllComponents() {
         Node top = getTopNode(node);
         List<Node> allComponents = new ArrayList<Node>();
-        if (top != null)
+        if (top != null) {
             fillUp(allComponents, top);
+        }
         return allComponents;
     }
 
@@ -241,29 +238,37 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
-    private Node getTopNode(Node c) {
-        while (c != null) {
-            if (ContextManager.isContext(c))
-                return c;
-            if (c.getScene().getRoot() == c)
-                return c;
-            c = c.getParent();
+    private Node getTopNode(Node n) {
+        Node parent = null;
+        while (parent == null) {
+            if (ContextManager.isContext(n))
+                parent = n;
+            else if (n.getScene().getRoot() == n)
+                parent = n;
+            else
+                n = n.getParent();
         }
-        return null;
+        return parent;
     }
 
     public int getIndexOfType() {
+        Object prop = node.getProperties().get("marathon.indexOfType");
+        if (prop != null) {
+            return (int) prop;
+        }
         List<Node> allComponents = findAllComponents();
         int index = 0;
         String type = getType();
         for (Node c : allComponents) {
-            if (c == node)
+            if (c == node) {
+                node.getProperties().put("marathon.indexOfType", index);
                 return index;
-            if (type.equals(getType(c.getClass())))
+            }
+            if (type.equals(getTagName(c)))
                 index++;
         }
-        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning("Could not find the component in allComponents");
-        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning(node.toString());
+        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName())
+                .warning("Could not find the component in allComponents: " + node.toString());
         return -1;
     }
 
@@ -301,6 +306,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     final public String getCText() {
+        if (node instanceof TextInputControl)
+            return null;
         Object o = getAttributeObject(getComponent(), "text");
         if (o == null || !(o instanceof String) || o.equals(""))
             return null;
@@ -810,7 +817,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     public int getRowAt(TreeView<?> treeView, Point2D point) {
         point = treeView.localToScene(point);
         int itemCount = treeView.getExpandedItemCount();
-        @SuppressWarnings("rawtypes") List<TreeCell> cells = new ArrayList<>();
+        @SuppressWarnings("rawtypes")
+        List<TreeCell> cells = new ArrayList<>();
         for (int i = 0; i < itemCount; i++) {
             cells.add(getCellAt(treeView, i));
         }

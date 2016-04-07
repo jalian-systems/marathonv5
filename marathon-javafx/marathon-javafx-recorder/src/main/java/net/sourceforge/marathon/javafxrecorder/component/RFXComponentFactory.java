@@ -241,8 +241,9 @@ public class RFXComponentFactory {
                 Node parent = component;
                 if (hasTab(component)) {
                     while (parent != null) {
-                        if (parent instanceof TabPane)
+                        if (parent instanceof TabPane) {
                             return parent;
+                        }
                         parent = parent.getParent();
                     }
                 }
@@ -453,10 +454,7 @@ public class RFXComponentFactory {
     }
 
     public RFXComponent findRComponent(Node parent, Point2D point, IJSONRecorder recorder) {
-        RFXComponent r = findRawRComponent(getComponent(parent, point), point, recorder);
-        System.out.println("RFXComponentFactory.findRComponent(node = " + parent.getClass().getName() + ", rfxComponent = "
-                + r.getClass().getName() + ")");
-        return r;
+        return findRawRComponent(getComponent(parent, point), point, recorder);
     }
 
     public RFXComponent findRawRComponent(Node source, Point2D point, IJSONRecorder recorder) {
