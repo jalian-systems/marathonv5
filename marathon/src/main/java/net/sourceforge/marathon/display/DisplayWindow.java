@@ -1290,7 +1290,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         int y = p.getInt(getPrefKey("window.y", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
         int w = p.getInt(getPrefKey("window.w", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
         int h = p.getInt(getPrefKey("window.h", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
-        if (x == -1)
+        if (x < 0 || y < 0 || w < 0 || h < 0)
             setExtendedState(JFrame.MAXIMIZED_BOTH);
         else {
             setSize(w, h);
