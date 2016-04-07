@@ -78,7 +78,8 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
             selectionModel.clearSelection();
             int[] selectedRows = getTreeTableSelectedRows(treeTableView, value);
             for (int i = 0; i < selectedRows.length; i++) {
-                treeTableView.scrollTo(selectedRows[i]);
+                if (getVisibleCellAt(treeTableView, selectedRows[i], 0) == null)
+                    treeTableView.scrollTo(selectedRows[i]);
                 selectionModel.select(selectedRows[i]);
             }
             return true;

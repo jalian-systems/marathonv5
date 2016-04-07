@@ -48,11 +48,10 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
         };
         new Wait("Waiting for the point to be in viewport") {
             @Override public boolean until() {
-                return getPoint(tableViewNode, 1, 10) != null;
+                Point2D point = getPoint(tableViewNode, 1, 10);
+                return tableViewNode.getBoundsInLocal().contains(point);
             }
         };
-        Point2D point = getPoint(tableViewNode, 1, 10);
-        AssertJUnit.assertTrue(tableViewNode.getBoundsInLocal().contains(point));
     }
 
     @Test public void scrollMultipleRows() {
@@ -71,11 +70,10 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
         };
         new Wait("Waiting for the point to be in viewport") {
             @Override public boolean until() {
-                return getPoint(tableViewNode, 2, 9) != null;
+                Point2D point = getPoint(tableViewNode, 2, 9);
+                return tableViewNode.getBoundsInLocal().contains(point);
             }
         };
-        Point2D point = getPoint(tableViewNode, 2, 9);
-        AssertJUnit.assertTrue(tableViewNode.getBoundsInLocal().contains(point));
     }
 
     @Test public void scrollToCell() throws Throwable {

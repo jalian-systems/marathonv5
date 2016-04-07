@@ -59,7 +59,7 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         int rowIndex = getTreeTableNodeIndex(treeTableView, path);
         treeTableView.scrollToColumnIndex(viewColumn);
         treeTableView.scrollTo(rowIndex);
-        return getTreeTableCellAt(treeTableView, rowIndex, viewColumn);
+        return getCellAt(treeTableView, rowIndex, viewColumn);
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
