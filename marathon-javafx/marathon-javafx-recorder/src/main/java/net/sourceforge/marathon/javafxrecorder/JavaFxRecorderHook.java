@@ -286,7 +286,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
         if (!isVaildEvent(event.getEventType()))
             return;
-        if(recordWindowState != null) {
+        if(recordWindowState != null && rawRecording) {
             recorder.recordWindowState(new WindowTitle(recordWindowState).getTitle(), recordWindowState.xProperty().intValue(),
                     recordWindowState.yProperty().intValue(), recordWindowState.widthProperty().intValue(),
                     recordWindowState.heightProperty().intValue());
