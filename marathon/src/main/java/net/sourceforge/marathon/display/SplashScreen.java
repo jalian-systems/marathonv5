@@ -29,7 +29,7 @@ public class SplashScreen extends JDialog {
             getContentPane().add(new JLabel(SPLASH), BorderLayout.NORTH);
             JPanel versionPanel = new JPanel();
             versionPanel.setAlignmentX(0.5f);
-            JLabel version = new JLabel(Version.product() + " Version: " + Version.id());
+            JLabel version = new JLabel(Version.blurbTitle() + " Version: " + Version.id());
             version.setFont(version.getFont().deriveFont(11.0f));
             versionPanel.add(version);
             getContentPane().add(versionPanel, BorderLayout.SOUTH);
