@@ -59,7 +59,7 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         int rowIndex = getTreeTableNodeIndex(treeTableView, path);
         treeTableView.scrollToColumnIndex(viewColumn);
         treeTableView.scrollTo(rowIndex);
-        return getTreeTableCellAt(treeTableView, rowIndex, viewColumn);
+        return getCellAt(treeTableView, rowIndex, viewColumn);
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
@@ -68,11 +68,12 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return super.getByPseudoElement(selector, params);
     }
 
-    private Node getEditor() {
-        TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) getPseudoComponent();
-        cell.startEdit();
+    @SuppressWarnings({ "unchecked", "rawtypes" }) private Node getEditor() {
+        TreeTableCell cell = (TreeTableCell) getPseudoComponent();
+        cell.getTreeTableView().edit(cell.getTreeTableRow().getIndex(), cell.getTableColumn());
         Node cellComponent = cell.getGraphic();
         cellComponent.getProperties().put("marathon.celleditor", true);
+        cellComponent.getProperties().put("marathon.cell", cell);
         return cellComponent;
     }
 

@@ -108,7 +108,12 @@ public class TestCreator {
                     suite.setName(name);
                 }
             } else {
-                Test test = getTest(line);
+                Test test = null;
+                try {
+                    test = getTest(line);
+                } catch (Throwable t) {
+                    System.err.println("Ignoring error creating a test from: " + line + "(suite = " + suiteName + ")");
+                }
                 if (test != null)
                     suite.addTest(test);
             }

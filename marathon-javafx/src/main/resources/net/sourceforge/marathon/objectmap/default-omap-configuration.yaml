@@ -1,22 +1,10 @@
 !!net.sourceforge.marathon.objectmap.ObjectMapConfiguration
 containerNamingProperties:
--   className: java.awt.Window
-    propertyLists: []
--   className: javax.swing.JInternalFrame
-    propertyLists: []
--   className: javax.swing.JWindow
-    propertyLists: []
 -   className: javafx.stage.Stage
     propertyLists:
     -   priority: 100
         properties: [title]
 containerRecognitionProperties:
--   className: java.awt.Window
-    propertyLists: []
--   className: javax.swing.JInternalFrame
-    propertyLists: []
--   className: javax.swing.JWindow
-    propertyLists: []
 -   className: javafx.stage.Stage
     propertyLists:
     -   priority: 100
@@ -26,10 +14,6 @@ generalProperties: [labeledBy, toolTipText, name, labelText, precedingLabel, cTe
     layoutData.gridy, layoutData.x, layoutData.y, accessibleContext.accessibleName,
     tagName, instanceOf, component.class.name]
 namingProperties:
--   className: java.awt.Component
-    propertyLists: []
--   className: javax.swing.JLabel
-    propertyLists: []
 -   className: javafx.scene.Node
     propertyLists:
     -   priority: 100
@@ -37,13 +21,17 @@ namingProperties:
     -   priority: 90
         properties: [id]
     -   priority: 80
-        properties: [accessibleName]
+        properties: [cText]
+    -   priority: 70
+        properties: [accessibleText]
+    -   priority: 60
+        properties: [accessibleHelp]
 recognitionProperties:
--   className: java.awt.Component
-    propertyLists: []
 -   className: javafx.scene.Node
     propertyLists:
     -   priority: 100
         properties: [tagName, Id]
     -   priority: 90
-        properties: [tagName, text]
+        properties: [tagName, fieldName]
+    -   priority: 80
+        properties: [tagName, cText]

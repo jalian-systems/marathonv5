@@ -29,6 +29,7 @@ import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -55,6 +56,7 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TreeCell;
@@ -70,6 +72,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
@@ -179,8 +182,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getTagName()
      */
     public String getTagName() {
-        Class<?> javaClass = findJavaClass();
-        Class<?> c = javaClass;
+        return getTagName(node);
+    }
+
+    private String getTagName(Node n) {
+        Class<?> c = findJavaClass(n);
         String simpleName = c.getSimpleName();
         while ("".equals(simpleName)) {
             c = c.getSuperclass();
@@ -194,8 +200,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return r.substring(0, 1).toLowerCase() + r.substring(1).replaceAll("[A-Z][A-Z]*", "-$0").toLowerCase();
     }
 
-    private Class<?> findJavaClass() {
-        Class<?> c = node.getClass();
+    private Class<?> findJavaClass(Node n) {
+        Class<?> c = n.getClass();
         if (this instanceof IPseudoElement)
             c = ((IPseudoElement) this).getPseudoComponent().getClass();
         while (c.getPackage() == null || (!c.getPackage().getName().startsWith("javafx.scene")))
@@ -204,15 +210,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public final String getType() {
-        return getType(node.getClass());
-    }
-
-    private String getType(Class<? extends Node> klass) {
-        String name = klass.getName();
-        if (name.startsWith("javafx.scene.control")) {
-            return name.substring("javafx.scene.control.".length());
-        }
-        return name;
+        return getTagName();
     }
 
     public final String getInstanceOf() {
@@ -226,8 +224,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     private List<Node> findAllComponents() {
         Node top = getTopNode(node);
         List<Node> allComponents = new ArrayList<Node>();
-        if (top != null)
+        if (top != null) {
             fillUp(allComponents, top);
+        }
         return allComponents;
     }
 
@@ -241,29 +240,37 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
-    private Node getTopNode(Node c) {
-        while (c != null) {
-            if (ContextManager.isContext(c))
-                return c;
-            if (c.getScene().getRoot() == c)
-                return c;
-            c = c.getParent();
+    private Node getTopNode(Node n) {
+        Node parent = null;
+        while (parent == null) {
+            if (ContextManager.isContext(n))
+                parent = n;
+            else if (n.getScene().getRoot() == n)
+                parent = n;
+            else
+                n = n.getParent();
         }
-        return null;
+        return parent;
     }
 
     public int getIndexOfType() {
+        Object prop = node.getProperties().get("marathon.indexOfType");
+        if (prop != null) {
+            return (int) prop;
+        }
         List<Node> allComponents = findAllComponents();
         int index = 0;
         String type = getType();
         for (Node c : allComponents) {
-            if (c == node)
+            if (c == node) {
+                node.getProperties().put("marathon.indexOfType", index);
                 return index;
-            if (type.equals(getType(c.getClass())))
+            }
+            if (type.equals(getTagName(c)))
                 index++;
         }
-        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning("Could not find the component in allComponents");
-        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName()).warning(node.toString());
+        Logger.getLogger(JavaFXElementPropertyAccessor.class.getName())
+                .warning("Could not find the component in allComponents: " + node.toString());
         return -1;
     }
 
@@ -301,6 +308,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     final public String getCText() {
+        if (node instanceof TextInputControl)
+            return null;
         Object o = getAttributeObject(getComponent(), "text");
         if (o == null || !(o instanceof String) || o.equals(""))
             return null;
@@ -608,13 +617,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public ListCell getCellAt(ListView listView, Integer index) {
-        Set<Node> lookupAll = listView.lookupAll(".list-cell");
-        for (Node node : lookupAll) {
-            ListCell<?> cell = (ListCell<?>) node;
-            if (cell.getIndex() == index) {
-                return cell;
-            }
-        }
+        ListCell<?> cell = getVisibleCellAt(listView, index);
+        if (cell != null)
+            return cell;
         try {
             Callback<ListView, ListCell> cellFactory = listView.getCellFactory();
             ListCell listCell = null;
@@ -658,17 +663,28 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
+    @SuppressWarnings("rawtypes") public ListCell<?> getVisibleCellAt(ListView listView, Integer index) {
+        Set<Node> lookupAll = listView.lookupAll(".list-cell");
+        ListCell<?> cell = null;
+        for (Node node : lookupAll) {
+            if (((ListCell<?>) node).getIndex() == index) {
+                cell = (ListCell<?>) node;
+                break;
+            }
+        }
+        if (cell != null && isShowing(cell))
+            return cell;
+        return null;
+    }
+
     public TreeCell<?> getCellAt(TreeView<?> treeView, int index) {
         return (TreeCell<?>) getCellAt(treeView, getPath(treeView, rowToPath(index)));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public Node getCellAt(TreeView treeView, TreeItem<?> treeItem1) {
-        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
-        for (Node node : lookupAll) {
-            TreeCell cell = (TreeCell) node;
-            if (cell.getTreeItem() == treeItem1)
-                return cell;
-        }
+        TreeCell visibleCell = getVisibleCellAt(treeView, treeItem1);
+        if (visibleCell != null)
+            return visibleCell;
         try {
             Callback<TreeView, TreeCell> cellFactory = treeView.getCellFactory();
             TreeCell treeCell = null;
@@ -766,6 +782,20 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
+    @SuppressWarnings("rawtypes") public TreeCell getVisibleCellAt(TreeView treeView, TreeItem<?> treeItem1) {
+        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        TreeCell cell = null;
+        for (Node treeNode : lookupAll) {
+            if (((TreeCell) treeNode).getTreeItem() == treeItem1) {
+                cell = (TreeCell) treeNode;
+                break;
+            }
+        }
+        if (cell != null && isShowing(cell))
+            return cell;
+        return null;
+    }
+
     public String rowToPath(int row) {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         TreeItem<?> treeItem = treeView.getTreeItem(row);
@@ -810,7 +840,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     public int getRowAt(TreeView<?> treeView, Point2D point) {
         point = treeView.localToScene(point);
         int itemCount = treeView.getExpandedItemCount();
-        @SuppressWarnings("rawtypes") List<TreeCell> cells = new ArrayList<>();
+        @SuppressWarnings("rawtypes")
+        List<TreeCell> cells = new ArrayList<>();
         for (int i = 0; i < itemCount; i++) {
             cells.add(getCellAt(treeView, i));
         }
@@ -1004,16 +1035,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
-        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
-        for (Node node : lookupAll) {
-            TableCell<?, ?> cell = (TableCell<?, ?>) node;
-            TableRow<?> tableRow = cell.getTableRow();
-            TableColumn<?, ?> tableColumn = cell.getTableColumn();
-            if (tableRow.getIndex() == row && tableColumn == tableView.getColumns().get(column))
-                return cell;
-        }
+        TableCell<?, ?> cell = getVisibleCellAt(tableView, row, column);
+        if (cell != null)
+            return cell;
         TableColumn tableColumn = (TableColumn) tableView.getColumns().get(column);
-        TableCell cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
+        cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
         Object value = tableColumn.getCellObservableValue(row).getValue();
         Method updateItem;
         try {
@@ -1024,6 +1050,58 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public TableCell<?, ?> getVisibleCellAt(TableView<?> tableView, int row, int column) {
+        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
+        TableCell<?, ?> cell = null;
+        for (Node node : lookupAll) {
+            TableCell<?, ?> cell1 = (TableCell<?, ?>) node;
+            TableRow<?> tableRow = cell1.getTableRow();
+            TableColumn<?, ?> tableColumn = cell1.getTableColumn();
+            if (tableRow.getIndex() == row && tableColumn == tableView.getColumns().get(column)) {
+                cell = cell1;
+                break;
+            }
+        }
+        if (cell != null && isShowing(cell))
+            return cell;
+        return null;
+    }
+
+    public boolean isShowing(Node cell) {
+        boolean isShowing = false;
+        Bounds boundsInLocal = cell.getBoundsInLocal();
+        Bounds localToScreen = cell.localToScreen(boundsInLocal);
+        Window w = cell.getScene().getWindow();
+        BoundingBox screenBounds = new BoundingBox(w.getX(), w.getY(), w.getWidth(), w.getHeight());
+        if (screenBounds.contains(localToScreen)) {
+            isShowing = true;
+        }
+        return isShowing;
+    }
+
+    public Point2D getPoint(TableView<?> tableView, int columnIndex, int rowIndex) {
+        Set<Node> tableRowCell = tableView.lookupAll(".table-row-cell");
+        TableRow<?> row = null;
+        for (Node tableRow : tableRowCell) {
+            TableRow<?> r = (TableRow<?>) tableRow;
+            if (r.getIndex() == rowIndex) {
+                row = r;
+                break;
+            }
+        }
+        Set<Node> cells = row.lookupAll(".table-cell");
+        for (Node node : cells) {
+            TableCell<?, ?> cell = (TableCell<?, ?>) node;
+            if ((tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex)) {
+                Bounds bounds = cell.getBoundsInParent();
+                Point2D localToParent = cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
+                Point2D rowLocal = row.localToScene(localToParent, true);
+                return rowLocal;
+            }
+        }
+        return null;
     }
 
     public String getSelection(TableView<?> tableView) {
@@ -1127,10 +1205,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         for (int i = 0; i < object.length(); i++) {
             JSONArray jsonArray = object.getJSONArray(i);
             int rowIndex = Integer.parseInt(jsonArray.getString(0));
+            int columnIndex = getColumnIndex(jsonArray.getString(1));
             @SuppressWarnings("rawtypes")
-            TableColumn column = tableView.getColumns().get(getColumnIndex(jsonArray.getString(1)));
-            tableView.scrollTo(rowIndex);
-            tableView.scrollToColumn(column);
+            TableColumn column = tableView.getColumns().get(columnIndex);
+            if (getVisibleCellAt(tableView, rowIndex, columnIndex) == null) {
+                tableView.scrollTo(rowIndex);
+                tableView.scrollToColumn(column);
+            }
             selectionModel.select(rowIndex, column);
         }
     }
@@ -1175,20 +1256,15 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return selected.getTreeTableRow().getIndex();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) protected TreeTableCell<?, ?> getTreeTableCellAt(TreeTableView<?> treeTableView,
-            int row, int column) {
-        Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
-        for (Node node : lookupAll) {
-            TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) node;
-            TreeTableRow<?> tableRow = cell.getTreeTableRow();
-            TreeTableColumn<?, ?> tableColumn = cell.getTableColumn();
-            if (tableRow.getIndex() == row && tableColumn == treeTableView.getColumns().get(column))
-                return cell;
-        }
+    @SuppressWarnings({ "unchecked", "rawtypes" }) protected TreeTableCell<?, ?> getCellAt(TreeTableView<?> treeTableView, int row,
+            int column) {
+        TreeTableCell cell = getVisibleCellAt(treeTableView, row, column);
+        if (cell != null)
+            return cell;
         try {
             TreeTableColumn treeTableColumn = treeTableView.getColumns().get(column);
             Callback cellFactory = treeTableColumn.getCellFactory();
-            TreeTableCell cell = (TreeTableCell) cellFactory.call(treeTableColumn);
+            cell = (TreeTableCell) cellFactory.call(treeTableColumn);
             Object value = treeTableColumn.getCellObservableValue(row).getValue();
             Method updateItem = cell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
             updateItem.setAccessible(true);
@@ -1197,6 +1273,21 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         } catch (Throwable t) {
             return null;
         }
+    }
+
+    @SuppressWarnings("rawtypes") public TreeTableCell getVisibleCellAt(TreeTableView<?> treeTableView, int row, int column) {
+        Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
+        TreeTableCell cell = null;
+        for (Node node : lookupAll) {
+            TreeTableCell<?, ?> cell1 = (TreeTableCell<?, ?>) node;
+            TreeTableRow<?> tableRow = cell1.getTreeTableRow();
+            TreeTableColumn<?, ?> tableColumn = cell1.getTableColumn();
+            if (tableRow.getIndex() == row && tableColumn == treeTableView.getColumns().get(column)) {
+                cell = cell1;
+                break;
+            }
+        }
+        return cell;
     }
 
     @SuppressWarnings("unchecked") public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView,
@@ -1350,10 +1441,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         for (int i = 0; i < object.length(); i++) {
             JSONArray jsonArray = object.getJSONArray(i);
             int rowIndex = getTreeTableNodeIndex(treeTableView, jsonArray.getString(0));
+            int columnIndex = getTreeTableColumnIndex(treeTableView, jsonArray.getString(1));
             @SuppressWarnings("rawtypes")
-            TreeTableColumn column = treeTableView.getColumns().get(getTreeTableColumnIndex(treeTableView, jsonArray.getString(1)));
-            treeTableView.scrollToColumn(column);
-            treeTableView.scrollTo(rowIndex);
+            TreeTableColumn column = treeTableView.getColumns().get(columnIndex);
+            if (getVisibleCellAt(treeTableView, rowIndex, columnIndex) == null) {
+                treeTableView.scrollToColumn(column);
+                treeTableView.scrollTo(rowIndex);
+            }
             selectionModel.select(rowIndex, column);
         }
     }

@@ -71,7 +71,8 @@ public class JavaFXTableViewElement extends JavaFXElement {
             selectionModel.clearSelection();
             for (int i = 0; i < selectedRows.length; i++) {
                 int rowIndex = selectedRows[i];
-                tableView.scrollTo(rowIndex);
+                if (getVisibleCellAt(tableView, rowIndex, tableView.getColumns().size() - 1) == null)
+                    tableView.scrollTo(rowIndex);
                 selectionModel.selectIndices(rowIndex);
             }
             return true;

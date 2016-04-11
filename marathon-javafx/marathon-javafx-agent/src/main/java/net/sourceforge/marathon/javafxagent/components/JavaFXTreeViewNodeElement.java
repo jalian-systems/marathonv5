@@ -60,11 +60,13 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         return super.getByPseudoElement(selector, params);
     }
 
-    private Node getEditor() {
-        TreeCell<?> cell = (TreeCell<?>) getPseudoComponent();
-        cell.startEdit();
+    @SuppressWarnings({ "rawtypes", "unchecked" }) private Node getEditor() {
+        TreeCell cell = (TreeCell) getPseudoComponent();
+        TreeView treeView = (TreeView) getComponent();
+        treeView.edit(cell.getTreeItem());
         Node cellComponent = cell.getGraphic();
         cellComponent.getProperties().put("marathon.celleditor", true);
+        cellComponent.getProperties().put("marathon.cell", cell);
         return cellComponent;
     }
 

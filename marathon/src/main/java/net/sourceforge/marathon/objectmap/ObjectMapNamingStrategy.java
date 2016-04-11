@@ -114,10 +114,10 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
             sb.append("[visible='true']");
         String r = sb.toString();
         if (tagNameProperty != null) {
-            if (typeProperty.getMethod().equals("equals"))
-                r = tagNameProperty.getValue();
+            if (tagNameProperty.getMethod().equals("equals"))
+                r = tagNameProperty.getValue() + r;
             else
-                r = "[" + tagNameProperty.getName() + op(typeProperty.getMethod()) + "'" + tagNameProperty.getValue() + "']" + r;
+                r = "[" + tagNameProperty.getName() + op(tagNameProperty.getMethod()) + "'" + tagNameProperty.getValue() + "']" + r;
         }
         if (typeProperty != null) {
             r = "[" + typeProperty.getName() + op(typeProperty.getMethod()) + "'" + typeProperty.getValue() + "']" + r;

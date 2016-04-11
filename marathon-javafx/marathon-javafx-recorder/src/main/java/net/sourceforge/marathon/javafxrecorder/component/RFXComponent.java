@@ -44,7 +44,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
     }
 
     public void processEvent(Event event) {
-        setIndexOfType(super.getIndexOfType());
         if (event instanceof MouseEvent) {
             MouseEvent me = (MouseEvent) event;
 
@@ -272,17 +271,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
                 list.add(e);
         }
         return list;
-    }
-
-    @Override public int getIndexOfType() {
-        Object iot = node.getProperties().get("marathon.indexOfType");
-        if (iot == null)
-            return super.getIndexOfType();
-        return (int) iot;
-    }
-
-    public void setIndexOfType(int indexOfType) {
-        node.getProperties().put("marathon.indexOfType", indexOfType);
     }
 
     protected void mouseExited(MouseEvent me) {

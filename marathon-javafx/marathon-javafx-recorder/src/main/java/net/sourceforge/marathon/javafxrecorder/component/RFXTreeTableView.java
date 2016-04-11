@@ -56,7 +56,7 @@ public class RFXTreeTableView extends RFXComponent {
     public String getTreeTableCellValueAt(TreeTableView<?> treeTableView, int row, int column) {
         if (row == -1 || column == -1)
             return null;
-        TreeTableCell<?, ?> tableCell = getTreeTableCellAt(treeTableView, row, column);
+        TreeTableCell<?, ?> tableCell = getCellAt(treeTableView, row, column);
         RFXComponent cellComponent = getFinder().findRawRComponent(tableCell, null, recorder);
         String ctext = cellComponent.getValue();
         return ctext;

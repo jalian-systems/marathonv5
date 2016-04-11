@@ -77,9 +77,10 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
 
     private Node getEditor() {
         ListCell<?> cell = (ListCell<?>) getPseudoComponent();
-        cell.startEdit();
+        cell.getListView().edit(cell.getIndex());
         Node cellComponent = cell.getGraphic();
         cellComponent.getProperties().put("marathon.celleditor", true);
+        cellComponent.getProperties().put("marathon.cell", cell);
         return cellComponent;
     }
 

@@ -61,7 +61,9 @@ public class JavaFXListViewElement extends JavaFXElement {
         listView.getSelectionModel().clearSelection();
         for (int i = 0; i < listItemIndices.size(); i++) {
             Integer index = listItemIndices.get(i);
-            listView.scrollTo(index);
+            if (getVisibleCellAt(listView, index) == null) {
+                listView.scrollTo(index);
+            }
             listView.getSelectionModel().select(index);
 
         }
@@ -75,10 +77,10 @@ public class JavaFXListViewElement extends JavaFXElement {
     public String getContent() {
         return new JSONArray(getContent((ListView<?>) getComponent())).toString();
     }
-    
+
     /*
-     * NOTE: Same code exits in RXFXListView class. So in case if you
-     * want to modify. Modify both.
+     * NOTE: Same code exits in RXFXListView class. So in case if you want to
+     * modify. Modify both.
      */
     private String[][] getContent(ListView<?> listView) {
         int nItems = listView.getItems().size();
