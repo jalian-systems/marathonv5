@@ -5,6 +5,7 @@ repositories {
 dependencies {
   compile project(":marathon:JSON-java")
   compile project(":marathon-java:marathon-java-agent")
+  compile project(":marathon-javafx:marathon-javafx-agent")
   compile project(":marathon:nanohttpd-2.1.1")
   compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
   testCompile "org.testng:testng:${testng_version}"

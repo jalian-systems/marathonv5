@@ -767,4 +767,8 @@ public class JavaProfile {
         this.launchType = launchType;
         return this;
     }
+    
+    public LaunchType getLaunchType() {
+        return launchType;
+    }
 }

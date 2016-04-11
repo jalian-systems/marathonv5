@@ -34,7 +34,7 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
             if (server != null)
                 return;
             int port = getAddressOfRemoteServer().getPort();
-            server = new EmbeddedServer();
+            server = new EmbeddedServer(profile);
             try {
                 server.start(port);
             } catch (IOException e) {
