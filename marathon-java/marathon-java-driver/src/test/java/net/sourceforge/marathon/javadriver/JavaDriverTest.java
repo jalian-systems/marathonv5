@@ -1376,6 +1376,24 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         }
     }
 
+    public void executeScriptWithPrimitiveReturn() throws Throwable {
+        try {
+            driver = new JavaDriver();
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override public void run() {
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                }
+            });
+            WebElement element1 = driver.findElement(By.name("text-field"));
+            Number width = (Number) ((JavascriptExecutor) driver).executeScript("return Double.valueOf($1.getSize().getWidth());",
+                    element1);
+            AssertJUnit.assertTrue(width.doubleValue() > 0);
+        } finally {
+            JavaElementFactory.reset();
+        }
+    }
+
     public void executeAsyncScript() throws Throwable {
         try {
             driver = new JavaDriver();

@@ -58,6 +58,7 @@ public abstract class Device implements IDevice {
                 parent.scrollRectToVisible(d);
             }
         });
+        EventQueueWait.call_noexc(component, "requestFocusInWindow");
     }
 
     private JComponent getSwingParent(Component component) {

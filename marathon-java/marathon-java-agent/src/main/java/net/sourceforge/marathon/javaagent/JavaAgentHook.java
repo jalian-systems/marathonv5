@@ -17,6 +17,8 @@ import net.sourceforge.marathon.javaagent.server.JavaServer;
 public class JavaAgentHook {
 
     private static final Logger logger = Logger.getLogger(JavaAgentHook.class.getName());
+    @SuppressWarnings("unused") private static EventLogger eventLogger ;
+    
     protected static String windowTitle;
 
     public static void premain(final String args) throws Exception {
@@ -28,6 +30,9 @@ public class JavaAgentHook {
             port = Integer.parseInt(args.trim());
         else
             throw new Exception("Port number not specified");
+        String eventsToLog = System.getProperty("marathon.logevents");
+        new EventLogger(eventsToLog);
+        
         windowTitle = System.getProperty("start.window.title", "");
         final AWTEventListener listener = new AWTEventListener() {
             boolean done = false;
