@@ -20,7 +20,11 @@ public class EmbeddedServer {
             javaServer = new JavaServer(port);
             javaServer.start();
         } else {
-            javaServer = new net.sourceforge.marathon.javafxagent.server.JavaServer(port);
+            try {
+                javaServer = (NanoHTTPD) Class.forName("net.sourceforge.marathon.javafxagent.server.JavaServer").getConstructor(Integer.TYPE).newInstance(port);
+            } catch (Throwable t) {
+                throw new RuntimeException("Unable to instantiate JavaServer", t);
+            }
             javaServer.start();
         }
     }
