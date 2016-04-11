@@ -17,7 +17,7 @@ import javax.swing.*;
 import net.sourceforge.marathon.javaagent.DnDHandler;
 import net.sourceforge.marathon.javaagent.DragAndDropException;
 
-public class DropDemo extends JPanel implements ActionListener {
+@SuppressWarnings({ "unchecked", "rawtypes" }) public class DropDemo extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JComboBox dropCombo;
     private JList list;
@@ -54,8 +54,8 @@ public class DropDemo extends JPanel implements ActionListener {
 
             @Override public void actionPerformed(ActionEvent e) {
                 Rectangle cellBounds = list.getCellBounds(3, 3);
-                DnDHandler dnd = new DnDHandler(list, list, cellBounds.x + cellBounds.width / 2, cellBounds.y + cellBounds.height
-                        / 2, dndAction);
+                DnDHandler dnd = new DnDHandler(list, list, cellBounds.x + cellBounds.width / 2,
+                        cellBounds.y + cellBounds.height / 2, dndAction);
                 try {
                     dnd.performDrop();
                 } catch (DragAndDropException e1) {
@@ -68,8 +68,8 @@ public class DropDemo extends JPanel implements ActionListener {
 
             @Override public void actionPerformed(ActionEvent e) {
                 Rectangle cellBounds = list.getCellBounds(3, 3);
-                DnDHandler dnd = new DnDHandler(list, textArea, cellBounds.x + cellBounds.width / 2, cellBounds.y
-                        + cellBounds.height / 2, dndAction);
+                DnDHandler dnd = new DnDHandler(list, textArea, cellBounds.x + cellBounds.width / 2,
+                        cellBounds.y + cellBounds.height / 2, dndAction);
                 try {
                     dnd.performDrop();
                 } catch (DragAndDropException e1) {

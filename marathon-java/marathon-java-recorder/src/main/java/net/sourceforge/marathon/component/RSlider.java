@@ -26,7 +26,7 @@ public class RSlider extends RComponent {
     @Override public void focusGained(RComponent prev) {
         value = ((JSlider) component).getValue();
     }
-    
+
     @Override public String getText() {
         return JSliderJavaElement.getCurrentValue((JSlider) component);
     }

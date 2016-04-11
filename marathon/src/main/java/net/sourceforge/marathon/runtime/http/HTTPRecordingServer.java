@@ -1,9 +1,11 @@
 package net.sourceforge.marathon.runtime.http;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.NanoHTTPD.Response.Status;
 import net.sourceforge.marathon.api.INamingStrategy;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration;
 import net.sourceforge.marathon.objectmap.ObjectMapException;
@@ -22,16 +30,130 @@ import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
+import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import fi.iki.elonen.NanoHTTPD;
-import fi.iki.elonen.NanoHTTPD.Response.Status;
-
 public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
+
+    private static class MenuItemScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String type;
+        private String value;
+        private WindowId windowId;
+
+        public MenuItemScriptElement(JSONObject o, WindowId windowId) {
+            this.windowId = windowId;
+            type = o.getString("menu_type");
+            value = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select_fx_menu", type, value);
+        }
+
+        @Override public WindowId getWindowId() {
+            return windowId;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
+    private static final class ChooserScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String type;
+        private String value;
+
+        public ChooserScriptElement(JSONObject o) {
+            type = o.getString("type").equals("select_file_chooser") ? "#filechooser" : "#folderchooser";
+            value = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select_file_chooser", type, value);
+        }
+
+        @Override public WindowId getWindowId() {
+            return null;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
+    private static final class WindowClosingScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String title;
+
+        public WindowClosingScriptElement(JSONObject o) {
+            title = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("window_closed", title);
+        }
+
+        @Override public WindowId getWindowId() {
+            return null;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
+    private static final class WindowStateScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String title;
+        private int x;
+        private int y;
+        private int width;
+        private int height;
+
+        public WindowStateScriptElement(JSONObject o) {
+            JSONObject value = o.getJSONObject("value");
+            title = value.getString("title");
+            x = value.getInt("x");
+            y = value.getInt("y");
+            width = value.getInt("width");
+            height = value.getInt("height");
+        }
+
+        @Override public String toScriptCode() {
+            String bounds = "" + x + ":" + y + ":" + width + ":" + height ;
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("window_changed", bounds);
+        }
+
+        @Override public WindowId getWindowId() {
+            return new WindowId(title, null, false);
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
 
     private final class JavaVersionScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
@@ -76,7 +198,8 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
         // Custom
         routes.add(new RouteMap(Method.POST, "/session", getMethod("createSession")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId", getMethod("getSession")));
-        routes.add(new RouteMap(Method.GET, "/session/:sessionId/object_map_configuration", getMethod("getObjectMapConfiguration")));
+        routes.add(
+                new RouteMap(Method.GET, "/session/:sessionId/object_map_configuration", getMethod("getObjectMapConfiguration")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/context_menu_triggers", getMethod("getContextMenuTriggers")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/raw_recording", getMethod("isRawRecording")));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/record", getMethod("record")));
@@ -120,8 +243,8 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
         String query = parms.get("NanoHttpd.QUERY_STRING");
         if (query != null) {
             try {
-                jsonQuery = new JSONObject(query);
-            } catch (JSONException e) {
+                jsonQuery = new JSONObject(URLDecoder.decode(query, "utf-8"));
+            } catch (JSONException | UnsupportedEncodingException e) {
                 return NanoHTTPDnewFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
             }
         }
@@ -226,9 +349,8 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
             return NanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (Exception e) {
             r.put("status", ErrorCodes.UNHANDLED_ERROR);
-            r.put("value",
-                    new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
-                            getStackTrace(e)));
+            r.put("value", new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
+                    getStackTrace(e)));
             return NanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         }
     }
@@ -332,15 +454,34 @@ public class HTTPRecordingServer extends NanoHTTPD implements IRecordingServer {
                 name = query.getJSONObject("attributes").getString("suggestedName");
             } catch (JSONException e) {
             }
-            recorder.record(new JSONScriptElement(createWindowId(query.getJSONObject("container")), ns.getName(query, name), query
-                    .getJSONObject("event")));
+            JSONObject jsonObject = query.getJSONObject("event");
+            String type = jsonObject.getString("type");
+            if (type.equals("select_file_chooser") || type.equals("select_folder_chooser")) {
+                recorder.record(new ChooserScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            } else if (type.equals("select_fx_menu")) {
+                recorder.record(
+                        new MenuItemScriptElement(query.getJSONObject("event"), createWindowId(query.getJSONObject("container"))));
+                return new JSONObject();
+            }
+            if (type.equals("window_closing_with_title")) {
+                recorder.record(new WindowClosingScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            }
+            if (type.equals("window_state_with_title")) {
+                recorder.record(new WindowStateScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            }
+            recorder.record(new JSONScriptElement(createWindowId(query.getJSONObject("container")), ns.getName(query, name),
+                    query.getJSONObject("event")));
         } catch (Throwable t) {
             t.printStackTrace();
         }
         return new JSONObject();
     }
 
-    public JSONObject focusedWindow(JSONObject query, JSONObject uriParams, Session session) throws IOException, JSONException, ObjectMapException {
+    public JSONObject focusedWindow(JSONObject query, JSONObject uriParams, Session session)
+            throws IOException, JSONException, ObjectMapException {
         focusedWindowId = createWindowId(query.getJSONObject("container"));
         return new JSONObject();
     }

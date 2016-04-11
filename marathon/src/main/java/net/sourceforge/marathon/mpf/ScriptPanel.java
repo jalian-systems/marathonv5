@@ -15,8 +15,8 @@ public class ScriptPanel extends CompositePanel implements IPropertiesPanel {
         super(parent);
     }
 
-    public static final Icon ICON = new ImageIcon(ProjectPanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/script_obj.gif"));
+    public static final Icon ICON = new ImageIcon(
+            ProjectPanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/script_obj.gif"));
 
     @Override protected String getResourceName() {
         return "scriptmodel";

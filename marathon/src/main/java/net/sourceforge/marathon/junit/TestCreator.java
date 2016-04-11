@@ -21,11 +21,13 @@ import net.sourceforge.marathon.util.FilePatternMatcher;
 public class TestCreator {
     private static String hideFilePattern = "";
     private static FilePatternMatcher hiddenFPM;
+
     static {
         Preferences prefs = Preferences.userNodeForPackage(Constants.class);
         hideFilePattern = prefs.get(Constants.PREF_JUNIT_HIDEFILES, "\\..* .*\\.class \\Q__init__.py\\E \\QExploratoryTests\\E");
         hiddenFPM = new FilePatternMatcher(TestCreator.hideFilePattern);
     }
+
     private String sourcePath;
     private String suffix;
     private boolean acceptChecklist;
@@ -106,7 +108,12 @@ public class TestCreator {
                     suite.setName(name);
                 }
             } else {
-                Test test = getTest(line);
+                Test test = null;
+                try {
+                    test = getTest(line);
+                } catch (Throwable t) {
+                    System.err.println("Ignoring error creating a test from: " + line + "(suite = " + suiteName + ")");
+                }
                 if (test != null)
                     suite.addTest(test);
             }
@@ -172,11 +179,11 @@ public class TestCreator {
         return new MarathonDDTestSuite(file, acceptChecklist, console);
     }
 
-	protected Test createTest(File file, String name) {
-		MarathonTestCase marathonTestCase = new MarathonTestCase(file, acceptChecklist, console);
-		marathonTestCase.setFullName(name);
-		return marathonTestCase;
-	}
+    protected Test createTest(File file, String name) {
+        MarathonTestCase marathonTestCase = new MarathonTestCase(file, acceptChecklist, console);
+        marathonTestCase.setFullName(name);
+        return marathonTestCase;
+    }
 
     private boolean isDDT(File file) throws IOException {
         try {
@@ -265,8 +272,8 @@ public class TestCreator {
 
         return suite;
     }
-    
+
     public IConsole getConsole() {
-		return console;
-	}
+        return console;
+    }
 }

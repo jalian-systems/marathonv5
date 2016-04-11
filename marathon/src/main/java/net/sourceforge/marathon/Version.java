@@ -8,8 +8,9 @@ import net.sourceforge.marathon.api.IVersion;
  */
 public class Version {
     private final static IVersion version;
+
     static {
-        IVersion xversion = null ;
+        IVersion xversion = null;
         try {
             xversion = (IVersion) Class.forName("Version").newInstance();
         } catch (Throwable t) {

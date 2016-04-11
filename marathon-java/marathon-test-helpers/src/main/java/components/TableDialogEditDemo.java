@@ -121,8 +121,8 @@ public class TableDialogEditDemo extends JPanel {
 
         public void setValueAt(Object value, int row, int col) {
             if (DEBUG) {
-                System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of " + value.getClass()
-                        + ")");
+                System.out.println(
+                        "Setting value at " + row + "," + col + " to " + value + " (an instance of " + value.getClass() + ")");
             }
 
             data[row][col] = value;

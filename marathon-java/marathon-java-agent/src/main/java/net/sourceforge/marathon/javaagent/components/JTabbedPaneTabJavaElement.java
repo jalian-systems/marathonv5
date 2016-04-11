@@ -128,8 +128,8 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
             try {
                 EventQueueWait.call(tp, "setSelectedIndex", selectedTab);
             } catch (NoSuchMethodException e) {
-                throw new InvalidElementStateException("Unable to call setSelectedIndex on JTabbedPane. selectedTab = "
-                        + selectedTab, e);
+                throw new InvalidElementStateException(
+                        "Unable to call setSelectedIndex on JTabbedPane. selectedTab = " + selectedTab, e);
             }
             return true;
         }

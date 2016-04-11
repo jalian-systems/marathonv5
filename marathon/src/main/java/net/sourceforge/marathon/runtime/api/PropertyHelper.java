@@ -226,6 +226,7 @@ public class PropertyHelper {
     public static String toCSS(Properties properties) {
         Entry<Object, Object> typeProperty = null;
         Entry<Object, Object> indexProperty = null;
+        Entry<Object, Object> tagNameProperty = null;
 
         StringBuilder sb = new StringBuilder();
         Set<Entry<Object, Object>> entries = properties.entrySet();
@@ -234,6 +235,8 @@ public class PropertyHelper {
                 typeProperty = entry;
             else if (entry.getKey().equals("indexOfType"))
                 indexProperty = entry;
+            else if (entry.getKey().equals("tagName"))
+                tagNameProperty = entry;
             else {
                 String value = entry.getValue().toString();
                 value = value.replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'");
@@ -241,6 +244,8 @@ public class PropertyHelper {
             }
         }
         String r = sb.toString();
+        if (tagNameProperty != null)
+            r = tagNameProperty.getValue().toString();
         if (typeProperty != null) {
             r = "[" + typeProperty.getKey().toString() + "=" + "'" + typeProperty.getValue().toString() + "']" + sb.toString();
         }

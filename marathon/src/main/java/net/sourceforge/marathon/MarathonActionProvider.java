@@ -190,8 +190,8 @@ public class MarathonActionProvider implements IActionProvider {
             }
         };
         mactions[7].setMenuName("Object Map");
-        mactions[8] = new MarathonAction("Object Map Server...", "Use remote object map server", (char) 0,
-                UIUtils.ICON_CONF_EDIT, null, editorProvider, true, true) {
+        mactions[8] = new MarathonAction("Object Map Server...", "Use remote object map server", (char) 0, UIUtils.ICON_CONF_EDIT,
+                null, editorProvider, true, true) {
 
             public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
                     int endCaretPosition, int startLine) throws Exception {
@@ -200,8 +200,8 @@ public class MarathonActionProvider implements IActionProvider {
             }
         };
         mactions[8].setMenuName("Object Map");
-        mactions[9] = new MarathonAction("Welcome Message", "Show the welcome message", (char) 0, null, null, editorProvider,
-                false, true) {
+        mactions[9] = new MarathonAction("Welcome Message", "Show the welcome message", (char) 0, null, null, editorProvider, false,
+                true) {
             public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
                     int endCaretPosition, int startLine) throws Exception {
                 WelcomeMessage.showWelcomeMessage();

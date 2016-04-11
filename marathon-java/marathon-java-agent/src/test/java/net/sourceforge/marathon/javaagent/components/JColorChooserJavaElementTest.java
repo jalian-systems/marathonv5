@@ -4,6 +4,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -15,7 +16,7 @@ import org.testng.annotations.Test;
 
 @Test public class JColorChooserJavaElementTest extends JavaElementTest {
     protected JFrame frame;
-    private JavaAgent driver;
+    private IJavaAgent driver;
 
     @BeforeMethod public void showDialog() throws Throwable {
         JavaElementFactory.add(JColorChooser.class, JColorChooserJavaElement.class);

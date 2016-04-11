@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
@@ -20,7 +21,7 @@ import components.TableFilterDemo;
 
 @Test public class JTableJavaElementTest extends JavaElementTest {
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
 
     @BeforeMethod public void showDialog() throws Throwable {

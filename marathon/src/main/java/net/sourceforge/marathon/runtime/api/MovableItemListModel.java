@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
-public class MovableItemListModel extends AbstractListModel {
+public class MovableItemListModel extends AbstractListModel<Object> {
     private static final long serialVersionUID = 1L;
     private List<Object> dataList;
 

@@ -2,18 +2,18 @@ package net.sourceforge.marathon.javaagent.css;
 
 import java.util.List;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
 
 public class FindByCssSelector {
 
     private IJavaElement container;
     private long implicitWait;
-    private JavaAgent driver;
+    private IJavaAgent driver;
 
-    public FindByCssSelector(IJavaElement container, JavaAgent driver, long implicitWait) {
+    public FindByCssSelector(IJavaElement container, IJavaAgent driver2, long implicitWait) {
         this.container = container;
-        this.driver = driver;
+        this.driver = driver2;
         this.implicitWait = implicitWait;
     }
 

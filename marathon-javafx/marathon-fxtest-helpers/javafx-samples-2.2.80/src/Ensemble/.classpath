@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/antlr"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/checkstyle"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/deployment"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javafx-checkstyle"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/media"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/webkit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfxrt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ScenicView"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

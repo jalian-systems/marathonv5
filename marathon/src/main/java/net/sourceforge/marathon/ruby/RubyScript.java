@@ -119,7 +119,7 @@ public class RubyScript implements IScript {
         readGlobals();
         debugger = new RubyDebugger(interpreter);
     }
-    
+
     private void readGlobals() {
         interpreter.evalScriptlet("$marathon = RubyMarathon.new('" + driverURL + "')");
         IRubyObject marathon = interpreter.evalScriptlet("$marathon");

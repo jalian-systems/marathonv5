@@ -86,15 +86,16 @@ public class PropertyEditor extends EscapeDialog {
             if (property.getKlass().equals(Color.class))
                 return new ColorEditor();
             if (property.getKlass().equals(Font.class)) {
-                JComboBox box = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+                JComboBox<String> box = new JComboBox<String>(
+                        GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
                 return new DefaultCellEditor(box);
             }
             if (property.getKlass().equals(Boolean.class)) {
-                JComboBox box = new JComboBox(new String[] { "true", "false" });
+                JComboBox<String> box = new JComboBox<String>(new String[] { "true", "false" });
                 return new DefaultCellEditor(box);
             }
             if (property.getKlass().equals(String[].class)) {
-                JComboBox box = new JComboBox(property.getItems());
+                JComboBox<String> box = new JComboBox<String>(property.getItems());
                 return new DefaultCellEditor(box);
             }
             if (property.getKlass().equals(Integer.class))
@@ -152,8 +153,8 @@ public class PropertyEditor extends EscapeDialog {
 
         // Override to invoke setValue on the formatted text field.
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            JFormattedTextField ftf = (JFormattedTextField) super
-                    .getTableCellEditorComponent(table, value, isSelected, row, column);
+            JFormattedTextField ftf = (JFormattedTextField) super.getTableCellEditorComponent(table, value, isSelected, row,
+                    column);
             ftf.setValue(Integer.parseInt(value.toString()));
             return ftf;
         }
@@ -207,8 +208,8 @@ public class PropertyEditor extends EscapeDialog {
             Object[] options = { "Edit", "Revert" };
             int answer = JOptionPane.showOptionDialog(SwingUtilities.getWindowAncestor(ftf),
                     "The value must be an integer between " + minimum + " and " + maximum + ".\n"
-                            + "You can either continue editing " + "or revert to the last valid value.", "Invalid Text Entered",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
+                            + "You can either continue editing " + "or revert to the last valid value.",
+                    "Invalid Text Entered", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
 
             if (answer == 1) { // Revert!
                 ftf.setValue(ftf.getValue());

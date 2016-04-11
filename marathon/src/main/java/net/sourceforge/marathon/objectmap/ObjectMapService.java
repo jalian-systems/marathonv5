@@ -131,13 +131,12 @@ public class ObjectMapService implements IObjectMapService {
 
     @Override public OMapComponent insertNameForComponent(String name, Properties urp, Properties properties,
             Properties urpContainer, Properties attributesContainer) throws ObjectMapException {
-        System.out.println("ObjectMapService.insertNameForComponent(" + name + "," + urp + "," + properties +
-                "," + urpContainer + "," + attributesContainer);
         IOMapContainer container = getContainer(urpContainer, attributesContainer);
         return insertNameForComponent(name, urp, properties, container);
     }
 
-    @Override public OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer) throws ObjectMapException {
+    @Override public OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer)
+            throws ObjectMapException {
         IOMapContainer container = getContainer(urpContainer, attributesContainer);
         return findComponentByName(name, container);
     }

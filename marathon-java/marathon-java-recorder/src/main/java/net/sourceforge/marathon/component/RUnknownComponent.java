@@ -21,4 +21,8 @@ public class RUnknownComponent extends RComponent {
     @Override protected void keyPressed(KeyEvent ke) {
         handleRawRecording(recorder, ke);
     }
+
+    @Override protected void keyTyped(KeyEvent ke) {
+        handleRawRecording(recorder, ke);
+    }
 }

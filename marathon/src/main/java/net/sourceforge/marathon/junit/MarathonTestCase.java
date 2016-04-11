@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -21,6 +20,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import net.sourceforge.marathon.Main;
@@ -29,6 +31,7 @@ import net.sourceforge.marathon.checklist.CheckListDialog;
 import net.sourceforge.marathon.checklist.CheckListForm;
 import net.sourceforge.marathon.checklist.CheckListForm.Mode;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
 import net.sourceforge.marathon.runtime.api.IPlaybackListener;
@@ -40,12 +43,8 @@ import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
 import net.sourceforge.marathon.runtime.api.UIUtils;
-import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.screencapture.AnnotateScreenCapture;
 import net.sourceforge.marathon.util.LauncherModelHelper;
-
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 
 public class MarathonTestCase extends TestCase implements IPlaybackListener, Test, IHasFullname {
 
@@ -225,7 +224,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     public CheckList showAndEnterChecklist(File file, final IMarathonRuntime runtime, final JFrame instance) {
         final CheckList checklist;
         try {
-            checklist = CheckList.read(new FileInputStream(file));
+            checklist = CheckList.read(file);
             CheckListForm checklistForm = new CheckListForm(checklist, Mode.ENTER);
             final CheckListDialog dialog = new CheckListDialog((JFrame) null, checklistForm);
 
@@ -331,7 +330,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
                 runtime = rf.createRuntime();
             }
         }
-        script = runtime
-                .createScript(MarathonMode.PLAYING, console, scriptText, file.getAbsolutePath(), false, true, dataVariables);
+        script = runtime.createScript(MarathonMode.PLAYING, console, scriptText, file.getAbsolutePath(), false, true,
+                dataVariables);
     }
 }

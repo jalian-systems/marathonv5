@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JFileChooser;
 
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
@@ -23,7 +23,7 @@ public class JFileChooserJavaElement extends JavaElement {
         marathonDir = getRealPath(System.getProperty("marathon.project.dir", null));
     }
 
-    public JFileChooserJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JFileChooserJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 

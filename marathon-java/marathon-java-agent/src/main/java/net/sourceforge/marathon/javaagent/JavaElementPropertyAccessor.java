@@ -681,7 +681,7 @@ public class JavaElementPropertyAccessor {
     public static final List<String> LAST_RESORT_RECOGNITION_PROPERTIES = new ArrayList<String>();
 
     static {
-        LAST_RESORT_RECOGNITION_PROPERTIES.add("type");
+        LAST_RESORT_RECOGNITION_PROPERTIES.add("tagName");
         LAST_RESORT_RECOGNITION_PROPERTIES.add("indexOfType");
     }
 
@@ -855,7 +855,7 @@ public class JavaElementPropertyAccessor {
         JTable table = (JTable) component;
         JTableHeader tableHeader = table.getTableHeader();
         String columnName;
-        if(tableHeader != null)
+        if (tableHeader != null)
             columnName = tableHeader.getColumnModel().getColumn(c).getHeaderValue().toString();
         else
             columnName = table.getColumnName(c);

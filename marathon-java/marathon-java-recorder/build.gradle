@@ -9,6 +9,21 @@ configurations {
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
+eclipse {
+  jdt {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+    javaRuntimeName = 'JavaSE-1.6'
+
+    file {
+      withProperties { properties ->
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+      }
+    }
+  }
+}
+
 compileJava {
 	options.fork = true
 	if(project.properties['jdk6home'])
@@ -37,10 +52,10 @@ jar {
   configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
   manifest {
     attributes 'Manifest-Version': '1.0',
-      'Agent-Class': 'net.sourceforge.marathon.javarecorder.JavaHook',
+      'Agent-Class': 'net.sourceforge.marathon.javarecorder.JavaRecorderHook',
       'Can-Redefine-Classes': 'false',
       'Can-Retransform-Classes': 'false',
-      'Premain-Class': 'net.sourceforge.marathon.javarecorder.JavaHook'
+      'Premain-Class': 'net.sourceforge.marathon.javarecorder.JavaRecorderHook'
   }
 }
 

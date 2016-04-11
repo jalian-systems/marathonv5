@@ -99,7 +99,7 @@ public class FixtureDialog extends EscapeDialog {
         testButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                if(!validateInputs())
+                if (!validateInputs())
                     return;
                 ITestApplication applicationTester = getApplicationTester();
                 try {
@@ -152,8 +152,8 @@ public class FixtureDialog extends EscapeDialog {
 
     private void setProperties() {
         try {
-            FileInputStream fileInputStream = new FileInputStream(new File(System.getProperty(Constants.PROP_PROJECT_DIR),
-                    Constants.PROJECT_FILE));
+            FileInputStream fileInputStream = new FileInputStream(
+                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), Constants.PROJECT_FILE));
             Properties properties = new Properties();
             properties.load(fileInputStream);
             properties.setProperty(Constants.PROP_PROJECT_DIR, System.getProperty(Constants.PROP_PROJECT_DIR));

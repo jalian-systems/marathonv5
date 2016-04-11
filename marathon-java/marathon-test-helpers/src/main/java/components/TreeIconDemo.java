@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -63,27 +63,24 @@ import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-public class TreeIconDemo extends JPanel 
-                          implements TreeSelectionListener {
+public class TreeIconDemo extends JPanel implements TreeSelectionListener {
     private JEditorPane htmlPane;
     private JTree tree;
     private URL helpURL;
     private static boolean DEBUG = false;
 
     public TreeIconDemo() {
-        super(new GridLayout(1,0));
+        super(new GridLayout(1, 0));
 
-        //Create the nodes.
-        DefaultMutableTreeNode top =
-            new DefaultMutableTreeNode("The Java Series");
+        // Create the nodes.
+        DefaultMutableTreeNode top = new DefaultMutableTreeNode("The Java Series");
         createNodes(top);
 
-        //Create a tree that allows one selection at a time.
+        // Create a tree that allows one selection at a time.
         tree = new JTree(top);
-        tree.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        //Set the icon for leaf nodes.
+        // Set the icon for leaf nodes.
         ImageIcon leafIcon = createImageIcon("images/middle.gif");
         if (leafIcon != null) {
             DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
@@ -93,19 +90,19 @@ public class TreeIconDemo extends JPanel
             System.err.println("Leaf icon missing; using default.");
         }
 
-        //Listen for when the selection changes.
+        // Listen for when the selection changes.
         tree.addTreeSelectionListener(this);
 
-        //Create the scroll pane and add the tree to it. 
+        // Create the scroll pane and add the tree to it.
         JScrollPane treeView = new JScrollPane(tree);
 
-        //Create the HTML viewing pane.
+        // Create the HTML viewing pane.
         htmlPane = new JEditorPane();
         htmlPane.setEditable(false);
         initHelp();
         JScrollPane htmlView = new JScrollPane(htmlPane);
 
-        //Add the scroll panes to a split pane.
+        // Add the scroll panes to a split pane.
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         splitPane.setTopComponent(treeView);
         splitPane.setBottomComponent(htmlView);
@@ -113,33 +110,33 @@ public class TreeIconDemo extends JPanel
         Dimension minimumSize = new Dimension(100, 50);
         htmlView.setMinimumSize(minimumSize);
         treeView.setMinimumSize(minimumSize);
-        splitPane.setDividerLocation(100); //XXX: ignored in some releases
-                                           //of Swing. bug 4101306
-        //workaround for bug 4101306:
-        //treeView.setPreferredSize(new Dimension(100, 100)); 
+        splitPane.setDividerLocation(100); // XXX: ignored in some releases
+                                           // of Swing. bug 4101306
+        // workaround for bug 4101306:
+        // treeView.setPreferredSize(new Dimension(100, 100));
 
         splitPane.setPreferredSize(new Dimension(500, 300));
 
-        //Add the split pane to this panel.
+        // Add the split pane to this panel.
         add(splitPane);
     }
 
     /** Required by TreeSelectionListener interface. */
     public void valueChanged(TreeSelectionEvent e) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-                           tree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 
-        if (node == null) return;
+        if (node == null)
+            return;
 
         Object nodeInfo = node.getUserObject();
         if (node.isLeaf()) {
-            BookInfo book = (BookInfo)nodeInfo;
+            BookInfo book = (BookInfo) nodeInfo;
             displayURL(book.bookURL);
             if (DEBUG) {
                 System.out.print(book.bookURL + ":  \n    ");
             }
         } else {
-            displayURL(helpURL); 
+            displayURL(helpURL);
         }
         if (DEBUG) {
             System.out.println(nodeInfo.toString());
@@ -154,8 +151,7 @@ public class TreeIconDemo extends JPanel
             bookName = book;
             bookURL = TreeIconDemo.class.getResource(filename);
             if (bookURL == null) {
-                System.err.println("Couldn't find file: "
-                                   + filename);
+                System.err.println("Couldn't find file: " + filename);
             }
         }
 
@@ -180,8 +176,8 @@ public class TreeIconDemo extends JPanel
         try {
             if (url != null) {
                 htmlPane.setPage(url);
-            } else { //null url
-		htmlPane.setText("File Not Found");
+            } else { // null url
+                htmlPane.setText("File Not Found");
                 if (DEBUG) {
                     System.out.println("Attempted to display a null URL.");
                 }
@@ -198,54 +194,40 @@ public class TreeIconDemo extends JPanel
         category = new DefaultMutableTreeNode("Books for Java Programmers");
         top.add(category);
 
-        //original Tutorial
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The Java Tutorial: A Short Course on the Basics",
-            "tutorial.html"));
+        // original Tutorial
+        book = new DefaultMutableTreeNode(new BookInfo("The Java Tutorial: A Short Course on the Basics", "tutorial.html"));
         category.add(book);
 
-        //Tutorial Continued
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The Java Tutorial Continued: The Rest of the JDK",
-            "tutorialcont.html"));
+        // Tutorial Continued
+        book = new DefaultMutableTreeNode(new BookInfo("The Java Tutorial Continued: The Rest of the JDK", "tutorialcont.html"));
         category.add(book);
 
-        //JFC Swing Tutorial
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The JFC Swing Tutorial: A Guide to Constructing GUIs",
-            "swingtutorial.html"));
+        // JFC Swing Tutorial
+        book = new DefaultMutableTreeNode(
+                new BookInfo("The JFC Swing Tutorial: A Guide to Constructing GUIs", "swingtutorial.html"));
         category.add(book);
 
-        //Bloch
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("Effective Java Programming Language Guide",
-	     "bloch.html"));
+        // Bloch
+        book = new DefaultMutableTreeNode(new BookInfo("Effective Java Programming Language Guide", "bloch.html"));
         category.add(book);
 
-        //Arnold/Gosling
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The Java Programming Language", "arnold.html"));
+        // Arnold/Gosling
+        book = new DefaultMutableTreeNode(new BookInfo("The Java Programming Language", "arnold.html"));
         category.add(book);
 
-        //Chan
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The Java Developers Almanac",
-             "chan.html"));
+        // Chan
+        book = new DefaultMutableTreeNode(new BookInfo("The Java Developers Almanac", "chan.html"));
         category.add(book);
 
         category = new DefaultMutableTreeNode("Books for Java Implementers");
         top.add(category);
 
-        //VM
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The Java Virtual Machine Specification",
-             "vm.html"));
+        // VM
+        book = new DefaultMutableTreeNode(new BookInfo("The Java Virtual Machine Specification", "vm.html"));
         category.add(book);
 
-        //Language Spec
-        book = new DefaultMutableTreeNode(new BookInfo
-            ("The Java Language Specification",
-             "jls.html"));
+        // Language Spec
+        book = new DefaultMutableTreeNode(new BookInfo("The Java Language Specification", "jls.html"));
         category.add(book);
     }
 
@@ -261,28 +243,27 @@ public class TreeIconDemo extends JPanel
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("TreeIconDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
+        // Create and set up the content pane.
         TreeIconDemo newContentPane = new TreeIconDemo();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

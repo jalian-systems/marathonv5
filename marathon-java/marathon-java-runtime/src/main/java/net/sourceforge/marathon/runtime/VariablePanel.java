@@ -41,8 +41,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class VariablePanel implements IPropertiesPanel, ISubPropertiesPanel {
-    public static final Icon ICON = new ImageIcon(VariablePanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/prop_obj.gif"));
+    public static final Icon ICON = new ImageIcon(
+            VariablePanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/prop_obj.gif"));
 
     private static class PropertyDialog extends EscapeDialog {
         private static final long serialVersionUID = 1L;

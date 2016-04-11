@@ -19,16 +19,16 @@ public class RSplitPane extends RComponent {
     }
 
     @Override protected void mouseButton1Pressed(MouseEvent me) {
-        JSplitPane c = (JSplitPane) (component instanceof JSplitPane ? component : SwingUtilities.getAncestorOfClass(
-                JSplitPane.class, component));
+        JSplitPane c = (JSplitPane) (component instanceof JSplitPane ? component
+                : SwingUtilities.getAncestorOfClass(JSplitPane.class, component));
         if (c == null)
             return;
         dividerLocation = c.getDividerLocation();
     }
 
     @Override protected void mouseReleased(MouseEvent me) {
-        JSplitPane c = (JSplitPane) (component instanceof JSplitPane ? component : SwingUtilities.getAncestorOfClass(
-                JSplitPane.class, component));
+        JSplitPane c = (JSplitPane) (component instanceof JSplitPane ? component
+                : SwingUtilities.getAncestorOfClass(JSplitPane.class, component));
         if (c == null || dividerLocation == c.getDividerLocation())
             return;
         RComponent rComponent = new RComponentFactory(omapConfig).findRComponent(c, null, recorder);

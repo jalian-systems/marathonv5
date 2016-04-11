@@ -15,8 +15,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import net.sourceforge.marathon.runtime.api.ModelInfo.PlugInModelInfo;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -28,7 +26,7 @@ public abstract class CompositePanel implements IPropertiesPanel {
 
     protected final JDialog parent;
 
-    private JComboBox launcherField;
+    private JComboBox<PlugInModelInfo> launcherField;
     private JTabbedPane launchInfo;
 
     private ModelInfo launcherModels;
@@ -54,8 +52,8 @@ public abstract class CompositePanel implements IPropertiesPanel {
 
     public JPanel getPanel() {
         if (panel == null) {
-            PanelBuilder builder = new PanelBuilder(new FormLayout("left:pref, 3dlu, pref:grow, 3dlu, fill:pref",
-                    "3dlu, pref, 3dlu, fill:pref:grow"));
+            PanelBuilder builder = new PanelBuilder(
+                    new FormLayout("left:pref, 3dlu, pref:grow, 3dlu, fill:pref", "3dlu, pref, 3dlu, fill:pref:grow"));
             if (needDialogBorder)
                 builder.border(Borders.DIALOG);
             CellConstraints labelConstraints = new CellConstraints();
@@ -69,8 +67,8 @@ public abstract class CompositePanel implements IPropertiesPanel {
 
     abstract protected String getOptionFieldName();
 
-    private void initComponents() {
-        launcherField = new JComboBox(launcherModels) {
+    @SuppressWarnings({ "unchecked", "rawtypes" }) private void initComponents() {
+        launcherField = new JComboBox<PlugInModelInfo>(launcherModels) {
             private static final long serialVersionUID = 1L;
 
             @Override public void setSelectedIndex(int anIndex) {
@@ -90,9 +88,9 @@ public abstract class CompositePanel implements IPropertiesPanel {
                     boolean cellHasFocus) {
                 Component c = oldRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 try {
-                    getLauncherModel(((PlugInModelInfo) launcherField.getItemAt(index)).className);
+                    getLauncherModel(((PlugInModelInfo) value).className);
                     c.setEnabled(true);
-                } catch (Exception e) {
+                } catch (Throwable t) {
                     c.setEnabled(false);
                 }
                 return c;
@@ -141,8 +139,8 @@ public abstract class CompositePanel implements IPropertiesPanel {
         return new ISubPropertiesPanel[] {};
     }
 
-    protected ISubpanelProvider getLauncherModel(String launcher) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+    protected ISubpanelProvider getLauncherModel(String launcher)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (launcher == null || launcher.equals(""))
             return null;
         Class<?> klass = Class.forName(launcher);
@@ -176,7 +174,7 @@ public abstract class CompositePanel implements IPropertiesPanel {
         }
     }
 
-    private void setPlugInSelection(JComboBox comboBox, ModelInfo models, Properties props, String key) {
+    private void setPlugInSelection(JComboBox<PlugInModelInfo> comboBox, ModelInfo models, Properties props, String key) {
         String model = (String) props.get(key);
         if (model == null) {
             comboBox.setSelectedIndex(-1);

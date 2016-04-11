@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -40,9 +40,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /**
- * Based on the source code for DefaultBoundedRangeModel,
- * this class stores its value as a double, rather than
- * an int.  The minimum value and extent are always 0.
+ * Based on the source code for DefaultBoundedRangeModel, this class stores its
+ * value as a double, rather than an int. The minimum value and extent are
+ * always 0.
  **/
 public class ConverterRangeModel implements BoundedRangeModel {
     protected ChangeEvent changeEvent = null;
@@ -76,20 +76,20 @@ public class ConverterRangeModel implements BoundedRangeModel {
     }
 
     public int getMinimum() {
-        return (int)minimum;
+        return (int) minimum;
     }
 
     public void setMinimum(int newMinimum) {
         System.out.println("In ConverterRangeModel setMinimum");
-        //Do nothing.
+        // Do nothing.
     }
 
     public int getValue() {
-        return (int)getDoubleValue();
+        return (int) getDoubleValue();
     }
 
     public void setValue(int newValue) {
-        setDoubleValue((double)newValue);
+        setDoubleValue((double) newValue);
     }
 
     public double getDoubleValue() {
@@ -101,11 +101,11 @@ public class ConverterRangeModel implements BoundedRangeModel {
     }
 
     public int getExtent() {
-        return (int)extent;
+        return (int) extent;
     }
 
     public void setExtent(int newExtent) {
-        //Do nothing.
+        // Do nothing.
     }
 
     public boolean getValueIsAdjusting() {
@@ -116,27 +116,15 @@ public class ConverterRangeModel implements BoundedRangeModel {
         setRangeProperties(value, extent, minimum, maximum, b);
     }
 
-    public void setRangeProperties(int newValue,
-                                   int newExtent,
-                                   int newMin,
-                                   int newMax,
-                                   boolean newAdjusting) {
-        setRangeProperties((double)newValue,
-                           newExtent,
-                           newMin,
-                           newMax,
-                           newAdjusting);
+    public void setRangeProperties(int newValue, int newExtent, int newMin, int newMax, boolean newAdjusting) {
+        setRangeProperties((double) newValue, newExtent, newMin, newMax, newAdjusting);
     }
 
-    public void setRangeProperties(double newValue,
-                                   int unusedExtent,
-                                   int unusedMin,
-                                   int newMax,
-                                   boolean newAdjusting) {
+    public void setRangeProperties(double newValue, int unusedExtent, int unusedMin, int newMax, boolean newAdjusting) {
         if (newMax <= minimum) {
             newMax = minimum + 1;
         }
-        if (Math.round(newValue) > newMax) { //allow some rounding error
+        if (Math.round(newValue) > newMax) { // allow some rounding error
             newValue = newMax;
         }
 
@@ -174,12 +162,12 @@ public class ConverterRangeModel implements BoundedRangeModel {
 
     protected void fireStateChanged() {
         Object[] listeners = listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -=2 ) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == ChangeListener.class) {
                 if (changeEvent == null) {
                     changeEvent = new ChangeEvent(this);
                 }
-                ((ChangeListener)listeners[i+1]).stateChanged(changeEvent);
+                ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
             }
         }
     }

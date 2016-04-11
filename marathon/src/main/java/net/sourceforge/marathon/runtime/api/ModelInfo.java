@@ -3,7 +3,6 @@ package net.sourceforge.marathon.runtime.api;
 import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -16,26 +15,8 @@ import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 
-public class ModelInfo extends AbstractListModel implements ComboBoxModel {
+public class ModelInfo extends AbstractListModel<PlugInModelInfo> implements ComboBoxModel<PlugInModelInfo> {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Information of plug ins such as ScriptModel, Launcher.
-     */
-    public static class PlugInModelInfo implements Serializable {
-        private static final long serialVersionUID = 1L;
-        public String name;
-        public String className;
-
-        public PlugInModelInfo(String description, String className) {
-            this.name = description;
-            this.className = className;
-        }
-
-        @Override public String toString() {
-            return name;
-        }
-    }
 
     private final String pluginName;
     private final Component parent;
@@ -92,7 +73,7 @@ public class ModelInfo extends AbstractListModel implements ComboBoxModel {
         return scriptmodels.size();
     }
 
-    public Object getElementAt(int index) {
+    public PlugInModelInfo getElementAt(int index) {
         return scriptmodels.get(index);
     }
 

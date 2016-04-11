@@ -45,7 +45,7 @@ import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
 
 public class JavaElementFactory {
 
-    public static IJavaElement createElement(Component component, JavaAgent driver, JWindow window) {
+    public static IJavaElement createElement(Component component, IJavaAgent driver, JWindow window) {
         IJavaElement found = window.findElementFromMap(component);
         if (found != null) {
             return found;
@@ -54,7 +54,8 @@ public class JavaElementFactory {
         if (klass == null)
             return new JavaElement(component, driver, window);
         try {
-            Constructor<? extends IJavaElement> constructor = klass.getConstructor(Component.class, JavaAgent.class, JWindow.class);
+            Constructor<? extends IJavaElement> constructor = klass.getConstructor(Component.class, IJavaAgent.class,
+                    JWindow.class);
             IJavaElement newInstance = constructor.newInstance(component, driver, window);
             return newInstance;
         } catch (Exception e) {

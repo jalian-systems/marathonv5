@@ -123,8 +123,9 @@ public class FileHandler {
             if (file.exists()) {
                 if (nameValidateChecker != null && !nameValidateChecker.okToOverwrite(file))
                     return null;
-                option = JOptionPane.showConfirmDialog(parent, "File " + file.getName()
-                        + " already exists. Do you want to overwrite?", "File exists", JOptionPane.YES_NO_CANCEL_OPTION);
+                option = JOptionPane.showConfirmDialog(parent,
+                        "File " + file.getName() + " already exists. Do you want to overwrite?", "File exists",
+                        JOptionPane.YES_NO_CANCEL_OPTION);
             }
             if (option == JOptionPane.YES_OPTION) {
                 setCurrentFile(file);

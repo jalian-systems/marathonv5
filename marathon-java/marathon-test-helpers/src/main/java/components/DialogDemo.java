@@ -311,8 +311,9 @@ public class DialogDemo extends JPanel {
                     // solution.
                     // question icon
                 } else if (command == questionCommand) {
-                    JOptionPane.showMessageDialog(frame, "You shouldn't use a message dialog " + "(like this)\n"
-                            + "for a question, OK?", "Inane question", JOptionPane.QUESTION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame,
+                            "You shouldn't use a message dialog " + "(like this)\n" + "for a question, OK?", "Inane question",
+                            JOptionPane.QUESTION_MESSAGE);
                     // error icon
                 } else if (command == errorCommand) {
                     JOptionPane.showMessageDialog(frame, "Eggs aren't supposed to be green.", "Inane error",

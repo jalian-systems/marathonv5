@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -35,8 +35,6 @@ package components;
  * TabComponentDemo.java requires one additional file:
  *   ButtonTabComponent.java
  */
-
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,33 +45,33 @@ import java.awt.event.KeyEvent;
 
 /*
  * Creating and using TabComponentsDemo example  
- */ 
-public class TabComponentsDemo extends JFrame {    
+ */
+public class TabComponentsDemo extends JFrame {
 
     private final int tabNumber = 5;
     private final JTabbedPane pane = new JTabbedPane();
     private JMenuItem tabComponentsItem;
     private JMenuItem scrollLayoutItem;
-    
+
     public static void main(String[] args) {
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                //Turn off metal's use of bold fonts
-	        UIManager.put("swing.boldMetal", Boolean.FALSE);
+        // Schedule a job for the event dispatch thread:
+        // creating and showing this application's GUI.
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                // Turn off metal's use of bold fonts
+                UIManager.put("swing.boldMetal", Boolean.FALSE);
                 new TabComponentsDemo("TabComponentsDemo").runTest();
             }
         });
     }
-    
+
     public TabComponentsDemo(String title) {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        initMenu();        
-        add(pane);        
+        initMenu();
+        add(pane);
     }
-    
+
     public void runTest() {
         pane.removeAll();
         for (int i = 0; i < tabNumber; i++) {
@@ -88,18 +86,16 @@ public class TabComponentsDemo extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
-    
-    private void initTabComponent(int i) {
-        pane.setTabComponentAt(i,
-                 new ButtonTabComponent(pane));
-    }    
 
-    //Setting menu
-    
+    private void initTabComponent(int i) {
+        pane.setTabComponentAt(i, new ButtonTabComponent(pane));
+    }
+
+    // Setting menu
+
     private void initMenu() {
         JMenuBar menuBar = new JMenuBar();
-        //create Options menu
+        // create Options menu
         tabComponentsItem = new JCheckBoxMenuItem("Use TabComponents", true);
         tabComponentsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.ALT_MASK));
         tabComponentsItem.addActionListener(new ActionListener() {
@@ -131,7 +127,7 @@ public class TabComponentsDemo extends JFrame {
                 runTest();
             }
         });
-       
+
         JMenu optionsMenu = new JMenu("Options");
         optionsMenu.add(tabComponentsItem);
         optionsMenu.add(scrollLayoutItem);
@@ -140,4 +136,3 @@ public class TabComponentsDemo extends JFrame {
         setJMenuBar(menuBar);
     }
 }
-

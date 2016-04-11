@@ -15,6 +15,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
@@ -31,7 +32,7 @@ import com.sun.swingset3.demos.editorpane.EditorPaneDemo;
 
 @Test public class JEditorPaneJavaElementTest extends JavaElementTest {
     protected JFrame frame;
-    private JavaAgent driver;
+    private IJavaAgent driver;
     private IJavaElement editor;
 
     @BeforeMethod public void showDialog() throws Throwable {

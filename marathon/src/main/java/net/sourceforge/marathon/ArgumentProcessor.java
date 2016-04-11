@@ -204,7 +204,8 @@ public class ArgumentProcessor {
                 message.append("Error: " + errorMessage + "<br><br>");
             }
             message.append("Usage:<br>");
-            message.append("java net.sourceforge.marathon.Main -batch [-reportdir &lt;report-directory&gt; [-acceptchecklists ] [-capture]] &lt;Project Directory&gt; [ (&lt;TestCase&gt;|+&lt;TestSuite&gt;) ...]<br>");
+            message.append(
+                    "java net.sourceforge.marathon.Main -batch [-reportdir &lt;report-directory&gt; [-acceptchecklists ] [-capture]] &lt;Project Directory&gt; [ (&lt;TestCase&gt;|+&lt;TestSuite&gt;) ...]<br>");
             message.append("or<br>");
             message.append("java net.sourceforge.marathon.Main [-ignore] [-nosplash] [&lt;Project Directory&gt;]<br>");
             pane.setText(message.toString());
@@ -219,7 +220,8 @@ public class ArgumentProcessor {
                 message.append("Error: " + errorMessage + "\n\n");
             }
             message.append("Usage:\n");
-            message.append("java net.sourceforge.marathon.Main -batch [-reportdir <report-directory> [-acceptchecklists ] [-capture]] <Project Directory> [ (<TestCase>|+<TestSuite>) ...]<br>");
+            message.append(
+                    "java net.sourceforge.marathon.Main -batch [-reportdir <report-directory> [-acceptchecklists ] [-capture]] <Project Directory> [ (<TestCase>|+<TestSuite>) ...]<br>");
             message.append("or\n");
             message.append("java net.sourceforge.marathon.Main [-ignore] [-nosplash] [<Project Directory>]\n");
             logger.severe(message.toString());

@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
@@ -45,7 +45,7 @@ public class SimpleSelector implements Selector {
         return sb.toString();
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final JavaAgent driver,
+    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
             final IJavaElement container, long implicitWait) {
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
@@ -102,7 +102,7 @@ public class SimpleSelector implements Selector {
         return list;
     }
 
-    public List<IJavaElement> found(IJavaElement self, JavaAgent driver) {
+    public List<IJavaElement> found(IJavaElement self, IJavaAgent driver) {
         List<IJavaElement> cs = new ArrayList<IJavaElement>();
         if (tag.equals(".")) {
             cs.addAll(filterMatches(self));
@@ -123,7 +123,7 @@ public class SimpleSelector implements Selector {
         return r;
     }
 
-    private void findByTagName(IJavaElement je, List<IJavaElement> cs, JavaAgent driver, boolean addThis) {
+    private void findByTagName(IJavaElement je, List<IJavaElement> cs, IJavaAgent driver, boolean addThis) {
         if (addThis)
             cs.addAll(matchesSelector(je));
         IJavaElement[] components = je.getComponents();

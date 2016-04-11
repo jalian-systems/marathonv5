@@ -262,10 +262,10 @@ public class PopupMenuDemoX implements ActionListener, ItemListener {
                 if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED) {
                     MenuSelectionManager msm = MenuSelectionManager.defaultManager();
                     MenuElement[] selectedPath = msm.getSelectedPath();
-                    if(selectedPath.length == 0)
+                    if (selectedPath.length == 0)
                         return;
                     MenuElement last = selectedPath[selectedPath.length - 1];
-                    if(last.getSubElements().length > 0)
+                    if (last.getSubElements().length > 0)
                         return;
                     StringBuilder sb = new StringBuilder();
                     for (MenuElement menu : selectedPath) {

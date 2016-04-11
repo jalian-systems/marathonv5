@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -39,8 +39,7 @@ import java.util.Vector;
 
 public class GenealogyModel implements TreeModel {
     private boolean showAncestors;
-    private Vector<TreeModelListener> treeModelListeners =
-        new Vector<TreeModelListener>();
+    private Vector<TreeModelListener> treeModelListeners = new Vector<TreeModelListener>();
     private Person rootPerson;
 
     public GenealogyModel(Person root) {
@@ -49,36 +48,33 @@ public class GenealogyModel implements TreeModel {
     }
 
     /**
-     * Used to toggle between show ancestors/show descendant and
-     * to change the root of the tree.
+     * Used to toggle between show ancestors/show descendant and to change the
+     * root of the tree.
      */
     public void showAncestor(boolean b, Object newRoot) {
         showAncestors = b;
         Person oldRoot = rootPerson;
         if (newRoot != null) {
-           rootPerson = (Person)newRoot;
+            rootPerson = (Person) newRoot;
         }
         fireTreeStructureChanged(oldRoot);
     }
 
-
-//////////////// Fire events //////////////////////////////////////////////
+    //////////////// Fire events //////////////////////////////////////////////
 
     /**
-     * The only event raised by this model is TreeStructureChanged with the
-     * root as path, i.e. the whole tree has changed.
+     * The only event raised by this model is TreeStructureChanged with the root
+     * as path, i.e. the whole tree has changed.
      */
     protected void fireTreeStructureChanged(Person oldRoot) {
         int len = treeModelListeners.size();
-        TreeModelEvent e = new TreeModelEvent(this, 
-                                              new Object[] {oldRoot});
+        TreeModelEvent e = new TreeModelEvent(this, new Object[] { oldRoot });
         for (TreeModelListener tml : treeModelListeners) {
             tml.treeStructureChanged(e);
         }
     }
 
-
-//////////////// TreeModel interface implementation ///////////////////////
+    //////////////// TreeModel interface implementation ///////////////////////
 
     /**
      * Adds a listener for the TreeModelEvent posted after the tree changes.
@@ -91,7 +87,7 @@ public class GenealogyModel implements TreeModel {
      * Returns the child of parent at index index in the parent's child array.
      */
     public Object getChild(Object parent, int index) {
-        Person p = (Person)parent;
+        Person p = (Person) parent;
         if (showAncestors) {
             if ((index > 0) && (p.getFather() != null)) {
                 return p.getMother();
@@ -105,13 +101,13 @@ public class GenealogyModel implements TreeModel {
      * Returns the number of children of parent.
      */
     public int getChildCount(Object parent) {
-        Person p = (Person)parent;
+        Person p = (Person) parent;
         if (showAncestors) {
             int count = 0;
-            if (p.getFather() != null) { 
+            if (p.getFather() != null) {
                 count++;
             }
-            if (p.getMother() != null) { 
+            if (p.getMother() != null) {
                 count++;
             }
             return count;
@@ -123,7 +119,7 @@ public class GenealogyModel implements TreeModel {
      * Returns the index of child in parent.
      */
     public int getIndexOfChild(Object parent, Object child) {
-        Person p = (Person)parent;
+        Person p = (Person) parent;
         if (showAncestors) {
             int count = 0;
             Person father = p.getFather();
@@ -138,7 +134,7 @@ public class GenealogyModel implements TreeModel {
             }
             return -1;
         }
-        return p.getIndexOfChild((Person)child);
+        return p.getIndexOfChild((Person) child);
     }
 
     /**
@@ -152,10 +148,9 @@ public class GenealogyModel implements TreeModel {
      * Returns true if node is a leaf.
      */
     public boolean isLeaf(Object node) {
-        Person p = (Person)node;
+        Person p = (Person) node;
         if (showAncestors) {
-            return ((p.getFather() == null)
-                 && (p.getMother() == null));
+            return ((p.getFather() == null) && (p.getMother() == null));
         }
         return p.getChildCount() == 0;
     }
@@ -168,11 +163,10 @@ public class GenealogyModel implements TreeModel {
     }
 
     /**
-     * Messaged when the user has altered the value for the item
-     * identified by path to newValue.  Not used by this model.
+     * Messaged when the user has altered the value for the item identified by
+     * path to newValue. Not used by this model.
      */
     public void valueForPathChanged(TreePath path, Object newValue) {
-        System.out.println("*** valueForPathChanged : "
-                           + path + " --> " + newValue);
+        System.out.println("*** valueForPathChanged : " + path + " --> " + newValue);
     }
 }

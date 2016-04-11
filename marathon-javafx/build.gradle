@@ -1,0 +1,111 @@
+repositories {
+  mavenCentral()
+}
+
+apply plugin: 'distribution'
+
+dependencies {
+  compile project(":marathon")
+  testCompile "org.testng:testng:${testng_version}"
+  testCompile project(":marathon-java:marathon-test-helpers")
+  testCompile project(":marathon-java:marathon-java-driver")
+  testCompile project(":marathon-javafx:marathon-javafx-agent")
+  testCompile project(":marathon-javafx:marathon-javafx-recorder")
+  testCompile project(":marathon-java:marathon-java-runtime")
+  testCompile project(":marathon-javafx:marathon-javafx-runtime")
+  testCompile project(":marathon:ruby-selenium-webdriver")
+  runtime project(":marathon-javafx")
+  runtime project(":marathon-java:marathon-java-driver")
+  runtime project(":marathon-javafx:marathon-javafx-agent")
+  runtime project(":marathon-javafx:marathon-javafx-recorder")
+  runtime project(":marathon-java:marathon-java-runtime")
+  runtime project(":marathon-javafx:marathon-javafx-runtime")
+  runtime project(":marathon:ruby-selenium-webdriver")
+}
+
+jar.doFirst{
+  manifest {
+    def classpath = configurations.runtime.filter{ it.name.startsWith 'marathon-' }.collect { it.name } +
+              configurations.runtime.filter{ !it.name.startsWith('marathon-') }.collect { 'support/' + it.name }
+    Properties props = new Properties()
+    props.load(new FileInputStream(file('build.properties')))
+    props.put("marathonversion", "${version}")
+    attributes("Manifest-Version" : "1.0",
+              "Created-By" : props.get('blurbcompany'),
+              "Specification-Title" : props.get('blurbtitle'),
+              "Specification-Version" : props.get('marathonversion'),
+              "Specification-Vendor" : props.get('blurbcompany'),
+              "Implementation-Title" : props.get('marathonproduct'),
+              "Implementation-Version" : props.get('marathonversion'),
+              "Implementation-Vendor" : props.get('blurbcompany'),
+              "Main-Class" : "net.sourceforge.marathon.Main",
+              "Class-Path" : classpath.join(' ')
+    )
+  }
+}
+
+task startScripts(type: Copy) {
+    destinationDir file("$buildDir/scripts")
+    from('script-templates/marathon-javafx') {
+      expand( [ 'marathonJar' : jar.archiveName, ])
+      fileMode(0755)
+    }
+    from('script-templates/marathon-javafx.bat') {
+      expand( [ 'marathonJar' : jar.archiveName, ])
+    }
+}
+
+distributions {
+  main {
+    contents {
+      from(configurations.runtime) {
+        exclude('**/marathon*jar')
+        into('support')
+      }
+      from(configurations.runtime) {
+        include('**/marathon*jar')
+      }
+      from(project(':marathon').file('src/main/dist'))
+      from(project(':marathon-java:marathon-java-runtime').file('src/main/dist'))
+      from(startScripts)
+      from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
+        exclude('**/marathon*jar')
+        into('support')
+      }
+      from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
+        include('**/marathon*jar')
+      }
+      from(project(':marathon-java:marathon-kbmap-tool').jar)
+      from(project(':marathon-java:marathon-kbmap-tool').files('build/scripts'))
+      from(project(':marathon').file('ChangeLog'))
+    }
+  }
+}
+
+task updateVersions(type: Copy) {
+    inputs.file file("build.properties")
+    inputs.file file("../build.gradle")
+    Properties props = new Properties()
+    props.load(new FileInputStream(file('build.properties')))
+    props.put("buildtime", new Date().format("dd MMM yyyy hh:mm aa"))
+    props.put("marathonversion", "${version}")
+    from project(':marathon').file('Version.tmpl')
+    into file('src/main/java').path
+    expand(props)
+    rename('Version.tmpl', 'Version.java')
+}
+
+test {
+  useTestNG()
+  systemProperty 'file.encoding', 'utf8'
+  testLogging.showStandardStreams = true
+  systemProperty 'marathon.agent.file', project(":marathon-javafx:marathon-javafx-agent").tasks.jar.archivePath
+  systemProperty 'marathon.recorder.file', project(":marathon-javafx:marathon-javafx-recorder").tasks.jar.archivePath
+  systemProperty 'applet.html', project(":marathon-java:marathon-test-helpers").file("swingset3/applet.html").path
+  systemProperty 'SwingSet3.jnlp', project(":marathon-java:marathon-test-helpers").file("swingset3/SwingSet3.jnlp").path
+}
+
+compileJava.dependsOn(updateVersions)
+assembleDist.dependsOn(startScripts)
+distZip.dependsOn(project(':marathon-java:marathon-kbmap-tool').tasks.build)
+tasks.eclipse.dependsOn(updateVersions)

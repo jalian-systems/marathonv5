@@ -158,8 +158,9 @@ public class IntegerEditor extends DefaultCellEditor {
         Toolkit.getDefaultToolkit().beep();
         ftf.selectAll();
         Object[] options = { "Edit", "Revert" };
-        int answer = JOptionPane.showOptionDialog(SwingUtilities.getWindowAncestor(ftf), "The value must be an integer between "
-                + minimum + " and " + maximum + ".\n" + "You can either continue editing " + "or revert to the last valid value.",
+        int answer = JOptionPane.showOptionDialog(SwingUtilities.getWindowAncestor(ftf),
+                "The value must be an integer between " + minimum + " and " + maximum + ".\n" + "You can either continue editing "
+                        + "or revert to the last valid value.",
                 "Invalid Text Entered", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
 
         if (answer == 1) { // Revert!

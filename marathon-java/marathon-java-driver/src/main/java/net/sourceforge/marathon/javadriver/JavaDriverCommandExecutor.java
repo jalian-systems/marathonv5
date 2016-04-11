@@ -47,9 +47,8 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
             command.executeAsync();
             new Wait() {
                 @Override public boolean until() {
-                    return isConnected()
-                            || (!profile.isJavaWebStart() && !Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR) && !command
-                                    .isRunning());
+                    return isConnected() || (!profile.isJavaWebStart() && !Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR)
+                            && !command.isRunning());
                 }
             }.wait("Timedout waiting for the server to start", Long.getLong("marathon.application.wait", Wait.DEFAULT_TIMEOUT * 5));
             if (!isConnected() && !command.isRunning()) {

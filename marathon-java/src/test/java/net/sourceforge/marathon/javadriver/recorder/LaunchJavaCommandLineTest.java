@@ -22,6 +22,7 @@ import com.sun.swingset3.SwingSet3;
 @Test public class LaunchJavaCommandLineTest extends RecordingTest {
 
     private JavaDriver driver;
+
     public LaunchJavaCommandLineTest() {
     }
 

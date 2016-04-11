@@ -1,6 +1,5 @@
 package net.sourceforge.marathon.javadriver;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -29,13 +28,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
-import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javaagent.JavaAgent;
-import net.sourceforge.marathon.javaagent.JavaElementFactory;
-import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-import net.sourceforge.marathon.testhelpers.MissingException;
 
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -69,6 +61,10 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.JavaElementFactory;
+import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test public class JavaDriverTest {
 
@@ -1272,21 +1268,8 @@ import org.testng.annotations.Test;
         AssertJUnit.assertTrue(altReleased);
     }
 
-    public static class JTextFieldJavaElementForTest extends AbstractJavaElement {
-        public JTextFieldJavaElementForTest(Component component, JavaAgent driver, JWindow window) {
-            super(component, driver, window);
-        }
-
-        @Override public boolean marathon_select(String value) {
-            ((JTextField) component).setText(value);
-            return true;
-        }
-
-    }
-
     public void setAttribute() throws Throwable {
         try {
-            JavaElementFactory.add(JTextField.class, JTextFieldJavaElementForTest.class);
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run() {
@@ -1378,7 +1361,6 @@ import org.testng.annotations.Test;
 
     public void executeScript() throws Throwable {
         try {
-            JavaElementFactory.add(JTextField.class, JTextFieldJavaElementForTest.class);
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run() {
@@ -1394,9 +1376,26 @@ import org.testng.annotations.Test;
         }
     }
 
+    public void executeScriptWithPrimitiveReturn() throws Throwable {
+        try {
+            driver = new JavaDriver();
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override public void run() {
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                }
+            });
+            WebElement element1 = driver.findElement(By.name("text-field"));
+            Number width = (Number) ((JavascriptExecutor) driver).executeScript("return Double.valueOf($1.getSize().getWidth());",
+                    element1);
+            AssertJUnit.assertTrue(width.doubleValue() > 0);
+        } finally {
+            JavaElementFactory.reset();
+        }
+    }
+
     public void executeAsyncScript() throws Throwable {
         try {
-            JavaElementFactory.add(JTextField.class, JTextFieldJavaElementForTest.class);
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run() {
@@ -1414,7 +1413,6 @@ import org.testng.annotations.Test;
 
     public void executeAsyncScriptWithoutCallback() throws Throwable {
         try {
-            JavaElementFactory.add(JTextField.class, JTextFieldJavaElementForTest.class);
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run() {
@@ -1433,7 +1431,6 @@ import org.testng.annotations.Test;
 
     public void executeAsyncScriptWithNullReturn() throws Throwable {
         try {
-            JavaElementFactory.add(JTextField.class, JTextFieldJavaElementForTest.class);
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run() {
@@ -1485,8 +1482,8 @@ import org.testng.annotations.Test;
         AssertJUnit.assertTrue(buttonMouseActions.toString().contains("clicked(1)"));
         buttonMouseActions.setLength(0);
         new Actions(driver).contextClick().perform();
-        AssertJUnit.assertTrue(buttonMouseActions.toString(), buttonMouseActions.toString().contains("pressed(3-popup)") ||
-                buttonMouseActions.toString().contains("released(3-popup)"));
+        AssertJUnit.assertTrue(buttonMouseActions.toString(), buttonMouseActions.toString().contains("pressed(3-popup)")
+                || buttonMouseActions.toString().contains("released(3-popup)"));
     }
 
     public void screenshot() throws Throwable {
@@ -1498,9 +1495,9 @@ import org.testng.annotations.Test;
                     frame.setVisible(true);
                 }
             });
-            if(driver instanceof TakesScreenshot) {
+            if (driver instanceof TakesScreenshot) {
                 Thread.sleep(1000);
-                File screenshotAs = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+                File screenshotAs = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                 System.out.println(screenshotAs.getAbsolutePath());
                 Thread.sleep(20000);
             }

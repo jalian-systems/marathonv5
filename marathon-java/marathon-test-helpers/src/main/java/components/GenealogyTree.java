@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -42,8 +42,7 @@ public class GenealogyTree extends JTree {
 
     public GenealogyTree(Person graphNode) {
         super(new GenealogyModel(graphNode));
-        getSelectionModel().setSelectionMode(
-                TreeSelectionModel.SINGLE_TREE_SELECTION);
+        getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
         Icon personIcon = null;
         renderer.setLeafIcon(personIcon);
@@ -51,10 +50,10 @@ public class GenealogyTree extends JTree {
         renderer.setOpenIcon(personIcon);
         setCellRenderer(renderer);
     }
-    
+
     /**
-     * Get the selected item in the tree, and call showAncestor with this
-     * item on the model.
+     * Get the selected item in the tree, and call showAncestor with this item
+     * on the model.
      */
     public void showAncestor(boolean b) {
         Object newRoot = null;
@@ -62,6 +61,6 @@ public class GenealogyTree extends JTree {
         if (path != null) {
             newRoot = path.getLastPathComponent();
         }
-        ((GenealogyModel)getModel()).showAncestor(b, newRoot);
+        ((GenealogyModel) getModel()).showAncestor(b, newRoot);
     }
 }

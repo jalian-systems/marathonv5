@@ -28,6 +28,24 @@ public class JavaProfile {
     private static final String MARATHON_AGENT = "marathon.agent";
     private static final String MARATHON_RECORDER = "marathon.recorder";
 
+    public enum LaunchType {
+        // @formatter:off
+        SWING_APPLICATION("java"),
+        FX_APPLICATION("javafx"),
+        ;
+        private String prefix;
+
+        // @formatter:on
+
+        LaunchType(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+    }
+
     public enum LaunchMode {
         // @formatter:off
         EMBEDDED("unittesting", "Unit Testing"),
@@ -69,6 +87,7 @@ public class JavaProfile {
     private List<String> wsArguments = new ArrayList<String>();
     private List<String> appArguments = new ArrayList<String>();
     private LaunchMode launchMode;
+    private LaunchType launchType = LaunchType.SWING_APPLICATION;
     private String mainClass;
     private File jnlpFile;
     private int port;
@@ -209,6 +228,7 @@ public class JavaProfile {
     private String getToolOptions() {
         StringBuilder java_tool_options = new StringBuilder();
         java_tool_options.append("-Dmarathon.launch.mode=" + launchMode.getName()).append(" ");
+        java_tool_options.append("-Dmarathon.mode=" + (recordingPort != -1 ? "recording" : "playing")).append(" ");
         if (startWindowTitle != null)
             java_tool_options.append("-Dstart.window.title=\"" + startWindowTitle).append("\" ");
         java_tool_options.append("-D" + MARATHON_AGENT + "=" + getAgentJarURL()).append(" ");
@@ -222,8 +242,8 @@ public class JavaProfile {
             java_tool_options.append("\"" + vmArg + "\"").append(" ");
         }
         if (System.getProperty("java.util.logging.config.file") != null) {
-            java_tool_options.append("-Djava.util.logging.config.file=\"" + System.getProperty("java.util.logging.config.file")
-                    + "\" ");
+            java_tool_options
+                    .append("-Djava.util.logging.config.file=\"" + System.getProperty("java.util.logging.config.file") + "\" ");
         }
         java_tool_options.setLength(java_tool_options.length() - 1);
         return java_tool_options.toString();
@@ -255,14 +275,15 @@ public class JavaProfile {
         }
     }
 
-    public static String getAgentJar() {
+    public String getAgentJar() {
+        String prefix = launchType.getPrefix();
         if (System.getenv(MARATHON_AGENT + ".file") != null)
             return System.getenv(MARATHON_AGENT + ".file");
         if (System.getProperty(MARATHON_AGENT + ".file") != null)
             return System.getProperty(MARATHON_AGENT + ".file");
-        String path = findFile(new String[] { ".", "marathon-java-agent", "../marathon-java-agent",
-                "../../MarathonV4/marathon-java/marathon-java-agent", System.getProperty(PROP_HOME, "."),
-                dirOfMarathonJavaDriverJar }, "marathon-java-agent.*.jar");
+        String path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
+                "../../MarathonV4/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
+                dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-agent.*.jar");
         if (path != null) {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for agent");
             return path;
@@ -429,14 +450,14 @@ public class JavaProfile {
     private boolean nativeEvents;
     private String executableJar;
 
-    public static String getRecorderJar() {
+    public String getRecorderJar() {
         if (System.getenv(MARATHON_RECORDER + ".file") != null)
             return System.getenv(MARATHON_RECORDER + ".file");
         if (System.getProperty(MARATHON_RECORDER + ".file") != null)
             return System.getProperty(MARATHON_RECORDER + ".file");
-        String path = findFile(
-                new String[] { ".", "marathon-java-recorder", "../marathon-java-recorder", System.getProperty(PROP_HOME, "."),
-                        dirOfMarathonJavaDriverJar }, "marathon-java-recorder.*.jar");
+        String prefix = launchType.getPrefix();
+        String path = findFile(new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
+                System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-recorder.*.jar");
         if (path != null) {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for recorder");
             return path;
@@ -605,11 +626,11 @@ public class JavaProfile {
     }
 
     @Override public String toString() {
-        return "JavaProfile [classPathEntries=" + classPathEntries + ", vmArguments=" + vmArguments + ", wsArguments="
-                + wsArguments + ", appArguments=" + appArguments + ", launchMode=" + launchMode + ", mainClass=" + mainClass
-                + ", jnlpFile=" + jnlpFile + ", port=" + port + ", startWindowTitle=" + startWindowTitle + ", workingDirectory="
-                + workingDirectory + ", vmCommand=" + vmCommand + ", command=" + command + ", appletURL=" + appletURL
-                + ", recordingPort=" + recordingPort + ", javaHome=" + javaHome + ", nativeEvents=" + nativeEvents + "]";
+        return "JavaProfile [classPathEntries=" + classPathEntries + ", vmArguments=" + vmArguments + ", wsArguments=" + wsArguments
+                + ", appArguments=" + appArguments + ", launchMode=" + launchMode + ", mainClass=" + mainClass + ", jnlpFile="
+                + jnlpFile + ", port=" + port + ", startWindowTitle=" + startWindowTitle + ", workingDirectory=" + workingDirectory
+                + ", vmCommand=" + vmCommand + ", command=" + command + ", appletURL=" + appletURL + ", recordingPort="
+                + recordingPort + ", javaHome=" + javaHome + ", nativeEvents=" + nativeEvents + "]";
     }
 
     @Override public int hashCode() {
@@ -742,4 +763,8 @@ public class JavaProfile {
         return launchMode == LaunchMode.JAVA_WEBSTART;
     }
 
+    public JavaProfile setLaunchType(LaunchType launchType) {
+        this.launchType = launchType;
+        return this;
+    }
 }

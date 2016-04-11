@@ -34,7 +34,7 @@ public class RList extends RComponent {
     @Override public String[][] getContent() {
         return JListJavaElement.getContent((JList) component);
     }
-    
+
     @Override protected void mousePressed(MouseEvent me) {
         // Ignore Ctrl+Clicks used to select the nodes
         if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me))

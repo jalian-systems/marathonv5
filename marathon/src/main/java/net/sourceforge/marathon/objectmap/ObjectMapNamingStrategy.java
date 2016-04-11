@@ -70,7 +70,7 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
     private Class<?> findClass(String cName) {
         try {
             return Class.forName(cName);
-        } catch (ClassNotFoundException e) {
+        } catch (Throwable e) {
             try {
                 return Thread.currentThread().getContextClassLoader().loadClass(cName);
             } catch (ClassNotFoundException e1) {
@@ -95,6 +95,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
     private String toCSS(OMapComponent omapComponent, boolean visibility) {
         OMapRecognitionProperty typeProperty = null;
         OMapRecognitionProperty indexProperty = null;
+        OMapRecognitionProperty tagNameProperty = null;
+
         List<OMapRecognitionProperty> properties = omapComponent.getComponentRecognitionProperties();
         StringBuilder sb = new StringBuilder();
         for (OMapRecognitionProperty rp : properties) {
@@ -102,19 +104,26 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
                 typeProperty = rp;
             } else if (rp.getName().equals("indexOfType")) {
                 indexProperty = rp;
+            } else if (rp.getName().equals("tagName")) {
+                tagNameProperty = rp;
             } else
                 sb.append("[").append(rp.getName()).append(op(rp.getMethod())).append("'")
                         .append(rp.getValue().replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")).append("']");
         }
         if (visibility)
-            sb.append("[visible='true'][showing='true']");
+            sb.append("[visible='true']");
         String r = sb.toString();
+        if (tagNameProperty != null) {
+            if (tagNameProperty.getMethod().equals("equals"))
+                r = tagNameProperty.getValue() + r;
+            else
+                r = "[" + tagNameProperty.getName() + op(tagNameProperty.getMethod()) + "'" + tagNameProperty.getValue() + "']" + r;
+        }
         if (typeProperty != null) {
-            r = "[" + typeProperty.getName() + op(typeProperty.getMethod()) + "'" + typeProperty.getValue() + "']" + sb.toString();
+            r = "[" + typeProperty.getName() + op(typeProperty.getMethod()) + "'" + typeProperty.getValue() + "']" + r;
         }
         if (indexProperty != null) {
-            int index = Integer.parseInt(indexProperty.getValue());
-            r = r + ":nth(" + (index + 1) + ")";
+            r = r + "[" + indexProperty.getName() + op(indexProperty.getMethod()) + "'" + indexProperty.getValue() + "']";
         }
         return r;
     }

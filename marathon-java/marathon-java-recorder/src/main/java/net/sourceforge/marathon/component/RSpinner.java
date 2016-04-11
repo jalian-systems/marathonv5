@@ -46,7 +46,7 @@ public class RSpinner extends RComponent {
 
     @Override protected void mousePressed(MouseEvent me) {
     }
-    
+
     @Override protected void keyPressed(KeyEvent ke) {
     }
 }

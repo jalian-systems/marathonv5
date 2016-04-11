@@ -1,19 +1,13 @@
 package net.sourceforge.marathon.runtime;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import javax.swing.KeyStroke;
+import org.json.JSONObject;
 
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
-import net.sourceforge.marathon.runtime.api.KeyStrokeParser;
-import net.sourceforge.marathon.runtime.api.OSUtils;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
-
-import org.json.JSONObject;
 
 public class JSONScriptElement implements IScriptElement {
     private final WindowId windowId;
@@ -101,28 +95,21 @@ public class JSONScriptElement implements IScriptElement {
     private String enscriptRawMouseClick() {
         boolean popupTrigger = event.getInt("button") == MouseEvent.BUTTON3;
         int clickCount = event.getInt("clickCount");
-        int modifiersEx = event.getInt("modifiersEx");
         int x = event.getInt("x");
         int y = event.getInt("y");
-        String mtext = KeyStrokeParser.getKeyModifierText(modifiersEx);
+        String mtext = event.getString("modifiersEx");
         String method = "click";
         if (popupTrigger)
             method = "rightclick";
         if ("".equals(mtext))
             return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, clickCount, x, y);
-        mtext = mtext.substring(0, mtext.length() - 1);
         return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, clickCount, x, y, mtext);
     }
 
     private String enscriptMouseClick() {
         boolean popupTrigger = event.getInt("button") == MouseEvent.BUTTON3;
         int clickCount = event.has("clickCount") ? event.getInt("clickCount") : 1;
-        int modifiersEx = event.has("modifiersEx") ? event.getInt("modifiersEx") : 0;
-        if (popupTrigger)
-            modifiersEx = modifiersEx & ~(InputEvent.META_DOWN_MASK | InputEvent.META_MASK);
-        String mtext = KeyStrokeParser.getKeyModifierText(modifiersEx);
-        if (!"".equals(mtext))
-            mtext = mtext.substring(0, mtext.length() - 1);
+        String mtext = event.getString("modifiersEx");
         String cellinfo = null;
         if (event.has("cellinfo"))
             cellinfo = event.getString("cellinfo");
@@ -184,15 +171,14 @@ public class JSONScriptElement implements IScriptElement {
     }
 
     private String enscriptKeystroke() {
-        KeyStroke ks = KeyStroke.getKeyStroke(event.getString("ks"));
-        char keyChar = (char) event.getInt("keyChar");
         String keytext = null;
-        if (keyChar != KeyEvent.CHAR_UNDEFINED && (ks.getModifiers() & ~(KeyEvent.SHIFT_DOWN_MASK | KeyEvent.SHIFT_MASK)) == 0
-                && !Character.isISOControl(keyChar)) {
-            keytext = KeyStrokeParser.getTextForKeyChar(keyChar);
+        if (event.has("keyChar")) {
+            keytext = event.getString("keyChar");
         } else {
-            String keyModifiersText = KeyStrokeParser.getKeyModifierText(ks.getModifiers());
-            keytext = keyModifiersText + OSUtils.keyEventGetKeyText(ks.getKeyCode());
+            String mtext = event.getString("modifiersEx");
+            if (mtext.length() > 0)
+                mtext = mtext + "+";
+            keytext = mtext + event.getString("keyCode");
         }
         return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("keystroke", name, keytext);
     }

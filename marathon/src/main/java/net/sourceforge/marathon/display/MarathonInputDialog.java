@@ -42,8 +42,8 @@ public abstract class MarathonInputDialog extends EscapeDialog {
         CellConstraints cc1 = new CellConstraints();
 
         errorMsgLabel = new JLabel("");
-        errorMsgLabel.setIcon(new ImageIcon(MarathonInputDialog.class.getClassLoader().getResource(
-                "net/sourceforge/marathon/display/icons/enabled/error.gif")));
+        errorMsgLabel.setIcon(new ImageIcon(MarathonInputDialog.class.getClassLoader()
+                .getResource("net/sourceforge/marathon/display/icons/enabled/error.gif")));
         errorMsgLabel.setVisible(false);
 
         int row = 1;

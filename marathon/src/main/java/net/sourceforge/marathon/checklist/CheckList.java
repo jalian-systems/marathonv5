@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -29,12 +28,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
+import com.jgoodies.forms.builder.DefaultFormBuilder;
+import com.jgoodies.forms.layout.FormLayout;
+
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.screencapture.ImagePanel;
 import net.sourceforge.marathon.screencapture.ImagePanel.Annotation;
-
-import com.jgoodies.forms.builder.DefaultFormBuilder;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class CheckList {
     public static abstract class CheckListItem {
@@ -364,9 +363,13 @@ public class CheckList {
         checkListItems = new ArrayList<CheckList.CheckListItem>();
     }
 
-    public static CheckList read(InputStream in) throws Exception {
-        XMLDecoder decoder = new XMLDecoder(in);
-        return (CheckList) decoder.readObject();
+    public static CheckList read(File file) throws Exception {
+        XMLDecoder decoder = new XMLDecoder(new FileInputStream(file));
+        try {
+            return (CheckList) decoder.readObject();
+        } finally {
+            decoder.close();
+        }
     }
 
     public void add(CheckListItem item) {
@@ -553,17 +556,23 @@ public class CheckList {
         return result.toString();
     }
 
-    /* Make XMLEncoder happy by not using standard bean property get/set methods */
+    /*
+     * Make XMLEncoder happy by not using standard bean property get/set methods
+     */
     public void setCaptureFile(String file) {
         this.captureFile = file;
     }
 
-    /* Make XMLEncoder happy by not using standard bean property get/set methods */
+    /*
+     * Make XMLEncoder happy by not using standard bean property get/set methods
+     */
     public void xsetDataFile(File file) {
         this.dataFile = file;
     }
 
-    /* Make XMLEncoder happy by not using standard bean property get/set methods */
+    /*
+     * Make XMLEncoder happy by not using standard bean property get/set methods
+     */
     public File xgetDataFile() {
         return dataFile;
     }

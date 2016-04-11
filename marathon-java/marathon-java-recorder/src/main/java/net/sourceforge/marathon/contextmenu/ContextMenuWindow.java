@@ -101,8 +101,8 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         });
         c.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                ContextMenuWindow.this.setLocation(ContextMenuWindow.this.getX() + e.getX() - startX, ContextMenuWindow.this.getY()
-                        + e.getY() - startY);
+                ContextMenuWindow.this.setLocation(ContextMenuWindow.this.getX() + e.getX() - startX,
+                        ContextMenuWindow.this.getY() + e.getY() - startY);
             }
 
         });

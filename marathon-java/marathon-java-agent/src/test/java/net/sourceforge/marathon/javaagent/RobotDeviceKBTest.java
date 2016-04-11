@@ -38,4 +38,7 @@ import org.testng.annotations.Test;
         AssertJUnit.assertEquals(true, exitItemCalled);
     }
 
+    @Override protected boolean isRobot() {
+        return true;
+    }
 }

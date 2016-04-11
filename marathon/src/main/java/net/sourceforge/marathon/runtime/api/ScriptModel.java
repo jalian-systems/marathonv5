@@ -16,8 +16,8 @@ public abstract class ScriptModel {
         }
     }
 
-    private static IScriptModel getModel(String selectedScript) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+    private static IScriptModel getModel(String selectedScript)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<?> klass = Class.forName(selectedScript);
         return (IScriptModel) klass.newInstance();
     }

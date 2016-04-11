@@ -47,7 +47,7 @@ public class RComboBox extends RComponent {
     @Override public String[][] getContent() {
         return JComboBoxJavaElement.getContent((JComboBox) component);
     }
-    
+
     @Override public String getText() {
         return JComboBoxJavaElement.getSelectedItemText((JComboBox) component);
     }

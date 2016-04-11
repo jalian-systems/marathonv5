@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -41,7 +41,7 @@ import java.awt.event.*;
 
 public class SharedModelDemo extends JPanel {
     JTextArea output;
-    JList list; 
+    JList list;
     JTable table;
     String newline = "\n";
     ListSelectionModel listSelectionModel;
@@ -51,15 +51,15 @@ public class SharedModelDemo extends JPanel {
 
         Vector data = new Vector(7);
         String[] columnNames = { "French", "Spanish", "Italian" };
-        String[] oneData =     { "un",     "uno",     "uno"     };
-        String[] twoData =     { "deux",   "dos",     "due"     };
-        String[] threeData =   { "trois",  "tres",    "tre"     };
-        String[] fourData =    { "quatre", "cuatro",  "quattro" };
-        String[] fiveData =    { "cinq",   "cinco",   "cinque"  };
-        String[] sixData =     { "six",    "seis",    "sei"     };
-        String[] sevenData =   { "sept",   "siete",   "sette"   };
+        String[] oneData = { "un", "uno", "uno" };
+        String[] twoData = { "deux", "dos", "due" };
+        String[] threeData = { "trois", "tres", "tre" };
+        String[] fourData = { "quatre", "cuatro", "quattro" };
+        String[] fiveData = { "cinq", "cinco", "cinque" };
+        String[] sixData = { "six", "seis", "sei" };
+        String[] sevenData = { "sept", "siete", "sette" };
 
-        //Build the model.
+        // Build the model.
         SharedDataModel dataModel = new SharedDataModel(columnNames);
         dataModel.addElement(oneData);
         dataModel.addElement(twoData);
@@ -71,79 +71,62 @@ public class SharedModelDemo extends JPanel {
 
         list = new JList(dataModel);
         list.setCellRenderer(new DefaultListCellRenderer() {
-            public Component getListCellRendererComponent(JList l, 
-                                                          Object value,
-                                                          int i,
-                                                          boolean s,
-                                                          boolean f) {
-                String[] array = (String[])value;
-                return super.getListCellRendererComponent(l,
-                                                          array[0],
-                                                          i, s, f);
+            public Component getListCellRendererComponent(JList l, Object value, int i, boolean s, boolean f) {
+                String[] array = (String[]) value;
+                return super.getListCellRendererComponent(l, array[0], i, s, f);
             }
         });
 
         listSelectionModel = list.getSelectionModel();
-        listSelectionModel.addListSelectionListener(
-                                new SharedListSelectionHandler());
+        listSelectionModel.addListSelectionListener(new SharedListSelectionHandler());
         JScrollPane listPane = new JScrollPane(list);
 
         table = new JTable(dataModel);
         table.setSelectionModel(listSelectionModel);
         JScrollPane tablePane = new JScrollPane(table);
 
-        //Build control area (use default FlowLayout).
+        // Build control area (use default FlowLayout).
         JPanel controlPane = new JPanel();
-        String[] modes = { "SINGLE_SELECTION",
-                           "SINGLE_INTERVAL_SELECTION",
-                           "MULTIPLE_INTERVAL_SELECTION" };
+        String[] modes = { "SINGLE_SELECTION", "SINGLE_INTERVAL_SELECTION", "MULTIPLE_INTERVAL_SELECTION" };
 
         final JComboBox comboBox = new JComboBox(modes);
         comboBox.setSelectedIndex(2);
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String newMode = (String)comboBox.getSelectedItem();
+                String newMode = (String) comboBox.getSelectedItem();
                 if (newMode.equals("SINGLE_SELECTION")) {
-                    listSelectionModel.setSelectionMode(
-                        ListSelectionModel.SINGLE_SELECTION);
+                    listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 } else if (newMode.equals("SINGLE_INTERVAL_SELECTION")) {
-                    listSelectionModel.setSelectionMode(
-                        ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                    listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
                 } else {
-                    listSelectionModel.setSelectionMode(
-                        ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                    listSelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 }
-                output.append("----------"
-                              + "Mode: " + newMode
-                              + "----------" + newline);
+                output.append("----------" + "Mode: " + newMode + "----------" + newline);
             }
         });
         controlPane.add(new JLabel("Selection mode:"));
         controlPane.add(comboBox);
 
-        //Build output area.
+        // Build output area.
         output = new JTextArea(10, 40);
         output.setEditable(false);
-        JScrollPane outputPane = new JScrollPane(output,
-                         ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane outputPane = new JScrollPane(output, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        //Do the layout.
+        // Do the layout.
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         add(splitPane, BorderLayout.CENTER);
 
         JPanel topHalf = new JPanel();
         topHalf.setLayout(new BoxLayout(topHalf, BoxLayout.X_AXIS));
-        JPanel listContainer = new JPanel(new GridLayout(1,1));
-        listContainer.setBorder(BorderFactory.createTitledBorder(
-                                                "List"));
+        JPanel listContainer = new JPanel(new GridLayout(1, 1));
+        listContainer.setBorder(BorderFactory.createTitledBorder("List"));
         listContainer.add(listPane);
-        JPanel tableContainer = new JPanel(new GridLayout(1,1));
-        tableContainer.setBorder(BorderFactory.createTitledBorder(
-                                                "Table"));
+        JPanel tableContainer = new JPanel(new GridLayout(1, 1));
+        tableContainer.setBorder(BorderFactory.createTitledBorder("Table"));
         tableContainer.add(tablePane);
         tablePane.setPreferredSize(new Dimension(300, 100));
-        topHalf.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+        topHalf.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
         topHalf.add(listContainer);
         topHalf.add(tableContainer);
 
@@ -154,35 +137,34 @@ public class SharedModelDemo extends JPanel {
         JPanel bottomHalf = new JPanel(new BorderLayout());
         bottomHalf.add(controlPane, BorderLayout.NORTH);
         bottomHalf.add(outputPane, BorderLayout.CENTER);
-        //XXX: next line needed if bottomHalf is a scroll pane:
-        //bottomHalf.setMinimumSize(new Dimension(400, 50));
+        // XXX: next line needed if bottomHalf is a scroll pane:
+        // bottomHalf.setMinimumSize(new Dimension(400, 50));
         bottomHalf.setPreferredSize(new Dimension(450, 135));
         splitPane.add(bottomHalf);
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("SharedModelDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
+        // Create and set up the content pane.
         JComponent newContentPane = new SharedModelDemo();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
@@ -191,16 +173,14 @@ public class SharedModelDemo extends JPanel {
     }
 
     class SharedListSelectionHandler implements ListSelectionListener {
-        public void valueChanged(ListSelectionEvent e) { 
-            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+        public void valueChanged(ListSelectionEvent e) {
+            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
             int firstIndex = e.getFirstIndex();
             int lastIndex = e.getLastIndex();
-            boolean isAdjusting = e.getValueIsAdjusting(); 
-            output.append("Event for indexes "
-                          + firstIndex + " - " + lastIndex
-                          + "; isAdjusting is " + isAdjusting
-                          + "; selected indexes:");
+            boolean isAdjusting = e.getValueIsAdjusting();
+            output.append("Event for indexes " + firstIndex + " - " + lastIndex + "; isAdjusting is " + isAdjusting
+                    + "; selected indexes:");
 
             if (lsm.isSelectionEmpty()) {
                 output.append(" <none>");
@@ -218,8 +198,7 @@ public class SharedModelDemo extends JPanel {
         }
     }
 
-    class SharedDataModel extends DefaultListModel
-                          implements TableModel {
+    class SharedDataModel extends DefaultListModel implements TableModel {
         public String[] columnNames;
 
         public SharedDataModel(String[] columnNames) {
@@ -228,60 +207,73 @@ public class SharedModelDemo extends JPanel {
         }
 
         public void rowChanged(int row) {
-            fireContentsChanged(this, row, row); 
+            fireContentsChanged(this, row, row);
         }
 
         private TableModel tableModel = new AbstractTableModel() {
             public String getColumnName(int column) {
                 return columnNames[column];
             }
-            public int getRowCount() { 
+
+            public int getRowCount() {
                 return size();
             }
+
             public int getColumnCount() {
                 return columnNames.length;
             }
+
             public Object getValueAt(int row, int column) {
-                String[] rowData = (String [])elementAt(row);
+                String[] rowData = (String[]) elementAt(row);
                 return rowData[column];
             }
+
             public boolean isCellEditable(int row, int column) {
                 return true;
             }
+
             public void setValueAt(Object value, int row, int column) {
-                String newValue = (String)value;
-                String[] rowData = (String [])elementAt(row);
+                String newValue = (String) value;
+                String[] rowData = (String[]) elementAt(row);
                 rowData[column] = newValue;
-                fireTableCellUpdated(row, column); //table event
-                rowChanged(row);                   //list event
+                fireTableCellUpdated(row, column); // table event
+                rowChanged(row); // list event
             }
         };
 
-        //Implement the TableModel interface.
+        // Implement the TableModel interface.
         public int getRowCount() {
             return tableModel.getRowCount();
         }
+
         public int getColumnCount() {
             return tableModel.getColumnCount();
         }
+
         public String getColumnName(int columnIndex) {
             return tableModel.getColumnName(columnIndex);
         }
+
         public Class getColumnClass(int columnIndex) {
             return tableModel.getColumnClass(columnIndex);
         }
+
         public boolean isCellEditable(int rowIndex, int columnIndex) {
             return tableModel.isCellEditable(rowIndex, columnIndex);
         }
+
         public Object getValueAt(int rowIndex, int columnIndex) {
             return tableModel.getValueAt(rowIndex, columnIndex);
         }
+
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
             tableModel.setValueAt(aValue, rowIndex, columnIndex);
         }
+
         public void addTableModelListener(TableModelListener l) {
             tableModel.addTableModelListener(l);
         }
+
         public void removeTableModelListener(TableModelListener l) {
             tableModel.removeTableModelListener(l);
         }

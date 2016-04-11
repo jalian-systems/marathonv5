@@ -74,8 +74,8 @@ public class JavaDriver extends RemoteWebDriver {
     }
 
     @Override public void setFileDetector(FileDetector detector) {
-        throw new WebDriverException("Setting the file detector only works on remote webdriver instances obtained "
-                + "via RemoteWebDriver");
+        throw new WebDriverException(
+                "Setting the file detector only works on remote webdriver instances obtained " + "via RemoteWebDriver");
     }
 
     @Override protected void startClient() {

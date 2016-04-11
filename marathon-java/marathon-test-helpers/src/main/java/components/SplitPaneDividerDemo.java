@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -42,11 +42,10 @@ import java.beans.*;
  *   images/Cat.gif
  *   images/Dog.gif
  */
-public class SplitPaneDividerDemo extends JPanel
-                                  implements ActionListener {
+public class SplitPaneDividerDemo extends JPanel implements ActionListener {
 
     private JSplitPane splitPane;
-    
+
     public SplitPaneDividerDemo() {
         super(new BorderLayout());
 
@@ -54,20 +53,19 @@ public class SplitPaneDividerDemo extends JPanel
 
         ImageIcon icon = createImageIcon("images/Cat.gif");
         SizeDisplayer sd1 = new SizeDisplayer("left", icon);
-        sd1.setMinimumSize(new Dimension(30,30));
+        sd1.setMinimumSize(new Dimension(30, 30));
         sd1.setFont(font);
-        
+
         icon = createImageIcon("images/Dog.gif");
         SizeDisplayer sd2 = new SizeDisplayer("right", icon);
-        sd2.setMinimumSize(new Dimension(60,60));
+        sd2.setMinimumSize(new Dimension(60, 60));
         sd2.setFont(font);
-        
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                                   sd1, sd2);
+
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sd1, sd2);
         splitPane.setResizeWeight(0.5);
         splitPane.setOneTouchExpandable(true);
         splitPane.setContinuousLayout(true);
-        
+
         add(splitPane, BorderLayout.CENTER);
         add(createControlPanel(), BorderLayout.PAGE_END);
     }
@@ -79,12 +77,12 @@ public class SplitPaneDividerDemo extends JPanel
         panel.add(reset);
         return panel;
     }
-    
-    //Required by ActionListener interface. Respond to reset button.
+
+    // Required by ActionListener interface. Respond to reset button.
     public void actionPerformed(ActionEvent e) {
         splitPane.resetToPreferredSizes();
     }
-    
+
     /** Returns an ImageIcon, or null if the path was invalid. */
     private static ImageIcon createImageIcon(String path) {
         java.net.URL imgURL = SplitPaneDividerDemo.class.getResource(path);
@@ -97,28 +95,27 @@ public class SplitPaneDividerDemo extends JPanel
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("SplitPaneDividerDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
+        // Create and set up the content pane.
         SplitPaneDividerDemo newContentPane = new SplitPaneDividerDemo();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

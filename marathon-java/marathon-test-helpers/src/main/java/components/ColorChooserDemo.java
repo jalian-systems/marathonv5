@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -38,8 +38,7 @@ import javax.swing.event.*;
 import javax.swing.colorchooser.*;
 
 /* ColorChooserDemo.java requires no other files. */
-public class ColorChooserDemo extends JPanel
-                              implements ChangeListener {
+public class ColorChooserDemo extends JPanel implements ChangeListener {
 
     protected JColorChooser tcc;
     protected JLabel banner;
@@ -47,9 +46,8 @@ public class ColorChooserDemo extends JPanel
     public ColorChooserDemo() {
         super(new BorderLayout());
 
-        //Set up the banner at the top of the window
-        banner = new JLabel("Welcome to the Tutorial Zone!",
-                            JLabel.CENTER);
+        // Set up the banner at the top of the window
+        banner = new JLabel("Welcome to the Tutorial Zone!", JLabel.CENTER);
         banner.setForeground(Color.yellow);
         banner.setBackground(Color.blue);
         banner.setOpaque(true);
@@ -60,11 +58,10 @@ public class ColorChooserDemo extends JPanel
         bannerPanel.add(banner, BorderLayout.CENTER);
         bannerPanel.setBorder(BorderFactory.createTitledBorder("Banner"));
 
-        //Set up color chooser for setting text color
+        // Set up color chooser for setting text color
         tcc = new JColorChooser(banner.getForeground());
         tcc.getSelectionModel().addChangeListener(this);
-        tcc.setBorder(BorderFactory.createTitledBorder(
-                                             "Choose Text Color"));
+        tcc.setBorder(BorderFactory.createTitledBorder("Choose Text Color"));
 
         add(bannerPanel, BorderLayout.CENTER);
         add(tcc, BorderLayout.PAGE_END);
@@ -76,28 +73,27 @@ public class ColorChooserDemo extends JPanel
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("ColorChooserDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
+        // Create and set up the content pane.
         JComponent newContentPane = new ColorChooserDemo();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

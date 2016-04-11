@@ -43,7 +43,7 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
     }
 
     public void run() {
-        TestAttributes.put("marathon.capture.prefix", ((IHasFullname)listener).getFullName()); // YUK!!!
+        TestAttributes.put("marathon.capture.prefix", ((IHasFullname) listener).getFullName()); // YUK!!!
         synchronized (this) {
             notify();
             InterruptionError.wait(this);

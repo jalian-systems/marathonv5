@@ -69,14 +69,14 @@ public class DnDHandler {
 
     private DropTargetDropEvent createDropTargetDropEvent() throws SecurityException, IllegalArgumentException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        return new DropTargetDropEvent(createDropTargetContext(), location, dropAction, ((JComponent) source).getTransferHandler()
-                .getSourceActions((JComponent) source), true);
+        return new DropTargetDropEvent(createDropTargetContext(), location, dropAction,
+                ((JComponent) source).getTransferHandler().getSourceActions((JComponent) source), true);
     }
 
     private DropTargetDragEvent createDropTargetDragEvent() throws SecurityException, IllegalArgumentException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        return new DropTargetDragEvent(createDropTargetContext(), location, dropAction, ((JComponent) source).getTransferHandler()
-                .getSourceActions((JComponent) source));
+        return new DropTargetDragEvent(createDropTargetContext(), location, dropAction,
+                ((JComponent) source).getTransferHandler().getSourceActions((JComponent) source));
     }
 
     private DropTargetContext createDropTargetContext() throws SecurityException, NoSuchMethodException, IllegalArgumentException,

@@ -44,9 +44,9 @@ public class MarathonModuleDialog extends EscapeDialog {
     private JLabel errorMsgLabel;
     private String errorMessage;
     private JTextArea description;
-    private JComboBox moduleDirCombo;
+    private JComboBox<ModuleDirElement> moduleDirCombo;
     private String suffix = ".rb";
-    private JComboBox moduleFileCombo;
+    private JComboBox<String> moduleFileCombo;
     private JButton okButton;
 
     private boolean needModuleFile = true;
@@ -82,8 +82,8 @@ public class MarathonModuleDialog extends EscapeDialog {
 
         errorMessage = "";
         errorMsgLabel = new JLabel("");
-        errorMsgLabel.setIcon(new ImageIcon(MarathonModuleDialog.class.getClassLoader().getResource(
-                "net/sourceforge/marathon/display/icons/enabled/error.gif")));
+        errorMsgLabel.setIcon(new ImageIcon(MarathonModuleDialog.class.getClassLoader()
+                .getResource("net/sourceforge/marathon/display/icons/enabled/error.gif")));
         errorMsgLabel.setVisible(false);
 
         int row = 1;
@@ -157,17 +157,17 @@ public class MarathonModuleDialog extends EscapeDialog {
         errorMsgLabel.setText(errorMessage);
     }
 
-    private static class ModuleFileComboModel extends AbstractListModel implements ComboBoxModel, ActionListener {
+    private static class ModuleFileComboModel extends AbstractListModel<String> implements ComboBoxModel<String>, ActionListener {
         private static final long serialVersionUID = 1L;
 
-        private final JComboBox dirCombo;
+        private final JComboBox<ModuleDirElement> dirCombo;
         private String suffix;
 
         private String[] listFiles = new String[0];
 
         private Object selectedItem;
 
-        public ModuleFileComboModel(JComboBox dirCombo, String suffix) {
+        public ModuleFileComboModel(JComboBox<ModuleDirElement> dirCombo, String suffix) {
             this.dirCombo = dirCombo;
             this.suffix = suffix;
             dirCombo.addActionListener(this);
@@ -177,7 +177,7 @@ public class MarathonModuleDialog extends EscapeDialog {
             return listFiles.length;
         }
 
-        public Object getElementAt(int index) {
+        public String getElementAt(int index) {
             return listFiles[index];
         }
 
@@ -204,8 +204,8 @@ public class MarathonModuleDialog extends EscapeDialog {
         }
     }
 
-    private JComboBox createModuleFileCombo() {
-        final JComboBox cb = new JComboBox(new ModuleFileComboModel(moduleDirCombo, suffix));
+    private JComboBox<String> createModuleFileCombo() {
+        final JComboBox<String> cb = new JComboBox<String>(new ModuleFileComboModel(moduleDirCombo, suffix));
         cb.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 cb.getEditor().setItem(cb.getSelectedItem());
@@ -224,7 +224,8 @@ public class MarathonModuleDialog extends EscapeDialog {
         }
     }
 
-    private static class ModuleDirComboModel extends AbstractListModel implements ComboBoxModel {
+    private static class ModuleDirComboModel extends AbstractListModel<ModuleDirElement>
+            implements ComboBoxModel<ModuleDirElement> {
         private static final long serialVersionUID = 1L;
 
         private Object selectedItem;
@@ -254,7 +255,7 @@ public class MarathonModuleDialog extends EscapeDialog {
             return dirs.size();
         }
 
-        public Object getElementAt(int index) {
+        public ModuleDirElement getElementAt(int index) {
             return dirs.get(index);
         }
 
@@ -268,13 +269,13 @@ public class MarathonModuleDialog extends EscapeDialog {
 
     }
 
-    private JComboBox createModuleDirCombo() {
+    private JComboBox<ModuleDirElement> createModuleDirCombo() {
         String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
-        JComboBox cb = new JComboBox(new ModuleDirComboModel(moduleDirs));
+        JComboBox<ModuleDirElement> cb = new JComboBox<ModuleDirElement>(new ModuleDirComboModel(moduleDirs));
         cb.setRenderer(new DefaultListCellRenderer() {
             private static final long serialVersionUID = 1L;
 
-            @Override public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            @Override public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
                     boolean cellHasFocus) {
                 if (value != null) {
                     ModuleDirElement element = (ModuleDirElement) value;

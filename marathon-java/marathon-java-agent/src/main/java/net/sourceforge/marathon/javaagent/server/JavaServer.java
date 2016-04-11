@@ -115,10 +115,11 @@ public class JavaServer extends NanoHTTPD {
         routes.add(new RouteMap(Method.DELETE, "/session/:sessionId/window", getMethod("closeSession")));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/size", getMethod("setWindowSize", true)));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/window/:windowHandle/size", getMethod("getWindowSize")));
-        routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/position", getMethod("setWindowPosition",
-                true)));
+        routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/position",
+                getMethod("setWindowPosition", true)));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/window/:windowHandle/position", getMethod("getWindowPosition")));
-        routes.add(new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/maximize", getMethod("maximizeWindow", true)));
+        routes.add(
+                new RouteMap(Method.POST, "/session/:sessionId/window/:windowHandle/maximize", getMethod("maximizeWindow", true)));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/cookie"));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/cookie"));
         routes.add(new RouteMap(Method.DELETE, "/session/:sessionId/cookie"));
@@ -288,7 +289,7 @@ public class JavaServer extends NanoHTTPD {
         // query = URLDecoder.decode(query, "UTF8");
         // } catch (UnsupportedEncodingException e1) {
         // }
-        logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query  : "{}"));
+        logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
         if (query != null) {
             try {
                 jsonQuery = new JSONObject(query);
@@ -384,9 +385,8 @@ public class JavaServer extends NanoHTTPD {
         } catch (Exception e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             r.put("status", ErrorCodes.UNHANDLED_ERROR);
-            r.put("value",
-                    new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
-                            getStackTrace(e)));
+            r.put("value", new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
+                    getStackTrace(e)));
             return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } finally {
             afterEvent();
@@ -413,7 +413,8 @@ public class JavaServer extends NanoHTTPD {
         return trace;
     }
 
-    public Object invoke(Route route, JSONObject query, JSONObject uriParams, Session session, JWindow window, IJavaElement element) {
+    public Object invoke(Route route, JSONObject query, JSONObject uriParams, Session session, JWindow window,
+            IJavaElement element) {
         Object result;
         try {
             if (session == null)

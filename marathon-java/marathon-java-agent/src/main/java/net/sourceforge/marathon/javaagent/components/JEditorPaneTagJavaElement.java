@@ -42,8 +42,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         int startOffset = iterator.getStartOffset();
         int endOffset = iterator.getEndOffset();
         try {
-            return ((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument()).getText(startOffset, endOffset
-                    - startOffset);
+            return ((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument()).getText(startOffset,
+                    endOffset - startOffset);
         } catch (BadLocationException e) {
             throw new InvalidElementStateException("Unable to get text for tag " + tag + " in document with index " + index, e);
         }
@@ -67,8 +67,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
     }
 
     @Override public String createHandle() {
-        JSONObject o = new JSONObject().put("selector", "tag")
-                .put("parameters", new JSONArray().put(tag.toString()).put(index + 1));
+        JSONObject o = new JSONObject().put("selector", "tag").put("parameters",
+                new JSONArray().put(tag.toString()).put(index + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
@@ -142,9 +142,9 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
             HTML.Attribute.NOSHADE, HTML.Attribute.COMPACT, HTML.Attribute.START, HTML.Attribute.ACTION, HTML.Attribute.METHOD,
             HTML.Attribute.ENCTYPE, HTML.Attribute.CHECKED, HTML.Attribute.MAXLENGTH, HTML.Attribute.MULTIPLE,
             HTML.Attribute.SELECTED, HTML.Attribute.ROWS, HTML.Attribute.COLS, HTML.Attribute.DUMMY, HTML.Attribute.CELLSPACING,
-            HTML.Attribute.CELLPADDING, HTML.Attribute.VALIGN, HTML.Attribute.HALIGN, HTML.Attribute.NOWRAP,
-            HTML.Attribute.ROWSPAN, HTML.Attribute.COLSPAN, HTML.Attribute.PROMPT, HTML.Attribute.HTTPEQUIV,
-            HTML.Attribute.CONTENT, HTML.Attribute.LANGUAGE, HTML.Attribute.VERSION, HTML.Attribute.N, HTML.Attribute.FRAMEBORDER,
+            HTML.Attribute.CELLPADDING, HTML.Attribute.VALIGN, HTML.Attribute.HALIGN, HTML.Attribute.NOWRAP, HTML.Attribute.ROWSPAN,
+            HTML.Attribute.COLSPAN, HTML.Attribute.PROMPT, HTML.Attribute.HTTPEQUIV, HTML.Attribute.CONTENT,
+            HTML.Attribute.LANGUAGE, HTML.Attribute.VERSION, HTML.Attribute.N, HTML.Attribute.FRAMEBORDER,
             HTML.Attribute.MARGINWIDTH, HTML.Attribute.MARGINHEIGHT, HTML.Attribute.SCROLLING, HTML.Attribute.NORESIZE,
             HTML.Attribute.ENDTAG };
 
@@ -210,8 +210,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
                 while (iterator.isValid()) {
                     if (current++ >= index)
                         return hRefIndex;
-                    String attribute = ((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument()).getText(
-                            iterator.getStartOffset(), iterator.getEndOffset() - iterator.getStartOffset());
+                    String attribute = ((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument())
+                            .getText(iterator.getStartOffset(), iterator.getEndOffset() - iterator.getStartOffset());
                     if (attribute != null && attribute.equals(href))
                         hRefIndex++;
                     iterator.next();

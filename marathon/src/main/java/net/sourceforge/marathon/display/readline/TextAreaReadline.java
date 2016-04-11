@@ -38,7 +38,7 @@ public class TextAreaReadline implements KeyListener {
     public volatile MutableAttributeSet outputStyle;
     public volatile MutableAttributeSet errorStyle;
     public volatile MutableAttributeSet resultStyle;
-    private JComboBox completeCombo;
+    private JComboBox<String> completeCombo;
     private BasicComboPopup completePopup;
     private int start;
     private int end;
@@ -216,7 +216,7 @@ public class TextAreaReadline implements KeyListener {
         resultStyle = new SimpleAttributeSet();
         StyleConstants.setItalic(resultStyle, true);
         StyleConstants.setForeground(resultStyle, resultForegroundColor);
-        completeCombo = new JComboBox();
+        completeCombo = new JComboBox<String>();
         completeCombo.setRenderer(new DefaultListCellRenderer()); // no silly
         completePopup = new BasicComboPopup(completeCombo);
         if (message != null) {

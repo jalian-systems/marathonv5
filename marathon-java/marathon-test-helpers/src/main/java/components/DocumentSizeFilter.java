@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -45,36 +45,30 @@ public class DocumentSizeFilter extends DocumentFilter {
         maxCharacters = maxChars;
     }
 
-    public void insertString(FilterBypass fb, int offs,
-                             String str, AttributeSet a)
-        throws BadLocationException {
+    public void insertString(FilterBypass fb, int offs, String str, AttributeSet a) throws BadLocationException {
         if (DEBUG) {
             System.out.println("in DocumentSizeFilter's insertString method");
         }
 
-        //This rejects the entire insertion if it would make
-        //the contents too long. Another option would be
-        //to truncate the inserted string so the contents
-        //would be exactly maxCharacters in length.
+        // This rejects the entire insertion if it would make
+        // the contents too long. Another option would be
+        // to truncate the inserted string so the contents
+        // would be exactly maxCharacters in length.
         if ((fb.getDocument().getLength() + str.length()) <= maxCharacters)
             super.insertString(fb, offs, str, a);
         else
             Toolkit.getDefaultToolkit().beep();
     }
-    
-    public void replace(FilterBypass fb, int offs,
-                        int length, 
-                        String str, AttributeSet a)
-        throws BadLocationException {
+
+    public void replace(FilterBypass fb, int offs, int length, String str, AttributeSet a) throws BadLocationException {
         if (DEBUG) {
             System.out.println("in DocumentSizeFilter's replace method");
         }
-        //This rejects the entire replacement if it would make
-        //the contents too long. Another option would be
-        //to truncate the replacement string so the contents
-        //would be exactly maxCharacters in length.
-        if ((fb.getDocument().getLength() + str.length()
-             - length) <= maxCharacters)
+        // This rejects the entire replacement if it would make
+        // the contents too long. Another option would be
+        // to truncate the replacement string so the contents
+        // would be exactly maxCharacters in length.
+        if ((fb.getDocument().getLength() + str.length() - length) <= maxCharacters)
             super.replace(fb, offs, length, str, a);
         else
             Toolkit.getDefaultToolkit().beep();

@@ -24,7 +24,7 @@ public class GeneralSiblingSelector implements Selector {
         return parent + " ~ " + sibling;
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final JavaAgent driver,
+    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
             final IJavaElement container, long implicitWait) {
         final List<IJavaElement> pElements = parent.findElements(driver, container, implicitWait);
         if (pElements.size() == 0)
@@ -74,7 +74,7 @@ public class GeneralSiblingSelector implements Selector {
         return (List<IJavaElement>) r[0];
     }
 
-    protected List<IJavaElement> found(List<IJavaElement> pElements, JavaAgent driver) {
+    protected List<IJavaElement> found(List<IJavaElement> pElements, IJavaAgent driver) {
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         for (IJavaElement je : pElements) {
             Component component = je.getComponent();

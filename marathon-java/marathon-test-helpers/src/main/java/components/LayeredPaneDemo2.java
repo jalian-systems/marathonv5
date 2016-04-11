@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -42,47 +42,39 @@ import java.awt.event.*;
  * LayeredPaneDemo2.java requires
  * images/dukeWaveRed.gif.
 */
-public class LayeredPaneDemo2 extends JPanel
-                              implements ActionListener,
-                                         MouseMotionListener {
-    private String[] layerStrings = { "Yellow (0)", "Magenta (1)",
-                                      "Cyan (2)",   "Red (3)",
-                                      "Green (4)",  "Blue (5)" };
-    private Color[] layerColors = { Color.yellow, Color.magenta,
-                                    Color.cyan,   Color.red,
-                                    Color.green,  Color.blue };
+public class LayeredPaneDemo2 extends JPanel implements ActionListener, MouseMotionListener {
+    private String[] layerStrings = { "Yellow (0)", "Magenta (1)", "Cyan (2)", "Red (3)", "Green (4)", "Blue (5)" };
+    private Color[] layerColors = { Color.yellow, Color.magenta, Color.cyan, Color.red, Color.green, Color.blue };
 
     private JLayeredPane layeredPane;
     private JLabel dukeLabel;
     private JCheckBox onTop;
     private JComboBox layerList;
 
-    //Action commands
+    // Action commands
     private static String ON_TOP_COMMAND = "ontop";
     private static String LAYER_COMMAND = "layer";
 
-    public LayeredPaneDemo2()    {
+    public LayeredPaneDemo2() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        //Create and load the duke icon.
+        // Create and load the duke icon.
         final ImageIcon icon = createImageIcon("images/dukeWaveRed.gif");
 
-        //Create and set up the layered pane.
+        // Create and set up the layered pane.
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(300, 310));
-        layeredPane.setBorder(BorderFactory.createTitledBorder(
-                                    "Move the Mouse to Move Duke"));
+        layeredPane.setBorder(BorderFactory.createTitledBorder("Move the Mouse to Move Duke"));
         layeredPane.addMouseMotionListener(this);
 
-        //Add several labels to the layered pane.
-        layeredPane.setLayout(new GridLayout(2,3));
+        // Add several labels to the layered pane.
+        layeredPane.setLayout(new GridLayout(2, 3));
         for (int i = 0; i < layerStrings.length; i++) {
-            JLabel label = createColoredLabel(layerStrings[i],
-                                              layerColors[i]);
+            JLabel label = createColoredLabel(layerStrings[i], layerColors[i]);
             layeredPane.add(label, new Integer(i));
         }
 
-        //Create and add the Duke label to the layered pane.
+        // Create and add the Duke label to the layered pane.
         dukeLabel = new JLabel(icon);
         if (icon == null) {
             System.err.println("Duke icon not found; using black rectangle instead.");
@@ -91,7 +83,7 @@ public class LayeredPaneDemo2 extends JPanel
         }
         layeredPane.add(dukeLabel, new Integer(2), 0);
 
-        //Add control pane and layered pane to this JPanel.
+        // Add control pane and layered pane to this JPanel.
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(createControlPanel());
         add(Box.createRigidArea(new Dimension(0, 10)));
@@ -109,9 +101,8 @@ public class LayeredPaneDemo2 extends JPanel
         }
     }
 
-    //Create and set up a colored label.
-    private JLabel createColoredLabel(String text,
-                                      Color color) {
+    // Create and set up a colored label.
+    private JLabel createColoredLabel(String text, Color color) {
         JLabel label = new JLabel(text);
         label.setVerticalAlignment(JLabel.TOP);
         label.setHorizontalAlignment(JLabel.CENTER);
@@ -123,7 +114,7 @@ public class LayeredPaneDemo2 extends JPanel
         return label;
     }
 
-    //Create the control pane for the top of the frame.
+    // Create the control pane for the top of the frame.
     private JPanel createControlPanel() {
         onTop = new JCheckBox("Top Position in Layer");
         onTop.setSelected(true);
@@ -131,26 +122,26 @@ public class LayeredPaneDemo2 extends JPanel
         onTop.addActionListener(this);
 
         layerList = new JComboBox(layerStrings);
-        layerList.setSelectedIndex(2);    //cyan layer
+        layerList.setSelectedIndex(2); // cyan layer
         layerList.setActionCommand(LAYER_COMMAND);
         layerList.addActionListener(this);
 
         JPanel controls = new JPanel();
         controls.add(layerList);
         controls.add(onTop);
-        controls.setBorder(BorderFactory.createTitledBorder(
-                                 "Choose Duke's Layer and Position"));
+        controls.setBorder(BorderFactory.createTitledBorder("Choose Duke's Layer and Position"));
         return controls;
     }
 
-    //Make Duke follow the cursor.
+    // Make Duke follow the cursor.
     public void mouseMoved(MouseEvent e) {
-        dukeLabel.setLocation(e.getX()-dukeLabel.getWidth()/2,
-                              e.getY()-dukeLabel.getHeight()/2);
+        dukeLabel.setLocation(e.getX() - dukeLabel.getWidth() / 2, e.getY() - dukeLabel.getHeight() / 2);
     }
-    public void mouseDragged(MouseEvent e) {} //do nothing
 
-    //Handle user interaction with the check box and combo box.
+    public void mouseDragged(MouseEvent e) {
+    } // do nothing
+
+    // Handle user interaction with the check box and combo box.
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
 
@@ -162,35 +153,32 @@ public class LayeredPaneDemo2 extends JPanel
 
         } else if (LAYER_COMMAND.equals(cmd)) {
             int position = onTop.isSelected() ? 0 : 1;
-            layeredPane.setLayer(dukeLabel,
-                                 layerList.getSelectedIndex(),
-                                 position);
+            layeredPane.setLayer(dukeLabel, layerList.getSelectedIndex(), position);
         }
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("LayeredPaneDemo2");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
+        // Create and set up the content pane.
         JComponent newContentPane = new LayeredPaneDemo2();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
 
-        //Display the window.
+        // Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

@@ -13,4 +13,5 @@ dependencies {
 
 test {
   useTestNG()
+  classpath = project.sourceSets.test.runtimeClasspath + files(project(':marathon-java').jar.archivePath)
 }

@@ -23,11 +23,11 @@ import org.json.JSONObject;
 
 public abstract class AbstractJavaElement extends JavaElementPropertyAccessor implements IJavaElement {
 
-    protected JavaAgent driver;
+    protected IJavaAgent driver;
     protected JWindow window;
     private UUID id;
 
-    public AbstractJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public AbstractJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component);
         this.driver = driver;
         this.window = window;
@@ -94,7 +94,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     }
 
     private String matchesCSS(String selector) {
-        long implicitWait = getDriver().implicitWait;
+        long implicitWait = getDriver().getImplicitWait();
         try {
             getDriver().setImplicitWait(0);
             return Boolean.toString(findElementsByCssSelector(selector).size() == 1);
@@ -129,7 +129,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         if (handle == null || !handle.equals(window.getHandle()))
             throw new StaleElementReferenceException(
                     "Element appears to be stale. Did you navigate away from the window that contained it? "
-                            + " And is the current window focussed the same as the one holding this element?", null);
+                            + " And is the current window focussed the same as the one holding this element?",
+                    null);
     }
 
     /*
@@ -160,7 +161,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     protected List<IJavaElement> findByCss(String css) {
         if (!(component instanceof Container))
             throw new UnsupportedCommandException("findElements unsupported for non container objects", null);
-        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.implicitWait);
+        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(css);
     }
 
@@ -249,7 +250,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     @Override public List<IJavaElement> findElementsByCssSelector(String using) {
         if (!(component instanceof Container))
             throw new UnsupportedCommandException("findElements unsupported for non container objects", null);
-        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.implicitWait);
+        FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }
 
@@ -277,8 +278,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
             return !isSelected();
         else if (function.equals("instance-of"))
             return isInstance((String) args[0]);
-        throw new UnsupportedCommandException("Unsupported psuedo class " + function + " component = "
-                + component.getClass().getName(), null);
+        throw new UnsupportedCommandException(
+                "Unsupported psuedo class " + function + " component = " + component.getClass().getName(), null);
     }
 
     private boolean isInstance(String classname) {
@@ -361,8 +362,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
                 return Arrays.asList((IJavaElement) this);
             return Arrays.<IJavaElement> asList();
         }
-        throw new UnsupportedCommandException("Pseudo element selector " + selector + " is not applicable for "
-                + component.getClass().getName(), null);
+        throw new UnsupportedCommandException(
+                "Pseudo element selector " + selector + " is not applicable for " + component.getClass().getName(), null);
     }
 
     public boolean marathon_select(JSONArray jsonArray) {
@@ -411,7 +412,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         driver.getDevices().moveto(component, xoffset, yoffset);
     }
 
-    public JavaAgent getDriver() {
+    public IJavaAgent getDriver() {
         return driver;
     }
 

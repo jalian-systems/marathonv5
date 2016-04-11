@@ -19,7 +19,7 @@ import javax.swing.tree.TreePath;
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 import org.json.JSONArray;
@@ -31,7 +31,7 @@ public class JTreeJavaElement extends AbstractJavaElement {
         public boolean isValid(JTreeNodeJavaElement e);
     }
 
-    public JTreeJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JTreeJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 
@@ -152,9 +152,8 @@ public class JTreeJavaElement extends AbstractJavaElement {
             String rootNodeText = unescapeSpecialCharacters(tokens[0]);
             searchedPath.append("/" + rootNodeText);
             assertTrue("JTree does not have a root node!", rootNode != null);
-            assertTrue(
-                    "JTree root node does not match: Expected </" + getPathText(tree, treePath) + "> Actual: <"
-                            + searchedPath.toString() + ">", searchedPath.toString().equals("/" + getPathText(tree, treePath)));
+            assertTrue("JTree root node does not match: Expected </" + getPathText(tree, treePath) + "> Actual: <"
+                    + searchedPath.toString() + ">", searchedPath.toString().equals("/" + getPathText(tree, treePath)));
         }
         for (int i = start; i < tokens.length; i++) {
             String childText = unescapeSpecialCharacters(tokens[i]);

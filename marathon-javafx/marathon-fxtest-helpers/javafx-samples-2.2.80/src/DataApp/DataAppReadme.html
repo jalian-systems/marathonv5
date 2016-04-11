@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>DataApp Installation Guide</title>
+  <style type="text/css">
+<!--
+body { background-color: #FFFFFF;
+       font-family: Arial, Helvetica, sans-serif;
+       border-top-width: 0px; border-right-width: 0px; 
+       border-bottom-width: 0px; border-left-width: 0px;
+       color: Black; font-size: 12px; font-style: normal;
+       font-variant: normal; font-weight: normal;
+       text-align: left; text-decoration: none;
+       text-indent: 0em; text-transform: none;
+}
+.copyright 
+{ font-family:Arial, Helvetica, sans-serif; font-size:10px}
+.pHr { color: #1E475B; background-color: #1E475B }
+-->
+  </style>
+
+</head>
+
+<body>
+<h1 align="center">DataApp Installation Guide</h1>
+<h2>Table of Contents</h2>
+<ul>
+  <li><a href="#prereqs">Prerequisites</a></li>
+  <li><a href="#setup">Setting Up the DataApp Sample</a></li>
+  <li><a href="#run">Running the Sample</a></li>
+  <li><a href="#nbprojects">NetBeans Projects for the Sample</a></li>
+  <li><a href="#license">Licensing</a></li>
+</ul>
+<p>&nbsp;</p>
+<h2><a name="prereqs" id="prereqs"></a>Prerequisites</h2>
+<p>You must have the following software installed to run the DataApp sample:</p>
+<ul>
+  <li><p>Java SDK 1.6.0_24 or later <br />
+    Available at 
+  <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>.</p>
+
+  </li>
+  <li><p>JavaFX 2.0 SDK or later<br />
+  Available at <a href="http://javafx.com/downloads/all.jsp">http://javafx.com/downloads/all.jsp</a>.
+    </p>
+  </li>
+  <li>MySQL 5.6 or later <br />
+    Available at 
+      <a href="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>. 
+      <p>You need to know the root password for your installation.</p>
+      <p>If you prefer to use MySQL 5.5, you must edit 
+        the 
+        <root>
+        <code><var>javafx-samples-install-dir</var>\src\DataApp\DataAppLoader\build.xml</code> file, where the <code><var>javafx-samples-install-dir</var></code> is the directory into which the JavaFX samples were extracted. Replace the line that starts with the &quot;<code>INSERT INTO user VALUES&quot;</code> command  with the line shown below. The &quot;<code>N</code>&quot; value after the &quot;<code>NULL</code>&quot; value at the end of the line has been removed.<p>
+      <code>
+      <strong>INSERT INTO user VALUES ('localhost','dataapp','*B974A83D18BB105D0C9186756F485406E6E6039B','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','','','','',0,0,0,0,'',NULL); </strong></code>
+  </li>
+  <li><p>Netbeans 7.1 with Java EE and GlassFish 3.1.1 or later <br />
+  Available at <a href="http://netbeans.org/downloads/">http://netbeans.org/downloads/</a>.</p>
+  <p>Run the NetBeans installer to install NetBeans and GlassFish to the default locations. </p></li>
+</ul>
+<p>&nbsp;</p>
+<h2><a name="setup" id="setup"></a>Setting Up the DataApp Sample </h2>
+<ol>
+  <li><p>Install the MySQL drivers into GlassFish.</p>
+  <p>Manually copy the <code>mysql-connector-java-5.1.13-bin.jar</code> file from the <code><var>netbeans-install-dir</var>\ide\modules\ext\</code> to the <code><var>glassfish-install-dir</var>/glassfish/lib</code> directory, where <code><var>netbeans-install-dir</var></code> and <code><var>glassfish-install-dir</var></code> are the directories into which the products were installed. For example, on Windows the install directory for products is typically in the <code>C:\Program Files\</code> or <code>C:\Program Files (x86)\</code> directories.</p>
+  </li>
+  <li>
+    <p>Open the following DataApp projects in NetBeans by selecting File -&gt;Open Project and navigating to the location of the DataApp sample: </p>
+     <ul>
+    <li>DataAppClient</li>
+    <li>DataAppLibrary</li>
+    <li>DataAppLoader</li>
+    <li>DataAppPreloader</li>
+    <li>DataAppServer</li>  
+    </ul>
+    </li>
+   <li>Configure and create the database (only needs to be done once):
+     <br />
+     <br />
+     <ol type="a">
+    <li>In NetBeans, right-click the DataAppLoader project. </li>
+    <li>Select Run.</li>
+    <li>Enter your MySQL root password when prompted.</li>
+  </ol>
+  <p>Wait until you see the message that the build has successfully finished, which takes approximately 5 to 15 minutes.</p>
+  </li>
+</ol>
+<p>&nbsp;</p>
+<h2><a name="run" id="run"></a>Running the Sample</h2>
+<ol>
+  <li><p>Start the server:</p>
+    <ol type="a">
+    <li>In NetBeans, right-click the DataAppServer project. </li>
+    <li>Select Run.</li>
+	</ol>
+    <p>Wait until a browser window opens that says: YOU ARE DONE!</p>
+    <p>NOTE: Currently, DataApp is self-signed. When you prepare to deploy your OWN Java applets and Web Start applications, ensure that they are properly signed with trusted certificates. To learn more about code signing, see <a href="http://www.oracle.com/technetwork/java/javase/tech/java-code-signing-1915323.html">http://www.oracle.com/technetwork/java/javase/tech/java-code-signing-1915323.html</a>.
+    </p>
+  </li>
+  <li>
+    <p>(Optional) Start the standalone client:</p>
+     <ol type="a">
+    <li>In NetBeans, right-click the DataAppClient project. </li>
+    <li>Select Run.</li>
+	</ol>
+</ol>
+<p>&nbsp;</p>
+<h2><a name="nbprojects" id="nbprojects"></a>NetBeans Projects for the Sample </h2>
+<p><strong>DataAppLibrary</strong> - Contains the following data:</p>
+<ul>
+  <li>Database tables</li>
+  <li>ORM model to database tables<br />
+</li>
+</ul>
+<p><strong>DataAppLoader</strong> - Application that is run once to perform the following tasks:</p>
+<ul><li>
+ Creates the database.
+</li>
+  <li>
+    Loads all of the static data for the data app.
+  </li>
+  <li>
+    Creates some historical data.
+  </li>
+</ul>
+<p><strong>DataAppServer</strong> - Web server that performs the following tasks:</p>
+<ul>
+  <li>Simulates auto sales and persists them to the database.</li>
+  <li>Provides access to the database through web services.<br />
+  </li>
+</ul>
+<p><strong>DataAppClient</strong> - The JavaFX 2.0 client application.</p>
+<p>&nbsp;</p>
+<h2><a name="license" id="license"></a>Licensing</h2>
+<p>The license for the <code>DataAppLoader/zip_code_inserts.sql</code>  file is the Creative Commons Attribution-ShareAlike license, which is available at <a href="http://creativecommons.org/licenses/by-sa/2.0/">http://creativecommons.org/licenses/by-sa/2.0/</a>. </p>
+<p>The license for all other files                     is the BSD style license:</p>
+<pre>
+/*
+* Copyright (c) 2008, 2013 Oracle and/or its affiliates.
+* All rights reserved. Use is subject to license terms.
+*
+* This file is available and licensed under the following license:
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions
+* are met:
+*
+* - Redistributions of source code must retain the above copyright
+* notice, this list of conditions and the following disclaimer.
+* - Redistributions in binary form must reproduce the above copyright
+* notice, this list of conditions and the following disclaimer in
+* the documentation and/or other materials provided with the distribution.
+* - Neither the name of Oracle Corporation nor the names of its
+* contributors may be used to endorse or promote products derived
+* from this software without specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+* A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+* OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+* DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+* THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+</pre>
+
+<hr class="pHr" />
+<p class="copyright">Copyright &copy; 2011, 2013, Oracle and/or its affiliates. All rights reserved</p>
+</body>
+</html>
+

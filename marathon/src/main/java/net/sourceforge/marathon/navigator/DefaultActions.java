@@ -49,9 +49,8 @@ public class DefaultActions {
         }
 
         public NewFileAction(boolean createDirectory) {
-            super(navigator, createDirectory ? "Folder" : "File",
-                    createDirectory ? Icons.NEWFOLDER_ENABLED : Icons.NEWFILE_ENABLED, createDirectory ? Icons.NEWFOLDER_DISABLED
-                            : Icons.NEWFILE_DISABLED);
+            super(navigator, createDirectory ? "Folder" : "File", createDirectory ? Icons.NEWFOLDER_ENABLED : Icons.NEWFILE_ENABLED,
+                    createDirectory ? Icons.NEWFOLDER_DISABLED : Icons.NEWFILE_DISABLED);
             this.createDirectory = createDirectory;
         }
 
@@ -130,8 +129,8 @@ public class DefaultActions {
             try {
                 navigator.paste(files[0]);
             } catch (IOException e) {
-                JOptionPane
-                        .showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -158,8 +157,8 @@ public class DefaultActions {
             try {
                 navigator.deleteFiles(files);
             } catch (IOException e) {
-                JOptionPane
-                        .showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -184,8 +183,8 @@ public class DefaultActions {
             try {
                 navigator.move(files, null);
             } catch (IOException e) {
-                JOptionPane
-                        .showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -212,8 +211,8 @@ public class DefaultActions {
             try {
                 navigator.rename(files[0]);
             } catch (IOException e) {
-                JOptionPane
-                        .showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showConfirmDialog(null, e.getMessage(), "Failed", JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
 

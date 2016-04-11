@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 
 import org.testng.annotations.AfterMethod;
@@ -12,7 +13,7 @@ import org.testng.annotations.Test;
 
 @Test public class JavaElementPropertyAccessorTest {
 
-    private JavaAgent driver;
+    private IJavaAgent driver;
     protected JFrame frame;
 
     @BeforeMethod public void showDialog() throws Throwable {

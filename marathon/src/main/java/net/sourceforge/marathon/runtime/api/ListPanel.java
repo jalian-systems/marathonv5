@@ -22,7 +22,7 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public abstract class ListPanel implements IPropertiesPanel {
+@SuppressWarnings({ "unchecked", "rawtypes" }) public abstract class ListPanel implements IPropertiesPanel {
     protected MovableItemListModel classpathListModel = new MovableItemListModel();
     private JList classpathList = null;
     private JButton removeButton = null;
@@ -143,8 +143,8 @@ public abstract class ListPanel implements IPropertiesPanel {
         }
         if (isAddArchivesNeeded()) {
             addJarsButton = UIUtils.createAddArchivesButton();
-            addJarsButton.addActionListener(new BrowseActionListener("Select Zip/Jar files", "Java Archives", new String[] {
-                    ".jar", ".zip" }));
+            addJarsButton.addActionListener(
+                    new BrowseActionListener("Select Zip/Jar files", "Java Archives", new String[] { ".jar", ".zip" }));
             addJarsButton.setMnemonic(KeyEvent.VK_H);
         }
         if (isAddFoldersNeeded()) {

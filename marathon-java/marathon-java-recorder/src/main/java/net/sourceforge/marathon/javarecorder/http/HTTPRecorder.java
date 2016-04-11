@@ -3,31 +3,33 @@ package net.sourceforge.marathon.javarecorder.http;
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.KeyStroke;
-
-import net.sourceforge.marathon.component.RComponent;
-import net.sourceforge.marathon.javarecorder.IJSONRecorder;
-import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
-import net.sourceforge.marathon.javarecorder.JavaHook;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import sun.net.www.protocol.http.HttpURLConnection;
 import fi.iki.elonen.NanoHTTPD.Response;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
+import net.sourceforge.marathon.component.RComponent;
+import net.sourceforge.marathon.javaagent.KeysMap;
+import net.sourceforge.marathon.javarecorder.IJSONRecorder;
+import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
+import net.sourceforge.marathon.javarecorder.JavaRecorderHook;
+import sun.net.www.protocol.http.HttpURLConnection;
 
 public class HTTPRecorder implements IJSONRecorder {
 
@@ -71,13 +73,13 @@ public class HTTPRecorder implements IJSONRecorder {
 
     private JSONObject createTargetDetailsObject() {
         JSONObject o = new JSONObject();
-        o.put("driver", JavaHook.DRIVER);
-        o.put("driver.version", JavaHook.DRIVER_VERSION);
-        o.put("platform", JavaHook.PLATFORM);
-        o.put("platform.version", JavaHook.PLATFORM_VERSION);
-        o.put("os", JavaHook.OS);
-        o.put("os.version", JavaHook.OS_VERSION);
-        o.put("os.arch", JavaHook.OS_ARCH);
+        o.put("driver", JavaRecorderHook.DRIVER);
+        o.put("driver.version", JavaRecorderHook.DRIVER_VERSION);
+        o.put("platform", JavaRecorderHook.PLATFORM);
+        o.put("platform.version", JavaRecorderHook.PLATFORM_VERSION);
+        o.put("os", JavaRecorderHook.OS);
+        o.put("os.version", JavaRecorderHook.OS_VERSION);
+        o.put("os.arch", JavaRecorderHook.OS_ARCH);
         return o;
     }
 
@@ -94,7 +96,8 @@ public class HTTPRecorder implements IJSONRecorder {
         event.put("type", "click");
         event.put("button", e.getButton());
         event.put("clickCount", e.getClickCount());
-        event.put("modifiersEx", e.getModifiersEx());
+        String mtext = buildModifiersText(e);
+        event.put("modifiersEx", mtext);
         event.put("x", e.getX());
         event.put("y", e.getY());
         if (withCellInfo)
@@ -123,7 +126,8 @@ public class HTTPRecorder implements IJSONRecorder {
         event.put("type", "click_raw");
         event.put("button", e.getButton());
         event.put("clickCount", e.getClickCount());
-        event.put("modifiersEx", e.getModifiersEx());
+        String mtext = buildModifiersText(e);
+        event.put("modifiersEx", mtext);
         event.put("x", e.getX());
         event.put("y", e.getY());
         final JSONObject o = new JSONObject();
@@ -145,18 +149,72 @@ public class HTTPRecorder implements IJSONRecorder {
         }
     }
 
+    private String buildModifiersText(InputEvent e) {
+        StringBuilder sb = new StringBuilder();
+        if (e.isAltDown()) {
+            sb.append("Alt+");
+        }
+        if (e.isControlDown()) {
+            sb.append("Ctrl+");
+        }
+        if (e.isMetaDown()) {
+            sb.append("Meta+");
+        }
+        if (e.isShiftDown()) {
+            sb.append("Shift+");
+        }
+        if (sb.length() > 0)
+            sb.setLength(sb.length() - 1);
+        String mtext = sb.toString();
+        return mtext;
+    }
+
     @Override public void recordRawKeyEvent(RComponent r, KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_META || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_CONTROL
-                || keyCode == KeyEvent.VK_SHIFT)
-            return;
         JSONObject event = new JSONObject();
         event.put("type", "key_raw");
-        KeyStroke ks = KeyStroke.getKeyStrokeForEvent(e);
-        String kss = ks.toString();
-        event.put("ks", kss);
-        event.put("keyChar", e.getKeyChar());
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_META || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT
+                || keyCode == KeyEvent.VK_CONTROL)
+            return;
+        if ((e.isActionKey() || e.isControlDown() || e.isMetaDown() || e.isAltDown()) && e.getID() == KeyEvent.KEY_PRESSED) {
+            String mtext = buildModifiersText(e);
+            event.put("modifiersEx", mtext);
+            KeysMap keysMap = KeysMap.findMap(e.getKeyCode());
+            if (keysMap == KeysMap.NULL)
+                return;
+            String keyText;
+            if (keysMap == null)
+                keyText = KeyEvent.getKeyText(e.getKeyCode());
+            else
+                keyText = keysMap.toString();
+            event.put("keyCode", keyText);
+        } else if (e.getID() == KeyEvent.KEY_TYPED && !e.isControlDown()) {
+            if (Character.isISOControl(e.getKeyChar()) && hasMapping(e.getKeyChar())) {
+                event.put("keyChar", getMapping(e.getKeyChar()));
+            } else
+                event.put("keyChar", "" + e.getKeyChar());
+        } else {
+            return;
+        }
         recordEvent(r, event);
+    }
+
+    private String getMapping(char keyChar) {
+        return controlKeyMappings.get(keyChar);
+    }
+
+    private boolean hasMapping(char keyChar) {
+        return controlKeyMappings.get(keyChar) != null;
+    }
+
+    private static final Map<Character, String> controlKeyMappings = new HashMap<Character, String>();
+
+    static {
+        controlKeyMappings.put('\n', "Enter");
+        controlKeyMappings.put('\t', "Tab");
+        controlKeyMappings.put('\b', "Backspace");
+        controlKeyMappings.put('\033', "Escape");
+        controlKeyMappings.put('\177', "Delete");
     }
 
     @Override public void recordSelect2(RComponent r, String state, boolean withCellInfo) {
@@ -285,7 +343,7 @@ public class HTTPRecorder implements IJSONRecorder {
                     // Send post request
                     con.setDoOutput(true);
                     DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-                    wr.writeBytes(postData);
+                    wr.writeBytes(URLEncoder.encode(postData, "utf-8"));
                     wr.flush();
                     wr.close();
 

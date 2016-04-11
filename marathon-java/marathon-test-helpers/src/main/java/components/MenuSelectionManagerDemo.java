@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package components;
 
@@ -67,24 +67,20 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
         JRadioButtonMenuItem rbMenuItem;
         JCheckBoxMenuItem cbMenuItem;
 
-        //Create the menu bar.
+        // Create the menu bar.
         menuBar = new JMenuBar();
 
-        //Build the first menu.
+        // Build the first menu.
         menu = new JMenu("A Menu");
         menu.setMnemonic(KeyEvent.VK_A);
-        menu.getAccessibleContext().setAccessibleDescription(
-                "The only menu in this program that has menu items");
+        menu.getAccessibleContext().setAccessibleDescription("The only menu in this program that has menu items");
         menuBar.add(menu);
 
-        //a group of JMenuItems
-        menuItem = new JMenuItem("A text-only menu item",
-                                 KeyEvent.VK_T);
-        //menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_1, ActionEvent.ALT_MASK));
-        menuItem.getAccessibleContext().setAccessibleDescription(
-                "This doesn't really do anything");
+        // a group of JMenuItems
+        menuItem = new JMenuItem("A text-only menu item", KeyEvent.VK_T);
+        // menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
+        menuItem.getAccessibleContext().setAccessibleDescription("This doesn't really do anything");
         menuItem.addActionListener(this);
         menu.add(menuItem);
 
@@ -99,7 +95,7 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
         menuItem.addActionListener(this);
         menu.add(menuItem);
 
-        //a group of radio button menu items
+        // a group of radio button menu items
         menu.addSeparator();
         ButtonGroup group = new ButtonGroup();
 
@@ -116,7 +112,7 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
         rbMenuItem.addActionListener(this);
         menu.add(rbMenuItem);
 
-        //a group of check box menu items
+        // a group of check box menu items
         menu.addSeparator();
         cbMenuItem = new JCheckBoxMenuItem("A check box menu item");
         cbMenuItem.setMnemonic(KeyEvent.VK_C);
@@ -128,14 +124,13 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
         cbMenuItem.addItemListener(this);
         menu.add(cbMenuItem);
 
-        //a submenu
+        // a submenu
         menu.addSeparator();
         submenu = new JMenu("A submenu");
         submenu.setMnemonic(KeyEvent.VK_S);
 
         menuItem = new JMenuItem("An item in the submenu");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_2, ActionEvent.ALT_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
         menuItem.addActionListener(this);
         submenu.add(menuItem);
 
@@ -144,20 +139,18 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
         submenu.add(menuItem);
         menu.add(submenu);
 
-        //Build second menu in the menu bar.
+        // Build second menu in the menu bar.
         menu = new JMenu("Another Menu");
         menu.setMnemonic(KeyEvent.VK_N);
-        menu.getAccessibleContext().setAccessibleDescription(
-                "This menu does nothing");
+        menu.getAccessibleContext().setAccessibleDescription("This menu does nothing");
         menuBar.add(menu);
 
         Timer timer = new Timer(ONE_SECOND, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                MenuElement[] path = MenuSelectionManager.defaultManager().
-                                     getSelectedPath();
-                for (int i = 0; i < path.length; i++ ) {
+                MenuElement[] path = MenuSelectionManager.defaultManager().getSelectedPath();
+                for (int i = 0; i < path.length; i++) {
                     if (path[i].getComponent() instanceof javax.swing.JMenuItem) {
-                        JMenuItem mi = (JMenuItem)path[i].getComponent();
+                        JMenuItem mi = (JMenuItem) path[i].getComponent();
                         if ("".equals(mi.getText())) {
                             output.append("ICON-ONLY MENU ITEM > ");
                         } else {
@@ -165,7 +158,8 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
                         }
                     }
                 }
-                if (path.length > 0) output.append(newline);
+                if (path.length > 0)
+                    output.append(newline);
             }
         });
         timer.start();
@@ -173,41 +167,34 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
     }
 
     public Container createContentPane() {
-        //Create the content-pane-to-be.
+        // Create the content-pane-to-be.
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setOpaque(true);
 
-        //Create a scrolled text area.
+        // Create a scrolled text area.
         output = new JTextArea(5, 30);
         output.setEditable(false);
         scrollPane = new JScrollPane(output);
 
-        //Add the text area to the content pane.
+        // Add the text area to the content pane.
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
         return contentPane;
     }
 
     public void actionPerformed(ActionEvent e) {
-        JMenuItem source = (JMenuItem)(e.getSource());
-        String s = "Action event detected."
-                   + newline
-                   + "    Event source: " + source.getText()
-                   + " (an instance of " + getClassName(source) + ")";
+        JMenuItem source = (JMenuItem) (e.getSource());
+        String s = "Action event detected." + newline + "    Event source: " + source.getText() + " (an instance of "
+                + getClassName(source) + ")";
         output.append(s + newline);
         output.setCaretPosition(output.getDocument().getLength());
     }
 
     public void itemStateChanged(ItemEvent e) {
-        JMenuItem source = (JMenuItem)(e.getSource());
-        String s = "Item event detected."
-                   + newline
-                   + "    Event source: " + source.getText()
-                   + " (an instance of " + getClassName(source) + ")"
-                   + newline
-                   + "    New state: "
-                   + ((e.getStateChange() == ItemEvent.SELECTED) ?
-                     "selected":"unselected");
+        JMenuItem source = (JMenuItem) (e.getSource());
+        String s = "Item event detected." + newline + "    Event source: " + source.getText() + " (an instance of "
+                + getClassName(source) + ")" + newline + "    New state: "
+                + ((e.getStateChange() == ItemEvent.SELECTED) ? "selected" : "unselected");
         output.append(s + newline);
         output.setCaretPosition(output.getDocument().getLength());
     }
@@ -216,7 +203,7 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
     protected String getClassName(Object o) {
         String classString = o.getClass().getName();
         int dotIndex = classString.lastIndexOf(".");
-        return classString.substring(dotIndex+1);
+        return classString.substring(dotIndex + 1);
     }
 
     /** Returns an ImageIcon, or null if the path was invalid. */
@@ -231,28 +218,27 @@ public class MenuSelectionManagerDemo implements ActionListener, ItemListener {
     }
 
     /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Create and set up the window.
+        // Create and set up the window.
         JFrame frame = new JFrame("MenuSelectionManagerDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
+        // Create and set up the content pane.
         MenuSelectionManagerDemo demo = new MenuSelectionManagerDemo();
         frame.setJMenuBar(demo.createMenuBar());
         frame.setContentPane(demo.createContentPane());
 
-        //Display the window.
+        // Display the window.
         frame.setSize(450, 260);
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

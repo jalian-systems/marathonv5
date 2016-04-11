@@ -11,24 +11,24 @@ import javax.swing.JTabbedPane;
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 import org.json.JSONArray;
 
 public class JTabbedPaneJavaElement extends AbstractJavaElement {
 
-    public JTabbedPaneJavaElement(Component component, JavaAgent driver, JWindow window) {
+    public JTabbedPaneJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }
 
     @Override public String _getText() {
-        return getSelectedItemText((JTabbedPane)component);
+        return getSelectedItemText((JTabbedPane) component);
     }
 
     public static String getSelectedItemText(JTabbedPane component) {
         int selectedIndex = component.getSelectedIndex();
-        if(selectedIndex != -1)
+        if (selectedIndex != -1)
             return JTabbedPaneTabJavaElement.getText(component, selectedIndex);
         return "";
     }

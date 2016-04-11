@@ -25,7 +25,8 @@ public interface IObjectMapService {
     public abstract OMapComponent insertNameForComponent(String name, Properties urp, Properties properties,
             Properties urpContainer, Properties attributesContainer) throws ObjectMapException;
 
-    public abstract OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer) throws ObjectMapException;
+    public abstract OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer)
+            throws ObjectMapException;
 
     public abstract String[] findComponentNames(IPropertyAccessor topContainerAccessor) throws ObjectMapException;
 

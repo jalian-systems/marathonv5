@@ -40,9 +40,9 @@ import com.jgoodies.forms.layout.FormLayout;
 public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
     private static final int MAX_SAVED_FILES = 10;
     private static final long serialVersionUID = 1L;
-    public static final ImageIcon BANNER = new ImageIcon(MPFConfigurationUI.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/banner.png"));;
-    private JComboBox dirName = new JComboBox();
+    public static final ImageIcon BANNER = new ImageIcon(
+            MPFConfigurationUI.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/banner.png"));;
+    private JComboBox<String> dirName = new JComboBox<String>();
     private JButton browseButton = UIUtils.createBrowseButton();
     protected boolean isOKSelected = false;
     private JButton modifyButton = UIUtils.createEditButton();
@@ -148,7 +148,7 @@ public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
         dirName.setRenderer(new DefaultListCellRenderer() {
             private static final long serialVersionUID = 1L;
 
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
                     boolean cellHasFocus) {
                 JLabel comp = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (comp.getText().equals(""))
@@ -252,7 +252,7 @@ public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
      * @return index, the file name index into the combobox. -1 if a new file.
      */
     private int findFile(File file) {
-        ComboBoxModel model = dirName.getModel();
+        ComboBoxModel<String> model = dirName.getModel();
         int size = model.getSize();
         for (int i = 0; i < size; i++) {
             String n = (String) dirName.getItemAt(i);

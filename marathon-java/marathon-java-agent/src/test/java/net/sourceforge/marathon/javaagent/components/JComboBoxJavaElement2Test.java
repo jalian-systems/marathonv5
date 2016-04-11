@@ -5,6 +5,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 
@@ -16,7 +17,7 @@ import org.testng.annotations.Test;
 @Test public class JComboBoxJavaElement2Test extends JavaElementTest {
 
     protected JFrame frame;
-    private JavaAgent driver;
+    private IJavaAgent driver;
 
     @BeforeMethod public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {

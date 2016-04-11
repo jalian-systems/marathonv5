@@ -458,8 +458,8 @@ public class TestRunner implements Dockable, IFileEventListener, TestListener {
         private static final long serialVersionUID = 1L;
 
         public ReportViewer(final File reportFile) {
-            super((JFrame) (SwingUtilities.windowForComponent(TestRunner.this.getComponent()) instanceof JFrame ? SwingUtilities
-                    .windowForComponent(TestRunner.this.getComponent()) : null));
+            super((JFrame) (SwingUtilities.windowForComponent(TestRunner.this.getComponent()) instanceof JFrame
+                    ? SwingUtilities.windowForComponent(TestRunner.this.getComponent()) : null));
             setTitle("Marathon Test Report");
             setModal(true);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);

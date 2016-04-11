@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 
@@ -16,7 +17,7 @@ import components.DynamicTreeDemo;
 
 @Test public class JTreeJavaElementTest extends JavaElementTest {
     protected JFrame frame;
-    private JavaAgent driver;
+    private IJavaAgent driver;
 
     @BeforeMethod public void showDialog() throws Throwable {
         siw(new Runnable() {

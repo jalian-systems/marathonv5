@@ -160,8 +160,8 @@ public class ObjectMapModel implements TreeNode {
     }
 
     public File getOMapFile() {
-        return new File(System.getProperty(Constants.PROP_PROJECT_DIR), System.getProperty(Constants.PROP_OMAP_FILE,
-                Constants.FILE_OMAP));
+        return new File(System.getProperty(Constants.PROP_PROJECT_DIR),
+                System.getProperty(Constants.PROP_OMAP_FILE, Constants.FILE_OMAP));
     }
 
     public boolean isDirty() {

@@ -52,11 +52,11 @@ import components.ButtonHtmlDemo;
         driver = new JavaDriver();
         List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
         AssertJUnit.assertEquals(3, buttons.size());
-        AssertJUnit.assertEquals("<html><center><b><u>D</u>isable</b><br><font color=#ffffdd>middle button</font>", buttons.get(0)
-                .getText());
+        AssertJUnit.assertEquals("<html><center><b><u>D</u>isable</b><br><font color=#ffffdd>middle button</font>",
+                buttons.get(0).getText());
         AssertJUnit.assertEquals("middle button", buttons.get(1).getText());
-        AssertJUnit.assertEquals("<html><center><b><u>E</u>nable</b><br><font color=#ffffdd>middle button</font>", buttons.get(2)
-                .getText());
+        AssertJUnit.assertEquals("<html><center><b><u>E</u>nable</b><br><font color=#ffffdd>middle button</font>",
+                buttons.get(2).getText());
         WebElement buttonMiddle = driver.findElement(By.cssSelector("button[text^='middle']"));
         AssertJUnit.assertEquals("middle button", buttonMiddle.getText());
     }
@@ -65,8 +65,8 @@ import components.ButtonHtmlDemo;
         driver = new JavaDriver();
         List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
         AssertJUnit.assertEquals(3, buttons.size());
-        AssertJUnit.assertEquals("<html><center><b><u>D</u>isable</b><br><font color=#ffffdd>middle button</font>", buttons.get(0)
-                .getAttribute("text"));
+        AssertJUnit.assertEquals("<html><center><b><u>D</u>isable</b><br><font color=#ffffdd>middle button</font>",
+                buttons.get(0).getAttribute("text"));
         AssertJUnit.assertEquals("true", buttons.get(0).getAttribute("enabled"));
         AssertJUnit.assertEquals("disable", buttons.get(0).getAttribute("actionCommand"));
         AssertJUnit.assertEquals("false", buttons.get(0).getAttribute("selected"));

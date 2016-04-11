@@ -31,8 +31,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class MainPanel implements IPropertiesPanel, IFileSelectedAction, ISubPropertiesPanel {
-    public static final Icon icon = new ImageIcon(MainPanel.class.getClassLoader().getResource(
-            "net/sourceforge/marathon/mpf/images/main_obj.gif"));
+    public static final Icon icon = new ImageIcon(
+            MainPanel.class.getClassLoader().getResource("net/sourceforge/marathon/mpf/images/main_obj.gif"));
     private JTextField mainClassField;
     private JTextArea programArgsField;
     private JTextArea vmArgsField;
@@ -139,11 +139,9 @@ public class MainPanel implements IPropertiesPanel, IFileSelectedAction, ISubPro
             return false;
         }
         if (mainClassField.getText().indexOf('.') == -1) {
-            int r = JOptionPane
-                    .showConfirmDialog(
-                            parent,
-                            "There is no package given for the main class. You need to give fully qualified class name. Do you want to continue?",
-                            "Main Class", JOptionPane.YES_NO_OPTION);
+            int r = JOptionPane.showConfirmDialog(parent,
+                    "There is no package given for the main class. You need to give fully qualified class name. Do you want to continue?",
+                    "Main Class", JOptionPane.YES_NO_OPTION);
             if (r != JOptionPane.OK_OPTION) {
                 mainClassField.requestFocus();
                 return false;

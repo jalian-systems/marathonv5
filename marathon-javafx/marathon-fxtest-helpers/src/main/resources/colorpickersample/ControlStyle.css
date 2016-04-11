@@ -1,0 +1,24 @@
+
+.tool-bar:horizontal {
+    -fx-background-color: #b3e6b3; 
+}
+
+.combo-box-base  {
+    -fx-background-color: null;  
+}
+
+.combo-box-base:hover  {
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+/*
+.color-picker {
+    -fx-background-color: #669999; 
+    -fx-background-radius: 0 15 15 0; 
+}
+
+
+.color-picker .color-picker-label .text {
+    -fx-fill: #ccffcc;
+}
+*/

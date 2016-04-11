@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JList;
 
 class UpDownListener implements ActionListener {
-    private JList list;
+    private JList<Object> list;
     private boolean shouldMoveUp;
 
-    public UpDownListener(JList list, boolean shouldMoveUp) {
+    public UpDownListener(JList<Object> list, boolean shouldMoveUp) {
         this.list = list;
         this.shouldMoveUp = shouldMoveUp;
     }
