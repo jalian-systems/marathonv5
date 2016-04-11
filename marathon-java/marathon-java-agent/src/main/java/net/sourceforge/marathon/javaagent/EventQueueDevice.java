@@ -381,6 +381,7 @@ public class EventQueueDevice extends Device {
                 }
             });
             ensureVisible(component.getParent(), d);
+            EventQueueWait.call_noexc(component, "requestFocusInWindow");
         } catch (Exception e) {
             throw new RuntimeException("getBounds failed for " + component.getClass().getName(), e);
         }
@@ -403,6 +404,7 @@ public class EventQueueDevice extends Device {
 
     private void dispatchMouseEvent(Component component, boolean popupTrigger, int clickCount, int buttons, int x, int y) {
         ensureVisible(component, new Rectangle(x, y, 50, 50));
+        EventQueueWait.call_noexc(component, "requestFocusInWindow");
         int modifierEx = deviceState.getModifierEx();
         if (component != deviceState.getComponent()) {
             if (deviceState.getComponent() != null)
