@@ -1,3 +1,12 @@
+Marathon Version 4.1.0.0 (Apr 11 2016)
+
+1. Added support for JavaFX
+2. You require JDK7 to run Marathon
+4. FX uses a different omap configuration.
+5. Added focus events before actions on a component
+6. Added marathon.logevents property and logging of events
+7. Invalid x,w,y,h values for display window defaults to full screen
+
 Marathon Version 4.0.1.0 (Feb 17 2016)
 
 1. Adding support for missing methods in playback.rb
@@ -13,4 +22,3 @@ Marathon Version 4.0.1.0 (Feb 17 2016)
 Marathon Version 4.0.0.0 (Feb 2 2016)
 
 1. Initial 4.0 release
-
