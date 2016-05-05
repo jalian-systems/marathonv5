@@ -125,3 +125,5 @@ marathon-java/test-output/
 marathon-javafx/marathon-javafx-runtime/bin/
 marathon/JSON-java/bin/
 marathon/nanohttpd-2.1.1/bin/
+marathon-java/marathon-java-runtime/moduledir2/
+marathon-java/marathon-java-runtime/testDir/
