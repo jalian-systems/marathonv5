@@ -330,7 +330,9 @@ public class EventQueueDevice extends Device {
         } else {
             pressKey(component, keys);
             if (keys == JavaAgentKeys.SPACE)
-                dispatchKeyEvent(component, null, KeyEvent.KEY_TYPED, ' ');
+                dispatchKeyEvent(component, keys, KeyEvent.KEY_TYPED, ' ');
+            if (keys == JavaAgentKeys.ENTER)
+                dispatchKeyEvent(component, keys, KeyEvent.KEY_TYPED, '\n');
             releaseKey(component, keys);
         }
     }
@@ -389,7 +391,10 @@ public class EventQueueDevice extends Device {
         if (keysMap == null)
             return;
         int m = deviceState.getModifierEx();
-        dispatchEvent(new KeyEvent(component, id, System.currentTimeMillis(), m, keysMap.getCode(), KeyEvent.CHAR_UNDEFINED));
+        int keyCode = keysMap.getCode();
+        if(id == KeyEvent.KEY_TYPED)
+            keyCode = KeyEvent.VK_UNDEFINED;
+        dispatchEvent(new KeyEvent(component, id, System.currentTimeMillis(), m, keyCode, c));
         EventQueueWait.empty();
     }
 
