@@ -10,6 +10,10 @@ subprojects {
   version = '4.1.2.0'
   task allDependencies(type: DependencyReportTask) {}
 
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+  }
+  
   eclipse.classpath {
     defaultOutputDir = file('bin')
   }
