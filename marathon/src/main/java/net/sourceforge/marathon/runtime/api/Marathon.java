@@ -132,7 +132,10 @@ public class Marathon {
 			KeyStroke ks = ksp.getKeyStroke();
 			CharSequence keys2 = keyMapping.get(ks.getKeyCode());
 			if (keys2 == null) {
-				keys2 = KeyEvent.getKeyText(ks.getKeyCode());
+				String keysText = KeyEvent.getKeyText(ks.getKeyCode());
+				if(keysText.length() == 1 && Character.isUpperCase(keysText.charAt(0)))
+				    keysText = keysText.toLowerCase();
+				keys2 = keysText;
 			}
 			int modifiers = ks.getModifiers();
 			if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
