@@ -179,6 +179,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                     e.printStackTrace();
                 }
                 dockable.getEditor().setData("filename", fileHandler.getCurrentFile().getName());
+                dockable.getEditor().setData("displayname", getDisplayName(fileHandler.getCurrentFile()));
                 dockable.updateKey();
                 updateDockName(dockable.getEditor());
             }
@@ -2023,8 +2024,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         if (editor != null && editor.isDirty()) {
             suffix = "*";
         }
-        if (editor != null && editor.getData("filename") != null) {
-            setTitle(projectName + " - " + (editor.getData("filename") + suffix));
+        if (editor != null && editor.getData("displayname") != null) {
+            setTitle(projectName + " - " + (editor.getData("displayname") + suffix));
             updateDockName(editor);
         } else
             setTitle(projectName);
@@ -2368,6 +2369,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         newEditor.setText(script);
         newEditor.setMode(getFileHandler(newEditor).getMode(newFileName));
         newEditor.setData("filename", newFileName);
+        newEditor.setData("displayname", newFileName);
         newEditor.clearUndo();
         newEditor.setDirty(false);
         setCurrentEditorDockable((EditorDockable) newEditor.getData("dockable"));
@@ -2554,6 +2556,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             file = getFileHandler(editor).saveAs(editor.getText(), this, (String) editor.getData("filename"));
             if (file != null) {
                 editor.setData("filename", getFileHandler(editor).getCurrentFile().getName());
+                editor.setData("displayname", getDisplayName(getFileHandler(editor).getCurrentFile()));
                 editor.setDirty(false);
                 EditorDockable dockable = (EditorDockable) editor.getData("dockable");
                 dockable.updateKey();
@@ -2645,8 +2648,23 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         if (file != null) {
             String name = getFileHandler(editor).getCurrentFile().getName();
             editor.setData("filename", name);
+            editor.setData("displayname", getDisplayName(getFileHandler(editor).getCurrentFile()));
             editor.setDirty(false);
         }
+    }
+
+    private String getDisplayName(File currentFile) {
+        System.out.println("DisplayWindow.getDisplayName(): " + currentFile);
+        try {
+            String projectPath = Constants.getMarathonProjectDirectory().getCanonicalPath();
+            String filePath = currentFile.getCanonicalPath();
+            if(filePath.startsWith(projectPath)) {
+                filePath = filePath.substring(projectPath.length() + 1);
+            }
+            return filePath;
+        } catch (IOException e) {
+        }
+        return currentFile.getName();
     }
 
     /**
@@ -3299,6 +3317,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                 e.setText(script);
                 e.setMode(getFileHandler(e).getMode(name));
                 e.setData("filename", name);
+                e.setData("displayname", getDisplayName(getFileHandler(e).getCurrentFile()));
                 e.setCaretLine(0);
                 e.setDirty(false);
             }

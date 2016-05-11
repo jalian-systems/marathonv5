@@ -172,6 +172,7 @@ public class JTreeJavaElement extends AbstractJavaElement {
             if (!matched)
                 return null;
         }
+        tree.expandPath(treePath);
         return treePath;
     }
 
