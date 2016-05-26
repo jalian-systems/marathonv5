@@ -3,18 +3,20 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.swing.JTabbedPane;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-
-import org.json.JSONArray;
 
 public class JTabbedPaneJavaElement extends AbstractJavaElement {
 
@@ -44,8 +46,19 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
                 r.add(new JTabbedPaneTabJavaElement(this, i));
             }
             return r;
-        }
+        } else if (selector.equals("select-by-properties"))
+            return findNodeByProperties(new JSONObject((String) params[0]));
         return super.getByPseudoElement(selector, params);
+    }
+
+    private List<IJavaElement> findNodeByProperties(JSONObject o) {
+        if (!o.has("select"))
+            return Collections.<IJavaElement> emptyList();
+        String tab = o.getString("select");
+        int tabIndex = findTabIndex((JTabbedPane) component, tab);
+        if(tabIndex != -1)
+            return Arrays.asList((IJavaElement) new JTabbedPaneTabJavaElement(this, tabIndex));
+        return Collections.<IJavaElement> emptyList();
     }
 
     private int getCount() {
@@ -62,16 +75,23 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
     }
 
     @Override public boolean marathon_select(String tab) {
-        JTabbedPane tp = (JTabbedPane) component;
+        int tabIndex = findTabIndex((JTabbedPane) component, tab);
+        if(tabIndex != -1)
+            ((JTabbedPane) component).setSelectedIndex(tabIndex);
+        return tabIndex != -1;
+    }
+
+    private int findTabIndex(JTabbedPane tp, String tab) {
         int tabCount = tp.getTabCount();
+        int tabIndex = -1 ;
         for (int index = 0; index < tabCount; index++) {
             String current = JTabbedPaneTabJavaElement.getText(tp, index);
             if (tab.equals(current)) {
-                tp.setSelectedIndex(index);
-                return true;
+                tabIndex = index ;
+                break;
             }
         }
-        return false;
+        return tabIndex;
     }
 
     public String getContent() {
