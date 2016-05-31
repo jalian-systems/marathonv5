@@ -47,8 +47,14 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
     }
 
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("editor"))
-            return Arrays.asList(JavaElementFactory.createElement(getEditor(), getDriver(), getWindow()));
+        if (selector.equals("editor")) {
+            Component editor = getEditor();
+            if (editor == null) {
+                throw new UnsupportedCommandException("Unable to find editingComponent for the tree. tree.editable = "
+                        + ((JTree) parent.getComponent()).isEditable(), null);
+            }
+            return Arrays.asList(JavaElementFactory.createElement(editor, getDriver(), getWindow()));
+        }
         throw new UnsupportedCommandException("JTree node does not support pseudoelement " + selector, null);
     }
 

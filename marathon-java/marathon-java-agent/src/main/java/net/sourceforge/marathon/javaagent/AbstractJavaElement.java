@@ -160,7 +160,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     protected List<IJavaElement> findByCss(String css) {
         if (!(component instanceof Container))
-            throw new UnsupportedCommandException("findElements unsupported for non container objects", null);
+            throw new UnsupportedCommandException("findByCss unsupported for non container objects: " + component.getClass().getName(), null);
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(css);
     }
@@ -249,7 +249,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      */
     @Override public List<IJavaElement> findElementsByCssSelector(String using) {
         if (!(component instanceof Container))
-            throw new UnsupportedCommandException("findElements unsupported for non container objects", null);
+            throw new UnsupportedCommandException("findElementsByCssSelector unsupported for non container objects: " + component.getClass().getName(), new Exception());
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }
