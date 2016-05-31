@@ -2654,7 +2654,6 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     private String getDisplayName(File currentFile) {
-        System.out.println("DisplayWindow.getDisplayName(): " + currentFile);
         try {
             String projectPath = Constants.getMarathonProjectDirectory().getCanonicalPath();
             String filePath = currentFile.getCanonicalPath();
