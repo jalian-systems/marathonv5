@@ -24,6 +24,10 @@ import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import org.jruby.Ruby;
+import org.jruby.RubyInstanceConfig;
+import org.jruby.javasupport.JavaEmbedUtils;
+
 import net.sourceforge.marathon.runtime.api.Argument;
 import net.sourceforge.marathon.runtime.api.Argument.Type;
 import net.sourceforge.marathon.runtime.api.Constants;
@@ -34,10 +38,6 @@ import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.ISubPropertiesPanel;
 import net.sourceforge.marathon.runtime.api.Module;
 import net.sourceforge.marathon.runtime.api.WindowId;
-
-import org.jruby.Ruby;
-import org.jruby.RubyInstanceConfig;
-import org.jruby.javasupport.JavaEmbedUtils;
 
 public class RubyScriptModel implements IScriptModel {
 
@@ -355,6 +355,8 @@ public class RubyScriptModel implements IScriptModel {
     }
 
     public void fileUpdated(File file, SCRIPT_FILE_TYPE type) {
+        if(type == SCRIPT_FILE_TYPE.MODULE || type == SCRIPT_FILE_TYPE.FIXTURE)
+            RubyInterpreters.clear();
     }
 
     public String getMarathonStartMarker() {

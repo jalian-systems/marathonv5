@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Window;
 import java.io.UnsupportedEncodingException;
@@ -335,7 +336,24 @@ public class JavaTargetLocator {
     }
 
     public String getTitle() {
-        return getTopContainer().getTitle();
+        return getFocusedWindowTitle();
+    }
+
+    private String getFocusedWindowTitle() {
+        new Wait() {
+            @Override public boolean until() {
+                return findFocusWindow() != null;
+            }
+
+        }.wait("No focused window available", 60000, 500);
+        Window focusWindow = findFocusWindow();
+        if(focusWindow != null)
+            return new JWindow(focusWindow).getTitle();
+        return null;
+    }
+
+    private Window findFocusWindow() {
+        return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
     }
 
     public String getWindowHandle() {

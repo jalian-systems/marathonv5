@@ -45,4 +45,9 @@ public class RubyInterpreters {
             }
         }
     }
+
+    public synchronized static void clear() {
+        slots.clear();
+        
+    }
 }
