@@ -702,3 +702,7 @@ end
 
 def use_native_events
 end
+
+def execute_script(args)
+  puts driver.execute_script("return ProcessLauncher.launch(new String[] { " + args.map{|s| "\"#{s}\""}.join(', ') + " });")
+end
