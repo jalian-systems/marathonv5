@@ -127,3 +127,8 @@ marathon-core/JSON-java/bin/
 marathon-core/nanohttpd-2.1.1/bin/
 marathon-java/marathon-java-runtime/moduledir2/
 marathon-java/marathon-java-runtime/testDir/
+marathon/.classpath
+marathon/.project
+marathon/.settings/
+marathon/build/
+marathon/src/
