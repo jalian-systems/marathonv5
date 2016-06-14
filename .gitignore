@@ -132,3 +132,4 @@ marathon/.project
 marathon/.settings/
 marathon/build/
 marathon/src/
+marathon/.gitignore
