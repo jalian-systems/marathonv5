@@ -162,7 +162,7 @@ public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
                 return comp;
             }
         });
-        JPopupMenu popup = new JPopupMenu();
+        final JPopupMenu popup = new JPopupMenu();
         JMenuItem swingProject = new JMenuItem("Java/Swing Project");
         swingProject.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {

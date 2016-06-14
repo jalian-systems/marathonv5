@@ -5,7 +5,7 @@ repositories {
 apply plugin: 'distribution'
 
 dependencies {
-  compile project(":marathon")
+  compile project(":marathon-core")
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-java:marathon-test-helpers")
   testCompile project(":marathon-java")
@@ -13,13 +13,13 @@ dependencies {
   testCompile project(":marathon-java:marathon-java-agent")
   testCompile project(":marathon-java:marathon-java-recorder")
   testCompile project(":marathon-java:marathon-java-runtime")
-  testCompile project(":marathon:ruby-selenium-webdriver")
+  testCompile project(":marathon-core:ruby-selenium-webdriver")
   runtime project(":marathon-java")
   runtime project(":marathon-java:marathon-java-driver")
   runtime project(":marathon-java:marathon-java-agent")
   runtime project(":marathon-java:marathon-java-recorder")
   runtime project(":marathon-java:marathon-java-runtime")
-  runtime project(":marathon:ruby-selenium-webdriver")
+  runtime project(":marathon-core:ruby-selenium-webdriver")
 }
 
 jar.doFirst{
@@ -64,7 +64,7 @@ distributions {
       from(configurations.runtime) {
         include('**/marathon*jar')
       }
-      from(project(':marathon').file('src/main/dist'))
+      from(project(':marathon-core').file('src/main/dist'))
       from(project(':marathon-java:marathon-java-runtime').file('src/main/dist'))
       from(startScripts)
       from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
@@ -76,7 +76,7 @@ distributions {
       }
       from(project(':marathon-java:marathon-kbmap-tool').jar)
       from(project(':marathon-java:marathon-kbmap-tool').files('build/scripts'))
-      from(project(':marathon').file('ChangeLog'))
+      from(project(':marathon-core').file('ChangeLog'))
     }
   }
 }
@@ -88,7 +88,7 @@ task updateVersions(type: Copy) {
     props.load(new FileInputStream(file('build.properties')))
     props.put("buildtime", new Date().format("dd MMM yyyy hh:mm aa"))
     props.put("marathonversion", "${version}")
-    from project(':marathon').file('Version.tmpl')
+    from project(':marathon-core').file('Version.tmpl')
     into file('src/main/java').path
     expand(props)
     rename('Version.tmpl', 'Version.java')

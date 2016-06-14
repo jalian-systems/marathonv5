@@ -5,7 +5,7 @@ repositories {
 dependencies {
   compile files('support/osxutil/dist/osxutil.jar')
   compile "org.jruby:jrubyparser:${jrubyparser_version}"
-  compile project(":marathon:JSON-java")
+  compile project(":marathon-core:JSON-java")
   compile "com.fifesoft:rsyntaxtextarea:${rsyntaxtextarea_version}"
   compile "junit:junit-dep:${junit_dep_version}"
   compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
@@ -14,7 +14,7 @@ dependencies {
   compile "net.sf.opencsv:opencsv:${opencsv_version}"
   compile "com.jgoodies:jgoodies-common:${jgoodies_common_version}"
   compile "com.jgoodies:jgoodies-forms:${jgoodies_forms_version}"
-  compile project(":marathon:nanohttpd-2.1.1")
+  compile project(":marathon-core:nanohttpd-2.1.1")
   compile "com.google.inject:guice:${guice_version}"
   compile "jline:jline:${jline_version}"
   compile "org.jruby:jruby-complete:${jruby_complete_version}"

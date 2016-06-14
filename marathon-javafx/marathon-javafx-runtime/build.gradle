@@ -3,11 +3,11 @@ repositories {
 }
 
 dependencies {
-  compile project(":marathon")
+  compile project(":marathon-core")
   compile project(":marathon-java:marathon-java-runtime")
   compile project(":marathon-java:marathon-java-driver")
   compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
-  testCompile project(":marathon:ruby-selenium-webdriver")
+  testCompile project(":marathon-core:ruby-selenium-webdriver")
   testCompile "org.testng:testng:${testng_version}"
 }
 
