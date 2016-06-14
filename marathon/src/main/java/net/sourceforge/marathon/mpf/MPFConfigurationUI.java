@@ -171,6 +171,7 @@ public class MPFConfigurationUI extends EscapeDialog {
         Properties props = new Properties();
         props.setProperty(Constants.PROP_USE_FIELD_NAMES, Boolean.TRUE.toString());
         props.setProperty(Constants.PROP_PROPPREFIX + "java.util.logging.config.file", "%marathon.project.dir%/logging.properties");
+        props.setProperty(Constants.PROP_PROJECT_FRAMEWORK, System.getProperty(Constants.PROP_PROJECT_FRAMEWORK));
         return props;
     }
 

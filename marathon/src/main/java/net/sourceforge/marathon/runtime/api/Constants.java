@@ -9,9 +9,6 @@ import java.util.Arrays;
 
 public class Constants {
 
-    private static URL OMAP_STREAM = Constants.class
-            .getResource("/net/sourceforge/marathon/objectmap/default-omap-configuration.yaml");
-
     public static enum MarathonMode {
         RECORDING, PLAYING;
 
@@ -122,10 +119,14 @@ public class Constants {
     public static final String FIXTURE_DESCRIPTION = "marathon.fixture.description";
     public static final String FIXTURE_REUSE = "marathon.fixture.reuse";
     public static final String APPLICATION_DONT_MONITOR = "marathon.application.dont.monitor";
+    public static final String PROP_PROJECT_FRAMEWORK = "marathon.project.framework";
 
     public static InputStream getOMapConfigurationStream() {
+        String suffix = System.getProperty(Constants.PROP_PROJECT_FRAMEWORK, "swing");
+        URL resource = Constants.class.getResource("/net/sourceforge/marathon/objectmap/default-omap-configuration-"
+                + suffix + ".yaml");
         try {
-            return OMAP_STREAM.openStream();
+            return resource.openStream();
         } catch (IOException e) {
             return null;
         }

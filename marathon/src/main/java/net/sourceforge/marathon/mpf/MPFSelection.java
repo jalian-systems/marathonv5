@@ -18,20 +18,22 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import net.sourceforge.marathon.runtime.api.Constants;
-import net.sourceforge.marathon.runtime.api.EscapeDialog;
-import net.sourceforge.marathon.runtime.api.FileSelectionListener;
-import net.sourceforge.marathon.runtime.api.IFileSelectedAction;
-import net.sourceforge.marathon.runtime.api.UIUtils;
+import javax.swing.JPopupMenu;
 
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.EscapeDialog;
+import net.sourceforge.marathon.runtime.api.FileSelectionListener;
+import net.sourceforge.marathon.runtime.api.IFileSelectedAction;
+import net.sourceforge.marathon.runtime.api.UIUtils;
 
 /**
  * MPFSelection allows the user to select a MPF file if not given on the command
@@ -160,13 +162,33 @@ public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
                 return comp;
             }
         });
-        newButton.setMnemonic(KeyEvent.VK_N);
-        newButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        JPopupMenu popup = new JPopupMenu();
+        JMenuItem swingProject = new JMenuItem("Java/Swing Project");
+        swingProject.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) {
+                System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, "swing");
                 MPFConfigurationUI configurationUI = new MPFConfigurationUI(MPFSelection.this);
                 String fname = configurationUI.getProjectDirectory();
                 if (fname != null)
                     filesSelected(new File[] { new File(fname) }, null);
+            }
+        });
+        popup.add(swingProject);
+        JMenuItem fxProject = new JMenuItem("Java/FX Project");
+        fxProject.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) {
+                System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, "fx");
+                MPFConfigurationUI configurationUI = new MPFConfigurationUI(MPFSelection.this);
+                String fname = configurationUI.getProjectDirectory();
+                if (fname != null)
+                    filesSelected(new File[] { new File(fname) }, null);
+            }
+        });
+        popup.add(fxProject);
+        newButton.setMnemonic(KeyEvent.VK_N);
+        newButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                popup.show(newButton, 0, newButton.getHeight());
             }
         });
         modifyButton.setMnemonic(KeyEvent.VK_E);
