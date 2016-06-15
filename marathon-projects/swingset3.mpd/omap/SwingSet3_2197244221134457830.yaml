@@ -1,0 +1,78 @@
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: actionCommand, value: 'JFrame '}
+    - {method: equals, name: type, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    generalProperties:
+    - {name: buttonText, value: 'JFrame '}
+    - {name: buttonIconFile, value: FrameDemo}
+    - {name: tagName, value: toggle-button}
+    - {name: iconFile, value: FrameDemo}
+    - {name: type, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    - {name: enabled, value: 'true'}
+    - {name: indexOfType, value: '0'}
+    - {name: actionCommand, value: 'JFrame '}
+    - {name: accessibleName, value: 'JFrame '}
+    - {name: component.class.name, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    - {name: size, value: '[width=164,height=27]'}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: toolTipText, value: 'Demonstrates JFrame, Swing''s top-level primary
+            window container.'}
+    - {name: accessibleContext.accessibleName, value: 'JFrame '}
+    - {name: cText, value: 'JFrame '}
+    - {name: instanceOf, value: javax.swing.JToggleButton}
+    - {name: component.class.simpleName, value: DemoButton}
+    - {name: position, value: '[x=523,y=330]'}
+    name: JFrame
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: actionCommand, value: 'JWindow '}
+    - {method: equals, name: type, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    generalProperties:
+    - {name: buttonText, value: 'JWindow '}
+    - {name: buttonIconFile, value: WindowDemo}
+    - {name: tagName, value: toggle-button}
+    - {name: iconFile, value: WindowDemo}
+    - {name: type, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    - {name: enabled, value: 'true'}
+    - {name: indexOfType, value: '2'}
+    - {name: actionCommand, value: 'JWindow '}
+    - {name: accessibleName, value: 'JWindow '}
+    - {name: component.class.name, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    - {name: size, value: '[width=164,height=27]'}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: toolTipText, value: 'Demonstrates JWindow, a toplevel container with
+            no system border.'}
+    - {name: accessibleContext.accessibleName, value: 'JWindow '}
+    - {name: cText, value: 'JWindow '}
+    - {name: instanceOf, value: javax.swing.JToggleButton}
+    - {name: component.class.simpleName, value: DemoButton}
+    - {name: position, value: '[x=523,y=384]'}
+    name: JWindow
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: actionCommand, value: 'JTabbedPane '}
+    - {method: equals, name: type, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    generalProperties:
+    - {name: buttonText, value: 'JTabbedPane '}
+    - {name: buttonIconFile, value: TabbedPaneDemo}
+    - {name: tagName, value: toggle-button}
+    - {name: iconFile, value: TabbedPaneDemo}
+    - {name: type, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    - {name: enabled, value: 'true'}
+    - {name: indexOfType, value: '4'}
+    - {name: actionCommand, value: 'JTabbedPane '}
+    - {name: accessibleName, value: 'JTabbedPane '}
+    - {name: component.class.name, value: com.sun.swingset3.DemoSelectorPanel$DemoButton}
+    - {name: size, value: '[width=164,height=35]'}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: toolTipText, value: 'Demonstrates JTabbedPane, a container which allows
+            tabbed navigation of components'}
+    - {name: accessibleContext.accessibleName, value: 'JTabbedPane '}
+    - {name: cText, value: 'JTabbedPane '}
+    - {name: instanceOf, value: javax.swing.JToggleButton}
+    - {name: component.class.simpleName, value: DemoButton}
+    - {name: position, value: '[x=523,y=474]'}
+    name: JTabbedPane
+    used: true

@@ -1,0 +1,21 @@
+#Marathon Project File
+#Wed Jun 15 15:39:38 IST 2016
+marathon.checklist.dir=%marathon.project.dir%/Checklists
+marathon.test.dir=%marathon.project.dir%/TestCases
+marathon.application.rubyhome=
+marathon.application.launchtime=60000
+marathon.data.dir=%marathon.project.dir%/TestData
+marathon.application.classpath=%marathon.project.dir%/../swingset3/lib/AnimatedTransitions.jar;%marathon.project.dir%/../swingset3/lib/AppFramework.jar;%marathon.project.dir%/../swingset3/lib/TimingFramework.jar;%marathon.project.dir%/../swingset3/lib/javaws.jar;%marathon.project.dir%/../swingset3/lib/swing-worker.jar;%marathon.project.dir%/../swingset3/lib/swingx.jar;%marathon.project.dir%/../swingset3/SwingSet3.jar
+marathon.application.arguments=
+marathon.application.working.dir=
+marathon.project.launcher.model=net.sourceforge.marathon.runtime.RuntimeLauncherModel
+marathon.capture.dir=%marathon.project.dir%/Modules
+marathon.application.mainclass=com.sun.swingset3.SwingSet3
+marathon.fixture.dir=%marathon.project.dir%/Fixtures
+marathon.project.description=
+marathon.application.java.home=
+marathon.project.name=Marathon Project for SwingSet3
+marathon.suite.dir=%marathon.project.dir%/TestSuites
+marathon.application.rubypath=
+marathon.project.script.model=net.sourceforge.marathon.ruby.RubyScriptModel
+marathon.application.vm.arguments=
