@@ -35,6 +35,7 @@ import org.jruby.runtime.builtin.IRubyObject;
             "  include_class '" + RubyScriptTest.class.getCanonicalName() + "'", "  TestRubyScript.throwError", "end" };
 
     @BeforeMethod public void setUp() throws Exception {
+        System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, Constants.FRAMEWORK_SWING);
         out = new StringWriter();
         err = new StringWriter();
         result = new PlaybackResult();
