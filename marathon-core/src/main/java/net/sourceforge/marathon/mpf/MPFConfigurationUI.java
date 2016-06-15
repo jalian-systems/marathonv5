@@ -74,6 +74,7 @@ public class MPFConfigurationUI extends EscapeDialog {
 
     private void initConfigurationUI(String dirName) {
         this.dirName = dirName;
+        setProjectFramework(dirName);
         applicationPanel = new ApplicationPanel(this);
         panels = new IPropertiesPanel[] { new ProjectPanel(this), applicationPanel, new ScriptPanel(this) };
         BannerPanel bannerPanel = new BannerPanel();
@@ -155,6 +156,37 @@ public class MPFConfigurationUI extends EscapeDialog {
         }
         setProperties(properties);
         setSize(800, 600);
+    }
+
+    private void setProjectFramework(String dirName2) {
+        Properties properties = new Properties();
+        if (dirName != null) {
+            FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(new File(dirName, Constants.PROJECT_FILE));
+                properties.load(fileInputStream);
+            } catch (FileNotFoundException e) {
+                return;
+            } catch (IOException e) {
+                return;
+            } finally {
+                if (fileInputStream != null) {
+                    try {
+                        fileInputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+        String framework = properties.getProperty(Constants.PROP_PROJECT_FRAMEWORK);
+        if(framework != null) {
+            System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, framework);
+        }
+        String launcherModel = properties.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL);
+        if(launcherModel != null) {
+            System.setProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL, launcherModel);
+        }
     }
 
     protected ITestApplication getApplicationTester() {
