@@ -3,6 +3,8 @@ marathon-java/.classpath
 marathon-java/.project
 marathon-java/.settings/
 marathon-java/build/
+marathon-java/moduledir2/
+marathon-java/testDir/
 marathon-java/marathon-java-agent/.classpath
 marathon-java/marathon-java-agent/bin
 marathon-java/marathon-java-agent/bin-test
