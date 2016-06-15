@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.sourceforge.marathon.util.LauncherModelHelper;
+
 public class Constants {
 
     public static enum MarathonMode {
@@ -120,11 +122,12 @@ public class Constants {
     public static final String FIXTURE_REUSE = "marathon.fixture.reuse";
     public static final String APPLICATION_DONT_MONITOR = "marathon.application.dont.monitor";
     public static final String PROP_PROJECT_FRAMEWORK = "marathon.project.framework";
+    public static final String FRAMEWORK_SWING = "swing";
+    public static final String FRAMEWORK_FX = "fx";
 
     public static InputStream getOMapConfigurationStream() {
-        String suffix = System.getProperty(Constants.PROP_PROJECT_FRAMEWORK, "swing");
         URL resource = Constants.class.getResource("/net/sourceforge/marathon/objectmap/default-omap-configuration-"
-                + suffix + ".yaml");
+                + getFramework() + ".yaml");
         try {
             return resource.openStream();
         } catch (IOException e) {
@@ -139,5 +142,15 @@ public class Constants {
                 throw new RuntimeException("Unable to craete object map directory...");
         }
         return omapDirectory;
+    }
+
+    public static String getFramework() {
+        String framework = System.getProperty(PROP_PROJECT_FRAMEWORK);
+        if(framework == null) {
+            IRuntimeLauncherModel launcherModel = LauncherModelHelper
+                    .getLauncherModel(System.getProperty(PROP_PROJECT_LAUNCHER_MODEL));
+            return launcherModel.getFramework();
+        }
+        return framework;
     }
 }

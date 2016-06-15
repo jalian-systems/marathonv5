@@ -22,8 +22,7 @@ public class ApplicationPanel extends CompositePanel implements IPropertiesPanel
     }
 
     protected String getResourceName() {
-        String suffix = System.getProperty(Constants.PROP_PROJECT_FRAMEWORK, "swing");
-        return "launcher-" + suffix;
+        return "launcher-" + Constants.getFramework();
     }
 
     public ApplicationPanel(JDialog parent, String nodialogborder) {

@@ -11,4 +11,6 @@ public interface IRuntimeLauncherModel extends ISubpanelProvider {
 
     public ITestLauncher createLauncher(Properties props);
 
+    public String getFramework();
+
 }
