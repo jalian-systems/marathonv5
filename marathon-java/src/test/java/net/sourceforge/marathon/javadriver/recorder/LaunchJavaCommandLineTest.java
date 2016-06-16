@@ -7,6 +7,7 @@ import net.sourceforge.marathon.javadriver.ClassPathHelper;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
+import net.sourceforge.marathon.runtime.api.Constants;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
@@ -27,6 +28,7 @@ import com.sun.swingset3.SwingSet3;
     }
 
     @BeforeMethod public void createDriver() {
+        System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, Constants.FRAMEWORK_SWING);
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE);
         File f = findFile();
         profile.addClassPath(f);

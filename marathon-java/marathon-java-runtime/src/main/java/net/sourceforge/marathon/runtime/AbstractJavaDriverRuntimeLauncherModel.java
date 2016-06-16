@@ -16,6 +16,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
+import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.ITestLauncher;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
@@ -78,5 +79,9 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
 
     @Override public boolean isApplet() {
         return false;
+    }
+
+    @Override public String getFramework() {
+        return Constants.FRAMEWORK_SWING;
     }
 }

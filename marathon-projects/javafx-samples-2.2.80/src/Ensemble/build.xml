@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="Ensemble" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <description>Builds, tests, and runs the project Ensemble.</description>
+    
+    <import file="nbproject/build-impl.xml"/>
+  
+    <target name="-pre-compile" depends="copy-sample-sources"/>
+    <target name="-post-compile" depends="build-search-index"/>
+    <target name="intellij-build-extras" 
+            description="Intellij projects should call this before run"
+            depends="copy-sample-sources, build-search-index"/>
+    
+    <target name="copy-sample-sources" 
+            description="Copy all sample source files to build dir"
+            depends="init">
+        <echo>Copying all sample source files to build dir</echo>
+         <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/samples/**/*.java"/>
+                <include name="**/*.js"/> <!-- include javascript files -->
+                <include name="**/*.wav"/> <!-- include wav files -->
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="index-check">
+        <condition property="index-uptodate">
+            <and>
+               <available file="${build.classes.dir}/ensemble/search/index"/>
+               <available file="${build.classes.dir}/ensemble/samplesAll.txt"/>
+            </and>
+        </condition>
+    </target>
+
+    <target name="build-search-index" description="Build the Ensemble search index" 
+            depends="init, index-check" unless="index-uptodate">
+        <echo>Building the Ensemble search index...</echo>
+        <java classname="ensemble.search.BuildEnsembleSearchIndex" dir="${basedir}" fork="true">
+             <classpath>
+               <pathelement location="lib/lucene-core-3.2.0.jar"/>
+               <pathelement location="lib/lucene-grouping-3.2.0.jar"/>
+               <pathelement path="${build.classes.dir}"/>
+             </classpath>
+        </java>
+    </target>
+    
+    <target name="-pre-jar">
+        <unzip src="lib/lucene-core-3.2.0.jar" dest="${build.classes.dir}"/>
+        <unzip src="lib/lucene-grouping-3.2.0.jar" dest="${build.classes.dir}"/>
+    </target>
+  
+    <target name="jfx-deployment" depends="-check-jfx-deployment">
+
+        <!-- Delete libraries that netbeans has coppied to dist and they are not 
+             needed as have been packaged inside Ensemble.jar -->
+        <delete file="${dist.dir}/lib"/>
+        
+        <!-- Delete the Ensemble.jar build by netbeans as we will build one with JavaFX packager -->
+        <delete file="${dist.jar}"/>
+        
+        <fx:application id="ensemble"
+                        name="${application.title}"
+                        mainClass="${javafx.main.class}"/>
+        <fx:platform id="ensemble_platform" j2se="1.7+">
+	    <fx:jvmarg value="-Xss1m"/>
+        </fx:platform>   
+
+        <fx:jar destfile="${dist.jar}">
+            <fx:application refId="ensemble"/>
+            <fileset dir="${build.classes.dir}"/>
+            <manifest>
+              <attribute name="Implementation-Vendor" value="${application.vendor}"/>
+              <attribute name="Implementation-Title" value="${application.title}"/>
+              <attribute name="Implementation-Version" value="1.0"/>
+              <attribute name="Permissions" value="all-permissions"/>
+            </manifest>
+        </fx:jar>
+
+        <!-- We do not need to sign it here. We only sign it for the OTN -->
+
+        <!-- note that for native package customizations to work 
+             jfx-impl.xml have to include "." on classpath when 
+             it loads javafx ant tasks (search for taskdef).
+             
+             NOTE: if NB converted project file to the newer format then 
+                   you may need to correct taskdef in the
+                   nbproject/jfx-impl.xml - simply add ".:" in front of
+                   classpath value -->
+        <!-- add verbose="true" to get more details about 
+             native bundle customization options -->
+        <fx:deploy width="100" height="100" 
+                  nativeBundles="all"
+                  embeddedWidth="100%" embeddedHeight="100%"
+                  outdir="${basedir}/${dist.dir}" embedJNLP="true"
+                  outfile="${application.title}">
+            <fx:application refId="ensemble"/>
+            <fx:platform refId="ensemble_platform"/>
+            <fx:template file="${basedir}/web/index_template.html"
+                    tofile="${dist.dir}/Ensemble.html"/>
+            <fx:resources>
+                <fx:fileset dir="${basedir}/${dist.dir}"
+                            includes="Ensemble.jar"/>      
+            </fx:resources> 
+            <fx:info title="${application.title}"
+                     vendor="${application.vendor}"/>
+            <fx:permissions elevated="true"/>
+        </fx:deploy>          
+    </target>
+</project>

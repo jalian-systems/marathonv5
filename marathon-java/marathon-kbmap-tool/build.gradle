@@ -12,7 +12,7 @@ jar.doFirst{
     def classpath = configurations.runtime.filter{ it.name.startsWith 'marathon' }.collect { it.name } +
               configurations.runtime.filter{ !it.name.startsWith('marathon') }.collect { 'support/' + it.name }
     Properties props = new Properties()
-    props.load(new FileInputStream(file('../build.properties')))
+    props.load(new FileInputStream(project(":marathon").file('build.properties')))
     props.put("marathonversion", "${version}")
     attributes("Manifest-Version" : "1.0",
               "Created-By" : props.get('blurbcompany'),

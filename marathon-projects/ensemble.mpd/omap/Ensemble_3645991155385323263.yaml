@@ -1,0 +1,16 @@
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: Id, value: page-tree}
+    - {method: equals, name: tagName, value: tree-view}
+    generalProperties:
+    - {name: name, value: page-tree}
+    - {name: id, value: page-tree}
+    - {name: tagName, value: tree-view}
+    - {name: Id, value: page-tree}
+    - {name: indexOfType, value: '0'}
+    - {name: component.class.name, value: javafx.scene.control.TreeView}
+    - {name: instanceOf, value: javafx.scene.control.TreeView}
+    - {name: enabled, value: 'true'}
+    - {name: type, value: tree-view}
+    name: page-tree
+    used: true

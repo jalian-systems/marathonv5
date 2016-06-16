@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JavaFX 2.0 - Henley Car Sales Sample</title>
+        <SCRIPT src="#DT.SCRIPT.URL#"></SCRIPT>
+        <style>
+            /* #dataapp-app, */
+            html, body, #javafx-app-placeholder, #dataapp-app, #progress, #car {  
+                margin: 0;  
+                overflow: hidden;  
+                padding: 0; 
+                width: 100%;
+                height: 100%; 
+            }
+            html {
+                background-color: #3f4346;
+                background-image: url("background.jpg");
+                background-size: 100% 100%;
+            }
+            body {
+                background-image: url("noise.png");
+                background-repeat: repeat;
+            }
+            #dataapp-splash {
+                background-color: transparent !important;
+            }
+            #javafx-app-placeholder {
+                background-image: url("title.png");
+                background-position: 19px 15px;
+                background-repeat: no-repeat;
+            }
+            #progress {
+                background-image: url("progress.gif");
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            #car {
+                background-image: url("car.png");
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+        </style>
+        <script>
+            function getSplash(app) {
+                var progress = document.createElement('div');
+                progress.id = "progress"
+                var car = document.createElement('div');
+                car.id = "car";
+                progress.appendChild(car);
+                return progress;
+            }
+        </script>
+        <!-- #DT.EMBED.CODE.ONLOAD# -->
+    </head>
+    <body><div id='javafx-app-placeholder'></div></body>
+</html>

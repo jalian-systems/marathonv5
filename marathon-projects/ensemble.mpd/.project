@@ -1,0 +1,21 @@
+#Marathon Project File
+#Thu Jun 16 10:04:40 IST 2016
+marathon.checklist.dir=%marathon.project.dir%/Checklists
+marathon.test.dir=%marathon.project.dir%/TestCases
+marathon.application.rubyhome=
+marathon.application.launchtime=60000
+marathon.data.dir=%marathon.project.dir%/TestData
+marathon.application.classpath=%marathon.project.dir%/../javafx-samples-2.2.80/Ensemble.jar
+marathon.application.arguments=
+marathon.application.working.dir=
+marathon.capture.dir=%marathon.project.dir%/Modules
+marathon.project.launcher.model=net.sourceforge.marathon.runtime.FXRuntimeLauncherModel
+marathon.application.mainclass=ensemble.Ensemble2
+marathon.fixture.dir=%marathon.project.dir%/Fixtures
+marathon.project.description=
+marathon.application.java.home=
+marathon.project.name=Marathon Ensemble Project
+marathon.suite.dir=%marathon.project.dir%/TestSuites
+marathon.application.rubypath=
+marathon.project.script.model=net.sourceforge.marathon.ruby.RubyScriptModel
+marathon.application.vm.arguments=
