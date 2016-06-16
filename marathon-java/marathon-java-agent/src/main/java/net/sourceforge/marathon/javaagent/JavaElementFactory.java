@@ -46,6 +46,8 @@ import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
 public class JavaElementFactory {
 
     public static IJavaElement createElement(Component component, IJavaAgent driver, JWindow window) {
+        if(component == null)
+            throw new RuntimeException("Calling createElement with a null component is not supported");
         IJavaElement found = window.findElementFromMap(component);
         if (found != null) {
             return found;

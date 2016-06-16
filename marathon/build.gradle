@@ -2,20 +2,97 @@ repositories {
   mavenCentral()
 }
 
+apply plugin: 'distribution'
+
 dependencies {
-  compile files('support/osxutil/dist/osxutil.jar')
-  compile "org.jruby:jrubyparser:${jrubyparser_version}"
-  compile project(":marathon:JSON-java")
-  compile "com.fifesoft:rsyntaxtextarea:${rsyntaxtextarea_version}"
-  compile "junit:junit-dep:${junit_dep_version}"
-  compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
-  compile "dk.navicon:vldocking:${vldocking_version}"
-  compile "org.yaml:snakeyaml:${snakeyaml_version}"
-  compile "net.sf.opencsv:opencsv:${opencsv_version}"
-  compile "com.jgoodies:jgoodies-common:${jgoodies_common_version}"
-  compile "com.jgoodies:jgoodies-forms:${jgoodies_forms_version}"
-  compile project(":marathon:nanohttpd-2.1.1")
-  compile "com.google.inject:guice:${guice_version}"
-  compile "jline:jline:${jline_version}"
-  compile "org.jruby:jruby-complete:${jruby_complete_version}"
+  compile project(":marathon-core")
+  runtime project(":marathon")
+  runtime project(":marathon-java")
+  runtime project(":marathon-java:marathon-java-driver")
+  runtime project(":marathon-java:marathon-java-agent")
+  runtime project(":marathon-java:marathon-java-recorder")
+  runtime project(":marathon-java:marathon-java-runtime")
+  runtime project(":marathon-javafx")
+  runtime project(":marathon-javafx:marathon-javafx-agent")
+  runtime project(":marathon-javafx:marathon-javafx-recorder")
+  runtime project(":marathon-javafx:marathon-javafx-runtime")
+  runtime project(":marathon-core:ruby-selenium-webdriver")
 }
+
+jar.doFirst{
+  manifest {
+    def classpath = configurations.runtime.filter{ it.name.startsWith 'marathon-' }.collect { it.name } +
+              configurations.runtime.filter{ !it.name.startsWith('marathon-') }.collect { 'support/' + it.name }
+    Properties props = new Properties()
+    props.load(new FileInputStream(file('build.properties')))
+    props.put("marathonversion", "${version}")
+    attributes("Manifest-Version" : "1.0",
+              "Created-By" : props.get('blurbcompany'),
+              "Specification-Title" : props.get('blurbtitle'),
+              "Specification-Version" : props.get('marathonversion'),
+              "Specification-Vendor" : props.get('blurbcompany'),
+              "Implementation-Title" : props.get('marathonproduct'),
+              "Implementation-Version" : props.get('marathonversion'),
+              "Implementation-Vendor" : props.get('blurbcompany'),
+              "Main-Class" : "net.sourceforge.marathon.Main",
+              "Class-Path" : classpath.join(' ')
+    )
+  }
+}
+
+task startScripts(type: Copy) {
+    destinationDir file("$buildDir/scripts")
+    from('script-templates/marathon') {
+      expand( [ 'marathonJar' : jar.archiveName, ])
+      fileMode(0755)
+    }
+    from('script-templates/marathon.bat') {
+      expand( [ 'marathonJar' : jar.archiveName, ])
+    }
+}
+
+distributions {
+  main {
+    contents {
+      from(configurations.runtime) {
+        exclude('**/marathon*jar')
+        into('support')
+      }
+      from(configurations.runtime) {
+        include('**/marathon*jar')
+      }
+      from(project(':marathon-core').file('src/main/dist'))
+      from(project(':marathon-java:marathon-java-runtime').file('src/main/dist'))
+      from(project(':marathon-javafx:marathon-javafx-runtime').file('src/main/dist'))
+      from(startScripts)
+      from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
+        exclude('**/marathon*jar')
+        into('support')
+      }
+      from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
+        include('**/marathon*jar')
+      }
+      from(project(':marathon-java:marathon-kbmap-tool').jar)
+      from(project(':marathon-java:marathon-kbmap-tool').files('build/scripts'))
+      from(project(':marathon-core').file('ChangeLog'))
+    }
+  }
+}
+
+task updateVersions(type: Copy) {
+    inputs.file file("build.properties")
+    inputs.file file("../build.gradle")
+    Properties props = new Properties()
+    props.load(new FileInputStream(file('build.properties')))
+    props.put("buildtime", new Date().format("dd MMM yyyy hh:mm aa"))
+    props.put("marathonversion", "${version}")
+    from project(':marathon-core').file('Version.tmpl')
+    into file('src/main/java').path
+    expand(props)
+    rename('Version.tmpl', 'Version.java')
+}
+
+compileJava.dependsOn(updateVersions)
+assembleDist.dependsOn(startScripts)
+distZip.dependsOn(project(':marathon-java:marathon-kbmap-tool').tasks.build)
+tasks.eclipse.dependsOn(updateVersions)

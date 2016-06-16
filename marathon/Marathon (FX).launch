@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/marathon-core/src/main/java/net/sourceforge/marathon/Main.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.sourceforge.marathon.Main"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="marathon"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms128m -Xmx512m -Dmarathon.agent.file=${resource_loc:/marathon-javafx-agent/marathon-javafx-agent-4.2.0.0.jar} -Dmarathon.recorder.file=${resource_loc:/marathon-javafx-recorder/marathon-javafx-recorder-4.2.0.0.jar}"/>
+</launchConfiguration>

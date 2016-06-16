@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="SwingInterop" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <description>Builds, tests, and runs the project SwingInterop.</description>
+    
+    <import file="nbproject/build-impl.xml"/>
+     
+    <!-- check if javafx is in jdk -->
+    <target name="check-javafx-in-jdk" unless="javafx.sdk">
+        <available file="${javafx.in.jdk}/jre/lib/jfxrt.jar" property="found-javafx" />
+    </target>
+    <!-- check if javafx is in sdk -->
+    <target name="check-javafx-in-sdk" if="javafx.sdk">
+        <available file="${javafx.sdk}/rt/lib/jfxrt.jar" property="found-javafx" />
+    </target>
+    <!-- point to JDK -->
+    <target name="find-javafx-in-jdk">
+        <property name="javafx.in.jdk" location="${java.home}/.."/>
+    </target>    
+    <target name="javafx-missing" unless="found-javafx">
+        <fail>.
+            Ant could not find the JavaFX SDK. Either install JDK 7u6 or above
+            and set JAVA_HOME to the JDK or set [javafx.sdk] on the command line
+            (e.g. on Windows: ant -Djavafx.sdk="C:\Program Files (x86)\Oracle\JavaFX 2.2 SDK
+            or ant -Djavafx.sdk="C:\Program Files (x86)\Oracle\JavaFX 2.2 SDK")
+        </fail>
+    </target>
+    
+    <!-- When not running in netbeans try to locate JavaFX SDK -->
+    <target name="-pre-init" depends="find-javafx-in-jdk,check-javafx-in-jdk,check-javafx-in-sdk" unless="netbeans-home">
+        <condition property="javafx.tools.ant.jar"
+                 value="${javafx.sdk}/lib/ant-javafx.jar"
+                 else="${javafx.in.jdk}/lib/ant-javafx.jar">
+            <isset property="javafx.sdk"/>
+        </condition>		
+        <condition property="file.reference.jfxrt.jar"                  
+                 value="${javafx.sdk}/rt/lib/jfxrt.jar"
+                 else="${javafx.in.jdk}/jre/lib/jfxrt.jar">
+            <isset property="javafx.sdk"/>
+        </condition>
+        <condition property="file.reference.ant-javafx.jar"
+                value="${javafx.sdk}/lib/ant-javafx.jar"
+                else="${javafx.in.jdk}/lib/ant-javafx.jar">
+            <isset property="javafx.sdk"/>
+        </condition>
+        <echo message="Using JavaFX at: ${file.reference.jfxrt.jar}"  />		
+    </target>
+                        
+    <target name="-pre-compile" depends="javafx-missing">
+    </target>
+
+    <target name="-pre-jar" depends="javafx-missing">
+    </target>
+
+    <target name="-post-jar">
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
+                uri="javafx:com.sun.javafx.tools.ant"
+                classpath="${javafx.tools.ant.jar}"/>
+                
+        <!-- remove libraries as they are not needed because jfxrt.jar will be installed on the system -->
+        <delete dir="${dist.dir}/lib"/>
+        
+        <!-- delete the jar build by netbeans as we need to build one using JavaFX packager -->
+        <delete file="${dist.jar}"/>
+        
+        <!-- Build jar using JavaFX packager so that it has code to find installed JavaFX bundled with app -->
+        <fx:application name= "SwingInterop" id="swingFXApp"
+                        mainClass="${main.class}"
+                        toolkit="swing"/>
+        <fx:platform id="swingInterop_platform" j2se="1.7+"/>
+
+        <fx:jar destfile="${dist.jar}">
+            <fileset dir="${build.classes.dir}"/>
+            <fx:application refid="swingFXApp" name="SwingInterop"/>
+            <manifest>
+                <attribute name="Implementation-Vendor" value="${application.vendor}"/>
+                <attribute name="Implementation-Title" value="${application.title}"/>
+                <attribute name="Implementation-Version" value="1.0"/>
+                <attribute name="Permissions" value="sandbox"/>
+            </manifest>
+        </fx:jar>
+
+        <!-- We do not need to sign it here. We only sign it for the OTN -->
+
+       <fx:deploy width="960" height="720"
+                  nativeBundles="all"
+                  outdir="${basedir}/${dist.dir}" embedJNLP="true"
+                  outfile="${application.title}">
+            <fx:application refId="swingFXApp"/>
+            <fx:platform refId="swingInterop_platform"/>
+            <fx:resources>
+                <fx:fileset dir="${basedir}/${dist.dir}"
+                            includes="SwingInterop.jar"/>      
+            </fx:resources> 
+            <fx:permissions/>
+            <info title="Sample app: ${application.title}"
+                  vendor="${application.vendor}"/>
+        </fx:deploy>  
+    </target>
+</project>

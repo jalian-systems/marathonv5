@@ -1,0 +1,7 @@
+- !!net.sourceforge.marathon.objectmap.OMapContainer
+    containerGeneralProperties: []
+    containerRecognitionProperties:
+    - {method: equals, name: type, value: javafx.stage.Stage}
+    - {method: equals, name: title, value: Ensemble}
+    containerTitles: [Ensemble]
+    fileName: Ensemble_3645991155385323263.yaml

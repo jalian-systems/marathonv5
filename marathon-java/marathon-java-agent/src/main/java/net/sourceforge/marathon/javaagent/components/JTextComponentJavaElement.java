@@ -23,7 +23,7 @@ public class JTextComponentJavaElement extends AbstractJavaElement {
             clear();
             sendKeys(value, JavaAgentKeys.ENTER);
         } else {
-            tc.setText(value);
+            sendKeys(value);
         }
         return true;
     }

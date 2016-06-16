@@ -7,9 +7,13 @@ ext.appName = "Marathon (OSS) (Java Version)"
 subprojects {
   apply plugin: 'java'
   apply plugin: 'eclipse'
-  version = '4.1.2.0'
+  version = '4.2.0.0'
   task allDependencies(type: DependencyReportTask) {}
 
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+  }
+  
   eclipse.classpath {
     defaultOutputDir = file('bin')
   }

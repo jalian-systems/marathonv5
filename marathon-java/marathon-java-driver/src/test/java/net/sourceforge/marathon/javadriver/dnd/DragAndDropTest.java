@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
+import com.sun.jna.Platform;
 
 @Test public class DragAndDropTest {
 
@@ -82,7 +83,10 @@ import com.google.common.base.Predicate;
         WebElement listitem5 = driver.findElement(By.cssSelector("list::nth-item(5)"));
         listitem1.click();
         driver.clearlogs(LogType.DRIVER);
-        new Actions(driver).keyDown(Keys.ALT).dragAndDrop(listitem1, listitem5).keyUp(Keys.ALT).perform();
+        Keys copyKey = Keys.ALT;
+        if(Platform.isWindows())
+            copyKey = Keys.CONTROL;
+        new Actions(driver).keyDown(copyKey).dragAndDrop(listitem1, listitem5).keyUp(copyKey).perform();
         waitTillDropCompletes(
                 "[[\"List Item 0\",\"List Item 1\",\"List Item 2\",\"List Item 3\",\"List Item 0(1)\",\"List Item 5\",\"List Item 6\",\"List Item 7\",\"List Item 8\",\"List Item 9\"]]",
                 list);

@@ -77,7 +77,7 @@ public class JSONScriptRunner {
             IJavaFXElement e = session.findElement((Node) jsonArg);
             return new JSONObject().put("ELEMENT", e.getElementId());
         }
-        return null;
+        return jsonArg.toString();
     }
 
 }

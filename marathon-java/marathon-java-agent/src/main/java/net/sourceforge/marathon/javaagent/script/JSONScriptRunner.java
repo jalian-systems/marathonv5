@@ -77,7 +77,7 @@ public class JSONScriptRunner {
             IJavaElement e = session.findElement((Component) jsonArg);
             return new JSONObject().put("ELEMENT", e.getId());
         }
-        return null;
+        return jsonArg.toString();
     }
 
 }

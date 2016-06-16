@@ -1,0 +1,7 @@
+- !!net.sourceforge.marathon.objectmap.OMapContainer
+    containerGeneralProperties: []
+    containerRecognitionProperties:
+    - {method: equals, name: component.class.name, value: javax.swing.JFrame}
+    - {method: equals, name: title, value: SwingSet3}
+    containerTitles: [SwingSet3]
+    fileName: SwingSet3_2197244221134457830.yaml

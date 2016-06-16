@@ -1,0 +1,58 @@
+Marathon Version 4.2.0.0 (Apr 11 2016)
+
+1. Single application to support both Java/Swing and Java/FX.
+2. Added execute_script method.
+   execute_script takes a list of strings and executes the command
+   on the VM executing the AUT.
+3. Added example Marathon projects.
+   For Swing we use SwingSet3 and FX we use Ensemble.
+4. Updated getTitle() to return the currently focused window title.
+5. Support for reloading ruby if a module changes
+   When a module or a fixture file changes, Ruby interpreter is reloaded
+   so that the changes are visible.
+5. Error message for non-editable tree nodes.
+   When a select() is called on a non-editable tree node, a proper error
+   message is shown.
+6. Added select-by-properties to JTabbedPane.
+   With this you can get a tab using get_component(<tabbedpane>, <tabname>)
+7. Using sendKeys() on text#select call.
+8. Ctrl+C is being sent as Ctrl+Shift+C
+9. Show relative file name in window title.
+10. Expand treepath for selected node.
+    When a treenode is selected, we expand the node also.
+11. Send keytyped events for SPACE/ENTER
+12. Using differnt D&D Copy key on windows.
+13. Using UTF8 for compiling Java sources.
+14. execute_script - toString() on return value
+    driver.execute_script was returning null when the return value is not one of
+    the known data types. We do a Object#toString() on it now.
+15. Selecting first row in tableView. (FX)
+    We were using selectIndices() which considers 0 as invalid value.
+16. fix: Using UTF8 for compiling Java sources.
+    Some of the test helper methods use UTF8 characters and do not compile
+    when the encoding is not set.
+
+Marathon Version 4.1.2.0 (Apr 11 2016)
+
+1. Added support for JavaFX
+2. You require JDK7 to run Marathon
+4. FX uses a different omap configuration.
+5. Added focus events before actions on a component
+6. Added marathon.logevents property and logging of events
+7. Invalid x,w,y,h values for display window defaults to full screen
+
+Marathon Version 4.0.1.0 (Feb 17 2016)
+
+1. Adding support for missing methods in playback.rb
+	drag, drag_and_drop, assert_true, assert_false, fail, error, get_named_components, get_component_names
+	file_equals, image_compare, get_window, get_window_object, get_p, get_po
+2. Fixed: JListJavaElement: added select-by-properties
+3. Fixed: Setting the DnDKey depending on the platform.
+4. Added log for exceptions
+5. Fixed NPE in agent
+6. Fixed: inserting module method not executing the method content
+7. Fixed: Showing only valid module methods while inserting by implementing topWindowId to recording server and client.
+
+Marathon Version 4.0.0.0 (Feb 2 2016)
+
+1. Initial 4.0 release

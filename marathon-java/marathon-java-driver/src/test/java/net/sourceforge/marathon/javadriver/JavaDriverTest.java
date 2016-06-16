@@ -1,5 +1,7 @@
 package net.sourceforge.marathon.javadriver;
 
+import java.awt.BorderLayout;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -1322,14 +1324,25 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override public void run() {
-                window = new java.awt.Window(null);
+                frame.setVisible(true);
+                window = new java.awt.Window(frame);
                 window.setName("awt-window");
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.add(new JTextField(80));
+                window.setLayout(new BorderLayout());
+                window.add(panel, BorderLayout.CENTER);
                 window.setSize(640, 480);
-                window.setLocationRelativeTo(null);
+                window.setLocationRelativeTo(frame);
+                window.requestFocus();
                 window.setVisible(true);
             }
         });
-        AssertJUnit.assertEquals("awt-window", driver.getTitle());
+        try {
+            Thread.sleep(200);
+            AssertJUnit.assertEquals("awt-window", driver.getTitle());
+        } finally {
+            window.dispose();
+        }
     }
 
     public void windowWithEmptyTitleUsesNextAvailableOption() throws Throwable {
@@ -1349,14 +1362,25 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override public void run() {
-                window = new java.awt.Window(null);
+                frame.setVisible(true);
+                window = new java.awt.Window(frame);
                 window.setName(null);
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.add(new JTextField(80));
+                window.setLayout(new BorderLayout());
+                window.add(panel, BorderLayout.CENTER);
                 window.setSize(640, 480);
-                window.setLocationRelativeTo(null);
+                window.setLocationRelativeTo(frame);
+                window.requestFocus();
                 window.setVisible(true);
             }
         });
-        AssertJUnit.assertEquals("java.awt.Window", driver.getTitle());
+        try {
+            Thread.sleep(200);
+            AssertJUnit.assertEquals("java.awt.Window", driver.getTitle());
+        } finally {
+            window.dispose();
+        }
     }
 
     public void executeScript() throws Throwable {
@@ -1506,4 +1530,22 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         }
     }
 
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override public void run() {
+                java.awt.Window window = new java.awt.Window(null);
+                window.setFocusableWindowState(true);
+                window.setName("awt-window");
+                window.setLayout(new BorderLayout());
+                TextField tf = new TextField(80);
+                tf.setText("Hello World");
+                window.add(tf);
+                tf.requestFocusInWindow();
+                window.pack();
+                window.setLocationRelativeTo(null);
+                window.setVisible(true);
+                System.out.println("JavaDriverTest.main(...).new Runnable() {...}.run(): " + window.isFocusableWindow() );
+            }
+        });
+    }
 }

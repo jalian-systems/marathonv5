@@ -1,0 +1,37 @@
+!!net.sourceforge.marathon.objectmap.ObjectMapConfiguration
+containerNamingProperties:
+-   className: javafx.stage.Stage
+    propertyLists:
+    -   priority: 100
+        properties: [title]
+containerRecognitionProperties:
+-   className: javafx.stage.Stage
+    propertyLists:
+    -   priority: 100
+        properties: [title]
+generalProperties: [labeledBy, toolTipText, name, labelText, precedingLabel, cText,
+    iconFile, position, size, accelerator, enabled, toolTipText, fieldName, layoutData.gridx,
+    layoutData.gridy, layoutData.x, layoutData.y, accessibleContext.accessibleName,
+    tagName, instanceOf, component.class.name]
+namingProperties:
+-   className: javafx.scene.Node
+    propertyLists:
+    -   priority: 100
+        properties: [labeledBy]
+    -   priority: 90
+        properties: [id]
+    -   priority: 80
+        properties: [cText]
+    -   priority: 70
+        properties: [accessibleText]
+    -   priority: 60
+        properties: [accessibleHelp]
+recognitionProperties:
+-   className: javafx.scene.Node
+    propertyLists:
+    -   priority: 100
+        properties: [tagName, Id]
+    -   priority: 90
+        properties: [tagName, fieldName]
+    -   priority: 80
+        properties: [tagName, cText]

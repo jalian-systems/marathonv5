@@ -1,0 +1,316 @@
+/*
+ * Copyright (c) 2008, 2012 Oracle and/or its affiliates.
+ * All rights reserved. Use is subject to license terms.
+ *
+ * This file is available and licensed under the following license:
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the distribution.
+ *  - Neither the name of Oracle Corporation nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+#Window {
+    -fx-padding: 0;
+    -fx-background-color: radial-gradient(center 70% 5%, radius 60%, #767a7b,#2b2f32);
+    -fx-background-image: url("images/noise.png") , url("images/title.png");
+    -fx-background-repeat: repeat, no-repeat;
+    -fx-background-position: left top, left 19px top 15px ;
+}
+#MainTabs {
+    -fx-padding: 36px 0 0 0;
+}
+#MainTabs *.tab-header-background {
+    -fx-background-color: transparent;
+    -fx-effect: null;
+    -fx-border-image-source: url("images/tab-area4.png");
+    -fx-border-image-slice: 0 0 25 0;
+    -fx-border-image-width: 0 0 25 0;
+    -fx-border-image-repeat: stretch;
+}
+#MainTabs *.tab-header-area {
+    -fx-padding: 0 10px 0 430px;
+}
+#MainTabs .headers-region {
+    -fx-effect: null;
+}
+#MainTabs .tab {
+    -fx-padding: 0px 5px -2px 5px;
+    -fx-background-insets: 0 -20 0 0;
+    -fx-background-color: transparent;
+    -fx-text-fill: #c4d8de;
+    -fx-border-image-source: url("images/tab5.png");
+    -fx-border-image-slice: 20 20 20 20 fill;
+    -fx-border-image-width: 20 20 20 20;
+    -fx-border-image-repeat: stretch;
+    -fx-font-size: 22px;
+}
+#MainTabs .tab:selected {
+    -fx-border-image-source: url("images/tab-selected5.png");
+    -fx-text-fill: #333333;
+/*    -fx-background-color: red;*/
+}
+#MainTabs .tab-content-area {
+    -fx-background-color: #6a6d6e;
+}
+#MainTabs .tab *.tab-label .text {
+    -fx-effect: null;
+}
+.split-pane {
+    -fx-background-color: transparent;
+}
+.table-view, .table-view:focused  {
+    -fx-background-color: null;
+}
+.table-row-cell {
+    -fx-background-color: null;
+}
+.choice-box {
+    -fx-base: #c8dce3;
+    -fx-background: #899ca0;
+    -fx-outer-border: #899ca0;
+    -fx-shadow-highlight-color: transparent;
+}
+/* =============== STYLE ALL SCROLL BARS ================================================= */
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 5;
+}
+.scroll-bar .thumb {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0.5em;
+}
+.scroll-bar .track  {
+    -fx-background-color: transparent;
+    -fx-background-insets:  0;
+    -fx-border-color: rgba(255,255,255,0.5);
+    -fx-border-radius: 0.5em;
+}
+.scroll-bar .increment-button {
+    -fx-background-color: null;
+}
+.scroll-bar:horizontal .increment-button {
+    -fx-padding: 0.5em 0 0.5em 0;
+}
+.scroll-bar:vertical .increment-button {
+    -fx-padding: 0 0.5em 0 0.5em;
+}
+.scroll-bar .decrement-button, .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-background-color: null;
+    -fx-padding: 0;
+}
+.corner {
+    -fx-background-color: transparent;
+}
+
+/* =============== LIVE TAB ================================================= */
+#LiveTable {
+    -fx-padding: 15px;
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+}
+#liveView .choice-box {
+    -fx-outer-border: #5b676b;
+}
+#liveView #usStates {
+    -fx-opacity: 0.7;
+}
+.map-pane {
+    -fx-padding: 10px;
+    -fx-border-image-source: url("images/map-background.png"), url("images/noise.png");
+    -fx-border-image-slice: 0 0 0 0 fill;
+    -fx-border-image-width: 0 0 0 0;
+    -fx-border-image-repeat: stretch, repeat;
+}
+#liveView.split-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+#liveView.split-pane .split-pane-divider {
+   -fx-padding: -3 0 -3 0;
+   -fx-border-color: null;
+   -fx-border-width: 0;
+   -fx-background-color: transparent;
+   -fx-background-insets: 0;
+}
+#liveView .horizontal-grabber {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+#liveView .vertical-grabber {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+#LiveSaleView{
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 10;
+    -fx-border-image-source: url("images/table-background.png"), url("images/noise.png");
+    -fx-border-image-slice: 0 0 1 0 fill, 0 0 0 0 fill;
+    -fx-border-image-width: 0 0 1 0, 0;
+    -fx-border-image-repeat: stretch, repeat;
+}
+#LiveSaleView Label , #LiveSaleView .table-cell { /* Center align table cells */
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+/* =============== STYLE ALL TABLES ================================================= */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 10;
+}
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.3) transparent;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-padding: 0 10 0 0;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-border-color: transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #e1fdff;
+    -fx-font-weight: bold;
+}
+.table-view .table-cell {
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+.table-view  .table-row-cell:filled:selected:focused, .table-row-cell:filled:selected {
+    -fx-background-color: rgba(0,0,0,0.1);
+}
+/* =============== HISTORY TAB ================================================= */
+#HistoryTab {
+    -fx-border-image-source: url("images/table-background.png"), url("images/noise.png");
+    -fx-border-image-slice: 0 0 1 0 fill, 0 0 0 0 fill;
+    -fx-border-image-width: 0 0 0 0, 0;
+    -fx-border-image-repeat: stretch, repeat;
+}
+#HistoryTab #regionLabel {
+    -fx-text-fill: white;
+}
+#HistoryTab .TimeRangeSelector .text {
+    -fx-fill: white;
+}
+#HistoryTab .TimeRangeSelector .handle {
+    /*-fx-border-color: blue; */
+    -fx-padding: 10;
+}
+#HistoryTab .TimeRangeSelector .handle .thumb {
+  /*  -fx-background-color: red;
+    -fx-padding: 5; */
+  -fx-padding: 20 18 20 18; 
+  -fx-background-image: url("images/slider-thumb.png");
+  -fx-background-image-insets: 0;
+}
+#HistoryTab #pieChart1 .chart-content, #HistoryTab #pieChart2 .chart-content {
+    -fx-padding: 0;
+}
+#HistoryTab .chart-vertical-grid-lines, #HistoryTab .chart-horizontal-grid-lines,  #HistoryTab .chart-vertical-zero-line, #HistoryTab .chart-horizontal-zero-line {
+    -fx-stroke: null;
+    -fx-stroke-width: 0;
+}
+#HistoryTab .chart-alternative-column-fill, #HistoryTab .chart-alternative-row-fill {
+    -fx-fill: null;
+}
+#HistoryTab .TimeRangeSelector .chart-plot-background {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+#HistoryTab .TimeRangeSelector .chart-content {
+    -fx-padding: 8 8 30 0;
+}
+#HistoryTab .TimeRangeSelector .chart-area-symbol {
+    -fx-background-color: null;
+    -fx-padding: 0;
+}
+#HistoryTab .TimeRangeSelector .axis-tick-mark {
+    -fx-stroke: white;
+}
+
+#HistoryTab .chart-pie-label {
+    -fx-font-size: 9px;
+    -fx-text-fill: white;
+}
+#HistoryTab .text.chart-pie-label{
+    -fx-fill: white;
+}
+.table-chart-cell {
+    -fx-padding: 0px;
+}
+.table-chart {
+    -fx-padding: 0px;
+}
+.table-chart .chart-content {
+    -fx-padding: 0px;
+}
+.table-chart .chart-area-symbol {
+    -fx-background-color: null;
+    -fx-padding: 0;
+}
+.table-chart .chart-plot-background {
+    -fx-background-color: null;
+}
+.table-chart .chart-vertical-grid-lines, .table-chart .chart-horizontal-grid-lines,  .table-chart .chart-vertical-zero-line, .table-chart .chart-horizontal-zero-line {
+    -fx-stroke: null;
+    -fx-stroke-width: 0;
+}
+.table-chart .chart-alternative-column-fill, .table-chart .chart-alternative-row-fill {
+    -fx-fill: null;
+}
+.table-chart .axis {
+    -fx-border-color: null;
+    -fx-tick-label-font: 1px Ariel;
+}
+.table-chart .axis .tick-mark {
+    -fx-font-size: 1px;
+}
+.table-chart .axis:bottom {
+    -fx-padding: 0 0 -30 0;
+}
+.table-chart .axis:left {
+    -fx-padding: 0 0 0 -30;
+}
+.table-chart .chart-series-area-line {
+    -fx-stroke: #418ace;
+    -fx-stroke-width: 1px;
+}
+.table-chart .chart-series-area-fill {
+    -fx-stroke: null;
+    -fx-fill: rgba(65,138,206,0.4);
+}
+/* =============== HEAT MAP TAB ================================================= */
+#heatTab .map-pane {
+    -fx-padding: 40px;
+}
+.heatmap-label {
+    -fx-font: bold 22px Verdana;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( one-pass-box , black , 5, 1 , 0 , 0 );
+}
