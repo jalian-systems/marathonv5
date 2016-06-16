@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2008, 2012 Oracle and/or its affiliates.
+ * All rights reserved. Use is subject to license terms.
+ *
+ * This file is available and licensed under the following license:
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the distribution.
+ *  - Neither the name of Oracle Corporation nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import java.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import com.javafx.experiments.dataapp.client.util.FormatedTableCellFactory?>
+
+<Tab text="Product Listings" fx:controller="com.javafx.experiments.dataapp.client.productstab.ProductsTabController" xmlns:fx="http://javafx.com/fxml">
+    <content>
+        <TableView fx:id="productsTable">
+            <columns>
+                <TableColumn text="General">
+                    <columns>
+                        <TableColumn text="ID">
+                            <cellValueFactory><PropertyValueFactory property="productId"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Name">
+                            <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Class"  >
+                            <cellValueFactory><PropertyValueFactory property="class1"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Subclass">
+                            <cellValueFactory><PropertyValueFactory property="subclass"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Cost">
+                            <cellValueFactory><PropertyValueFactory property="cost"/></cellValueFactory>
+                            <cellFactory>
+                                <FormatedTableCellFactory alignment="right" > 
+                                    <format><NumberFormat fx:factory="getCurrencyInstance" maximumFractionDigits="0"/></format>
+                                </FormatedTableCellFactory>
+                            </cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Price">
+                            <cellValueFactory><PropertyValueFactory property="price"/></cellValueFactory>
+                            <cellFactory>
+                                <FormatedTableCellFactory alignment="right" > 
+                                    <format><NumberFormat fx:factory="getCurrencyInstance" maximumFractionDigits="0"/></format>
+                                </FormatedTableCellFactory>
+                            </cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Year">
+                            <cellValueFactory><PropertyValueFactory property="modelYear"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                    </columns>
+                </TableColumn>
+                <TableColumn text="Engine">
+                    <columns>
+                        <TableColumn text="Cylinders" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="cylinders"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Litre" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="litre"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Inline" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="inline"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Vee" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="vee"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Hybrid" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="hybrid"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Super" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="supercharge"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Turbo" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="turbocharge"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                    </columns>
+                </TableColumn>
+                <TableColumn text="Transmission">
+                    <columns>
+                        <TableColumn text="Type" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="type"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Gears" prefWidth="60">
+                            <cellValueFactory><PropertyValueFactory property="gears"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                    </columns>
+                </TableColumn>
+                <TableColumn text="Size">
+                    <columns>
+                        <TableColumn text="L" prefWidth="50">
+                            <cellValueFactory><PropertyValueFactory property="length"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="W" prefWidth="40">
+                            <cellValueFactory><PropertyValueFactory property="width"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                        <TableColumn text="H" prefWidth="40">
+                            <cellValueFactory><PropertyValueFactory property="height"/></cellValueFactory>
+                            <cellFactory><FormatedTableCellFactory alignment="center"/></cellFactory>
+                        </TableColumn>
+                    </columns>
+                </TableColumn>
+            </columns>
+<!--            <placeholder><ProgressIndicator id="liveViewProgressIndicator" maxWidth="150" maxHeight="150"/></placeholder>-->
+        </TableView>        
+    </content>
+</Tab>
