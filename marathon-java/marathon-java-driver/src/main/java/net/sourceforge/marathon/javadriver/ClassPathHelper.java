@@ -2,7 +2,7 @@ package net.sourceforge.marathon.javadriver;
 
 /*******************************************************************************
  *  
- *  Copyright (C) 2010 Jalian Systems Private Ltd.
+ *  Copyright (C) 2010, 2016 Jalian Systems Private Ltd.
  *  Copyright (C) 2010 Contributors to Marathon OSS Project
  * 
  *  This library is free software; you can redistribute it and/or
