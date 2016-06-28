@@ -135,3 +135,7 @@ marathon/.settings/
 marathon/build/
 marathon/src/
 marathon/.gitignore
+marathon-core/bin/
+marathon-java/bin-test/
+marathon-java/bin/
+marathon/bin/
