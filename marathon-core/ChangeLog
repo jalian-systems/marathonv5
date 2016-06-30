@@ -1,3 +1,8 @@
+Marathon Version 4.2.1.0 (June 30 2016)
+
+1. Fixed: execute_script printing the output instead of returning.
+2. Chore: get_title returns nil if there is no focused window.
+
 Marathon Version 4.2.0.0 (Apr 11 2016)
 
 1. Single application to support both Java/Swing and Java/FX.
