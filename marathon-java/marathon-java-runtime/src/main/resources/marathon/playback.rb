@@ -511,7 +511,11 @@ end
 # Gets the title of the current window
 
 def get_window()
-    driver.title
+    begin
+      driver.title
+    rescue
+      nil
+    end
 end
 
 # Gets the current window
@@ -704,5 +708,5 @@ def use_native_events
 end
 
 def execute_script(args)
-  puts driver.execute_script("return ProcessLauncher.launch(new String[] { " + args.map{|s| "\"#{s}\""}.join(', ') + " });")
+  driver.execute_script("return ProcessLauncher.launch(new String[] { " + args.map{|s| "\"#{s}\""}.join(', ') + " });")
 end
