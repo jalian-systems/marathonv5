@@ -1116,7 +1116,7 @@ public class JSONObject {
             testValidity(value);
             this.map.put(key, value);
         } else {
-            this.remove(key);
+            this.map.put(key, value);
         }
         return this;
     }

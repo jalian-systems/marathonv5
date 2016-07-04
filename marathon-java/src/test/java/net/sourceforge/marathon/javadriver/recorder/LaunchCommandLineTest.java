@@ -48,7 +48,6 @@ import com.sun.swingset3.SwingSet3;
         JavaProfile profile = new JavaProfile(LaunchMode.COMMAND_LINE);
         File f = findFile();
         profile.setCommand(f.getAbsolutePath());
-        profile.addApplicationArguments("Argument1");
         profile.setRecordingPort(startRecordingServer());
         DesiredCapabilities caps = new DesiredCapabilities("java", "1.5", Platform.ANY);
         driver = new JavaDriver(profile, caps, caps);

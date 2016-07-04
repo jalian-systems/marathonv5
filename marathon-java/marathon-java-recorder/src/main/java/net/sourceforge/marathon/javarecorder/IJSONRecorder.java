@@ -20,7 +20,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.sourceforge.marathon.component.RComponent;
@@ -49,11 +48,11 @@ public interface IJSONRecorder {
 
     public abstract void recordWindowState(RComponent r, Rectangle bounds);
 
-    public abstract JSONOMapConfig getObjectMapConfiguration() throws IOException;
+    public abstract JSONOMapConfig getObjectMapConfiguration();
 
-    public abstract JSONObject getContextMenuTriggers() throws JSONException, IOException;
+    public abstract JSONObject getContextMenuTriggers();
 
-    public abstract boolean isRawRecording() throws IOException;
+    public abstract boolean isRawRecording();
 
     public abstract void recordMenuItem(RComponent rComponent);
 

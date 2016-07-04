@@ -70,7 +70,6 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteStatus;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.SessionId;
@@ -279,12 +278,6 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaDriver(caps, caps);
         Capabilities capabilities = ((RemoteWebDriver) driver).getCapabilities();
         AssertJUnit.assertTrue(!capabilities.is("nativeEvents"));
-    }
-
-    public void remoteStatus() {
-        driver = new JavaDriver();
-        RemoteStatus remoteStatus = ((RemoteWebDriver) driver).getRemoteStatus();
-        AssertJUnit.assertNotNull(remoteStatus);
     }
 
     public void getWindowHandles() throws Throwable {

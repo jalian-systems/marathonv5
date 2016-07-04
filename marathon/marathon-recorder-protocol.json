@@ -1,0 +1,137 @@
+select: {
+  "container": {
+    "container": {
+      "is_window": true,
+      "urp": {"title": "SwingSet3"},
+      "containerURP": {
+        "title": "SwingSet3",
+        "component.class.name": "javax.swing.JFrame"
+      },
+      "attributes": {
+        "component.class.simpleName": "JFrame",
+        "type": "JFrame",
+        "title": "SwingSet3",
+        "tagName": "frame",
+        "enabled": "true",
+        "indexOfType": "0",
+        "instanceOf": "javax.swing.JFrame",
+        "internalFrameIndex2": "-1",
+        "accessibleContext.accessibleName": "SwingSet3",
+        "size": "[width=880,height=685]",
+        "name": "mainFrame",
+        "accessibleName": "SwingSet3",
+        "position": "[x=0,y=23]",
+        "component.class.name": "javax.swing.JFrame"
+      }
+    },
+    "is_window": false,
+    "urp": {
+      "title": "Internal Frame Generator",
+      "internalFrameIndex2": "0"
+    },
+    "containerURP": {
+      "title": "Internal Frame Generator",
+      "component.class.name": "javax.swing.JInternalFrame"
+    },
+    "attributes": {
+      "fieldName": "selectedFrame",
+      "component.class.simpleName": "JInternalFrame",
+      "type": "JInternalFrame",
+      "title": "Internal Frame Generator",
+      "tagName": "internal-frame",
+      "enabled": "true",
+      "indexOfType": "0",
+      "instanceOf": "javax.swing.JInternalFrame",
+      "internalFrameIndex2": "0",
+      "accessibleContext.accessibleName": "Internal Frame Generator",
+      "size": "[width=250,height=250]",
+      "accessibleName": "Internal Frame Generator",
+      "position": "[x=217,y=134]",
+      "component.class.name": "javax.swing.JInternalFrame"
+    }
+  },
+  "request": "record-action",
+  "urp": {
+    "fieldName": "lastFocusOwner",
+    "type": "JCheckBox"
+  },
+  "attributes": {
+    "buttonText": "Closable",
+    "fieldName": "lastFocusOwner",
+    "component.class.simpleName": "JCheckBox",
+    "cText": "Closable",
+    "type": "JCheckBox",
+    "tagName": "check-box",
+    "enabled": "true",
+    "indexOfType": "2",
+    "instanceOf": "javax.swing.JCheckBox",
+    "internalFrameIndex2": "-1",
+    "actionCommand": "Closable",
+    "accessibleContext.accessibleName": "Closable",
+    "size": "[width=71,height=18]",
+    "accessibleName": "Closable",
+    "position": "[x=347,y=293]",
+    "component.class.name": "javax.swing.JCheckBox"
+  },
+  "event": {
+    "type": "select",
+    "value": "false"
+  }
+}
+click: {
+  "urp": {
+    "actionCommand": "Do it",
+    "type": "JButton"
+  },
+  "event": {
+    "clickCount": 1,
+    "button": 1,
+    "modifiersEx": "",
+    "type": "click",
+    "y": 18,
+    "x": 32
+  },
+  "container": {
+    "urp": {"title": "SwingSet3"},
+    "containerURP": {
+      "title": "SwingSet3",
+      "component.class.name": "javax.swing.JFrame"
+    },
+    "attributes": {
+      "position": "[x=512,y=169]",
+      "enabled": "true",
+      "accessibleName": "SwingSet3",
+      "instanceOf": "javax.swing.JFrame",
+      "type": "JFrame",
+      "size": "[width=896,height=702]",
+      "title": "SwingSet3",
+      "indexOfType": "0",
+      "component.class.simpleName": "JFrame",
+      "name": "mainFrame",
+      "tagName": "frame",
+      "component.class.name": "javax.swing.JFrame",
+      "internalFrameIndex2": "-1",
+      "accessibleContext.accessibleName": "SwingSet3"
+    },
+    "is_window": true
+  },
+  "request": "record-action",
+  "attributes": {
+    "position": "[x=984,y=290]",
+    "enabled": "true",
+    "accessibleName": "Do it",
+    "instanceOf": "javax.swing.JButton",
+    "cText": "Do it",
+    "type": "JButton",
+    "size": "[width=53,height=28]",
+    "indexOfType": "0",
+    "component.class.simpleName": "JButton",
+    "tagName": "button",
+    "actionCommand": "Do it",
+    "toolTipText": "simple button",
+    "component.class.name": "javax.swing.JButton",
+    "internalFrameIndex2": "-1",
+    "buttonText": "Do it",
+    "accessibleContext.accessibleName": "Do it"
+  }
+}

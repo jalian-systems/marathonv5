@@ -6,6 +6,7 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_91"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.sourceforge.marathon.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="marathon"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms128m -Xmx512m -Dmarathon.agent.file=${resource_loc:/marathon-javafx-agent/marathon-javafx-agent-4.2.1.0.jar} -Dmarathon.recorder.file=${resource_loc:/marathon-javafx-recorder/marathon-javafx-recorder-4.2.1.0.jar}"/>

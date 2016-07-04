@@ -119,13 +119,16 @@ public class RubyScript implements IScript {
     private boolean isTeardownCalled = false;
     private ArrayList<String> assertionProviderList;
     private String driverURL;
+    private String framework;
 
     private Properties dataVariables;
 
-    public RubyScript(Writer out, Writer err, String script, String filename, boolean isDebugging, Properties dataVariables) {
+    public RubyScript(Writer out, Writer err, String script, String filename, boolean isDebugging, Properties dataVariables,
+            String framework) {
         this.script = script;
         this.filename = filename;
         this.dataVariables = dataVariables;
+        this.framework = framework;
         loadScript(out, err, isDebugging);
     }
 
@@ -184,7 +187,7 @@ public class RubyScript implements IScript {
                 Ruby interpreter = JavaEmbedUtils.initialize(loadPaths, config);
                 interpreter.evalScriptlet("require 'selenium/webdriver'");
                 interpreter.evalScriptlet("require 'marathon/results'");
-                interpreter.evalScriptlet("require 'marathon/playback'");
+                interpreter.evalScriptlet("require 'marathon/playback-" + framework + "'");
                 return interpreter;
             }
         };
@@ -411,5 +414,10 @@ public class RubyScript implements IScript {
         getFixture().callMethod(interpreter.getCurrentContext(), "setup");
         if (getFixture().respondsTo("test_setup"))
             getFixture().callMethod(interpreter.getCurrentContext(), "test_setup");
+    }
+
+    @Override public void onWSConnectionClose(int port) {
+        if(runtime != null)
+            runtime.onWSConnectionClose(port);
     }
 }

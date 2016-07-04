@@ -93,7 +93,7 @@ import com.google.common.base.Predicate;
         buttons.get(0).click();
     }
 
-    private File findFile() {
+    private static File findFile() {
         File f = new File(System.getProperty("SwingSet3.jnlp", "../marathon-test-helpers/swingset3/SwingSet3.jnlp"));
         if (f.exists())
             return f;
@@ -121,7 +121,18 @@ import com.google.common.base.Predicate;
         CommandLine commandLine = profile.getCommandLine();
         @SuppressWarnings("deprecation")
         String exec = CommandLine.find("java");
-        AssertJUnit.assertTrue(commandLine.toString(), commandLine.toString().startsWith(exec));
+        AssertJUnit.assertTrue(commandLine.toString(), commandLine.toString().contains(exec));
     }
 
+    public static void main(String[] args) throws InterruptedException {
+        JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART);
+        File f = findFile();
+        profile.setJNLPFile(f);
+        profile.setStartWindowTitle("SwingSet3");
+        CommandLine commandLine = profile.getCommandLine();
+        commandLine.copyOutputTo(System.err);
+        System.out.println(commandLine);
+        commandLine.execute();
+        
+    }
 }

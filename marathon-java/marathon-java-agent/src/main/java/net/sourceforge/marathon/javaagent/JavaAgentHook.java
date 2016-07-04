@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.logging.Logger;
@@ -37,8 +38,6 @@ public class JavaAgentHook {
     protected static String windowTitle;
 
     public static void premain(final String args) throws Exception {
-        logger.info("JavaVersion: " + System.getProperty("java.version"));
-        logger.info("JavaHome: " + System.getProperty("java.home"));
         InternalFrameMonitor.init();
         final int port;
         if (args != null && args.trim().length() > 0)
@@ -66,6 +65,12 @@ public class JavaAgentHook {
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
                     @Override public Object run() {
                         try {
+                            logger.info("JavaVersion: " + System.getProperty("java.version"));
+                            logger.info("JavaHome: " + System.getProperty("java.home"));
+                            Charset utf8 = Charset.forName("utf-8");
+                            if(!Charset.defaultCharset().equals(utf8)) {
+                                logger.warning("Application is using a non-utf8 charset. Marathon might cause issues while playing");
+                            }
                             JavaServer server = new JavaServer(port, true);
                             server.start();
                         } catch (IOException e) {

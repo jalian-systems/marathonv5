@@ -22,17 +22,14 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import net.sourceforge.marathon.runtime.api.ITestLauncher;
-import net.sourceforge.marathon.util.Blurb;
-
-import org.openqa.selenium.WebDriver;
 
 public class TestLauncher implements ITestLauncher {
 
-    private WebDriver driver;
     private IWebDriverRuntimeLauncherModel launcherModel;
     private Map<String, Object> ps;
     private PrintStream writerOutputStream;
     private PrintStream messagePS;
+    private IWebdriverProxy proxy;
 
     public TestLauncher(IWebDriverRuntimeLauncherModel launcherModel, Map<String, Object> ps) {
         this.launcherModel = launcherModel;
@@ -40,8 +37,8 @@ public class TestLauncher implements ITestLauncher {
     }
 
     @Override public void destroy() {
-        if (driver != null)
-            driver.quit();
+        if (proxy != null)
+            proxy.quit();
     }
 
     @Override public void copyOutputTo(OutputStream writerOutputStream) {
@@ -54,16 +51,10 @@ public class TestLauncher implements ITestLauncher {
 
     @Override public int start() {
         int selection = JOptionPane.OK_OPTION;
-        if (launcherModel.isWebStart() || launcherModel.isApplet()) {
-            Blurb blurb = new Blurb("/webstartlauncher", "Using WebStart", true) {
-            };
-            selection = blurb.getSelection();
-            if (selection != JOptionPane.OK_OPTION)
-                return selection;
-        }
+        if(!launcherModel.confirmConfiguration())
+            return JOptionPane.CANCEL_OPTION;
         try {
-            IWebdriverProxy proxy = launcherModel.createDriver(ps, -1, writerOutputStream);
-            driver = proxy.getDriver();
+            proxy = launcherModel.createDriver(ps, -1, writerOutputStream);
         } catch (Throwable t) {
             t.printStackTrace(writerOutputStream);
             writerOutputStream.flush();
@@ -85,8 +76,8 @@ public class TestLauncher implements ITestLauncher {
     }
 
     @Override public String toString() {
-        if (driver != null)
-            return driver.toString();
+        if (proxy != null)
+            return proxy.toString();
         return super.toString();
     }
 }

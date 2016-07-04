@@ -19,6 +19,7 @@ import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -55,9 +56,9 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 import net.sourceforge.marathon.javafxrecorder.component.RFXFileChooser;
 import net.sourceforge.marathon.javafxrecorder.component.RFXFolderChooser;
-import net.sourceforge.marathon.javafxrecorder.component.RFXUnknownComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXMenuItem;
-import net.sourceforge.marathon.javafxrecorder.http.HTTPRecorder;
+import net.sourceforge.marathon.javafxrecorder.component.RFXUnknownComponent;
+import net.sourceforge.marathon.javafxrecorder.ws.WSRecorder;
 
 public class JavaFxRecorderHook implements EventHandler<Event> {
 
@@ -86,7 +87,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     public JavaFxRecorderHook(int port) {
         try {
             logger.info("Starting HTTP Recorder on : " + port);
-            recorder = new HTTPRecorder(port);
+            recorder = new WSRecorder(port);
             objectMapConfiguration = recorder.getObjectMapConfiguration();
             setContextMenuTriggers(recorder.getContextMenuTriggers());
             finder = new RFXComponentFactory(objectMapConfiguration);
@@ -118,6 +119,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             logger.log(Level.WARNING, "Error in Recorder startup", e);
         } catch (IOException e) {
             logger.log(Level.WARNING, "Error in Recorder startup", e);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
@@ -183,8 +186,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     private ContextMenuTriggerCheck contextMenuTriggerCheck;
 
-    protected boolean rawRecording;
-
     protected Stage recordWindowState;
 
     private void setContextMenuTriggers(JSONObject jsonObject) {
@@ -205,16 +206,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         stage.getScene().getRoot().getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
         stage.getScene().getRoot().getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
         stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
-        stage.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue && recorder != null)
-                    try {
-                        rawRecording = recorder.isRawRecording();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-            }
-        });
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
             @Override public void handle(WindowEvent event) {
                 recorder.recordWindowClosing(new WindowTitle(stage).getTitle());
@@ -301,7 +292,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
         if (!isVaildEvent(event.getEventType()))
             return;
-        if(recordWindowState != null && rawRecording) {
+        if(recordWindowState != null && recorder.isRawRecording()) {
             recorder.recordWindowState(new WindowTitle(recordWindowState).getTitle(), recordWindowState.xProperty().intValue(),
                     recordWindowState.yProperty().intValue(), recordWindowState.widthProperty().intValue(),
                     recordWindowState.heightProperty().intValue());
@@ -313,7 +304,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         if (event instanceof MouseEvent) {
             point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
         }
-        if (rawRecording) {
+        if (recorder.isRawRecording()) {
             new RFXUnknownComponent((Node) event.getTarget(), objectMapConfiguration, null, recorder).handleRawRecording(recorder,
                     event);
             return;

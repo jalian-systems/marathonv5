@@ -57,12 +57,12 @@ compileTestJava {
 
 dependencies {
   compile project(":marathon-core:JSON-java")
-  compile project(":marathon-core:nanohttpd-2.1.1")
+  compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
   compile "org.javassist:javassist:${javassist_version}"
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-javafx:marathon-fxtest-helpers")
   antBuildXML project(":marathon-core:JSON-java").files("bin")
-  antBuildXML project(":marathon-core:nanohttpd-2.1.1").files("bin")
+  antBuildXML "org.nanohttpd:nanohttpd:${nanohttpd_version}"
   antBuildXML "org.javassist:javassist:${javassist_version}"
 }
 

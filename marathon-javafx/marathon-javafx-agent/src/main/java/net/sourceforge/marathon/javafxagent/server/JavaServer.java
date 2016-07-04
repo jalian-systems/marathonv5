@@ -104,7 +104,7 @@ public class JavaServer extends NanoHTTPD {
         routes.add(new RouteMap(Method.GET, "/sessions", getMethod("getSessions")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId", getMethod("getCapabilities")));
         routes.add(new RouteMap(Method.DELETE, "/session/:sessionId", getMethod("quitSession")));
-        routes.add(new RouteMap(Method.POST, "/session/:sessionId/timeouts"));
+        routes.add(new RouteMap(Method.POST, "/session/:sessionId/timeouts", getMethod("setTimeouts")));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/timeouts/async_script"));
         routes.add(new RouteMap(Method.POST, "/session/:sessionId/timeouts/implicit_wait", getMethod("setImplicitTimeout")));
         routes.add(new RouteMap(Method.GET, "/session/:sessionId/window_handle", getMethod("getWindowHandle")));
@@ -307,7 +307,7 @@ public class JavaServer extends NanoHTTPD {
                 jsonQuery = new JSONObject(query);
             } catch (JSONException e) {
                 logger.info("JavaServer.serve(): " + query);
-                return nanoHTTPDnewFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
+                return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
             }
         }
         StringBuilder logmsg = new StringBuilder();
@@ -330,14 +330,14 @@ public class JavaServer extends NanoHTTPD {
                 return handleRoute(route, jsonQuery);
             }
             if (route == null)
-                return nanoHTTPDnewFixedLengthResponse(Status.NOT_FOUND, MIME_PLAINTEXT, "Not Implemented: (route is null)");
+                return newFixedLengthResponse(Status.NOT_FOUND, MIME_PLAINTEXT, "Not Implemented: (route is null)");
             if (route.getProc() == null)
-                return nanoHTTPDnewFixedLengthResponse(Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Not Implemented: route = " + route);
+                return newFixedLengthResponse(Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Not Implemented: route = " + route);
         } catch (Throwable e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
         }
-        return nanoHTTPDnewFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
+        return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
     }
 
     private Response handleRoute(Route route, JSONObject query) {
@@ -362,44 +362,44 @@ public class JavaServer extends NanoHTTPD {
             Object result;
             result = invoke(route, query, uriParams, session, window, element);
             if (result == null)
-                return nanoHTTPDnewFixedLengthResponse(Status.NO_CONTENT, MIME_HTML, null);
+                return newFixedLengthResponse(Status.NO_CONTENT, MIME_HTML, null);
             if (result instanceof Response)
                 return (Response) result;
             if (result == NULL_OBJECT)
                 r.put("value", (Object) null);
             else
                 r.put("value", result);
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (NoSuchWindowException e) {
             r.put("status", ErrorCodes.NO_SUCH_WINDOW);
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (NoSuchElementException e) {
             r.put("status", ErrorCodes.NO_SUCH_ELEMENT);
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (MissingCommandParametersException e) {
-            return nanoHTTPDnewFixedLengthResponse(Status.BAD_REQUEST, MIME_PLAINTEXT, e.getMessage());
+            return newFixedLengthResponse(Status.BAD_REQUEST, MIME_PLAINTEXT, e.getMessage());
         } catch (UnsupportedCommandException e) {
-            return nanoHTTPDnewFixedLengthResponse(Status.METHOD_NOT_ALLOWED, MIME_PLAINTEXT, e.getMessage());
+            return newFixedLengthResponse(Status.METHOD_NOT_ALLOWED, MIME_PLAINTEXT, e.getMessage());
         } catch (InvalidElementStateException e) {
             r.put("status", ErrorCodes.INVALID_ELEMENT_STATE);
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (StaleElementReferenceException e) {
             r.put("status", ErrorCodes.STALE_ELEMENT_REFERENCE);
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (SessionNotCreatedException e) {
             r.put("status", ErrorCodes.SESSION_NOT_CREATED);
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (Exception e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             r.put("status", ErrorCodes.UNHANDLED_ERROR);
             r.put("value", new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
                     getStackTrace(e)));
-            return nanoHTTPDnewFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
+            return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } finally {
             afterEvent();
         }
@@ -482,7 +482,7 @@ public class JavaServer extends NanoHTTPD {
         session.setLogLevel(getLogLevel(query));
         session.log(Level.INFO, "A new session created. sessionID = " + session.getID());
         try {
-            Response r = nanoHTTPDnewFixedLengthResponse(Status.REDIRECT, MIME_HTML, null);
+            Response r = newFixedLengthResponse(Status.REDIRECT, MIME_HTML, null);
             r.addHeader("Location", new URL("http", "localhost", port, "/session/" + session.getID()).toString());
             return r;
         } catch (MalformedURLException e) {
@@ -627,6 +627,11 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public void setImplicitTimeout(JSONObject query, JSONObject uriParams, Session session) {
+        checkRequiredArguments(query, "ms");
+        session.setTimeout(query.getLong("ms"));
+    }
+
+    public void setTimeouts(JSONObject query, JSONObject uriParams, Session session) {
         checkRequiredArguments(query, "ms");
         session.setTimeout(query.getLong("ms"));
     }
@@ -911,10 +916,6 @@ public class JavaServer extends NanoHTTPD {
                 throw new MissingCommandParametersException("Required parameter `" + arg + "` is missing", null);
             }
         }
-    }
-
-    private Response nanoHTTPDnewFixedLengthResponse(Status status, String mimeType, String data) {
-        return new Response(status, mimeType, data);
     }
 
     public String getScreenShot(JSONObject query, JSONObject uriParams, Session session) throws IOException {

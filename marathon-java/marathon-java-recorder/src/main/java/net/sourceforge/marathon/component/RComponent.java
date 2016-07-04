@@ -189,7 +189,7 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         r.put("containerURP", pa.findURP(rp));
         List<List<String>> np = omapConfig.findContainerNP(parent.getClass());
         r.put("urp", pa.findURP(np));
-        r.put("is_window", parent instanceof Window);
+        r.put("container_type", parent instanceof Window ? "window" : "frame");
         return r;
     }
 

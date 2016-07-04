@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -37,6 +36,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.io.FileUtils;
+
+import com.jgoodies.forms.factories.Borders;
+
 import net.sourceforge.marathon.Main;
 import net.sourceforge.marathon.api.ITestApplication;
 import net.sourceforge.marathon.junit.textui.StdOutLogger;
@@ -44,15 +47,12 @@ import net.sourceforge.marathon.runtime.TestApplication;
 import net.sourceforge.marathon.runtime.api.ButtonBarFactory;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.EscapeDialog;
-import net.sourceforge.marathon.runtime.api.FileUtils;
 import net.sourceforge.marathon.runtime.api.IPropertiesPanel;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.MPFUtils;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.UIUtils;
-
-import com.jgoodies.forms.factories.Borders;
 
 public class MPFConfigurationUI extends EscapeDialog {
 
@@ -195,11 +195,11 @@ public class MPFConfigurationUI extends EscapeDialog {
             }
         }
         String framework = properties.getProperty(Constants.PROP_PROJECT_FRAMEWORK);
-        if(framework != null) {
+        if (framework != null) {
             System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, framework);
         }
         String launcherModel = properties.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL);
-        if(launcherModel != null) {
+        if (launcherModel != null) {
             System.setProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL, launcherModel);
         }
     }
@@ -335,19 +335,19 @@ public class MPFConfigurationUI extends EscapeDialog {
             createMarathonDir(projectDir, Constants.DIR_TESTSUITES);
         if (props.getProperty(Constants.PROP_CHECKLIST_DIR) == null) {
             createMarathonDir(projectDir, Constants.DIR_CHECKLIST);
-            FilenameFilter filter = new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.endsWith(".xml");
-                }
-            };
-            FileUtils.copyFiles(new File(System.getProperty(Constants.PROP_HOME), "Checklists"),
-                    new File(projectDir, Constants.DIR_CHECKLIST), filter);
-            File srcFile = new File(System.getProperty(Constants.PROP_HOME), "logging.properties");
+            File srcDir = new File(System.getProperty(Constants.PROP_HOME), "Checklists");
+            File destDir = new File(projectDir, Constants.DIR_CHECKLIST);
+            try {
+                FileUtils.copyDirectory(srcDir, destDir);
+            } catch (IOException e1) {
+                logger.warning("Unable to copy Checklists folder from " + srcDir + " to " + destDir);
+                e1.printStackTrace();
+            }
             File destFile = new File(projectDir, "logging.properties");
             try {
-                FileUtils.copyFile(srcFile, destFile);
+                FileUtils.copyInputStreamToFile(MPFConfigurationUI.class.getResourceAsStream("/logging.properties"), destFile);
             } catch (IOException e) {
-                logger.warning("Copy file failed: src = " + srcFile + " dest = " + destFile);
+                logger.warning("Copy file failed: " + destFile);
                 e.printStackTrace();
             }
         }

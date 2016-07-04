@@ -15,9 +15,12 @@
  *******************************************************************************/
 package net.sourceforge.marathon.api;
 
+import net.sourceforge.marathon.objectmap.OMapComponent;
 import net.sourceforge.marathon.objectmap.ObjectMapException;
 import net.sourceforge.marathon.runtime.api.ComponentId;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
+
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,4 +41,7 @@ public interface INamingStrategy {
 
     String[] getComponentNames() throws ObjectMapException;
 
+	List<List<String>> getContainerNamingProperties(String string);
+
+	OMapComponent getOMapComponent(ComponentId componentId) throws ObjectMapException;
 }

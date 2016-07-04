@@ -85,7 +85,7 @@ public interface IScriptModel extends ISubpanelProvider {
     public abstract Object eval(String script);
 
     public abstract IScript createScript(Writer scriptOutput, Writer scriptError, String scriptText, String filePath,
-            boolean isRecording, boolean isDebugging, Properties dataVariables);
+            boolean isRecording, boolean isDebugging, Properties dataVariables, String framework);
 
     public abstract String getScriptCodeForGenericAction(String method, String name, Object... params);
 

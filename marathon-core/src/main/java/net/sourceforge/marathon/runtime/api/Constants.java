@@ -139,6 +139,8 @@ public class Constants {
     public static final String PROP_PROJECT_FRAMEWORK = "marathon.project.framework";
     public static final String FRAMEWORK_SWING = "swing";
     public static final String FRAMEWORK_FX = "fx";
+    public static final String FRAMEWORK_WEB = "web";
+    public static final String PROP_BROWSER = "marathon.browser";
 
     public static InputStream getOMapConfigurationStream() {
         URL resource = Constants.class.getResource("/net/sourceforge/marathon/objectmap/default-omap-configuration-"

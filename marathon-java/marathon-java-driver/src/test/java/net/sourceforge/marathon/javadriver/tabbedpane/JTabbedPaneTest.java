@@ -21,6 +21,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
@@ -33,8 +34,6 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import com.thoughtworks.selenium.Wait;
 
 import components.TabbedPaneDemo;
 

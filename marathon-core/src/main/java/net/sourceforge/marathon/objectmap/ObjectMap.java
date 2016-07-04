@@ -59,7 +59,7 @@ public class ObjectMap extends ObjectMapModel {
             if (createIfNeeded)
                 currentContainer = createNewContainer(pa, rproperties, gproperties, title);
             else
-                throw new ObjectMapException("No top level component matched for the given properties");
+                throw new ObjectMapException("No top level component matched for the given properties: " + pa);
         } else
             throw new ObjectMapException("More than one toplevel container matched for given properties");
         currentContainer.addTitle(title);

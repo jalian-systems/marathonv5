@@ -36,4 +36,6 @@ public interface IRecordingServer {
 
     public abstract WindowId getFocusedWindowId();
 
+	public abstract boolean isRecording();
+
 }

@@ -178,28 +178,9 @@ public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
             }
         });
         final JPopupMenu popup = new JPopupMenu();
-        JMenuItem swingProject = new JMenuItem("Java/Swing Project");
-        swingProject.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, "swing");
-                MPFConfigurationUI configurationUI = new MPFConfigurationUI(MPFSelection.this);
-                String fname = configurationUI.getProjectDirectory();
-                if (fname != null)
-                    filesSelected(new File[] { new File(fname) }, null);
-            }
-        });
-        popup.add(swingProject);
-        JMenuItem fxProject = new JMenuItem("Java/FX Project");
-        fxProject.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
-                System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, "fx");
-                MPFConfigurationUI configurationUI = new MPFConfigurationUI(MPFSelection.this);
-                String fname = configurationUI.getProjectDirectory();
-                if (fname != null)
-                    filesSelected(new File[] { new File(fname) }, null);
-            }
-        });
-        popup.add(fxProject);
+        popup.add(getFrameworkMenuItem("Java/Swing Project", Constants.FRAMEWORK_SWING));
+        popup.add(getFrameworkMenuItem("Java/FX Project", Constants.FRAMEWORK_FX));
+        popup.add(getFrameworkMenuItem("Web Application Project", Constants.FRAMEWORK_WEB));
         newButton.setMnemonic(KeyEvent.VK_N);
         newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -247,6 +228,20 @@ public class MPFSelection extends EscapeDialog implements IFileSelectedAction {
         JPanel buttonPanel = bbb.getPanel();
         buttonPanel.setBorder(Borders.createEmptyBorder("0dlu, 0dlu, 3dlu, 7dlu"));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    public JMenuItem getFrameworkMenuItem(String name, final String framework) {
+        JMenuItem swingProject = new JMenuItem(name);
+        swingProject.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) {
+                System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, framework);
+                MPFConfigurationUI configurationUI = new MPFConfigurationUI(MPFSelection.this);
+                String fname = configurationUI.getProjectDirectory();
+                if (fname != null)
+                    filesSelected(new File[] { new File(fname) }, null);
+            }
+        });
+        return swingProject;
     }
 
     /**

@@ -96,6 +96,10 @@ public class ObjectMapService implements IObjectMapService {
         return configuration.getNamingProperties();
     }
 
+    public List<ObjectIdentity> getContainerNamingProperties() {
+        return configuration.getContainerNamingProperties();
+    }
+
     private List<ObjectIdentity> getContainerRecognitionProperties() {
         return configuration.getContainerRecognitionProperties();
     }

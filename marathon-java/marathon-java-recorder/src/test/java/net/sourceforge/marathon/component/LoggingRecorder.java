@@ -19,11 +19,9 @@ import java.awt.AWTEvent;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
@@ -127,7 +125,7 @@ public final class LoggingRecorder implements IJSONRecorder {
         return null;
     }
 
-    @Override public JSONObject getContextMenuTriggers() throws JSONException, IOException {
+    @Override public JSONObject getContextMenuTriggers() {
         // TODO Auto-generated method stub
         return null;
     }

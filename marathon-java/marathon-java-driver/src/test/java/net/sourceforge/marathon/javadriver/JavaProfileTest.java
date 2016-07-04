@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringReader;
 
+import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
@@ -29,8 +30,6 @@ import org.openqa.selenium.os.CommandLine;
 import org.testng.AssertJUnit;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
-
-import com.thoughtworks.selenium.Wait;
 
 @Test public class JavaProfileTest {
 
@@ -68,7 +67,8 @@ import com.thoughtworks.selenium.Wait;
         File f = new File(".").getCanonicalFile();
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE).addClassPath(f);
         CommandLine commandLine = profile.getCommandLine();
-        AssertJUnit.assertTrue(commandLine.toString().contains("-cp " + f.getAbsolutePath()));
+        AssertJUnit.assertTrue(commandLine.toString().contains("-cp"));
+        AssertJUnit.assertTrue(commandLine.toString().contains(f.getAbsolutePath()));
     }
 
     public void getJavaCommandLineWithClasspathErr() throws Throwable {

@@ -88,14 +88,17 @@ public class JSONScriptElement implements IScriptElement {
     }
 
     private String enscriptSelect() {
+        String suffix = "";
+        if(event.has("suffix"))
+            suffix = "_" + event.getString("suffix");
         String value = event.getString("value");
         String cellinfo = null;
         if (event.has("cellinfo"))
             cellinfo = event.getString("cellinfo");
         if (cellinfo == null)
-            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select", name, value);
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select" + suffix, name, value);
         else
-            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select", name, value, cellinfo);
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select" + suffix, name, value, cellinfo);
     }
 
     private String enscriptSelectMenu() {
@@ -122,6 +125,9 @@ public class JSONScriptElement implements IScriptElement {
     }
 
     private String enscriptMouseClick() {
+        String suffix = "";
+        if(event.has("suffix"))
+            suffix = "_" + event.getString("suffix");
         boolean popupTrigger = event.getInt("button") == MouseEvent.BUTTON3;
         int clickCount = event.has("clickCount") ? event.getInt("clickCount") : 1;
         String mtext = event.getString("modifiersEx");
@@ -134,52 +140,52 @@ public class JSONScriptElement implements IScriptElement {
             if (clickCount == 1) {
                 if ("".equals(mtext)) {
                     if (cellinfo == null)
-                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name);
-                    return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, cellinfo);
+                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name);
+                    return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, cellinfo);
                 } else {
                     if (cellinfo == null)
-                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, mtext);
+                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, mtext);
                     return Indent.getIndent()
-                            + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, mtext, cellinfo);
+                            + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, mtext, cellinfo);
                 }
             } else {
                 if ("".equals(mtext)) {
                     if (cellinfo == null)
                         return Indent.getIndent()
-                                + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, clickCount);
+                                + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, clickCount);
                     return Indent.getIndent()
-                            + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, clickCount, cellinfo);
+                            + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, clickCount, cellinfo);
                 } else {
                     if (cellinfo == null)
                         return Indent.getIndent()
-                                + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, clickCount, mtext);
+                                + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, clickCount, mtext);
                     return Indent.getIndent()
-                            + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick", name, clickCount, mtext, cellinfo);
+                            + ScriptModel.getModel().getScriptCodeForGenericAction("rightclick" + suffix, name, clickCount, mtext, cellinfo);
                 }
             }
         } else {
             if (clickCount == 1) {
                 if ("".equals(mtext)) {
                     if (cellinfo == null)
-                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("click", name);
-                    return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("click", name, cellinfo);
+                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("click" + suffix, name);
+                    return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("click" + suffix, name, cellinfo);
                 } else {
                     if (cellinfo == null)
-                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("click", name, mtext);
+                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("click" + suffix, name, mtext);
                     return Indent.getIndent()
-                            + ScriptModel.getModel().getScriptCodeForGenericAction("click", name, mtext, cellinfo);
+                            + ScriptModel.getModel().getScriptCodeForGenericAction("click" + suffix, name, mtext, cellinfo);
                 }
             } else {
                 if ("".equals(mtext)) {
                     if (cellinfo == null)
-                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", name);
-                    return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", name, cellinfo);
+                        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick" + suffix, name);
+                    return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick" + suffix, name, cellinfo);
                 } else {
                     if (cellinfo == null)
                         return Indent.getIndent()
-                                + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", name, mtext);
+                                + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick" + suffix, name, mtext);
                     return Indent.getIndent()
-                            + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", name, mtext, cellinfo);
+                            + ScriptModel.getModel().getScriptCodeForGenericAction("doubleclick" + suffix, name, mtext, cellinfo);
                 }
             }
         }

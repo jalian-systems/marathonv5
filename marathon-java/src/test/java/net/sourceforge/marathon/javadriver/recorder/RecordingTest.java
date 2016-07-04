@@ -23,16 +23,16 @@ import java.util.List;
 import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.WindowId;
-import net.sourceforge.marathon.runtime.http.HTTPRecordingServer;
+import net.sourceforge.marathon.runtime.ws.WSRecordingServer;
 
 public class RecordingTest {
 
-    protected HTTPRecordingServer recordingServer;
+    protected WSRecordingServer recordingServer;
     protected List<IScriptElement> scriptElements = new ArrayList<IScriptElement>();
 
     protected int startRecordingServer() {
         int port = findPort();
-        recordingServer = new HTTPRecordingServer(port);
+        recordingServer = new WSRecordingServer(port);
         recordingServer.start();
         recordingServer.startRecording(new IRecorder() {
             @Override public void record(IScriptElement element) {

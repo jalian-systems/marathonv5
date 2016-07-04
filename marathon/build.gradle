@@ -33,6 +33,8 @@ dependencies {
   runtime project(":marathon-javafx:marathon-javafx-recorder")
   runtime project(":marathon-javafx:marathon-javafx-runtime")
   runtime project(":marathon-core:ruby-selenium-webdriver")
+  runtime project(":marathon-web")
+  runtime project(":marathon-web:marathon-web-runtime")
 }
 
 jar.doFirst{

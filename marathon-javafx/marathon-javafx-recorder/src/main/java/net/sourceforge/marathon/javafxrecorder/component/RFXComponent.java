@@ -175,7 +175,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         r.put("containerURP", pa.findURP(rp));
         List<List<String>> np = omapConfig.findContainerNP(stage.getClass());
         Map<String, String> urp = pa.findURP(np);
-        r.put("is_window", true);
+        r.put("container_type", "window");
         r.put("urp", urp);
         return r;
     }
@@ -208,7 +208,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         r.put("containerURP", pa.findURP(rp));
         List<List<String>> np = omapConfig.findContainerNP(parent.getClass());
         Map<String, String> urp = pa.findURP(np);
-        r.put("is_window", false);
+        r.put("container_type", "frame");
         r.put("urp", urp);
         return r;
     }

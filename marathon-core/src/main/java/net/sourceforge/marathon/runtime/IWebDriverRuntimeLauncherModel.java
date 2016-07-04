@@ -32,8 +32,6 @@ public interface IWebDriverRuntimeLauncherModel extends IRuntimeLauncherModel {
 
     public abstract boolean needReplaceEnviron();
 
-    public abstract boolean isWebStart();
-
-    public abstract boolean isApplet();
+    public abstract boolean confirmConfiguration();
 
 }

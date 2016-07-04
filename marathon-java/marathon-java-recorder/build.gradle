@@ -55,13 +55,13 @@ compileTestJava {
 dependencies {
   compile project(":marathon-core:JSON-java")
   compile project(':marathon-java:marathon-java-agent')
-  compile project(":marathon-core:nanohttpd-2.1.1")
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-java:marathon-test-helpers")
   testCompile project(':marathon-java:marathon-java-agent')
   antBuildXML project(":marathon-core:JSON-java").files("bin")
   antBuildXML project(':marathon-java:marathon-java-agent').files("bin")
-  antBuildXML project(":marathon-core:nanohttpd-2.1.1").files("bin")
+  antBuildXML "org.java-websocket:Java-WebSocket:${java_websocket_version}"
+  compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
 }
 
 jar {

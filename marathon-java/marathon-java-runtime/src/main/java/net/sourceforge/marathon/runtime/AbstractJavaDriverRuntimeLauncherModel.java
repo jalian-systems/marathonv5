@@ -88,15 +88,11 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         return true;
     }
 
-    @Override public boolean isWebStart() {
-        return false;
-    }
-
-    @Override public boolean isApplet() {
-        return false;
-    }
-
     @Override public String getFramework() {
         return Constants.FRAMEWORK_SWING;
+    }
+    
+    @Override public boolean confirmConfiguration() {
+        return true;
     }
 }

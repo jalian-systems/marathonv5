@@ -24,7 +24,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 
-import com.thoughtworks.selenium.Wait;
+import net.sourceforge.marathon.javaagent.Wait;
 
 public class JavaDriverCommandExecutor extends HttpCommandExecutor {
     private static final String MARATHON_APPLICATION_DONT_MONITOR = "marathon.application.dont.monitor";

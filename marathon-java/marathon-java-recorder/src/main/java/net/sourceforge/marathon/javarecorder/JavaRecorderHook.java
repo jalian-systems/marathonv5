@@ -32,6 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -41,13 +42,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.component.RUnknownComponent;
 import net.sourceforge.marathon.contextmenu.ContextMenuHandler;
-import net.sourceforge.marathon.javarecorder.http.HTTPRecorder;
-
-import org.json.JSONObject;
+import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
 
 public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
 
@@ -67,7 +68,6 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     private RComponentFactory finder;
     private IJSONRecorder recorder;
     private RComponent current;
-    private boolean rawRecording;
     private int contextMenuKeyModifiers;
     private int contextMenuKey;
     private int menuModifiers;
@@ -75,7 +75,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
 
     public JavaRecorderHook(int port) {
         try {
-            recorder = new HTTPRecorder(port);
+            recorder = new WSRecorder(port);
             objectMapConfiguration = recorder.getObjectMapConfiguration();
             setContextMenuTriggers(recorder.getContextMenuTriggers());
             finder = new RComponentFactory(objectMapConfiguration);
@@ -129,11 +129,13 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
     private void handleWindowStateEvent(Window window) {
-        if (!rawRecording || !window.isVisible())
+        if (!recorder.isRawRecording() || !window.isVisible())
             return;
         Rectangle bounds = null;
         if (window instanceof Frame) {
@@ -218,7 +220,6 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     public static void premain(final String args) throws Exception {
-        logger.info("JavaVersion: " + System.getProperty("java.version"));
         final int port;
         if (args != null && args.trim().length() > 0)
             port = Integer.parseInt(args.trim());
@@ -239,6 +240,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                     }
                 }
                 done = true;
+                logger.info("JavaVersion: " + System.getProperty("java.version"));
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
                     @Override public Object run() {
                         return new JavaRecorderHook(port);
@@ -300,7 +302,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                     Component component = (Component) source;
                     if (SwingUtilities.getWindowAncestor(component) == null)
                         return null;
-                    if (rawRecording) {
+                    if (recorder.isRawRecording()) {
                         new RUnknownComponent(component, objectMapConfiguration, null, recorder)
                                 .handleRawRecording(recorder, event);
                         return null;
@@ -337,15 +339,6 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             RComponent r = finder.findRComponent(event.getWindow(), null, recorder);
             recorder.recordWindowClosing(r);
         }
-        if (event.getID() == WindowEvent.WINDOW_GAINED_FOCUS) {
-            if (recorder != null) {
-                try {
-                    rawRecording = recorder.isRawRecording();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         if (event.getID() != WindowEvent.WINDOW_CLOSING) {
             RComponent r = finder.findRComponent(event.getWindow(), null, recorder);
             try {
@@ -373,7 +366,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     @Override public void stateChanged(ChangeEvent e) {
-        if (rawRecording) {
+        if (recorder.isRawRecording()) {
             return;
         }
         if (!(e.getSource() instanceof Component) || current == null || e.getSource() != current.getComponent())
@@ -382,7 +375,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     @Override public void actionPerformed(ActionEvent e) {
-        if (rawRecording) {
+        if (recorder.isRawRecording()) {
             return;
         }
         if (!(e.getSource() instanceof Component))

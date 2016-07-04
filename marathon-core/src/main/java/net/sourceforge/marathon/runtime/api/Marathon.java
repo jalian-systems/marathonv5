@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.swing.KeyStroke;
 
@@ -148,8 +149,8 @@ public class Marathon {
 			CharSequence keys2 = keyMapping.get(ks.getKeyCode());
 			if (keys2 == null) {
 				String keysText = KeyEvent.getKeyText(ks.getKeyCode());
-				if(keysText.length() == 1 && Character.isUpperCase(keysText.charAt(0)))
-				    keysText = keysText.toLowerCase();
+				if (keysText.length() == 1 && Character.isUpperCase(keysText.charAt(0)))
+					keysText = keysText.toLowerCase();
 				keys2 = keysText;
 			}
 			int modifiers = ks.getModifiers();
@@ -528,4 +529,38 @@ public class Marathon {
 	public void saveScreenShotOnError() {
 	}
 
+	public boolean windowMatchingTitle(String title) {
+		IPropertyAccessor propertyAccessor = getDriverAsAccessor();
+		List<List<String>> namingProperties = namingStrategy.getContainerNamingProperties("window");
+		for (List<String> nlist : namingProperties) {
+			String currentTitle = createName(nlist, propertyAccessor);
+			if (currentTitle == null)
+				continue;
+			if (!title.startsWith("/") || title.startsWith("//")) {
+				if (title.startsWith("//"))
+					title = title.substring(2);
+				if (title.equals(currentTitle))
+					return true;
+			} else {
+				Pattern pattern = Pattern.compile(title.substring(1));
+				if (pattern.matcher(currentTitle).matches())
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private String createName(List<String> nlist, IPropertyAccessor propertyAccessor) {
+		System.err.println("Marathon.createName(" + nlist + "): ");
+		StringBuilder sb = new StringBuilder();
+		for (String key : nlist) {
+			String value = propertyAccessor.getProperty(key);
+			if (value == null)
+				return null;
+			sb.append(value).append(":");
+		}
+		sb.setLength(sb.length() - 1);
+		System.err.println("Marathon.createName(" + nlist + "): " + sb.toString());
+		return sb.toString();
+	}
 }

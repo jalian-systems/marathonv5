@@ -18,7 +18,6 @@ package net.sourceforge.marathon.display;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -80,7 +79,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -372,7 +370,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
         public void setError(Throwable exception, String message) {
             RuntimeLogger.getRuntimeLogger().error("Marathon", exception.getMessage(), ExceptionUtil.getTrace(exception));
-            recordWaitMessageDialog.setVisible(false);
+            WaitMessageDialog.setVisible(false);
             if (exception instanceof MarathonRuntimeException) {
                 if (!"true".equals(System.getProperty("marathon.unittests")))
                     JOptionPane.showMessageDialog(DisplayWindow.this, "Application Under Test Aborted!!", "Error",
@@ -1170,7 +1168,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     void startController() {
         windowState = getExtendedState();
-        recordWaitMessageDialog.setVisible(false);
+        WaitMessageDialog.setVisible(false);
         controller.setVisible(true);
         setExtendedState(ICONIFIED);
     }
@@ -2899,43 +2897,12 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         resumePlay();
     }
 
-    private static class WaitMessageDialog extends JFrame {
-        private static final long serialVersionUID = 1L;
-
-        public WaitMessageDialog() {
-            setUndecorated(true);
-            getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-            setAlwaysOnTop(true);
-            initComponents();
-        }
-
-        private void initComponents() {
-            Container contentPane = getContentPane();
-            contentPane.setLayout(new BorderLayout());
-            contentPane.add(new JLabel(new ImageIcon(DisplayWindow.class.getResource("wait.gif"), "Wait Message")),
-                    BorderLayout.CENTER);
-            JLabel label = new JLabel("This window closes once Marathon is ready for recording");
-            label.setOpaque(true);
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setBackground(Color.BLACK);
-            label.setForeground(Color.WHITE);
-            Dimension preferredSize = label.getPreferredSize();
-            preferredSize.height = 30;
-            label.setPreferredSize(preferredSize);
-            contentPane.add(label, BorderLayout.SOUTH);
-            pack();
-        }
-    }
-
-    WaitMessageDialog recordWaitMessageDialog = new WaitMessageDialog();
-
     public void onRecord() {
         importStatements = new HashSet<String>();
         resultPane.clear();
         outputPane.clear();
         controller.clear();
-        recordWaitMessageDialog.setLocationRelativeTo(null);
-        recordWaitMessageDialog.setVisible(true);
+        WaitMessageDialog.setVisible(true);
         new Thread(new Runnable() {
             @Override public void run() {
                 display.record(taConsole);

@@ -96,7 +96,7 @@ import org.jruby.runtime.builtin.IRubyObject;
     public void resultsLoaded() throws Throwable {
         try {
             RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_RUBY),
-                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null);
+                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null, Constants.FRAMEWORK_SWING);
             script.setDriverURL("");
             Ruby interpreter = script.getInterpreter();
             assertTrue("Collector not defined", interpreter.isClassDefined("Collector"));
@@ -125,7 +125,7 @@ import org.jruby.runtime.builtin.IRubyObject;
 
     @Test(enabled = false) public void resultsCapturesJavaError() throws Exception {
         RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_JAVA),
-                new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null);
+                new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null, Constants.FRAMEWORK_SWING);
         script.setDriverURL("");
         Ruby interpreter = script.getInterpreter();
         assertTrue("Collector not defined", interpreter.isClassDefined("Collector"));

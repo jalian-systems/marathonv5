@@ -43,4 +43,6 @@ public interface IScript {
 
     public abstract void exec(String function);
 
+    public abstract void onWSConnectionClose(int port);
+
 }

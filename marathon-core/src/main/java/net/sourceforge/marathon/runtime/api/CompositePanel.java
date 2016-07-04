@@ -121,6 +121,19 @@ public abstract class CompositePanel implements IPropertiesPanel {
         launchInfo = new JTabbedPane();
     }
 
+    private int findFirstValidModel(ModelInfo launcherModels) {
+        int n = launcherModels.getSize();
+        for (int i = 0; i < n; i++) {
+            PlugInModelInfo elementAt = launcherModels.getElementAt(i);
+            try {
+                getLauncherModel(elementAt.className);
+                return i;
+            } catch(Throwable t) {
+            }
+        }
+        return 0;
+    }
+
     public void updateLauncher(String launcher) {
         launchInfo.removeAll();
         launcherPanels = getLauncherPanels();
@@ -192,7 +205,7 @@ public abstract class CompositePanel implements IPropertiesPanel {
     private void setPlugInSelection(JComboBox<PlugInModelInfo> comboBox, ModelInfo models, Properties props, String key) {
         String model = (String) props.get(key);
         if (model == null) {
-            comboBox.setSelectedIndex(-1);
+            comboBox.setSelectedIndex(findFirstValidModel(launcherModels));
         } else {
             comboBox.setSelectedItem(models.getPluginModel(model));
             if (!isSelectable())

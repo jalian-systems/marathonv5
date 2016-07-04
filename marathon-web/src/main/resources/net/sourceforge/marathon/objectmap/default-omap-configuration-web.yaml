@@ -1,0 +1,72 @@
+!!net.sourceforge.marathon.objectmap.ObjectMapConfiguration
+containerNamingProperties:
+-   className: window
+    propertyLists:
+    -   priority: 100
+        properties: [document.title]
+-   className: form
+    propertyLists: []
+-   className: div#adminmenumain
+    propertyLists: []
+containerRecognitionProperties:
+-   className: window
+    propertyLists:
+    -   priority: 100
+        properties: [document.title]
+-   className: form
+    propertyLists: []
+-   className: div#adminmenumain
+    propertyLists: []
+generalProperties: []
+namingProperties:
+-   className: '*'
+    propertyLists:
+    -   priority: 98
+        properties: [label]
+    -   priority: 95
+        properties: [id]
+    -   priority: 90
+        properties: [name]
+    -   priority: 80
+        properties: [css]
+    -   priority: 70
+        properties: [xpath]
+    -   priority: 85
+        properties: [text]
+-   className: a
+    propertyLists:
+    -   priority: 100
+        properties: [link_text]
+-   className: button
+    propertyLists:
+    -   priority: 100
+        properties: [value]
+-   className: input[type='submit']
+    propertyLists:
+    -   priority: 100
+        properties: [value]
+-   className: input[type='reset']
+    propertyLists:
+    -   priority: 100
+        properties: [value]
+-   className: input[type='button']
+    propertyLists:
+    -   priority: 100
+        properties: [value]
+-   className: div.wp-menu-name
+    propertyLists: []
+recognitionProperties:
+-   className: '*'
+    propertyLists:
+    -   priority: 100
+        properties: [id]
+    -   priority: 90
+        properties: [name]
+    -   priority: 80
+        properties: [css]
+    -   priority: 70
+        properties: [xpath]
+-   className: a
+    propertyLists: []
+-   className: div.wp-menu-name
+    propertyLists: []

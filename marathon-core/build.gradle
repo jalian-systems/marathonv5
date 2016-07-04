@@ -30,8 +30,8 @@ dependencies {
   compile "net.sf.opencsv:opencsv:${opencsv_version}"
   compile "com.jgoodies:jgoodies-common:${jgoodies_common_version}"
   compile "com.jgoodies:jgoodies-forms:${jgoodies_forms_version}"
-  compile project(":marathon-core:nanohttpd-2.1.1")
   compile "com.google.inject:guice:${guice_version}"
   compile "jline:jline:${jline_version}"
   compile "org.jruby:jruby-complete:${jruby_complete_version}"
+  compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
 }

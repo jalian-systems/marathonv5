@@ -45,4 +45,6 @@ public interface IObjectMapService {
 
     public abstract String[] findComponentNames(IPropertyAccessor topContainerAccessor) throws ObjectMapException;
 
+	public abstract List<ObjectIdentity> getContainerNamingProperties();
+
 }

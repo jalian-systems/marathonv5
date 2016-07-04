@@ -17,7 +17,6 @@ package net.sourceforge.marathon.javafxrecorder;
 
 import java.io.IOException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javafx.geometry.Rectangle2D;
@@ -47,11 +46,11 @@ public interface IJSONRecorder {
 
     public abstract void recordWindowState(RFXComponent r, Rectangle2D bounds);
 
-    public abstract JSONOMapConfig getObjectMapConfiguration() throws IOException;
+    public abstract JSONOMapConfig getObjectMapConfiguration();
 
-    public abstract JSONObject getContextMenuTriggers() throws JSONException, IOException;
+    public abstract JSONObject getContextMenuTriggers();
 
-    public abstract boolean isRawRecording() throws IOException;
+    public abstract boolean isRawRecording();
 
     public abstract void recordMenuItem(RFXComponent rComponent);
 

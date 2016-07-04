@@ -41,12 +41,6 @@ public class JavaFxAgentHook {
     protected static String windowTitle;
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
-        logger.info("JavaVersion: " + System.getProperty("java.version"));
-        logger.info("JavaHome: " + System.getProperty("java.home"));
-        Charset utf8 = Charset.forName("utf-8");
-        if(!Charset.defaultCharset().equals(utf8)) {
-            logger.warning("Application is using a non-utf8 charset. Marathon might cause issues while playing");
-        }
         instrumentation.addTransformer(new FileChooserTransformer());
         final int port;
         if (args != null && args.trim().length() > 0)
@@ -70,6 +64,12 @@ public class JavaFxAgentHook {
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
                         @Override public Object run() {
                             try {
+                                logger.info("JavaVersion: " + System.getProperty("java.version"));
+                                logger.info("JavaHome: " + System.getProperty("java.home"));
+                                Charset utf8 = Charset.forName("utf-8");
+                                if(!Charset.defaultCharset().equals(utf8)) {
+                                    logger.warning("Application is using a non-utf8 charset. Marathon might cause issues while playing");
+                                }
                                 JavaServer server = new JavaServer(port, true);
                                 server.start();
                             } catch (IOException e) {

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javafx.geometry.Rectangle2D;
@@ -91,15 +90,15 @@ public final class LoggingRecorder implements IJSONRecorder {
     @Override public void recordWindowState(RFXComponent r, Rectangle2D bounds) {
     }
 
-    @Override public JSONOMapConfig getObjectMapConfiguration() throws IOException {
+    @Override public JSONOMapConfig getObjectMapConfiguration() {
         return null;
     }
 
-    @Override public JSONObject getContextMenuTriggers() throws JSONException, IOException {
+    @Override public JSONObject getContextMenuTriggers() {
         return null;
     }
 
-    @Override public boolean isRawRecording() throws IOException {
+    @Override public boolean isRawRecording() {
         return false;
     }
 
