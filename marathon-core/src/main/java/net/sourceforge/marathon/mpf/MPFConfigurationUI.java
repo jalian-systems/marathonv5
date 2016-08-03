@@ -75,6 +75,10 @@ public class MPFConfigurationUI extends EscapeDialog {
         this(null, parent);
     }
 
+    public MPFConfigurationUI(JFrame parent) {
+        this(null, parent);
+    }
+
     public MPFConfigurationUI(String dirName, JDialog parent) {
         super(parent, "Configure - (New Project)", true);
         RuntimeLogger.setRuntimeLogger(new StdOutLogger());
