@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.fxcontextmenu;
 
 import java.lang.reflect.Array;
@@ -37,17 +37,19 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
             this.value = value;
             this.property = property;
             this.displayValue = this.value;
-            if(this.value.getClass().isArray())
+            if (this.value.getClass().isArray()) {
                 this.displayValue = unboxPremitiveArray(this.value);
+            }
         }
 
         String property;
         Object value;
-        Object displayValue ;
+        Object displayValue;
 
         @Override public String toString() {
-            if (property == null)
+            if (property == null) {
                 return "root" + " (" + displayValue + ")";
+            }
             return property + " (" + displayValue + ")";
         }
 
@@ -56,10 +58,11 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
             ArrayList<Object> list = new ArrayList<Object>();
             for (int i = 0; i < length; i++) {
                 Object e = Array.get(r, i);
-                if (e != null && e.getClass().isArray())
+                if (e != null && e.getClass().isArray()) {
                     list.add(unboxPremitiveArray(e));
-                else
+                } else {
                     list.add(e);
+                }
             }
             return list;
         }
@@ -75,8 +78,9 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
 
         @Override public String toString() {
             String property = getValue().property;
-            if (property == null)
+            if (property == null) {
                 return "root";
+            }
             return property;
         }
 
@@ -97,19 +101,22 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
         }
 
         @Override public ObservableList<TreeItem<AssertionTreeView.PropertyWrapper>> getChildren() {
-            if (done)
+            if (done) {
                 return super.getChildren();
+            }
             done = true;
             ArrayList<TreeItem<AssertionTreeView.PropertyWrapper>> r = new ArrayList<>();
             Object object = getValue().value;
-            if (object instanceof List)
+            if (object instanceof List) {
                 fillListValues((List<?>) object, r);
-            if (object instanceof Map)
+            }
+            if (object instanceof Map) {
                 fillMapValues((Map<?, ?>) object, r);
-            else if (object.getClass().isArray())
+            } else if (object.getClass().isArray()) {
                 fillArrayValues(object, r);
-            else
+            } else {
                 fillObjectValues(object, r);
+            }
             super.getChildren().setAll(r);
             return super.getChildren();
         }
@@ -124,14 +131,16 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
 
         private void fillObjectValues(Object object, ArrayList<TreeItem<AssertionTreeView.PropertyWrapper>> r) {
             ArrayList<Method> methods;
-            if (object instanceof RFXComponent)
+            if (object instanceof RFXComponent) {
                 methods = ((RFXComponent) object).getMethods();
-            else
+            } else {
                 methods = getMethods(object);
+            }
             for (Method method : methods) {
                 AssertionTreeItem item = getTreeItemForMethod(object, method);
-                if (item != null)
+                if (item != null) {
                     r.add(item);
+                }
             }
         }
 
@@ -140,8 +149,9 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
             try {
                 method.setAccessible(true);
                 Object value = method.invoke(object, new Object[] {});
-                if (value != null)
+                if (value != null) {
                     return new AssertionTreeItem(value, getPropertyName(method.getName()));
+                }
             } catch (Throwable t) {
             } finally {
                 method.setAccessible(accessible);
@@ -150,10 +160,11 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
         }
 
         private String getPropertyName(String name) {
-            if (name.startsWith("is"))
+            if (name.startsWith("is")) {
                 name = name.substring(2);
-            else
+            } else {
                 name = name.substring(3);
+            }
             return name.substring(0, 1).toLowerCase() + name.substring(1);
         }
 
@@ -186,9 +197,10 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
         private ArrayList<Method> getMethods(Object object) {
             ArrayList<Method> list = new ArrayList<Method>();
             Method[] methods = object.getClass().getMethods();
-            for (int i = 0; i < methods.length; i++) {
-                if (isValidMethod(methods[i]))
-                    list.add(methods[i]);
+            for (Method method : methods) {
+                if (isValidMethod(method)) {
+                    list.add(method);
+                }
             }
             sort(list);
             return list;
@@ -199,14 +211,16 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
                 @Override public int compare(Method o1, Method o2) {
                     String name1 = o1.getName();
                     String name2 = o2.getName();
-                    if (name1.startsWith("is"))
+                    if (name1.startsWith("is")) {
                         name1 = name1.substring(2);
-                    else
+                    } else {
                         name1 = name1.substring(3);
-                    if (name2.startsWith("is"))
+                    }
+                    if (name2.startsWith("is")) {
                         name2 = name2.substring(2);
-                    else
+                    } else {
                         name2 = name2.substring(3);
+                    }
                     return name1.compareTo(name2);
                 }
             });

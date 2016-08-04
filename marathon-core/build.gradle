@@ -18,21 +18,46 @@ repositories {
   mavenCentral()
 }
 
+eclipse {
+  jdt {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    javaRuntimeName = 'JavaSE-1.8'
+
+    file {
+      withProperties { properties ->
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+      }
+    }
+  }
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 dependencies {
-  compile files('support/osxutil/dist/osxutil.jar')
   compile "org.jruby:jrubyparser:${jrubyparser_version}"
   compile project(":marathon-core:JSON-java")
-  compile "com.fifesoft:rsyntaxtextarea:${rsyntaxtextarea_version}"
+  compile project(":marathon-java:marathon-java-driver")
   compile "junit:junit-dep:${junit_dep_version}"
   compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
-  compile "dk.navicon:vldocking:${vldocking_version}"
   compile "org.yaml:snakeyaml:${snakeyaml_version}"
   compile "net.sf.opencsv:opencsv:${opencsv_version}"
-  compile "com.jgoodies:jgoodies-common:${jgoodies_common_version}"
-  compile "com.jgoodies:jgoodies-forms:${jgoodies_forms_version}"
   compile "com.google.inject:guice:${guice_version}"
-  compile "jline:jline:${jline_version}"
   compile "org.jruby:jruby-complete:${jruby_complete_version}"
   compile "commons-io:commons-io:${commons_io_version}"
   compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
+  compile "ru.yandex.qatools.allure:allure-junit-adaptor:${allure_version}"
+  compile "ru.yandex.qatools.allure:allure-commandline:${allure_version}"
+  compile "ru.yandex.qatools.allure:allure-bundle:${allure_version}"
+  compile "org.aspectj:aspectjweaver:${aspectj_version}"
+  compile "jline:jline:${jline_version}"
+  testCompile "org.testng:testng:${testng_version}"
+}
+
+test {
+  useTestNG()
+  systemProperty 'file.encoding', 'utf8'
+  testLogging.showStandardStreams = true
 }

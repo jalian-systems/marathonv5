@@ -1,0 +1,180 @@
+.form-pane {
+	-fx-padding: 10;
+	-fx-hgap: 5;
+	-fx-vgap: 5;
+}
+
+.path-list {
+	-fx-padding: 10;
+	-fx-spacing: 5;
+}
+
+.composite-layout {
+	-fx-padding: 10;
+}
+
+.button-bar {
+	-fx-padding: 3 10 5 0;
+}
+
+.project-selection #ProjectTableLabel {
+	-fx-label-padding: 0 0 0 15;
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.project-selection #ProjectSelectionBanner #BannerText {
+	-fx-font-size: 2.5em;
+	-fx-font-weight: bolder;
+}
+
+.mpf-configuration #banner {
+	-fx-padding: 5 5 2.5 5;
+}
+
+.mpf-configuration #MPFTitle {
+	-fx-font-size: 2.5em;
+	-fx-font-weight: bolder;
+}
+
+.mpf-configuration #MPFSubTitle {
+	-fx-font-size: 1.5em;
+	-fx-font-weight: bolder;
+}
+
+.mpf-configuration #subTitleBox {
+	-fx-padding: 0 0 2.5 2.5;
+}
+
+.marathonite-splash-screen .label {
+	-fx-font-size: 11;
+	-fx-font-weight: bold;
+}
+
+.search #SearchSeparator {
+	-fx-padding: 8 0 0 0;
+}
+
+.preferences-stage #preference-toolbar #preference-label-1 {
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.preferences-stage #mouse_trigger-field-1, .preferences-stage #keyboard_trigger-field-1
+	{
+	-fx-background-color: lightblue;
+}
+
+.fixture-selection #fixture-list-view {
+	-fx-border-color: black;
+	-fx-border-insets: 10;
+}
+
+.fixture-selection #fixture-selection-toolbar #fixture-selection-title {
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.MarathonFileChooser #marathon-save-banner #marathon-save-title {
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.about-stage .label {
+	-fx-text-fill: white;
+}
+
+.about-stage #titleBar {
+	-fx-padding: 5 0 0 0;
+}
+
+.about-stage #blurbTitle {
+	-fx-font-weight: bolder;
+	-fx-font-size: 12;
+}
+
+.about-stage #vesionInfo {
+	-fx-label-padding: 5 0 0 0;
+	-fx-font-weight: bolder;
+	-fx-font-size: 11;
+}
+
+.about-stage #companyName {
+	-fx-padding: 5 0 0 0;
+	-fx-font-size: 12;
+}
+
+.about-stage #websiteAddress, #creditsLabel {
+	-fx-font-size: 12;
+}
+
+.about-stage #buttonBar {
+	-fx-padding: 5 5 5 0;
+}
+
+.marathonite-about-stage #vesionInfo {
+	-fx-label-padding: 5 0 0 0;
+	-fx-font-weight: bolder;
+	-fx-font-size: 11;
+}
+
+.marathonite-about-stage #companyName {
+	-fx-padding: 0 0 0 0;
+	-fx-font-size: 11;
+}
+
+.marathonite-about-stage #trialLicenseLabel {
+	-fx-font-size: 12;
+}
+
+.omap-folder-cleanup-stage #cleanupToolBar #omapCleanUpTitle {
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.omap-folder-cleanup-stage #toolbarBannerBox {
+	-fx-padding: 15 5 5 10;
+}
+
+.omap-folder-cleanup-stage #logoBox {
+	-fx-padding: 5 5 5 5;
+}
+
+.object-map-stage #selectNodeButtonBar {
+	-fx-padding: 5 5 5 0.5;
+}
+
+.object-map-stage #verticalButtonBox {
+	-fx-padding: 16 0 0 0;
+}
+
+.object-map-configuration #verticalButtonBox {
+	-fx-padding: 21 5 0 5;
+}
+
+#status-bar .separator:vertical .line {
+	-fx-border-width: 1;
+	-fx-border-color: dimgrey;
+}
+
+.ace-editor-preferences-stage #ace-editor-preference-toolbar #preference-label-1
+	{
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.test-runner .green-bar {
+	-fx-accent: limegreen;
+}
+
+.test-runner .red-bar {
+	-fx-accent: salmon;
+}
+
+.run-history-stage #history-pane {
+	-fx-padding: 10;
+}
+
+.run-history-stage #vertical-buttonbar {
+	-fx-padding: 22 0 0 0;
+}

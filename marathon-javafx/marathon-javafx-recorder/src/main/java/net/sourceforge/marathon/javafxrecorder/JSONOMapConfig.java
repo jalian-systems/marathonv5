@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder;
 
 import java.util.ArrayList;
@@ -36,8 +36,9 @@ public class JSONOMapConfig {
     }
 
     public Collection<String> findProperties() {
-        if (allProperties == null)
+        if (allProperties == null) {
             allProperties = collectProperties();
+        }
         return allProperties;
     }
 
@@ -83,8 +84,9 @@ public class JSONOMapConfig {
             String className = props.getString("className");
             try {
                 Class<?> klass = Class.forName(className);
-                if (!klass.isAssignableFrom(componentClass))
+                if (!klass.isAssignableFrom(componentClass)) {
                     continue;
+                }
                 JSONArray plists = props.getJSONArray("propertyLists");
                 for (int j = 0; j < plists.length(); j++) {
                     JSONObject o = plists.getJSONObject(j);
@@ -101,8 +103,9 @@ public class JSONOMapConfig {
                 if (o1prio == o2prio) {
                     Class<?> o1class = (Class<?>) o1.get("class");
                     Class<?> o2class = (Class<?>) o2.get("class");
-                    if (o1class.isAssignableFrom(o2class))
+                    if (o1class.isAssignableFrom(o2class)) {
                         return 1;
+                    }
                     return -1;
                 }
                 return o2prio - o1prio;

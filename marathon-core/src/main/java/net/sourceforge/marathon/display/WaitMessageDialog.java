@@ -1,68 +1,78 @@
+/*******************************************************************************
+ * Copyright 2016 Jalian Systems Pvt. Ltd.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package net.sourceforge.marathon.display;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JRootPane;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class WaitMessageDialog {
     private static final String DEFAULT_MESSAGE = "This window closes once Marathon is ready for recording";
     private static MessageDialog _instance = new MessageDialog();
 
-    private static class MessageDialog extends JFrame {
-        private static final long serialVersionUID = 1L;
+    private static class MessageDialog extends Stage {
         private String message = DEFAULT_MESSAGE;
-        private JLabel messageLabel;
+        private Label messageLabel;
 
         private MessageDialog() {
-            setUndecorated(true);
-            getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
             setAlwaysOnTop(true);
+            initStyle(StageStyle.UNDECORATED);
             initComponents();
-            setLocationRelativeTo(null);
         }
 
         private void initComponents() {
-            Container contentPane = getContentPane();
-            contentPane.setLayout(new BorderLayout());
-            contentPane.add(new JLabel(new ImageIcon(DisplayWindow.class.getResource("wait.gif"), "Wait Message")),
-                    BorderLayout.CENTER);
-            messageLabel = new JLabel(message);
-            messageLabel.setOpaque(true);
-            messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            messageLabel.setBackground(Color.BLACK);
-            messageLabel.setForeground(Color.WHITE);
-            Dimension preferredSize = messageLabel.getPreferredSize();
-            preferredSize.height = 30;
-            messageLabel.setPreferredSize(preferredSize);
-            contentPane.add(messageLabel, BorderLayout.SOUTH);
-            pack();
+            messageLabel = new Label(message);
+            messageLabel.setAlignment(Pos.CENTER);
+            messageLabel.setStyle("-fx-background-color:#000000");
+            messageLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+            messageLabel.setMaxWidth(Double.MAX_VALUE);
+            setScene(new Scene(new VBox(FXUIUtils.getImage("wait"), messageLabel)));
         }
 
         public void setMessage(String message) {
-            if(message.equals(this.message))
+            if (message.equals(this.message)) {
                 return;
-            this.message = message ;
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override public void run() {
-                    messageLabel.setText(MessageDialog.this.message);
-                }
-            });
+            }
+            this.message = message;
+            Platform.runLater(() -> messageLabel.setText(message));
         }
 
     }
 
     public static void setVisible(boolean b, String message) {
-        if (_instance.isVisible() != b)
-            _instance.setVisible(b);
-        _instance.setMessage(message);
+        Runnable r = () -> {
+            if (_instance.isShowing() != b) {
+                if (b) {
+                    _instance.show();
+                } else {
+                    _instance.hide();
+                }
+            }
+            _instance.setMessage(message);
+        };
+        if (Platform.isFxApplicationThread()) {
+            r.run();
+        } else {
+            Platform.runLater(r);
+        }
     }
 
     public static void setVisible(boolean b) {

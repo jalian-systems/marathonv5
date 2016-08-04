@@ -1,26 +1,22 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.cmdlinelauncher;
 
 import java.io.File;
 import java.util.List;
-
-import net.sourceforge.marathon.javadriver.JavaDriver;
-import net.sourceforge.marathon.javadriver.JavaProfile;
-import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchWindowException;
@@ -33,6 +29,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
+
+import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.javadriver.JavaProfile;
+import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
 @Test public class LaunchWebStartTest {
 
@@ -47,8 +47,9 @@ import com.google.common.base.Predicate;
     }
 
     @AfterMethod public void quitDriver() {
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void getDriverWithProfile() throws Throwable {
@@ -95,8 +96,9 @@ import com.google.common.base.Predicate;
 
     private static File findFile() {
         File f = new File(System.getProperty("SwingSet3.jnlp", "../marathon-test-helpers/swingset3/SwingSet3.jnlp"));
-        if (f.exists())
+        if (f.exists()) {
             return f;
+        }
         return null;
     }
 
@@ -133,6 +135,6 @@ import com.google.common.base.Predicate;
         commandLine.copyOutputTo(System.err);
         System.out.println(commandLine);
         commandLine.execute();
-        
+
     }
 }

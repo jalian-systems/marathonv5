@@ -1,21 +1,20 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder;
 
-import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
@@ -44,6 +43,7 @@ import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -84,6 +84,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     private RFXComponent current;
 
     ContextMenuHandler contextMenuHandler;
+
     public JavaFxRecorderHook(int port) {
         try {
             logger.info("Starting HTTP Recorder on : " + port);
@@ -114,7 +115,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 }
 
             });
-            // contextMenuHandler = new ContextMenuHandler(recorder, finder);
         } catch (UnknownHostException e) {
             logger.log(Level.WARNING, "Error in Recorder startup", e);
         } catch (IOException e) {
@@ -125,62 +125,159 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     private static class ContextMenuTriggerCheck {
-        private int keyModifiers;
-        private int key;
-        private int mouseModifiers;
+        private String keyModifiers;
+        private String key;
+        private String mouseModifiers;
 
-        public ContextMenuTriggerCheck(int contextMenuKeyModifiers, int contextMenuKey, int menuModifiers) {
+        public ContextMenuTriggerCheck(String contextMenuKeyModifiers, String contextMenuKey, String menuModifiers) {
             this.keyModifiers = contextMenuKeyModifiers;
             this.key = contextMenuKey;
             this.mouseModifiers = menuModifiers;
         }
 
         public boolean isContextMenuEvent(Event event) {
-            if (event instanceof MouseEvent)
+            if (event instanceof MouseEvent) {
                 return isContextMenuMouseEvent((MouseEvent) event);
-            else if (event instanceof KeyEvent)
+            } else if (event instanceof KeyEvent) {
                 return isContextMenuKeyEvent((KeyEvent) event);
+            }
             return false;
         }
 
-        @SuppressWarnings("deprecation") private boolean isContextMenuKeyEvent(KeyEvent event) {
-            if (!event.getEventType().equals(KeyEvent.KEY_PRESSED))
+        private boolean isContextMenuKeyEvent(KeyEvent event) {
+            if (!event.getEventType().equals(KeyEvent.KEY_PRESSED)) {
                 return false;
-            if (isModifierKeyPressed(keyModifiers, InputEvent.ALT_DOWN_MASK) && !event.isAltDown())
+            }
+            if (event.getCode() == KeyCode.CONTROL || event.getCode() == KeyCode.SHIFT || event.getCode() == KeyCode.ALT
+                    || event.getCode() == KeyCode.META) {
                 return false;
-            if (isModifierKeyPressed(keyModifiers, InputEvent.META_DOWN_MASK) && !event.isMetaDown())
-                return false;
-            if (isModifierKeyPressed(keyModifiers, InputEvent.CTRL_DOWN_MASK) && !event.isControlDown())
-                return false;
-            if (isModifierKeyPressed(keyModifiers, InputEvent.SHIFT_DOWN_MASK) && !event.isShiftDown())
-                return false;
-            if (event.getCode().impl_getCode() != key)
-                return false;
-            return true;
+            }
+            String keyText = isModifiers(event) ? ketEventGetModifiersExText(event) + "+" : "";
+            keyText += keyEventGetKeyText(event.getCode());
+            StringBuffer contextMenuText = new StringBuffer();
+            if (keyModifiers != null && !keyModifiers.equals("")) {
+                contextMenuText.append(keyModifiers + "+");
+            }
+            contextMenuText.append(key);
+            return contextMenuText.toString().equals(keyText);
+        }
+
+        public static boolean isModifiers(KeyEvent e) {
+            if (e.isAltDown() || e.isControlDown() || e.isMetaDown() || e.isShiftDown()) {
+                return true;
+            }
+            return false;
+        }
+
+        public static String ketEventGetModifiersExText(KeyEvent event) {
+            StringBuffer sb = new StringBuffer();
+
+            if (event.isControlDown()) {
+                sb.append("Ctrl+");
+            }
+            if (event.isMetaDown()) {
+                sb.append("Command+");
+            }
+            if (event.isAltDown()) {
+                sb.append("Alt+");
+            }
+            if (event.isShiftDown()) {
+                sb.append("Shift+");
+            }
+            String text = sb.toString();
+            if (text.equals("")) {
+                return text;
+            }
+            return text.substring(0, text.length() - 1);
+        }
+
+        public static String keyEventGetKeyText(KeyCode keyCode) {
+            if (keyCode == KeyCode.TAB) {
+                return "Tab";
+            }
+            if (keyCode == KeyCode.CONTROL) {
+                return "Ctrl";
+            }
+            if (keyCode == KeyCode.ALT) {
+                return "Alt";
+            }
+            if (keyCode == KeyCode.SHIFT) {
+                return "Shift";
+            }
+            if (keyCode == KeyCode.META) {
+                return "Command";
+            }
+            if (keyCode == KeyCode.SPACE) {
+                return "Space";
+            }
+            if (keyCode == KeyCode.BACK_SPACE) {
+                return "Backspace";
+            }
+            if (keyCode == KeyCode.HOME) {
+                return "Home";
+            }
+            if (keyCode == KeyCode.END) {
+                return "End";
+            }
+            if (keyCode == KeyCode.DELETE) {
+                return "Delete";
+            }
+            if (keyCode == KeyCode.PAGE_UP) {
+                return "Pageup";
+            }
+            if (keyCode == KeyCode.PAGE_DOWN) {
+                return "Pagedown";
+            }
+            if (keyCode == KeyCode.UP) {
+                return "Up";
+            }
+            if (keyCode == KeyCode.DOWN) {
+                return "Down";
+            }
+            if (keyCode == KeyCode.LEFT) {
+                return "Left";
+            }
+            if (keyCode == KeyCode.RIGHT) {
+                return "Right";
+            }
+            if (keyCode == KeyCode.ENTER) {
+                return "Enter";
+            }
+            return keyCode.getName();
         }
 
         private boolean isContextMenuMouseEvent(MouseEvent event) {
-            if (!event.getEventType().equals(MouseEvent.MOUSE_PRESSED))
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.ALT_DOWN_MASK) && !event.isAltDown())
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.META_DOWN_MASK) && !event.isMetaDown())
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.CTRL_DOWN_MASK) && !event.isControlDown())
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.SHIFT_DOWN_MASK) && !event.isShiftDown())
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.BUTTON1_DOWN_MASK) && !event.isPrimaryButtonDown())
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.BUTTON2_DOWN_MASK) && !event.isMiddleButtonDown())
-                return false;
-            if (isModifierKeyPressed(mouseModifiers, InputEvent.BUTTON3_DOWN_MASK) && !event.isSecondaryButtonDown())
-                return false;
-            return true;
+            return mouseModifiers.equals(mouseEventGetModifiersExText(event));
         }
 
-        private boolean isModifierKeyPressed(int menuModifiers, int mkey) {
-            return (menuModifiers & mkey) == mkey;
+        public static String mouseEventGetModifiersExText(MouseEvent event) {
+            StringBuffer sb = new StringBuffer();
+            if (event.isControlDown()) {
+                sb.append("Ctrl+");
+            }
+            if (event.isMetaDown()) {
+                sb.append("Command+");
+            }
+            if (event.isAltDown()) {
+                sb.append("Alt+");
+            }
+            if (event.isShiftDown()) {
+                sb.append("Shift+");
+            }
+            if (event.isPrimaryButtonDown()) {
+                sb.append("Button1+");
+            }
+            if (event.isMiddleButtonDown()) {
+                sb.append("Button2+");
+            }
+            if (event.isSecondaryButtonDown()) {
+                sb.append("Button3+");
+            }
+            String text = sb.toString();
+            if (text.equals("")) {
+                return text;
+            }
+            return text.substring(0, text.length() - 1);
         }
     }
 
@@ -189,10 +286,11 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     protected Stage recordWindowState;
 
     private void setContextMenuTriggers(JSONObject jsonObject) {
-        int contextMenuKeyModifiers = jsonObject.getInt("contextMenuKeyModifiers");
-        int contextMenuKey = jsonObject.getInt("contextMenuKey");
-        int menuModifiers = jsonObject.getInt("menuModifiers");
+        String contextMenuKeyModifiers = jsonObject.getString("contextMenuKeyModifiers");
+        String contextMenuKey = jsonObject.getString("contextMenuKey");
+        String menuModifiers = jsonObject.getString("menuModifiers");
         contextMenuTriggerCheck = new ContextMenuTriggerCheck(contextMenuKeyModifiers, contextMenuKey, menuModifiers);
+
     }
 
     private static final EventType<?> events[] = { MouseEvent.MOUSE_PRESSED, MouseEvent.MOUSE_RELEASED, MouseEvent.MOUSE_CLICKED,
@@ -213,22 +311,22 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         });
         stage.widthProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                recordWindowState = stage ;
+                recordWindowState = stage;
             }
         });
         stage.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                recordWindowState = stage ;
+                recordWindowState = stage;
             }
         });
         stage.xProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                recordWindowState = stage ;
+                recordWindowState = stage;
             }
         });
         stage.yProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                recordWindowState = stage ;
+                recordWindowState = stage;
             }
         });
         stage.getScene().getRoot().getProperties().put("marathon.menu.handler", menuEvent);
@@ -240,18 +338,20 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         instrumentation.addTransformer(new FileChooserTransformer());
         logger.info("JavaVersion: " + System.getProperty("java.version"));
         final int port;
-        if (args != null && args.trim().length() > 0)
+        if (args != null && args.trim().length() > 0) {
             port = Integer.parseInt(args.trim());
-        else
+        } else {
             throw new Exception("Port number not specified");
+        }
         windowTitle = System.getProperty("start.window.title", "");
         ObservableList<Stage> stages = StageHelper.getStages();
         stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 
             @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
-                if (done)
+                if (done) {
                     return;
+                }
                 if (!"".equals(windowTitle)) {
                     logger.warning("WindowTitle is not supported yet... Ignoring it.");
                 }
@@ -271,7 +371,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     @Override public void handle(Event event) {
         try {
             handle_internal(event);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }
@@ -290,16 +390,18 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             handleFolderChooser(event);
             return;
         }
-        if (!isVaildEvent(event.getEventType()))
+        if (!isVaildEvent(event.getEventType())) {
             return;
-        if(recordWindowState != null && recorder.isRawRecording()) {
+        }
+        if (recordWindowState != null && recorder.isRawRecording()) {
             recorder.recordWindowState(new WindowTitle(recordWindowState).getTitle(), recordWindowState.xProperty().intValue(),
                     recordWindowState.yProperty().intValue(), recordWindowState.widthProperty().intValue(),
                     recordWindowState.heightProperty().intValue());
             recordWindowState = null;
         }
-        if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node))
+        if (!(event.getTarget() instanceof Node) || !(event.getSource() instanceof Node)) {
             return;
+        }
         Point2D point = null;
         if (event instanceof MouseEvent) {
             point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
@@ -311,14 +413,16 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
         RFXComponent c = finder.findRComponent((Node) event.getTarget(), point, recorder);
         if (!c.equals(current) && isFocusChangeEvent(event)) {
-            if (current != null && isShowing(current))
+            if (current != null && isShowing(current)) {
                 current.focusLost(c);
+            }
             c.focusGained(current);
             current = c;
         }
         // We Need This.
-        if (c.equals(current))
+        if (c.equals(current)) {
             c = current;
+        }
         c.processEvent(event);
     }
 
@@ -333,8 +437,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         CommonDialogs.FileChooserResult files = (CommonDialogs.FileChooserResult) source.getProperties()
                 .get("marathon.selectedFiles");
         List<File> selectedFiles = null;
-        if (files != null)
+        if (files != null) {
             selectedFiles = files.getFiles();
+        }
         new RFXFileChooser(recorder).record(selectedFiles);
     }
 
@@ -356,8 +461,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     public class MenuEventHandler implements EventHandler<ActionEvent> {
         @Override public void handle(ActionEvent event) {
-            if (event.getSource() instanceof Menu)
+            if (event.getSource() instanceof Menu) {
                 return;
+            }
             new RFXMenuItem(recorder, objectMapConfiguration).record(event);
         }
     }

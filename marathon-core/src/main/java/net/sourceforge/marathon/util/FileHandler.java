@@ -1,21 +1,20 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.util;
 
-import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,14 +23,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileSystemView;
-
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Window;
+import net.sourceforge.marathon.display.MarathonFileChooserInfo;
+import net.sourceforge.marathon.display.MarathonFileFilter;
 import net.sourceforge.marathon.editor.IMarathonFileFilter;
+import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.runtime.api.Constants;
 
-public class FileHandler {
+public class FileHandler implements IResourceHandler {
     private static final String NL = System.getProperty("line.separator");
     private File currentFile;
     private IMarathonFileFilter filter;
@@ -40,22 +43,27 @@ public class FileHandler {
     private File rootDirectory;
     private File testDirectory;
     private INameValidateChecker nameValidateChecker;
+    private MarathonFileChooserInfo fileChooserInfo;
+    private boolean isNewFile = false;
 
-    public FileHandler(IMarathonFileFilter filter, File testDirectory, File fixtureDirectory, File[] moduleDirectories,
-            INameValidateChecker nameValidateChecker) {
+    public FileHandler(IMarathonFileFilter filter, INameValidateChecker nameValidateChecker) throws IOException {
         this.filter = filter;
-        this.testDirectory = testDirectory;
-        this.fixtureDirectory = fixtureDirectory;
-        this.moduleDirectories = moduleDirectories;
+        this.testDirectory = Constants.getMarathonDirectory(Constants.PROP_TEST_DIR);
+        this.fixtureDirectory = Constants.getMarathonDirectory(Constants.PROP_FIXTURE_DIR);
+        this.moduleDirectories = Constants.getMarathonDirectories(Constants.PROP_MODULE_DIRS);
         this.nameValidateChecker = nameValidateChecker;
         rootDirectory = new File("");
     }
 
-    public void clearCurrentFile() {
+    public FileHandler(INameValidateChecker nameChecker) throws IOException {
+        this(new MarathonFileFilter(), nameChecker);
+    }
+
+    @Override public void clearCurrentFile() {
         setCurrentFile(null);
     }
 
-    public File getCurrentFile() {
+    @Override public File getCurrentFile() {
         return currentFile;
     }
 
@@ -66,25 +74,30 @@ public class FileHandler {
                 String relativeFileName = fileName.substring(testDirectory.getCanonicalPath().length() + 1, fileName.length());
                 file = new File(testDirectory, relativeFileName);
                 if (file.exists()) {
-                    if (file.isFile())
+                    if (file.isFile()) {
                         return file;
-                }
-            } else
-                for (int i = 0; i < moduleDirectories.length; i++) {
-                    if (fileName.contains(moduleDirectories[i].getCanonicalPath())) {
-                        String relativeFileName = fileName.substring(moduleDirectories[i].getCanonicalPath().length() + 1,
-                                fileName.length());
-                        file = new File(moduleDirectories[i], relativeFileName);
-                    } else
-                        file = new File(moduleDirectories[i], fileName);
-                    if (file.exists()) {
-                        if (file.isFile())
-                            return file;
                     }
                 }
+            } else {
+                for (File moduleDirectorie : moduleDirectories) {
+                    if (fileName.contains(moduleDirectorie.getCanonicalPath())) {
+                        String relativeFileName = fileName.substring(moduleDirectorie.getCanonicalPath().length() + 1,
+                                fileName.length());
+                        file = new File(moduleDirectorie, relativeFileName);
+                    } else {
+                        file = new File(moduleDirectorie, fileName);
+                    }
+                    if (file.exists()) {
+                        if (file.isFile()) {
+                            return file;
+                        }
+                    }
+                }
+            }
             file = new File(fixtureDirectory, fileName);
-            if (file.exists())
+            if (file.exists()) {
                 return file;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -92,68 +105,76 @@ public class FileHandler {
         return null;
     }
 
-    public boolean isModuleFile() {
-        for (int i = 0; i < moduleDirectories.length; i++) {
-            if (rootDirectory.equals(moduleDirectories[i]))
+    @Override public boolean isModuleFile() {
+        for (File moduleDirectorie : moduleDirectories) {
+            if (rootDirectory.equals(moduleDirectorie)) {
                 return true;
+            }
         }
         return false;
     }
 
-    public boolean isProjectFile() {
-        if (rootDirectory.equals(testDirectory) || rootDirectory.equals(fixtureDirectory))
+    @Override public boolean isProjectFile() {
+        if (rootDirectory.equals(testDirectory) || rootDirectory.equals(fixtureDirectory)) {
             return true;
-        for (int k = 0; k < moduleDirectories.length; k++) {
-            if (rootDirectory.equals(moduleDirectories[k]))
+        }
+        for (File moduleDirectorie : moduleDirectories) {
+            if (rootDirectory.equals(moduleDirectorie)) {
                 return true;
+            }
         }
         return false;
     }
 
-    public boolean isTestFile() {
+    @Override public boolean isTestFile() {
         return rootDirectory.equals(testDirectory);
     }
 
-    public String readFile(File file) throws IOException {
-        setCurrentFile(file);
+    @Override public String readFile(File file) throws IOException {
+        setCurrentFile(file.getCanonicalFile());
         return readFile();
     }
 
-    public File save(String script, Component parent, String filename) throws IOException {
+    @Override public File save(String script, Window parent, String filename) throws IOException {
         if (currentFile != null) {
             saveToFile(currentFile, script);
             return currentFile;
         } else {
+            this.isNewFile = true;
             return saveAs(script, parent, filename);
         }
     }
 
-    public File saveAs(String script, Component parent, String filename) throws IOException {
+    @Override public File saveAs(String script, Window parent, String filename) throws IOException {
         boolean saved = false;
         while (!saved) {
             File file = askForFile(parent, filename);
-            if (file == null)
+            if (file == null) {
                 return null;
-            int option = JOptionPane.YES_OPTION;
-            if (file.exists()) {
-                if (nameValidateChecker != null && !nameValidateChecker.okToOverwrite(file))
-                    return null;
-                option = JOptionPane.showConfirmDialog(parent,
-                        "File " + file.getName() + " already exists. Do you want to overwrite?", "File exists",
-                        JOptionPane.YES_NO_CANCEL_OPTION);
             }
-            if (option == JOptionPane.YES_OPTION) {
+            ButtonType option = ButtonType.YES;
+            if (file.exists()) {
+                if (nameValidateChecker != null && !nameValidateChecker.okToOverwrite(file)) {
+                    return null;
+                }
+                Optional<ButtonType> result = FXUIUtils.showConfirmDialog(parent,
+                        "File " + file.getName() + " already exists. Do you want to overwrite?", "File exists",
+                        AlertType.CONFIRMATION, ButtonType.YES, ButtonType.NO);
+                option = result.get();
+            }
+            if (option == ButtonType.YES) {
                 setCurrentFile(file);
                 saveToFile(currentFile, script);
                 return file;
             }
-            if (option == JOptionPane.CANCEL_OPTION)
+            if (option == ButtonType.CANCEL) {
                 return null;
+            }
         }
         return null;
     }
 
-    public File saveTo(File file, String script) throws IOException {
+    @Override public File saveTo(File file, String script) throws IOException {
         if (file != null) {
             setCurrentFile(file);
             saveToFile(currentFile, script);
@@ -161,7 +182,7 @@ public class FileHandler {
         return file;
     }
 
-    public void setCurrentDirectory(File directory) {
+    @Override public void setCurrentDirectory(File directory) {
         try {
             rootDirectory = directory.getCanonicalFile();
         } catch (IOException e) {
@@ -169,52 +190,17 @@ public class FileHandler {
         }
     }
 
-    private File askForFile(Component parent, String filename) {
-        final File startDirectory = currentFile == null ? rootDirectory : currentFile.getParentFile();
-        JFileChooser chooser = new JFileChooser(startDirectory, new FileSystemView() {
-            public File createNewFolder(File containingDir) throws IOException {
-                if (containingDir == null)
-                    throw new IOException("Parent Directory is null");
-                File newDirectory = new File(containingDir, "New Suite");
-                int i = 1;
-                while (newDirectory.exists() && i < 100) {
-                    newDirectory = new File(containingDir, "New Suite" + i);
-                    i++;
-                }
-                if (newDirectory.exists())
-                    throw new IOException("Directory exists");
-                if (!newDirectory.mkdir()) {
-                    throw new IOException("Unable to create a new folder (mkdir failed)");
-                }
-                return newDirectory;
-            }
-
-            public File getDefaultDirectory() {
-                return startDirectory;
-            }
-
-            public File getHomeDirectory() {
-                return startDirectory;
-            }
-
-            public File[] getRoots() {
-                return new File[] { startDirectory };
-            }
-
-            public boolean isRoot(File f) {
-                return f.equals(startDirectory);
-            }
-        });
-        chooser.addChoosableFileFilter(filter.getChooserFilter());
-        chooser.setFileFilter(filter.getChooserFilter());
-        chooser.setDialogTitle("Saving '" + filename + "'");
-        if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(parent)) {
-            File selectedFile = chooser.getSelectedFile();
+    private File askForFile(Window parent, String filename) {
+        fileChooserInfo = new MarathonFileChooserInfo("Saving '" + filename + "'", filename, rootDirectory, isTestFile());
+        File selectedFile = FXUIUtils.showMarathonSaveFileChooser(fileChooserInfo);
+        if (selectedFile != null) {
             String suffix = filter.getSuffix();
-            if (suffix == null)
+            if (suffix == null) {
                 throw new RuntimeException("Could not find suffix needed for the script");
-            if (selectedFile.getName().indexOf('.') == -1 && !selectedFile.getName().endsWith(suffix))
+            }
+            if (selectedFile.getName().indexOf('.') == -1 && !selectedFile.getName().endsWith(suffix)) {
                 selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + suffix);
+            }
             return selectedFile;
         } else {
             return null;
@@ -224,14 +210,17 @@ public class FileHandler {
     private File getRootDir(File file) {
         try {
             String filePath = file.getCanonicalPath();
-            if (filePath.startsWith(testDirectory.getCanonicalPath()))
+            if (filePath.startsWith(testDirectory.getCanonicalPath())) {
                 return testDirectory;
-            for (int i = 0; i < moduleDirectories.length; i++) {
-                if (filePath.startsWith(moduleDirectories[i].getCanonicalPath()))
-                    return moduleDirectories[i];
             }
-            if (filePath.startsWith(fixtureDirectory.getCanonicalPath()))
+            for (File moduleDirectorie : moduleDirectories) {
+                if (filePath.startsWith(moduleDirectorie.getCanonicalPath())) {
+                    return moduleDirectorie;
+                }
+            }
+            if (filePath.startsWith(fixtureDirectory.getCanonicalPath())) {
                 return fixtureDirectory;
+            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -262,34 +251,39 @@ public class FileHandler {
         } finally {
             out.close();
         }
+        if (fileChooserInfo != null) {
+            fileChooserInfo.fileCreated(file);
+        }
     }
 
-    private void setCurrentFile(File file) {
+    public void setCurrentFile(File file) {
         currentFile = file;
         if (file != null) {
             rootDirectory = getRootDir(file);
         }
     }
 
-    public String getMode(String fileName) {
-        if (fileName == null)
+    @Override public String getMode(String fileName) {
+        if (fileName == null) {
             return "text";
+        }
         String ext = "";
-        if (fileName.startsWith("Untitled"))
+        if (fileName.startsWith("Untitled")) {
             ext = filter.getSuffix().substring(1);
-        else {
+        } else {
             int lastIndexOf = fileName.lastIndexOf('.');
-            if (lastIndexOf == -1 || lastIndexOf == fileName.length() - 1)
+            if (lastIndexOf == -1 || lastIndexOf == fileName.length() - 1) {
                 return "text";
+            }
             ext = fileName.substring(lastIndexOf + 1);
         }
-        if (ext.equals("rb"))
+        if (ext.equals("rb")) {
             return "ruby";
-        if (ext.equals("xml"))
-            return "xml";
-        if (ext.equals("html"))
-            return "html";
-        return "text";
+        }
+        if (ext.equals("suite") || ext.equals("story") || ext.equals("feature") || ext.equals("issue")) {
+            return "json";
+        }
+        return ext;
     }
 
     public boolean isFixtureFile() {
@@ -297,19 +291,25 @@ public class FileHandler {
     }
 
     public String getFixture() {
-        if (!isFixtureFile())
+        if (!isFixtureFile()) {
             throw new RuntimeException("Current file is not a fixture file");
+        }
         try {
             String rootPath = rootDirectory.getCanonicalPath();
             String filePath = currentFile.getCanonicalPath();
-            if (!filePath.startsWith(rootPath))
+            if (!filePath.startsWith(rootPath)) {
                 throw new RuntimeException("Fixture is not in fixture directory?");
+            }
             String fixtureFileName = filePath.substring(rootPath.length() + 1);
             int indexOfDot = fixtureFileName.lastIndexOf('.');
             return fixtureFileName.substring(0, indexOfDot);
         } catch (IOException e) {
             throw new RuntimeException("getFixture" + e.getMessage());
         }
+    }
+
+    public boolean isNewFile() {
+        return isNewFile;
     }
 
 }

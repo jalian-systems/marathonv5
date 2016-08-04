@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -26,8 +26,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgentException;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
@@ -39,7 +39,7 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
     }
 
     @Override public boolean marathon_select(String value) {
-        if (value != null && !("".equals(value))) {
+        if (value != null && !"".equals(value)) {
             return setSelectedPath(value.split("\\>\\>"));
         }
         return true;
@@ -58,13 +58,14 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
         } else {
             throw new JavaAgentException("Component is not a JMenu", null);
         }
-        Component current = (JMenuItem) component;
+        Component current = component;
         for (int i = 1; i < items.length; i++) {
             current = findMenuElement(current, items[i]);
-            if (current == null)
+            if (current == null) {
                 return false;
+            }
             if (current instanceof JMenu) {
-                if (!(((JMenu) current).isPopupMenuVisible())) {
+                if (!((JMenu) current).isPopupMenuVisible()) {
                     JavaElementFactory.createElement(current, driver, window).click();
                     return false;
                 }
@@ -100,8 +101,9 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
             if (components[i] == current) {
                 return itemText;
             }
-            if (!(components[i] instanceof AbstractButton))
+            if (!(components[i] instanceof AbstractButton)) {
                 continue;
+            }
             AbstractButton menuItem = (AbstractButton) components[i];
             String menuItemText = menuItem.getText();
             if ("".equals(menuItemText) || menuItemText == null) {
@@ -114,15 +116,16 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
         return itemText;
     }
 
-    public String _getText() {
+    @Override public String _getText() {
         JMenuItem current = (JMenuItem) component;
         return getItemText(current);
     }
 
     public static String getItemText(JMenuItem current) {
         String text = current.getText();
-        if (text == null || "".equals(text))
+        if (text == null || "".equals(text)) {
             return getTextFromIcon(current);
+        }
         return text;
     }
 
@@ -138,10 +141,12 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
     private static String getNameFromImageDescription(String description) {
         try {
             String name = new URL(description).getPath();
-            if (name.lastIndexOf('/') != -1)
+            if (name.lastIndexOf('/') != -1) {
                 name = name.substring(name.lastIndexOf('/') + 1);
-            if (name.lastIndexOf('.') != -1)
+            }
+            if (name.lastIndexOf('.') != -1) {
                 name = name.substring(0, name.lastIndexOf('.'));
+            }
             return name;
         } catch (MalformedURLException e) {
             return description;

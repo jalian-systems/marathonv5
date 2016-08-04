@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.ArrayList;
@@ -23,8 +23,13 @@ import org.json.JSONException;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import net.sourceforge.marathon.javafxagent.*;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
+import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
+import net.sourceforge.marathon.javafxagent.IJavaFXElement;
+import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.javafxagent.NoSuchWindowException;
+import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 
 public class GeneralSiblingSelector implements Selector {
 
@@ -43,8 +48,9 @@ public class GeneralSiblingSelector implements Selector {
     @SuppressWarnings("unchecked") @Override public List<IJavaFXElement> findElements(final IJavaFXAgent driver,
             final IJavaFXElement container, long implicitWait) {
         final List<IJavaFXElement> pElements = parent.findElements(driver, container, implicitWait);
-        if (pElements.size() == 0)
+        if (pElements.size() == 0) {
             return pElements;
+        }
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
             EventQueueWait.exec(new Runnable() {
@@ -81,12 +87,15 @@ public class GeneralSiblingSelector implements Selector {
                 }
             }.wait_noexc("Unable to find component", implicitWait, 50);
         }
-        if (r[0] instanceof NoSuchWindowException)
+        if (r[0] instanceof NoSuchWindowException) {
             throw (NoSuchWindowException) r[0];
-        if (r[0] instanceof UnsupportedCommandException)
+        }
+        if (r[0] instanceof UnsupportedCommandException) {
             throw (UnsupportedCommandException) r[0];
-        if (r[0] instanceof JSONException)
+        }
+        if (r[0] instanceof JSONException) {
             throw (JSONException) r[0];
+        }
         return (List<IJavaFXElement>) r[0];
     }
 
@@ -94,11 +103,13 @@ public class GeneralSiblingSelector implements Selector {
         List<IJavaFXElement> r = new ArrayList<IJavaFXElement>();
         for (IJavaFXElement je : pElements) {
             Node component = je.getComponent();
-            if (!(component instanceof Parent))
+            if (!(component instanceof Parent)) {
                 continue;
+            }
             int index = getIndexOfComponentInParent(component);
-            if (index < 0)
+            if (index < 0) {
                 continue;
+            }
             Parent parent = component.getParent();
             JFXWindow topContainer = driver.switchTo().getTopContainer();
             ObservableList<Node> children = parent.getChildrenUnmodifiable();
@@ -107,8 +118,9 @@ public class GeneralSiblingSelector implements Selector {
                 IJavaFXElement je2 = JavaFXElementFactory.createElement(c, driver, driver.switchTo().getTopContainer());
                 if (sibling.matchesSelector(je2).size() > 0) {
                     IJavaFXElement e = topContainer.addElement(JavaFXElementFactory.createElement(c, driver, topContainer));
-                    if (!r.contains(e))
+                    if (!r.contains(e)) {
                         r.add(e);
+                    }
                 }
             }
         }
@@ -117,12 +129,14 @@ public class GeneralSiblingSelector implements Selector {
 
     private int getIndexOfComponentInParent(Node component) {
         Parent parent = component.getParent();
-        if (parent == null)
+        if (parent == null) {
             return -1;
+        }
         ObservableList<Node> components = parent.getChildrenUnmodifiable();
         for (int i = 0; i < components.size(); i++) {
-            if (components.get(i) == component)
+            if (components.get(i) == component) {
                 return i;
+            }
         }
         return -1;
     }

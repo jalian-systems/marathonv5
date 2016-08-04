@@ -19,8 +19,8 @@ repositories {
 }
 
 dependencies {
-  compile "com.jgoodies:jgoodies-common:${jgoodies_common_version}"
-  compile "com.jgoodies:jgoodies-forms:${jgoodies_forms_version}"
+  compile "com.jgoodies:jgoodies-common:1.8.1"
+  compile "com.jgoodies:jgoodies-forms:1.8.0"
 }
 
 jar.doFirst{

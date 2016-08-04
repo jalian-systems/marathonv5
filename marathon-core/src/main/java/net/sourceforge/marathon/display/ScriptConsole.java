@@ -1,137 +1,142 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.prefs.Preferences;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.display.readline.TextAreaReadline;
 import net.sourceforge.marathon.runtime.api.Constants;
 
-public final class ScriptConsole extends JDialog implements IStdOut {
-    private static final long serialVersionUID = 1L;
-    private JEditorPane text;
-    private transient TextAreaReadline textAreaReadline;
-    private Font font;
-    private Color backgroundColor = new Color(0xf2, 0xf2, 0xf2);
-    private Color foregroundColor = new Color(0xa4, 0x00, 0x00);
-    private Color caretColor = new Color(0xa4, 0x00, 0x00);
-    private Color promptForegroundColor = new Color(0xa4, 0x00, 0x00);
-    private Color inputForegroundColor = new Color(0x20, 0x4a, 0x87);
-    private Color outputForegroundColor = Color.darkGray;
-    private Color resultForegroundColor = new Color(0x20, 0x4a, 0x87);
-    private Color errorForegroundColor = Color.RED;
+public class ScriptConsole extends Stage implements IStdOut {
+
+    private TextField text;
+    private TextFlow output = new TextFlow();
+    private BorderPane root = new BorderPane();
+    private TextAreaReadline textAreaReadline;
     protected PrintWriter spooler;
     private PrintStream oldOut;
     private PrintStream oldErr;
+    private List<TextNodeInfo> textNodes = new ArrayList<>();
+    private ScrollPane scrollPane;
 
-    public ScriptConsole(JFrame parent, Font defaultFont, final IScriptConsoleListener l, final String spoolSuffix) {
-        super(parent);
+    public ScriptConsole(IScriptConsoleListener l, String spoolSuffix) {
         setTitle("Script Console");
-        text = new JTextPane();
-        text.setMargin(new Insets(8, 8, 8, 8));
-        readPreferences(defaultFont);
-        text.setCaretColor(caretColor);
-        text.setBackground(backgroundColor);
-        text.setForeground(foregroundColor);
-        text.setFont(font);
-        JScrollPane pane = new JScrollPane();
-        pane.setViewportView(text);
-        pane.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-        getContentPane().add(pane);
-        setSize(640, 480);
-        validate();
-        textAreaReadline = new TextAreaReadline(text, "Marathon Script Console \n\n") {
-            @Override public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        text = new TextField();
+        scrollPane = new ScrollPane(output);
+        output.prefWidthProperty().bind(scrollPane.widthProperty());
+        output.heightProperty().addListener((observable, oldValue, newValue) -> {
+            scrollPane.setVvalue(scrollPane.getVmax());
+        });
+        output.setPadding(new Insets(0, 8, 0, 8));
+        root.setCenter(scrollPane);
+        HBox.setHgrow(text, Priority.ALWAYS);
+
+        Text promptText = new Text(">>");
+        promptText.setFont(Font.font("Verdana", FontWeight.MEDIUM, 12));
+        promptText.setFill(Color.rgb(0xa4, 0x00, 0x00));
+        TextFlow textFlow = new TextFlow(promptText);
+        textFlow.setStyle("-fx-background-color: white;");
+        HBox.setMargin(textFlow, new Insets(5, 0, 0, 0));
+        root.setBottom(new HBox(textFlow, text));
+        setScene(new Scene(root, 640, 480));
+        textAreaReadline = new TextAreaReadline(text, output, "Marathon Script Console \n\n") {
+            @Override public void handle(KeyEvent event) {
+                if (event.getEventType() == KeyEvent.KEY_PRESSED && event.getCode() == KeyCode.ESCAPE) {
                     textAreaReadline.shutdown();
-                    if (spooler != null)
+                    if (spooler != null) {
                         spooler.close();
+                    }
                     resetStdStreams();
                 } else {
-                    super.keyPressed(event);
+                    super.handle(event);
                 }
             }
         };
-        textAreaReadline.setPromptForegroundColor(promptForegroundColor);
-        textAreaReadline.setErrorForegroundColor(errorForegroundColor);
-        textAreaReadline.setInputForegroundColor(inputForegroundColor);
-        textAreaReadline.setResultForegroundColor(resultForegroundColor);
-        textAreaReadline.setOutputForegroundColor(outputForegroundColor);
         final String projectDir = System.getProperty(Constants.PROP_PROJECT_DIR);
         try {
             textAreaReadline.setHistoryFile(new File(projectDir, ".history"));
         } catch (IOException e1) {
         }
-
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+        setOnCloseRequest((we) -> {
+            if (we.getEventType() == WindowEvent.WINDOW_CLOSE_REQUEST) {
                 textAreaReadline.shutdown();
-                if (spooler != null)
+                if (spooler != null) {
                     spooler.close();
+                }
                 resetStdStreams();
             }
         });
-        setLocationRelativeTo(getParent());
         try {
             spooler = new PrintWriter(new FileWriter(new File(projectDir, "spool" + spoolSuffix), true));
         } catch (IOException e1) {
         }
         Thread t2 = new Thread() {
-            public void run() {
+            @Override public void run() {
                 String line = null;
                 while ((line = textAreaReadline.readLine(">> ")) != null) {
                     line = line.trim();
-                    if (line.equals(""))
+                    if (line.equals("")) {
                         continue;
+                    }
                     spooler.println(line);
                     spooler.flush();
-                    if (line.equals("help"))
+                    if (line.equals("help")) {
                         line = "marathon_help()";
-                    else if (line.equals("spool clear")) {
+                    } else if (line.equals("spool clear")) {
                         try {
-                            if (spooler != null)
+                            if (spooler != null) {
                                 spooler.close();
+                            }
                             spooler = new PrintWriter(new FileWriter(new File(projectDir, "spool" + spoolSuffix), false));
                         } catch (IOException e) {
                         }
                         continue;
                     }
-                    textAreaReadline.getHistory().addToHistory(line);
+                    if (!line.contains("\n")) {
+                        textAreaReadline.getHistory().addToHistory(line);
+                    }
                     String ret = l.evaluateScript(line);
-                    if (ret != null && !ret.equals(""))
+                    if (ret != null && !ret.equals("")) {
                         append("=> " + ret + "\n", IStdOut.STD_OUT);
+                    }
                 }
                 l.sessionClosed();
             }
@@ -140,21 +145,57 @@ public final class ScriptConsole extends JDialog implements IStdOut {
         t2.start();
     }
 
-    private void setStdStreams() {
-        oldOut = System.out;
-        oldErr = System.err;
-        oldOut.flush();
-        oldErr.flush();
-        System.setOut(new PrintStream(new OutputStream() {
-            @Override public void write(int b) throws IOException {
-                append((byte) b, IStdOut.STD_OUT);
+    @Override public String getText() {
+        return text.getText();
+    }
+
+    @Override public void append(String text, int type) {
+        addInfo(text, type);
+        if (text.contains("\n")) {
+            List<TextNodeInfo> writeNow = textNodes;
+            textNodes = new ArrayList<>();
+            Platform.runLater(() -> {
+                for (TextNodeInfo textNodeInfo : writeNow) {
+                    OutputStream stream = null;
+                    try {
+                        stream = isErrorType(textNodeInfo.getType()) ? textAreaReadline.getErrorStream()
+                                : textAreaReadline.getOutputStream();
+                        stream.write(textNodeInfo.getText().toString().getBytes());
+                        stream.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (IOException e) {
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private void addInfo(String text, int type) {
+        if (textNodes.size() == 0) {
+            textNodes.add(new TextNodeInfo(text, type));
+        } else {
+            TextNodeInfo lastNode = textNodes.get(textNodes.size() - 1);
+            if (lastNode.getType() == type) {
+                lastNode.getText().append(text);
+            } else {
+                textNodes.add(new TextNodeInfo(text, type));
             }
-        }));
-        System.setErr(new PrintStream(new OutputStream() {
-            @Override public void write(int b) throws IOException {
-                append((byte) b, IStdOut.STD_ERR);
-            }
-        }));
+        }
+    }
+
+    private boolean isErrorType(int type) {
+        return type == IStdOut.SCRIPT_ERR || type == IStdOut.STD_ERR;
+    }
+
+    @Override public void clear() {
+        text.setText("");
     }
 
     private void resetStdStreams() {
@@ -162,58 +203,27 @@ public final class ScriptConsole extends JDialog implements IStdOut {
         System.setErr(oldErr);
     }
 
-    private void readPreferences(Font defaultFont) {
-        Preferences prefs = Preferences.userNodeForPackage(ScriptConsole.class);
-        Color color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.caretcolor")) != null)
-            caretColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.foregroundcolor")) != null)
-            foregroundColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.backgroundcolor")) != null)
-            backgroundColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.promptforegroundcolor")) != null)
-            promptForegroundColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.inputforegroundcolor")) != null)
-            inputForegroundColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.outputforegroundcolor")) != null)
-            outputForegroundColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.resultforegroundcolor")) != null)
-            resultForegroundColor = color;
-        if ((color = getPrefColor(prefs, "marathon.scriptconsole.errorforegroundcolor")) != null)
-            errorForegroundColor = color;
-
-        font = null;
-        String prop = prefs.get("marathon.scriptconsole.font", null);
-        if (prop != null) {
-            font = Font.decode(prop);
-        }
-        if (font == null)
-            font = defaultFont;
+    public void dispose() {
+        Platform.runLater(() -> super.close());
     }
 
-    private Color getPrefColor(Preferences prefs, String key) {
-        Color color = null;
-        String prop = prefs.get(key, null);
-        if (prop != null)
-            color = Color.decode(prop);
-        return color;
+    public void setVisible(boolean b) {
+        if (b) {
+            setStdStreams();
+            super.show();
+        }
     }
 
-    public void append(String text, int type) {
-        OutputStream stream = null;
-        try {
-            stream = isErrorType(type) ? textAreaReadline.getErrorStream() : textAreaReadline.getOutputStream();
-            stream.write(text.getBytes());
-            stream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (stream != null)
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                }
-        }
+    private void setStdStreams() {
+        oldOut = System.out;
+        oldErr = System.err;
+        oldOut.flush();
+        oldErr.flush();
+        System.setErr(new PrintStream(new OutputStream() {
+            @Override public void write(int b) throws IOException {
+                append((byte) b, IStdOut.STD_ERR);
+            }
+        }));
     }
 
     public void append(byte b, int type) {
@@ -225,29 +235,44 @@ public final class ScriptConsole extends JDialog implements IStdOut {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (stream != null)
+            if (stream != null) {
                 try {
                     stream.close();
                 } catch (IOException e) {
                 }
+            }
         }
     }
 
-    private boolean isErrorType(int type) {
-        return type == IStdOut.SCRIPT_ERR || type == IStdOut.STD_ERR;
+    private static class TextNodeInfo {
+        private StringBuffer text = new StringBuffer();
+        private int type;
+
+        public TextNodeInfo(String text, int type) {
+            this.text.append(text);
+            this.type = type;
+        }
+
+        public StringBuffer getText() {
+            return text;
+        }
+
+        public int getType() {
+            return type;
+        }
     }
 
-    public void clear() {
-        text.setText("");
+    public static class Main extends Application {
+
+        @Override public void start(Stage primaryStage) throws Exception {
+            ScriptConsole scriptConsole = new ScriptConsole(null, null);
+            scriptConsole.show();
+        }
+
+        public static void main(String[] args) {
+            launch(args);
+        }
+
     }
 
-    public String getText() {
-        return text.getText();
-    }
-
-    @Override public void setVisible(boolean b) {
-        if (b)
-            setStdStreams();
-        super.setVisible(b);
-    }
 }

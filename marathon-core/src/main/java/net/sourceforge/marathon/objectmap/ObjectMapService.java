@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.objectmap;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class ObjectMapService implements IObjectMapService {
         synchronized (objectMap) {
             final OMapContainer topLevelComponent = objectMap.getTopLevelComponent(pa, rproperties, gproperties, title, false);
             return new IOMapContainer() {
-                public OMapContainer getOMapContainer(ObjectMap objectMap) {
+                @Override public OMapContainer getOMapContainer(ObjectMap objectMap) {
                     return topLevelComponent;
                 }
 
@@ -58,20 +58,20 @@ public class ObjectMapService implements IObjectMapService {
                     return topLevelComponent.toString();
                 }
 
-                public List<String> getUsedRecognitionProperties() {
+                @Override public List<String> getUsedRecognitionProperties() {
                     return topLevelComponent.getUsedRecognitionProperties();
                 }
             };
         }
     }
 
-    public void save() {
+    @Override public void save() {
         synchronized (objectMap) {
             objectMap.save();
         }
     }
 
-    public void setDirty(boolean b) {
+    @Override public void setDirty(boolean b) {
         synchronized (objectMap) {
             objectMap.setDirty(b);
         }
@@ -88,15 +88,15 @@ public class ObjectMapService implements IObjectMapService {
         return configuration.getGeneralProperties();
     }
 
-    public void load() throws IOException {
+    @Override public void load() throws IOException {
         configuration.load();
     }
 
-    public List<ObjectIdentity> getNamingProperties() {
+    @Override public List<ObjectIdentity> getNamingProperties() {
         return configuration.getNamingProperties();
     }
 
-    public List<ObjectIdentity> getContainerNamingProperties() {
+    @Override public List<ObjectIdentity> getContainerNamingProperties() {
         return configuration.getContainerNamingProperties();
     }
 
@@ -115,7 +115,7 @@ public class ObjectMapService implements IObjectMapService {
         synchronized (objectMap) {
             final OMapContainer topLevelComponent = objectMap.getTopLevelComponent(attributes, urp);
             return new IOMapContainer() {
-                public OMapContainer getOMapContainer(ObjectMap objectMap) {
+                @Override public OMapContainer getOMapContainer(ObjectMap objectMap) {
                     return topLevelComponent;
                 }
 
@@ -123,7 +123,7 @@ public class ObjectMapService implements IObjectMapService {
                     return topLevelComponent.toString();
                 }
 
-                public List<String> getUsedRecognitionProperties() {
+                @Override public List<String> getUsedRecognitionProperties() {
                     return topLevelComponent.getUsedRecognitionProperties();
                 }
             };
@@ -180,11 +180,12 @@ public class ObjectMapService implements IObjectMapService {
     private List<List<String>> findProperties(String name, List<ObjectIdentity> list) {
         List<PropertyList> selection = new ArrayList<PropertyList>();
         for (ObjectIdentity objectIdentity : list) {
-            if (objectIdentity.getClassName().equals(name))
+            if (objectIdentity.getClassName().equals(name)) {
                 selection.addAll(objectIdentity.getPropertyLists());
+            }
         }
         Collections.sort(selection, new Comparator<PropertyList>() {
-            public int compare(PropertyList o1, PropertyList o2) {
+            @Override public int compare(PropertyList o1, PropertyList o2) {
                 return o2.getPriority() - o1.getPriority();
             }
         });

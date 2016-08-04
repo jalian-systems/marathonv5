@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.list;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -35,10 +35,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javadriver.JavaDriver;
-import net.sourceforge.marathon.testhelpers.MissingException;
-
 import org.json.JSONArray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -51,6 +47,10 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.testhelpers.MissingException;
 
 @SuppressWarnings({ "unchecked", "rawtypes" }) @Test public class JListXTest {
 
@@ -70,10 +70,11 @@ import org.testng.annotations.Test;
                 frame.setName("dialog-1");
                 Object[] listData = new Object[30];
                 for (int i = 1; i <= listData.length; i++) {
-                    if (i == 25)
+                    if (i == 25) {
                         listData[i - 1] = "List Item - '" + i + "'";
-                    else
+                    } else {
                         listData[i - 1] = "List Item - " + i;
+                    }
                 }
                 list = new JList(listData);
                 list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -101,19 +102,22 @@ import org.testng.annotations.Test;
                 frame.dispose();
             }
         });
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void cssSelector() throws Throwable {
         driver = new JavaDriver();
         WebElement list = driver.findElement(By.name("list-1"));
         JSONArray a = new JSONArray();
-        for (int i = 1; i <= 30; i++)
-            if (i == 25)
+        for (int i = 1; i <= 30; i++) {
+            if (i == 25) {
                 a.put("List Item - '" + i + "'");
-            else
+            } else {
                 a.put("List Item - " + i);
+            }
+        }
         JSONArray b = new JSONArray();
         b.put(a);
         assertEquals(b.toString(), list.getAttribute("content"));
@@ -123,11 +127,13 @@ import org.testng.annotations.Test;
         assertEquals("List Item - 1", listItem.getText());
         listItems = driver.findElements(By.cssSelector("#list-1::all-items"));
         assertEquals(30, listItems.size());
-        for (int i = 0; i < 30; i++)
-            if (i == 24)
+        for (int i = 0; i < 30; i++) {
+            if (i == 24) {
                 assertEquals("List Item - '" + (i + 1) + "'", listItems.get(i).getText());
-            else
+            } else {
                 assertEquals("List Item - " + (i + 1), listItems.get(i).getText());
+            }
+        }
         List<WebElement> firstItem = driver.findElements(By.cssSelector("#list-1::all-items[text='List Item - 1']"));
         assertEquals(1, firstItem.size());
         assertEquals("List Item - 1", firstItem.get(0).getText());

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
@@ -37,13 +37,16 @@ public class WindowTitle {
         String original = title;
         int index = 1;
         for (Window w : windows) {
-            if (w == window)
+            if (w == window) {
                 return title;
-            if (!w.isVisible())
+            }
+            if (!w.isVisible()) {
                 continue;
+            }
             String wTitle = getTitle(w);
-            if (original.equals(wTitle))
+            if (original.equals(wTitle)) {
                 title = original + "(" + index++ + ")";
+            }
         }
         return title;
     }
@@ -52,21 +55,25 @@ public class WindowTitle {
         String title = null;
         if (component instanceof Dialog) {
             title = ((Dialog) component).getTitle();
-        } else if (component instanceof Frame)
+        } else if (component instanceof Frame) {
             title = ((Frame) component).getTitle();
+        }
 
-        if(title == null || "".equals(title))
+        if (title == null || "".equals(title)) {
             title = titleFromFirstLabel(component);
-        if (title == null || "".equals(title))
+        }
+        if (title == null || "".equals(title)) {
             title = component.getName();
-        if (title == null || "".equals(title))
+        }
+        if (title == null || "".equals(title)) {
             title = component.getClass().getName();
+        }
         return title;
     }
 
     private String titleFromFirstLabel(Component component) {
-        if(component instanceof Container) {
-            return titleFromFirstLabelOfContainer((Container)component);
+        if (component instanceof Container) {
+            return titleFromFirstLabelOfContainer((Container) component);
         }
         return null;
     }
@@ -74,15 +81,19 @@ public class WindowTitle {
     private String titleFromFirstLabelOfContainer(Container component) {
         Component[] components = component.getComponents();
         for (Component c : components) {
-            String title = null ;
-            if(c instanceof JLabel)
+            String title = null;
+            if (c instanceof JLabel) {
                 title = ((JLabel) c).getText();
-            if(title != null && !"".equals(title))
-                return title ;
-            if(c instanceof Container)
+            }
+            if (title != null && !"".equals(title)) {
+                return title;
+            }
+            if (c instanceof Container) {
                 title = titleFromFirstLabelOfContainer((Container) c);
-            if(title != null && !"".equals(title))
-                return title ;
+            }
+            if (title != null && !"".equals(title)) {
+                return title;
+            }
         }
         return null;
     }

@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Jalian Systems Pvt. Ltd.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.ws;
 
 import java.io.IOException;
@@ -51,7 +66,7 @@ public class WSRecorder implements IJSONRecorder {
                 }
             }
         });
-        if(wsClient == null) {
+        if (wsClient == null) {
             throw new URISyntaxException("Invalid syntax!!!", "port = " + port);
         }
     }
@@ -81,8 +96,9 @@ public class WSRecorder implements IJSONRecorder {
         y = e.getY() - tts.getY() + sts.getY();
         event.put("x", x);
         event.put("y", y);
-        if (withCellInfo)
+        if (withCellInfo) {
             event.put("cellinfo", r.getCellInfo());
+        }
         final JSONObject o = new JSONObject();
         o.put("event", event);
         fill(r, o);
@@ -148,8 +164,9 @@ public class WSRecorder implements IJSONRecorder {
         if (e.isShiftDown()) {
             sb.append("Shift+");
         }
-        if (sb.length() > 0)
+        if (sb.length() > 0) {
             sb.setLength(sb.length() - 1);
+        }
         String mtext = sb.toString();
         return mtext;
     }
@@ -168,8 +185,9 @@ public class WSRecorder implements IJSONRecorder {
         if (e.isShiftDown()) {
             sb.append("Shift+");
         }
-        if (sb.length() > 0)
+        if (sb.length() > 0) {
             sb.setLength(sb.length() - 1);
+        }
         String mtext = sb.toString();
         return mtext;
     }
@@ -178,31 +196,36 @@ public class WSRecorder implements IJSONRecorder {
         JSONObject event = new JSONObject();
         event.put("type", "key_raw");
         KeyCode keyCode = e.getCode();
-        if (keyCode.isModifierKey())
+        if (keyCode.isModifierKey()) {
             return;
+        }
         if ((keyCode.isFunctionKey() || keyCode.isArrowKey() || keyCode.isKeypadKey() || keyCode.isMediaKey()
                 || keyCode.isNavigationKey() || e.isControlDown() || e.isMetaDown() || e.isAltDown()
-                || needManualRecording(keyCode)) && (e.getEventType() == KeyEvent.KEY_PRESSED)) {
+                || needManualRecording(keyCode)) && e.getEventType() == KeyEvent.KEY_PRESSED) {
             String mtext = buildModifiersText(e);
             event.put("modifiersEx", mtext);
             KeysMap keysMap = KeysMap.findMap(e.getCode());
-            if (keysMap == KeysMap.NULL)
+            if (keysMap == KeysMap.NULL) {
                 return;
+            }
             String keyText;
-            if (keysMap == null)
+            if (keysMap == null) {
                 keyText = e.getText();
-            else
+            } else {
                 keyText = keysMap.toString();
+            }
             event.put("keyCode", keyText);
         } else if (e.getEventType() == KeyEvent.KEY_TYPED && !e.isControlDown() && !needManualRecording(keyCode)) {
             char[] cs = e.getCharacter().toCharArray();
-            if (cs.length == 0)
+            if (cs.length == 0) {
                 return;
+            }
             for (char c : cs) {
                 if (Character.isISOControl(c) && hasMapping(c)) {
                     event.put("keyChar", getMapping(c));
-                } else
+                } else {
                     event.put("keyChar", "" + c);
+                }
             }
         } else {
             return;
@@ -237,8 +260,9 @@ public class WSRecorder implements IJSONRecorder {
         JSONObject event = new JSONObject();
         event.put("type", "select");
         event.put("value", state);
-        if (withCellInfo)
+        if (withCellInfo) {
             event.put("cellinfo", r.getCellInfo());
+        }
         recordEvent(r, event);
     }
 
@@ -319,8 +343,9 @@ public class WSRecorder implements IJSONRecorder {
         event.put("bounds", bounds.getMinX() + ":" + bounds.getMinY() + ":" + bounds.getWidth() + ":" + bounds.getHeight());
         final JSONObject o = new JSONObject();
         o.put("event", event);
-        if (windowStateTimer != null)
+        if (windowStateTimer != null) {
             windowStateTimer.cancel();
+        }
         windowStateTimer = new Timer();
         windowStateTimer.schedule(new TimerTask() {
             @Override public void run() {
@@ -337,7 +362,7 @@ public class WSRecorder implements IJSONRecorder {
     public void setRawRecording(JSONObject o) {
         rawRecording = o.getBoolean("value");
     }
-    
+
     @Override public void recordMenuItem(RFXComponent r) {
         JSONObject event = new JSONObject();
         event.put("type", "menu_item");
@@ -381,8 +406,9 @@ public class WSRecorder implements IJSONRecorder {
     @Override public JSONOMapConfig getObjectMapConfiguration() {
         if (jsonOMapConfig == null) {
             synchronized (jsonOMapConfigLock) {
-                if (jsonOMapConfig != null)
+                if (jsonOMapConfig != null) {
                     return jsonOMapConfig;
+                }
                 try {
                     jsonOMapConfigLock.wait(10000);
                 } catch (InterruptedException e) {
@@ -404,8 +430,9 @@ public class WSRecorder implements IJSONRecorder {
     @Override public JSONObject getContextMenuTriggers() {
         if (contextMenuTriggers == null) {
             synchronized (contextMenuTriggersLock) {
-                if (contextMenuTriggers != null)
+                if (contextMenuTriggers != null) {
                     return contextMenuTriggers;
+                }
                 try {
                     contextMenuTriggersLock.wait(10000);
                 } catch (InterruptedException e) {
@@ -494,8 +521,9 @@ public class WSRecorder implements IJSONRecorder {
     private static java.lang.reflect.Method getMethod(String name) {
         java.lang.reflect.Method[] methods = WSRecorder.class.getMethods();
         for (java.lang.reflect.Method method : methods) {
-            if (method.getName().equals(name))
+            if (method.getName().equals(name)) {
                 return method;
+            }
         }
         return null;
     }

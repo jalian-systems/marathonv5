@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.menu;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,9 +20,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import net.sourceforge.marathon.javaagent.NoSuchWindowException;
-import net.sourceforge.marathon.javadriver.JavaDriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -35,7 +32,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
+
 import components.MenuLayoutDemo;
+import net.sourceforge.marathon.javaagent.NoSuchWindowException;
+import net.sourceforge.marathon.javadriver.JavaDriver;
 
 @Test public class JMenuHorizontalTest {
 
@@ -64,8 +64,9 @@ import components.MenuLayoutDemo;
                 frame.dispose();
             }
         });
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void getTextOnMenu() throws Throwable {
@@ -100,7 +101,7 @@ import components.MenuLayoutDemo;
         new Actions(driver).moveToElement(menu).click().perform();
 
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 3;
             }
         });
@@ -179,7 +180,7 @@ import components.MenuLayoutDemo;
 
         subMenu.click();
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 5;
             }
         });
@@ -210,7 +211,7 @@ import components.MenuLayoutDemo;
 
         subMenu.click();
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 5;
             }
         });
@@ -251,7 +252,7 @@ import components.MenuLayoutDemo;
         menu.click();
         subMenu.click();
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == initialMenuItemsSize + 2;
             }
         });

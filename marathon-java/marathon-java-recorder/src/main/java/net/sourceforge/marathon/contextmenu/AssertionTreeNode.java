@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
 import java.lang.reflect.Method;
@@ -47,7 +47,7 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
         this.property = property;
     }
 
-    public boolean isLeaf() {
+    @Override public boolean isLeaf() {
         return isPrimitive(object);
     }
 
@@ -58,42 +58,51 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
                 || object.getClass() == Void.class || object.getClass() == String.class;
     }
 
-    public int getChildCount() {
-        if (isLeaf())
+    @Override public int getChildCount() {
+        if (isLeaf()) {
             return 0;
-        if (object instanceof List)
+        }
+        if (object instanceof List) {
             return ((List<?>) object).size() + 1;
-        if (object instanceof Map)
+        }
+        if (object instanceof Map) {
             return ((Map<?, ?>) object).size() + 1;
-        if (object instanceof RComponent)
+        }
+        if (object instanceof RComponent) {
             return ((RComponent) object).getMethods().size();
+        }
         return getMethods(object).size();
     }
 
-    public TreeNode getChildAt(int index) {
-        if (object instanceof List)
+    @Override public TreeNode getChildAt(int index) {
+        if (object instanceof List) {
             return getNodeForList((List<?>) object, index);
-        if (object instanceof Map)
+        }
+        if (object instanceof Map) {
             return getNodeForMap((Map<?, ?>) object, index);
+        }
         Method method;
         if (object instanceof RComponent) {
             Method o = ((RComponent) object).getMethods().get(index);
-            method = (Method) o;
-        } else
-            method = (Method) getMethods(object).get(index);
+            method = o;
+        } else {
+            method = getMethods(object).get(index);
+        }
         return getNodeForMethod(method);
     }
 
     private TreeNode getNodeForMap(Map<?, ?> map, int index) {
-        if (index == 0)
+        if (index == 0) {
             return getNewNode(Integer.valueOf(map.size()), "size");
+        }
         Entry<?, ?> entry = (Entry<?, ?>) map.entrySet().toArray()[index - 1];
         return getNewNode(entry.getValue(), "[" + entry.getKey().toString() + "]");
     }
 
     private TreeNode getNodeForList(List<?> l, int index) {
-        if (index == 0)
+        if (index == 0) {
             return getNewNode(Integer.valueOf(l.size()), "size");
+        }
         return getNewNode(l.get(index - 1), "[" + (index - 1) + "]");
     }
 
@@ -115,15 +124,17 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
             r = RComponent.unboxPremitiveArray(((Collection<?>) r).toArray());
         }
         AssertionTreeNode node = new AssertionTreeNode(r, p);
-        if (isPrimitive(r))
+        if (isPrimitive(r)) {
             node.setAllowsChildren(false);
+        }
         node.setParent(this);
         return node;
     }
 
     private String getPropertyName(String name) {
-        if (name.startsWith("is"))
+        if (name.startsWith("is")) {
             return name.substring(2);
+        }
         return name.substring(3);
     }
 
@@ -139,9 +150,10 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
     private ArrayList<Method> getMethods(Object object) {
         ArrayList<Method> list = new ArrayList<Method>();
         Method[] methods = object.getClass().getMethods();
-        for (int i = 0; i < methods.length; i++) {
-            if (isValidMethod(methods[i]))
-                list.add(methods[i]);
+        for (Method method : methods) {
+            if (isValidMethod(method)) {
+                list.add(method);
+            }
         }
         sort(list);
         return list;
@@ -152,14 +164,16 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
             @Override public int compare(Method o1, Method o2) {
                 String name1 = o1.getName();
                 String name2 = o2.getName();
-                if (name1.startsWith("is"))
+                if (name1.startsWith("is")) {
                     name1 = name1.substring(2);
-                else
+                } else {
                     name1 = name1.substring(3);
-                if (name2.startsWith("is"))
+                }
+                if (name2.startsWith("is")) {
                     name2 = name2.substring(2);
-                else
+                } else {
                     name2 = name2.substring(3);
+                }
                 return name1.compareTo(name2);
             }
         });
@@ -167,8 +181,9 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
 
     public String getDisplayNode() {
         String d = object == null ? "null" : getObjectRepr();
-        if (d.length() > 60)
+        if (d.length() > 60) {
             d = d.substring(0, 56) + "...";
+        }
         return d;
     }
 

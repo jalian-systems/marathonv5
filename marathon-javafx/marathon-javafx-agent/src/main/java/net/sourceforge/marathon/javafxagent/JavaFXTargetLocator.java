@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.io.UnsupportedEncodingException;
@@ -118,7 +118,7 @@ public class JavaFXTargetLocator {
 
         public void maximize() {
             if (currentWindow instanceof Stage) {
-                ((Stage) currentWindow).setMaximized(true);
+                currentWindow.setMaximized(true);
             }
         }
 
@@ -148,8 +148,9 @@ public class JavaFXTargetLocator {
                 id = idPart;
             }
             IJavaFXElement e = elements.get(id);
-            if (e == null)
+            if (e == null) {
                 throw new NoSuchElementException("Could not find element for the given id in the topmost window", null);
+            }
             if (info == null) {
                 return e;
             }
@@ -157,8 +158,9 @@ public class JavaFXTargetLocator {
             String selector = pobj.getString("selector");
             JSONArray parray = pobj.getJSONArray("parameters");
             Object[] params = new Object[parray.length()];
-            for (int i = 0; i < parray.length(); i++)
+            for (int i = 0; i < parray.length(); i++) {
                 params[i] = parray.get(i);
+            }
             e = e.getByPseudoElement(selector, params).get(0);
             return e;
         }
@@ -192,11 +194,13 @@ public class JavaFXTargetLocator {
             if (currentWindow instanceof Stage) {
                 String className = currentWindow.getClass().getName();
                 Package pkg = currentWindow.getClass().getPackage();
-                if (pkg == null)
+                if (pkg == null) {
                     return className;
+                }
                 String pkgName = pkg.getName();
-                if (!pkgName.startsWith(Stage.class.getPackage().getName()))
+                if (!pkgName.startsWith(Stage.class.getPackage().getName())) {
                     return className;
+                }
                 return null;
             }
             return null;
@@ -226,8 +230,9 @@ public class JavaFXTargetLocator {
             new Wait("Unable to find menu bar component") {
                 @Override public boolean until() {
                     Node menubar = currentWindow.getScene().getRoot().lookup(".menu-bar");
-                    if (menubar != null)
-                        nodes.add((MenuBar) menubar);
+                    if (menubar != null) {
+                        nodes.add(menubar);
+                    }
                     return nodes.size() > 0;
                 }
             };
@@ -245,12 +250,13 @@ public class JavaFXTargetLocator {
             List<Window> contextMenus = new ArrayList<>();
             new Wait("Unable to context menu") {
                 @Override public boolean until() {
-                    @SuppressWarnings({ "deprecation", "static-access" })
-                    Iterator<Window> windows = currentWindow.impl_getWindows();
+                    @SuppressWarnings({ "deprecation" })
+                    Iterator<Window> windows = Window.impl_getWindows();
                     while (windows.hasNext()) {
-                        Window window = (Window) windows.next();
-                        if (window instanceof ContextMenu)
-                            contextMenus.add((ContextMenu) window);
+                        Window window = windows.next();
+                        if (window instanceof ContextMenu) {
+                            contextMenus.add(window);
+                        }
                     }
                     return contextMenus.size() > 0;
                 }
@@ -392,17 +398,19 @@ public class JavaFXTargetLocator {
                         null);
             }
         }
-        if (currentWindow == null)
+        if (currentWindow == null) {
             throw new NoSuchWindowException(
                     "No top level window is set. Java driver is unable to find a suitable implicit candidate", null);
+        }
         return currentWindow;
     }
 
     public JFXWindow getWindowForHandle(String windowHandle) {
         Stage[] windows = getValidWindows();
         for (Stage window : windows) {
-            if (windowHandle.equals(getWindowHandle(window)))
+            if (windowHandle.equals(getWindowHandle(window))) {
                 return new JFXWindow(window);
+            }
         }
         throw new NoSuchWindowException("No window found corresponding to the given window Handle", null);
     }
@@ -414,8 +422,9 @@ public class JavaFXTargetLocator {
     public IJavaFXElement getActiveElement() {
         JFXWindow top = getTopContainer();
         Node active = top.getWindow().getScene().getFocusOwner();
-        if (active == null)
+        if (active == null) {
             throw new NoSuchElementException("Could not find focus owner for the topmost window", null);
+        }
         return top.findElement(active);
     }
 

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
 import javax.swing.event.TreeModelListener;
@@ -42,58 +42,61 @@ public class FilterableTreeModel<T> implements TreeModel {
         };
     }
 
-    public Object getRoot() {
+    @Override public Object getRoot() {
         return treeModel.getRoot();
     }
 
-    @SuppressWarnings("unchecked") public int getIndexOfChild(Object parent, Object child2) {
+    @Override @SuppressWarnings("unchecked") public int getIndexOfChild(Object parent, Object child2) {
         int childCount = treeModel.getChildCount(parent);
         int ourCount = 0;
         for (int i = 0; i < childCount; i++) {
             Object child = treeModel.getChild(parent, i);
             if (predicate.apply((T) child)) {
-                if (child == child2)
+                if (child == child2) {
                     return ourCount;
+                }
                 ourCount++;
             }
         }
         return -1;
     }
 
-    @SuppressWarnings("unchecked") public Object getChild(Object parent, int index) {
+    @Override @SuppressWarnings("unchecked") public Object getChild(Object parent, int index) {
         int childCount = treeModel.getChildCount(parent);
         int ourCount = 0;
         for (int i = 0; i < childCount; i++) {
             Object child = treeModel.getChild(parent, i);
             if (predicate.apply((T) child)) {
-                if (ourCount == index)
+                if (ourCount == index) {
                     return child;
+                }
                 ourCount++;
             }
         }
         throw new RuntimeException("Reached unexpected code point");
     }
 
-    @SuppressWarnings("unchecked") public int getChildCount(Object parent) {
+    @Override @SuppressWarnings("unchecked") public int getChildCount(Object parent) {
         int childCount = treeModel.getChildCount(parent);
         int ourCount = 0;
         for (int i = 0; i < childCount; i++) {
             Object child = treeModel.getChild(parent, i);
-            if (predicate.apply((T) child))
+            if (predicate.apply((T) child)) {
                 ourCount++;
+            }
         }
         return ourCount;
     }
 
-    public boolean isLeaf(Object node) {
+    @Override public boolean isLeaf(Object node) {
         return treeModel.isLeaf(node);
     }
 
-    public void addTreeModelListener(TreeModelListener l) {
+    @Override public void addTreeModelListener(TreeModelListener l) {
         treeModel.addTreeModelListener(l);
     }
 
-    public void removeTreeModelListener(TreeModelListener l) {
+    @Override public void removeTreeModelListener(TreeModelListener l) {
         treeModel.removeTreeModelListener(l);
     }
 

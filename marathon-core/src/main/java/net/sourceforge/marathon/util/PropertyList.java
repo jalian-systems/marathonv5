@@ -1,37 +1,39 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.util;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
 public class PropertyList {
-    static class Property {
+    public static class Property {
         private String key;
-        private String description;
-        private String value;
+        private SimpleStringProperty propertyName;
+        private SimpleStringProperty value;
         private Class<?> klass;
         private String[] items;
 
-        Property(String key, String description, String value, Class<?> klass) {
+        Property(String key, String pName, String pValue, Class<?> klass) {
             this.key = key;
-            this.description = description;
-            this.value = value;
+            this.propertyName = new SimpleStringProperty(pName);
+            this.value = new SimpleStringProperty(pValue);
             this.klass = klass;
         }
 
@@ -44,20 +46,20 @@ public class PropertyList {
             return key;
         }
 
-        public String getDescription() {
-            return description;
+        public String getPropertyName() {
+            return propertyName.get();
         }
 
         public String getValue() {
-            return value;
+            return value.get();
         }
 
         public Class<?> getKlass() {
             return klass;
         }
 
-        public void setValue(String value) {
-            this.value = value;
+        public void setValue(String pValue) {
+            this.value.set(pValue);
         }
 
         public String[] getItems() {
@@ -76,7 +78,8 @@ public class PropertyList {
     }
 
     public void addColorProperty(String key, String description, Color color) {
-        String value = "#" + Integer.toHexString((color.getRGB() & 0x00FFFFFF) | 0x1000000).substring(1);
+        String value = String.format("#%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
         addProperty(key, description, value, Color.class);
     }
 
@@ -85,13 +88,14 @@ public class PropertyList {
     }
 
     public void addFontProperty(String key, String description, Font font) {
-        addProperty(key, description, font.getFontName(), Font.class);
+        addProperty(key, description, font.getName(), Font.class);
     }
 
     public Property getProperty(String key) {
         for (Property prop : propList) {
-            if (prop.getKey().equals(key))
+            if (prop.getKey().equals(key)) {
                 return prop;
+            }
         }
         return null;
     }

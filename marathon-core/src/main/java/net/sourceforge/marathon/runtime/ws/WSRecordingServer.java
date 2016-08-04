@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Jalian Systems Pvt. Ltd.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.ws;
 
 import java.io.IOException;
@@ -13,12 +28,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.sourceforge.marathon.api.INamingStrategy;
+import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration;
 import net.sourceforge.marathon.objectmap.ObjectMapException;
 import net.sourceforge.marathon.runtime.IRecordingServer;
 import net.sourceforge.marathon.runtime.JSONScriptElement;
 import net.sourceforge.marathon.runtime.NamingStrategyFactory;
-import net.sourceforge.marathon.runtime.api.ContextMenuTriggers;
 import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
@@ -179,8 +194,9 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         private static final long serialVersionUID = 1L;
 
         @Override public String toScriptCode() {
-            if (java_version != null)
+            if (java_version != null) {
                 return Indent.getIndent() + "java_recorded_version = '" + java_version + "'\n";
+            }
             java_version = null;
             return "";
         }
@@ -249,15 +265,16 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     public JSONObject getContextMenuTriggers() {
-        return new JSONObject().put("contextMenuKeyModifiers", ContextMenuTriggers.getContextMenuKeyModifiers())
-                .put("contextMenuKey", ContextMenuTriggers.getContextMenuKeyCode())
-                .put("menuModifiers", ContextMenuTriggers.getContextMenuModifiers());
+        return new JSONObject().put("contextMenuKeyModifiers", FXContextMenuTriggers.getContextMenuKeyModifiers())
+                .put("contextMenuKey", FXContextMenuTriggers.getContextMenuKeyCode())
+                .put("menuModifiers", FXContextMenuTriggers.getContextMenuModifiers());
     }
 
     public JSONObject record(WebSocket conn, JSONObject query) throws IOException {
         logger.info("WSRecordingServer.record(" + query.toString(2) + ")");
-        if (paused || recorder == null)
+        if (paused || recorder == null) {
             return new JSONObject();
+        }
         try {
             String name = null;
             try {
@@ -313,11 +330,13 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             return ns.getContainerName(container);
         }
         JSONObject urp = container.getJSONObject("urp");
-        if (urp.has("title"))
+        if (urp.has("title")) {
             return urp.getString("title");
+        }
         urp = container.getJSONObject("containerURP");
-        if (urp.has("title"))
+        if (urp.has("title")) {
             return urp.getString("title");
+        }
         urp = container.getJSONObject("attributes");
         return urp.getString("title");
     }
@@ -330,7 +349,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         paused = false;
     }
 
-    public WindowId getFocusedWindowId() {
+    @Override public WindowId getFocusedWindowId() {
         return focusedWindowId;
     }
 
@@ -400,8 +419,9 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     private static java.lang.reflect.Method getMethod(String name) {
         java.lang.reflect.Method[] methods = WSRecordingServer.class.getMethods();
         for (java.lang.reflect.Method method : methods) {
-            if (method.getName().equals(name))
+            if (method.getName().equals(name)) {
                 return method;
+            }
         }
         return null;
     }

@@ -1,0 +1,34 @@
+{
+  "ace-editor": {
+    "tabSize": 2,
+    "showLineNumbers": true,
+    "keyboard-handler": "ace",
+    "theme": "ace/theme/solarized_dark",
+    "fontSize": "13px",
+    "tabConversion": true
+  },
+  "workspace": {"state": {"dockables": [
+    "Navigator",
+    "..\\..\\marathon-core\\README.txt",
+    "TestCases\\sample1.rb",
+    "Results",
+    "Log",
+    "Output"
+  ]}},
+  "display": {
+    "iconified": false,
+    "maximized": false,
+    "window.w": 1116,
+    "window.x": 199,
+    "window.h": 759,
+    "window.y": 142,
+    "fullScreen": false
+  },
+  "navigator": {},
+  "project": {"fixture": "default"},
+  "theme": {
+    "path": "/themes/marathon.css",
+    "builtin": false,
+    "name": "Marathon"
+  }
+}

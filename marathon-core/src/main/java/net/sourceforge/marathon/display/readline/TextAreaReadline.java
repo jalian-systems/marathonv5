@@ -1,62 +1,44 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display.readline;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import jline.History;
 
-public class TextAreaReadline implements KeyListener {
+public class TextAreaReadline implements EventHandler<KeyEvent> {
+
     private static final String EMPTY_LINE = "";
-    private JTextComponent area;
-    private int startPos;
+    private TextField area;
+    private TextFlow output;
     private String currentLine;
-    public volatile MutableAttributeSet promptStyle;
-    public volatile MutableAttributeSet inputStyle;
-    public volatile MutableAttributeSet outputStyle;
-    public volatile MutableAttributeSet errorStyle;
-    public volatile MutableAttributeSet resultStyle;
-    private JComboBox<String> completeCombo;
-    private BasicComboPopup completePopup;
-    private int start;
-    private int end;
     private final InputStream inputStream = new Input();
     private final OutputStream outputStream = new Output(1);
     private final OutputStream errorStream = new Output(2);
@@ -105,51 +87,51 @@ public class TextAreaReadline implements KeyListener {
     private static final Spec INPUT_SPEC = new Spec() {
         {
             addReaction(new FastReaction(Channel.SHUTDOWN, Channel.BUFFER) {
-                public void react(Join join, Object[] args) {
+                @Override public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new FastReaction(Channel.SHUTDOWN, Channel.EMPTY) {
-                public void react(Join join, Object[] args) {
+                @Override public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new FastReaction(Channel.SHUTDOWN, Channel.FINISHED) {
-                public void react(Join join, Object[] args) {
+                @Override public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new FastReaction(Channel.FINISHED, Channel.LINE) {
-                public void react(Join join, Object[] args) {
+                @Override public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new SyncReaction(Channel.AVAILABLE, Channel.BUFFER) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     InputBuffer buffer = (InputBuffer) args[1];
                     join.send(Channel.BUFFER, buffer);
                     return buffer.bytes.length - buffer.offset;
                 }
             });
             addReaction(new SyncReaction(Channel.AVAILABLE, Channel.EMPTY) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     join.send(Channel.EMPTY, null);
                     return 0;
                 }
             });
             addReaction(new SyncReaction(Channel.AVAILABLE, Channel.FINISHED) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                     return 0;
                 }
             });
             addReaction(new SyncReaction(Channel.READ, Channel.BUFFER) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     return ((ReadRequest) args[0]).perform(join, (InputBuffer) args[1]);
                 }
             });
             addReaction(new SyncReaction(Channel.READ, Channel.EMPTY, Channel.LINE) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     final ReadRequest request = (ReadRequest) args[0];
                     final String line = (String) args[2];
                     if (line.length() != 0) {
@@ -166,18 +148,18 @@ public class TextAreaReadline implements KeyListener {
                 }
             });
             addReaction(new SyncReaction(Channel.READ, Channel.FINISHED) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                     return -1;
                 }
             });
             addReaction(new SyncReaction(Channel.GET_LINE, Channel.LINE) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     return args[1];
                 }
             });
             addReaction(new SyncReaction(Channel.GET_LINE, Channel.FINISHED) {
-                public Object react(Join join, Object[] args) {
+                @Override public Object react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                     return EMPTY_LINE;
                 }
@@ -186,61 +168,22 @@ public class TextAreaReadline implements KeyListener {
     };
     private final Join inputJoin = INPUT_SPEC.createJoin();
     private Readline readline;
-    private Color promptForegroundColor = new Color(0xa4, 0x00, 0x00);
-    private Color inputForegroundColor = new Color(0x20, 0x4a, 0x87);
-    private Color outputForegroundColor = Color.darkGray;
-    private Color resultForegroundColor = new Color(0x20, 0x4a, 0x87);
-    private Color errorForegroundColor = Color.RED;
+    private Style promptStyle = new Style(Color.rgb(0xa4, 0x00, 0x00), Font.font("Verdana", FontWeight.MEDIUM, 12));
+    private Style inputStyle = new Style(Color.rgb(0x20, 0x4a, 0x87), Font.font("Verdana", FontWeight.MEDIUM, 12));
+    private Style outputStyle = new Style(Color.DIMGRAY, Font.font("Verdana", FontWeight.MEDIUM, 12));
+    private Style resultStyle = new Style(Color.rgb(0x20, 0x4a, 0x87), Font.font("Verdana", FontWeight.MEDIUM, 12));
+    private Style errorStyle = new Style(Color.RED, Font.font("Verdana", FontWeight.MEDIUM, 12));
+    private StringBuffer functionText = new StringBuffer();
 
-    public TextAreaReadline(JTextComponent area) {
-        this(area, null);
-    }
-
-    public TextAreaReadline(JTextComponent area, final String message) {
-        this.area = area;
+    public TextAreaReadline(TextField text, TextFlow output, final String message) {
+        this.area = text;
+        this.output = output;
         readline = new Readline();
         inputJoin.send(Channel.EMPTY, null);
-        area.addKeyListener(this);
-        if (area.getDocument() instanceof AbstractDocument)
-            ((AbstractDocument) area.getDocument()).setDocumentFilter(new DocumentFilter() {
-                public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr)
-                        throws BadLocationException {
-                    if (offset >= startPos)
-                        super.insertString(fb, offset, string, attr);
-                }
-
-                public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
-                    if (offset >= startPos)
-                        super.remove(fb, offset, length);
-                }
-
-                public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                        throws BadLocationException {
-                    if (offset >= startPos)
-                        super.replace(fb, offset, length, text, attrs);
-                }
-            });
-        promptStyle = new SimpleAttributeSet();
-        StyleConstants.setForeground(promptStyle, promptForegroundColor);
-        inputStyle = new SimpleAttributeSet();
-        StyleConstants.setForeground(inputStyle, inputForegroundColor);
-        outputStyle = new SimpleAttributeSet();
-        StyleConstants.setForeground(outputStyle, outputForegroundColor);
-        errorStyle = new SimpleAttributeSet();
-        StyleConstants.setForeground(errorStyle, errorForegroundColor);
-        resultStyle = new SimpleAttributeSet();
-        StyleConstants.setItalic(resultStyle, true);
-        StyleConstants.setForeground(resultStyle, resultForegroundColor);
-        completeCombo = new JComboBox<String>();
-        completeCombo.setRenderer(new DefaultListCellRenderer()); // no silly
-        completePopup = new BasicComboPopup(completeCombo);
+        text.setOnKeyPressed(this);
         if (message != null) {
-            final MutableAttributeSet messageStyle = new SimpleAttributeSet();
-            StyleConstants.setBackground(messageStyle, area.getForeground());
-            StyleConstants.setForeground(messageStyle, area.getBackground());
-            append(message, messageStyle);
+            append(message, promptStyle);
         }
-        startPos = area.getDocument().getLength();
     }
 
     public InputStream getInputStream() {
@@ -255,240 +198,134 @@ public class TextAreaReadline implements KeyListener {
         return errorStream;
     }
 
-    protected void completeAction(KeyEvent event) {
-        if (readline.getCompletor() == null)
-            return;
-        event.consume();
-        if (completePopup.isVisible())
-            return;
-        List<String> candidates = new LinkedList<String>();
-        String bufstr = null;
-        try {
-            bufstr = area.getText(startPos, area.getCaretPosition() - startPos);
-        } catch (BadLocationException e) {
-            return;
-        }
-        int cursor = area.getCaretPosition() - startPos;
-        int position = readline.getCompletor().complete(bufstr, cursor, candidates);
-        // no candidates? Fail.
-        if (candidates.isEmpty())
-            return;
-        if (candidates.size() == 1) {
-            replaceText(startPos + position, area.getCaretPosition(), candidates.get(0));
-            return;
-        }
-        start = startPos + position;
-        end = area.getCaretPosition();
-        Point pos = area.getCaret().getMagicCaretPosition();
-        // bit risky if someone changes completor, but useful for method calls
-        int cutoff = bufstr.substring(position).lastIndexOf('.') + 1;
-        start += cutoff;
-        if (candidates.size() < 10)
-            completePopup.getList().setVisibleRowCount(candidates.size());
-        else
-            completePopup.getList().setVisibleRowCount(10);
-        completeCombo.removeAllItems();
-        for (Iterator<String> i = candidates.iterator(); i.hasNext();) {
-            String item = i.next();
-            if (cutoff != 0)
-                item = item.substring(cutoff);
-            completeCombo.addItem(item);
-        }
-        completePopup.show(area, pos.x, pos.y + area.getFontMetrics(area.getFont()).getHeight());
-    }
-
-    protected void backAction(KeyEvent event) {
-        if (area.getCaretPosition() <= startPos)
-            event.consume();
-    }
-
     protected void upAction(KeyEvent event) {
         event.consume();
-        if (completePopup.isVisible()) {
-            int selected = completeCombo.getSelectedIndex() - 1;
-            if (selected < 0)
-                return;
-            completeCombo.setSelectedIndex(selected);
+        if (!readline.getHistory().next()) {
+            currentLine = getLine();
+        } else {
+            readline.getHistory().previous(); // undo check
+        }
+        if (!readline.getHistory().previous()) {
             return;
         }
-        if (!readline.getHistory().next()) // at end
-            currentLine = getLine();
-        else
-            readline.getHistory().previous(); // undo check
-        if (!readline.getHistory().previous())
-            return;
         String oldLine = readline.getHistory().current().trim();
-        replaceText(startPos, area.getDocument().getLength(), oldLine);
+        replaceText(oldLine);
     }
 
     protected void downAction(KeyEvent event) {
         event.consume();
-        if (completePopup.isVisible()) {
-            int selected = completeCombo.getSelectedIndex() + 1;
-            if (selected == completeCombo.getItemCount())
-                return;
-            completeCombo.setSelectedIndex(selected);
+        if (!readline.getHistory().next()) {
             return;
         }
-        if (!readline.getHistory().next())
-            return;
         String oldLine;
-        if (!readline.getHistory().next()) // at end
+        if (!readline.getHistory().next()) {
             oldLine = currentLine;
-        else {
+        } else {
             readline.getHistory().previous(); // undo check
             oldLine = readline.getHistory().current().trim();
         }
-        replaceText(startPos, area.getDocument().getLength(), oldLine);
+        replaceText(oldLine);
     }
 
-    protected void replaceText(int start, int end, String replacement) {
-        try {
-            area.getDocument().remove(start, end - start);
-            area.getDocument().insertString(start, replacement, inputStyle);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
+    protected void replaceText(String replacement) {
+        area.setText(replacement);
     }
 
     protected String getLine() {
-        try {
-            return area.getText(startPos, area.getDocument().getLength() - startPos);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return area.getText();
     }
 
     protected void enterAction(KeyEvent event) {
         event.consume();
-        if (completePopup.isVisible()) {
-            if (completeCombo.getSelectedItem() != null)
-                replaceText(start, end, (String) completeCombo.getSelectedItem());
-            completePopup.setVisible(false);
-            return;
+        if (functionText.length() > 0) {
+            String function = functionText.toString();
+            append(">> ", promptStyle);
+            append(function, inputStyle);
+            inputJoin.send(Channel.LINE, function);
+        } else {
+            String text = area.getText();
+            append(">> ", promptStyle);
+            append(text, inputStyle);
+            append("\n", inputStyle);
+            String line = getLine();
+            inputJoin.send(Channel.LINE, line);
         }
-        append("\n", null);
-        String line = getLine();
-        startPos = area.getDocument().getLength();
-        inputJoin.send(Channel.LINE, line);
+        functionText = new StringBuffer();
+        area.clear();
+    }
+
+    private void collectAction() {
+        String text = area.getText();
+        functionText.append(text + "\n");
+        readline.getHistory().addToHistory(text);
+        area.clear();
     }
 
     public String readLine(final String prompt) {
-        if (SwingUtilities.isEventDispatchThread()) {
+        if (Platform.isFxApplicationThread()) {
             throw new RuntimeException("Cannot call readline from event dispatch thread");
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                append(prompt.trim(), promptStyle);
-                append(" ", inputStyle); // hack to get right style for input
-                area.setCaretPosition(area.getDocument().getLength());
-                startPos = area.getDocument().getLength();
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                area.positionCaret(area.getLength());
                 readline.getHistory().moveToEnd();
             }
         });
         final String line = (String) inputJoin.call(Channel.GET_LINE, null);
-        if (line.length() > 0) {
+        if (line != null && line.length() > 0) {
             return line.trim();
         } else {
             return null;
         }
     }
 
-    public void keyPressed(KeyEvent event) {
-        int code = event.getKeyCode();
-        switch (code) {
-        case KeyEvent.VK_TAB:
-            positionToLastLine();
-            completeAction(event);
-            break;
-        case KeyEvent.VK_LEFT:
-        case KeyEvent.VK_BACK_SPACE:
-            positionToLastLine();
-            backAction(event);
-            break;
-        case KeyEvent.VK_UP:
-            positionToLastLine();
-            upAction(event);
-            break;
-        case KeyEvent.VK_DOWN:
-            positionToLastLine();
-            downAction(event);
-            break;
-        case KeyEvent.VK_ENTER:
-            positionToLastLine();
-            enterAction(event);
-            break;
-        case KeyEvent.VK_HOME:
-            positionToLastLine();
-            event.consume();
-            area.setCaretPosition(startPos);
-            break;
-        case KeyEvent.VK_D:
-            if ((event.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
-                event.consume();
-                inputJoin.send(Channel.LINE, EMPTY_LINE);
-            }
-            break;
-        }
-        if (!event.isAltDown() && !event.isAltGraphDown() && !event.isControlDown() && !event.isMetaDown()) {
-            if (code >= KeyEvent.VK_A && code <= KeyEvent.VK_Z)
-                positionToLastLine();
-        }
-        if (completePopup.isVisible() && code != KeyEvent.VK_TAB && code != KeyEvent.VK_UP && code != KeyEvent.VK_DOWN)
-            completePopup.setVisible(false);
-    }
-
     public void positionToLastLine() {
-        boolean lastLine = area.getDocument().getLength() == area.getCaretPosition();
-        try {
-            if (!lastLine)
-                lastLine = !area.getDocument()
-                        .getText(area.getCaretPosition(), area.getDocument().getLength() - area.getCaretPosition()).contains("\n");
-        } catch (BadLocationException e) {
+        boolean lastLine = area.getLength() == area.getCaretPosition();
+        if (!lastLine) {
+            lastLine = !area.getText(area.getCaretPosition(), area.getLength()).contains("\n");
         }
-        if (!lastLine)
-            area.setCaretPosition(area.getDocument().getLength());
-    }
-
-    public void keyReleased(KeyEvent arg0) {
-    }
-
-    public void keyTyped(KeyEvent arg0) {
+        if (!lastLine) {
+            area.positionCaret(area.getLength());
+        }
     }
 
     public void shutdown() {
         inputJoin.send(Channel.SHUTDOWN, null);
     }
 
-    /** Output methods **/
-    protected void append(String toAppend, AttributeSet style) {
-        try {
-            area.getDocument().insertString(area.getDocument().getLength(), toAppend, style);
-        } catch (BadLocationException e) {
-        }
+    /**
+     * Output methods
+     *
+     * @param fill
+     **/
+    protected void append(String toAppend, Style style) {
+        Text text = new Text(toAppend);
+        text.setFill(style.getFillColor());
+        text.setFont(style.getFont());
+        text.setWrappingWidth(640);
+        output.getChildren().add(text);
     }
 
     private void writeLineUnsafe(final String line, int type) {
-        if (line.startsWith("=>"))
+        if (line.startsWith("=>")) {
             append(line, resultStyle);
-        else if (line.startsWith("****")) {
+        } else if (line.startsWith("****")) {
             append(line.substring(4), resultStyle);
         } else {
-            if (type == 1)
+            if (type == 1) {
                 append(line, outputStyle);
-            else
+            } else {
                 append(line, errorStyle);
+            }
         }
-        startPos = area.getDocument().getLength();
     }
 
     private void writeLine(final String line, final int type) {
-        if (SwingUtilities.isEventDispatchThread()) {
+        if (Platform.isFxApplicationThread()) {
             writeLineUnsafe(line, type);
         } else {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
                     writeLineUnsafe(line, type);
                 }
             });
@@ -518,7 +355,7 @@ public class TextAreaReadline implements KeyListener {
             if (closed) {
                 throw new IOException("Stream is closed");
             }
-            if (SwingUtilities.isEventDispatchThread()) {
+            if (Platform.isFxApplicationThread()) {
                 throw new IOException("Cannot call read from event dispatch thread");
             }
             if (b == null) {
@@ -572,32 +409,64 @@ public class TextAreaReadline implements KeyListener {
         return readline.getHistory();
     }
 
-    public void setPromptForegroundColor(Color promptForegroundColor) {
-        this.promptForegroundColor = promptForegroundColor;
-        StyleConstants.setForeground(promptStyle, promptForegroundColor);
-    }
-
-    public void setInputForegroundColor(Color inputForegroundColor) {
-        this.inputForegroundColor = inputForegroundColor;
-        StyleConstants.setForeground(inputStyle, inputForegroundColor);
-    }
-
-    public void setOutputForegroundColor(Color outputForegroundColor) {
-        this.outputForegroundColor = outputForegroundColor;
-        StyleConstants.setForeground(outputStyle, outputForegroundColor);
-    }
-
-    public void setResultForegroundColor(Color resultForegroundColor) {
-        this.resultForegroundColor = resultForegroundColor;
-        StyleConstants.setForeground(resultStyle, resultForegroundColor);
-    }
-
-    public void setErrorForegroundColor(Color errorForegroundColor) {
-        this.errorForegroundColor = errorForegroundColor;
-        StyleConstants.setForeground(errorStyle, errorForegroundColor);
-    }
-
     public void setHistoryFile(File file) throws IOException {
         readline.getHistory().setHistoryFile(file);
     }
+
+    @Override public void handle(KeyEvent event) {
+        if (event.getEventType() != KeyEvent.KEY_PRESSED) {
+            return;
+        }
+        KeyCode code = event.getCode();
+        switch (code) {
+        case ENTER:
+            positionToLastLine();
+            if (event.isShiftDown()) {
+                collectAction();
+            } else {
+                if (functionText.length() > 0) {
+                    collectAction();
+                }
+                enterAction(event);
+            }
+            break;
+        case UP:
+            positionToLastLine();
+            upAction(event);
+            break;
+        case DOWN:
+            positionToLastLine();
+            downAction(event);
+            break;
+        case LEFT:
+        case D:
+            if (event.isControlDown()) {
+                event.consume();
+                inputJoin.send(Channel.LINE, EMPTY_LINE);
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    public class Style {
+
+        private Color fillColor;
+        private Font font;
+
+        public Style(Color fillColor, Font font) {
+            this.fillColor = fillColor;
+            this.font = font;
+        }
+
+        public Color getFillColor() {
+            return fillColor;
+        }
+
+        public Font getFont() {
+            return font;
+        }
+    }
+
 }

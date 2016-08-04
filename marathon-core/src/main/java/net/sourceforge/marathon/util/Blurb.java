@@ -1,49 +1,41 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.util;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
-import net.sourceforge.marathon.runtime.api.ButtonBarFactory;
-import net.sourceforge.marathon.runtime.api.EscapeDialog;
+import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public abstract class Blurb {
     private URL url;
     private String title;
-    private int selection;
+    private ButtonType selection;
     private boolean cancel;
 
     public Blurb(String marker, String title, boolean cancel) {
@@ -57,119 +49,90 @@ public abstract class Blurb {
         this(marker, title, false);
     }
 
-    protected int showDialog() {
-        try {
-            BlurbDialog dialog = new BlurbDialog(url, title, cancel);
-            dialog.setPreferredSize(new Dimension(640, 480));
-            dialog.setLocationRelativeTo(null);
-            dialog.pack();
-            dialog.centerScreen();
-            dialog.setVisible(true);
-            return dialog.getSelection();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return -1;
-        }
+    protected ButtonType showDialog() {
+        BlurbStage blurbStage = new BlurbStage(new BlurbInfo(url, title, cancel));
+        blurbStage.getStage().showAndWait();
+        return blurbStage.getSelection();
     }
 
-    public int getSelection() {
+    public ButtonType getSelection() {
         return selection;
     }
 
-    public int showMessage() {
-        if (SwingUtilities.isEventDispatchThread()) {
+    public ButtonType showMessage() {
+        if (Platform.isFxApplicationThread()) {
             return showDialog();
         } else {
-            final Integer[] ret = new Integer[1];
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override public void run() {
-                        ret[0] = showDialog();
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            return ret[0];
+            Object[] ret = new Object[1];
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    ret[0] = showDialog();
+                }
+            });
+            return (ButtonType) ret[0];
         }
     }
 
-    public static class BlurbDialog extends EscapeDialog {
-        private static final long serialVersionUID = 1L;
-        private URL url;
-        private JButton ok;
-        private JButton cancel;
-        private int selection = JOptionPane.OK_OPTION;
-        private boolean cancelNeeded;
+    public static class BlurbStage extends ModalDialog<BlurbInfo> {
 
-        public BlurbDialog(URL url, String title, boolean cancelNeeded) throws IOException {
-            super((Frame) null, title, true);
-            this.url = url;
-            this.cancelNeeded = cancelNeeded;
+        private BlurbInfo blurbInfo;
+        private ButtonType selection;
+        private WebView webView = new WebView();
+        private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
+        private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
+        private ButtonBar buttonBar = new ButtonBar();
+
+        public BlurbStage(BlurbInfo blurbInfo) {
+            super(blurbInfo.getTitle());
+            this.blurbInfo = blurbInfo;
             initComponents();
         }
 
-        public int getSelection() {
+        @Override protected void initialize(Stage stage) {
+            super.initialize(stage);
+            stage.initModality(Modality.APPLICATION_MODAL);
+        }
+
+        @Override protected Parent getContentPane() {
+            VBox content = new VBox();
+            content.getStyleClass().add("blurb-stage");
+            content.setId("blurbStage");
+            content.getChildren().addAll(webView, buttonBar);
+            return content;
+        }
+
+        private void initComponents() {
+            webView.setId("webView");
+            VBox.setVgrow(webView, Priority.ALWAYS);
+            WebEngine engine = webView.getEngine();
+            engine.load(blurbInfo.getURL().toExternalForm());
+
+            buttonBar.setId("buttonBar");
+            buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
+            buttonBar.getButtons().add(okButton);
+            if (blurbInfo.isCancelNeeded()) {
+                buttonBar.getButtons().add(cancelButton);
+            }
+            okButton.setOnAction((e) -> onOk());
+            cancelButton.setOnAction((e) -> onCancel());
+        }
+
+        private void onOk() {
+            selection = ButtonType.OK;
+            dispose();
+        }
+
+        private void onCancel() {
+            selection = ButtonType.CANCEL;
+            dispose();
+        }
+
+        @Override protected void setDefaultButton() {
+            okButton.setDefaultButton(true);
+        }
+
+        public ButtonType getSelection() {
             return selection;
-        }
-
-        private void initComponents() throws IOException {
-            JEditorPane pane = new JEditorPane(url);
-            pane.setEditable(false);
-            pane.addHyperlinkListener(new HyperlinkListener() {
-                @Override public void hyperlinkUpdate(HyperlinkEvent e) {
-                    if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                        if (Desktop.isDesktopSupported()) {
-                            try {
-                                Desktop.getDesktop().browse(e.getURL().toURI());
-                            } catch (IOException e1) {
-                            } catch (URISyntaxException e1) {
-                            }
-                        }
-                    }
-                }
-            });
-            Container contentPane = getContentPane();
-            contentPane.setLayout(new BorderLayout());
-            contentPane.add(new JScrollPane(pane), BorderLayout.CENTER);
-            contentPane.add(getButtonBar(), BorderLayout.SOUTH);
-        }
-
-        private Component getButtonBar() {
-            ok = new JButton("OK");
-            ok.addActionListener(new ActionListener() {
-                @Override public void actionPerformed(ActionEvent e) {
-                    dispose();
-                }
-            });
-            if (cancelNeeded) {
-                cancel = new JButton("Cancel");
-                cancel.addActionListener(new ActionListener() {
-                    @Override public void actionPerformed(ActionEvent e) {
-                        selection = JOptionPane.CANCEL_OPTION;
-                        dispose();
-                    }
-                });
-            } else
-                cancel = ok;
-            if (cancelNeeded)
-                return ButtonBarFactory.buildOKCancelBar(ok, cancel);
-            return ButtonBarFactory.buildOKBar(ok);
-        }
-
-        @Override public JButton getOKButton() {
-            return ok;
-        }
-
-        @Override public JButton getCloseButton() {
-            return cancel;
-        }
-
-        public void centerScreen() {
-            Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-            setLocation((size.width - getWidth()) / 2, (size.height - getHeight()) / 2);
         }
     }
 }

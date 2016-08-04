@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
 import java.io.Serializable;
@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javafx.scene.control.TreeItem;
 
 public class Module implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
     private List<Module> children;
     private List<Function> functionList;
-    private DefaultMutableTreeNode rootNode;
+    private TreeItem<Object> rootNode;
     private final boolean file;
     private final Module parent;
 
@@ -70,37 +70,40 @@ public class Module implements Serializable {
     }
 
     @Override public String toString() {
-        return name + " (children: " + children.toString() + ") (functions: " + functionList.toString() + ")";
+        return getName();
+        // return name + " (children: " + children.toString() + ") (functions: "
+        // + functionList.toString() + ")";
     }
 
     public String getDocumentation() {
         return "";
     }
 
-    public DefaultMutableTreeNode createTreeNode(String window) {
-        rootNode = new DefaultMutableTreeNode(this);
+    public TreeItem<Object> createTreeNode(String window) {
+        rootNode = new TreeItem<>(this);
         addModulesToTree(rootNode, this, window);
         return rootNode;
     }
 
-    private boolean addModulesToTree(DefaultMutableTreeNode node, Module module, String window) {
-        if (module.getChildren().size() == 0 && module.getFunctions().size() == 0)
+    private boolean addModulesToTree(TreeItem<Object> node, Module module, String window) {
+        if (module.getChildren().size() == 0 && module.getFunctions().size() == 0) {
             return false;
+        }
         List<Module> children = module.getChildren();
         boolean added = false;
         for (Module child : children) {
-            DefaultMutableTreeNode cnode = new DefaultMutableTreeNode(child);
+            TreeItem<Object> cnode = new TreeItem<Object>(child);
             if (addModulesToTree(cnode, child, window)) {
                 added = true;
-                node.add(cnode);
+                node.getChildren().add(cnode);
             }
         }
         List<Function> functions = module.getFunctions();
         for (Function function : functions) {
             if (window == null || titleMatches(window, function.getWindow())) {
-                DefaultMutableTreeNode f = new DefaultMutableTreeNode(function);
-                f.setAllowsChildren(false);
-                node.add(f);
+                TreeItem<Object> f = new TreeItem<Object>(function);
+                // f.setAllowsChildren(false);
+                node.getChildren().add(f);
                 added = true;
             }
         }
@@ -108,22 +111,26 @@ public class Module implements Serializable {
     }
 
     private boolean titleMatches(String title, String mayBeRegex) {
-        if (mayBeRegex == null)
+        if (mayBeRegex == null) {
             return false;
+        }
         if (mayBeRegex.startsWith("/") && !mayBeRegex.startsWith("//")) {
-            if (!Pattern.matches(mayBeRegex.substring(1), title))
+            if (!Pattern.matches(mayBeRegex.substring(1), title)) {
                 return false;
+            }
         } else {
-            if (mayBeRegex.startsWith("//"))
+            if (mayBeRegex.startsWith("//")) {
                 mayBeRegex = mayBeRegex.substring(1);
-            if (!mayBeRegex.equals(title))
+            }
+            if (!mayBeRegex.equals(title)) {
                 return false;
+            }
         }
         return true;
     }
 
-    public DefaultMutableTreeNode refreshNode(String window) {
-        rootNode.removeAllChildren();
+    public TreeItem<Object> refreshNode(String window) {
+        rootNode.getChildren().clear();
         addModulesToTree(rootNode, this, window);
         return rootNode;
     }

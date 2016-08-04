@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display;
 
 import java.io.BufferedReader;
@@ -26,9 +26,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import com.google.inject.BindingAnnotation;
+import com.google.inject.Inject;
 
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import net.sourceforge.marathon.api.ApplicationLaunchException;
 import net.sourceforge.marathon.checklist.CheckList;
 import net.sourceforge.marathon.junit.DDTestRunner;
@@ -38,6 +40,7 @@ import net.sourceforge.marathon.providers.PlaybackResultProvider;
 import net.sourceforge.marathon.providers.RecorderProvider;
 import net.sourceforge.marathon.recorder.IScriptListener;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
 import net.sourceforge.marathon.runtime.api.IPlaybackListener;
@@ -54,39 +57,35 @@ import net.sourceforge.marathon.runtime.api.ScriptException;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
 import net.sourceforge.marathon.runtime.api.WindowId;
-import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.util.LauncherModelHelper;
-
-import com.google.inject.BindingAnnotation;
-import com.google.inject.Inject;
 
 public class Display implements IPlaybackListener, IScriptListener, IExceptionReporter, IHasFullname {
 
     public static final class DummyRecorder implements IRecorder {
-        public void record(IScriptElement element) {
+        @Override public void record(IScriptElement element) {
         }
 
-        public void abortRecording() {
+        @Override public void abortRecording() {
         }
 
-        public void insertChecklist(String name) {
+        @Override public void insertChecklist(String name) {
         }
 
-        public String recordInsertScriptElement(WindowId windowId, String script) {
+        @Override public String recordInsertScriptElement(WindowId windowId, String script) {
             return null;
         }
 
-        public void recordInsertChecklistElement(WindowId windowId, String fileName) {
+        @Override public void recordInsertChecklistElement(WindowId windowId, String fileName) {
         }
 
-        public void recordShowChecklistElement(WindowId windowId, String fileName) {
+        @Override public void recordShowChecklistElement(WindowId windowId, String fileName) {
         }
 
-        public boolean isCreatingObjectMap() {
+        @Override public boolean isCreatingObjectMap() {
             return true;
         }
 
-        public void updateScript() {
+        @Override public void updateScript() {
         }
     }
 
@@ -174,8 +173,9 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     }
 
     private void runTest(boolean debugging) {
-        if (ddTestRunner == null)
+        if (ddTestRunner == null) {
             return;
+        }
         this.debugging = debugging;
         displayView.startTest();
         createRuntime(ddTestRunner.getScriptText(), MarathonMode.PLAYING);
@@ -196,16 +196,19 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         boolean fixtureFound = false;
         try {
             while ((line = br.readLine()) != null) {
-                if (line.matches("^def.*test.*().*"))
+                if (line.matches("^def.*test.*().*")) {
                     testFound = true;
-                if (line.matches("^#\\{\\{\\{ Marathon"))
+                }
+                if (line.matches("^#\\{\\{\\{ Marathon")) {
                     fixtureFound = true;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (testFound && fixtureFound)
+        if (testFound && fixtureFound) {
             return true;
+        }
         return false;
     }
 
@@ -234,7 +237,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         }
         try {
             createRuntime(scriptText, MarathonMode.RECORDING);
-            displayView.startInserting();
+            Platform.runLater(() -> displayView.startInserting());
             runtime.createScript(MarathonMode.RECORDING, console, scriptText, displayView.getFilePath(), false, true, null);
             recorder = recorderProvider.get();
             startApplicationIfNecessary();
@@ -316,10 +319,12 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         if (autShutdown) {
             setState(State.STOPPED_WITH_APP_CLOSED);
             runtime = null;
-        } else
+        } else {
             setState(State.STOPPED_WITH_APP_OPEN);
-        if (shouldClose)
+        }
+        if (shouldClose) {
             closeApplication(closeApplicationNeeded);
+        }
     }
 
     public void openApplication(IConsole console) {
@@ -340,8 +345,9 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
          * work, we need changes in the semantics of the Script and Runtime
          */
         try {
-            if (closeApplicationNeeded && runtime != null && !autShutdown)
+            if (closeApplicationNeeded && runtime != null && !autShutdown) {
                 runtime.stopApplication();
+            }
         } catch (Exception e) {
             displayView.setError(e, "Application Under Test Aborted");
         } finally {
@@ -355,8 +361,9 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         if (runtime != null) {
             logger.info("Destroying VM. autShutdown = " + autShutdown);
             try {
-                if (!autShutdown)
+                if (!autShutdown) {
                     runtime.destroy();
+                }
             } finally {
                 runtime = null;
             }
@@ -381,13 +388,14 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
             }
             runtime = rf.createRuntime();
         }
-        assert (runtime != null);
+        assert runtime != null;
         this.autShutdown = false;
     }
 
     public Module getModuleFuctions() {
-        if (runtime == null)
+        if (runtime == null) {
             return null;
+        }
         return runtime.getModuleFunctions();
     }
 
@@ -399,7 +407,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     }
 
     public boolean canOpenFile() {
-        return (state == State.STOPPED_WITH_APP_CLOSED || state == State.STOPPED_WITH_APP_OPEN);
+        return state == State.STOPPED_WITH_APP_CLOSED || state == State.STOPPED_WITH_APP_OPEN;
     }
 
     public void setDefaultFixture(String pFixture) {
@@ -441,19 +449,20 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     }
 
     public String getTopWindowName() {
-        if (runtime == null || runtime.getTopWindowId() == null)
+        if (runtime == null || runtime.getTopWindowId() == null) {
             return null;
+        }
         return runtime.getTopWindowId().getTitle();
     }
 
     /* Implementation of IPlaybackListener * */
-    public void playbackFinished(final PlaybackResult result, boolean shutdown) {
+    @Override public void playbackFinished(final PlaybackResult result, boolean shutdown) {
         this.autShutdown = shutdown;
         displayView.endTest(result);
         if (ddTestRunner != null && ddTestRunner.hasNext() && !playbackStopped) {
             ddTestRunner.next();
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
                     if (result.failureCount() == 0) {
                         shouldClose = !reuseFixture;
                         displayView.trackProgress();
@@ -468,42 +477,42 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
             });
             return;
         }
-        displayView.endTestRun();
         displayView.stopInserting();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                showResult(result);
-            }
-        });
+        if (Platform.isFxApplicationThread()) {
+            showResult(result);
+        } else {
+            Platform.runLater(() -> showResult(result));
+        }
+        displayView.endTestRun();
         ddTestRunner = null;
     }
 
-    public int lineReached(SourceLine line) {
+    @Override public int lineReached(SourceLine line) {
         return displayView.trackProgress(line, LINE_REACHED);
     }
 
-    public int methodReturned(SourceLine line) {
+    @Override public int methodReturned(SourceLine line) {
         return displayView.trackProgress(line, METHOD_RETURNED);
     }
 
-    public int methodCalled(SourceLine line) {
+    @Override public int methodCalled(SourceLine line) {
         return displayView.trackProgress(line, METHOD_CALLED);
     }
 
-    public int acceptChecklist(String fileName) {
+    @Override public int acceptChecklist(String fileName) {
         return displayView.acceptChecklist(fileName);
     }
 
-    public int showChecklist(String fileName) {
+    @Override public int showChecklist(String fileName) {
         return displayView.showChecklist(fileName);
     }
 
     /** Implementation of IScriptListener **/
-    public void setScript(String script) {
+    @Override public void setScript(String script) {
         displayView.insertScript(script);
     }
 
-    public void abortRecording() {
+    @Override public void abortRecording() {
         if (state.isRecording()) {
             displayView.stopInserting();
         }
@@ -513,35 +522,38 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         setState(State.STOPPED_WITH_APP_CLOSED);
     }
 
-    public void insertChecklistAction(String name) {
+    @Override public void insertChecklistAction(String name) {
         displayView.insertChecklistAction(name);
     }
 
     /** Implementation IExceptionReporter **/
-    public void reportException(Throwable e) {
-        if (e instanceof ApplicationLaunchException)
+    @Override public void reportException(Throwable e) {
+        if (e instanceof ApplicationLaunchException) {
             destroyRuntime();
+        }
         displayView.setError(e,
                 e.getClass().getName().substring(e.getClass().getName().lastIndexOf('.') + 1) + " : " + e.getMessage());
     }
 
-    public void addImportStatement(String ims) {
+    @Override public void addImportStatement(String ims) {
         displayView.addImport(ims);
     }
 
     public IRuntimeFactory getRuntimeFactory(String scriptText) {
         Map<String, Object> fixtureProperties = ScriptModel.getModel().getFixtureProperties(scriptText);
-        if (fixtureProperties == null || fixtureProperties.size() == 0)
+        if (fixtureProperties == null || fixtureProperties.size() == 0) {
             return runtimeFactory;
+        }
         reuseFixture = Boolean.valueOf((String) fixtureProperties.get(Constants.FIXTURE_REUSE));
         String launcherModel = (String) fixtureProperties.get(Constants.PROP_PROJECT_LAUNCHER_MODEL);
         IRuntimeLauncherModel lm = LauncherModelHelper.getLauncherModel(launcherModel);
-        if (lm == null)
+        if (lm == null) {
             return runtimeFactory;
+        }
         return lm.getRuntimeFactory();
     }
 
-    public CheckList fillUpChecklist(MarathonTestCase testCase, File file, JFrame view) {
+    public CheckList fillUpChecklist(MarathonTestCase testCase, File file, Stage view) {
         return testCase.showAndEnterChecklist(file, runtime, view);
     }
 

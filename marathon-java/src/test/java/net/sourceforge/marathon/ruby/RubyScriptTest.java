@@ -1,41 +1,39 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeMethod;
-
 import java.io.File;
 import java.io.StringWriter;
 import java.util.Properties;
-
-import net.sourceforge.marathon.ruby.RubyScriptModel;
-import net.sourceforge.marathon.runtime.api.Constants;
-import net.sourceforge.marathon.runtime.api.Failure;
-import net.sourceforge.marathon.runtime.api.PlaybackResult;
 
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
 import org.jruby.runtime.builtin.IRubyObject;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.Failure;
+import net.sourceforge.marathon.runtime.api.PlaybackResult;
 
 @Test public class RubyScriptTest {
 
@@ -86,8 +84,8 @@ import org.jruby.runtime.builtin.IRubyObject;
     private static void deleteRecursive(File file) {
         if (file.isDirectory()) {
             File[] list = file.listFiles();
-            for (int i = 0; i < list.length; i++) {
-                deleteRecursive(list[i]);
+            for (File element : list) {
+                deleteRecursive(element);
             }
         }
         file.delete();
@@ -96,7 +94,8 @@ import org.jruby.runtime.builtin.IRubyObject;
     public void resultsLoaded() throws Throwable {
         try {
             RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_RUBY),
-                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null, Constants.FRAMEWORK_SWING);
+                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null,
+                    Constants.FRAMEWORK_SWING);
             script.setDriverURL("");
             Ruby interpreter = script.getInterpreter();
             assertTrue("Collector not defined", interpreter.isClassDefined("Collector"));
@@ -125,7 +124,8 @@ import org.jruby.runtime.builtin.IRubyObject;
 
     @Test(enabled = false) public void resultsCapturesJavaError() throws Exception {
         RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_JAVA),
-                new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null, Constants.FRAMEWORK_SWING);
+                new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null,
+                Constants.FRAMEWORK_SWING);
         script.setDriverURL("");
         Ruby interpreter = script.getInterpreter();
         assertTrue("Collector not defined", interpreter.isClassDefined("Collector"));
@@ -147,8 +147,8 @@ import org.jruby.runtime.builtin.IRubyObject;
 
     private String converToCode(String[] scriptContents) {
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < scriptContents.length; i++) {
-            sb.append(scriptContents[i]).append("\n");
+        for (String scriptContent : scriptContents) {
+            sb.append(scriptContent).append("\n");
         }
         return sb.toString();
     }

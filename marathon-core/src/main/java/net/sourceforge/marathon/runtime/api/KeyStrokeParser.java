@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
 import java.awt.event.InputEvent;
@@ -51,12 +51,15 @@ public class KeyStrokeParser {
         while (toke.hasMoreTokens()) {
             String keyText = toke.nextToken();
             Integer keycode = (Integer) keyCodes.get(keyText);
-            if (keycode == null && keyText.equals("Meta"))
+            if (keycode == null && keyText.equals("Meta")) {
                 keycode = (Integer) keyCodes.get("Command");
-            if (keycode == null && keyText.equals("Command"))
+            }
+            if (keycode == null && keyText.equals("Command")) {
                 keycode = (Integer) keyCodes.get("Meta");
-            if (keycode == null)
+            }
+            if (keycode == null) {
                 throw new RuntimeException("don't know what key is represented by " + sequence);
+            }
             if (toke.hasMoreTokens()) {
                 modifiers |= getModifier(keycode.intValue());
             } else {
@@ -89,8 +92,7 @@ public class KeyStrokeParser {
     private synchronized static void initKeyCodes() {
         keyCodes = new HashMap<Object, Object>();
         Field[] fields = KeyEvent.class.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+        for (Field field : fields) {
             String fieldName = field.getName();
             if (fieldName.startsWith("VK")) {
                 int keyCode = 0;
@@ -133,8 +135,9 @@ public class KeyStrokeParser {
     }
 
     public static String getKeyModifierText(int modifiers) {
-        if (modifiers == 0)
+        if (modifiers == 0) {
             return "";
+        }
         StringBuffer sb = new StringBuffer();
         if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
             sb.append("Ctrl+");

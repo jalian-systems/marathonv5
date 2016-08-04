@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.util.ArrayList;
@@ -101,14 +101,18 @@ public class FXEventQueueDevice implements IDevice {
 
         @SuppressWarnings("deprecation") public int getModifierEx() {
             int modifiersEx = 0;
-            if (shiftPressed)
+            if (shiftPressed) {
                 modifiersEx |= KeyCode.SHIFT.impl_getCode();
-            if (ctrlPressed)
+            }
+            if (ctrlPressed) {
                 modifiersEx |= KeyCode.CONTROL.impl_getCode();
-            if (altPressed)
+            }
+            if (altPressed) {
                 modifiersEx |= KeyCode.ALT.impl_getCode();
-            if (metaPressed)
+            }
+            if (metaPressed) {
                 modifiersEx |= KeyCode.META.impl_getCode();
+            }
             return modifiersEx;
         }
 
@@ -118,40 +122,52 @@ public class FXEventQueueDevice implements IDevice {
         }
 
         private void storeMouseDown(MouseButton button) {
-            if (button == MouseButton.PRIMARY)
+            if (button == MouseButton.PRIMARY) {
                 button1Pressed = true;
-            if (button == MouseButton.MIDDLE)
+            }
+            if (button == MouseButton.MIDDLE) {
                 button2Pressed = true;
-            if (button == MouseButton.SECONDARY)
+            }
+            if (button == MouseButton.SECONDARY) {
                 button3Pressed = true;
+            }
         }
 
         private void storeMouseUp(MouseButton button) {
-            if (button == MouseButton.PRIMARY)
+            if (button == MouseButton.PRIMARY) {
                 button1Pressed = false;
-            if (button == MouseButton.MIDDLE)
+            }
+            if (button == MouseButton.MIDDLE) {
                 button2Pressed = false;
-            if (button == MouseButton.SECONDARY)
+            }
+            if (button == MouseButton.SECONDARY) {
                 button3Pressed = false;
+            }
         }
 
         public MouseButton getButtons() {
-            if (button1Pressed)
+            if (button1Pressed) {
                 return MouseButton.PRIMARY;
-            if (button2Pressed)
+            }
+            if (button2Pressed) {
                 return MouseButton.MIDDLE;
-            if (button3Pressed)
+            }
+            if (button3Pressed) {
                 return MouseButton.SECONDARY;
+            }
             return MouseButton.NONE;
         }
 
         public MouseButton getButtonMask() {
-            if (button1Pressed)
+            if (button1Pressed) {
                 return MouseButton.PRIMARY;
-            if (button2Pressed)
+            }
+            if (button2Pressed) {
                 return MouseButton.MIDDLE;
-            if (button3Pressed)
+            }
+            if (button3Pressed) {
                 return MouseButton.SECONDARY;
+            }
             return MouseButton.NONE;
         }
 
@@ -213,19 +229,21 @@ public class FXEventQueueDevice implements IDevice {
         JavaAgentKeys keys = JavaAgentKeys.getKeyFromUnicode(c);
         if (keys == null) {
             dispatchKeyEvent(node, null, KeyEvent.KEY_PRESSED, c);
-            if (deviceState.getModifierEx() == 0)
+            if (deviceState.getModifierEx() == 0) {
                 dispatchKeyEvent(node, null, KeyEvent.KEY_TYPED, c);
+            }
             dispatchKeyEvent(node, null, KeyEvent.KEY_RELEASED, c);
             return;
         }
-        if (keys == JavaAgentKeys.NULL)
+        if (keys == JavaAgentKeys.NULL) {
             resetModifierState(node);
-        else if (deviceState.isModifier(keys)) {
+        } else if (deviceState.isModifier(keys)) {
             pressKey(node, keys);
         } else {
             pressKey(node, keys);
-            if (keys == JavaAgentKeys.SPACE)
+            if (keys == JavaAgentKeys.SPACE) {
                 dispatchKeyEvent(node, null, KeyEvent.KEY_TYPED, ' ');
+            }
             releaseKey(node, keys);
         }
     }
@@ -236,8 +254,9 @@ public class FXEventQueueDevice implements IDevice {
         if (keyToPress == null) {
             KeyboardMap kbMap = new KeyboardMap(c);
             KeyCode keyCode = KeyCode.getKeyCode((kbMap.getChar() + "").toUpperCase());
-            if (eventType.getName().equals("KEY_TYPED"))
+            if (eventType.getName().equals("KEY_TYPED")) {
                 keyCode = KeyCode.UNDEFINED;
+            }
             int modifiersEx = deviceState.getModifierEx();
             char char1 = kbMap.getChar();
             if (modifiersEx == 0) {
@@ -251,8 +270,9 @@ public class FXEventQueueDevice implements IDevice {
             return;
         }
         final KeysMap keysMap = KeysMap.findMap(keyToPress);
-        if (keysMap == null)
+        if (keysMap == null) {
             return;
+        }
         deviceState.toggleKeyState(keyToPress);
         dispatchEvent(new KeyEvent(eventType, KeyCode.UNDEFINED.impl_getChar(), KeyCode.UNDEFINED.impl_getChar(), keysMap.getCode(),
                 deviceState.isShiftPressed(), deviceState.isCtrlPressed(), deviceState.isAltPressed(), deviceState.isMetaPressed()),
@@ -280,10 +300,11 @@ public class FXEventQueueDevice implements IDevice {
     }
 
     @Override public void pressKey(Node node, JavaAgentKeys keyToPress) {
-        if (keyToPress == JavaAgentKeys.NULL)
+        if (keyToPress == JavaAgentKeys.NULL) {
             resetModifierState(node);
-        else
+        } else {
             dispatchKeyEvent(node, keyToPress, KeyEvent.KEY_PRESSED, KeyEvent.CHAR_UNDEFINED.charAt(0));
+        }
 
     }
 
@@ -310,18 +331,20 @@ public class FXEventQueueDevice implements IDevice {
     }
 
     @Override public void moveto(Node node) {
-        if (node instanceof Control)
+        if (node instanceof Control) {
             moveto(node, ((Control) node).getWidth() / 2, ((Control) node).getHeight() / 2);
+        }
     }
 
     @Override public void moveto(Node node, double xoffset, double yoffset) {
         MouseButton buttons = deviceState.getButtons();
         if (node != deviceState.getNode()) {
-            if (deviceState.getNode() != null)
+            if (deviceState.getNode() != null) {
                 dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, xoffset, yoffset, 0, 0, buttons, 0,
                         deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
                         buttons == MouseButton.PRIMARY, buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false,
                         false, false, node));
+            }
             dispatchEvent(createMouseEvent(MouseEvent.MOUSE_ENTERED, xoffset, yoffset, 0, 0, buttons, 0, deviceState.shiftPressed,
                     deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, buttons == MouseButton.PRIMARY,
                     buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false, false, false, node));
@@ -350,10 +373,11 @@ public class FXEventQueueDevice implements IDevice {
         ensureVisible(node);
         Point2D screenXY = node.localToScreen(new Point2D(x, y));
         if (node != deviceState.getNode()) {
-            if (deviceState.getNode() != null)
+            if (deviceState.getNode() != null) {
                 dispatchEvent(createMouseEvent(MouseEvent.MOUSE_EXITED, x, y, screenXY.getX(), screenXY.getY(), buttons, clickCount,
                         deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, false,
                         false, false, false, popupTrigger, false, node));
+            }
             dispatchEvent(createMouseEvent(MouseEvent.MOUSE_ENTERED, x, y, screenXY.getX(), screenXY.getY(), buttons, clickCount,
                     deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, false,
                     false, false, false, popupTrigger, false, node));
@@ -375,14 +399,18 @@ public class FXEventQueueDevice implements IDevice {
     }
 
     private void resetModifierState(Node node) {
-        if (deviceState.isShiftPressed())
+        if (deviceState.isShiftPressed()) {
             releaseKey(node, JavaAgentKeys.SHIFT);
-        if (deviceState.isAltPressed())
+        }
+        if (deviceState.isAltPressed()) {
             releaseKey(node, JavaAgentKeys.ALT);
-        if (deviceState.isCtrlPressed())
+        }
+        if (deviceState.isCtrlPressed()) {
             releaseKey(node, JavaAgentKeys.CONTROL);
-        if (deviceState.isMetaPressed())
+        }
+        if (deviceState.isMetaPressed()) {
             releaseKey(node, JavaAgentKeys.META);
+        }
     }
 
     public static FXEventQueueDevice getInstance() {
@@ -397,8 +425,9 @@ public class FXEventQueueDevice implements IDevice {
             return getTarget_target;
         }
         List<Node> hits = new ArrayList<>();
-        if (!(source instanceof Parent))
+        if (!(source instanceof Parent)) {
             return source;
+        }
         ObservableList<Node> children = ((Parent) source).getChildrenUnmodifiable();
         for (Node child : children) {
             checkHit(child, x, y, hits, "");
@@ -415,8 +444,9 @@ public class FXEventQueueDevice implements IDevice {
         Bounds boundsInParent = child.getBoundsInParent();
         if (boundsInParent.contains(x, y)) {
             hits.add(child);
-            if (!(child instanceof Parent))
+            if (!(child instanceof Parent)) {
                 return;
+            }
             ObservableList<Node> childrenUnmodifiable = ((Parent) child).getChildrenUnmodifiable();
             for (Node node : childrenUnmodifiable) {
                 checkHit(node, x, y, hits, "    " + indent);
@@ -438,14 +468,16 @@ public class FXEventQueueDevice implements IDevice {
 
     protected void ensureVisible(Node target) {
         ScrollPane scrollPane = getParentScrollPane(target);
-        if (scrollPane == null)
+        if (scrollPane == null) {
             return;
+        }
         Node content = scrollPane.getContent();
         Bounds contentBounds = content.localToScene(content.getBoundsInLocal());
         Bounds viewportBounds = scrollPane.getViewportBounds();
         Bounds nodeBounds = target.localToScene(target.getBoundsInLocal());
-        if (scrollPane.contains(nodeBounds.getMinX() - contentBounds.getMinX(), nodeBounds.getMinY() - contentBounds.getMinY()))
+        if (scrollPane.contains(nodeBounds.getMinX() - contentBounds.getMinX(), nodeBounds.getMinY() - contentBounds.getMinY())) {
             return;
+        }
         double toVScroll = (nodeBounds.getMinY() - contentBounds.getMinY())
                 * ((scrollPane.getVmax() - scrollPane.getVmin()) / (contentBounds.getHeight() - viewportBounds.getHeight()));
         scrollPane.setVvalue(toVScroll);
@@ -456,8 +488,9 @@ public class FXEventQueueDevice implements IDevice {
 
     private ScrollPane getParentScrollPane(Node target) {
         Parent p = target.getParent();
-        while (p != null && !(p instanceof ScrollPane))
+        while (p != null && !(p instanceof ScrollPane)) {
             p = p.getParent();
+        }
         return (ScrollPane) p;
     }
 

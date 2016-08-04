@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.AWTEvent;
@@ -39,12 +39,12 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.components.ContextManager;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
-
-import org.json.JSONObject;
 
 public abstract class RComponent extends JavaElementPropertyAccessor {
 
@@ -96,32 +96,39 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     }
 
     public void handleRawRecording(IJSONRecorder recorder, AWTEvent event) {
-        if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED)
+        if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED) {
             recorder.recordRawMouseEvent(this, (MouseEvent) event);
-        if (event instanceof KeyEvent && event.getID() != KeyEvent.KEY_RELEASED)
+        }
+        if (event instanceof KeyEvent && event.getID() != KeyEvent.KEY_RELEASED) {
             recorder.recordRawKeyEvent(this, (KeyEvent) event);
+        }
     }
 
     @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((component == null) ? 0 : component.hashCode());
+        result = prime * result + (component == null ? 0 : component.hashCode());
         return result;
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         RComponent other = (RComponent) obj;
         if (component == null) {
-            if (other.component != null)
+            if (other.component != null) {
                 return false;
-        } else if (!component.equals(other.component))
+            }
+        } else if (!component.equals(other.component)) {
             return false;
+        }
         return true;
     }
 
@@ -143,8 +150,9 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         while (parent != null && !(parent instanceof Window)) {
             if (ContextManager.isContext(parent)) {
                 JSONObject pContext = getContextJSONObject(parent);
-                if (r == null)
+                if (r == null) {
                     r = pContext;
+                }
                 if (current != null) {
                     current.put("container", pContext);
                 }
@@ -160,8 +168,9 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
             if (!parent.getClass().getName().equals("javax.swing.SwingUtilities$SharedOwnerFrame")
                     && !parent.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow") && parent.isVisible()) {
                 JSONObject pWindow = getContextJSONObject(parent);
-                if (r == null)
+                if (r == null) {
                     r = pWindow;
+                }
                 if (current != null) {
                     current.put("container", pWindow);
                 }
@@ -183,8 +192,9 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         }
         JSONObject r = new JSONObject();
         r.put("attributes", attributes);
-        if (parent == null)
+        if (parent == null) {
             throw new RuntimeException("parent == null for " + component);
+        }
         List<List<String>> rp = omapConfig.findContainerRP(parent.getClass());
         r.put("containerURP", pa.findURP(rp));
         List<List<String>> np = omapConfig.findContainerNP(parent.getClass());
@@ -213,20 +223,24 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         };
         // @formatter:on
         ArrayList<Method> l = new ArrayList<Method>();
-        if (getText() != null)
+        if (getText() != null) {
             addMethod(l, "getText");
-        if (getContent() != null)
+        }
+        if (getContent() != null) {
             addMethod(l, "getContent");
+        }
         Arrays.sort(methods, new Comparator<String>() {
             @Override public int compare(String o1, String o2) {
-                if (o1.startsWith("is"))
+                if (o1.startsWith("is")) {
                     o1 = o1.substring(2);
-                else if (o1.startsWith("get"))
+                } else if (o1.startsWith("get")) {
                     o1 = o1.substring(3);
-                if (o2.startsWith("is"))
+                }
+                if (o2.startsWith("is")) {
                     o2 = o2.substring(2);
-                else if (o2.startsWith("get"))
+                } else if (o2.startsWith("get")) {
                     o2 = o2.substring(3);
+                }
                 return o1.compareTo(o2);
             }
         });
@@ -241,9 +255,10 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         try {
             Method method = this.getClass().getMethod(name, new Class[] {});
             Object r = method.invoke(this);
-            if (r == null || "".equals(r) || (r.getClass().isArray() && Array.getLength(r) == 0)
-                    || ((r instanceof List) && ((List<?>) r).size() == 0))
+            if (r == null || "".equals(r) || r.getClass().isArray() && Array.getLength(r) == 0
+                    || r instanceof List && ((List<?>) r).size() == 0) {
                 return;
+            }
             l.add(method);
         } catch (SecurityException e) {
         } catch (NoSuchMethodException e) {
@@ -262,10 +277,11 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         ArrayList<Object> list = new ArrayList<Object>();
         for (int i = 0; i < length; i++) {
             Object e = Array.get(r, i);
-            if (e != null && e.getClass().isArray())
+            if (e != null && e.getClass().isArray()) {
                 list.add(unboxPremitiveArray(e));
-            else
+            } else {
                 list.add(e);
+            }
         }
         return list;
     }
@@ -273,15 +289,17 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
     @Override public int getIndexOfType() {
         if (component instanceof JComponent) {
             Integer index = (Integer) ((JComponent) component).getClientProperty("marathon.indexOfType");
-            if (index != null)
+            if (index != null) {
                 return index;
+            }
         }
         return super.getIndexOfType();
     }
 
     public void setIndexOfType(int indexOfType) {
-        if (component instanceof JComponent)
+        if (component instanceof JComponent) {
             ((JComponent) component).putClientProperty("marathon.indexOfType", indexOfType);
+        }
     }
 
     protected void mouseExited(MouseEvent me) {
@@ -295,9 +313,9 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
 
     protected void mousePressed(MouseEvent me) {
         if (me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 1 && !me.isAltDown() && !me.isMetaDown()
-                && !me.isAltGraphDown() && !me.isControlDown())
+                && !me.isAltGraphDown() && !me.isControlDown()) {
             mouseButton1Pressed(me);
-        else {
+        } else {
             recorder.recordClick2(this, me, true);
         }
     }

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -32,6 +32,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
@@ -40,9 +43,6 @@ import net.sourceforge.marathon.javaagent.InvalidElementStateException;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IPseudoElement {
 
@@ -56,8 +56,9 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
     }
 
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("component"))
+        if (selector.equals("component")) {
             return Arrays.asList(JavaElementFactory.createElement(getTabComponent(tabIndex), getDriver(), getWindow()));
+        }
         throw new UnsupportedCommandException("JTabbedPane does not support pseudoelement " + selector, null);
     }
 
@@ -76,7 +77,7 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
     }
 
     @Override public String _getText() {
-        return getText(((JTabbedPane) parent.getComponent()), tabIndex);
+        return getText((JTabbedPane) parent.getComponent(), tabIndex);
     }
 
     public static String getText(JTabbedPane tabbedPane, int index) {
@@ -114,10 +115,12 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
     private static String nameFromImageDescription(String description) {
         try {
             String name = new URL(description).getPath();
-            if (name.lastIndexOf('/') != -1)
+            if (name.lastIndexOf('/') != -1) {
                 name = name.substring(name.lastIndexOf('/') + 1);
-            if (name.lastIndexOf('.') != -1)
+            }
+            if (name.lastIndexOf('.') != -1) {
                 name = name.substring(0, name.lastIndexOf('.'));
+            }
             return name;
         } catch (MalformedURLException e) {
             return description;
@@ -160,14 +163,16 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
                 int tabForCoordinate = tp.getUI().tabForCoordinate(tp, tabBounds.x + tabBounds.width / 2,
                         tabBounds.y + tabBounds.height / 2);
                 if (tabForCoordinate != -1) {
-                    if (firstVisibleTab == -1)
+                    if (firstVisibleTab == -1) {
                         firstVisibleTab = tabForCoordinate;
+                    }
                     lastVisibleTab = tabForCoordinate;
                 }
             }
             isVisible = firstVisibleTab <= selectedTab && selectedTab <= lastVisibleTab;
-            if (isVisible)
+            if (isVisible) {
                 continue;
+            }
             if (selectedTab < firstVisibleTab) {
                 backward.actionPerformed(new ActionEvent(tp, ActionEvent.ACTION_PERFORMED, ""));
             } else {
@@ -196,8 +201,9 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
             @Override public void run() {
                 JTabbedPane pane = (JTabbedPane) parent.getComponent();
                 int tabCount = pane.getTabCount();
-                if (tabIndex < 0 || tabIndex >= tabCount)
+                if (tabIndex < 0 || tabIndex >= tabCount) {
                     throw new NoSuchElementException("Invalid tab index for JTabbedPane: " + tabIndex, null);
+                }
             }
         });
     }
@@ -209,8 +215,9 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
 
     @Override public Point _getMidpoint() {
         // makeTabVisible((JTabbedPane) parent.getComponent(), tabIndex);
-        if (!isDisplayed())
+        if (!isDisplayed()) {
             throw new InvalidElementStateException("The tabitem " + (tabIndex + 1) + " is not visible", null);
+        }
         Rectangle bounds = getTabBounds();
         return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     }

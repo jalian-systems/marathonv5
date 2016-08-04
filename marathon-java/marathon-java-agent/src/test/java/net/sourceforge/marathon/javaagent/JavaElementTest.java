@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Dimension;
@@ -43,11 +43,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     @BeforeMethod public void createWebDriver() throws Throwable {
         ejDriver = new JavaAgent();
-        ejButton = (IJavaElement) ejDriver.findElementByName("click-me");
-        ejText = (IJavaElement) ejDriver.findElementByName("text");
-        ejCheckbox = (IJavaElement) ejDriver.findElementByName("check-me");
-        ejBoxPanel = (IJavaElement) ejDriver.findElementByName("box-panel");
-        ejAwtText = (IJavaElement) ejDriver.findElementByName("awt-text");
+        ejButton = ejDriver.findElementByName("click-me");
+        ejText = ejDriver.findElementByName("text");
+        ejCheckbox = ejDriver.findElementByName("check-me");
+        ejBoxPanel = ejDriver.findElementByName("box-panel");
+        ejAwtText = ejDriver.findElementByName("awt-text");
         AssertJUnit.assertNotNull(ejButton);
     }
 

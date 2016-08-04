@@ -652,6 +652,10 @@ def suite(arg)
   TestAttributes.put("marathon.suite.name", arg)
 end
 
+def id(arg)
+  TestAttributes.put("marathon.test.id", arg)
+end
+
 def severity(arg)
   TestAttributes.put("marathon.test.severity", arg) if ['blocker', 'critical', 'normal', 'minor', 'trivial'].include? arg.downcase
 end

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.table;
 
 import java.awt.BorderLayout;
@@ -22,11 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-
-import net.sourceforge.marathon.javadriver.JavaDriver;
-import net.sourceforge.marathon.testhelpers.MissingException;
-import net.sourceforge.marathon.javadriver.OSUtils;
-import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -43,6 +38,10 @@ import org.testng.annotations.Test;
 import com.google.common.base.Predicate;
 
 import components.TableFilterDemo;
+import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.javadriver.OSUtils;
+import net.sourceforge.marathon.testhelpers.ComponentUtils;
+import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test public class JTableTest {
 
@@ -69,8 +68,9 @@ import components.TableFilterDemo;
                 frame.dispose();
             }
         });
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void gettable() throws Throwable {
@@ -102,8 +102,9 @@ import components.TableFilterDemo;
                 { "Joe", "Brown", "Pool", new Integer(10), new Boolean(false) } };
         for (int i = 0, ii = 1; i < data.length; i++, ii++) {
             for (int j = 0, jj = 1; j < data[i].length; j++, jj++) {
-                if (j == 4)
+                if (j == 4) {
                     continue;
+                }
                 AssertJUnit.assertEquals(data[i][j].toString(),
                         driver.findElement(By.cssSelector("table::mnth-cell(" + ii + ", " + jj + ")")).getText());
             }

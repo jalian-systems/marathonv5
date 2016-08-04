@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.server;
 
 import java.awt.AWTException;
@@ -33,14 +33,20 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.NanoHTTPD.Response.Status;
+import net.sourceforge.marathon.javaagent.Device;
 import net.sourceforge.marathon.javaagent.Device.Type;
+import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.InvalidElementStateException;
 import net.sourceforge.marathon.javaagent.JavaAgentException;
 import net.sourceforge.marathon.javaagent.JavaAgentKeys;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-import net.sourceforge.marathon.javaagent.Device;
-import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.MissingCommandParametersException;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
@@ -49,13 +55,6 @@ import net.sourceforge.marathon.javaagent.SessionNotCreatedException;
 import net.sourceforge.marathon.javaagent.StaleElementReferenceException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javaagent.script.JSONScriptRunner;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import fi.iki.elonen.NanoHTTPD;
-import fi.iki.elonen.NanoHTTPD.Response.Status;
 
 public class JavaServer extends NanoHTTPD {
 
@@ -258,8 +257,9 @@ public class JavaServer extends NanoHTTPD {
     public Route findRoute(Method method, String uri) {
         JSONObject params = new JSONObject();
         RouteMap map = findRouteMap(method, uri, params);
-        if (map == null)
+        if (map == null) {
             return null;
+        }
         return new Route(map.getProc(), params, map);
     }
 
@@ -270,16 +270,17 @@ public class JavaServer extends NanoHTTPD {
             }
             String[] actualParts = uri.split("/");
             String[] expectedParts = route.getUri().split("/");
-            if (actualParts.length != expectedParts.length)
+            if (actualParts.length != expectedParts.length) {
                 continue;
+            }
             Map<String, String> tParams = new HashMap<String, String>();
             boolean found = true;
             for (int i = 0; i < actualParts.length; i++) {
                 if (expectedParts[i].startsWith(":")) {
                     tParams.put(expectedParts[i].substring(1), actualParts[i]);
-                } else if (expectedParts[i].equals(actualParts[i]))
+                } else if (expectedParts[i].equals(actualParts[i])) {
                     continue;
-                else {
+                } else {
                     found = false;
                     break;
                 }
@@ -315,8 +316,9 @@ public class JavaServer extends NanoHTTPD {
         }
         StringBuilder logmsg = new StringBuilder();
         logmsg.append(method + "(" + uri);
-        if (jsonQuery != null)
+        if (jsonQuery != null) {
             logmsg.append(", " + jsonQuery);
+        }
         logmsg.append(") = ");
         Response response = serve_internal(uri, method, jsonQuery == null ? new JSONObject() : jsonQuery);
         logmsg.append(response);
@@ -333,10 +335,12 @@ public class JavaServer extends NanoHTTPD {
             if (route != null && route.getProc() != null) {
                 return handleRoute(route, jsonQuery);
             }
-            if (route == null)
+            if (route == null) {
                 return newFixedLengthResponse(Status.NOT_FOUND, MIME_PLAINTEXT, "Not Implemented: (route is null)");
-            if (route.getProc() == null)
+            }
+            if (route.getProc() == null) {
                 return newFixedLengthResponse(Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Not Implemented: route = " + route);
+            }
         } catch (Throwable e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
@@ -355,24 +359,30 @@ public class JavaServer extends NanoHTTPD {
                 session = liveSessions.get(uriParams.get("sessionId"));
                 latestSession = session;
             }
-            if (session != null)
+            if (session != null) {
                 r.put("sessionId", session.getID());
+            }
             IJavaElement element = null;
-            if (uriParams.has("id"))
+            if (uriParams.has("id")) {
                 element = session.findElement(uriParams.getString("id"));
+            }
             JWindow window = null;
-            if (uriParams.has("windowHandle"))
+            if (uriParams.has("windowHandle")) {
                 window = session.getWindow(uriParams.getString("windowHandle"));
+            }
             Object result;
             result = invoke(route, query, uriParams, session, window, element);
-            if (result == null)
+            if (result == null) {
                 return newFixedLengthResponse(Status.NO_CONTENT, MIME_HTML, null);
-            if (result instanceof Response)
+            }
+            if (result instanceof Response) {
                 return (Response) result;
-            if (result == NULL_OBJECT)
+            }
+            if (result == NULL_OBJECT) {
                 r.put("value", (Object) null);
-            else
+            } else {
                 r.put("value", result);
+            }
             return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (NoSuchWindowException e) {
             r.put("status", ErrorCodes.NO_SUCH_WINDOW);
@@ -433,34 +443,44 @@ public class JavaServer extends NanoHTTPD {
             IJavaElement element) {
         Object result;
         try {
-            if (session == null)
+            if (session == null) {
                 result = route.getProc().invoke(this, query, uriParams);
-            else if (element != null)
+            } else if (element != null) {
                 result = route.getProc().invoke(this, query, uriParams, session, element);
-            else if (window != null)
+            } else if (window != null) {
                 result = route.getProc().invoke(this, query, uriParams, session, window);
-            else
+            } else {
                 result = route.getProc().invoke(this, query, uriParams, session);
+            }
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
-            if (cause instanceof MissingCommandParametersException)
-                throw ((MissingCommandParametersException) cause);
-            if (cause instanceof JSONException)
-                throw ((JSONException) cause);
-            if (cause instanceof NoSuchElementException)
-                throw ((NoSuchElementException) cause);
-            if (cause instanceof NoSuchWindowException)
-                throw ((NoSuchWindowException) cause);
-            if (cause instanceof UnsupportedCommandException)
-                throw ((UnsupportedCommandException) cause);
-            if (cause instanceof InvalidElementStateException)
-                throw ((InvalidElementStateException) cause);
-            if (cause instanceof StaleElementReferenceException)
-                throw ((StaleElementReferenceException) cause);
-            if (cause instanceof SessionNotCreatedException)
-                throw ((SessionNotCreatedException) cause);
-            if (cause instanceof JavaAgentException)
-                throw ((JavaAgentException) cause);
+            if (cause instanceof MissingCommandParametersException) {
+                throw (MissingCommandParametersException) cause;
+            }
+            if (cause instanceof JSONException) {
+                throw (JSONException) cause;
+            }
+            if (cause instanceof NoSuchElementException) {
+                throw (NoSuchElementException) cause;
+            }
+            if (cause instanceof NoSuchWindowException) {
+                throw (NoSuchWindowException) cause;
+            }
+            if (cause instanceof UnsupportedCommandException) {
+                throw (UnsupportedCommandException) cause;
+            }
+            if (cause instanceof InvalidElementStateException) {
+                throw (InvalidElementStateException) cause;
+            }
+            if (cause instanceof StaleElementReferenceException) {
+                throw (StaleElementReferenceException) cause;
+            }
+            if (cause instanceof SessionNotCreatedException) {
+                throw (SessionNotCreatedException) cause;
+            }
+            if (cause instanceof JavaAgentException) {
+                throw (JavaAgentException) cause;
+            }
             throw new JavaAgentException(cause.getMessage(), cause);
         } catch (IllegalArgumentException e) {
             throw new JavaAgentException(e.getMessage(), e);
@@ -479,8 +499,9 @@ public class JavaServer extends NanoHTTPD {
             }
         }
         Type t = Device.Type.EVENT_QUEUE;
-        if (capabilities.getBoolean("nativeEvents"))
+        if (capabilities.getBoolean("nativeEvents")) {
             t = Device.Type.ROBOT;
+        }
         Logger.getLogger(JavaServer.class.getName()).info("Creating device with type: " + t);
         Session session = new Session(t);
         liveSessions.put(session.getID(), session);
@@ -513,8 +534,9 @@ public class JavaServer extends NanoHTTPD {
             prefs = query.getJSONObject("requiredCapabilities").getJSONObject("loggingPrefs");
         } else if (query.has("desiredCapabilities") && query.getJSONObject("desiredCapabilities").has("loggingPrefs")) {
             prefs = query.getJSONObject("desiredCapabilities").getJSONObject("loggingPrefs");
-        } else
+        } else {
             return Level.ALL;
+        }
         if (prefs.has("driver")) {
             return Level.parse(prefs.getString("driver"));
         }
@@ -531,8 +553,9 @@ public class JavaServer extends NanoHTTPD {
             }
             Object rvalue = required.get(key);
             capabilities.put(key, rvalue);
-            if (rvalue instanceof Boolean && !((Boolean) rvalue).booleanValue())
+            if (rvalue instanceof Boolean && !((Boolean) rvalue).booleanValue()) {
                 continue;
+            }
             Object lvalue = hasCapabilities.get(key);
             if (!lvalue.equals(rvalue)) {
                 if (key.equals("loggingPrefs")) {
@@ -541,8 +564,9 @@ public class JavaServer extends NanoHTTPD {
                 if (key.equals("platform")) {
                     Platform lPlatform = Platform.valueOf((String) lvalue);
                     Platform rPlatform = Platform.valueOf((String) rvalue);
-                    if (rPlatform.is(lPlatform))
+                    if (rPlatform.is(lPlatform)) {
                         continue;
+                    }
                 }
                 if (key.equals("version") && rvalue.equals("")) {
                     continue;
@@ -589,8 +613,9 @@ public class JavaServer extends NanoHTTPD {
 
     public String getElementAttribute(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
         String attribute = element.getAttribute(uriParams.getString("name"));
-        if (attribute == null)
+        if (attribute == null) {
             return NULL_OBJECT;
+        }
         return attribute;
     }
 
@@ -635,8 +660,9 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public void quitSession(JSONObject query, JSONObject uriParams, Session session) {
-        if (exitOnQuit)
+        if (exitOnQuit) {
             session.quit();
+        }
         liveSessions.remove(session.getID());
     }
 
@@ -668,15 +694,17 @@ public class JavaServer extends NanoHTTPD {
 
     public String getWindowTitle(JSONObject query, JSONObject uriParams, Session session) {
         String title = session.getTitle();
-        if (title == null)
+        if (title == null) {
             return NULL_OBJECT;
+        }
         return title;
     }
 
     public String getElementText(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
         String text = element.getAttribute("text");
-        if (text == null)
+        if (text == null) {
             return NULL_OBJECT;
+        }
         return text;
     }
 
@@ -761,13 +789,16 @@ public class JavaServer extends NanoHTTPD {
 
     public void moveto(JSONObject query, JSONObject uriParams, Session session) {
         IJavaElement element = null;
-        if (query.has("element"))
+        if (query.has("element")) {
             element = session.findElement(query.getString("element"));
+        }
         boolean hasOffset = query.has("xoffset");
-        if (hasOffset != query.has("yoffset"))
+        if (hasOffset != query.has("yoffset")) {
             throw new MissingCommandParametersException("Missing x-offset or y-offset. Provide both x and y offsets.", null);
-        if (element == null && !hasOffset)
+        }
+        if (element == null && !hasOffset) {
             throw new MissingCommandParametersException("One of the element or offset is expected.", null);
+        }
         int xoffset, yoffset;
         if (hasOffset) {
             xoffset = query.getInt("xoffset");
@@ -782,8 +813,9 @@ public class JavaServer extends NanoHTTPD {
                 element = lastComponenet.element;
                 xoffset += lastComponenet.x;
                 yoffset += lastComponenet.y;
-            } else
+            } else {
                 element = session.getActiveElement();
+            }
         }
         element.moveto(xoffset, yoffset);
         lastComponenet.x = xoffset;
@@ -805,8 +837,9 @@ public class JavaServer extends NanoHTTPD {
 
     public void click(JSONObject query, JSONObject uriParams, Session session) {
         int button = 0;
-        if (query.has("button"))
+        if (query.has("button")) {
             button = query.getInt("button");
+        }
         click(session, button, 1);
     }
 
@@ -834,8 +867,9 @@ public class JavaServer extends NanoHTTPD {
 
     public void buttondown(JSONObject query, JSONObject uriParams, Session session) {
         int button = 0;
-        if (query != null && query.has("button"))
+        if (query != null && query.has("button")) {
             button = query.getInt("button");
+        }
         IJavaElement element = null;
         int xoffset, yoffset;
         if (lastComponenet.element != null) {
@@ -853,8 +887,9 @@ public class JavaServer extends NanoHTTPD {
 
     public void buttonup(JSONObject query, JSONObject uriParams, Session session) {
         int button = 0;
-        if (query.has("button"))
+        if (query.has("button")) {
             button = query.getInt("button");
+        }
         IJavaElement element = null;
         int xoffset, yoffset;
         if (lastComponenet.element != null) {

@@ -1,26 +1,26 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,16 +31,19 @@ public class PropertyHelper {
     public static String toString(Properties p, String[] propOrder) {
         StringBuffer sb = new StringBuffer();
 
-        if (p.size() > 1)
+        if (p.size() > 1) {
             sb.append("{");
+        }
         char[] convertBuf = new char[1024];
         for (int i = 0; i < propOrder.length; i++) {
             sb.append(escape(p.getProperty(propOrder[i]), convertBuf));
-            if (i < propOrder.length - 1)
+            if (i < propOrder.length - 1) {
                 sb.append(", ");
+            }
         }
-        if (p.size() > 1)
+        if (p.size() > 1) {
             sb.append("}");
+        }
         return sb.toString();
     }
 
@@ -65,8 +68,9 @@ public class PropertyHelper {
                 convertBuf[convertLen++] = '\\';
                 break;
             case ' ':
-                if (i == 0)
+                if (i == 0) {
                     convertBuf[convertLen++] = '\\';
+                }
                 break;
             }
             convertBuf[convertLen++] = chars[i];
@@ -80,8 +84,9 @@ public class PropertyHelper {
         sb.append("[");
         for (int i = 0; i < pa.length; i++) {
             sb.append(toString(pa[i], propOrder));
-            if (i < pa.length - 1)
+            if (i < pa.length - 1) {
                 sb.append(", ");
+            }
         }
         sb.append("]");
         return sb.toString();
@@ -117,8 +122,9 @@ public class PropertyHelper {
 
         public int next() {
             skipSpaces();
-            if (index >= len)
+            if (index >= len) {
                 throw new RuntimeException("Invalid property list format");
+            }
             switch (b[index]) {
             case ',':
             case '{':
@@ -130,8 +136,9 @@ public class PropertyHelper {
                 while (index < len && b[index] != ',' && b[index] != '{' && b[index] != '}' && b[index] != ':') {
                     if (b[index] == '\\') {
                         index++;
-                        if (index >= len)
+                        if (index >= len) {
                             throw new RuntimeException("Invalid property list format");
+                        }
                     }
                     sb.append(b[index]);
                     index++;
@@ -142,8 +149,9 @@ public class PropertyHelper {
         }
 
         private void skipSpaces() {
-            while (index < len && b[index] == ' ')
+            while (index < len && b[index] == ' ') {
                 index++;
+            }
         }
 
         public String getText() {
@@ -158,15 +166,16 @@ public class PropertyHelper {
     }
 
     public static Properties readProperties(TokenReader reader, String[][] props) {
-        if (!reader.hasNext())
+        if (!reader.hasNext()) {
             throw new RuntimeException("Invalid property list format");
+        }
 
         int token = reader.next();
         if (token == TokenReader.ID) {
             Properties p = new Properties();
-            for (int i = 0; i < props.length; i++) {
-                if (props[i].length == 1) {
-                    p.setProperty(props[i][0], reader.getText());
+            for (String[] prop : props) {
+                if (prop.length == 1) {
+                    p.setProperty(prop[0], reader.getText());
                     return p;
                 }
             }
@@ -177,32 +186,34 @@ public class PropertyHelper {
             while (token != TokenReader.CLOSEBR) {
                 String[] tokens = new String[2];
                 token = reader.next();
-                if (token != TokenReader.ID)
+                if (token != TokenReader.ID) {
                     throw new RuntimeException("Invalid property list format");
+                }
                 tokens[0] = reader.getText();
                 token = reader.next();
                 if (token == TokenReader.COLON) {
                     token = reader.next();
-                    if (token != TokenReader.ID)
+                    if (token != TokenReader.ID) {
                         throw new RuntimeException("Invalid property list format");
+                    }
                     tokens[1] = reader.getText();
                     token = reader.next();
-                    if (token != TokenReader.COMMA && token != TokenReader.CLOSEBR)
+                    if (token != TokenReader.COMMA && token != TokenReader.CLOSEBR) {
                         throw new RuntimeException("Invalid property list format");
+                    }
                 } else if (token == TokenReader.COMMA || token == TokenReader.CLOSEBR) {
                     tokens[1] = tokens[0];
                     tokens[0] = null;
                 }
                 list.add(tokens);
             }
-            String[] first = (String[]) list.get(0);
+            String[] first = list.get(0);
             if (first[0] == null) {
                 Properties p = new Properties();
-                for (int i = 0; i < props.length; i++) {
-                    if (props[i].length == list.size()) {
-                        String[] selectedProps = props[i];
+                for (String[] selectedProps : props) {
+                    if (selectedProps.length == list.size()) {
                         for (int j = 0; j < selectedProps.length; j++) {
-                            p.setProperty(selectedProps[j], ((String[]) list.get(j))[1]);
+                            p.setProperty(selectedProps[j], list.get(j)[1]);
                         }
                         return p;
                     }
@@ -211,7 +222,7 @@ public class PropertyHelper {
             }
             Properties p = new Properties();
             for (int i = 0; i < list.size(); i++) {
-                String[] prop = (String[]) list.get(i);
+                String[] prop = list.get(i);
                 p.setProperty(prop[0], prop[1]);
             }
             return p;
@@ -221,10 +232,12 @@ public class PropertyHelper {
 
     public static Properties[] fromStringToArray(String s, String[][] props) {
         s = s.trim();
-        if (!s.startsWith("[") || !s.endsWith("]"))
+        if (!s.startsWith("[") || !s.endsWith("]")) {
             throw new RuntimeException("Invalid property list format");
-        if (s.length() == 2)
+        }
+        if (s.length() == 2) {
             return new Properties[0];
+        }
 
         ArrayList<Properties> plist = new ArrayList<Properties>();
         int token = TokenReader.COMMA;
@@ -232,10 +245,11 @@ public class PropertyHelper {
         while (token == TokenReader.COMMA && reader.hasNext()) {
             Properties p = readProperties(reader, props);
             plist.add(p);
-            if (reader.hasNext())
+            if (reader.hasNext()) {
                 token = reader.next();
+            }
         }
-        return (Properties[]) plist.toArray(new Properties[plist.size()]);
+        return plist.toArray(new Properties[plist.size()]);
     }
 
     public static String toCSS(Properties properties) {
@@ -246,21 +260,22 @@ public class PropertyHelper {
         StringBuilder sb = new StringBuilder();
         Set<Entry<Object, Object>> entries = properties.entrySet();
         for (Entry<Object, Object> entry : entries) {
-            if (entry.getKey().equals("type"))
+            if (entry.getKey().equals("type")) {
                 typeProperty = entry;
-            else if (entry.getKey().equals("indexOfType"))
+            } else if (entry.getKey().equals("indexOfType")) {
                 indexProperty = entry;
-            else if (entry.getKey().equals("tagName"))
+            } else if (entry.getKey().equals("tagName")) {
                 tagNameProperty = entry;
-            else {
+            } else {
                 String value = entry.getValue().toString();
                 value = value.replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'");
                 sb.append("[").append(entry.getKey().toString()).append("=").append("'").append(value).append("']");
             }
         }
         String r = sb.toString();
-        if (tagNameProperty != null)
+        if (tagNameProperty != null) {
             r = tagNameProperty.getValue().toString();
+        }
         if (typeProperty != null) {
             r = "[" + typeProperty.getKey().toString() + "=" + "'" + typeProperty.getValue().toString() + "']" + sb.toString();
         }
@@ -332,10 +347,11 @@ public class PropertyHelper {
     public static Properties asProperties(JSONObject jsonObject) {
         Properties r = new Properties();
         String[] names = JSONObject.getNames(jsonObject);
-        if (names != null)
+        if (names != null) {
             for (String name : names) {
                 r.setProperty(name, jsonObject.get(name).toString());
             }
+        }
         return r;
     }
 

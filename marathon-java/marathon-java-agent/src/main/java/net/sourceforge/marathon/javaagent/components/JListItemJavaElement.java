@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -23,14 +23,14 @@ import java.util.concurrent.Callable;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JListItemJavaElement extends AbstractJavaElement implements IPseudoElement {
 
@@ -45,8 +45,9 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
     }
 
     private void validateItem() {
-        if (item >= ((JList) parent.getComponent()).getModel().getSize())
+        if (item >= ((JList) parent.getComponent()).getModel().getSize()) {
             throw new NoSuchElementException("Index out of bounds error on JList: " + item, null);
+        }
     }
 
     @Override public String createHandle() {
@@ -111,12 +112,14 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         String original = getItemText(list, index);
         String itemText = original;
         int suffixIndex = 0;
-        if (list.getModel().getSize() > MAX_LIST_ITEMS)
+        if (list.getModel().getSize() > MAX_LIST_ITEMS) {
             return itemText;
+        }
         for (int i = 0; i < index; i++) {
             String current = getItemText(list, i);
-            if (current.equals(original))
+            if (current.equals(original)) {
                 itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
         }
         return itemText;
     }

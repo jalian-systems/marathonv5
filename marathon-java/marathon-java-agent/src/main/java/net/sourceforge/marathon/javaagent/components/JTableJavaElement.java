@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -29,15 +29,15 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
-import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.IJavaAgent;
-import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-import net.sourceforge.marathon.javaagent.NoSuchElementException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import net.sourceforge.marathon.javaagent.AbstractJavaElement;
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JTableJavaElement extends AbstractJavaElement {
 
@@ -52,8 +52,9 @@ public class JTableJavaElement extends AbstractJavaElement {
             Enumeration<Object> keys = p.keys();
             while (keys.hasMoreElements()) {
                 String object = (String) keys.nextElement();
-                if (!p.getProperty(object).equals(e.getAttribute(object)))
+                if (!p.getProperty(object).equals(e.getAttribute(object))) {
                     return false;
+                }
             }
             return true;
         }
@@ -68,13 +69,13 @@ public class JTableJavaElement extends AbstractJavaElement {
     }
 
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("header"))
+        if (selector.equals("header")) {
             return Arrays.asList((IJavaElement) new JTableHeaderJavaElement(((JTable) getComponent()).getTableHeader(), getDriver(),
                     getWindow()));
-        else if (selector.equals("mnth-cell"))
+        } else if (selector.equals("mnth-cell")) {
             return Arrays.asList((IJavaElement) new JTableCellJavaElement(this, ((Integer) params[0]).intValue() - 1,
                     ((Integer) params[1]).intValue() - 1));
-        else if (selector.equals("all-cells")) {
+        } else if (selector.equals("all-cells")) {
             return collectCells(new ArrayList<IJavaElement>(), new Predicate() {
                 @Override public boolean isValid(JTableCellJavaElement e) {
                     return true;
@@ -94,8 +95,9 @@ public class JTableJavaElement extends AbstractJavaElement {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
                     JTableCellJavaElement e = new JTableCellJavaElement(this, i, j);
-                    if (p.isValid(e))
+                    if (p.isValid(e)) {
                         r.add(e);
+                    }
                 }
             }
             return r;
@@ -151,12 +153,14 @@ public class JTableJavaElement extends AbstractJavaElement {
             int row = table.convertRowIndexToModel(viewRow);
             int col = table.convertColumnIndexToModel(viewCol);
             TableModel model = table.getModel();
-            if (row >= 0 && row < model.getRowCount() && col >= 0 && col < model.getColumnCount())
-                if (table.isCellEditable(viewRow, viewCol))
+            if (row >= 0 && row < model.getRowCount() && col >= 0 && col < model.getColumnCount()) {
+                if (table.isCellEditable(viewRow, viewCol)) {
                     return;
-                else
+                } else {
                     throw new NoSuchElementException("The cell is not editable on JTable: (" + viewRow + ", " + viewCol + ")",
                             null);
+                }
+            }
         } catch (IndexOutOfBoundsException e) {
         }
         throw new NoSuchElementException("Invalid row/col for JTable: (" + viewRow + ", " + viewCol + ")", null);
@@ -173,8 +177,9 @@ public class JTableJavaElement extends AbstractJavaElement {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Object valueAt = component.getValueAt(i, j);
-                if (valueAt == null)
+                if (valueAt == null) {
                     valueAt = "";
+                }
                 content[i][j] = valueAt.toString();
             }
         }
@@ -201,8 +206,9 @@ public class JTableJavaElement extends AbstractJavaElement {
     @Override public boolean marathon_select(String text) {
         JTable table = (JTable) component;
         boolean cellEditing = table.isEditing();
-        if (cellEditing)
+        if (cellEditing) {
             return true;
+        }
         if ("".equals(text)) {
             table.clearSelection();
             return true;
@@ -214,10 +220,12 @@ public class JTableJavaElement extends AbstractJavaElement {
             int columnCount = table.getColumnCount();
             rows = new int[rowCount];
             cols = new int[columnCount];
-            for (int i = 0; i < rowCount; i++)
+            for (int i = 0; i < rowCount; i++) {
                 rows[i] = i;
-            for (int i = 0; i < columnCount; i++)
+            }
+            for (int i = 0; i < columnCount; i++) {
                 cols[i] = i;
+            }
         } else {
             rows = parseRows(text);
             String[] colNames = parseCols(text);
@@ -233,8 +241,9 @@ public class JTableJavaElement extends AbstractJavaElement {
     private boolean selectRowsColumns(JTable table, int[] rows, int[] cols) {
         int rowCount = table.getRowCount();
         for (int r : rows) {
-            if (r >= rowCount)
+            if (r >= rowCount) {
                 return false;
+            }
         }
         table.clearSelection();
         for (int c : cols) {
@@ -251,8 +260,9 @@ public class JTableJavaElement extends AbstractJavaElement {
         int ncolumns = table.getColumnCount();
         for (int i = 0; i < ncolumns; i++) {
             String column = getColumnName(i);
-            if (columnName.equals(escape(column)))
+            if (columnName.equals(escape(column))) {
                 return i;
+            }
         }
         throw new RuntimeException("Could not find column " + columnName + " in table");
     }
@@ -266,10 +276,11 @@ public class JTableJavaElement extends AbstractJavaElement {
         int i = s.indexOf("rows:");
         if (i != -1) {
             int j = s.indexOf("columns:");
-            if (j == -1)
+            if (j == -1) {
                 rowText = s.substring(i + 5);
-            else
+            } else {
                 rowText = s.substring(i + 5, j);
+            }
             int k = rowText.indexOf('[');
             int l = rowText.indexOf(']');
             rowText = rowText.substring(k + 1, l);

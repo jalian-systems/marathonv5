@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -26,14 +26,14 @@ import java.util.concurrent.Callable;
 
 import javax.swing.JList;
 
-import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.IJavaAgent;
-import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import net.sourceforge.marathon.javaagent.AbstractJavaElement;
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JListJavaElement extends AbstractJavaElement {
 
@@ -50,7 +50,7 @@ public class JListJavaElement extends AbstractJavaElement {
     }
 
     public static String[][] getContent(JList component) {
-        int nItems = ((JList) component).getModel().getSize();
+        int nItems = component.getModel().getSize();
         String[][] content = new String[1][nItems];
         for (int i = 0; i < nItems; i++) {
             content[0][i] = JListItemJavaElement.getText(component, i);
@@ -71,14 +71,16 @@ public class JListJavaElement extends AbstractJavaElement {
                     return true;
                 }
             });
-        } else if (selector.equals("select-by-properties"))
+        } else if (selector.equals("select-by-properties")) {
             return findItemByProperties(new JSONObject((String) params[0]));
+        }
         return super.getByPseudoElement(selector, params);
     }
 
     private List<IJavaElement> findItemByProperties(JSONObject o) {
-        if (!o.has("select"))
+        if (!o.has("select")) {
             return Collections.<IJavaElement> emptyList();
+        }
         final String item = o.getString("select");
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         return collectItems(r, new Predicate() {
@@ -92,8 +94,9 @@ public class JListJavaElement extends AbstractJavaElement {
         int nitems = getCount();
         for (int i = 0; i < nitems; i++) {
             JListItemJavaElement l = new JListItemJavaElement(this, i);
-            if (p.isValid(l))
+            if (p.isValid(l)) {
                 r.add(l);
+            }
         }
         return r;
     }
@@ -130,15 +133,17 @@ public class JListJavaElement extends AbstractJavaElement {
                 @Override public boolean isValid(JListItemJavaElement e) {
                     Set<Object> keySet = properties.keySet();
                     for (Object object : keySet) {
-                        if (!properties.getProperty(object.toString()).equals(e.getAttribute(object.toString())))
+                        if (!properties.getProperty(object.toString()).equals(e.getAttribute(object.toString()))) {
                             return false;
+                        }
                     }
                     return true;
                 }
             });
         }
-        if (r.size() != pa.length)
+        if (r.size() != pa.length) {
             return false;
+        }
         int[] indices = new int[r.size()];
         int index = 0;
         for (IJavaElement je : r) {

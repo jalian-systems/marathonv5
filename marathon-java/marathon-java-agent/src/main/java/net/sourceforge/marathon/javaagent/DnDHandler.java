@@ -1,25 +1,28 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.dnd.*;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetContext;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.peer.DropTargetContextPeer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -57,17 +60,20 @@ public class DnDHandler {
     }
 
     public Boolean performInEQ() {
-        if (!(source instanceof JComponent) || !(dest instanceof JComponent))
+        if (!(source instanceof JComponent) || !(dest instanceof JComponent)) {
             return false;
+        }
         try {
             Method m;
             TransferHandler th = ((JComponent) source).getTransferHandler();
-            if (th == null)
+            if (th == null) {
                 return false;
+            }
             m = getDeclaredMethod(th, "createTransferable", JComponent.class);
             transferable = (Transferable) m.invoke(th, source);
-            if (transferable == null)
+            if (transferable == null) {
                 return false;
+            }
             m = getDeclaredMethod(dest, "dropLocationForPoint", Point.class);
             Object dropLocation = m.invoke(dest, location);
             m = getDeclaredMethod(dest, "setDropLocation", TransferHandler.DropLocation.class, Object.class, Boolean.TYPE);

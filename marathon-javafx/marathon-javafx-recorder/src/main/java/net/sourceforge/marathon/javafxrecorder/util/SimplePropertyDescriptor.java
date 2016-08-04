@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.util;
 
 import java.lang.reflect.Method;
@@ -50,26 +50,29 @@ public class SimplePropertyDescriptor {
             String methodName = m.getName();
             if (methodName.length() > 2 && methodName.startsWith("is")) {
                 String propertyName = uncapitalize(methodName.substring(2));
-                if (properties.containsKey(propertyName))
+                if (properties.containsKey(propertyName)) {
                     properties.get(propertyName).readMethod = m;
-                else
+                } else {
                     properties.put(propertyName, new SimplePropertyDescriptor(propertyName, m, null));
+                }
             }
             if (methodName.length() <= 3) {
                 continue;
             }
             String propertyName = uncapitalize(methodName.substring(3));
             if (methodName.startsWith("get") || methodName.startsWith("has")) {
-                if (properties.containsKey(propertyName))
+                if (properties.containsKey(propertyName)) {
                     properties.get(propertyName).readMethod = m;
-                else
+                } else {
                     properties.put(propertyName, new SimplePropertyDescriptor(propertyName, m, null));
+                }
             }
             if (methodName.startsWith("set")) {
-                if (properties.containsKey(propertyName))
+                if (properties.containsKey(propertyName)) {
                     properties.get(propertyName).writeMethod = m;
-                else
+                } else {
                     properties.put(propertyName, new SimplePropertyDescriptor(propertyName, null, m));
+                }
             }
         }
         SimplePropertyDescriptor[] pdsArray = new SimplePropertyDescriptor[properties.size()];

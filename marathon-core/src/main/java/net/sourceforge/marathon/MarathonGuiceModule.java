@@ -1,37 +1,45 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon;
 
 import java.util.Properties;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.util.Providers;
+
+import net.sourceforge.marathon.display.AbstractGroupsPanel;
 import net.sourceforge.marathon.display.Display.IDisplayProperties;
 import net.sourceforge.marathon.display.FixtureSelector;
 import net.sourceforge.marathon.display.IActionProvider;
 import net.sourceforge.marathon.editor.IEditorProvider;
 import net.sourceforge.marathon.editor.MultiEditorProvider;
-import net.sourceforge.marathon.editor.rsta.RSTAEditorProvider;
+import net.sourceforge.marathon.editor.ace.ACEEditorProvider;
+import net.sourceforge.marathon.editor.html.HTMLEditorProvider;
+import net.sourceforge.marathon.fx.display.IGroupTabPane;
+import net.sourceforge.marathon.model.Group.FeaturesPanel;
+import net.sourceforge.marathon.model.Group.GroupType;
+import net.sourceforge.marathon.model.Group.IssuesPanel;
+import net.sourceforge.marathon.model.Group.StoriesPanel;
+import net.sourceforge.marathon.model.Group.SuitesPanel;
 import net.sourceforge.marathon.providers.PlaybackResultProvider;
 import net.sourceforge.marathon.providers.RecorderProvider;
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
 import net.sourceforge.marathon.runtime.api.IRuntimeFactory;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
-import net.sourceforge.marathon.suite.editor.SuiteEditorProvider;
-
-import com.google.inject.AbstractModule;
 
 public class MarathonGuiceModule extends AbstractModule {
 
@@ -39,11 +47,10 @@ public class MarathonGuiceModule extends AbstractModule {
 
     public MarathonGuiceModule() {
         editorProvider = new MultiEditorProvider();
-        IEditorProvider rstaEditorProvider = new RSTAEditorProvider();
-        editorProvider.add(rstaEditorProvider, true);
+        editorProvider.add(new HTMLEditorProvider(), false);
+        IEditorProvider aceEditorProvider = new ACEEditorProvider();
+        editorProvider.add(aceEditorProvider, true);
 
-        SuiteEditorProvider suiteEditorProvider = new SuiteEditorProvider();
-        editorProvider.add(suiteEditorProvider, false);
     }
 
     @Override protected void configure() {
@@ -55,6 +62,7 @@ public class MarathonGuiceModule extends AbstractModule {
         bind(IEditorProvider.class).toInstance(editorProvider);
         bind(FixtureSelector.class).toInstance(new FixtureSelector());
         bindActionProvider();
+        bindPanels();
     }
 
     protected void bindActionProvider() {
@@ -67,5 +75,13 @@ public class MarathonGuiceModule extends AbstractModule {
                 return null;
             }
         });
+    }
+
+    protected void bindPanels() {
+        bind(AbstractGroupsPanel.class).annotatedWith(SuitesPanel.class).toInstance(new BlurbGroupsPanel(GroupType.SUITE));
+        bind(AbstractGroupsPanel.class).annotatedWith(FeaturesPanel.class).toInstance(new BlurbGroupsPanel(GroupType.FEATURE));
+        bind(AbstractGroupsPanel.class).annotatedWith(StoriesPanel.class).toInstance(new BlurbGroupsPanel(GroupType.STORY));
+        bind(AbstractGroupsPanel.class).annotatedWith(IssuesPanel.class).toInstance(new BlurbGroupsPanel(GroupType.ISSUE));
+        bind(IGroupTabPane.class).toProvider(Providers.of(null));
     }
 }

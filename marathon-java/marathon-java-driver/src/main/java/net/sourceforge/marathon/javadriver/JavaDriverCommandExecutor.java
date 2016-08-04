@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
 import java.io.IOException;
@@ -46,8 +46,9 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
 
     public void start() {
         if (profile.isEmbedded()) {
-            if (server != null)
+            if (server != null) {
                 return;
+            }
             int port = getAddressOfRemoteServer().getPort();
             server = new EmbeddedServer(profile);
             try {
@@ -62,8 +63,8 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
             command.executeAsync();
             new Wait() {
                 @Override public boolean until() {
-                    return isConnected() || (!profile.isJavaWebStart() && !Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR)
-                            && !command.isRunning());
+                    return isConnected() || !profile.isJavaWebStart() && !Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR)
+                            && !command.isRunning();
                 }
             }.wait("Timedout waiting for the server to start", Long.getLong("marathon.application.wait", Wait.DEFAULT_TIMEOUT * 5));
             if (!isConnected() && !command.isRunning()) {
@@ -84,8 +85,9 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
     }
 
     public void stop() {
-        if (server != null)
+        if (server != null) {
             server.stop();
+        }
         server = null;
     }
 

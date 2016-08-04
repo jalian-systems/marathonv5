@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
 import java.awt.event.InputEvent;
@@ -47,17 +47,20 @@ public class ContextMenuTriggers {
     private static void setMenuModifiersFromText(String menuModifiersTxt) {
         String button = menuModifiersTxt.substring(menuModifiersTxt.lastIndexOf('+') + 1);
         menuModifiers = 0;
-        if (button.equals("Button1"))
+        if (button.equals("Button1")) {
             menuModifiers |= InputEvent.BUTTON1_DOWN_MASK;
-        else if (button.equals("Button2"))
+        } else if (button.equals("Button2")) {
             menuModifiers |= InputEvent.BUTTON2_DOWN_MASK;
-        else if (button.equals("Button3"))
+        } else if (button.equals("Button3")) {
             menuModifiers |= InputEvent.BUTTON3_DOWN_MASK;
-        else
+        } else {
             throw new RuntimeException("Unknow button " + button + " in setting mouse trigger");
-        String modifiers = menuModifiersTxt.substring(0, menuModifiersTxt.lastIndexOf('+'));
-        KeyStroke ks = new KeyStrokeParser(modifiers + "+A").getKeyStroke();
-        menuModifiers |= getDownModifierMask(ks.getModifiers());
+        }
+        if (menuModifiersTxt.contains("+")) {
+            String modifiers = menuModifiersTxt.substring(0, menuModifiersTxt.lastIndexOf('+'));
+            KeyStroke ks = new KeyStrokeParser(modifiers + "+A").getKeyStroke();
+            menuModifiers |= getDownModifierMask(ks.getModifiers());
+        }
     }
 
     public static int getContextMenuModifiers() {
@@ -65,7 +68,7 @@ public class ContextMenuTriggers {
     }
 
     public static boolean isContextMenuSequence(MouseEvent e) {
-        return (e.getID() == MouseEvent.MOUSE_PRESSED) && (e.getModifiersEx() == getContextMenuModifiers());
+        return e.getID() == MouseEvent.MOUSE_PRESSED && e.getModifiersEx() == getContextMenuModifiers();
     }
 
     public static int getContextMenuKeyCode() {
@@ -90,14 +93,18 @@ public class ContextMenuTriggers {
 
     private static int getDownModifierMask(int modifiers) {
         int contextMenuKeyModifiers = 0;
-        if ((modifiers & InputEvent.CTRL_MASK) != 0)
+        if ((modifiers & InputEvent.CTRL_MASK) != 0) {
             contextMenuKeyModifiers |= InputEvent.CTRL_DOWN_MASK;
-        if ((modifiers & InputEvent.ALT_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.ALT_MASK) != 0) {
             contextMenuKeyModifiers |= InputEvent.ALT_DOWN_MASK;
-        if ((modifiers & InputEvent.META_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.META_MASK) != 0) {
             contextMenuKeyModifiers |= InputEvent.META_DOWN_MASK;
-        if ((modifiers & InputEvent.SHIFT_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.SHIFT_MASK) != 0) {
             contextMenuKeyModifiers |= InputEvent.SHIFT_DOWN_MASK;
+        }
         return contextMenuKeyModifiers;
     }
 

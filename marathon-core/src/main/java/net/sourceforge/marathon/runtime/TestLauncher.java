@@ -1,25 +1,23 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Map;
-
-import javax.swing.JOptionPane;
 
 import net.sourceforge.marathon.runtime.api.ITestLauncher;
 
@@ -37,8 +35,9 @@ public class TestLauncher implements ITestLauncher {
     }
 
     @Override public void destroy() {
-        if (proxy != null)
+        if (proxy != null) {
             proxy.quit();
+        }
     }
 
     @Override public void copyOutputTo(OutputStream writerOutputStream) {
@@ -50,9 +49,10 @@ public class TestLauncher implements ITestLauncher {
     }
 
     @Override public int start() {
-        int selection = JOptionPane.OK_OPTION;
-        if(!launcherModel.confirmConfiguration())
-            return JOptionPane.CANCEL_OPTION;
+        int selection = OK_OPTION;
+        if (!launcherModel.confirmConfiguration()) {
+            return CANCEL_OPTION;
+        }
         try {
             proxy = launcherModel.createDriver(ps, -1, writerOutputStream);
         } catch (Throwable t) {
@@ -76,8 +76,9 @@ public class TestLauncher implements ITestLauncher {
     }
 
     @Override public String toString() {
-        if (proxy != null)
+        if (proxy != null) {
             return proxy.toString();
+        }
         return super.toString();
     }
 }

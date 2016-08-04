@@ -1,0 +1,68 @@
+[
+  {
+    "name":"Marathon",
+    "path":"/themes/marathon.css",
+	"editor_themes": [ "theme-cobalt", "theme-chrome", "theme-kuroir", "theme-katzenmilch", "theme-chaos", "theme-clouds_midnight", "theme-idle_fingers", "theme-monokai"]
+  },
+
+  {
+    "name":"Twilight",
+    "path":"/themes/twilight.css",
+    "editor_themes": ["theme-tomorrow_night_bright", "theme-chrome", "theme-dawn", "theme-dreamweaver", "theme-eclipse", "theme-iplastic", "theme-textmate", "theme-kuroir", "theme-katzenmilch","theme-idle_fingers", "theme-kr_theme", "theme-mono_industrial", "theme-monokai", "theme-solarized_dark", "theme-tomorrow_night", "theme-tomorrow_night_blue", "theme-twilight"] 
+  },
+
+  {
+    "name":"SolarizedLight",
+    "path":"/themes/solorizedLight.css",
+    "editor_themes": ["theme-solarized_light", "theme-chrome", "theme-clouds", "theme-github", "theme-iplastic", "theme-textmate", "theme-tomorrow", "theme-xcode", "theme-katzenmilch","theme-idle_fingers", "theme-kr_theme", "theme-mono_industrial", "theme-monokai", "theme-terminal", "theme-tomorrow_night", "theme-tomorrow_night_bright", "theme-twilight"]   
+  },
+
+  {
+    "name":"Pista",
+    "path":"/themes/pista.css",
+	"editor_themes": ["theme-dreamweaver", "theme-solarized_light", "theme-chrome", "theme-crimson_editor", "theme-eclipse", "theme-clouds", "theme-github", "theme-iplastic", "theme-textmate", "theme-tomorrow", "theme-xcode", "theme-kuroir", "theme-sqlserver", "theme-ambience", "theme-chaos", "theme-kr_theme", "theme-mono_industrial", "theme-monokai", "theme-tomorrow_night", "theme-tomorrow_night_bright", "theme-twilight"]   
+  },
+
+  {
+    "name":"Cherries",
+    "path":"/themes/cherries.css",
+	"editor_themes": ["theme-monokai", "theme-github", "theme-iplastic", "theme-solarized_light", "theme-tomorrow", "theme-xcode", "theme-katzenmilch", "theme-ambience", "theme-idle_fingers", "theme-kr_theme", "theme-mono_industrial", "theme-terminal", "theme-tomorrow_night", "theme-tomorrow_night_bright", "theme-tomorrow_night_eighties", "theme-twilight"]
+  },
+
+  {
+    "name":"Blueberry",
+    "path":"/themes/blueberry.css",
+	"editor_themes": ["theme-tomorrow_night_eighties", "theme-chrome", "theme-chrimson_editor", "theme-dawn", "theme-github", "theme-iplastic", "theme-solarized_light", "theme-tomorrow", "theme-kuroir", "theme-katzenmilch", "theme-ambience", "theme-chaos", "theme-idle_fingers", "theme-kr_theme", "theme-merbivore", "theme-merbivore_soft", "theme-mono_industrial", "theme-monokai", "theme-pastel_on_dark", "theme-tomorrow_night", "theme-tomorrow_night_bright", "theme-vibrant_ink"]
+  },
+
+  {
+    "name":"Ambience",
+    "path":"/themes/ambience.css",
+	"editor_themes": [ "theme-gruvbox", "theme-chrome", "theme-dawn", "theme-github", "theme-iplastic", "theme-solarized_light", "theme-tomorrow", "theme-kuroir", "theme-katzenmilch", "theme-ambience", "theme-chaos", "theme-clouds_midnight", "theme-idle_fingers", "theme-merbivore", "theme-merbivore_soft", "theme-mono_industrial", "theme-monokai", "theme-solarized_dark", "theme-terminal", "theme-tomorrow_night", "theme-twilight"]
+  },
+
+  {
+    "name":"Cobalt",
+    "path":"/themes/cobalt.css",
+	"editor_themes": [ "theme-cobalt", "theme-chrome", "theme-kuroir", "theme-katzenmilch", "theme-chaos", "theme-clouds_midnight", "theme-idle_fingers", "theme-monokai"]
+  },
+
+  {
+    "name":"Idlefingers",
+    "path":"/themes/idlefingers.css",
+	"editor_themes": [ "theme-idle_fingers", "theme-chrome", "theme-github", "theme-iplastic", "theme-solarized_light", "theme-tomorrow", "theme-kuroir", "theme-katzenmilch", "theme-ambience", "theme-chaos", "theme-clouds_midnight", "theme-kr_theme", "theme-mono_industrial", "theme-monokai", "theme-tomorrow_night", "theme-tomorrow_night_bright", "theme-tomorrow_night_eighties", "theme-twilight"]
+  },
+
+  {
+    "name":"SolarizedDark",
+    "path":"/themes/solarizedDark.css",
+	"editor_themes": [ "theme-katzenmilch", "theme-chrome", "theme-dawn", "theme-solarized_light", "theme-textmate"]
+  },
+
+  {
+    "name":"VibrantInk",
+    "path":"/themes/vibrantInk.css",
+	"editor_themes": [ "theme-ambience", "theme-dawn", "theme-github", "theme-iplastic", "theme-solarized_light", "theme-tomorrow", "theme-chaos", "theme-clouds_midnight", "theme-idle_fingers", "theme-kr_theme", "theme-mono_industrial", "theme-monokai", "theme-tomorrow_night", "theme-tomorrow_night_bright", "theme-tomorrow_night_eighties", "theme-twilight"]
+  }
+
+]

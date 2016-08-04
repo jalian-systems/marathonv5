@@ -1,33 +1,42 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.editor;
 
-import java.awt.Component;
-import java.awt.event.ActionListener;
+import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
 import java.util.EventListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
-import javax.swing.event.CaretListener;
-import javax.swing.text.BadLocationException;
+import javafx.scene.Node;
+import javafx.scene.control.MenuItem;
+import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
+import net.sourceforge.marathon.util.AbstractSimpleAction;
+import net.sourceforge.marathon.util.INameValidateChecker;
+import net.sourceforge.marathon.util.IResourceHandler;
 
 public interface IEditor {
 
+    public interface CaretListener extends EventListener {
+
+        void caretUpdate();
+
+    }
+
     public interface IGutterListener extends EventListener {
-        public ImageIcon getIconAtLine(int line);
+        public boolean hasBreakpointAtLine(int line);
 
         public void gutterDoubleClickedAt(int line);
     }
@@ -47,7 +56,7 @@ public interface IEditor {
 
     public void insertScript(String script);
 
-    public void addKeyBinding(String keyBinding, ActionListener action);
+    public void addKeyBinding(String keyBinding, AbstractSimpleAction action);
 
     public void highlightLine(int line);
 
@@ -56,22 +65,6 @@ public interface IEditor {
     public int getSelectionStart();
 
     public int getSelectionEnd();
-
-    public void undo();
-
-    public void redo();
-
-    public void cut();
-
-    public void copy();
-
-    public void paste();
-
-    public boolean canUndo();
-
-    public boolean canRedo();
-
-    public void clearUndo();
 
     public void setDirty(boolean b);
 
@@ -87,24 +80,7 @@ public interface IEditor {
 
     public void setCaretLine(int line);
 
-    public Component getComponent();
-
-    public void closeSearch();
-
-    public int find(String searchText, boolean bForward, boolean bAllLines, boolean bCaseSensitive, boolean bWrapSearch,
-            boolean bWholeWord, boolean bRegex);
-
-    abstract int replaceFind(String searchText, String replaceText, boolean bForward, boolean bAllLines, boolean bCaseSensitive,
-            boolean bWrapSearch, boolean bWholeWord, boolean bRegex);
-
-    abstract void replace(String searchText, String replaceText, boolean bForward, boolean bAllLines, boolean bCaseSensitive,
-            boolean bWrapSearch, boolean bWholeWord, boolean bRegex);
-
-    public void replaceAll(String searchText, String replaceText, boolean bCaseSensitive, boolean bWholeWord, boolean bRegex);
-
-    public void find(int findPrev);
-
-    public void showSearchDialog(ISearchDialog dialog);
+    public Node getNode();
 
     public void addGutterListener(IGutterListener provider);
 
@@ -122,17 +98,61 @@ public interface IEditor {
 
     public void setMode(String mode);
 
-    public int getLineOfOffset(int selectionStart) throws BadLocationException;
+    public int getLineOfOffset(int selectionStart);
 
-    public int getLineStartOffset(int startLine) throws BadLocationException;
+    public int getLineStartOffset(int startLine);
 
-    public int getLineEndOffset(int endLine) throws BadLocationException;
+    public int getLineEndOffset(int endLine);
 
     public void setFocus();
 
-    public void setMenuItems(JMenuItem[] menuItems);
+    public void setMenuItems(MenuItem[] menuItems);
 
     public void toggleInsertMode();
 
     public void setEditable(boolean b);
+
+    public void runWhenReady(Runnable r);
+
+    public Font getFont();
+
+    public IResourceHandler createResourceHandler(EditorType type, INameValidateChecker nameChecker) throws IOException;
+
+    public void refreshResource();
+
+    public String getDockKey();
+
+    public String getName();
+
+    public String getResourcePath();
+
+    public String getDisplayName();
+
+    public void readResource(File to) throws IOException;
+
+    public boolean isProjectFile();
+
+    public boolean isTestFile();
+
+    public File saveAs() throws IOException;
+
+    public File save() throws IOException;
+
+    public boolean isModuleFile();
+
+    public void saveTo(File file) throws IOException;
+
+    public void createNewResource(String script, File directory);
+
+    public boolean isEditingResource(File file);
+
+    public boolean isFileBased();
+
+    public boolean canSaveAs();
+
+    public void changeResource(File file);
+
+    void runWhenContentLoaded(Runnable r);
+
+    public boolean isNewFile();
 };

@@ -1,23 +1,19 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.ws;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -34,6 +30,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Utility class for converting between JSON and Java Objects.
  */
@@ -45,7 +45,7 @@ public class BeanToJsonConverter {
      * Convert an object that may or may not be a JSONArray or JSONObject into
      * its JSON string representation, handling the case where it is neither in
      * a graceful way.
-     * 
+     *
      * @param object
      *            which needs conversion
      * @return the JSON string representation of object
@@ -72,7 +72,7 @@ public class BeanToJsonConverter {
      * Convert a JSON[Array|Object] into the equivalent Java Collection type
      * (that is, List|Map) returning other objects untouched. This method is
      * used for preparing values for use by the HttpCommandExecutor
-     * 
+     *
      * @param o
      *            Object to convert
      * @return a Map, List or the unconverted Object

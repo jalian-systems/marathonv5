@@ -1,24 +1,24 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 /**
  * Representations of pressable keys that aren't text. These are stored in the
  * Unicode PUA (Private Use Area) code points, 0xE000-0xF8FF.
- * 
+ *
  * @see <a href="http://www.google.com.au/search?&q=unicode+pua&btnG=Search">
  *      http://www.google.com.au/search?&q=unicode+pua&btnG=Search</a>
  */
@@ -99,15 +99,17 @@ public enum JavaAgentKeys implements CharSequence {
 
     JavaAgentKeys(char keyCode) {
         if (keyCode == '\uE03F') {
-            if (Platform.getCurrent().is(Platform.MAC))
+            if (Platform.getCurrent().is(Platform.MAC)) {
                 this.keyCode = '\uE03D';
-            else
+            } else {
                 this.keyCode = '\uE009';
-        } else
+            }
+        } else {
             this.keyCode = keyCode;
+        }
     }
 
-    public char charAt(int index) {
+    @Override public char charAt(int index) {
         if (index == 0) {
             return keyCode;
         }
@@ -115,11 +117,11 @@ public enum JavaAgentKeys implements CharSequence {
         return 0;
     }
 
-    public int length() {
+    @Override public int length() {
         return 1;
     }
 
-    public CharSequence subSequence(int start, int end) {
+    @Override public CharSequence subSequence(int start, int end) {
         if (start == 0 && end == 1) {
             return String.valueOf(keyCode);
         }
@@ -131,10 +133,10 @@ public enum JavaAgentKeys implements CharSequence {
      * Simulate pressing many keys at once in a "chord". Takes a sequence of
      * Keys.XXXX or strings; appends each of the values to a string, and adds
      * the chord termination key (Keys.NULL) and returns the resultant string.
-     * 
+     *
      * Note: When the low-level webdriver key handlers see Keys.NULL, active
      * modifier keys (CTRL/ALT/SHIFT/etc) release via a keyup event.
-     * 
+     *
      * Issue: http://code.google.com/p/webdriver/issues/detail?id=79
      */
     public static String chord(CharSequence... value) {
@@ -152,7 +154,7 @@ public enum JavaAgentKeys implements CharSequence {
      * Get the special key representation, {@link JavaAgentKeys}, of the
      * supplied character if there is one. If there is no special key tied to
      * this character, null will be returned.
-     * 
+     *
      * @param key
      *            unicode character code
      * @return special key linked to the character code, or null if character is

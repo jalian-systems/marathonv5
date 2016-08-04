@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -45,8 +45,9 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
 
     public static String getSelectedItemText(JTabbedPane component) {
         int selectedIndex = component.getSelectedIndex();
-        if (selectedIndex != -1)
+        if (selectedIndex != -1) {
             return JTabbedPaneTabJavaElement.getText(component, selectedIndex);
+        }
         return "";
     }
 
@@ -61,18 +62,21 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
                 r.add(new JTabbedPaneTabJavaElement(this, i));
             }
             return r;
-        } else if (selector.equals("select-by-properties"))
+        } else if (selector.equals("select-by-properties")) {
             return findNodeByProperties(new JSONObject((String) params[0]));
+        }
         return super.getByPseudoElement(selector, params);
     }
 
     private List<IJavaElement> findNodeByProperties(JSONObject o) {
-        if (!o.has("select"))
+        if (!o.has("select")) {
             return Collections.<IJavaElement> emptyList();
+        }
         String tab = o.getString("select");
         int tabIndex = findTabIndex((JTabbedPane) component, tab);
-        if(tabIndex != -1)
+        if (tabIndex != -1) {
             return Arrays.asList((IJavaElement) new JTabbedPaneTabJavaElement(this, tabIndex));
+        }
         return Collections.<IJavaElement> emptyList();
     }
 
@@ -91,18 +95,19 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
 
     @Override public boolean marathon_select(String tab) {
         int tabIndex = findTabIndex((JTabbedPane) component, tab);
-        if(tabIndex != -1)
+        if (tabIndex != -1) {
             ((JTabbedPane) component).setSelectedIndex(tabIndex);
+        }
         return tabIndex != -1;
     }
 
     private int findTabIndex(JTabbedPane tp, String tab) {
         int tabCount = tp.getTabCount();
-        int tabIndex = -1 ;
+        int tabIndex = -1;
         for (int index = 0; index < tabCount; index++) {
             String current = JTabbedPaneTabJavaElement.getText(tp, index);
             if (tab.equals(current)) {
-                tabIndex = index ;
+                tabIndex = index;
                 break;
             }
         }

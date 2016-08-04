@@ -1,6 +1,0 @@
-net.sourceforge.marathon.runtime.ChromeWebDriverProxy=Chrome
-net.sourceforge.marathon.runtime.FirefoxWebDriverProxy=Firefox
-net.sourceforge.marathon.runtime.EdgeWebDriverProxy=Microsoft Edge
-net.sourceforge.marathon.runtime.IEWebDriverProxy=Internet Explorer
-net.sourceforge.marathon.runtime.OperaWebDriverProxy=Opera
-net.sourceforge.marathon.runtime.GeckoWebDriverProxy=Firefox (Marionette)

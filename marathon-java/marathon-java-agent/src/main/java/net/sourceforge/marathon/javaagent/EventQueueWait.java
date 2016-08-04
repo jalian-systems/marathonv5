@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.AWTEvent;
@@ -57,7 +57,7 @@ public abstract class EventQueueWait extends Wait {
     /**
      * Returns true when it is time to stop waiting. This method is executed in
      * the Event Dispatch Thread
-     * 
+     *
      * @return
      */
     public abstract boolean till();
@@ -81,13 +81,15 @@ public abstract class EventQueueWait extends Wait {
         if (exc[0] != null) {
             if (exc[0] instanceof InvocationTargetException) {
                 Throwable cause = exc[0].getCause();
-                if (cause instanceof Exception)
+                if (cause instanceof Exception) {
                     exc[0] = (Exception) cause;
-                else
+                } else {
                     exc[0] = new RuntimeException(cause);
+                }
             }
-            if (exc[0] instanceof RuntimeException)
-                throw ((RuntimeException) exc[0]);
+            if (exc[0] instanceof RuntimeException) {
+                throw (RuntimeException) exc[0];
+            }
             throw new JavaAgentException("Call to invokeAndWait failed: " + exc[0].getMessage(), exc[0]);
         }
         return (X) result[0];
@@ -97,7 +99,7 @@ public abstract class EventQueueWait extends Wait {
         try {
             invokeAndWait(runnable);
         } catch (RuntimeException e) {
-            throw ((RuntimeException) e);
+            throw e;
         } catch (Exception e) {
             throw new JavaAgentException("Call to invokeAndWait failed: " + e.getMessage(), e);
         }
@@ -107,10 +109,11 @@ public abstract class EventQueueWait extends Wait {
             throws NoSuchMethodException {
         Class<?>[] params = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
-            if (args[i] instanceof Integer)
+            if (args[i] instanceof Integer) {
                 params[i] = Integer.TYPE;
-            else
+            } else {
                 params[i] = args[i].getClass();
+            }
         }
         final Method method;
         try {
@@ -131,10 +134,11 @@ public abstract class EventQueueWait extends Wait {
         if (r[0] instanceof InvocationTargetException) {
             r[0] = ((InvocationTargetException) r[0]).getCause();
         }
-        if (r[0] instanceof RuntimeException)
-            throw ((RuntimeException) r[0]);
-        else if (r[0] instanceof Exception)
+        if (r[0] instanceof RuntimeException) {
+            throw (RuntimeException) r[0];
+        } else if (r[0] instanceof Exception) {
             throw new RuntimeException(((Exception) r[0]).getMessage(), (Exception) r[0]);
+        }
         return (T) r[0];
     }
 
@@ -152,16 +156,17 @@ public abstract class EventQueueWait extends Wait {
     /**
      * Requests for the focus of the component and waits till the component
      * receives focus.
-     * 
+     *
      * @param c
      */
     public static void requestFocus(final Component c) {
         try {
             new EventQueueWait() {
-                public void setup() {
+                @Override public void setup() {
                     c.requestFocusInWindow();
-                    if (!c.isFocusOwner())
+                    if (!c.isFocusOwner()) {
                         c.requestFocusInWindow();
+                    }
                 };
 
                 @Override public boolean till() {
@@ -179,13 +184,14 @@ public abstract class EventQueueWait extends Wait {
                 }
 
                 private boolean focused(final Component c, Component f) {
-                    if (f == c)
+                    if (f == c) {
                         return true;
-                    else if (c instanceof Container) {
+                    } else if (c instanceof Container) {
                         Component[] cs = ((Container) c).getComponents();
                         for (Component component : cs) {
-                            if (focused(component, f))
+                            if (focused(component, f)) {
                                 return true;
+                            }
                         }
                     }
                     return false;
@@ -199,10 +205,12 @@ public abstract class EventQueueWait extends Wait {
     }
 
     private static void generateFocusEvents(Component c) {
-        if (c == focusComponent || !c.isFocusable())
+        if (c == focusComponent || !c.isFocusable()) {
             return;
-        if (focusComponent != null)
+        }
+        if (focusComponent != null) {
             dispatchEvent(new FocusEvent(focusComponent, FocusEvent.FOCUS_LOST, false, c));
+        }
         dispatchEvent(new FocusEvent(c, FocusEvent.FOCUS_GAINED, false, focusComponent));
     }
 
@@ -239,19 +247,21 @@ public abstract class EventQueueWait extends Wait {
     }
 
     private static void invokeAndWait(Runnable r) {
-        if (SwingUtilities.isEventDispatchThread())
+        if (SwingUtilities.isEventDispatchThread()) {
             r.run();
-        else
+        } else {
             try {
                 SwingUtilities.invokeAndWait(r);
             } catch (InterruptedException e) {
                 throw new RuntimeException("invokeAndWait failed: " + e.getMessage(), e);
             } catch (InvocationTargetException e) {
                 Throwable cause = e.getCause();
-                if (cause instanceof RuntimeException)
-                    throw ((RuntimeException) cause);
+                if (cause instanceof RuntimeException) {
+                    throw (RuntimeException) cause;
+                }
                 throw new RuntimeException("invokeAndWait failed: " + e.getMessage(), e);
             }
+        }
     }
 
     public static <T> T call_noexc(final Object o, String f, final Object... args) {

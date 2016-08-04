@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
 import java.io.File;
@@ -22,11 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import net.sourceforge.marathon.runtime.api.Argument;
-import net.sourceforge.marathon.runtime.api.Function;
-import net.sourceforge.marathon.runtime.api.Module;
-import net.sourceforge.marathon.runtime.api.Argument.Type;
 
 import org.jruby.Ruby;
 import org.jrubyparser.Parser;
@@ -49,6 +44,11 @@ import org.jrubyparser.lexer.Lexer;
 import org.jrubyparser.lexer.LexerSource;
 import org.jrubyparser.parser.ParserConfiguration;
 import org.jrubyparser.parser.Tokens;
+
+import net.sourceforge.marathon.runtime.api.Argument;
+import net.sourceforge.marathon.runtime.api.Argument.Type;
+import net.sourceforge.marathon.runtime.api.Function;
+import net.sourceforge.marathon.runtime.api.Module;
 
 public class ModuleList {
     private Module topModule;
@@ -73,19 +73,23 @@ public class ModuleList {
 
     private Module loadModulesFromFSMulti() {
         Module module = new Module("Functions", null);
-        for (int i = 0; i < moduleDirs.length; i++) {
-            File file = new File(moduleDirs[i]);
+        for (String moduleDir : moduleDirs) {
+            File file = new File(moduleDir);
             File[] files = file.listFiles(new FileFilter() {
-                public boolean accept(File pathname) {
-                    if (pathname.getName().startsWith("."))
+                @Override public boolean accept(File pathname) {
+                    if (pathname.getName().startsWith(".")) {
                         return false;
+                    }
                     return pathname.isDirectory() || pathname.getName().endsWith(".rb");
                 }
             });
-            for (File child : files) {
-                Module m = loadModulesFromFS(child, module);
-                if (m != null)
-                    module.addChild(m);
+            if (files != null) {
+                for (File child : files) {
+                    Module m = loadModulesFromFS(child, module);
+                    if (m != null) {
+                        module.addChild(m);
+                    }
+                }
             }
         }
         return module;
@@ -95,19 +99,24 @@ public class ModuleList {
         if (file.isDirectory()) {
             Module module = new Module(getModuleName(file), parent);
             File[] files = file.listFiles(new FileFilter() {
-                public boolean accept(File pathname) {
-                    if (pathname.getName().startsWith("."))
+                @Override public boolean accept(File pathname) {
+                    if (pathname.getName().startsWith(".")) {
                         return false;
+                    }
                     return pathname.isDirectory() || pathname.getName().endsWith(".rb");
                 }
             });
-            for (File child : files) {
-                Module m = loadModulesFromFS(child, module);
-                if (m != null)
-                    module.addChild(m);
+            if (files != null) {
+                for (File child : files) {
+                    Module m = loadModulesFromFS(child, module);
+                    if (m != null) {
+                        module.addChild(m);
+                    }
+                }
             }
-            if (module.getChildren().size() > 0)
+            if (module.getChildren().size() > 0) {
                 return module;
+            }
             return null;
         }
         return loadFunctionsFromFile(file, parent);
@@ -121,13 +130,13 @@ public class ModuleList {
             Node node = parser.parse(file.getName(), new FileReader(file), new ParserConfiguration());
             List<Node> defnNodes = findNodes(node, new INodeFilter() {
 
-                public void visitStart(Node node) {
+                @Override public void visitStart(Node node) {
                 }
 
-                public void visitEnd(Node node) {
+                @Override public void visitEnd(Node node) {
                 }
 
-                public boolean accept(Node node) {
+                @Override public boolean accept(Node node) {
                     return node instanceof DefnNode;
                 }
             });
@@ -150,18 +159,21 @@ public class ModuleList {
         int token = -1;
         Properties props = new Properties();
         while (lexer.advance()) {
-            if (token == -1)
+            if (token == -1) {
                 token = lexer.token();
+            }
             if (token == Tokens.tDOCUMENTATION) {
                 doc = lexer.getTokenBuffer().toString();
                 while (lexer.advance() && (token = lexer.token()) == Tokens.tWHITESPACE) {
                 }
-                if (token != Tokens.kDEF)
+                if (token != Tokens.kDEF) {
                     continue;
+                }
                 while (lexer.advance() && (token = lexer.token()) == Tokens.tWHITESPACE) {
                 }
-                if (token != Tokens.tIDENTIFIER)
+                if (token != Tokens.tIDENTIFIER) {
                     continue;
+                }
                 props.setProperty(lexer.getTokenBuffer().toString(), doc);
             }
             token = -1;
@@ -172,55 +184,60 @@ public class ModuleList {
     private void addNodeToModule(DefnNode defn, Module module, Properties docNodes) {
         List<Argument> args = new ArrayList<Argument>();
         ArgsNode argsNode = defn.getArgs();
-        if (argsNode.getBlock() != null)
+        if (argsNode.getBlock() != null) {
             return;
+        }
         ListNode pre = argsNode.getPre();
         if (pre != null) {
             for (int i = 0; i < pre.size(); i++) {
                 Node node = pre.get(i);
-                if (node instanceof INameNode)
+                if (node instanceof INameNode) {
                     args.add(new Argument(((INameNode) node).getName()));
-                else
+                } else {
                     return;
+                }
             }
         }
         ListNode optional = argsNode.getOptional();
         if (optional != null) {
             for (int i = 0; i < optional.size(); i++) {
                 Node node = optional.get(i);
-                if (!(node instanceof LocalAsgnNode))
+                if (!(node instanceof LocalAsgnNode)) {
                     return;
+                }
                 LocalAsgnNode lan = (LocalAsgnNode) node;
                 Node valueNode = lan.getValue();
-                if ((valueNode instanceof StrNode))
+                if (valueNode instanceof StrNode) {
                     args.add(new Argument(lan.getName(), argEncode(((StrNode) valueNode).getValue().toString()), Type.STRING));
-                else if (valueNode instanceof RegexpNode)
+                } else if (valueNode instanceof RegexpNode) {
                     args.add(new Argument(lan.getName(), ((RegexpNode) valueNode).getValue().toString(), Type.REGEX));
-                else if (valueNode instanceof BignumNode)
+                } else if (valueNode instanceof BignumNode) {
                     args.add(new Argument(lan.getName(), "" + ((BignumNode) valueNode).getValue().toString(), Type.NUMBER));
-                else if (valueNode instanceof FixnumNode)
+                } else if (valueNode instanceof FixnumNode) {
                     args.add(new Argument(lan.getName(), ((FixnumNode) valueNode).getValue() + "", Type.NUMBER));
-                else if (valueNode instanceof FloatNode)
+                } else if (valueNode instanceof FloatNode) {
                     args.add(new Argument(lan.getName(), ((FloatNode) valueNode).getValue() + "", Type.NUMBER));
-                else if (valueNode instanceof TrueNode)
+                } else if (valueNode instanceof TrueNode) {
                     args.add(new Argument(lan.getName(), ((TrueNode) valueNode).getName(), Type.BOOLEAN));
-                else if (valueNode instanceof FalseNode)
+                } else if (valueNode instanceof FalseNode) {
                     args.add(new Argument(lan.getName(), ((FalseNode) valueNode).getName(), Type.BOOLEAN));
-                else if (valueNode instanceof ArrayNode && ((ArrayNode) valueNode).size() > 0) {
+                } else if (valueNode instanceof ArrayNode && ((ArrayNode) valueNode).size() > 0) {
                     ArrayNode arrayNode = (ArrayNode) valueNode;
                     List<String> argValue = getListValue(arrayNode);
                     if (argValue != null) {
                         Node node2 = arrayNode.get(0);
                         Type type = Type.NONE;
-                        if (node2 instanceof StrNode)
+                        if (node2 instanceof StrNode) {
                             type = Type.STRING;
-                        else if (node2 instanceof RegexpNode)
+                        } else if (node2 instanceof RegexpNode) {
                             type = Type.REGEX;
-                        else if (node instanceof BignumNode || node instanceof FixnumNode || node instanceof FloatNode)
+                        } else if (node instanceof BignumNode || node instanceof FixnumNode || node instanceof FloatNode) {
                             type = Type.NUMBER;
+                        }
                         args.add(new Argument(lan.getName(), argValue, type));
-                    } else
+                    } else {
                         return;
+                    }
                 } else {
                     return;
                 }
@@ -237,14 +254,15 @@ public class ModuleList {
         boolean isRegex = false;
         boolean isNumber = false;
         Node node = arrayNode.get(0);
-        if (node instanceof StrNode)
+        if (node instanceof StrNode) {
             isString = true;
-        else if (node instanceof RegexpNode)
+        } else if (node instanceof RegexpNode) {
             isRegex = true;
-        else if (node instanceof BignumNode || node instanceof FixnumNode || node instanceof FloatNode)
+        } else if (node instanceof BignumNode || node instanceof FixnumNode || node instanceof FloatNode) {
             isNumber = true;
-        else
+        } else {
             return null;
+        }
 
         List<String> l = new ArrayList<String>();
         for (int i = 0; i < arrayNode.size(); i++) {
@@ -259,8 +277,9 @@ public class ModuleList {
                 l.add("" + ((FixnumNode) anode).getValue());
             } else if (isNumber && anode instanceof FloatNode) {
                 l.add("" + ((FloatNode) anode).getValue());
-            } else
+            } else {
                 return null;
+            }
         }
         return l;
     }
@@ -270,48 +289,54 @@ public class ModuleList {
 
         findNodes(defn, new INodeFilter() {
 
-            public void visitStart(Node node) {
+            @Override public void visitStart(Node node) {
             }
 
-            public void visitEnd(Node node) {
+            @Override public void visitEnd(Node node) {
             }
 
-            public boolean accept(Node node) {
+            @Override public boolean accept(Node node) {
                 if (node instanceof FCallNode && ((FCallNode) node).getName().equals("with_window") && callNodes[0] == null) {
                     callNodes[0] = (FCallNode) node;
                 }
                 return false;
             }
         });
-        if (callNodes[0] == null)
+        if (callNodes[0] == null) {
             return null;
+        }
         return validWithCallNode(callNodes[0]);
     }
 
     private String validWithCallNode(FCallNode node) {
         Node argsNode = node.getArgs();
-        if (!(argsNode instanceof ArrayNode))
+        if (!(argsNode instanceof ArrayNode)) {
             return null;
+        }
         ArrayNode aNode = (ArrayNode) argsNode;
-        if (aNode.size() != 1)
+        if (aNode.size() != 1) {
             return null;
+        }
         Node node2 = aNode.get(0);
-        if (!(node2 instanceof StrNode))
+        if (!(node2 instanceof StrNode)) {
             return null;
+        }
         return ((StrNode) node2).getValue();
     }
 
     private String argEncode(String string) {
         String s = interpreter.newString(string).inspect().toString();
-        if (s.length() >= 2 && s.startsWith("\"") && s.endsWith("\""))
+        if (s.length() >= 2 && s.startsWith("\"") && s.endsWith("\"")) {
             return s.substring(1, s.length() - 1);
+        }
         return s;
     }
 
     private String getModuleName(File file) {
         String name = file.getName();
-        if (file.isDirectory())
+        if (file.isDirectory()) {
             return name;
+        }
         return name.substring(0, name.length() - 3);
     }
 
@@ -335,8 +360,9 @@ public class ModuleList {
 
     private static List<Node> findNodes(Node root, ArrayList<Node> nodes, INodeFilter filter) {
         filter.visitStart(root);
-        if (filter.accept(root))
+        if (filter.accept(root)) {
             nodes.add(root);
+        }
         List<Node> childNodes = root.childNodes();
         for (Node child : childNodes) {
             findNodes(child, nodes, filter);

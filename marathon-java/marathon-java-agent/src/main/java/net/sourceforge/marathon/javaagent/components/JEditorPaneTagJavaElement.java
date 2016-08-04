@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -29,15 +29,15 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.InvalidElementStateException;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IPseudoElement {
 
@@ -68,12 +68,14 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         Iterator iterator = doc.getIterator(tag);
         int current = 0;
         while (iterator.isValid()) {
-            if (current++ == index)
+            if (current++ == index) {
                 break;
+            }
             iterator.next();
         }
-        if (!iterator.isValid())
+        if (!iterator.isValid()) {
             throw new NoSuchElementException("Unable to find tag " + tag + " in document with index " + index, null);
+        }
         return iterator;
     }
 
@@ -88,19 +90,23 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
     }
 
     @Override public String getAttribute(final String name) {
-        if ("text".equals(name))
+        if ("text".equals(name)) {
             return getText();
-        if ("hRefIndex".equals(name))
+        }
+        if ("hRefIndex".equals(name)) {
             return getHRefIndex() + "";
-        if ("textIndex".equals(name))
+        }
+        if ("textIndex".equals(name)) {
             return getTextIndex() + "";
+        }
         return EventQueueWait.exec(new Callable<String>() {
             @Override public String call() throws Exception {
                 Iterator iterator = findTag((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument());
                 AttributeSet attributes = iterator.getAttributes();
                 Attribute attr = findAttribute(name);
-                if (attr != null && attributes.isDefined(attr))
+                if (attr != null && attributes.isDefined(attr)) {
                     return attributes.getAttribute(attr).toString();
+                }
                 return null;
             }
         });
@@ -165,8 +171,9 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
 
     private Attribute findAttribute(String attrName) {
         for (Attribute attr : allAttributes) {
-            if (attrName.toUpperCase().equals(attr.toString().toUpperCase()))
+            if (attrName.toUpperCase().equals(attr.toString().toUpperCase())) {
                 return attr;
+            }
         }
         return null;
     }
@@ -195,15 +202,17 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
                 HTMLDocument document = (HTMLDocument) editor.getDocument();
                 Iterator iterator = document.getIterator(Tag.A);
                 while (iterator.isValid()) {
-                    if (current++ >= index)
+                    if (current++ >= index) {
                         return hRefIndex;
+                    }
                     AttributeSet attributes = iterator.getAttributes();
                     if (attributes != null) {
                         Object attributeObject = attributes.getAttribute(HTML.Attribute.HREF);
                         if (attributeObject != null) {
                             String attribute = attributeObject.toString();
-                            if (attribute.equals(href))
+                            if (attribute.equals(href)) {
                                 hRefIndex++;
+                            }
                         }
                     }
                     iterator.next();
@@ -223,12 +232,14 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
                 HTMLDocument document = (HTMLDocument) editor.getDocument();
                 Iterator iterator = document.getIterator(Tag.A);
                 while (iterator.isValid()) {
-                    if (current++ >= index)
+                    if (current++ >= index) {
                         return hRefIndex;
+                    }
                     String attribute = ((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument())
                             .getText(iterator.getStartOffset(), iterator.getEndOffset() - iterator.getStartOffset());
-                    if (attribute != null && attribute.equals(href))
+                    if (attribute != null && attribute.equals(href)) {
                         hRefIndex++;
+                    }
                     iterator.next();
                 }
                 return -1;

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.ArrayList;
@@ -39,10 +39,10 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("root")) {
             return Arrays.asList(new JavaFXTreeTableViewCellElement(this, 0, 0));
-        } else if (selector.equals("mnth-cell"))
+        } else if (selector.equals("mnth-cell")) {
             return Arrays.asList(new JavaFXTreeTableViewCellElement(this, ((Integer) params[0]).intValue() - 1,
                     ((Integer) params[1]).intValue() - 1));
-        else if (selector.equals("all-cells")) {
+        } else if (selector.equals("all-cells")) {
             TreeTableView<?> tableView = (TreeTableView<?>) getComponent();
             int rowCount = tableView.getExpandedItemCount();
             int columnCount = tableView.getColumns().size();
@@ -80,8 +80,9 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
             selectionModel.clearSelection();
             if (!selectionModel.isCellSelectionEnabled()) {
                 int rowCount = treeTableView.getExpandedItemCount();
-                for (int i = 0; i < rowCount; i++)
+                for (int i = 0; i < rowCount; i++) {
                     selectionModel.select(i);
+                }
                 return true;
             } else {
                 selectionModel.clearSelection();
@@ -92,10 +93,11 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
         } else if (!selectionModel.isCellSelectionEnabled()) {
             selectionModel.clearSelection();
             int[] selectedRows = getTreeTableSelectedRows(treeTableView, value);
-            for (int i = 0; i < selectedRows.length; i++) {
-                if (getVisibleCellAt(treeTableView, selectedRows[i], 0) == null)
-                    treeTableView.scrollTo(selectedRows[i]);
-                selectionModel.select(selectedRows[i]);
+            for (int selectedRow : selectedRows) {
+                if (getVisibleCellAt(treeTableView, selectedRow, 0) == null) {
+                    treeTableView.scrollTo(selectedRow);
+                }
+                selectionModel.select(selectedRow);
             }
             return true;
         } else {
@@ -124,8 +126,9 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 String valueAt = new JavaFXTreeTableViewCellElement(this, i, j)._getText();
-                if (valueAt == null)
+                if (valueAt == null) {
                     valueAt = "";
+                }
                 content[i][j] = valueAt;
             }
         }

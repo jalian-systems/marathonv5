@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.mcomponent;
 
 import java.awt.AWTException;
@@ -40,9 +40,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javadriver.JavaDriver;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -52,6 +49,9 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javadriver.JavaDriver;
 
 @Test(enabled = false) public class NativeEventsTest {
     private WebDriver driver;
@@ -78,17 +78,19 @@ import org.testng.annotations.Test;
         SwingUtilities.invokeAndWait(new Runnable() {
 
             public void captureEvent(InputEvent e, String event) {
-                if (events != e.getID())
+                if (events != e.getID()) {
                     return;
-                if (events == MouseEvent.MOUSE_MOVED)
+                }
+                if (events == MouseEvent.MOUSE_MOVED) {
                     System.out.println(e);
+                }
                 String clickCount = "";
                 if (e instanceof MouseEvent) {
                     MouseEvent me = (MouseEvent) e;
                     clickCount = "" + me.getClickCount() + "-" + me.isPopupTrigger();
                 } else if (e instanceof KeyEvent) {
                     KeyEvent ke = (KeyEvent) e;
-                    clickCount = "" + (int) ke.getKeyChar() + "-" + (int) ke.getKeyCode();
+                    clickCount = "" + (int) ke.getKeyChar() + "-" + ke.getKeyCode();
                 }
                 String mt1 = getModifiersExText(e);
                 String mt2 = getModifiersText(e);
@@ -96,20 +98,22 @@ import org.testng.annotations.Test;
             }
 
             public String getModifiersExText(InputEvent e) {
-                String mt = MouseEvent.getModifiersExText(e.getModifiersEx());
-                if (mt != null && !"".equals(mt))
+                String mt = InputEvent.getModifiersExText(e.getModifiersEx());
+                if (mt != null && !"".equals(mt)) {
                     mt = "-" + mt;
-                else
+                } else {
                     mt = "";
+                }
                 return mt;
             }
 
             public String getModifiersText(InputEvent e) {
                 String mt = MouseEvent.getMouseModifiersText(e.getModifiers());
-                if (mt != null && !"".equals(mt))
+                if (mt != null && !"".equals(mt)) {
                     mt = "-" + mt;
-                else
+                } else {
                     mt = "";
+                }
                 return mt;
             }
 
@@ -198,8 +202,9 @@ import org.testng.annotations.Test;
                 frame.dispose();
             }
         });
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void altClickGeneratesSameEventsClicked() throws Throwable {
@@ -732,8 +737,8 @@ import org.testng.annotations.Test;
         r.mouseMove(location.x + size.width / 2, location.y + size.height / 2);
         r.mousePress(InputEvent.BUTTON1_MASK);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
-        for (int i = 0; i < keysToPress.length; i++) {
-            r.keyPress(keysToPress[i]);
+        for (int keysToPres : keysToPress) {
+            r.keyPress(keysToPres);
         }
         for (int i = keysToPress.length - 1; i >= 0; i--) {
             r.keyRelease(keysToPress[i]);

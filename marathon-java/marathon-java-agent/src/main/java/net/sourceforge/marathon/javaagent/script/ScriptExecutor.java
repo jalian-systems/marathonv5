@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.script;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,14 +20,13 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
-
-import javax.swing.SwingUtilities;
-
 import net.sourceforge.marathon.javaagent.JavaAgentException;
 import net.sourceforge.marathon.javaagent.server.ExecuteMode;
 
@@ -51,8 +50,9 @@ public class ScriptExecutor {
         cp.importPackage("java.lang.reflect.Array");
         CtClass helloClass = cp.makeClass(getClassName());
         CtMethod make = CtNewMethod.make(getMethodBody(args), helloClass);
-        if(!methodBody.endsWith(";"))
+        if (!methodBody.endsWith(";")) {
             methodBody = methodBody + ";";
+        }
         make.insertBefore(methodBody);
         Logger.getLogger(ScriptExecutor.class.getName()).log(Level.INFO, "Method Body:\n" + methodBody);
         helloClass.addMethod(make);
@@ -90,8 +90,9 @@ public class ScriptExecutor {
                     result = e;
                 }
             }
-            if (!callback)
+            if (!callback) {
                 throw new JavaAgentException("Expected callback not occured. Use $2.call(...) to perform callback", null);
+            }
             return result;
         }
         SwingUtilities.invokeAndWait(new Runnable() {
@@ -116,15 +117,17 @@ public class ScriptExecutor {
     public Class<?>[] getMethodParams(Object[] args) {
         Class<?>[] r = new Class[mode == ExecuteMode.SYNC ? args.length : args.length + 1];
         for (int i = 0; i < args.length; i++) {
-            if (args[i] == null)
+            if (args[i] == null) {
                 r[i] = Object.class;
-            else if (args[i].getClass().isArray())
+            } else if (args[i].getClass().isArray()) {
                 r[i] = Object[].class;
-            else
+            } else {
                 r[i] = args[i].getClass();
+            }
         }
-        if (mode == ExecuteMode.ASYNC)
+        if (mode == ExecuteMode.ASYNC) {
             r[args.length] = Callback.class;
+        }
         return r;
     }
 
@@ -138,18 +141,20 @@ public class ScriptExecutor {
         int index = 0;
         StringBuilder sb = new StringBuilder();
         for (Object o : args) {
-            if (o == null)
+            if (o == null) {
                 sb.append("Object a" + index++).append(",");
-            else if (o.getClass().isArray())
+            } else if (o.getClass().isArray()) {
                 sb.append("Object[] a" + index++).append(",");
-            else
+            } else {
                 sb.append(o.getClass().getName() + " a" + index++).append(",");
+            }
         }
         if (mode == ExecuteMode.ASYNC) {
             sb.append(Callback.class.getName() + " a" + index++).append(",");
         }
-        if (sb.length() > 0)
+        if (sb.length() > 0) {
             sb.setLength(sb.length() - 1);
+        }
         return sb.toString();
     }
 

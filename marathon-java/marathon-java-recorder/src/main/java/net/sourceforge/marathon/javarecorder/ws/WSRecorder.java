@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Jalian Systems Pvt. Ltd.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package net.sourceforge.marathon.javarecorder.ws;
 
 import java.awt.Container;
@@ -37,8 +52,9 @@ public class WSRecorder implements IJSONRecorder {
 
     static {
         timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
-        if (timerinterval == null)
+        if (timerinterval == null) {
             timerinterval = Integer.valueOf(300);
+        }
     }
 
     public WSRecorder(final int port) throws IOException, URISyntaxException {
@@ -77,8 +93,9 @@ public class WSRecorder implements IJSONRecorder {
         event.put("modifiersEx", mtext);
         event.put("x", e.getX());
         event.put("y", e.getY());
-        if (withCellInfo)
+        if (withCellInfo) {
             event.put("cellinfo", r.getCellInfo());
+        }
         final JSONObject o = new JSONObject();
         o.put("event", event);
         fill(r, o);
@@ -140,8 +157,9 @@ public class WSRecorder implements IJSONRecorder {
         if (e.isShiftDown()) {
             sb.append("Shift+");
         }
-        if (sb.length() > 0)
+        if (sb.length() > 0) {
             sb.setLength(sb.length() - 1);
+        }
         String mtext = sb.toString();
         return mtext;
     }
@@ -151,25 +169,29 @@ public class WSRecorder implements IJSONRecorder {
         event.put("type", "key_raw");
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_META || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT
-                || keyCode == KeyEvent.VK_CONTROL)
+                || keyCode == KeyEvent.VK_CONTROL) {
             return;
+        }
         if ((e.isActionKey() || e.isControlDown() || e.isMetaDown() || e.isAltDown()) && e.getID() == KeyEvent.KEY_PRESSED) {
             String mtext = buildModifiersText(e);
             event.put("modifiersEx", mtext);
             KeysMap keysMap = KeysMap.findMap(e.getKeyCode());
-            if (keysMap == KeysMap.NULL)
+            if (keysMap == KeysMap.NULL) {
                 return;
+            }
             String keyText;
-            if (keysMap == null)
+            if (keysMap == null) {
                 keyText = KeyEvent.getKeyText(e.getKeyCode());
-            else
+            } else {
                 keyText = keysMap.toString();
+            }
             event.put("keyCode", keyText);
         } else if (e.getID() == KeyEvent.KEY_TYPED && !e.isControlDown()) {
             if (Character.isISOControl(e.getKeyChar()) && hasMapping(e.getKeyChar())) {
                 event.put("keyChar", getMapping(e.getKeyChar()));
-            } else
+            } else {
                 event.put("keyChar", "" + e.getKeyChar());
+            }
         } else {
             return;
         }
@@ -199,8 +221,9 @@ public class WSRecorder implements IJSONRecorder {
         JSONObject event = new JSONObject();
         event.put("type", "select");
         event.put("value", state);
-        if (withCellInfo)
+        if (withCellInfo) {
             event.put("cellinfo", r.getCellInfo());
+        }
         recordEvent(r, event);
     }
 
@@ -259,8 +282,9 @@ public class WSRecorder implements IJSONRecorder {
         event.put("bounds", bounds.x + ":" + bounds.y + ":" + bounds.width + ":" + bounds.height);
         final JSONObject o = new JSONObject();
         o.put("event", event);
-        if (windowStateTimer != null)
+        if (windowStateTimer != null) {
             windowStateTimer.cancel();
+        }
         windowStateTimer = new Timer();
         windowStateTimer.schedule(new TimerTask() {
             @Override public void run() {
@@ -275,8 +299,9 @@ public class WSRecorder implements IJSONRecorder {
     @Override public JSONOMapConfig getObjectMapConfiguration() {
         if (jsonOMapConfig == null) {
             synchronized (jsonOMapConfigLock) {
-                if (jsonOMapConfig != null)
+                if (jsonOMapConfig != null) {
                     return jsonOMapConfig;
+                }
                 try {
                     jsonOMapConfigLock.wait(10000);
                 } catch (InterruptedException e) {
@@ -298,8 +323,9 @@ public class WSRecorder implements IJSONRecorder {
     @Override public JSONObject getContextMenuTriggers() {
         if (contextMenuTriggers == null) {
             synchronized (contextMenuTriggersLock) {
-                if (contextMenuTriggers != null)
+                if (contextMenuTriggers != null) {
                     return contextMenuTriggers;
+                }
                 try {
                     contextMenuTriggersLock.wait(10000);
                 } catch (InterruptedException e) {
@@ -323,7 +349,7 @@ public class WSRecorder implements IJSONRecorder {
     public void setRawRecording(JSONObject o) {
         rawRecording = o.getBoolean("value");
     }
-    
+
     @Override public void recordMenuItem(RComponent r) {
         JSONObject event = new JSONObject();
         event.put("type", "menu_item");
@@ -410,8 +436,9 @@ public class WSRecorder implements IJSONRecorder {
     private static java.lang.reflect.Method getMethod(String name) {
         java.lang.reflect.Method[] methods = WSRecorder.class.getMethods();
         for (java.lang.reflect.Method method : methods) {
-            if (method.getName().equals(name))
+            if (method.getName().equals(name)) {
                 return method;
+            }
         }
         return null;
     }

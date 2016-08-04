@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
 import java.io.File;
@@ -116,10 +116,11 @@ public class JavaProfile {
     static {
         dirOfMarathonJavaDriverJar = ClassPathHelper.getClassPath(JavaProfile.class.getName());
         File dir = new File(dirOfMarathonJavaDriverJar).getParentFile();
-        if (dir.exists())
+        if (dir.exists()) {
             dirOfMarathonJavaDriverJar = dir.getAbsolutePath();
-        else
+        } else {
             dirOfMarathonJavaDriverJar = ".";
+        }
     }
 
     public JavaProfile() {
@@ -144,11 +145,12 @@ public class JavaProfile {
         } catch (IOException e1) {
             throw new WebDriverException("Could not allocate a port: " + e1.getMessage());
         } finally {
-            if (socket != null)
+            if (socket != null) {
                 try {
                     socket.close();
                 } catch (IOException e) {
                 }
+            }
         }
     }
 
@@ -168,43 +170,54 @@ public class JavaProfile {
             args.addAll(appArguments);
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
-            if (javaHome != null)
+            if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
-            if (workingDirectory != null)
+            }
+            if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
-            if (outputStream != null)
+            }
+            if (outputStream != null) {
                 commandLine.copyOutputTo(outputStream);
+            }
             return commandLine;
         }
         if (launchMode == LaunchMode.JAVA_WEBSTART) {
             List<String> args = new ArrayList<String>();
             args.add(findJavaWSBinary());
             args.addAll(wsArguments);
-            if (jnlpFile != null)
+            if (jnlpFile != null) {
                 args.add(jnlpFile.getAbsolutePath());
+            }
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
-            if (javaHome != null)
+            if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
-            if (workingDirectory != null)
+            }
+            if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
-            if (outputStream != null)
+            }
+            if (outputStream != null) {
                 commandLine.copyOutputTo(outputStream);
+            }
             return commandLine;
         }
         if (launchMode == LaunchMode.JAVA_APPLET) {
             List<String> args = new ArrayList<String>();
             args.add(findAppletViewerBinary());
-            if (appletURL != null)
+            if (appletURL != null) {
                 args.add(appletURL);
+            }
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
-            if (javaHome != null)
+            if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
-            if (workingDirectory != null)
+            }
+            if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
-            if (outputStream != null)
+            }
+            if (outputStream != null) {
                 commandLine.copyOutputTo(outputStream);
+            }
             return commandLine;
         }
         if (launchMode == LaunchMode.COMMAND_LINE) {
@@ -212,13 +225,16 @@ public class JavaProfile {
             args.add(command);
             args.addAll(appArguments);
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
-            if (javaHome != null)
+            if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
+            }
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
-            if (workingDirectory != null)
+            if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
-            if (outputStream != null)
+            }
+            if (outputStream != null) {
                 commandLine.copyOutputTo(outputStream);
+            }
             return commandLine;
         }
         if (launchMode == LaunchMode.EXECUTABLE_JAR) {
@@ -228,13 +244,16 @@ public class JavaProfile {
             args.add(executableJar);
             args.addAll(appArguments);
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
-            if (javaHome != null)
+            if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
+            }
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
-            if (workingDirectory != null)
+            if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
-            if (outputStream != null)
+            }
+            if (outputStream != null) {
                 commandLine.copyOutputTo(outputStream);
+            }
             return commandLine;
         }
         return null;
@@ -244,8 +263,9 @@ public class JavaProfile {
         StringBuilder java_tool_options = new StringBuilder();
         java_tool_options.append("-Dmarathon.launch.mode=" + launchMode.getName()).append(" ");
         java_tool_options.append("-Dmarathon.mode=" + (recordingPort != -1 ? "recording" : "playing")).append(" ");
-        if (startWindowTitle != null)
+        if (startWindowTitle != null) {
             java_tool_options.append("-Dstart.window.title=\"" + startWindowTitle).append("\" ");
+        }
         java_tool_options.append("-D" + MARATHON_AGENT + "=" + getAgentJarURL()).append(" ");
         java_tool_options.append("-javaagent:\"" + getAgentJar() + "\"=" + port).append(" ");
         if (recordingPort != -1) {
@@ -285,17 +305,20 @@ public class JavaProfile {
         Collection<String> classes = FindResources.findClasses("MarathonExtension");
         for (String klass : classes) {
             String classPath = ClassPathHelper.getClassPath(klass);
-            if (classPath != null)
+            if (classPath != null) {
                 sb.append("-javaagent:\"" + classPath + "\"").append(" ");
+            }
         }
     }
 
     public String getAgentJar() {
         String prefix = launchType.getPrefix();
-        if (System.getenv(MARATHON_AGENT + ".file") != null)
+        if (System.getenv(MARATHON_AGENT + ".file") != null) {
             return System.getenv(MARATHON_AGENT + ".file");
-        if (System.getProperty(MARATHON_AGENT + ".file") != null)
+        }
+        if (System.getProperty(MARATHON_AGENT + ".file") != null) {
             return System.getProperty(MARATHON_AGENT + ".file");
+        }
         String path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
                 "../../marathonv4/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
                 dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-agent.*.jar");
@@ -342,14 +365,17 @@ public class JavaProfile {
         }
         if (javaHome != null) {
             File homeFolder = new File(javaHome);
-            if (!homeFolder.exists() || !homeFolder.isDirectory())
+            if (!homeFolder.exists() || !homeFolder.isDirectory()) {
                 throw new WebDriverException(String.format("%s: No such directory", homeFolder));
+            }
             File binFolder = new File(javaHome, "bin");
-            if (!binFolder.exists() || !binFolder.isDirectory())
+            if (!binFolder.exists() || !binFolder.isDirectory()) {
                 throw new WebDriverException(String.format("%s: No bin directory found in home directory", binFolder));
+            }
             File java = new File(binFolder, Platform.getCurrent().is(Platform.WINDOWS) ? command + ".exe" : command);
-            if (!java.exists() || !java.isFile())
+            if (!java.exists() || !java.isFile()) {
                 throw new WebDriverException(String.format("%s: No such file", java));
+            }
             return java.getAbsolutePath();
         }
         return command;
@@ -363,8 +389,9 @@ public class JavaProfile {
         if (vmCommand != null) {
             return vmCommand;
         }
-        if (Platform.getCurrent().is(Platform.MAC))
+        if (Platform.getCurrent().is(Platform.MAC)) {
             return "javaws";
+        }
         return findCommand("javaws");
     }
 
@@ -375,8 +402,9 @@ public class JavaProfile {
     public JavaProfile addClassPath(File... jarOrDirs) {
         checkValidProperty("classpath");
         for (File jarOrDir : jarOrDirs) {
-            if (!jarOrDir.exists())
+            if (!jarOrDir.exists()) {
                 throw new WebDriverException(String.format("But unable to locate the requested jar or folder: %s", jarOrDir));
+            }
             classPathEntries.add(jarOrDir);
         }
         return this;
@@ -386,8 +414,9 @@ public class JavaProfile {
         checkValidProperty("classpath");
         for (String s : jarOrDirs) {
             File jarOrDir = new File(s);
-            if (!jarOrDir.exists() && !s.matches(".*%[^%]*%.*"))
+            if (!jarOrDir.exists() && !s.matches(".*%[^%]*%.*")) {
                 throw new WebDriverException(String.format("But unable to locate the requested jar or folder: %s", jarOrDir));
+            }
             classPathEntries.add(jarOrDir);
         }
         return this;
@@ -466,10 +495,12 @@ public class JavaProfile {
     private String executableJar;
 
     public String getRecorderJar() {
-        if (System.getenv(MARATHON_RECORDER + ".file") != null)
+        if (System.getenv(MARATHON_RECORDER + ".file") != null) {
             return System.getenv(MARATHON_RECORDER + ".file");
-        if (System.getProperty(MARATHON_RECORDER + ".file") != null)
+        }
+        if (System.getProperty(MARATHON_RECORDER + ".file") != null) {
             return System.getProperty(MARATHON_RECORDER + ".file");
+        }
         String prefix = launchType.getPrefix();
         String path = findFile(new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
                 System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-recorder.*.jar");
@@ -494,8 +525,9 @@ public class JavaProfile {
     }
 
     public OutputStream getOutputStream() {
-        if (outputStream == null)
+        if (outputStream == null) {
             return System.err;
+        }
         return outputStream;
     }
 
@@ -515,33 +547,42 @@ public class JavaProfile {
         for (int i = 1; i <= appArguments.size(); i++) {
             builder.addParameter("arg" + i, appArguments.get(i - 1));
         }
-        if (command != null)
+        if (command != null) {
             builder.addParameter("command", command);
-        if (startWindowTitle != null)
+        }
+        if (startWindowTitle != null) {
             builder.addParameter("swt", startWindowTitle);
-        if (javaHome != null)
+        }
+        if (javaHome != null) {
             builder.addParameter("javahome", javaHome);
-        if (vmCommand != null)
+        }
+        if (vmCommand != null) {
             builder.addParameter("vmcommand", vmCommand);
+        }
         for (int i = 1; i <= vmArguments.size(); i++) {
             builder.addParameter("vmarg" + i, vmArguments.get(i - 1));
         }
         for (int i = 1; i <= classPathEntries.size(); i++) {
             builder.addParameter("cp" + i, classPathEntries.get(i - 1).getPath());
         }
-        if (mainClass != null)
+        if (mainClass != null) {
             builder.addParameter("mainclass", mainClass);
+        }
         for (int i = 1; i <= wsArguments.size(); i++) {
             builder.addParameter("wsarg" + i, wsArguments.get(i - 1));
         }
-        if (jnlpFile != null)
+        if (jnlpFile != null) {
             builder.addParameter("jnlp", jnlpFile.getPath());
-        if (appletURL != null)
+        }
+        if (appletURL != null) {
             builder.addParameter("appleturl", appletURL);
-        if (nativeEvents)
+        }
+        if (nativeEvents) {
             builder.addParameter("nativeevents", nativeEvents + "");
-        if (executableJar != null)
+        }
+        if (executableJar != null) {
             builder.addParameter("executablejar", executableJar);
+        }
         return builder.build().toURL();
     }
 
@@ -550,53 +591,67 @@ public class JavaProfile {
         String launchModeStr = findValueOf(values, "launchmode");
         launchMode = LaunchMode.valueOf(launchModeStr);
         for (int i = 1;; i++) {
-            if (hasValueFor(values, "arg" + i))
+            if (hasValueFor(values, "arg" + i)) {
                 appArguments.add(findValueOf(values, "arg" + i));
-            else
+            } else {
                 break;
+            }
         }
-        if (hasValueFor(values, "command"))
+        if (hasValueFor(values, "command")) {
             command = findValueOf(values, "command");
-        if (hasValueFor(values, "executablejar"))
+        }
+        if (hasValueFor(values, "executablejar")) {
             executableJar = findValueOf(values, "executablejar");
-        if (hasValueFor(values, "swt"))
+        }
+        if (hasValueFor(values, "swt")) {
             startWindowTitle = findValueOf(values, "swt");
-        if (hasValueFor(values, "javahome"))
+        }
+        if (hasValueFor(values, "javahome")) {
             javaHome = findValueOf(values, "javahome");
-        if (hasValueFor(values, "vmcommand"))
+        }
+        if (hasValueFor(values, "vmcommand")) {
             vmCommand = findValueOf(values, "vmcommand");
+        }
         for (int i = 1;; i++) {
-            if (hasValueFor(values, "vmarg" + i))
+            if (hasValueFor(values, "vmarg" + i)) {
                 vmArguments.add(findValueOf(values, "vmarg" + i));
-            else
+            } else {
                 break;
+            }
         }
         for (int i = 1;; i++) {
-            if (hasValueFor(values, "cp" + i))
+            if (hasValueFor(values, "cp" + i)) {
                 classPathEntries.add(new File(findValueOf(values, "cp" + i)));
-            else
+            } else {
                 break;
+            }
         }
-        if (hasValueFor(values, "mainclass"))
+        if (hasValueFor(values, "mainclass")) {
             mainClass = findValueOf(values, "mainclass");
-        for (int i = 1;; i++) {
-            if (hasValueFor(values, "wsarg" + i))
-                wsArguments.add(findValueOf(values, "wsarg" + i));
-            else
-                break;
         }
-        if (hasValueFor(values, "jnlp"))
+        for (int i = 1;; i++) {
+            if (hasValueFor(values, "wsarg" + i)) {
+                wsArguments.add(findValueOf(values, "wsarg" + i));
+            } else {
+                break;
+            }
+        }
+        if (hasValueFor(values, "jnlp")) {
             jnlpFile = new File(findValueOf(values, "jnlp"));
-        if (hasValueFor(values, "appleturl"))
+        }
+        if (hasValueFor(values, "appleturl")) {
             appletURL = findValueOf(values, "appleturl");
-        if (hasValueFor(values, "nativeevents"))
+        }
+        if (hasValueFor(values, "nativeevents")) {
             nativeEvents = true;
+        }
     }
 
     private boolean hasValueFor(List<NameValuePair> values, String name) {
         for (NameValuePair nameValuePair : values) {
-            if (nameValuePair.getName().equals(name))
+            if (nameValuePair.getName().equals(name)) {
                 return true;
+            }
         }
         return false;
     }
@@ -611,8 +666,9 @@ public class JavaProfile {
     }
 
     private String replaceEnviron(String value) {
-        if (value == null)
+        if (value == null) {
             return null;
+        }
         Pattern p = Pattern.compile("[^%]*(%[^%]*%).*");
         Matcher m = p.matcher(value);
         while (m.matches()) {
@@ -622,8 +678,9 @@ public class JavaProfile {
                 varValue = System.getProperty(var.substring(1, var.length() - 1), null);
                 if (varValue == null) {
                     varValue = System.getenv(var.substring(1, var.length() - 1));
-                    if (varValue == null)
+                    if (varValue == null) {
                         varValue = "";
+                    }
                 }
             }
             value = value.replaceAll(var, escape(varValue));
@@ -651,95 +708,124 @@ public class JavaProfile {
     @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((appArguments == null) ? 0 : appArguments.hashCode());
-        result = prime * result + ((appletURL == null) ? 0 : appletURL.hashCode());
-        result = prime * result + ((classPathEntries == null) ? 0 : classPathEntries.hashCode());
-        result = prime * result + ((command == null) ? 0 : command.hashCode());
-        result = prime * result + ((javaHome == null) ? 0 : javaHome.hashCode());
-        result = prime * result + ((jnlpFile == null) ? 0 : jnlpFile.hashCode());
-        result = prime * result + ((launchMode == null) ? 0 : launchMode.hashCode());
-        result = prime * result + ((mainClass == null) ? 0 : mainClass.hashCode());
+        result = prime * result + (appArguments == null ? 0 : appArguments.hashCode());
+        result = prime * result + (appletURL == null ? 0 : appletURL.hashCode());
+        result = prime * result + (classPathEntries == null ? 0 : classPathEntries.hashCode());
+        result = prime * result + (command == null ? 0 : command.hashCode());
+        result = prime * result + (javaHome == null ? 0 : javaHome.hashCode());
+        result = prime * result + (jnlpFile == null ? 0 : jnlpFile.hashCode());
+        result = prime * result + (launchMode == null ? 0 : launchMode.hashCode());
+        result = prime * result + (mainClass == null ? 0 : mainClass.hashCode());
         result = prime * result + (nativeEvents ? 1231 : 1237);
-        result = prime * result + ((startWindowTitle == null) ? 0 : startWindowTitle.hashCode());
-        result = prime * result + ((vmArguments == null) ? 0 : vmArguments.hashCode());
-        result = prime * result + ((vmCommand == null) ? 0 : vmCommand.hashCode());
-        result = prime * result + ((workingDirectory == null) ? 0 : workingDirectory.hashCode());
-        result = prime * result + ((wsArguments == null) ? 0 : wsArguments.hashCode());
+        result = prime * result + (startWindowTitle == null ? 0 : startWindowTitle.hashCode());
+        result = prime * result + (vmArguments == null ? 0 : vmArguments.hashCode());
+        result = prime * result + (vmCommand == null ? 0 : vmCommand.hashCode());
+        result = prime * result + (workingDirectory == null ? 0 : workingDirectory.hashCode());
+        result = prime * result + (wsArguments == null ? 0 : wsArguments.hashCode());
         return result;
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         JavaProfile other = (JavaProfile) obj;
         if (appArguments == null) {
-            if (other.appArguments != null)
+            if (other.appArguments != null) {
                 return false;
-        } else if (!appArguments.equals(other.appArguments))
+            }
+        } else if (!appArguments.equals(other.appArguments)) {
             return false;
+        }
         if (appletURL == null) {
-            if (other.appletURL != null)
+            if (other.appletURL != null) {
                 return false;
-        } else if (!appletURL.equals(other.appletURL))
+            }
+        } else if (!appletURL.equals(other.appletURL)) {
             return false;
+        }
         if (classPathEntries == null) {
-            if (other.classPathEntries != null)
+            if (other.classPathEntries != null) {
                 return false;
-        } else if (!classPathEntries.equals(other.classPathEntries))
+            }
+        } else if (!classPathEntries.equals(other.classPathEntries)) {
             return false;
+        }
         if (command == null) {
-            if (other.command != null)
+            if (other.command != null) {
                 return false;
-        } else if (!command.equals(other.command))
+            }
+        } else if (!command.equals(other.command)) {
             return false;
+        }
         if (javaHome == null) {
-            if (other.javaHome != null)
+            if (other.javaHome != null) {
                 return false;
-        } else if (!javaHome.equals(other.javaHome))
+            }
+        } else if (!javaHome.equals(other.javaHome)) {
             return false;
+        }
         if (jnlpFile == null) {
-            if (other.jnlpFile != null)
+            if (other.jnlpFile != null) {
                 return false;
-        } else if (!jnlpFile.equals(other.jnlpFile))
+            }
+        } else if (!jnlpFile.equals(other.jnlpFile)) {
             return false;
-        if (launchMode != other.launchMode)
+        }
+        if (launchMode != other.launchMode) {
             return false;
+        }
         if (mainClass == null) {
-            if (other.mainClass != null)
+            if (other.mainClass != null) {
                 return false;
-        } else if (!mainClass.equals(other.mainClass))
+            }
+        } else if (!mainClass.equals(other.mainClass)) {
             return false;
-        if (nativeEvents != other.nativeEvents)
+        }
+        if (nativeEvents != other.nativeEvents) {
             return false;
+        }
         if (startWindowTitle == null) {
-            if (other.startWindowTitle != null)
+            if (other.startWindowTitle != null) {
                 return false;
-        } else if (!startWindowTitle.equals(other.startWindowTitle))
+            }
+        } else if (!startWindowTitle.equals(other.startWindowTitle)) {
             return false;
+        }
         if (vmArguments == null) {
-            if (other.vmArguments != null)
+            if (other.vmArguments != null) {
                 return false;
-        } else if (!vmArguments.equals(other.vmArguments))
+            }
+        } else if (!vmArguments.equals(other.vmArguments)) {
             return false;
+        }
         if (vmCommand == null) {
-            if (other.vmCommand != null)
+            if (other.vmCommand != null) {
                 return false;
-        } else if (!vmCommand.equals(other.vmCommand))
+            }
+        } else if (!vmCommand.equals(other.vmCommand)) {
             return false;
+        }
         if (workingDirectory == null) {
-            if (other.workingDirectory != null)
+            if (other.workingDirectory != null) {
                 return false;
-        } else if (!workingDirectory.equals(other.workingDirectory))
+            }
+        } else if (!workingDirectory.equals(other.workingDirectory)) {
             return false;
+        }
         if (wsArguments == null) {
-            if (other.wsArguments != null)
+            if (other.wsArguments != null) {
                 return false;
-        } else if (!wsArguments.equals(other.wsArguments))
+            }
+        } else if (!wsArguments.equals(other.wsArguments)) {
             return false;
+        }
         return true;
     }
 
@@ -782,7 +868,7 @@ public class JavaProfile {
         this.launchType = launchType;
         return this;
     }
-    
+
     public LaunchType getLaunchType() {
         return launchType;
     }

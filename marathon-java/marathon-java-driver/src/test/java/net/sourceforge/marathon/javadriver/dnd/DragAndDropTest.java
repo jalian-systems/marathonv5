@@ -1,27 +1,24 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.dnd;
 
 import static org.testng.AssertJUnit.assertEquals;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javadriver.JavaDriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -37,6 +34,9 @@ import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
 import com.sun.jna.Platform;
+
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javadriver.JavaDriver;
 
 @Test public class DragAndDropTest {
 
@@ -61,8 +61,9 @@ import com.sun.jna.Platform;
             }
         });
         EventQueueWait.empty();
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void dndWithMove() throws Throwable {
@@ -99,8 +100,9 @@ import com.sun.jna.Platform;
         listitem1.click();
         driver.clearlogs(LogType.DRIVER);
         Keys copyKey = Keys.ALT;
-        if(Platform.isWindows())
+        if (Platform.isWindows()) {
             copyKey = Keys.CONTROL;
+        }
         new Actions(driver).keyDown(copyKey).dragAndDrop(listitem1, listitem5).keyUp(copyKey).perform();
         waitTillDropCompletes(
                 "[[\"List Item 0\",\"List Item 1\",\"List Item 2\",\"List Item 3\",\"List Item 0(1)\",\"List Item 5\",\"List Item 6\",\"List Item 7\",\"List Item 8\",\"List Item 9\"]]",
@@ -113,7 +115,7 @@ import com.sun.jna.Platform;
     private void waitTillDropCompletes(final String string, final WebElement list) {
         try {
             new WebDriverWait(driver, 5, 500).until(new Predicate<WebDriver>() {
-                public boolean apply(WebDriver driver) {
+                @Override public boolean apply(WebDriver driver) {
                     return string.equals(list.getAttribute("content"));
                 }
             });

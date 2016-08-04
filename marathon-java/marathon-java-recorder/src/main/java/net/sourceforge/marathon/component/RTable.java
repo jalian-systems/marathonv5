@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.Component;
@@ -61,17 +61,22 @@ public class RTable extends RComponent {
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         RTable other = (RTable) obj;
-        if (column != other.column)
+        if (column != other.column) {
             return false;
-        if (row != other.row)
+        }
+        if (row != other.row) {
             return false;
+        }
         return true;
     }
 
@@ -83,8 +88,9 @@ public class RTable extends RComponent {
                 RComponentFactory finder = new RComponentFactory(omapConfig);
                 RComponent pa = finder.findRComponent(renderer, null, recorder);
                 Object t = pa.getText();
-                if (t != null && !t.equals(text))
+                if (t != null && !t.equals(text)) {
                     recorder.recordSelect2(this, t.toString(), true);
+                }
             }
         }
         if (next == null || next.getComponent() != getComponent()) {
@@ -98,35 +104,40 @@ public class RTable extends RComponent {
         boolean rowSelectionAllowed = table.getRowSelectionAllowed();
         boolean columnSelectionAllowed = table.getColumnSelectionAllowed();
 
-        if (!rowSelectionAllowed && !columnSelectionAllowed)
+        if (!rowSelectionAllowed && !columnSelectionAllowed) {
             return null;
+        }
 
         int[] rows = table.getSelectedRows();
         int[] columns = table.getSelectedColumns();
         int rowCount = table.getRowCount();
         int columnCount = table.getColumnCount();
 
-        if (rows.length == rowCount && columns.length == columnCount)
+        if (rows.length == rowCount && columns.length == columnCount) {
             return "all";
+        }
 
-        if (rows.length == 0 && columns.length == 0)
+        if (rows.length == 0 && columns.length == 0) {
             return "";
+        }
 
         StringBuffer text = new StringBuffer();
 
         text.append("rows:[");
         for (int i = 0; i < rows.length; i++) {
             text.append(rows[i]);
-            if (i != rows.length - 1)
+            if (i != rows.length - 1) {
                 text.append(",");
+            }
         }
         text.append("],");
         text.append("columns:[");
         for (int i = 0; i < columns.length; i++) {
             String columnName = getColumnName(columns[i]);
             text.append(escape(columnName));
-            if (i != columns.length - 1)
+            if (i != columns.length - 1) {
                 text.append(",");
+            }
         }
         text.append("]");
         return text.toString();
@@ -162,11 +173,13 @@ public class RTable extends RComponent {
     }
 
     @Override public String getCellInfo() {
-        if (column == -1 || row == -1)
+        if (column == -1 || row == -1) {
             return null;
+        }
         String scolumn = getColumnName(column);
-        if (scolumn == null || "".equals(scolumn))
+        if (scolumn == null || "".equals(scolumn)) {
             scolumn = "" + column;
+        }
         return "{" + row + ", " + scolumn + "}";
     }
 
@@ -188,10 +201,12 @@ public class RTable extends RComponent {
 
     @Override protected void mousePressed(MouseEvent me) {
         // Ignore Ctrl+Clicks used to select the nodes
-        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me))
+        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me)) {
             return;
-        if (me.getButton() != MouseEvent.BUTTON1)
+        }
+        if (me.getButton() != MouseEvent.BUTTON1) {
             focusLost(null);
+        }
         super.mousePressed(me);
     }
 }

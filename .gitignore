@@ -40,6 +40,7 @@ marathon-java/marathon-test-helpers/build/
 marathon-java/omap
 marathon-java/src/main/java/Version.java
 marathon-core/.classpath
+marathon-core/test-output
 marathon-core/.project
 marathon-core/.settings/
 marathon-core/JSON-java/.classpath
@@ -141,18 +142,3 @@ marathon-java/bin/
 marathon/bin/
 marathon/bin-test/
 marathon/omap-configuration.yaml
-marathon-web/.classpath
-marathon-web/.gitignore
-marathon-web/.project
-marathon-web/.settings/
-marathon-web/build
-marathon-web/bin
-marathon-web/marathon-web-runtime/.classpath
-marathon-web/marathon-web-runtime/.gitignore
-marathon-web/marathon-web-runtime/.project
-marathon-web/marathon-web-runtime/.settings/
-marathon-web/marathon-web-runtime/build/
-marathon-web/marathon-web-runtime/bin/
-marathon-web/marathon-web-runtime/test-output/
-marathon-web/marathon-web-runtime/bin-test/
-marathon-web/marathon-web-runtime/internetexplorer.log 

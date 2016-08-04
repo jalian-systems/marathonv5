@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
 import java.awt.BorderLayout;
@@ -56,6 +56,7 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
@@ -71,7 +72,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.SessionId;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -225,8 +225,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         DesiredCapabilities caps = new DesiredCapabilities("xjava", "1.0", Platform.getCurrent());
         try {
             driver = new JavaDriver(caps, caps);
-            throw new MissingException(UnreachableBrowserException.class);
-        } catch (UnreachableBrowserException e) {
+            throw new MissingException(SessionNotCreatedException.class);
+        } catch (SessionNotCreatedException e) {
         }
     }
 
@@ -234,16 +234,17 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         Platform[] values = Platform.values();
         Platform otherPlatform = null;
         for (Platform platform : values) {
-            if (Platform.getCurrent().is(platform))
+            if (Platform.getCurrent().is(platform)) {
                 continue;
+            }
             otherPlatform = platform;
             break;
         }
         DesiredCapabilities caps = new DesiredCapabilities("java", "1.0", otherPlatform);
         try {
             driver = new JavaDriver(caps, caps);
-            throw new MissingException(UnreachableBrowserException.class);
-        } catch (UnreachableBrowserException e) {
+            throw new MissingException(SessionNotCreatedException.class);
+        } catch (SessionNotCreatedException e) {
         }
     }
 
@@ -258,8 +259,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         caps.setCapability("rotatable", true);
         try {
             driver = new JavaDriver(caps, caps);
-            throw new MissingException(UnreachableBrowserException.class);
-        } catch (UnreachableBrowserException e) {
+            throw new MissingException(SessionNotCreatedException.class);
+        } catch (SessionNotCreatedException e) {
         }
     }
 
@@ -1224,13 +1225,15 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                     }
 
                     @Override public void keyReleased(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altReleased = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
 
                     @Override public void keyPressed(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altPressed = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
                 });
                 frame.setLocationRelativeTo(null);
@@ -1256,13 +1259,15 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                     }
 
                     @Override public void keyReleased(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altReleased = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
 
                     @Override public void keyPressed(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altPressed = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
                 });
                 frame.setLocationRelativeTo(null);

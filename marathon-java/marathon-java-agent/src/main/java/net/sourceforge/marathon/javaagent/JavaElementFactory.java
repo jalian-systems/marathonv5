@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
@@ -61,15 +61,17 @@ import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
 public class JavaElementFactory {
 
     public static IJavaElement createElement(Component component, IJavaAgent driver, JWindow window) {
-        if(component == null)
+        if (component == null) {
             throw new RuntimeException("Calling createElement with a null component is not supported");
+        }
         IJavaElement found = window.findElementFromMap(component);
         if (found != null) {
             return found;
         }
         Class<? extends IJavaElement> klass = get(component);
-        if (klass == null)
+        if (klass == null) {
             return new JavaElement(component, driver, window);
+        }
         try {
             Constructor<? extends IJavaElement> constructor = klass.getConstructor(Component.class, IJavaAgent.class,
                     JWindow.class);
@@ -91,14 +93,15 @@ public class JavaElementFactory {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
          * .Component)
          */
         @Override public Class<? extends IJavaElement> get(Component component) {
-            if (componentKlass.isInstance(component))
+            if (componentKlass.isInstance(component)) {
                 return javaElementKlass;
+            }
             return null;
         }
     }
@@ -136,8 +139,9 @@ public class JavaElementFactory {
     public static Class<? extends IJavaElement> get(Component component) {
         for (IJavaElementFinder entry : entries) {
             Class<? extends IJavaElement> k = entry.get(component);
-            if (k != null)
+            if (k != null) {
                 return k;
+            }
         }
         return null;
     }

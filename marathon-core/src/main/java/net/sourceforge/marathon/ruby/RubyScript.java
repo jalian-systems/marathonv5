@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
 import java.awt.Window;
@@ -32,17 +32,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.marathon.runtime.api.Constants;
-import net.sourceforge.marathon.runtime.api.IDebugger;
-import net.sourceforge.marathon.runtime.api.IPlaybackListener;
-import net.sourceforge.marathon.runtime.api.IPlayer;
-import net.sourceforge.marathon.runtime.api.IScript;
-import net.sourceforge.marathon.runtime.api.MarathonPlayer;
-import net.sourceforge.marathon.runtime.api.Module;
-import net.sourceforge.marathon.runtime.api.PlaybackResult;
-import net.sourceforge.marathon.runtime.api.RuntimeLogger;
-import net.sourceforge.marathon.runtime.api.ScriptException;
-
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyInstanceConfig;
@@ -53,6 +42,17 @@ import org.jruby.internal.runtime.GlobalVariable.Scope;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.GlobalVariable;
 import org.jruby.runtime.builtin.IRubyObject;
+
+import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.IDebugger;
+import net.sourceforge.marathon.runtime.api.IPlaybackListener;
+import net.sourceforge.marathon.runtime.api.IPlayer;
+import net.sourceforge.marathon.runtime.api.IScript;
+import net.sourceforge.marathon.runtime.api.MarathonPlayer;
+import net.sourceforge.marathon.runtime.api.Module;
+import net.sourceforge.marathon.runtime.api.PlaybackResult;
+import net.sourceforge.marathon.runtime.api.RuntimeLogger;
+import net.sourceforge.marathon.runtime.api.ScriptException;
 
 public class RubyScript implements IScript {
 
@@ -73,10 +73,10 @@ public class RubyScript implements IScript {
             this.thread = playbackThread;
         }
 
-        public void run() {
+        @Override public void run() {
             if (fixture) {
                 invokeAndWaitForWindow(new Runnable() {
-                    public void run() {
+                    @Override public void run() {
                         try {
                             try {
                                 RuntimeLogger.getRuntimeLogger().info(MODULE, "Running fixture setup...");
@@ -94,8 +94,9 @@ public class RubyScript implements IScript {
                     }
 
                 });
-                if (setupFailed)
+                if (setupFailed) {
                     return;
+                }
                 try {
                     debugger.run("$marathon.execTestSetup");
                     debugger.run("$marathon.execTest($test)");
@@ -159,8 +160,9 @@ public class RubyScript implements IScript {
             defineVariable("marathon_project_dir", System.getProperty(Constants.PROP_PROJECT_DIR));
             defineVariable("marathon_fixture_dir", System.getProperty("marathon.fixture.dir"));
             defineVariable("marathon_test_dir", System.getProperty(Constants.PROP_TEST_DIR));
-            if (dataVariables != null)
+            if (dataVariables != null) {
                 setDataVariables(dataVariables);
+            }
             interpreter.executeScript(script, filename);
         } catch (RaiseException e) {
             throw new ScriptException(e.getException().toString(), e);
@@ -179,8 +181,9 @@ public class RubyScript implements IScript {
                 String appRubyPath = System.getProperty(PROP_APPLICATION_RUBYPATH);
                 if (appRubyPath != null) {
                     StringTokenizer tok = new StringTokenizer(appRubyPath, ";");
-                    while (tok.hasMoreTokens())
+                    while (tok.hasMoreTokens()) {
                         loadPaths.add(tok.nextToken().replace('/', File.separatorChar));
+                    }
                 }
                 config.setOutput(new PrintStream(new WriterOutputStream(out)));
                 config.setError(new PrintStream(new WriterOutputStream(err)));
@@ -231,28 +234,30 @@ public class RubyScript implements IScript {
 
     private String getTestName() {
         String name = new File(filename).getName().toUpperCase();
-        if (name.endsWith(".RB"))
+        if (name.endsWith(".RB")) {
             return name.substring(0, name.length() - 3);
+        }
         return name;
     }
 
     private void setModule(List<String> segments) {
         try {
             String[] ModuleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
-            for (int i = 0; i < ModuleDirs.length; i++) {
-                segments.add(new File(ModuleDirs[i]).getCanonicalFile().getCanonicalPath());
+            for (String moduleDir : ModuleDirs) {
+                segments.add(new File(moduleDir).getCanonicalFile().getCanonicalPath());
             }
             // segments.add(new
             // File(System.getProperty(Constants.PROP_FIXTURE_DIR)).getCanonicalFile().getCanonicalPath());
             File assertionDir = new File(System.getProperty(Constants.PROP_PROJECT_DIR), "Assertions");
-            if (assertionDir.exists() && assertionDir.isDirectory())
+            if (assertionDir.exists() && assertionDir.isDirectory()) {
                 segments.add(assertionDir.getCanonicalFile().getCanonicalPath());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void exec(String function) {
+    @Override public void exec(String function) {
         try {
             Matcher matcher = FUNCTION_PATTERN.matcher(function);
             if (matcher.matches()) {
@@ -262,21 +267,22 @@ public class RubyScript implements IScript {
                 interpreter.evalScriptlet(function);
             }
         } catch (Throwable t) {
-            if (t instanceof ScriptException)
+            if (t instanceof ScriptException) {
                 throw (ScriptException) t;
+            }
             throw new ScriptException(t.getMessage(), t);
         }
     }
 
-    public IDebugger getDebugger() {
+    @Override public IDebugger getDebugger() {
         return debugger;
     }
 
-    public Module getModuleFunctions() {
+    @Override public Module getModuleFunctions() {
         return moduleList.getTop();
     }
 
-    public IPlayer getPlayer(IPlaybackListener playbackListener, PlaybackResult result) {
+    @Override public IPlayer getPlayer(IPlaybackListener playbackListener, PlaybackResult result) {
         runtime.result = result;
         return new MarathonPlayer(this, playbackListener, result);
     }
@@ -309,15 +315,15 @@ public class RubyScript implements IScript {
         return interpreter;
     }
 
-    public void attachPlaybackListener(IPlaybackListener listener) {
+    @Override public void attachPlaybackListener(IPlaybackListener listener) {
         debugger.setListener(listener);
     }
 
-    public Runnable playbackBody(boolean shouldRunFixture, Thread playbackThread) {
+    @Override public Runnable playbackBody(boolean shouldRunFixture, Thread playbackThread) {
         return new FixtureRunner(shouldRunFixture, playbackThread);
     }
 
-    public String evaluate(String code) {
+    @Override public String evaluate(String code) {
         try {
             return interpreter.evalScriptlet(code).inspect().toString();
         } catch (Throwable t) {
@@ -328,32 +334,36 @@ public class RubyScript implements IScript {
 
     void loadAssertionProviders() {
         File defaultDir = new File(System.getProperty(Constants.PROP_PROJECT_DIR), "Assertions");
-        if (defaultDir.exists() && defaultDir.isDirectory())
+        if (defaultDir.exists() && defaultDir.isDirectory()) {
             loadAssertionProvidersFromDir(defaultDir);
+        }
     }
 
     private void findAssertionProviderMethods() {
         IRubyObject ro = interpreter.evalScriptlet("Object.private_instance_methods");
         Object[] methods = ((RubyArray) JavaEmbedUtils.rubyToJava(interpreter, ro, String[].class)).toArray();
         assertionProviderList = new ArrayList<String>();
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].toString().startsWith("marathon_assert_"))
-                assertionProviderList.add(methods[i].toString());
+        for (Object method : methods) {
+            if (method.toString().startsWith("marathon_assert_")) {
+                assertionProviderList.add(method.toString());
+            }
         }
     }
 
     private void loadAssertionProvidersFromDir(final File dirFile) {
         File[] listFiles = dirFile.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
+            @Override public boolean accept(File dir, String name) {
                 return dir.equals(dirFile) && name.endsWith(".rb");
             }
         });
-        for (int i = 0; i < listFiles.length; i++) {
-            try {
-                String fileName = listFiles[i].getName();
-                interpreter.executeScript("require '" + fileName.substring(0, fileName.length() - 3) + "'", "<internal>");
-            } catch (Throwable t) {
-                t.printStackTrace();
+        if (listFiles != null) {
+            for (File listFile : listFiles) {
+                try {
+                    String fileName = listFile.getName();
+                    interpreter.executeScript("require '" + fileName.substring(0, fileName.length() - 3) + "'", "<internal>");
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
             }
         }
         findAssertionProviderMethods();
@@ -368,13 +378,13 @@ public class RubyScript implements IScript {
         return assertions.toArray(new String[assertions.size()][]);
     }
 
-    public void setDataVariables(Properties dataVariables) {
+    @Override public void setDataVariables(Properties dataVariables) {
         Set<Entry<Object, Object>> set = dataVariables.entrySet();
         for (Entry<Object, Object> entry : set) {
             try {
                 String key = (String) entry.getKey();
                 String value = entry.getValue().toString();
-                if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") || value.endsWith("'"))) {
+                if (value.startsWith("\"") && value.endsWith("\"") || value.startsWith("'") || value.endsWith("'")) {
                     value = value.substring(1, value.length() - 1);
                     defineVariable(key, value);
                 } else {
@@ -412,13 +422,15 @@ public class RubyScript implements IScript {
 
     @Override public void runFixtureSetup() {
         getFixture().callMethod(interpreter.getCurrentContext(), "setup");
-        if (getFixture().respondsTo("test_setup"))
+        if (getFixture().respondsTo("test_setup")) {
             getFixture().callMethod(interpreter.getCurrentContext(), "test_setup");
+        }
     }
 
     @Override public void onWSConnectionClose(int port) {
-        if(runtime != null)
+        if (runtime != null) {
             runtime.onWSConnectionClose(port);
+        }
     }
 
     @Override public boolean isDriverAvailable() {

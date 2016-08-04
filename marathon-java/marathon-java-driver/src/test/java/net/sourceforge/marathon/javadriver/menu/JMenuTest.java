@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.menu;
 
 import java.util.List;
@@ -20,8 +20,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
-
-import net.sourceforge.marathon.javadriver.JavaDriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -37,6 +35,7 @@ import org.testng.annotations.Test;
 import com.google.common.base.Predicate;
 
 import components.MenuDemo;
+import net.sourceforge.marathon.javadriver.JavaDriver;
 
 @Test public class JMenuTest {
 
@@ -66,8 +65,9 @@ import components.MenuDemo;
                 frame.dispose();
             }
         });
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
         MenuSelectionManager.defaultManager().clearSelectedPath();
     }
 
@@ -163,7 +163,7 @@ import components.MenuDemo;
         new Actions(driver).moveToElement(menu).click().perform();
 
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("radio-button-menu-item")).size() > 0;
             }
         });
@@ -233,7 +233,7 @@ import components.MenuDemo;
         new Actions(driver).moveToElement(menus.get(2)).click().perform();
 
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 List<WebElement> menus = driver.findElements(By.cssSelector("menu-item"));
                 return menus.size() == 5;
             }
@@ -263,7 +263,7 @@ import components.MenuDemo;
         new Actions(driver).moveToElement(menus.get(2)).click().perform();
 
         new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            public boolean apply(WebDriver driver) {
+            @Override public boolean apply(WebDriver driver) {
                 List<WebElement> menus = driver.findElements(By.cssSelector("menu-item"));
                 return menus.size() == 5;
             }
@@ -284,10 +284,11 @@ import components.MenuDemo;
     private void assertMenuItem(List<WebElement> menuItems, int i, String text, String iconFileName, String mnemonic) {
         WebElement menuItem = menuItems.get(i);
         AssertJUnit.assertEquals(text, menuItem.getText());
-        if ("".equals(iconFileName))
+        if ("".equals(iconFileName)) {
             AssertJUnit.assertNull(menuItem.getAttribute("icon"));
-        else
+        } else {
             AssertJUnit.assertTrue("Icon mismatch", menuItem.getAttribute("icon").endsWith(iconFileName));
+        }
         AssertJUnit.assertEquals("Mnemonic mismatch", mnemonic, menuItem.getAttribute("mnemonic"));
     }
 

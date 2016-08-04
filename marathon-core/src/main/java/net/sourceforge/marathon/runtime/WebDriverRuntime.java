@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
 import java.io.File;
@@ -47,16 +47,17 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private static class ScriptOutput extends ConsoleWriter {
         public ScriptOutput(final IConsole console) {
             super(new Writer() {
-                public void write(char cbuf[], int off, int len) throws IOException {
-                    if (mergeOutput)
+                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                    if (mergeOutput) {
                         System.out.print(new String(cbuf, off, len));
+                    }
                     console.writeScriptOut(cbuf, off, len);
                 }
 
-                public void flush() throws IOException {
+                @Override public void flush() throws IOException {
                 }
 
-                public void close() throws IOException {
+                @Override public void close() throws IOException {
                 }
             });
         }
@@ -65,16 +66,17 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private static class ScriptError extends ConsoleWriter {
         public ScriptError(final IConsole console) {
             super(new Writer() {
-                public void write(char cbuf[], int off, int len) throws IOException {
-                    if (mergeOutput)
+                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                    if (mergeOutput) {
                         System.err.print(new String(cbuf, off, len));
+                    }
                     console.writeScriptErr(cbuf, off, len);
                 }
 
-                public void flush() throws IOException {
+                @Override public void flush() throws IOException {
                 }
 
-                public void close() throws IOException {
+                @Override public void close() throws IOException {
                 }
             });
         }
@@ -83,16 +85,17 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private static class CommandOutput extends ConsoleWriter {
         public CommandOutput(final IConsole console) {
             super(new Writer() {
-                public void write(char cbuf[], int off, int len) throws IOException {
-                    if (mergeOutput)
+                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                    if (mergeOutput) {
                         System.out.print(new String(cbuf, off, len));
+                    }
                     console.writeStdOut(cbuf, off, len);
                 }
 
-                public void flush() throws IOException {
+                @Override public void flush() throws IOException {
                 }
 
-                public void close() throws IOException {
+                @Override public void close() throws IOException {
                 }
             });
         }
@@ -102,16 +105,17 @@ public class WebDriverRuntime implements IMarathonRuntime {
     @SuppressWarnings("unused") private static class CommandError extends ConsoleWriter {
         public CommandError(final IConsole console) {
             super(new Writer() {
-                public void write(char cbuf[], int off, int len) throws IOException {
-                    if (mergeOutput)
+                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                    if (mergeOutput) {
                         System.err.print(new String(cbuf, off, len));
+                    }
                     console.writeStdErr(cbuf, off, len);
                 }
 
-                public void flush() throws IOException {
+                @Override public void flush() throws IOException {
                 }
 
-                public void close() throws IOException {
+                @Override public void close() throws IOException {
                 }
             });
         }
@@ -156,8 +160,9 @@ public class WebDriverRuntime implements IMarathonRuntime {
                 }
                 if (recordingServer.isRecording()) {
                     synchronized (WebDriverRuntime.this) {
-                        if (WebDriverRuntime.this.reloadingScript)
+                        if (WebDriverRuntime.this.reloadingScript) {
                             return;
+                        }
                     }
                     Thread thread = new Thread(new Runnable() {
                         @Override public void run() {
@@ -186,11 +191,12 @@ public class WebDriverRuntime implements IMarathonRuntime {
         } catch (IOException e1) {
             throw new RuntimeException("Could not allocate a port: " + e1.getMessage());
         } finally {
-            if (socket != null)
+            if (socket != null) {
                 try {
                     socket.close();
                 } catch (IOException e) {
                 }
+            }
         }
     }
 
@@ -218,15 +224,18 @@ public class WebDriverRuntime implements IMarathonRuntime {
     }
 
     @Override public void stopApplication() {
-        if (recordingServer != null)
+        if (recordingServer != null) {
             recordingServer.stopRecording();
+        }
     }
 
     @Override public void destroy() {
-        if (script != null)
+        if (script != null) {
             script.quit();
-        if (webDriverProxy != null)
+        }
+        if (webDriverProxy != null) {
             webDriverProxy.quit();
+        }
     }
 
     @Override public Module getModuleFunctions() {
@@ -234,12 +243,13 @@ public class WebDriverRuntime implements IMarathonRuntime {
     }
 
     @Override public void setRawRecording(boolean selected) {
-        if (recordingServer != null)
+        if (recordingServer != null) {
             try {
                 recordingServer.setRawRecording(selected);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
     }
 
     @Override public String evaluate(String code) {
@@ -276,8 +286,9 @@ public class WebDriverRuntime implements IMarathonRuntime {
                 isDebugging, dataVariables, launcherModel.getFramework());
         if (driverURL == null) {
             Map<String, Object> fixtureProperties = scriptModel.getFixtureProperties(scriptText);
-            if (launcherModel.needReplaceEnviron())
+            if (launcherModel.needReplaceEnviron()) {
                 replaceEnviron(fixtureProperties);
+            }
             driverURL = createDriver(fixtureProperties, mode, console);
         }
         script.setDriverURL(driverURL);

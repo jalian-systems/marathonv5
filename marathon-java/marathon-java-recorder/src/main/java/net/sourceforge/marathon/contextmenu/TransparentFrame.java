@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
 import java.awt.AWTEvent;
@@ -50,7 +50,7 @@ public class TransparentFrame implements AWTEventListener {
         if (b) {
             Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.PAINT_EVENT_MASK);
             SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+                @Override public void run() {
                     paintTransparentFrame();
                 }
             });
@@ -63,15 +63,15 @@ public class TransparentFrame implements AWTEventListener {
         disposed = true;
         Toolkit.getDefaultToolkit().removeAWTEventListener(this);
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override public void run() {
                 paintTransparentFrame();
             }
         });
     }
 
-    public void eventDispatched(AWTEvent event) {
+    @Override public void eventDispatched(AWTEvent event) {
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override public void run() {
                 paintTransparentFrame();
             }
         });
@@ -83,8 +83,9 @@ public class TransparentFrame implements AWTEventListener {
             JComponent jc = (JComponent) component.getComponent();
             jc.paintImmediately(0, 0, size.width, size.height);
         }
-        if (disposed)
+        if (disposed) {
             return;
+        }
         size = component.getSize();
         Point location = component.getLocation();
         graphics.setColor(BG);
@@ -101,7 +102,8 @@ public class TransparentFrame implements AWTEventListener {
         } else if (stringWidth >= size.width || stringHeight >= size.height) {
             graphics.setFont(new Font(graphics.getFont().getName(), Font.ITALIC, 9));
             graphics.drawString(name, 0 + location.x, (size.height + stringHeight) / 2 + location.y);
-        } else
+        } else {
             logger.warning("Not drawing");
+        }
     }
 }
