@@ -118,7 +118,9 @@ class RubyMarathon < MarathonRuby
     rescue
     end
     if System.getProperty("marathon.recording.port", "") != ""
-      @scriptText = java.lang.Object.new.java_class.resource_as_string('/marathon.js')
+      @scriptText = java.lang.Object.new.java_class.resource_as_string('/PopUpWindow.js')
+      @scriptText += java.lang.Object.new.java_class.resource_as_string('/AssertionWindow.js')
+      @scriptText += java.lang.Object.new.java_class.resource_as_string('/Marathon.js')
       @port = System.getProperty("marathon.recording.port").to_i
       load_script
     end
@@ -528,8 +530,7 @@ class RubyMarathon < MarathonRuby
   end
 
   def assertProperty(id, property, expected)
-    e = get_leaf_component(id)
-    actual = e.attribute property
+    actual = getProperty(id, property)
     begin
       throw
     rescue
@@ -540,7 +541,19 @@ class RubyMarathon < MarathonRuby
     expected, actual, bt)
   end
 
-  def assertTrue(message, b)
+  def assertPropertyContains(id, property, expected)
+    actual = getProperty(id, property)
+    begin
+      throw
+    rescue
+      bt = @collector.convert($!.backtrace)
+    end
+    actual = "" if !actual
+    assertContains("Assertion failed: component = " + id.to_s + "\n     expected = `" + expected + "'\n     actual = `" + actual + "'",
+    expected, actual, bt)
+  end
+
+    def assertTrue(message, b)
     message = 'Expected true: but was false' if !message
     begin
       throw
@@ -651,7 +664,12 @@ class RubyMarathon < MarathonRuby
   end
 
   def getProperty(id, property)
-    get_leaf_component(id).attribute property
+    e = get_leaf_component(id)
+    if(e.respond_to? property)
+      e.send(property)
+    else
+      e.attribute property
+    end
   end
 
   def getComponent_any(id)
@@ -835,6 +853,14 @@ end
 
 def assert_p(component, property, value, componentInfo=nil)
   $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value)
+end
+
+def assert_contains(component, property, value, componentInfo=nil)
+  $marathon.assertPropertyContains(ComponentId.new(component, componentInfo), property, value)
+end
+
+def wait_p(component, property, value, componentInfo=nil)
+  $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value)
 end
 
 def wait_p(component, property, value, componentInfo=nil)

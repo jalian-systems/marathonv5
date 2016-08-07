@@ -101,12 +101,28 @@ Marathon.prototype.createSocket = function(url) {
 			console.log("Closed connection to " + url);
 		}
 		_this.addEventHandlers();
+		_this.assertionWindow = new AssertionWindow(function(target, selection){ $marathon.recordAssertion(target, selection); }, function(target, selection){ $marathon.recordWait(target, selection); }); 
+		_this.assertionWindow.getProperties = function(target) { return $marathon.findAssertionProperties(target); }
 	}
 
 	ws.onclose = function(evt) {
 		console.log("Trying reconnect again to " + url);
 		_this.createSocket(url);
 	};
+}
+
+Marathon.prototype.recordAssertion = function(target, selection) {
+	if(selection.selection)
+		this.postEvent(target, { type: 'assert', method: 'assert_contains', property: selection.property, value: selection.selection });
+	else
+		this.postEvent(target, { type: 'assert', property: selection.property, value: selection.value });
+}
+
+Marathon.prototype.recordWait = function(target, selection) {
+	if(selection.selection)
+		this.postEvent(target, { type: 'wait', method: 'wait_contains', property: selection.property, value: selection.selection });
+	else
+		this.postEvent(target, { type: 'wait', property: selection.property, value: selection.value });
 }
 
 Marathon.prototype.reloadScript = function() {
@@ -129,7 +145,7 @@ Marathon.prototype.addEventHandlers = function() {
 	    if (mutation.type === 'childList' && mutation.addedNodes) {
 	      var addedNodes = mutation.addedNodes;
 	      for(var i = 0; i < addedNodes.length; i++) {
-	        if(addedNodes[i].tagName.toLowerCase() === 'iframe')
+	        if(addedNodes[i].tagName && addedNodes[i].tagName.toLowerCase() === 'iframe')
 	          reloadScript = true;
 	      }
 	    }
@@ -307,7 +323,7 @@ Marathon.prototype.getProperty = function(target, props) {
 	}
 	else if (props === 'text') {
 		var text = target.innerText;
-		if(text && text.length < 30)
+		if(text && text < 30)
 			return ['text', text.trim()];
 		return null;
 	}
@@ -350,6 +366,19 @@ Marathon.prototype.findGeneralProperties = function(target) {
 		for (var i = 0, atts = target.attributes, n = atts.length; i < n; i++){
 	    	propmap[atts[i].nodeName] = atts[i].nodeValue;
 		}
+	return propmap;
+}
+
+Marathon.prototype.findAssertionProperties = function(target) {
+	var propmap = {};
+	if(target.attributes)
+		for (var i = 0, atts = target.attributes, n = atts.length; i < n; i++){
+	    	propmap[atts[i].nodeName] = atts[i].nodeValue;
+		}
+	propmap['tag_name'] = target.tagName.toLowerCase();
+	var text = target.innerText;
+	if(text)
+		propmap['text'] = text.trim();
 	return propmap;
 }
 

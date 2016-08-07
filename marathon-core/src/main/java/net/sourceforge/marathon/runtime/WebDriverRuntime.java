@@ -44,12 +44,12 @@ import net.sourceforge.marathon.runtime.ws.WSRecordingServer;
 public class WebDriverRuntime implements IMarathonRuntime {
 
     private static boolean mergeOutput = Boolean.getBoolean("marathon.merge.output");
-    
+
     private static class ScriptOutput extends ConsoleWriter {
         public ScriptOutput(final IConsole console) {
             super(new Writer() {
                 public void write(char cbuf[], int off, int len) throws IOException {
-                    if(mergeOutput)
+                    if (mergeOutput)
                         System.out.print(new String(cbuf, off, len));
                     console.writeScriptOut(cbuf, off, len);
                 }
@@ -67,7 +67,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
         public ScriptError(final IConsole console) {
             super(new Writer() {
                 public void write(char cbuf[], int off, int len) throws IOException {
-                    if(mergeOutput)
+                    if (mergeOutput)
                         System.err.print(new String(cbuf, off, len));
                     console.writeScriptErr(cbuf, off, len);
                 }
@@ -85,7 +85,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
         public CommandOutput(final IConsole console) {
             super(new Writer() {
                 public void write(char cbuf[], int off, int len) throws IOException {
-                    if(mergeOutput)
+                    if (mergeOutput)
                         System.out.print(new String(cbuf, off, len));
                     console.writeStdOut(cbuf, off, len);
                 }
@@ -104,7 +104,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
         public CommandError(final IConsole console) {
             super(new Writer() {
                 public void write(char cbuf[], int off, int len) throws IOException {
-                    if(mergeOutput)
+                    if (mergeOutput)
                         System.err.print(new String(cbuf, off, len));
                     console.writeStdErr(cbuf, off, len);
                 }
@@ -151,7 +151,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
             @Override public void reloadScript(WebSocket conn, JSONObject query) {
                 scriptReloadScript(port);
             }
-            
+
             private void scriptReloadScript(final int port) {
                 if (recordingServer.isRecording()) {
                     Thread thread = new Thread(new Runnable() {
@@ -214,7 +214,8 @@ public class WebDriverRuntime implements IMarathonRuntime {
     @Override public void destroy() {
         if (script != null)
             script.quit();
-        webDriverProxy.quit();
+        if (webDriverProxy != null)
+            webDriverProxy.quit();
     }
 
     @Override public Module getModuleFunctions() {

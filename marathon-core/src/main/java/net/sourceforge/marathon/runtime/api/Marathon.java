@@ -339,6 +339,18 @@ public class Marathon {
 		saveScreenShotOnError();
 	}
 
+    public void assertContains(String message, String expected, String actual, SourceLine[] bt) {
+        if (expected == null && actual == null)
+            return;
+        if (actual != null && expected != null && ((String) actual).indexOf((String)expected) > 0)
+            return;
+        if (message == null)
+            message = "Assertion failed. Expected = " + expected + " Actual = " + actual;
+        AssertionFailedError error = new AssertionFailedError(message);
+        result.addFailure(message, bt, error);
+        saveScreenShotOnError();
+    }
+
 	public void failTest(String message, SourceLine[] bt) {
 		RuntimeException e = new RuntimeException(message);
 		result.addFailure(message, bt, e);
