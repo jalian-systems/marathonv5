@@ -130,6 +130,7 @@ class RubyMarathon < MarathonRuby
   def load_script
     begin
       WaitMessageDialog.setVisible(true)
+      java.lang.Thread.sleep(10000)
       bmark = MyBenchMark.new
       window_container = ""
       bmark.report("Waiting for document ready") {
@@ -332,9 +333,11 @@ class RubyMarathon < MarathonRuby
   def close
     popped = @close_handles.pop
     if(popped.is_a? Proc)
+      @current_search_context = Proc.new {
         handles = @close_handles.clone
         @close_handles.clear
         handles.each { |h| h.call }
+      }
     else
       @current_search_context = popped
       namingStrategy.setTopLevelComponent(getContextAsAccessor(@current_search_context))
@@ -366,7 +369,14 @@ class RubyMarathon < MarathonRuby
     rps = rps_raw.map { |rp_raw|
       { :name => rp_raw.name, :method => rp_raw.method, :value => rp_raw.value }
     }
-    @current_search_context = refresh_if_stale(@current_search_context)
+    @current_search_context.call if @current_search_context.is_a?(Proc)
+    if(@refresh_if_stale && @current_search_context == @webdriver && @close_handles.size > 1)
+      handles = @close_handles.clone
+      @close_handles.clear
+      handles.each { |h| h.call }
+    else
+      @current_search_context = refresh_if_stale(@current_search_context)
+    end
     begin
       turnoff_implicit_wait
       find_element(@current_search_context, rps)
@@ -447,7 +457,7 @@ class RubyMarathon < MarathonRuby
   end
 
   def value_of(name, e)
-    if e.respond_to? name
+    if name != 'class' && e.respond_to?(name)
       e.send(name)
     else
       e.attribute(name)
@@ -665,7 +675,7 @@ class RubyMarathon < MarathonRuby
 
   def getProperty(id, property)
     e = get_leaf_component(id)
-    if(e.respond_to? property)
+    if(property != 'class' && e.respond_to?(property))
       e.send(property).to_s
     else
       e.attribute property
