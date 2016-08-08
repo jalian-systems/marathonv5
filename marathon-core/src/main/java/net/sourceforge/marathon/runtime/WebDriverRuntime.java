@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
-import org.openqa.selenium.WebDriver;
 
 import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IConsole;
@@ -124,11 +123,9 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private IRecordingServer recordingServer;
     private IWebDriverRuntimeLauncherModel launcherModel;
     private IScript script;
-    // We don't need this variable. Keep it so that the connection is not
-    // closed.
-    protected WebDriver driver;
     private IWebdriverProxy webDriverProxy;
     private int recordingPort = -1;
+    protected boolean reloadingScript;
 
     public WebDriverRuntime(IWebDriverRuntimeLauncherModel launcherModel) {
         this.launcherModel = launcherModel;
@@ -154,9 +151,19 @@ public class WebDriverRuntime implements IMarathonRuntime {
 
             private void scriptReloadScript(final int port) {
                 if (recordingServer.isRecording()) {
+                    synchronized (WebDriverRuntime.this) {
+                        if (WebDriverRuntime.this.reloadingScript)
+                            return;
+                    }
                     Thread thread = new Thread(new Runnable() {
                         @Override public void run() {
+                            synchronized (WebDriverRuntime.this) {
+                                WebDriverRuntime.this.reloadingScript = true;
+                            }
                             script.onWSConnectionClose(port);
+                            synchronized (WebDriverRuntime.this) {
+                                WebDriverRuntime.this.reloadingScript = false;
+                            }
                         }
                     });
                     thread.start();

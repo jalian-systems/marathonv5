@@ -331,10 +331,10 @@ class RubyMarathon < MarathonRuby
 
   def close
     popped = @close_handles.pop
-    if(popped.respond_to? :call)
-      handles = @close_handles.clone
-      @close_handles.clear
-      handles.each { |h| h.call }
+    if(popped.is_a? Proc)
+        handles = @close_handles.clone
+        @close_handles.clear
+        handles.each { |h| h.call }
     else
       @current_search_context = popped
       namingStrategy.setTopLevelComponent(getContextAsAccessor(@current_search_context))
@@ -666,7 +666,7 @@ class RubyMarathon < MarathonRuby
   def getProperty(id, property)
     e = get_leaf_component(id)
     if(e.respond_to? property)
-      e.send(property)
+      e.send(property).to_s
     else
       e.attribute property
     end

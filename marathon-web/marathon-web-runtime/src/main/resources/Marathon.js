@@ -232,6 +232,8 @@ Marathon.prototype.getSuffix = function(target) {
 }
 
 Marathon.prototype.handleChangeEvent = function(target) {
+	if(target.matches('#popUpWindow-top, #popUpWindow-top *'))
+		return;
 	var v = this.value(target);
 	if(v != null)
 		this.postEvent(target, { type: 'select', value: v, suffix: this.getSuffix(target)});
@@ -246,9 +248,10 @@ Marathon.prototype.shouldIgnoreClick = function(target) {
 	               'input[type="checkbox"]', 'input[type="radio"]',
 	               'input[type="month"]', 'select', 'option', 'textarea',
 					function() { return this.matches('label') && this.getAttribute('for') !== null ;},
-					function() { return this.matches('input') && this.getAttribute('type') === null ;},
-					'ul.ui-autocomplete > li.ui-menu-item > div.ui-menu-item-wrapper'];
+					function() { return this.matches('input') && this.getAttribute('type') === null ;}];
 	
+	if(target.matches('#popUpWindow-top, #popUpWindow-top *'))
+		return true;
 	var matched = values.find(function(v) { return typeof v === 'function' ? v.call(target) : target.matches(v); });
 	if(matched)
 		return true;
@@ -379,6 +382,12 @@ Marathon.prototype.findAssertionProperties = function(target) {
 	var text = target.innerText;
 	if(text)
 		propmap['text'] = text.trim();
+	if(target.value)
+		propmap['value'] = target.value.trim();
+	if(target.matches('input[type="checkbox"]') || target.matches('input[type="radio"]')) {
+		propmap['selected?'] = '' + target.checked;
+	}
+	propmap['enabled?'] = target.disabled ? '' + false : '' + true ;
 	return propmap;
 }
 
@@ -461,7 +470,13 @@ Marathon.prototype.setObjectMapConfig = function(jsonObjectMap) {
 			});
 		});
 		nplist = nplist.sort(function(a, b) {
-			return b.priority - a.priority;
+		    if(a.className.toLowerCase() === b.className.toLowerCase())
+				return b.priority - a.priority;
+			if(a.className === '*')
+			    return 1 ;
+			if(b.className === '*')
+			    return -1 ;
+			return a.className.toLowerCase().localeCompare(b.className.toLowerCase());
 		});
 		_this[list] = nplist;
 	});

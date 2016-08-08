@@ -21,18 +21,18 @@ generalProperties: []
 namingProperties:
 -   className: '*'
     propertyLists:
-    -   priority: 98
+    -   priority: 100
         properties: [label]
-    -   priority: 95
-        properties: [id]
     -   priority: 90
-        properties: [name]
+        properties: [placeholder]
     -   priority: 80
-        properties: [css]
+        properties: [title]
     -   priority: 70
-        properties: [xpath]
-    -   priority: 85
-        properties: [text]
+        properties: [name]
+    -   priority: 60
+        properties: [id]
+    -   priority: 1
+        properties: [css]
 -   className: a
     propertyLists:
     -   priority: 100
@@ -55,6 +55,10 @@ namingProperties:
         properties: [value]
 -   className: div.wp-menu-name
     propertyLists: []
+-   className: image
+    propertyLists:
+    -   priority: 100
+        properties: [alt]
 recognitionProperties:
 -   className: '*'
     propertyLists:

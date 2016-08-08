@@ -345,7 +345,6 @@ public class MPFConfigurationUI extends EscapeDialog {
                 FileUtils.copyDirectory(srcDir, destDir);
             } catch (IOException e1) {
                 logger.warning("Unable to copy Checklists folder from " + srcDir + " to " + destDir);
-                e1.printStackTrace();
             }
             File destFile = new File(projectDir, "logging.properties");
             try {

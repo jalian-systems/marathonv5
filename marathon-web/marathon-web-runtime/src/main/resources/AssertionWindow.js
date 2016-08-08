@@ -166,7 +166,7 @@ AssertionWindow.prototype.set = function(target) {
 }
 
 AssertionWindow.prototype.showWindow = function(evt) {
-	_this = this;
+	var _this = this;
 	if (!this.popup)
 		this.popup = new PopUpWindow('CSS Styling', {
 			id : 'popUpWindow-top',
