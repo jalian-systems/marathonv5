@@ -361,6 +361,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
                 runtime = null;
             }
         }
+        WaitMessageDialog.setVisible(false);
     }
 
     public State getState() {

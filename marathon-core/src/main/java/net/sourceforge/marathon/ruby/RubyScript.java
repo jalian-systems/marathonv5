@@ -420,4 +420,8 @@ public class RubyScript implements IScript {
         if(runtime != null)
             runtime.onWSConnectionClose(port);
     }
+
+    @Override public boolean isDriverAvailable() {
+        return runtime.isDriverAvailable();
+    }
 }

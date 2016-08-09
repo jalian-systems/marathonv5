@@ -150,6 +150,10 @@ public class WebDriverRuntime implements IMarathonRuntime {
             }
 
             private void scriptReloadScript(final int port) {
+                if (!script.isDriverAvailable()) {
+                    destroy();
+                    return;
+                }
                 if (recordingServer.isRecording()) {
                     synchronized (WebDriverRuntime.this) {
                         if (WebDriverRuntime.this.reloadingScript)

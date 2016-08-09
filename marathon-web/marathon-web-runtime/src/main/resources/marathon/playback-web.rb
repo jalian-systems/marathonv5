@@ -21,6 +21,7 @@ require 'json'
 
 class MyBenchMark
   def report(s)
+    WaitMessageDialog.setVisible(true, s)
     begin_time = Time.now
     begin
       yield
@@ -28,6 +29,10 @@ class MyBenchMark
       end_time = Time.now
       puts s + ": #{(end_time - begin_time)} seconds"
     end
+  end
+  
+  def close
+    WaitMessageDialog.setVisible(false);
   end
 end
 
@@ -129,8 +134,9 @@ class RubyMarathon < MarathonRuby
 
   def load_script
     begin
-      WaitMessageDialog.setVisible(true)
+      WaitMessageDialog.setVisible(true, "Waiting for 10 seconds")
       java.lang.Thread.sleep(10000)
+      WaitMessageDialog.setVisible(true, "Loading scripts...")
       bmark = MyBenchMark.new
       window_container = ""
       bmark.report("Waiting for document ready") {
@@ -316,14 +322,18 @@ class RubyMarathon < MarathonRuby
     bmark = MyBenchMark.new
     bmark.report("Waiting for window '" + title + "'") {
       wait = Wait.new(:timeout => 30, :message => "Waiting for window '" + title + "'")
-      wait.until {
-        waitSucceeded = false
-        @webdriver.window_handles.each { |h|
-          @webdriver.switch_to.window(h) unless waitSucceeded
-          waitSucceeded = true if windowMatchingTitle(title)
+      begin
+        wait.until {
+          waitSucceeded = false
+          @webdriver.window_handles.each { |h|
+            @webdriver.switch_to.window(h) unless waitSucceeded
+            waitSucceeded = true if windowMatchingTitle(title)
+          }
+          waitSucceeded
         }
-        waitSucceeded
-      }
+      ensure
+        bmark.close
+      end
     }
     @current_search_context = @webdriver
     namingStrategy.setTopLevelComponent(getDriverAsAccessor())

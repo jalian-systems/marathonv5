@@ -10,12 +10,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class WaitMessageDialog {
+    private static final String DEFAULT_MESSAGE = "This window closes once Marathon is ready for recording";
     private static MessageDialog _instance = new MessageDialog();
 
     private static class MessageDialog extends JFrame {
         private static final long serialVersionUID = 1L;
+        private String message = DEFAULT_MESSAGE;
+        private JLabel messageLabel;
 
         private MessageDialog() {
             setUndecorated(true);
@@ -30,22 +34,38 @@ public class WaitMessageDialog {
             contentPane.setLayout(new BorderLayout());
             contentPane.add(new JLabel(new ImageIcon(DisplayWindow.class.getResource("wait.gif"), "Wait Message")),
                     BorderLayout.CENTER);
-            JLabel label = new JLabel("This window closes once Marathon is ready for recording");
-            label.setOpaque(true);
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setBackground(Color.BLACK);
-            label.setForeground(Color.WHITE);
-            Dimension preferredSize = label.getPreferredSize();
+            messageLabel = new JLabel(message);
+            messageLabel.setOpaque(true);
+            messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            messageLabel.setBackground(Color.BLACK);
+            messageLabel.setForeground(Color.WHITE);
+            Dimension preferredSize = messageLabel.getPreferredSize();
             preferredSize.height = 30;
-            label.setPreferredSize(preferredSize);
-            contentPane.add(label, BorderLayout.SOUTH);
+            messageLabel.setPreferredSize(preferredSize);
+            contentPane.add(messageLabel, BorderLayout.SOUTH);
             pack();
+        }
+
+        public void setMessage(String message) {
+            if(message.equals(this.message))
+                return;
+            this.message = message ;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override public void run() {
+                    messageLabel.setText(MessageDialog.this.message);
+                }
+            });
         }
 
     }
 
-    public static void setVisible(boolean b) {
+    public static void setVisible(boolean b, String message) {
         if (_instance.isVisible() != b)
             _instance.setVisible(b);
+        _instance.setMessage(message);
+    }
+
+    public static void setVisible(boolean b) {
+        setVisible(b, DEFAULT_MESSAGE);
     }
 }

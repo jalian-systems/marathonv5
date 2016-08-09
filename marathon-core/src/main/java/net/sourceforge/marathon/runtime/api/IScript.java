@@ -45,4 +45,6 @@ public interface IScript {
 
     public abstract void onWSConnectionClose(int port);
 
+    public abstract boolean isDriverAvailable();
+
 }

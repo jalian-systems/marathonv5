@@ -123,4 +123,8 @@ public class MarathonRuby extends Marathon {
 	public void onWSConnectionClose(int port) {
 	}
 
+    public boolean isDriverAvailable() {
+        return true;
+    }
+
 }
