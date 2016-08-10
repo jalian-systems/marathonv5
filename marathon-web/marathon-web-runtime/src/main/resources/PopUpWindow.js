@@ -8,13 +8,17 @@ dragDrop = {
     if (typeof element == 'string')
       element = document.getElementById(element);
     element.addEventListener('mousedown', function(event) {
-      dragDrop.startDragMouse(element, event, dragHandle, resizeHandle);
+      dragDrop.startDragMouse(element, event, dragHandle, false);
     });
+    if(resizeHandle)
+	    resizeHandle.addEventListener('mousedown', function(event) {
+	      dragDrop.startDragMouse(element, event, dragHandle, resizeHandle);
+	    });
   },
   startDragMouse: function (element, e, dragHandle, resizeHandle) {
     if(dragHandle && e.target.matches(dragHandle)) {
       dragDrop.op = dragDrop.setPosition;
-    } else if(resizeHandle && e.target.matches(resizeHandle)) {
+    } else if(resizeHandle) {
       dragDrop.op = dragDrop.setSize;
     } else
       return false;
@@ -85,7 +89,7 @@ function PopUpWindow(title, options) {
     styleTitleBar: "position:relative;font-size:16px;padding:5px 0 0 9px;cursor:move;color:#3c6b98;",
     styleCloseIcon: "position:absolute;top:5px;right:7px;height:18px;width:18px;cursor:pointer;" ,
     styleContent: "position:relative;margin:0;padding:8px 10px 7px 10px;font-size:14px;color:#278622;height:400px;width:300px;overflow:auto;",
-    styleResizeIcon: "position:absolute;right:1px;bottom:1px;height:16px;width:16px;text-align:right;cursor:se-resize;" ,
+    styleResizeIcon: "color:#278622;position:absolute;right:1px;bottom:1px;height:16px;width:16px;text-align:right;cursor:se-resize;" ,
     URL:            null
   };
 
@@ -109,7 +113,7 @@ PopUpWindow.prototype.initialize = function(title, options) {
   windowDiv.style.top = this.options.top;
   
   var closeIconHTML  = this.options.isClosable  ? '<span style="' + this.options.styleCloseIcon + '" class="closeIcon">&#10006;</span>'  : '';
-  var resizeIconHTML = this.options.isResizable ? '<span style="' + this.options.styleResizeIcon + '" class="resizeIcon resizeHandle">&#9698;</span>' : '';
+  var resizeIconHTML = this.options.isResizable ? '</div><span style="' + this.options.styleResizeIcon + '" class="resizeIcon resizeHandle">&#9698;</span><div>' : '';
 
   windowDiv.innerHTML = '<div class="' + this.options.className + '" style="' + this.options.stylePopUpWindow + '">' +
                           ' <div class="titleBar" style="' + this.options.styleTitleBar + '"><span>' + title + '</span>' + closeIconHTML + '</div>' +
@@ -121,6 +125,7 @@ PopUpWindow.prototype.initialize = function(title, options) {
   windowDiv.titleSpan = windowDiv.getElementsByTagName('span')[0];
   windowDiv.closeIcon = windowDiv.getElementsByClassName('closeIcon')[0];
   windowDiv.contentDivHolder = windowDiv.getElementsByClassName('contentHolder')[0];
+  windowDiv.resizeHandle = windowDiv.getElementsByClassName('resizeHandle')[0];
 
   windowDiv.contentDiv = (document.getElementById(this.options.contentDiv) || document.createElement('div'));
   if(this.options.width)
@@ -144,7 +149,7 @@ PopUpWindow.prototype.initialize = function(title, options) {
 
 PopUpWindow.prototype.initializeDrag = function() {
     if(this.options.isResizable)
-      dragDrop.initElement(this.windowDiv.getElementsByClassName('content')[0], false, '.resizeHandle');
+      dragDrop.initElement(this.windowDiv.getElementsByClassName('content')[0], false, this.windowDiv.resizeHandle);
     if(this.options.isDraggable) {
       this.windowDiv.titleBar.style.cursor = 'move';
       dragDrop.initElement(this.windowDiv, '.titleBar, .titleBar *', false);

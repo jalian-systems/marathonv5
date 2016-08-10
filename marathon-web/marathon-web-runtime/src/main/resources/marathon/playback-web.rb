@@ -105,11 +105,11 @@ class RubyMarathon < MarathonRuby
   def initialize(url)
     @close_handles = []
     @refresh_if_stale = true
-    @cwms = System.getProperty("marathon.COMPONENT_WAIT_MS", "30000").to_i
+    @component_wait_ms = System.getProperty("marathon.COMPONENT_WAIT_MS", "30000").to_i
+    @document_wait_time = 1
     if(url.length != 0)
       caps = Selenium::WebDriver::Remote::Capabilities.new
       @webdriver = Selenium::WebDriver.for(:remote, :url => url, :desired_capabilities => caps)
-      @webdriver.manage.timeouts.implicit_wait=@cwms/1000
       if TestAttributes.get("marathon.profile.url") != nil
         @webdriver.get(TestAttributes.get("marathon.profile.url"))
       end
@@ -129,13 +129,14 @@ class RubyMarathon < MarathonRuby
       @port = System.getProperty("marathon.recording.port").to_i
       load_script
     end
-
   end
 
+  def set_document_wait_time(seconds)
+    @document_wait_time = seconds if @document_wait_time > 0
+  end
+  
   def load_script
     begin
-      WaitMessageDialog.setVisible(true, "Waiting for 10 seconds")
-      java.lang.Thread.sleep(10000)
       WaitMessageDialog.setVisible(true, "Loading scripts...")
       bmark = MyBenchMark.new
       window_container = ""
@@ -149,6 +150,12 @@ class RubyMarathon < MarathonRuby
           end
         }
       }
+      if(@document_wait_time == 1)
+        WaitMessageDialog.setVisible(true, "Waiting for " + @document_wait_time.to_s + " second")
+      else
+        WaitMessageDialog.setVisible(true, "Waiting for " + @document_wait_time.to_s + " seconds")
+      end
+      java.lang.Thread.sleep(@document_wait_time * 1000)
       bmark.report("Loading script to main") { @webdriver.execute_script(@scriptText, @port) }
       bmark.report("Waiting for omapLoad") {
         wait = Wait.new(:timeout => 30)
@@ -159,21 +166,16 @@ class RubyMarathon < MarathonRuby
       bmark.report("Getting window container") {
         window_container = @webdriver.execute_script("return $marathon.getContainer(window);")
       }
-      begin
-        turnoff_implicit_wait
-        frames = []
-        bmark.report("Finding iframes in main") {
-          frames = @webdriver.find_elements(:tag_name, 'iframe')
+      frames = []
+      bmark.report("Finding iframes in main") {
+        frames = @webdriver.find_elements(:tag_name, 'iframe')
+      }
+      frames.each { |f|
+        load_script_frame(f, window_container, [], bmark)
+        bmark.report("Switching to default content") {
+          @webdriver.switch_to.default_content
         }
-        frames.each { |f|
-          load_script_frame(f, window_container, [], bmark)
-          bmark.report("Switching to default content") {
-            @webdriver.switch_to.default_content
-          }
-        }
-      ensure
-        turnon_implicit_wait
-      end
+      }
     ensure
       WaitMessageDialog.setVisible(false);
     end
@@ -218,14 +220,6 @@ class RubyMarathon < MarathonRuby
     }
   end
 
-  def turnoff_implicit_wait
-    @webdriver.manage.timeouts.implicit_wait=0
-  end
-
-  def turnon_implicit_wait
-    @webdriver.manage.timeouts.implicit_wait=@cwms/1000
-  end
-
   def set_refresh_if_stale(b)
     @refresh_if_stale = b
   end
@@ -233,14 +227,11 @@ class RubyMarathon < MarathonRuby
   def refresh_if_stale(o)
     return o unless @refresh_if_stale
     begin
-      turnoff_implicit_wait
       o.enabled? if o.respond_to? :search_context
       return o
     rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
       puts "Recreating element with " + o.search_context.to_s + " with " + o.recognition_properties.to_s
       return find_element(o.search_context, o.recognition_properties)
-    ensure
-      turnon_implicit_wait
     end
   end
 
@@ -387,12 +378,7 @@ class RubyMarathon < MarathonRuby
     else
       @current_search_context = refresh_if_stale(@current_search_context)
     end
-    begin
-      turnoff_implicit_wait
-      find_element(@current_search_context, rps)
-    ensure
-      turnon_implicit_wait
-    end
+    find_element(@current_search_context, rps)
   end
 
   def find_element(search_context, rps)
@@ -406,7 +392,7 @@ class RubyMarathon < MarathonRuby
     end
     puts 'Finding elements using: ' + se_rp.to_s + ' and then ' + rps.to_s 
     matched = []
-    wait = Wait.new(:timeout => @cwms/1000, :message => 'Unable to find an element using ' + recognition_properties.to_s)
+    wait = Wait.new(:timeout => @component_wait_ms/1000, :message => 'Unable to find an element using ' + recognition_properties.to_s)
     wait.until {
       matched = search_context.find_elements(se_rp[:name].to_sym, se_rp[:value])
       matched = filter_using_rps(matched, rps)
@@ -507,7 +493,16 @@ class RubyMarathon < MarathonRuby
         action.key_up :control if m == 'Ctrl'
       }
     end
-    action.perform
+    retried = false
+    begin
+      action.perform
+    rescue Exception => exc
+      raise exc if retried
+      puts 'Retrying with scrollIntoView '
+      @webdriver.execute_script('arguments[0].scrollIntoView(false);', e)
+      retried = true
+      retry
+    end
   end
 
   def dragInternal(id, modifiers, startPos, endPos)
@@ -618,12 +613,16 @@ class RubyMarathon < MarathonRuby
     rescue
       bt = @collector.convert($!.backtrace)
     end
-    wait = Wait.new(:timeout => @cwms/1000)
+    wait = Wait.new(:timeout => @component_wait_ms/1000)
     wait.until {
       expected == e.attribute(property)
     }
   end
 
+  def set_component_wait_ms(ms)
+    @component_wait_ms = ms if @component_wait_ms >= 0
+  end
+  
   def convert(backtrace)
     @collector.convert(backtrace)
   end
@@ -1046,3 +1045,12 @@ def method_missing(m, *args, &blk)
     super
   end
 end
+
+def set_document_wait_time(seconds)
+  $marathon.set_document_wait_time(seconds)
+end
+
+def set_component_wait_ms(ms)
+  $marathon.set_component_wait_ms(ms)
+end
+

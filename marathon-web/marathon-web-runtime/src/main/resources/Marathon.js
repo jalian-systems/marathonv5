@@ -1,7 +1,3 @@
-// # https://github.com/Autarc/optimal-select
-!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.OptimalSelect=e():t.OptimalSelect=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var u=n[r]={exports:{},id:r,loaded:!1};return t[r].call(u.exports,u,u.exports,e),u.loaded=!0,u.exports}var n={};return e.m=t,e.c=n,e.p="",e(0)}([function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}Object.defineProperty(e,"__esModule",{value:!0}),e.default=e.optimize=e.select=void 0;var u=n(4),i=r(u),o=n(2),a=r(o);e.select=i.default,e.optimize=a.default,e.default=i.default},function(t,e){(function(n){"use strict";function r(t){return Array.isArray(t)?t:Array.from(t)}function u(t,e){if(n.document)return!1;var u=e.context;n.document=u||function(){for(var e=t;e.parent;)e=e.parent;return e}();var a=Object.getPrototypeOf(n.document);return Object.getOwnPropertyDescriptor(a,"childTags")||Object.defineProperty(a,"childTags",{enumerable:!0,get:function(){return this.children.filter(function(t){return"tag"===t.type||"script"===t.type||"style"===t.type})}}),Object.getOwnPropertyDescriptor(a,"attributes")||Object.defineProperty(a,"attributes",{enumerable:!0,get:function(){var t=this.attribs,e=Object.keys(t),n=e.reduce(function(e,n,r){return e[r]={name:n,value:t[n]},e},{});return Object.defineProperty(n,"length",{enumerable:!1,configurable:!1,value:e.length}),n}}),a.getAttribute||(a.getAttribute=function(t){return this.attribs[t]||null}),a.getElementsByTagName||(a.getElementsByTagName=function(t){var e=[];return o(this.childTags,function(n){n.name!==t&&"*"!==t||e.push(n)}),e}),a.getElementsByClassName||(a.getElementsByClassName=function(t){var e=t.trim().replace(/\s+/g," ").split(" "),n=[];return o([this],function(t){var r=t.attribs.class;r&&e.every(function(t){return r.indexOf(t)>-1})&&n.push(t)}),n}),a.querySelectorAll||(a.querySelectorAll=function(t){var e=this;t=t.replace(/(>)(\S)/g,"$1 $2").trim();var n=i(t),u=r(n),o=u[0],a=u.slice(1),f=a.length;return o(this).filter(function(t){for(var n=0;f>n;){if(t=a[n](t,e),!t)return!1;n+=1}return!0})}),a.contains||(a.contains=function(t){var e=!1;return o([this],function(n,r){n===t&&(e=!0,r())}),e}),!0}function i(t){return t.split(" ").reverse().map(function(t,e){var n=0===e,r=t.split(":"),u=c(r,2),i=u[0],l=u[1],s=null,d=null;switch(!0){case/>/.test(i):d=function(t){return function(e){return e(t.parent)&&t.parent}};break;case/^\./.test(i):var p=i.substr(1).split(".");s=function(t){var e=t.attribs.class;return e&&p.every(function(t){return e.indexOf(t)>-1})},d=function(t,e){return n?t.getElementsByClassName(p.join(" ")):"function"==typeof t?t(s):a(t,e,s)};break;case/^\[/.test(i):var v=i.replace(/\[|\]|"/g,"").split("="),y=c(v,2),h=y[0],g=y[1];s=function(t){var e=Object.keys(t.attribs).indexOf(h)>-1;return e&&(!g||t.attribs[h]===g)},d=function(t,e){if(n){var r=function(){var e=[];return o([t],function(t){s(t)&&e.push(t)}),{v:e}}();if("object"===("undefined"==typeof r?"undefined":f(r)))return r.v}return"function"==typeof t?t(s):a(t,e,s)};break;case/^#/.test(i):var m=i.substr(1);s=function(t){return t.attribs.id===m},d=function(t,e){if(n){var r=function(){var e=[];return o([t],function(t,n){s(t)&&(e.push(t),n())}),{v:e}}();if("object"===("undefined"==typeof r?"undefined":f(r)))return r.v}return"function"==typeof t?t(s):a(t,e,s)};break;case/\*/.test(i):s=function(t){return!0},d=function(t,e){if(n){var r=function(){var e=[];return o([t],function(t){return e.push(t)}),{v:e}}();if("object"===("undefined"==typeof r?"undefined":f(r)))return r.v}return"function"==typeof t?t(s):a(t,e,s)};break;default:s=function(t){return t.name===i},d=function(t,e){if(n){var r=function(){var e=[];return o([t],function(t){s(t)&&e.push(t)}),{v:e}}();if("object"===("undefined"==typeof r?"undefined":f(r)))return r.v}return"function"==typeof t?t(s):a(t,e,s)}}if(!l)return d;var b=l.match(/-(child|type)\((\d+)\)$/),j=b[1],S=parseInt(b[2],10)-1,O=function(t){if(t){var e=t.parent.childTags;"type"===j&&(e=e.filter(s));var n=e.findIndex(function(e){return e===t});if(n===S)return!0}return!1};return function(t){var e=d(t);return n?e.reduce(function(t,e){return O(e)&&t.push(e),t},[]):O(e)&&e}})}function o(t,e){t.forEach(function(t){var n=!0;e(t,function(){return n=!1}),t.childTags&&n&&o(t.childTags,e)})}function a(t,e,n){for(;t.parent;){if(t=t.parent,n(t))return t;if(t===e)break}return null}Object.defineProperty(e,"__esModule",{value:!0});var f="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){var n=[],r=!0,u=!1,i=void 0;try{for(var o,a=t[Symbol.iterator]();!(r=(o=a.next()).done)&&(n.push(o.value),!e||n.length!==e);r=!0);}catch(f){u=!0,i=f}finally{try{!r&&a.return&&a.return()}finally{if(u)throw i}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}();e.default=u,t.exports=e.default}).call(e,function(){return this}())},function(t,e,n){(function(r){"use strict";function u(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){var n=arguments.length<=2||void 0===arguments[2]?{}:arguments[2],u=(0,f.default)(e,n),i=t.replace(/> /g,">").split(/\s+(?=(?:(?:[^"]*"){2})*[^"]*$)/);if(i.length<3)return t;for(var a=[i.pop()];i.length>1;){var c=i.pop(),l=i.join(" "),s=a.join(" "),d=l+" "+s,p=document.querySelectorAll(d);1!==p.length&&a.unshift(o(l,c,s,e))}return a.unshift(i[0]),i=a,i[0]=o("",i[0],i.slice(1).join(" "),e),i[i.length-1]=o(i.slice(0,-1).join(" "),i[i.length-1],"",e),u&&delete r.document,i.join(" ").replace(/>/g,"> ").trim()}function o(t,e,n,r){if(t.length&&(t+=" "),n.length&&(n=" "+n),/\[*\]/.test(e)){var u=e.replace(/=.*$/,"]"),i=""+t+u+n,o=document.querySelectorAll(i);if(1===o.length&&o[0]===r)e=u;else for(var a=document.querySelectorAll(""+t+u),f=0,c=a.length;c>f;f++)if(a[f].contains(r)){var l=a[f].tagName.toLowerCase(),i=""+t+l+n,o=document.querySelectorAll(i);1===o.length&&o[0]===r&&(e=l);break}}if(/>/.test(e)){var s=e.replace(/>/,""),i=""+t+s+n,o=document.querySelectorAll(i);1===o.length&&o[0]===r&&(e=s)}if(/:nth-child/.test(e)){var d=e.replace(/nth-child/g,"nth-of-type"),i=""+t+d+n,o=document.querySelectorAll(i);1===o.length&&o[0]===r&&(e=d)}if(/\.\S+\.\S+/.test(e)){for(var p=e.trim().split(".").slice(1).map(function(t){return"."+t}).sort(function(t,e){return t.length-e.length});p.length;){var v=e.replace(p.shift(),""),i=""+t+v+n,o=document.querySelectorAll(i);1===o.length&&o[0]===r&&(e=v)}if(e&&e.match(/\./g).length>2)for(var y=document.querySelectorAll(""+t+e),f=0,c=y.length;c>f;f++)if(y[f].contains(r)){var h=y[f].tagName.toLowerCase(),i=""+t+h+n,o=document.querySelectorAll(i);1===o.length&&o[0]===r&&(e=h);break}}return e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=i;var a=n(1),f=u(a);t.exports=e.default}).call(e,function(){return this}())},function(t,e){"use strict";function n(t,e){var n=[],p=t,v=n.length,y=e.root,h=void 0===y?document:y,g=e.skip,m=void 0===g?null:g,b=e.ignore,j=void 0===b?{}:b,S=m&&(Array.isArray(m)?m:[m]).map(function(t){return"function"!=typeof t?function(e){return e===t}:t}),O=function(t){return m&&S.some(function(e){return e(t)})},A=!1;for(Object.keys(j).forEach(function(t){"class"===t&&(A=!0);var e=j[t];"function"!=typeof e&&("number"==typeof e&&(e=e.toString()),"string"==typeof e&&(e=new RegExp(e)),j[t]=e.test.bind(e))}),A&&!function(){var t=j.attribute;j.attribute=function(e,n,r){return j.class(n)||t&&t(e,n,r)}}();p!==h;){if(O(p)!==!0){if(d(p,n,j))break;if(r(p,n,j,h))break;if(o(p,n,j,h))break;if(c(p,n,j,h))break;u(p,n,j),n.length===v&&a(p,n,j),n.length===v&&l(p,n,j),n.length===v&&i(p,n,j),n.length===v&&f(p,n,j),n.length===v&&s(p,n,j)}p=p.parentNode,v=n.length}return p===h&&n.unshift("*"),n.join(" ")}function r(t,e,n,r){return p(t,e,n,r)}function u(t,e,n){return p(t,e,n,t.parentNode)}function i(t,e,n){var r=t.getAttribute("class");return g(n.class,r)?!1:h(t,e,"."+r.trim().replace(/\s+/g,"."))}function o(t,e,n,r){return v(t,e,n,r)}function a(t,e,n){return v(t,e,n,t.parentNode)}function f(t,e,n){var r=t.attributes;return Object.keys(r).some(function(u){var i=r[u],o=i.name,a=i.value;if(g(n.attribute,o,a,m.attribute))return!1;var f="["+o+'="'+a+'"]';return h(t,e,f)})}function c(t,e,n,r){return y(t,e,n,r)}function l(t,e,n){return y(t,e,n,t.parentNode)}function s(t,e,n){var r=t.tagName.toLowerCase();return g(n.tag,r)?!1:h(t,e,r)}function d(t,e,n){var r=t.getAttribute("id");return g(n.id,r)?!1:(e.unshift("#"+r),!0)}function p(t,e,n,r){var u=t.getAttribute("class");if(g(n.class,u))return!1;var i=r.getElementsByClassName(u);return 1===i.length?(e.unshift("."+u.trim().replace(/\s+/g,".")),!0):!1}function v(t,e,n,r){var u=t.attributes;return Object.keys(u).some(function(t){var i=u[t],o=i.name,a=i.value;if(g(n.attribute,o,a,m.attribute))return!1;var f="["+o+'="'+a+'"]',c=r.querySelectorAll(f);return 1===c.length?(e.unshift(f),!0):void 0})}function y(t,e,n,r){var u=t.tagName.toLowerCase();if(g(n.tag,u))return!1;var i=r.getElementsByTagName(u);return 1===i.length?(e.unshift(u),!0):!1}function h(t,e,n){for(var r=t.parentNode,u=r.childTags||r.children,i=0,o=u.length;o>i;i++)if(u[i]===t)return e.unshift("> "+n+":nth-child("+(i+1)+")"),!0;return!1}function g(t,e,n,r){if(!e)return!0;var u=t||r;return u?u(e,n||e,r):!1}Object.defineProperty(e,"__esModule",{value:!0}),e.default=n;var m={attribute:function(t){return["style","data-reactid","data-react-checksum"].indexOf(t)>-1}};t.exports=e.default},function(t,e,n){(function(t){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function u(t){var e=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];return Array.isArray(t)?o(t,e):i(t,e)}function i(e,n){if(3===e.nodeType)return i(e.parentNode);if(1!==e.nodeType)throw new Error('Invalid input - only HTMLElements or representations of them are supported! (not "'+("undefined"==typeof e?"undefined":a(e))+'")');var r=(0,c.default)(e,n),u=(0,s.default)(e,n),o=(0,p.default)(u,e,n);return r&&delete t.document,o}function o(t,e){for(var n=null,r=null,u=null,o=null,a=0,f=t.length;f>a;a++){var c=t[a];if(n){if(n!==c.parentNode)return console.log("Can't be efficiently mapped. It probably best to use multiple single selectors instead!")}else n=c.parentNode,r=c.className,o=c.tagName;if(c.className!==r){var l,s,d=[];c.className.length>r.length?(l=c.className,s=r):(l=r,s=c.className),s.split(" ").forEach(function(t){l.indexOf(t)>-1&&d.push(t)}),r=d.join(" ")}c.tagName!==o&&(o=null)}var p=i(n,e);return console.log(p,r,u,o),r?p+" > ."+r.replace(/ /g,"."):o?p+" > "+o.toLowerCase():p+" > *"}Object.defineProperty(e,"__esModule",{value:!0});var a="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t};e.default=u,e.getSingleSelector=i,e.getMultiSelector=o;var f=n(1),c=r(f),l=n(3),s=r(l),d=n(2),p=r(d)}).call(e,function(){return this}())}])});
-// # sourceMappingURL=optimal-select.min.js.map
-
 if (!Element.prototype.matches) {
 	Element.prototype.matches = Element.prototype.matchesSelector
 			|| Element.prototype.mozMatchesSelector
@@ -56,7 +52,13 @@ if (!Element.prototype.label) {
 
 if (!Element.prototype.css) {
 	Element.prototype.css = function() {
-		return OptimalSelect.select(this);
+		return Marathon.cssPath(this);
+	}
+}
+
+if (!Element.prototype.xpath) {
+	Element.prototype.xpath = function() {
+		return Marathon.xPath(this);
 	}
 }
 
@@ -259,6 +261,8 @@ Marathon.prototype.shouldIgnoreClick = function(target) {
 }
 
 Marathon.prototype.handleClickEvent = function(target) {
+	if (evt.which === 1 && evt.altKey && (evt.metaKey || evt.ctrlKey))
+		return;
 	if(this.shouldIgnoreClick(target) === true)
 		return;
 	this.postEvent(target, { type: 'click', clickCount: 1, button: 1, modifiersEx: "", x: 0, y: 0, suffix: this.getSuffix(target)});
@@ -486,6 +490,361 @@ Marathon.prototype.setObjectMapConfig = function(jsonObjectMap) {
 	_this.omapLoaded = true;
 }
 
+/*
+ * Copyright (C) 2011 Google Inc.  All rights reserved.
+ * Copyright (C) 2007, 2008 Apple Inc.  All rights reserved.
+ * Copyright (C) 2008 Matt Lilek <webkit@mattlilek.com>
+ * Copyright (C) 2009 Joseph Pecoraro
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1.  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ * 2.  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * 3.  Neither the name of Apple Computer, Inc. ("Apple") nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * @param {!WebInspector.DOMNode} node
+ * @param {boolean=} optimized
+ * @return {string}
+ */
+Marathon.cssPath = function(node, optimized)
+{
+    optimized = true;
+    if (node.nodeType !== Node.ELEMENT_NODE)
+        return "";
+
+    var steps = [];
+    var contextNode = node;
+    while (contextNode) {
+        var step = Marathon._cssPathStep(contextNode, !!optimized, contextNode === node);
+        if (!step)
+            break; // Error - bail out early.
+        steps.push(step);
+        if (step.optimized)
+            break;
+        contextNode = contextNode.parentNode;
+    }
+
+    steps.reverse();
+    return steps.join(" > ");
+}
+
+/**
+ * @param {!WebInspector.DOMNode} node
+ * @param {boolean} optimized
+ * @param {boolean} isTargetNode
+ * @return {?Marathon.DOMNodePathStep}
+ */
+Marathon._cssPathStep = function(node, optimized, isTargetNode)
+{
+    if (node.nodeType !== Node.ELEMENT_NODE)
+        return null;
+
+    var id = node.getAttribute("id");
+    if (optimized) {
+        if (id)
+            return new Marathon.DOMNodePathStep(idSelector(id), true);
+        var nodeNameLower = node.tagName.toLowerCase().toLowerCase();
+        if (nodeNameLower === "body" || nodeNameLower === "head" || nodeNameLower === "html")
+            return new Marathon.DOMNodePathStep(node.tagName.toLowerCase(), true);
+    }
+    var nodeName = node.tagName.toLowerCase();
+
+    if (id)
+        return new Marathon.DOMNodePathStep(nodeName + idSelector(id), true);
+    var parent = node.parentNode;
+    if (!parent || parent.nodeType === Node.DOCUMENT_NODE)
+        return new Marathon.DOMNodePathStep(nodeName, true);
+
+    /**
+     * @param {!WebInspector.DOMNode} node
+     * @return {!Array.<string>}
+     */
+    function prefixedElementClassNames(node)
+    {
+        var classAttribute = node.getAttribute("class");
+        if (!classAttribute)
+            return [];
+
+        return classAttribute.split(/\s+/g).filter(Boolean).map(function(name) {
+            // The prefix is required to store "__proto__" in a object-based map.
+            return "$" + name;
+        });
+    }
+
+    /**
+     * @param {string} id
+     * @return {string}
+     */
+    function idSelector(id)
+    {
+        return "#" + escapeIdentifierIfNeeded(id);
+    }
+
+    /**
+     * @param {string} ident
+     * @return {string}
+     */
+    function escapeIdentifierIfNeeded(ident)
+    {
+        if (isCSSIdentifier(ident))
+            return ident;
+        var shouldEscapeFirst = /^(?:[0-9]|-[0-9-]?)/.test(ident);
+        var lastIndex = ident.length - 1;
+        return ident.replace(/./g, function(c, i) {
+            return ((shouldEscapeFirst && i === 0) || !isCSSIdentChar(c)) ? escapeAsciiChar(c, i === lastIndex) : c;
+        });
+    }
+
+    /**
+     * @param {string} c
+     * @param {boolean} isLast
+     * @return {string}
+     */
+    function escapeAsciiChar(c, isLast)
+    {
+        return "\\" + toHexByte(c) + (isLast ? "" : " ");
+    }
+
+    /**
+     * @param {string} c
+     */
+    function toHexByte(c)
+    {
+        var hexByte = c.charCodeAt(0).toString(16);
+        if (hexByte.length === 1)
+            hexByte = "0" + hexByte;
+        return hexByte;
+    }
+
+    /**
+     * @param {string} c
+     * @return {boolean}
+     */
+    function isCSSIdentChar(c)
+    {
+        if (/[a-zA-Z0-9_-]/.test(c))
+            return true;
+        return c.charCodeAt(0) >= 0xA0;
+    }
+
+    /**
+     * @param {string} value
+     * @return {boolean}
+     */
+    function isCSSIdentifier(value)
+    {
+        return /^-?[a-zA-Z_][a-zA-Z0-9_-]*$/.test(value);
+    }
+
+    var prefixedOwnClassNamesArray = prefixedElementClassNames(node);
+    var needsClassNames = false;
+    var needsNthChild = false;
+    var ownIndex = -1;
+    var elementIndex = -1;
+    var siblings = parent.children;
+    for (var i = 0; (ownIndex === -1 || !needsNthChild) && i < siblings.length; ++i) {
+        var sibling = siblings[i];
+        if (sibling.nodeType !== Node.ELEMENT_NODE)
+            continue;
+        elementIndex += 1;
+        if (sibling === node) {
+            ownIndex = elementIndex;
+            continue;
+        }
+        if (needsNthChild)
+            continue;
+        if (sibling.tagName.toLowerCase() !== nodeName)
+            continue;
+
+        needsClassNames = true;
+        var ownClassNames = prefixedOwnClassNamesArray.keys();
+        var ownClassNameCount = 0;
+        for (var name in ownClassNames)
+            ++ownClassNameCount;
+        if (ownClassNameCount === 0) {
+            needsNthChild = true;
+            continue;
+        }
+        var siblingClassNamesArray = prefixedElementClassNames(sibling);
+        for (var j = 0; j < siblingClassNamesArray.length; ++j) {
+            var siblingClass = siblingClassNamesArray[j];
+            if (!ownClassNames.hasOwnProperty(siblingClass))
+                continue;
+            delete ownClassNames[siblingClass];
+            if (!--ownClassNameCount) {
+                needsNthChild = true;
+                break;
+            }
+        }
+    }
+
+    var result = nodeName;
+    if (isTargetNode && nodeName.toLowerCase() === "input" && node.getAttribute("type") && !node.getAttribute("id") && !node.getAttribute("class"))
+        result += "[type=\"" + node.getAttribute("type") + "\"]";
+    if (needsNthChild) {
+        result += ":nth-child(" + (ownIndex + 1) + ")";
+    } else if (needsClassNames) {
+        for (var prefixedName in prefixedOwnClassNamesArray.keys())
+            result += "." + escapeIdentifierIfNeeded(prefixedName.substr(1));
+    }
+
+    return new Marathon.DOMNodePathStep(result, false);
+}
+
+/**
+ * @param {!WebInspector.DOMNode} node
+ * @param {boolean=} optimized
+ * @return {string}
+ */
+Marathon.xPath = function(node, optimized)
+{
+    optimized = true ;
+    if (node.nodeType === Node.DOCUMENT_NODE)
+        return "/";
+
+    var steps = [];
+    var contextNode = node;
+    while (contextNode) {
+        var step = Marathon._xPathValue(contextNode, optimized);
+        if (!step)
+            break; // Error - bail out early.
+        steps.push(step);
+        if (step.optimized)
+            break;
+        contextNode = contextNode.parentNode;
+    }
+
+    steps.reverse();
+    return (steps.length && steps[0].optimized ? "" : "/") + steps.join("/");
+}
+
+/**
+ * @param {!WebInspector.DOMNode} node
+ * @param {boolean=} optimized
+ * @return {?Marathon.DOMNodePathStep}
+ */
+Marathon._xPathValue = function(node, optimized)
+{
+    var ownValue;
+    var ownIndex = Marathon._xPathIndex(node);
+    if (ownIndex === -1)
+        return null; // Error.
+
+    switch (node.nodeType) {
+    case Node.ELEMENT_NODE:
+        if (optimized && node.getAttribute("id"))
+            return new Marathon.DOMNodePathStep("//*[@id=\"" + node.getAttribute("id") + "\"]", true);
+        ownValue = node.localName;
+        break;
+    case Node.ATTRIBUTE_NODE:
+        ownValue = "@" + node.tagName.toLowerCase();
+        break;
+    case Node.TEXT_NODE:
+    case Node.CDATA_SECTION_NODE:
+        ownValue = "text()";
+        break;
+    case Node.PROCESSING_INSTRUCTION_NODE:
+        ownValue = "processing-instruction()";
+        break;
+    case Node.COMMENT_NODE:
+        ownValue = "comment()";
+        break;
+    case Node.DOCUMENT_NODE:
+        ownValue = "";
+        break;
+    default:
+        ownValue = "";
+        break;
+    }
+
+    if (ownIndex > 0)
+        ownValue += "[" + ownIndex + "]";
+
+    return new Marathon.DOMNodePathStep(ownValue, node.nodeType === Node.DOCUMENT_NODE);
+}
+
+/**
+ * @param {!WebInspector.DOMNode} node
+ * @return {number}
+ */
+Marathon._xPathIndex = function(node)
+{
+    // Returns -1 in case of error, 0 if no siblings matching the same expression, <XPath index among the same expression-matching sibling nodes> otherwise.
+    function areNodesSimilar(left, right)
+    {
+        if (left === right)
+            return true;
+
+        if (left.nodeType === Node.ELEMENT_NODE && right.nodeType === Node.ELEMENT_NODE)
+            return left.localName === right.localName;
+
+        if (left.nodeType === right.nodeType)
+            return true;
+
+        // XPath treats CDATA as text nodes.
+        var leftType = left.nodeType === Node.CDATA_SECTION_NODE ? Node.TEXT_NODE : left.nodeType;
+        var rightType = right.nodeType === Node.CDATA_SECTION_NODE ? Node.TEXT_NODE : right.nodeType;
+        return leftType === rightType;
+    }
+
+    var siblings = node.parentNode ? node.parentNode.children : null;
+    if (!siblings)
+        return 0; // Root node - no siblings.
+    var hasSameNamedElements;
+    for (var i = 0; i < siblings.length; ++i) {
+        if (areNodesSimilar(node, siblings[i]) && siblings[i] !== node) {
+            hasSameNamedElements = true;
+            break;
+        }
+    }
+    if (!hasSameNamedElements)
+        return 0;
+    var ownIndex = 1; // XPath indices start with 1.
+    for (var i = 0; i < siblings.length; ++i) {
+        if (areNodesSimilar(node, siblings[i])) {
+            if (siblings[i] === node)
+                return ownIndex;
+            ++ownIndex;
+        }
+    }
+    return -1; // An error occurred: |node| not found in parent's children.
+}
+
+/**
+ * @constructor
+ * @param {string} value
+ * @param {boolean} optimized
+ */
+Marathon.DOMNodePathStep = function(value, optimized)
+{
+    this.value = value;
+    this.optimized = optimized || false;
+}
+
+Marathon.DOMNodePathStep.prototype.toString = function()
+{
+  return this.value;
+}
 console.log("Loading marathon.js...");
 
 if(!window.$marathon)
