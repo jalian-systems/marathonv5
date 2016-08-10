@@ -1,4 +1,4 @@
-function AssertionWindow(assertCallback, waitCallback) {
+Marathon.AssertionWindow = function(assertCallback, waitCallback) {
 	this.assertCallback = assertCallback;
 	this.waitCallback = waitCallback;
 	var _this = this;
@@ -7,7 +7,7 @@ function AssertionWindow(assertCallback, waitCallback) {
 	}, true);
 }
 
-AssertionWindow.prototype.handleClickEvent = function(evt) {
+Marathon.AssertionWindow.prototype.handleClickEvent = function(evt) {
 	if (!evt.target) {
 		console.log("A click event generated without target!!!", evt);
 		return;
@@ -81,7 +81,7 @@ AssertionWindow.prototype.handleClickEvent = function(evt) {
 	}
 }
 
-AssertionWindow.prototype.getProperties = function(target) {
+Marathon.AssertionWindow.prototype.getProperties = function(target) {
 	var propmap = {};
 	if (target.attributes) {
 		for (var i = 0, atts = target.attributes, n = atts.length; i < n; i++) {
@@ -95,7 +95,7 @@ AssertionWindow.prototype.getProperties = function(target) {
 	return propmap;
 }
 
-AssertionWindow.prototype.set = function(target) {
+Marathon.AssertionWindow.prototype.set = function(target) {
 	this.currentSelection = false;
 	this.valueSelection = false;
 	this.removeOutline();
@@ -147,6 +147,7 @@ AssertionWindow.prototype.set = function(target) {
 			+ 'type="button" class="wait-b" value="Insert Wait"/><div>'
 			+ '</div>';
 	this.popup.setContentHTML(html);
+	this.popup.setTitle($marathon.getSuggestedName(target));
 	var self = this;
 	document.querySelector('#popUpWindow-top .value-p').addEventListener(
 			'mouseup',
@@ -165,10 +166,10 @@ AssertionWindow.prototype.set = function(target) {
 	this.currentElement = target;
 }
 
-AssertionWindow.prototype.showWindow = function(evt) {
+Marathon.AssertionWindow.prototype.showWindow = function(evt) {
 	var _this = this;
 	if (!this.popup)
-		this.popup = new PopUpWindow('CSS Styling', {
+		this.popup = new Marathon.PopUpWindow('CSS Styling', {
 			id : 'popUpWindow-top',
 			isResizable : true,
 			onClose : function() {
@@ -179,21 +180,15 @@ AssertionWindow.prototype.showWindow = function(evt) {
 	this.popup.open();
 }
 
-AssertionWindow.prototype.removeOutline = function() {
+Marathon.AssertionWindow.prototype.removeOutline = function() {
 	if (this.currentElement) {
 		this.currentElement.style.outline = this.prevOutline;
 	}
 }
 
-AssertionWindow.prototype.hideWindow = function() {
+Marathon.AssertionWindow.prototype.hideWindow = function() {
 	this.removeOutline();
 	if (this.popup && this.popup.isOpen) {
 		this.popup.close();
 	}
 }
-
-/*
- * if(!window.$assertion_window) { window.$assertion_window = new
- * AssertionWindow(function(selection) { console.log("assert", selection) },
- * function(selection) { console.log("wait", selection) }); }
- */

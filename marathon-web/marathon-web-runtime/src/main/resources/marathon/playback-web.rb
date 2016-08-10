@@ -123,9 +123,10 @@ class RubyMarathon < MarathonRuby
     rescue
     end
     if System.getProperty("marathon.recording.port", "") != ""
-      @scriptText = java.lang.Object.new.java_class.resource_as_string('/PopUpWindow.js')
+      @scriptText = java.lang.Object.new.java_class.resource_as_string('/Marathon.js')
+      @scriptText += java.lang.Object.new.java_class.resource_as_string('/PopUpWindow.js')
       @scriptText += java.lang.Object.new.java_class.resource_as_string('/AssertionWindow.js')
-      @scriptText += java.lang.Object.new.java_class.resource_as_string('/Marathon.js')
+      @scriptText += java.lang.Object.new.java_class.resource_as_string('/initmarathon.js')
       @port = System.getProperty("marathon.recording.port").to_i
       load_script
     end

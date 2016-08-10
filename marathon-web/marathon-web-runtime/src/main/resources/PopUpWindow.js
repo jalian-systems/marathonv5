@@ -1,4 +1,4 @@
-dragDrop = {
+Marathon.dragDrop = {
   initialMouseX: undefined,
   initialMouseY: undefined,
   startX: undefined,
@@ -8,67 +8,67 @@ dragDrop = {
     if (typeof element == 'string')
       element = document.getElementById(element);
     element.addEventListener('mousedown', function(event) {
-      dragDrop.startDragMouse(element, event, dragHandle, false);
+      Marathon.dragDrop.startDragMouse(element, event, dragHandle, false);
     });
     if(resizeHandle)
 	    resizeHandle.addEventListener('mousedown', function(event) {
-	      dragDrop.startDragMouse(element, event, dragHandle, resizeHandle);
+	      Marathon.dragDrop.startDragMouse(element, event, dragHandle, resizeHandle);
 	    });
   },
   startDragMouse: function (element, e, dragHandle, resizeHandle) {
     if(dragHandle && e.target.matches(dragHandle)) {
-      dragDrop.op = dragDrop.setPosition;
+      Marathon.dragDrop.op = Marathon.dragDrop.setPosition;
     } else if(resizeHandle) {
-      dragDrop.op = dragDrop.setSize;
+      Marathon.dragDrop.op = Marathon.dragDrop.setSize;
     } else
       return false;
-    dragDrop.startDrag(element);
+    Marathon.dragDrop.startDrag(element);
     var evt = e || window.event;
-    dragDrop.initialMouseX = evt.clientX;
-    dragDrop.initialMouseY = evt.clientY;
-    document.addEventListener('mousemove',dragDrop.dragMouse);
-    document.addEventListener('mouseup',dragDrop.releaseElement);
+    Marathon.dragDrop.initialMouseX = evt.clientX;
+    Marathon.dragDrop.initialMouseY = evt.clientY;
+    document.addEventListener('mousemove',Marathon.dragDrop.dragMouse);
+    document.addEventListener('mouseup',Marathon.dragDrop.releaseElement);
     return false;
   },
   startDrag: function (obj) {
-    if (dragDrop.draggedObject)
-      dragDrop.releaseElement();
-    if(dragDrop.op === dragDrop.setPosition) {
-      dragDrop.startX = obj.offsetLeft;
-      dragDrop.startY = obj.offsetTop;
+    if (Marathon.dragDrop.draggedObject)
+      Marathon.dragDrop.releaseElement();
+    if(Marathon.dragDrop.op === Marathon.dragDrop.setPosition) {
+      Marathon.dragDrop.startX = obj.offsetLeft;
+      Marathon.dragDrop.startY = obj.offsetTop;
     } else {
       var style = window.getComputedStyle(obj);
-      dragDrop.startX = parseFloat(style.getPropertyValue('width'));
-      dragDrop.startY = parseFloat(style.getPropertyValue('height'));
-      console.log('object', dragDrop.startX, dragDrop.startY);
+      Marathon.dragDrop.startX = parseFloat(style.getPropertyValue('width'));
+      Marathon.dragDrop.startY = parseFloat(style.getPropertyValue('height'));
+      console.log('object', Marathon.dragDrop.startX, Marathon.dragDrop.startY);
     }
-    dragDrop.draggedObject = obj;
+    Marathon.dragDrop.draggedObject = obj;
     obj.className += ' dragged';
   },
   dragMouse: function (e) {
     var evt = e || window.event;
-    var dX = evt.clientX - dragDrop.initialMouseX;
-    var dY = evt.clientY - dragDrop.initialMouseY;
-    dragDrop.op(dX,dY);
+    var dX = evt.clientX - Marathon.dragDrop.initialMouseX;
+    var dY = evt.clientY - Marathon.dragDrop.initialMouseY;
+    Marathon.dragDrop.op(dX,dY);
     return false;
   },
   setSize: function (dx,dy) {
-    dragDrop.draggedObject.style.width = dragDrop.startX + dx + 'px';
-    dragDrop.draggedObject.style.height = dragDrop.startY + dy + 'px';
+    Marathon.dragDrop.draggedObject.style.width = Marathon.dragDrop.startX + dx + 'px';
+    Marathon.dragDrop.draggedObject.style.height = Marathon.dragDrop.startY + dy + 'px';
   },
   setPosition: function (dx,dy) {
-    dragDrop.draggedObject.style.left = dragDrop.startX + dx + 'px';
-    dragDrop.draggedObject.style.top = dragDrop.startY + dy + 'px';
+    Marathon.dragDrop.draggedObject.style.left = Marathon.dragDrop.startX + dx + 'px';
+    Marathon.dragDrop.draggedObject.style.top = Marathon.dragDrop.startY + dy + 'px';
   },
   releaseElement: function() {
-    document.removeEventListener('mousemove',dragDrop.dragMouse);
-    document.removeEventListener('mouseup',dragDrop.releaseElement);
-    dragDrop.draggedObject.className = dragDrop.draggedObject.className.replace(/dragged/,'');
-    dragDrop.draggedObject = null;
+    document.removeEventListener('mousemove',Marathon.dragDrop.dragMouse);
+    document.removeEventListener('mouseup',Marathon.dragDrop.releaseElement);
+    Marathon.dragDrop.draggedObject.className = Marathon.dragDrop.draggedObject.className.replace(/dragged/,'');
+    Marathon.dragDrop.draggedObject = null;
   }
 }
 
-function PopUpWindow(title, options) {
+Marathon.PopUpWindow = function(title, options) {
   this.options = {
     id:             false,
     onOpen:         false,
@@ -96,11 +96,11 @@ function PopUpWindow(title, options) {
   this.initialize(title, options);
 }
 
-PopUpWindow.prototype.initialize = function(title, options) {
+Marathon.PopUpWindow.prototype.initialize = function(title, options) {
   this.setOptions(options);
   this.title = title;
 
-  PopUpWindow.topZIndex = Math.max(this.options.zIndex, PopUpWindow.topZIndex);
+  Marathon.PopUpWindow.topZIndex = Math.max(this.options.zIndex, Marathon.PopUpWindow.topZIndex);
 
   var windowDiv = document.createElement('div');
   windowDiv.style.visibility = 'hidden' ;
@@ -136,7 +136,7 @@ PopUpWindow.prototype.initialize = function(title, options) {
 
   this.windowDiv = windowDiv;
   var self = this;
-  this.windowDiv.addEventListener('mousedown', function() { self.windowDiv.style.zIndex = PopUpWindow.topZIndex++; });
+  this.windowDiv.addEventListener('mousedown', function() { self.windowDiv.style.zIndex = Marathon.PopUpWindow.topZIndex++; });
 
   this.initializeDrag();
 
@@ -147,38 +147,38 @@ PopUpWindow.prototype.initialize = function(title, options) {
     this.openURL(this.options.URL);
 };
 
-PopUpWindow.prototype.initializeDrag = function() {
+Marathon.PopUpWindow.prototype.initializeDrag = function() {
     if(this.options.isResizable)
-      dragDrop.initElement(this.windowDiv.getElementsByClassName('content')[0], false, this.windowDiv.resizeHandle);
+      Marathon.dragDrop.initElement(this.windowDiv.getElementsByClassName('content')[0], false, this.windowDiv.resizeHandle);
     if(this.options.isDraggable) {
       this.windowDiv.titleBar.style.cursor = 'move';
-      dragDrop.initElement(this.windowDiv, '.titleBar, .titleBar *', false);
+      Marathon.dragDrop.initElement(this.windowDiv, '.titleBar, .titleBar *', false);
     }
 };
 
-PopUpWindow.prototype.handleDragOverEvent = function(event) {
+Marathon.PopUpWindow.prototype.handleDragOverEvent = function(event) {
   event.preventDefault();
   event.dataTransfer.dropEffect = 'move' ;
 };
 
-PopUpWindow.prototype.handleDragStartEvent = function(event) {
+Marathon.PopUpWindow.prototype.handleDragStartEvent = function(event) {
   event.preventDefault();
   event.dataTransfer.setData('text/plain', "Moving Around");
 };
 
-PopUpWindow.prototype.handleDropEvent = function(event) {
+Marathon.PopUpWindow.prototype.handleDropEvent = function(event) {
   event.preventDefault();
 };
 
-PopUpWindow.prototype.getWindowDiv = function() { return this.windowDiv; };
-PopUpWindow.prototype.getContentDiv =  function() { return this.windowDiv.contentDivHolder; };
+Marathon.PopUpWindow.prototype.getWindowDiv = function() { return this.windowDiv; };
+Marathon.PopUpWindow.prototype.getContentDiv =  function() { return this.windowDiv.contentDivHolder; };
 
-PopUpWindow.prototype.setTitle = function(newTitle) { this.windowDiv.titleSpan.innerHTML = newTitle; };
-PopUpWindow.prototype.setContent =  function(contentDiv) { this.windowDiv.contentDivHolder.empty().adopt(contentDiv); };
-PopUpWindow.prototype.setContentHTML = function(contentHTML) { this.windowDiv.contentDivHolder.innerHTML = contentHTML; };
-PopUpWindow.prototype.setWidth = function(newWidth) { this.windowDiv.style.width = newWidth + 'px'; };
+Marathon.PopUpWindow.prototype.setTitle = function(newTitle) { this.windowDiv.titleSpan.innerHTML = newTitle; };
+Marathon.PopUpWindow.prototype.setContent =  function(contentDiv) { this.windowDiv.contentDivHolder.empty().adopt(contentDiv); };
+Marathon.PopUpWindow.prototype.setContentHTML = function(contentHTML) { this.windowDiv.contentDivHolder.innerHTML = contentHTML; };
+Marathon.PopUpWindow.prototype.setWidth = function(newWidth) { this.windowDiv.style.width = newWidth + 'px'; };
 
-PopUpWindow.prototype.close = function(event) {
+Marathon.PopUpWindow.prototype.close = function(event) {
   if(!this.isOpen)
     return;
   this.isOpen = false;
@@ -186,8 +186,8 @@ PopUpWindow.prototype.close = function(event) {
   this.fadeOut(this.windowDiv);
 };
 
-PopUpWindow.prototype.open = function() {
-  this.windowDiv.style.zIndex = PopUpWindow.topZIndex++;
+Marathon.PopUpWindow.prototype.open = function() {
+  this.windowDiv.style.zIndex = Marathon.PopUpWindow.topZIndex++;
   if(this.isOpen)
     return;
   this.fadeIn(this.windowDiv);
@@ -195,9 +195,9 @@ PopUpWindow.prototype.open = function() {
   this.isOpen = true;
 };
 
-PopUpWindow.prototype.toggle = function() { this.isOpen ? this.close() : this.open(); };
+Marathon.PopUpWindow.prototype.toggle = function() { this.isOpen ? this.close() : this.open(); };
 
-PopUpWindow.prototype.setPosition = function(options) {
+Marathon.PopUpWindow.prototype.setPosition = function(options) {
   var posRelative = options.relativeTo.getBoundingClientRect();
   var x = posRelative.left + options.offset.x;
   var y = posRelative.top + options.offset.y;
@@ -205,14 +205,14 @@ PopUpWindow.prototype.setPosition = function(options) {
   this.windowDiv.style.top = '' + y + 'px';
 };
 
-PopUpWindow.prototype.positionTo = function(relativeTo, xOffset, yOffset) {
+Marathon.PopUpWindow.prototype.positionTo = function(relativeTo, xOffset, yOffset) {
   this.setPosition( { relativeTo: relativeTo,
                       offset: { x: xOffset, y: yOffset},
                       position: 'top left',
                       edge: 'top left' });
 };
 
-PopUpWindow.prototype.openURL = function(URL, newTitle, onComplete, method) {
+Marathon.PopUpWindow.prototype.openURL = function(URL, newTitle, onComplete, method) {
   var self = this;
   new Request.HTML({ url: URL,
     method: method || 'post',
@@ -227,7 +227,7 @@ PopUpWindow.prototype.openURL = function(URL, newTitle, onComplete, method) {
     } }).send();
 }
 
-PopUpWindow.prototype.setOptions = function(options) {
+Marathon.PopUpWindow.prototype.setOptions = function(options) {
   for(var key in options) {
     if(this.options.hasOwnProperty(key))
       this.options[key] = options[key];
@@ -237,7 +237,7 @@ PopUpWindow.prototype.setOptions = function(options) {
   return this;
 }
 
-PopUpWindow.prototype.fadeOut = function(element)
+Marathon.PopUpWindow.prototype.fadeOut = function(element)
 {
   if(this.options.fadeAnimation) {
   var op = 1;  // initial opacity
@@ -255,7 +255,7 @@ PopUpWindow.prototype.fadeOut = function(element)
   }
 }
 
-PopUpWindow.prototype.fadeIn = function(element)
+Marathon.PopUpWindow.prototype.fadeIn = function(element)
 {
   if(this.options.fadeAnimation) {
     var op = 0.1;  // initial opacity
@@ -273,4 +273,4 @@ PopUpWindow.prototype.fadeIn = function(element)
   }
 }
 
-PopUpWindow.topZIndex = 1;
+Marathon.PopUpWindow.topZIndex = 1;

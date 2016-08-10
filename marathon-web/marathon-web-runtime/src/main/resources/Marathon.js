@@ -103,7 +103,7 @@ Marathon.prototype.createSocket = function(url) {
 			console.log("Closed connection to " + url);
 		}
 		_this.addEventHandlers();
-		_this.assertionWindow = new AssertionWindow(function(target, selection){ $marathon.recordAssertion(target, selection); }, function(target, selection){ $marathon.recordWait(target, selection); }); 
+		_this.assertionWindow = new Marathon.AssertionWindow(function(target, selection){ $marathon.recordAssertion(target, selection); }, function(target, selection){ $marathon.recordWait(target, selection); }); 
 		_this.assertionWindow.getProperties = function(target) { return $marathon.findAssertionProperties(target); }
 	}
 
@@ -276,12 +276,16 @@ Marathon.prototype.postEvent = function(target, event) {
 	this.post('record', record);
 }
 
+Marathon.prototype.getSuggestedName = function(target) {
+	return this.getName(this.findMatchingProperties('namingProperties', target, false));	
+}
+
 Marathon.prototype.getObjectIdentity = function(target) {
 	var identity = {};	
 	identity.attributes = this.findGeneralProperties(target);
 	identity.urp = this.findMatchingProperties('recognitionProperties', target);
 	identity.urp['tag_name'] = target.tagName.toLowerCase();
-	identity.attributes.suggestedName = this.getName(this.findMatchingProperties('namingProperties', target, false));
+	identity.attributes.suggestedName = this.getSuggestedName(target);
 	return identity;
 }
 
@@ -845,7 +849,3 @@ Marathon.DOMNodePathStep.prototype.toString = function()
 {
   return this.value;
 }
-console.log("Loading marathon.js...");
-
-if(!window.$marathon)
-	window.$marathon = new Marathon(arguments[0]);
