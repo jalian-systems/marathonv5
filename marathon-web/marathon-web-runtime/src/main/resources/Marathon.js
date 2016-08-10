@@ -135,8 +135,11 @@ Marathon.prototype.addEventHandlers = function() {
 	document.addEventListener('change', function(evt) {
 		_this.handleChangeEvent(evt.target);
 	}, true);
+	document.addEventListener('mousedown', function(evt) {
+		_this.handleMouseDownEvent(evt);
+	}, true);
 	document.addEventListener('click', function(evt) {
-		_this.handleClickEvent(evt.target);
+		_this.handleClickEvent(evt);
 	}, true);
 	var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 	var list = document.querySelector('body');
@@ -260,12 +263,27 @@ Marathon.prototype.shouldIgnoreClick = function(target) {
 	return false;
 }
 
-Marathon.prototype.handleClickEvent = function(target) {
+Marathon.prototype.handleMouseDownEvent = function(evt) {
+	this.currentMouseDownTarget = evt.target ;
+	if(document.activeElement !== evt.target) {
+		document.activeElement.blur();
+	}
+	this.postMouseEvent(evt);
+}
+
+Marathon.prototype.handleClickEvent = function(evt) {
+	if(this.currentMouseDownTarget && this.currentMouseDownTarget === evt.target)
+		return;
+	this.postMouseEvent(evt);
+}
+
+Marathon.prototype.postMouseEvent = function(evt) {
 	if (evt.which === 1 && evt.altKey && (evt.metaKey || evt.ctrlKey))
 		return;
+	var target = evt.target;
 	if(this.shouldIgnoreClick(target) === true)
 		return;
-	this.postEvent(target, { type: 'click', clickCount: 1, button: 1, modifiersEx: "", x: 0, y: 0, suffix: this.getSuffix(target)});
+	$marathon.postEvent(target, { type: 'click', clickCount: evt.detail == 0 ? 1 : evt.detail, button: evt.button + 1, modifiersEx: "", x: 0, y: 0, suffix: this.getSuffix(target) });
 }
 
 Marathon.prototype.postEvent = function(target, event) {

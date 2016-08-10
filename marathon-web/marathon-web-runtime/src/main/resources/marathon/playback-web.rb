@@ -30,7 +30,7 @@ class MyBenchMark
       puts s + ": #{(end_time - begin_time)} seconds"
     end
   end
-  
+
   def close
     WaitMessageDialog.setVisible(false);
   end
@@ -39,7 +39,7 @@ end
 class Wait
 
   attr_accessor :message
-  
+
   DEFAULT_TIMEOUT  = 5
   DEFAULT_INTERVAL = 0.2
 
@@ -52,14 +52,12 @@ class Wait
   # @option opts [String] :message Exception mesage if timed out.
   # @option opts [Array, Exception] :ignore Exceptions to ignore while polling (default: Error::NoSuchElementError)
   #
-
   def initialize(opts = {})
     @timeout  = opts.fetch(:timeout, DEFAULT_TIMEOUT)
     @interval = opts.fetch(:interval, DEFAULT_INTERVAL)
     @message  = opts[:message]
     @ignored  = Array(opts[:ignore] || Selenium::WebDriver::Error::NoSuchElementError)
   end
-
 
   #
   # Wait until the given block returns a true value.
@@ -82,7 +80,6 @@ class Wait
 
       sleep @interval
     end
-
 
     if @message
       msg = @message.dup unless @message.respond_to?(:call)
@@ -135,7 +132,7 @@ class RubyMarathon < MarathonRuby
   def set_document_wait_time(seconds)
     @document_wait_time = seconds if @document_wait_time > 0
   end
-  
+
   def load_script
     begin
       WaitMessageDialog.setVisible(true, "Loading scripts...")
@@ -391,7 +388,7 @@ class RubyMarathon < MarathonRuby
     else
       se_rp = { :name => 'css', :value => '*', :method => 'equals' }
     end
-    puts 'Finding elements using: ' + se_rp.to_s + ' and then ' + rps.to_s 
+    puts 'Finding elements using: ' + se_rp.to_s + ' and then ' + rps.to_s
     matched = []
     wait = Wait.new(:timeout => @component_wait_ms/1000, :message => 'Unable to find an element using ' + recognition_properties.to_s)
     wait.until {
@@ -569,7 +566,7 @@ class RubyMarathon < MarathonRuby
     expected, actual, bt)
   end
 
-    def assertTrue(message, b)
+  def assertTrue(message, b)
     message = 'Expected true: but was false' if !message
     begin
       throw
@@ -623,7 +620,7 @@ class RubyMarathon < MarathonRuby
   def set_component_wait_ms(ms)
     @component_wait_ms = ms if @component_wait_ms >= 0
   end
-  
+
   def convert(backtrace)
     @collector.convert(backtrace)
   end
@@ -1040,6 +1037,10 @@ def method_missing(m, *args, &blk)
     with_context(*args, &blk)
   elsif m.to_s.start_with?('click_')
     click(*args)
+  elsif m.to_s.start_with?('doubleclick_')
+    doubleclick(*args)
+  elsif m.to_s.start_with?('rightclick_')
+    rightclick(*args)
   elsif m.to_s.start_with?('select_')
     select(*args)
   else
