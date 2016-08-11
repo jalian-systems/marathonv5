@@ -30,6 +30,8 @@ namingProperties:
     -   priority: 70
         properties: [name]
     -   priority: 60
+        properties: [text]
+    -   priority: 50
         properties: [id]
     -   priority: 1
         properties: [css]

@@ -52,13 +52,21 @@ if (!Element.prototype.label) {
 
 if (!Element.prototype.css) {
 	Element.prototype.css = function() {
-		return Marathon.cssPath(this);
+		var path = Marathon.cssPath(this, true);
+		var count = document.querySelectorAll(path).length;
+		if(count > 1)
+			return Marathon.cssPath(this, false);
+		return path;
 	}
 }
 
 if (!Element.prototype.xpath) {
 	Element.prototype.xpath = function() {
-		return Marathon.xPath(this);
+		var path = Marathon.xPath(this, true);
+		var count = document.evaluate('count(' + path + ')', document, null, XPathResult.NUMBER_TYPE, null ).numberValue;
+		if(count > 1)
+			return Marathon.xPath(this, false);
+		return path;
 	}
 }
 
@@ -89,7 +97,7 @@ Marathon.prototype.setParentContainer = function(jsonStr) {
 }
 
 Marathon.prototype.createSocket = function(url) {
-	_this = this;
+	var _this = this;
 	
 	var ws = new WebSocket(url);
 	ws.onopen = function() {
@@ -132,6 +140,7 @@ Marathon.prototype.reloadScript = function() {
 }
 
 Marathon.prototype.addEventHandlers = function() {
+	var _this = this;
 	document.addEventListener('change', function(evt) {
 		_this.handleChangeEvent(evt.target);
 	}, true);
@@ -352,7 +361,7 @@ Marathon.prototype.getProperty = function(target, props) {
 	}
 	else if (props === 'text') {
 		var text = target.innerText;
-		if(text && text < 30)
+		if(text && text.length < 30)
 			return ['text', text.trim()];
 		return null;
 	}
@@ -482,7 +491,7 @@ Marathon.prototype.setObjectMapConfig = function(jsonObjectMap) {
 			'containerNamingProperties', 'containerRecognitionProperties' ];
 
 	var generalProperties = new Set(jsonObjectMap['generalProperties']);
-	_this = this;
+	var _this = this;
 	lists.forEach(function(list) {
 		var nplist = [];
 		jsonObjectMap[list].forEach(function(np) {
@@ -550,7 +559,6 @@ Marathon.prototype.setObjectMapConfig = function(jsonObjectMap) {
  */
 Marathon.cssPath = function(node, optimized)
 {
-    optimized = true;
     if (node.nodeType !== Node.ELEMENT_NODE)
         return "";
 
@@ -561,7 +569,7 @@ Marathon.cssPath = function(node, optimized)
         if (!step)
             break; // Error - bail out early.
         steps.push(step);
-        if (step.optimized)
+        if (optimized && step.optimized)
             break;
         contextNode = contextNode.parentNode;
     }
@@ -740,7 +748,6 @@ Marathon._cssPathStep = function(node, optimized, isTargetNode)
  */
 Marathon.xPath = function(node, optimized)
 {
-    optimized = true ;
     if (node.nodeType === Node.DOCUMENT_NODE)
         return "/";
 
@@ -751,7 +758,7 @@ Marathon.xPath = function(node, optimized)
         if (!step)
             break; // Error - bail out early.
         steps.push(step);
-        if (step.optimized)
+        if (optimized && step.optimized)
             break;
         contextNode = contextNode.parentNode;
     }

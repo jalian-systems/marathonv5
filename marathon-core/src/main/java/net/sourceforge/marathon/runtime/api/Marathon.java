@@ -563,7 +563,6 @@ public class Marathon {
 	}
 
 	private String createName(List<String> nlist, IPropertyAccessor propertyAccessor) {
-		System.err.println("Marathon.createName(" + nlist + "): ");
 		StringBuilder sb = new StringBuilder();
 		for (String key : nlist) {
 			String value = propertyAccessor.getProperty(key);
@@ -572,7 +571,6 @@ public class Marathon {
 			sb.append(value).append(":");
 		}
 		sb.setLength(sb.length() - 1);
-		System.err.println("Marathon.createName(" + nlist + "): " + sb.toString());
 		return sb.toString();
 	}
 }

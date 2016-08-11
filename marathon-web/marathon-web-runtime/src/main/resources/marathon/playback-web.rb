@@ -19,6 +19,8 @@ java_import 'net.sourceforge.marathon.display.WaitMessageDialog'
 require 'marathon/results'
 require 'json'
 
+LOGGER = java.util.logging.Logger.getLogger('net.sourceforge.marathon.ruby.MarathonRuby.PlaybackWeb')
+
 class MyBenchMark
   def report(s)
     WaitMessageDialog.setVisible(true, s)
@@ -27,7 +29,7 @@ class MyBenchMark
       yield
     ensure
       end_time = Time.now
-      puts s + ": #{(end_time - begin_time)} seconds"
+      LOGGER.info(s + ": #{(end_time - begin_time)} seconds")
     end
   end
 
@@ -228,13 +230,13 @@ class RubyMarathon < MarathonRuby
       o.enabled? if o.respond_to? :search_context
       return o
     rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
-      puts "Recreating element with " + o.search_context.to_s + " with " + o.recognition_properties.to_s
+      LOGGER.info("Recreating element with " + o.search_context.to_s + " with " + o.recognition_properties.to_s)
       return find_element(o.search_context, o.recognition_properties)
     end
   end
 
   def onWSConnectionClose(port)
-    puts "onWSConnectionClose: Loading Script"
+    LOGGER.info("onWSConnectionClose: Loading Script")
     load_script
   end
 
@@ -300,6 +302,7 @@ class RubyMarathon < MarathonRuby
   end
 
   def frame(title, timeout)
+    LOGGER.info("frame('" + title + "', " + timeout.to_s + ")") 
     search_context = get_leaf_component(ComponentId.new(title, nil))
     @webdriver.switch_to.frame search_context
     @current_search_context = @webdriver
@@ -308,6 +311,7 @@ class RubyMarathon < MarathonRuby
   end
 
   def window(title, timeout)
+    LOGGER.info("window('" + title + "', " + timeout.to_s + ")") 
     bmark = MyBenchMark.new
     bmark.report("Waiting for window '" + title + "'") {
       wait = Wait.new(:timeout => 30, :message => "Waiting for window '" + title + "'")
@@ -331,16 +335,20 @@ class RubyMarathon < MarathonRuby
 
   def close
     popped = @close_handles.pop
-    if(popped.is_a? Proc)
+    LOGGER.info("closed(" + popped.to_s + ")")
+    return if @close_handles.size == 0
+    last = @close_handles.last
+    if(last.is_a? Proc)
+      handles = @close_handles.clone
       @current_search_context = Proc.new {
-        handles = @close_handles.clone
         @close_handles.clear
         handles.each { |h| h.call }
       }
     else
-      @current_search_context = popped
+      @current_search_context = last
       namingStrategy.setTopLevelComponent(getContextAsAccessor(@current_search_context))
     end
+    LOGGER.info("closed(search_context = " + @current_search_context.to_s + ")")
   end
 
   def getWindowDetails
@@ -363,12 +371,17 @@ class RubyMarathon < MarathonRuby
   end
 
   def get_leaf_component(id)
+    if @current_search_context.is_a?(Proc)
+      LOGGER.info("Calling search context proc")
+      @current_search_context.call
+    end
+
     omapComponent = namingStrategy.getOMapComponent(id)
     rps_raw = omapComponent.getComponentRecognitionProperties().to_a
     rps = rps_raw.map { |rp_raw|
       { :name => rp_raw.name, :method => rp_raw.method, :value => rp_raw.value }
     }
-    @current_search_context.call if @current_search_context.is_a?(Proc)
+    
     if(@refresh_if_stale && @current_search_context == @webdriver && @close_handles.size > 1)
       handles = @close_handles.clone
       @close_handles.clear
@@ -388,7 +401,7 @@ class RubyMarathon < MarathonRuby
     else
       se_rp = { :name => 'css', :value => '*', :method => 'equals' }
     end
-    puts 'Finding elements using: ' + se_rp.to_s + ' and then ' + rps.to_s
+    LOGGER.info('Finding elements using: ' + se_rp.to_s + ' and then ' + rps.to_s)
     matched = []
     wait = Wait.new(:timeout => @component_wait_ms/1000, :message => 'Unable to find an element using ' + recognition_properties.to_s)
     wait.until {
@@ -415,6 +428,7 @@ class RubyMarathon < MarathonRuby
   end
 
   def setContext(o)
+    LOGGER.info("Setting context...")
     @current_search_context = o
   end
 
@@ -496,7 +510,7 @@ class RubyMarathon < MarathonRuby
       action.perform
     rescue Exception => exc
       raise exc if retried
-      puts 'Retrying with scrollIntoView '
+      LOGGER.warning('Retrying with scrollIntoView ')
       @webdriver.execute_script('arguments[0].scrollIntoView(false);', e)
       retried = true
       retry
