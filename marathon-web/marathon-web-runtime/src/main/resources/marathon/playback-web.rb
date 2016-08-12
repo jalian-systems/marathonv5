@@ -102,7 +102,56 @@ class RubyMarathon < MarathonRuby
   attr_reader :dndCopyKey
   field_accessor :namingStrategy
   def initialize(url)
-    @close_handles = []
+    puts 'Initialize ' + url
+    @_select = Proc.new { |e, text|
+      tag = e.tag_name
+  
+      if(tag.downcase == 'input')
+        type = e.attribute('type').downcase
+        matched = ["text", "password", "color", "date", "datetime", "datetime-local",
+          "number", "range", "search", "tel", "time", "url",
+          "week", "email", "file", "month"].find { |e| e == type }
+  
+        if(matched != nil)
+          e.clear
+          e.send_keys text
+          next
+        end
+        matched = ['radio', 'checkbox'].find { |e| e == type }
+        if(matched != nil)
+          selected = e.selected?.to_s
+          if(text.downcase != selected.downcase)
+            e.click
+          end
+          next
+        end
+      end
+  
+      if(tag.downcase == 'textarea')
+        e.clear
+        e.send_keys text
+        next
+      end
+  
+      if(tag.downcase == 'select')
+        option = Selenium::WebDriver::Support::Select.new(e)
+        JSON.parse(text).each { |v|
+          option.select_by(:text, v)
+        }
+      end
+    }
+    
+    @resolvers = []
+    @resolvers.push({ :can_handle => Proc.new { |e| true }, :select => @_select })
+
+    resolvers_dir = File.join(System.getProperty('marathon.project.dir', '.'), 'extensions')
+    if(Dir.exist?(resolvers_dir))
+      Dir.glob(resolvers_dir  + '/enabled-*.rb') { |f|
+        resolver = eval(File.read(f))
+        @resolvers.unshift(resolver)
+      }
+    end
+    @context_handles = []
     @refresh_if_stale = true
     @component_wait_ms = System.getProperty("marathon.COMPONENT_WAIT_MS", "30000").to_i
     @document_wait_time = 1
@@ -298,7 +347,7 @@ class RubyMarathon < MarathonRuby
     search_context = @current_search_context
     @current_search_context = get_leaf_component(ComponentId.new(title, nil))
     namingStrategy.setTopLevelComponent(getContextAsAccessor(@current_search_context))
-    @close_handles.push( search_context )
+    @context_handles.push( search_context )
   end
 
   def frame(title, timeout)
@@ -307,7 +356,7 @@ class RubyMarathon < MarathonRuby
     @webdriver.switch_to.frame search_context
     @current_search_context = @webdriver
     namingStrategy.setTopLevelComponent(getDriverAsAccessor())
-    @close_handles.push( Proc.new { frame(title, timeout) } )
+    @context_handles.push( Proc.new { frame(title, timeout) } )
   end
 
   def window(title, timeout)
@@ -330,18 +379,18 @@ class RubyMarathon < MarathonRuby
     }
     @current_search_context = @webdriver
     namingStrategy.setTopLevelComponent(getDriverAsAccessor())
-    @close_handles.push( Proc.new { window(title, timeout) } )
+    @context_handles.push( Proc.new { window(title, timeout) } )
   end
 
   def close
-    popped = @close_handles.pop
+    popped = @context_handles.pop
     LOGGER.info("closed(" + popped.to_s + ")")
-    return if @close_handles.size == 0
-    last = @close_handles.last
+    return if @context_handles.size == 0
+    last = @context_handles.last
     if(last.is_a? Proc)
-      handles = @close_handles.clone
+      handles = @context_handles.clone
       @current_search_context = Proc.new {
-        @close_handles.clear
+        @context_handles.clear
         handles.each { |h| h.call }
       }
     else
@@ -382,9 +431,9 @@ class RubyMarathon < MarathonRuby
       { :name => rp_raw.name, :method => rp_raw.method, :value => rp_raw.value }
     }
     
-    if(@refresh_if_stale && @current_search_context == @webdriver && @close_handles.size > 1)
-      handles = @close_handles.clone
-      @close_handles.clear
+    if(@refresh_if_stale && @current_search_context == @webdriver && @context_handles.size > 1)
+      handles = @context_handles.clone
+      @context_handles.clear
       handles.each { |h| h.call }
     else
       @current_search_context = refresh_if_stale(@current_search_context)
@@ -653,43 +702,14 @@ class RubyMarathon < MarathonRuby
 
   def selectString(id, text)
     e = get_leaf_component(id)
-    tag = e.tag_name
-
-    if(tag.downcase == 'input')
-      type = e.attribute('type').downcase
-      matched = ["text", "password", "color", "date", "datetime", "datetime-local",
-        "number", "range", "search", "tel", "time", "url",
-        "week", "email", "file", "month"].find { |e| e == type }
-
-      if(matched != nil)
-        e.clear
-        e.send_keys text
-        return
+    @resolvers.each { |resolver|
+      if(resolver[:can_handle].call(e))
+        resolver[:select].call(e, text)
+        break
       end
-      matched = ['radio', 'checkbox'].find { |e| e == type }
-      if(matched != nil)
-        selected = e.selected?.to_s
-        if(text.downcase != selected.downcase)
-          e.click
-        end
-        return
-      end
-    end
-
-    if(tag.downcase == 'textarea')
-      e.clear
-      e.send_keys text
-      return
-    end
-
-    if(tag.downcase == 'select')
-      option = Selenium::WebDriver::Support::Select.new(e)
-      JSON.parse(text).each { |v|
-        option.select_by(:text, v)
-      }
-    end
+    }
   end
-
+  
   def getComponent(id)
     get_leaf_component(id)
   end
