@@ -110,7 +110,7 @@ public interface IEditor {
 
     public Object getData(String key);
 
-    public void setData(String key, Object fileHandler);
+    public void setData(String key, Object value);
 
     public void setCaretPosition(int position);
 
@@ -120,9 +120,7 @@ public interface IEditor {
 
     public void setText(String code);
 
-    public void setMode(String string);
-
-    public void setEnabled(boolean b);
+    public void setMode(String mode);
 
     public int getLineOfOffset(int selectionStart) throws BadLocationException;
 

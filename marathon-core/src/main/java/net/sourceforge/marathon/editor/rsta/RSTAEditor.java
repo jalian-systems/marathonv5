@@ -331,15 +331,11 @@ public class RSTAEditor extends RSyntaxTextArea implements IEditor, DocumentList
     }
 
     public void setMode(String mode) {
-        String styleKey = SyntaxConstants.SYNTAX_STYLE_NONE;
-        if ("ruby".equals(mode))
-            styleKey = SyntaxConstants.SYNTAX_STYLE_RUBY;
-        else if ("xml".equals(mode))
-            styleKey = SyntaxConstants.SYNTAX_STYLE_XML;
-        else if ("html".equals(mode))
-            styleKey = SyntaxConstants.SYNTAX_STYLE_HTML;
-        else if ("java".equals(mode))
-            styleKey = SyntaxConstants.SYNTAX_STYLE_JAVA;
+        String styleKey;
+        if(mode == null)
+            styleKey = SyntaxConstants.SYNTAX_STYLE_NONE;
+        else
+            styleKey = "text/" + mode;
         setSyntaxEditingStyle(styleKey);
     }
 
