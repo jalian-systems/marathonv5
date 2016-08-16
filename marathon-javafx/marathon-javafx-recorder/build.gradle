@@ -40,18 +40,6 @@ eclipse {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-compileJava {
-	options.fork = true
-	if(project.properties['jdk8home'])
-		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
-}
-
-compileTestJava {
-	options.fork = true
-	if(project.properties['jdk8home'])
-		options.forkOptions*.executable = project.properties['jdk8home'] + '/bin/javac'
-}
-
 dependencies {
   compile project(":marathon-core:JSON-java")
   compile project(':marathon-javafx:marathon-javafx-agent')
@@ -77,6 +65,4 @@ jar {
 
 test {
   useTestNG()
-  if(project.properties['jdk8home'])
-     executable = project.properties['jdk8home'] + '/bin/java'
 }
