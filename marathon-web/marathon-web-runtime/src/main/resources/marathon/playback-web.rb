@@ -175,6 +175,11 @@ class RubyMarathon < MarathonRuby
       @scriptText += java.lang.Object.new.java_class.resource_as_string('/PopUpWindow.js')
       @scriptText += java.lang.Object.new.java_class.resource_as_string('/AssertionWindow.js')
       @scriptText += java.lang.Object.new.java_class.resource_as_string('/initmarathon.js')
+      if(Dir.exist?(resolvers_dir))
+        Dir.glob(resolvers_dir  + '/enabled-*.js') { |f|
+          @scriptText += File.read(f)
+        }
+      end
       @port = System.getProperty("marathon.recording.port").to_i
       load_script
     end

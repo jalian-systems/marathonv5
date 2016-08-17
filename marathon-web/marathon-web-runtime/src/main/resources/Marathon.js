@@ -88,7 +88,12 @@ function Marathon(port) {
 	this.identity = null;
 	this.omapLoaded = false;
 	console.log("Connecting to server @ " + this.url);
-
+	var _this = this ;
+	this.resolvers = [{ 	canhandle: function(evt) { return true; },
+						onchange: function(evt) { _this.handleChangeEvent(evt); },
+						onmousedown: function(evt) { _this.handleMouseDownEvent(evt); },
+						onclick: function(evt) { _this.handleClickEvent(evt); }
+					}];
 	this.createSocket(this.url);
 }
 
@@ -142,13 +147,28 @@ Marathon.prototype.reloadScript = function() {
 Marathon.prototype.addEventHandlers = function() {
 	var _this = this;
 	document.addEventListener('change', function(evt) {
-		_this.handleChangeEvent(evt.target);
+		if(evt.target.matches('#popUpWindow-top, #popUpWindow-top *'))
+			return;
+		var resolver = _this.resolvers.find(function(resolver) {
+			return resolver.canhandle(evt);
+		});
+		resolver.onchange && resolver.onchange(evt);
 	}, true);
 	document.addEventListener('mousedown', function(evt) {
-		_this.handleMouseDownEvent(evt);
+		if(evt.target.matches('#popUpWindow-top, #popUpWindow-top *'))
+			return;
+		var resolver = _this.resolvers.find(function(resolver) {
+			return resolver.canhandle(evt);
+		});
+		resolver.onmousedown && resolver.onmousedown(evt);
 	}, true);
 	document.addEventListener('click', function(evt) {
-		_this.handleClickEvent(evt);
+		if(evt.target.matches('#popUpWindow-top, #popUpWindow-top *'))
+			return;
+		var resolver = _this.resolvers.find(function(resolver) {
+			return resolver.canhandle(evt);
+		});
+		resolver.onclick && resolver.onclick(evt);
 	}, true);
 	var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 	var list = document.querySelector('body');
@@ -245,9 +265,8 @@ Marathon.prototype.getSuffix = function(target) {
 	}
 }
 
-Marathon.prototype.handleChangeEvent = function(target) {
-	if(target.matches('#popUpWindow-top, #popUpWindow-top *'))
-		return;
+Marathon.prototype.handleChangeEvent = function(evt) {
+	var target = evt.target;
 	var v = this.value(target);
 	if(v != null)
 		this.postEvent(target, { type: 'select', value: v, suffix: this.getSuffix(target)});
@@ -264,8 +283,6 @@ Marathon.prototype.shouldIgnoreClick = function(target) {
 					function() { return this.matches('label') && this.getAttribute('for') !== null ;},
 					function() { return this.matches('input') && this.getAttribute('type') === null ;}];
 	
-	if(target.matches('#popUpWindow-top, #popUpWindow-top *'))
-		return true;
 	var matched = values.find(function(v) { return typeof v === 'function' ? v.call(target) : target.matches(v); });
 	if(matched)
 		return true;
@@ -274,9 +291,9 @@ Marathon.prototype.shouldIgnoreClick = function(target) {
 
 Marathon.prototype.handleMouseDownEvent = function(evt) {
 	this.currentMouseDownTarget = evt.target ;
-	if(document.activeElement !== evt.target) {
-		document.activeElement.blur();
-	}
+// 	if(document.activeElement !== evt.target) {
+// 		document.activeElement.blur();
+// 	}
 	this.postMouseEvent(evt);
 }
 
@@ -292,7 +309,9 @@ Marathon.prototype.postMouseEvent = function(evt) {
 	var target = evt.target;
 	if(this.shouldIgnoreClick(target) === true)
 		return;
-	$marathon.postEvent(target, { type: 'click', clickCount: evt.detail == 0 ? 1 : evt.detail, button: evt.button + 1, modifiersEx: "", x: 0, y: 0, suffix: this.getSuffix(target) });
+	setTimeout(function() {
+		$marathon.postEvent(target, { type: 'click', clickCount: evt.detail == 0 ? 1 : evt.detail, button: evt.button + 1, modifiersEx: "", x: 0, y: 0, suffix: $marathon.getSuffix(target) });
+	}, 50);
 }
 
 Marathon.prototype.postEvent = function(target, event) {

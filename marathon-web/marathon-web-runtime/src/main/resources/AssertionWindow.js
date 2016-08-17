@@ -17,10 +17,11 @@ Marathon.AssertionWindow.prototype.handleClickEvent = function(evt) {
 			return;
 		}
 		if (!this.popup || !this.popup.isOpen) {
-			this.showWindow(evt);
+			this.showWindow(evt.target, evt.offsetX, evt.offsetY);
 		}
 		this.set(evt.target);
 		evt.preventDefault();
+		evt.stopPropagation();
 		return;
 	}
 	if (!evt.target.matches('#popUpWindow-top *')) {
@@ -166,7 +167,7 @@ Marathon.AssertionWindow.prototype.set = function(target) {
 	this.currentElement = target;
 }
 
-Marathon.AssertionWindow.prototype.showWindow = function(evt) {
+Marathon.AssertionWindow.prototype.showWindow = function(target, offsetX, offsetY) {
 	var _this = this;
 	if (!this.popup)
 		this.popup = new Marathon.PopUpWindow('CSS Styling', {
@@ -176,7 +177,7 @@ Marathon.AssertionWindow.prototype.showWindow = function(evt) {
 				_this.removeOutline();
 			}
 		});
-	this.popup.positionTo(evt.target, evt.offsetX, evt.offsetY);
+	this.popup.positionTo(target, offsetX, offsetY);
 	this.popup.open();
 }
 
