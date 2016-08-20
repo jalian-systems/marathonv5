@@ -291,9 +291,6 @@ Marathon.prototype.shouldIgnoreClick = function(target) {
 
 Marathon.prototype.handleMouseDownEvent = function(evt) {
 	this.currentMouseDownTarget = evt.target ;
-// 	if(document.activeElement !== evt.target) {
-// 		document.activeElement.blur();
-// 	}
 	this.postMouseEvent(evt);
 }
 
@@ -309,9 +306,7 @@ Marathon.prototype.postMouseEvent = function(evt) {
 	var target = evt.target;
 	if(this.shouldIgnoreClick(target) === true)
 		return;
-	setTimeout(function() {
-		$marathon.postEvent(target, { type: 'click', clickCount: evt.detail == 0 ? 1 : evt.detail, button: evt.button + 1, modifiersEx: "", x: 0, y: 0, suffix: $marathon.getSuffix(target) });
-	}, 50);
+	$marathon.postDelayedEvent(target, { type: 'click', clickCount: evt.detail == 0 ? 1 : evt.detail, button: evt.button + 1, modifiersEx: "", x: 0, y: 0, suffix: $marathon.getSuffix(target) });
 }
 
 Marathon.prototype.postEvent = function(target, event) {
@@ -320,6 +315,16 @@ Marathon.prototype.postEvent = function(target, event) {
 	record.request = 'record-action';
 	record.container = this.getContainer(target);
 	this.post('record', record);
+}
+
+Marathon.prototype.postDelayedEvent = function(target, event) {
+    var record = this.getObjectIdentity(target);
+	record.event = event ;
+	record.request = 'record-action';
+	record.container = this.getContainer(target);
+	setTimeout(function() {
+		$marathon.post('record', record);
+	}, 50);
 }
 
 Marathon.prototype.getSuggestedName = function(target) {
@@ -453,6 +458,10 @@ Marathon.prototype.isUnique = function(target, props) {
 		var other = others[i];
 		var matched = true;
 		for(var prop in props) {
+		    if(prop === 'css' || prop === 'xpath') {
+				matched = false ;
+				break;		    	
+		    }
 			if(matched && props.hasOwnProperty(prop)) {
 				var otherValue = this.getProperty(other, prop);
 				if(otherValue === null || otherValue[1] !== props[prop])
@@ -578,6 +587,7 @@ Marathon.prototype.setObjectMapConfig = function(jsonObjectMap) {
  */
 Marathon.cssPath = function(node, optimized)
 {
+	console.log('cssPath', node, optimized);
     if (node.nodeType !== Node.ELEMENT_NODE)
         return "";
 
@@ -594,6 +604,7 @@ Marathon.cssPath = function(node, optimized)
     }
 
     steps.reverse();
+    console.log('cssPath = ', steps);
     return steps.join(" > ");
 }
 

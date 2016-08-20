@@ -559,16 +559,20 @@ class RubyMarathon < MarathonRuby
         action.key_up :control if m == 'Ctrl'
       }
     end
-    retried = false
-    begin
-      action.perform
-    rescue Exception => exc
-      raise exc if retried
-      LOGGER.warning('Retrying with scrollIntoView ')
-      @webdriver.execute_script('arguments[0].scrollIntoView(false);', e)
-      retried = true
-      retry
-    end
+    wait = Wait.new(:timeout => @component_wait_ms/1000)
+    wait.until {
+	    begin
+	      action.perform
+	      true
+	    rescue Exception => exc
+	      LOGGER.warning('Retrying with scrollIntoView due to ' + exc.message)
+	      begin
+	      	@webdriver.execute_script('arguments[0].scrollIntoView(false);', e)
+	      rescue
+	      end
+	      false
+	    end
+    }
   end
 
   def dragInternal(id, modifiers, startPos, endPos)

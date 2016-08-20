@@ -1,9 +1,12 @@
 LOGGER.info("Loading... JQuery.rb")
 
 jquery_can_handle = Proc.new { |e|
-  return unless e.attribute('class')
-  classes = e.attribute('class').split(/\s/)
-  classes.include?('ui-checkboxradio') || classes.include?('hasDatepicker')
+  if e.attribute('class')
+	classes = e.attribute('class').split(/\s/)
+	classes.include?('ui-checkboxradio') || classes.include?('hasDatepicker')
+  else
+  	false
+  end
 }
 
 jquery_select = Proc.new { |e, text|
