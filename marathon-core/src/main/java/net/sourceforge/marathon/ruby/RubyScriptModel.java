@@ -298,11 +298,11 @@ public class RubyScriptModel implements IScriptModel {
 
 	public static String inspect(String string) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\"");
+		sb.append("\'");
 		char[] chars = string.toCharArray();
 		for (int i = 0; i < chars.length; i++) {
 			char c = chars[i];
-			if (c == '"' || c == '\\') {
+			if (c == '\'' || c == '\\') {
 				sb.append("\\").append(c);
 			} else if (c == '#' && chars[i + 1] == '{') {
 				sb.append("\\").append(c);
@@ -326,7 +326,7 @@ public class RubyScriptModel implements IScriptModel {
 				sb.append(c);
 			}
 		}
-		sb.append("\"");
+		sb.append("\'");
 		return sb.toString();
 	}
 

@@ -35,6 +35,15 @@ if (typeof Object.assign != 'function') {
   };
 }
 
+if (typeof Object.closest != 'function') {
+  Object.closest = function(s) {
+    'use strict';
+    var r = this;
+    while(r != null && !r.matches(s)) r = r.parentElement;
+    return r;
+  };
+}
+
 if (!Element.prototype.label) {
 	Element.prototype.label = function() {
 		var id = this.getAttribute('id');
@@ -587,7 +596,6 @@ Marathon.prototype.setObjectMapConfig = function(jsonObjectMap) {
  */
 Marathon.cssPath = function(node, optimized)
 {
-	console.log('cssPath', node, optimized);
     if (node.nodeType !== Node.ELEMENT_NODE)
         return "";
 
@@ -604,7 +612,6 @@ Marathon.cssPath = function(node, optimized)
     }
 
     steps.reverse();
-    console.log('cssPath = ', steps);
     return steps.join(" > ");
 }
 
