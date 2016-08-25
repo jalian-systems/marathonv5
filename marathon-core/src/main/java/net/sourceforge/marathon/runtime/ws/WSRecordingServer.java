@@ -294,7 +294,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         return new JSONObject();
     }
 
-    public JSONObject focusedWindow(JSONObject query) throws IOException, JSONException, ObjectMapException {
+    public JSONObject focusedWindow(WebSocket conn, JSONObject query) throws IOException, JSONException, ObjectMapException {
         focusedWindowId = createWindowId(query.getJSONObject("container"));
         return new JSONObject();
     }
