@@ -7,5 +7,4 @@ import org.testng.annotations.Test;
     public GeckoWebDriverProxyTest() {
         super(GeckoWebDriverProxy.class);
     }
-
 }

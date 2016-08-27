@@ -2,6 +2,7 @@ package net.sourceforge.marathon.runtime;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.By;
@@ -25,7 +26,7 @@ public class SafariWebDriverTest {
         server = new NanoHTTPD(21346) {
             @Override public Response serve(IHTTPSession session) {
                 try {
-                    String data = IOUtils.toString(SafariWebDriverTest.class.getResourceAsStream("form.html"));
+                    String data = IOUtils.toString(SafariWebDriverTest.class.getResourceAsStream("form.html"), Charset.defaultCharset());
                     return newFixedLengthResponse(data);
                 } catch (IOException e) {
                     return super.serve(session);

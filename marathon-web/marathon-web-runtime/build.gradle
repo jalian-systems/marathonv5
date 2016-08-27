@@ -21,8 +21,9 @@ repositories {
 dependencies {
   compile project(":marathon-core")
   compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
-  testCompile project(":marathon-core:ruby-selenium-webdriver")
   compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
+  compile "commons-io:commons-io:${commons_io_version}"
+  testCompile project(":marathon-core:ruby-selenium-webdriver")
   testCompile "org.testng:testng:${testng_version}"
 }
 

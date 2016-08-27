@@ -33,5 +33,6 @@ dependencies {
   compile "com.google.inject:guice:${guice_version}"
   compile "jline:jline:${jline_version}"
   compile "org.jruby:jruby-complete:${jruby_complete_version}"
+  compile "commons-io:commons-io:${commons_io_version}"
   compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
 }
