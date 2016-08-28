@@ -29,4 +29,5 @@ dependencies {
 
 test {
   useTestNG()
+  systemProperty 'firefox_binary', "${firefox_47_binary}"
 }

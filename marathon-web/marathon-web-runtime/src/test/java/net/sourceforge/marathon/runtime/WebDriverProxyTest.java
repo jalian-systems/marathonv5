@@ -28,10 +28,12 @@ public abstract class WebDriverProxyTest {
     private Class<? extends IWebdriverProxy> klass;
 
     @BeforeClass public void startServer() throws IOException {
+        System.out.println("WebDriverProxyTest.startServer()");
         server = new NanoHTTPD(21346) {
             @Override public Response serve(IHTTPSession session) {
                 try {
-                    String data = IOUtils.toString(WebDriverProxyTest.class.getResourceAsStream("form.html"), Charset.defaultCharset());
+                    String data = IOUtils.toString(WebDriverProxyTest.class.getResourceAsStream("form.html"),
+                            Charset.defaultCharset());
                     return newFixedLengthResponse(data);
                 } catch (IOException e) {
                     return super.serve(session);
@@ -56,7 +58,8 @@ public abstract class WebDriverProxyTest {
         this.klass = klass;
     }
 
-    @Test public void WebDriverProxy() throws MalformedURLException, InterruptedException, InstantiationException, IllegalAccessException {
+    @Test public void WebDriverProxy()
+            throws MalformedURLException, InterruptedException, InstantiationException, IllegalAccessException {
         checkPlatform();
         proxy = klass.newInstance();
         driver = new RemoteWebDriver(new URL(proxy.getURL()), DesiredCapabilities.firefox());
