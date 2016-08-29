@@ -147,8 +147,9 @@ class RubyMarathon < MarathonRuby
     resolvers_dir = File.join(System.getProperty('marathon.project.dir', '.'), 'extensions')
     if(Dir.exist?(resolvers_dir))
       Dir.glob(resolvers_dir  + '/enabled-*.rb') { |f|
-        resolver = eval(File.read(f))
-        @resolvers.unshift(resolver)
+      	$resolver = nil
+        load(f)
+        @resolvers.unshift($resolver) if $resolver
       }
     end
     @context_handles = []
@@ -407,18 +408,14 @@ class RubyMarathon < MarathonRuby
 
   def getWindowDetails
     r = JSONObject.new
-    location = @webdriver.execute_script('return location')
-    r.put('location.href', location['href'])
-    r.put('location.origin', location['origin'])
-
-    r.put('location.protocol', location['protocol'])
-    r.put('location.host', location['host'])
-    r.put('location.hostname', location['hostname'])
-    r.put('location.port', location['port'])
-    r.put('location.pathname', location['pathname'])
-    r.put('location.search', location['search'])
-    r.put('document.URL', @webdriver.execute_script('return document.URL'))
-    r.put('document.title', @webdriver.execute_script('return document.title'))
+    uri = URI(@webdriver.current_url)
+    r.put('location.href', uri.to_s)
+    r.put('location.pathname', uri.path)
+    r.put('location.search', uri.query)
+    r.put('location.fragment', uri.fragment)
+    
+    r.put('document.URL', @webdriver.current_url)
+    r.put('document.title', @webdriver.title)
     r.put('current_url', @webdriver.current_url)
     r.put('title', @webdriver.title)
     return r.to_s
