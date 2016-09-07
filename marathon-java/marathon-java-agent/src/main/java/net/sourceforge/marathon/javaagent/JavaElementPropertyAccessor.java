@@ -358,7 +358,14 @@ public class JavaElementPropertyAccessor {
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getTagName()
      */
     public String getTagName() {
-        Class<?> javaClass = findJavaClass();
+        Class<?> c = component.getClass();
+        if (this instanceof IPseudoElement)
+            c = ((IPseudoElement) this).getPseudoComponent().getClass();
+        return getTagName(c);
+    }
+
+    private String getTagName(Class<?> klass) {
+        Class<?> javaClass = findJavaClass(klass);
         Class<?> c = javaClass;
         String simpleName = c.getSimpleName();
         while ("".equals(simpleName)) {
@@ -377,10 +384,7 @@ public class JavaElementPropertyAccessor {
         return r.substring(0, 1).toLowerCase() + r.substring(1).replaceAll("[A-Z][A-Z]*", "-$0").toLowerCase();
     }
 
-    private Class<?> findJavaClass() {
-        Class<?> c = component.getClass();
-        if (this instanceof IPseudoElement)
-            c = ((IPseudoElement) this).getPseudoComponent().getClass();
+    private Class<?> findJavaClass(Class<?> c) {
         while (c.getPackage() == null
                 || (!c.getPackage().getName().startsWith("java.awt") && !c.getPackage().getName().startsWith("javax.swing")))
             c = c.getSuperclass();
@@ -535,10 +539,11 @@ public class JavaElementPropertyAccessor {
         List<Component> allComponents = findAllComponents();
         int index = 0;
         Class<? extends Component> klass = component.getClass();
+        String tagName = getTagName(klass);
         for (Component c : allComponents) {
             if (c == component)
                 return index;
-            if (c.getClass().equals(klass))
+            if (getTagName(c.getClass()).equals(tagName))
                 index++;
         }
         return -1;
