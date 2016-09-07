@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -127,8 +128,8 @@ public class TestApplication extends JDialog implements ITestApplication {
             return;
         }
         commandField.setCaretPosition(0);
-        launchCommand.copyOutputTo(new WriterOutputStream(new TextAreaWriter(outputArea)));
-        launchCommand.setMessageArea(new WriterOutputStream(new TextAreaWriter(errorArea)));
+        launchCommand.copyOutputTo(new WriterOutputStream(new TextAreaWriter(outputArea), Charset.defaultCharset()));
+        launchCommand.setMessageArea(new WriterOutputStream(new TextAreaWriter(errorArea), Charset.defaultCharset()));
         if (launchCommand.start() == JOptionPane.OK_OPTION) {
             commandField.setText(launchCommand.toString());
             setVisible(true);

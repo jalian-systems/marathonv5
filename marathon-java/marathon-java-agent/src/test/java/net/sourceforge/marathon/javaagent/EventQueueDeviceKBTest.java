@@ -57,13 +57,14 @@ import org.testng.annotations.Test;
         AssertJUnit.assertEquals(true, exitItemCalled);
     }
 
-    public void sendingEnterToMenuItemDoesntWork() throws Throwable {
+    @Test(enabled=false) public void sendingEnterToMenuItemDoesntWork() throws Throwable {
         Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
             @Override public void eventDispatched(AWTEvent event) {
                 System.err.println(event);
             }
         }, AWTEvent.KEY_EVENT_MASK);
-        if (Platform.getCurrent() == Platform.MAC && System.getProperty("java.version", "").matches("1.[78].*")) {
+        System.out.println(System.getProperty("java.version"));
+        if (Platform.getCurrent().is(Platform.MAC) && System.getProperty("java.version", "").matches("1.[78].*")) {
             throw new SkipException("Menu mneomonics are not handled on Mac under Java 1.7+");
         }
         if (Platform.getCurrent().is(Platform.WINDOWS)) {

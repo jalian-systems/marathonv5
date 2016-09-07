@@ -297,7 +297,7 @@ public class JavaProfile {
         if (System.getProperty(MARATHON_AGENT + ".file") != null)
             return System.getProperty(MARATHON_AGENT + ".file");
         String path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
-                "../../MarathonV4/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
+                "../../marathonv4/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
                 dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-agent.*.jar");
         if (path != null) {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for agent");

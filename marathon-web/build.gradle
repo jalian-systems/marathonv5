@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
   compile project(":marathon-core")
+  compile "commons-io:commons-io:${commons_io_version}"
   testCompile "org.testng:testng:${testng_version}"
 }
 
