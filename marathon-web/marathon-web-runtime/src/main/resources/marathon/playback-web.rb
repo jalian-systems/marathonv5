@@ -138,7 +138,9 @@ class RubyMarathon < MarathonRuby
         JSON.parse(text).each { |v|
           option.select_by(:text, v)
         }
+        next
       end
+      puts "Unknown tag - default select can't handle: " + tag
     }
     
     @resolvers = []
@@ -523,8 +525,12 @@ class RubyMarathon < MarathonRuby
     end
   end
 
-  def clickInternal(id, position, clickCount, modifiers, popupTrigger)
+  def clickInternal(id, position = nil, clickCount = 1, modifiers = nil, popupTrigger = false)
     e = get_leaf_component(id)
+    _click(e, position, clickCount, modifiers, popupTrigger)
+  end
+ 
+  def _click(e, position = nil, clickCount = 1, modifiers = nil, popupTrigger = false)
     action = @webdriver.action
     if(position == nil)
       action.move_to(e)
@@ -708,6 +714,10 @@ class RubyMarathon < MarathonRuby
 
   def selectString(id, text)
     e = get_leaf_component(id)
+    _select(e, text)
+  end
+
+  def _select(e, text)
     @resolvers.each { |resolver|
       if(resolver[:can_handle].call(e))
         resolver[:select].call(e, text)
