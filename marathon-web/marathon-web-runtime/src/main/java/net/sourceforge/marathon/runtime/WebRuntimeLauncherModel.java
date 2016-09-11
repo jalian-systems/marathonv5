@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 
@@ -73,11 +74,11 @@ public class WebRuntimeLauncherModel implements IRuntimeLauncherModel, IWebDrive
 
     private String createURL(String urlPrefix, String urlPath) {
         StringBuilder sb = new StringBuilder();
-        if(urlPrefix.endsWith("/"))
+        if (urlPrefix.endsWith("/"))
             urlPrefix = urlPrefix.substring(0, urlPrefix.length() - 1);
         sb.append(urlPrefix);
-        if(urlPath.length() > 0) {
-            if(urlPath.startsWith("/"))
+        if (urlPath.length() > 0) {
+            if (urlPath.startsWith("/"))
                 urlPath = urlPath.substring(1);
             sb.append("/").append(urlPath);
         }
@@ -89,6 +90,8 @@ public class WebRuntimeLauncherModel implements IRuntimeLauncherModel, IWebDrive
         try {
             return (IWebdriverProxy) Class.forName(proxyClass).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            Logger.getLogger(WebRuntimeLauncherModel.class.getName())
+                    .warning("Unable to load class: " + proxyClass + ". Defaulting to " + FirefoxWebDriverProxy.class.getName());
             return new FirefoxWebDriverProxy();
         }
     }

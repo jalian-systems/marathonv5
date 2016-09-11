@@ -201,8 +201,11 @@ class RubyMarathon < MarathonRuby
         wait = Wait.new(:timeout => 30)
         wait.until {
           begin
-            @webdriver.execute_script("return document.readyState == 'complete';")
+            readyState = @webdriver.execute_script("return document.readyState;")
+            puts "ReadyState = " + readyState
+            readyState === 'complete'
           rescue
+            puts "Error during processing: #{$!}"
             false
           end
         }

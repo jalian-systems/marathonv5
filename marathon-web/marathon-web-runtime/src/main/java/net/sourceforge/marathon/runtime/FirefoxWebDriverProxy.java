@@ -21,8 +21,8 @@ public class FirefoxWebDriverProxy implements IWebdriverProxy {
         FirefoxProfile profile = new FirefoxProfile();
         profile.setPreference(FirefoxProfile.PORT_PREFERENCE, port);
         FirefoxBinary binary ;
-        if(System.getProperty("firefox_binary") != null) {
-            binary = new FirefoxBinary(new File(System.getProperty("firefox_binary")));
+        if(System.getProperty("firefox_binary", System.getProperty("firefox_47_binary")) != null) {
+            binary = new FirefoxBinary(new File(System.getProperty("firefox_binary", System.getProperty("firefox_47_binary"))));
         } else {
             binary = new FirefoxBinary();
         }
