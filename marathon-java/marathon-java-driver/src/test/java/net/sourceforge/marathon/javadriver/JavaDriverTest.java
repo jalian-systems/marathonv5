@@ -16,7 +16,6 @@
 package net.sourceforge.marathon.javadriver;
 
 import java.awt.BorderLayout;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -57,7 +56,6 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
@@ -73,6 +71,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.SessionId;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -226,8 +225,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         DesiredCapabilities caps = new DesiredCapabilities("xjava", "1.0", Platform.getCurrent());
         try {
             driver = new JavaDriver(caps, caps);
-            throw new MissingException(SessionNotCreatedException.class);
-        } catch (SessionNotCreatedException e) {
+            throw new MissingException(UnreachableBrowserException.class);
+        } catch (UnreachableBrowserException e) {
         }
     }
 
@@ -243,8 +242,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         DesiredCapabilities caps = new DesiredCapabilities("java", "1.0", otherPlatform);
         try {
             driver = new JavaDriver(caps, caps);
-            throw new MissingException(SessionNotCreatedException.class);
-        } catch (SessionNotCreatedException e) {
+            throw new MissingException(UnreachableBrowserException.class);
+        } catch (UnreachableBrowserException e) {
         }
     }
 
@@ -259,8 +258,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         caps.setCapability("rotatable", true);
         try {
             driver = new JavaDriver(caps, caps);
-            throw new MissingException(SessionNotCreatedException.class);
-        } catch (SessionNotCreatedException e) {
+            throw new MissingException(UnreachableBrowserException.class);
+        } catch (UnreachableBrowserException e) {
         }
     }
 
@@ -1353,7 +1352,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         }
     }
 
-    public void windowWithEmptyTitleUsesNextAvailableOption() throws Throwable {
+    public void windowWithEmptyTitleUsesFirstAvailableLabel() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override public void run() {
@@ -1363,7 +1362,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 frame.setVisible(true);
             }
         });
-        AssertJUnit.assertEquals("javax.swing.JFrame", driver.getTitle());
+        AssertJUnit.assertEquals("Enter The Text", driver.getTitle());
     }
 
     public void nonFrameDialogWindowUsesClassNameAsTitleOnLastResort() throws Throwable {
@@ -1538,22 +1537,4 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         }
     }
 
-    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
-                java.awt.Window window = new java.awt.Window(null);
-                window.setFocusableWindowState(true);
-                window.setName("awt-window");
-                window.setLayout(new BorderLayout());
-                TextField tf = new TextField(80);
-                tf.setText("Hello World");
-                window.add(tf);
-                tf.requestFocusInWindow();
-                window.pack();
-                window.setLocationRelativeTo(null);
-                window.setVisible(true);
-                System.out.println("JavaDriverTest.main(...).new Runnable() {...}.run(): " + window.isFocusableWindow() );
-            }
-        });
-    }
 }

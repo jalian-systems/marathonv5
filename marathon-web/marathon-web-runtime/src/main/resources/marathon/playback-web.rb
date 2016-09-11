@@ -228,7 +228,7 @@ class RubyMarathon < MarathonRuby
       }
       frames = []
       bmark.report("Finding iframes in main") {
-        frames = @webdriver.find_elements(:tag_name, 'iframe')
+        frames = @webdriver.find_elements(:css, 'iframe')
       }
       frames.each { |f|
         load_script_frame(f, window_container, [], bmark)
@@ -243,6 +243,7 @@ class RubyMarathon < MarathonRuby
 
   def load_script_frame(frame, parent_container, framestack, bmark)
     title = frame.attribute('title')
+    title = "<none>" unless title
     frame_identity = nil
     bmark.report("Getting objectIdentity for " + title) {
       frame_identity = @webdriver.execute_script("return $marathon.getObjectIdentity(arguments[0]);", frame)
@@ -266,7 +267,7 @@ class RubyMarathon < MarathonRuby
     }
     frames = []
     bmark.report("Finding iframes in " + title) {
-      frames = @webdriver.find_elements(:tag_name, 'iframe')
+      frames = @webdriver.find_elements(:css, 'iframe')
     }
     framestack.push(frame)
     frames.each { |f|

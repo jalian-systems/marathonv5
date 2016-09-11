@@ -72,6 +72,7 @@ public abstract class WebDriverProxyTest {
         AssertJUnit.assertEquals("joe_bumkin", value);
         value = (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].value;", pass);
         AssertJUnit.assertEquals("secret_words", value);
+        driver.findElement(By.cssSelector("input"));
     }
 
     protected void checkPlatform() {

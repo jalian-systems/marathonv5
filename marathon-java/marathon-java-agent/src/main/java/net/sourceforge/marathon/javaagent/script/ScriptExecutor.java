@@ -51,6 +51,8 @@ public class ScriptExecutor {
         cp.importPackage("java.lang.reflect.Array");
         CtClass helloClass = cp.makeClass(getClassName());
         CtMethod make = CtNewMethod.make(getMethodBody(args), helloClass);
+        if(!methodBody.endsWith(";"))
+            methodBody = methodBody + ";";
         make.insertBefore(methodBody);
         Logger.getLogger(ScriptExecutor.class.getName()).log(Level.INFO, "Method Body:\n" + methodBody);
         helloClass.addMethod(make);

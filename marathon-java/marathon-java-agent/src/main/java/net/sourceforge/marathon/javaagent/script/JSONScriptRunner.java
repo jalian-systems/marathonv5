@@ -69,6 +69,9 @@ public class JSONScriptRunner {
     public Object execute() {
         ScriptExecutor se = new ScriptExecutor(mode);
         try {
+            // YUK!!!
+            if(script.equals("return window.name"))
+                return null;
             return convertToJson(se.executeScript(script, args));
         } catch (Exception e) {
             throw new JavaAgentException("Script execution failed with an exception (" + e.getMessage() + ")", e);
