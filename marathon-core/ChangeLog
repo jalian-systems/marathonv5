@@ -1,3 +1,8 @@
+Marathon Version 4.2.2.0 (September 12 2016)
+
+1. Fixed: indexOfType() using type, but URP recorded using tag-name.
+2. Fixed: getTitle() returns first available label text if title is empty.
+
 Marathon Version 4.2.1.0 (June 30 2016)
 
 1. Fixed: execute_script printing the output instead of returning.
