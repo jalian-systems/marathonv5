@@ -104,7 +104,7 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
 
     private static String getTabNameFromIcon(JTabbedPane tp, int index) {
         Icon iconAt = tp.getIconAt(index);
-        if (iconAt == null || !(iconAt instanceof ImageIcon)) {
+        if (iconAt == null || !(iconAt instanceof ImageIcon) || ((ImageIcon) iconAt).getDescription() == null) {
             return "tabIndex-" + index;
         }
         String description = ((ImageIcon) iconAt).getDescription();
