@@ -89,4 +89,11 @@ public class RuntimeLauncherModel extends AbstractJavaDriverRuntimeLauncherModel
         return new ISubPropertiesLayout[] { new MainLayout(parent), new ClassPathLayout(parent) };
     }
 
+    @Override public String getLaunchErrorMessage() {
+        // @formatter:off
+        return
+            "Check the class path, main class name";
+        // @formatter:on
+    }
+
 }

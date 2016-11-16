@@ -55,7 +55,7 @@ public class TestRunner {
         Result result = runner.run(suite);
         MarathonTestCase.reset();
         if (runReportDir != null) {
-            AllureUtils.launchAllure(resultsDir, new File(runReportDir, "reports").getAbsolutePath());
+            AllureUtils.launchAllure(false, resultsDir, new File(runReportDir, "reports").getAbsolutePath());
         }
         return result;
     }

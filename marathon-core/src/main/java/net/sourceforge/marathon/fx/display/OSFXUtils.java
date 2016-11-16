@@ -32,7 +32,7 @@ public class OSFXUtils {
             sb.append("Ctrl+");
         }
         if (event.isMetaDown()) {
-            sb.append("Command+");
+            sb.append("Meta+");
         }
         if (event.isAltDown()) {
             sb.append("Alt+");
@@ -77,7 +77,7 @@ public class OSFXUtils {
             return "Shift";
         }
         if (keycode == KeyCode.META) {
-            return "Command";
+            return "Meta";
         }
         if (keycode == KeyCode.SPACE) {
             return "Space";
@@ -132,7 +132,7 @@ public class OSFXUtils {
             sb.append("Ctrl+");
         }
         if (event.isMetaDown()) {
-            sb.append("Command+");
+            sb.append("Meta+");
         }
         if (event.isAltDown()) {
             sb.append("Alt+");

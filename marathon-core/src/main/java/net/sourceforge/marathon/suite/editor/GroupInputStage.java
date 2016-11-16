@@ -38,7 +38,8 @@ public class GroupInputStage extends ModalDialog<GroupInputInfo> {
     private GroupType type;
 
     public GroupInputStage(GroupType type) {
-        super("New " + type.fileType() + " File");
+        super("New " + type.fileType() + " File", "Create a new " + type.fileType().toLowerCase() + " to store tests.",
+                type.dockIcon());
         this.type = type;
     }
 

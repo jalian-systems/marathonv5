@@ -33,7 +33,7 @@ public class UnSavedHistoryStage extends RunHistoryStage {
     private Button removeAllButton = FXUIUtils.createButton("clearUnSavedHistory", "Clear All", false, "Clear all");
 
     public UnSavedHistoryStage(RunHistoryInfo runHistoryInfo) {
-        super("Unsaved History", runHistoryInfo, true);
+        super("Unsaved History", runHistoryInfo, true, "History of test runs", null);
         initComponents();
     }
 
@@ -63,7 +63,7 @@ public class UnSavedHistoryStage extends RunHistoryStage {
     }
 
     private void onSave() {
-        MarathonInputStage testNameStage = new MarathonInputStage("Test name") {
+        MarathonInputStage testNameStage = new MarathonInputStage("Test name", "Save the current test run", FXUIUtils.getIcon("testrunner")) {
 
             @Override protected String validateInput(String name) {
                 String errorMessage = null;
@@ -84,6 +84,8 @@ public class UnSavedHistoryStage extends RunHistoryStage {
         TestNameHandler testNameHandler = new TestNameHandler();
         testNameStage.setInputHandler(testNameHandler);
         testNameStage.getStage().showAndWait();
+        if(testNameHandler.getTestName() == null)
+            return;
         JSONObject jsonObject = removeAndGetTest("unsaved");
         if (jsonObject != null) {
             JSONArray history = TestRunnerHistory.getInstance().getHistory("favourites");
@@ -131,7 +133,7 @@ public class UnSavedHistoryStage extends RunHistoryStage {
     }
 
     @Override protected String getRemeberedCount() {
-        return Preferences.instance().getRememberedRunCount() + "";
+        return Preferences.instance().getValue("testrunner", "remember-count", 10) + "";
     }
 
     @Override protected void addButtonsToVerticalButtonBar() {
@@ -139,6 +141,6 @@ public class UnSavedHistoryStage extends RunHistoryStage {
     }
 
     @Override protected void saveRememberedCount() {
-        Preferences.instance().setRememberedRunCount(Integer.parseInt(countField.getText()));
+        Preferences.instance().setValue("testrunner", "remember-count", Integer.parseInt(countField.getText()));
     }
 }

@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +30,7 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -354,16 +356,25 @@ public class JavaFXAgent implements IJavaFXAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getScreenShot()
      */
     @Override public byte[] getScreenShot() throws IOException {
-        Stage window = targetLocator.getTopContainer().getWindow();
-        Parent root = window.getScene().getRoot();
-        WritableImage image = root.snapshot(new SnapshotParameters(), null);
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", baos);
-            return baos.toByteArray();
-        } catch (IOException e) {
-            return new byte[0];
-        }
+        List<byte[]> bytes = new ArrayList<>();
+        Platform.runLater(() -> {
+            Stage window = targetLocator.getFocusedWindow().getWindow();
+            Parent root = window.getScene().getRoot();
+            WritableImage image = root.snapshot(new SnapshotParameters(), null);
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", baos);
+                bytes.add(baos.toByteArray());
+            } catch (IOException e) {
+                bytes.add(new byte[0]);
+            }
+        });
+        new Wait("Waiting for screen shot") {
+            @Override public boolean until() {
+                return bytes.size() > 0;
+            }
+        };
+        return bytes.get(0);
     }
 
     /*

@@ -660,11 +660,17 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         errorMsgLabel.setVisible(false);
         console.clear();
         TreeItem<Test> root = testTree.getRoot();
+        resetTestState(root);
         if (root != null) {
             Test testSuite = root.getValue();
             progressBar.reset(testSuite.countTestCases());
             doRunTest(testSuite);
         }
+    }
+
+    private void resetTestState(TreeItem<Test> root) {
+        root.getChildren().stream().forEach((test) -> ((TestTreeItem) test).setState(TestTreeItem.State.NORMAL));
+        testTree.refresh();
     }
 
     public void onManageHistory() {

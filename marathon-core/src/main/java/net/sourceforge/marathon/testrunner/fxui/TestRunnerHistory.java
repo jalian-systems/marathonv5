@@ -54,7 +54,7 @@ public class TestRunnerHistory {
 
     private void removeExceeding() {
         JSONArray his = getHistory("unsaved");
-        if (his.length() > Preferences.instance().getRememberedRunCount()) {
+        if (his.length() > Preferences.instance().getValue("testrunner", "remember-count", 10)) {
             his.remove(0);
         }
     }

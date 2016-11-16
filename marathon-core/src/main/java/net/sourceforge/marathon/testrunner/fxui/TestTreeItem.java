@@ -61,10 +61,10 @@ public class TestTreeItem extends TreeItem<Test> {
 
     public void setState(State state) {
         if (!isLeaf()) {
-            if (state == State.SUCCESS || state == State.FAILURE || state == State.ERROR) {
+            if (state == State.SUCCESS || state == State.FAILURE || state == State.ERROR || state == State.NORMAL) {
                 if (this.state == null || this.state == State.NORMAL || this.state == State.SUCCESS) {
                     this.state = state;
-                } else if (this.state == State.FAILURE && state != State.SUCCESS) {
+                } else if ((this.state == State.ERROR || this.state == State.FAILURE) && state != State.SUCCESS) {
                     this.state = state;
                 }
             }

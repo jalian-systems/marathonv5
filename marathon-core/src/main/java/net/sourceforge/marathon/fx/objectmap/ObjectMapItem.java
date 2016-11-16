@@ -178,7 +178,14 @@ public class ObjectMapItem implements IObjectMapTreeItem {
                     return properties;
                 }
             };
-            new Yaml(representer, options).dump(data, new FileWriter(getOMapFile()));
+            FileWriter writer = null;
+            try{
+            writer = new FileWriter(getOMapFile());
+            new Yaml(representer, options).dump(data, writer);
+            }finally{
+                if(writer != null)
+                    writer.close();
+            }
             for (OMapContainer container : data) {
                 container.save();
             }

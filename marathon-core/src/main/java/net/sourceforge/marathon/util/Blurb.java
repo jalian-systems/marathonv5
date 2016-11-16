@@ -83,7 +83,7 @@ public abstract class Blurb {
         private ButtonBar buttonBar = new ButtonBar();
 
         public BlurbStage(BlurbInfo blurbInfo) {
-            super(blurbInfo.getTitle());
+            super(blurbInfo.getTitle(), null, null);
             this.blurbInfo = blurbInfo;
             initComponents();
         }

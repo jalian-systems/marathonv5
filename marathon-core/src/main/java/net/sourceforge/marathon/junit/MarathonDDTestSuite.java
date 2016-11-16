@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.marathon.resource.Project;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
@@ -68,4 +69,9 @@ public class MarathonDDTestSuite extends TestSuite implements Test {
     public File getFile() {
         return file;
     }
+
+    @Override public void setName(String name) {
+        Project.setTestName(name, file);
+    }
+
 }

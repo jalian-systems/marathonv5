@@ -34,7 +34,7 @@ public class CreditsStage extends ModalDialog<String> {
     private ButtonBar buttonBar = new ButtonBar();
 
     public CreditsStage() {
-        super("Credits");
+        super("Credits", "Without the following projects, Marathon would not have been possible", FXUIUtils.getIcon("credits"));
         initComponents();
     }
 
@@ -67,37 +67,55 @@ public class CreditsStage extends ModalDialog<String> {
         String prefix = "<html><body>" +
                             "<center><h1>Credits</h1></center>" +
                             "<p><table width=\"100%\" height=\"60%\" border=\"1\" align=\"center\"  cellspacing=\"0\">" +
-                            "<tr bgcolor=\"#c3d9ff\">" + "<th>Package</th>" + "<th>Blurb</th>" + "<th>Web Site</th>" + "</tr>";
+                            "<tr bgcolor=\"#c3d9ff\">" + "<th>Project</th>" + "<th>Blurb</th>" + "</tr>";
 
         String suffix =      "</table></p>" +
                         "</body></html>";
         // @formatter:on
         StringBuffer content = new StringBuffer(prefix);
+        content.append(getCredit("Selenium", "Selenium automates browsers. We added the Java application support to it.",
+                "http://www.seleniumhq.org"));
+        content.append(getCredit("JRuby", "The Ruby Programming Language on the JVM", "http://jruby.org"));
+        content.append(getCredit("JUnit", "The original Java unit testing framework", "http://www.junit.org"));
+        content.append(getCredit("Javassist",
+                "Java bytecode engineering toolkit, allows us to include execute_script and execute_async_script for Java drivers.",
+                "http://jboss-javassist.github.io/javassist/"));
+        content.append(getCredit("JLine", "JLine is a Java library for handling console input. ScriptConsole.. enuf said.",
+                "http://jline.sourceforge.net"));
+        content.append(getCredit("opencsv", "Opencsv is a very simple csv (comma-separated values) parser library for Java. ",
+                "http://opencsv.sourceforge.net"));
+        content.append(getCredit("Gradle", "A powerful build system for the JVM.", "https://gradle.org"));
+        content.append(getCredit("SnakeYAML", "SnakeYAML is a YAML processor for the Java Virtual Machine.",
+                "https://bitbucket.org/asomov/snakeyaml"));
+        content.append(getCredit("TestNG",
+                "TestNG is a testing framework inspired from JUnit and NUnit but introducing some new functionalities that make it more powerful and easier to use,",
+                "http://testng.org/doc/index.html"));
+        content.append(getCredit("Allure",
+                "Allure - an open-source framework designed to create test execution reports clear to everyone in the team.",
+                "http://allure.qatools.ru"));
+        content.append(getCredit("Java-WebSocket", "A barebones WebSocket client and server implementation written in 100% Java.",
+                "https://github.com/TooTallNate/Java-WebSocket"));
+        content.append(
+                getCredit("NanoHttpd", "Tiny, easily embeddable HTTP server in Java.", "https://github.com/NanoHttpd/nanohttpd"));
+        content.append(getCredit("Commons IO", "Commons IO is a library of utilities to assist with developing IO functionality.",
+                "http://commons.apache.org/proper/commons-io/"));
         content.append(getCredit("Eclipse",
                 "Great platform to work with.<br>The navigator and junit interfaces as well as most of the icons are picked up from eclipse package. Hopefully, we will have Marathon as eclipse package sometime",
                 "http://eclipse.org"));
-        content.append(getCredit("JRuby",
-                "JRuby is an 100% pure-Java implementation of the Ruby programming language.<br>Marathon Ruby scripting model uses JRuby.",
-                "http://jruby.codehaus.org"));
-        content.append(getCredit("jEdit",
-                "Programmer's text editor.<br>Marathon uses jEdit's excellent text area component to provide a comprehensive editing environment.",
-                "http://www.jedit.org"));
-        content.append(getCredit("Looks and Forms", "The good looks of Marathon are derived from these two packages from jgoodies.",
-                "http://www.jgoodies.com"));
-        content.append(getCredit("JUnit", "The original Java unit testing framework", "http://www.junit.org"));
-        content.append(getCredit("VL Docking",
-                "VLDocking Framework is a set of Java Swing Components providing a simple and coherent API to bring docking capabilities to any Swing application. "
-                        + "<br>VLDocking Framework (www.vlsolutions.com), is the property of VLSolutions, and is distributed under the terms of its commercial license. It can only be used in the context of the marathon project."
-                        + "<br>For any other usage, please refer to the open source (GPL compatible) version available from VLSolutions web site.",
-                "http://www.vlsolutions.com"));
+        content.append(getCredit("Guice",
+                "Guice (pronounced 'juice') is a lightweight dependency injection framework for Java 6 and above, which allows us to use the same code base for both Marathon and MarathonITE",
+                "https://github.com/google/guice"));
+        content.append(getCredit("Ace",
+                "The high performance code editor for the web, used in Marathon for displaying text content.",
+                "https://ace.c9.io/#nav=about"));
+
         content.append(suffix);
         return content.toString();
     }
 
     private String getCredit(String name, String blurb, String website) {
-        String string = "<tr>" + "<td valign=\"center\" style=\"font-size:15px\" nowrap >" + name + "</td>"
-                + "<td width=\"280px\" style=\"font-size:15px\" valign=\"center\" nowrap pre>" + blurb + "</td>"
-                + "<td valign=\"center\" style=\"font-size:15px\" nowrap><a href=\"" + website + "\">" + website + "</a>" + "</tr>";
+        String string = "<tr>" + "<td width=\"280px\" valign=\"center\" style=\"font-size:15px\" nowrap><a href=\"" + website + "\">" + name
+                + "</a>" + "<td style=\"font-size:15px\" valign=\"center\" >" + blurb + "</td>" + "</tr>";
         return string;
     }
 

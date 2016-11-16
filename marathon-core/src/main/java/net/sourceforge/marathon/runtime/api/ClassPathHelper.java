@@ -20,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 
+import org.openqa.selenium.Platform;
+
 public class ClassPathHelper {
 
     public static String getClassPath(Class<?> klass) {
@@ -56,7 +58,7 @@ public class ClassPathHelper {
                 resource = resource.substring(0, index - 1);
             }
         }
-        if (OSUtils.isWindowsOS()) {
+        if (Platform.getCurrent().is(Platform.WINDOWS)) {
             resource = resource.substring(1);
         }
         return resource.replace('/', File.separatorChar);

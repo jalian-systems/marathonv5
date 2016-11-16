@@ -257,7 +257,7 @@ public class RubyScript implements IScript {
         }
     }
 
-    @Override public void exec(String function) {
+    @Override public synchronized void exec(String function) {
         try {
             Matcher matcher = FUNCTION_PATTERN.matcher(function);
             if (matcher.matches()) {
@@ -323,7 +323,7 @@ public class RubyScript implements IScript {
         return new FixtureRunner(shouldRunFixture, playbackThread);
     }
 
-    @Override public String evaluate(String code) {
+    @Override public synchronized String evaluate(String code) {
         try {
             return interpreter.evalScriptlet(code).inspect().toString();
         } catch (Throwable t) {
@@ -427,7 +427,7 @@ public class RubyScript implements IScript {
         }
     }
 
-    @Override public void onWSConnectionClose(int port) {
+    @Override public synchronized void onWSConnectionClose(int port) {
         if (runtime != null) {
             runtime.onWSConnectionClose(port);
         }

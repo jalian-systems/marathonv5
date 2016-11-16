@@ -15,23 +15,37 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.api;
 
+import javafx.scene.Node;
+
 public class FileSelectionInfo {
 
     private String title;
     private String fileType;
     private String[] extensionFilters;
     private String selectedFileName;
+    private String subTitle;
+    private Node icon;
 
-    public FileSelectionInfo(String title, String fileType, String[] extensionFilters) {
+    public FileSelectionInfo(String title, String fileType, String[] extensionFilters, String subTitle, Node icon) {
         this.title = title;
         this.fileType = fileType;
         this.extensionFilters = extensionFilters;
+        this.subTitle = subTitle;
+        this.icon = icon;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public Node getIcon() {
+        return icon;
+    }
+    
+    public String getSubTitle() {
+        return subTitle;
+    }
+    
     public String getFileType() {
         return fileType;
     }

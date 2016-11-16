@@ -53,7 +53,6 @@ public class DockingDesktop extends BorderPane {
         if (container != null) {
             container.remove(dockable);
         }
-        dockable.setContainer(null);
     }
 
     public void unregisterDockable(Dockable dockable) {
@@ -131,13 +130,13 @@ public class DockingDesktop extends BorderPane {
     public JSONObject saveDockableState() {
         JSONArray a = new JSONArray();
         DockableState[] dockables = getDockables();
+        Path projectPath = Constants.getProjectPath();
         for (DockableState dockableState : dockables) {
             String path = dockableState.getDockable().getDockKey().getKey();
             if (path.contains(File.separator)) {
-                Path projectPath = Constants.getProjectPath();
                 Path filePath = new File(path).toPath().toAbsolutePath();
                 Path relativize = projectPath.relativize(filePath);
-                a.put(relativize.toString());
+                a.put(relativize.toString().replace('\\', '/'));
             } else {
                 a.put(path);
             }

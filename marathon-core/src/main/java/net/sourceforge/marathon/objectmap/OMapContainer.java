@@ -437,7 +437,14 @@ public class OMapContainer implements IObjectMapTreeItem {
                 return properties;
             }
         };
-        new Yaml(representer, options).dump(getUsed(components), new FileWriter(file));
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(file);
+            new Yaml(representer, options).dump(getUsed(components), writer);
+        } finally {
+            if (writer != null)
+                writer.close();
+        }
     }
 
     private List<OMapComponent> getUsed(List<OMapComponent> components) {

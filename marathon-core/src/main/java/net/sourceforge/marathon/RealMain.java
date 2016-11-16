@@ -40,7 +40,6 @@ package net.sourceforge.marathon;
  *******************************************************************************/
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.junit.runner.Result;
@@ -72,6 +70,9 @@ import net.sourceforge.marathon.junit.textui.TestRunner;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.MPFUtils;
 import net.sourceforge.marathon.runtime.api.NullLogger;
+import net.sourceforge.marathon.runtime.api.OSUtils;
+import net.sourceforge.marathon.runtime.api.Preferences;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 
 /**
@@ -119,7 +120,7 @@ public class RealMain {
         }
         processMPF(projectDir);
         initializeInjector();
-        setLogConfiguration(projectDir);
+        OSUtils.setLogConfiguration(projectDir);
         RuntimeLogger.setRuntimeLogger(new NullLogger());
         cleanResultFolder();
         TestRunner aTestRunner = createTestRunner();
@@ -170,22 +171,10 @@ public class RealMain {
         }
         processMPF(projectDir);
         initializeInjector();
-        setLogConfiguration(projectDir);
+        OSUtils.setLogConfiguration(projectDir);
         Injector injector = GuiceInjector.get();
         final DisplayWindow display = injector.getInstance(DisplayWindow.class);
         display.setVisible(true);
-    }
-
-    private static void setLogConfiguration(String projectDir) {
-        File logconfig = new File(projectDir, "logging.properties");
-        if (logconfig.exists()) {
-            try {
-                System.setProperty("java.util.logging.config.file", logconfig.getAbsolutePath());
-                LogManager.getLogManager().readConfiguration();
-            } catch (SecurityException e) {
-            } catch (IOException e) {
-            }
-        }
     }
 
     private static void initializeInjector() {
@@ -219,7 +208,7 @@ public class RealMain {
      * @return MPF selected by the user. Can be null.
      */
     private static String getProjectDirectory(final String arg) {
-        if (arg != null && !isValidProjectDirectory(new File(arg))) {
+        if (arg != null && !ProjectFile.isValidProjectDirectory(new File(arg))) {
             argProcessor.help("`" + arg + "`Please provide a Marathon project folder.");
         }
         if (arg != null) {
@@ -243,11 +232,8 @@ public class RealMain {
         if (selectedProjects.size() == 0) {
             return null;
         }
+        Preferences.resetInstance();
         return selectedProjects.get(0);
-    }
-
-    private static boolean isValidProjectDirectory(File file) {
-        return file.exists() && file.isDirectory() && new File(file, Constants.PROJECT_FILE).exists();
     }
 
     /**
@@ -258,14 +244,11 @@ public class RealMain {
      *            name does not end with it.
      */
     public static void processMPF(String projectDir) {
-        FileInputStream input = null;
         try {
             File file = new File(projectDir);
             projectDir = file.getCanonicalPath();
             System.setProperty(Constants.PROP_PROJECT_DIR, projectDir);
-            input = new FileInputStream(new File(projectDir, Constants.PROJECT_FILE));
-            Properties mpfProps = new Properties();
-            mpfProps.load(input);
+            Properties mpfProps = ProjectFile.getProjectProperties();
             checkForScriptModel(projectDir, mpfProps);
             MPFUtils.convertPathChar(mpfProps);
             MPFUtils.replaceEnviron(mpfProps);
@@ -278,14 +261,6 @@ public class RealMain {
         } catch (IOException e) {
             FXUIUtils.showMessageDialog(null, "Unable to read Marathon Project File " + e.getMessage(), "Error", AlertType.ERROR);
             System.exit(1);
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         String userDir = System.getProperty(Constants.PROP_PROJECT_DIR);
         if (userDir != null && !userDir.equals("") && System.getProperty("user.dir") == null) {

@@ -162,7 +162,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             });
             setOnDragOver((e) -> {
                 Resource resource = getItem();
-                if (resource.droppable(e.getDragboard())) {
+                if (resource != null && resource.droppable(e.getDragboard())) {
                     e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 }
             });
@@ -174,7 +174,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         }
 
         @Override public void startEdit() {
-            if (!getItem().canRename()) {
+            Resource resource = getItem();
+            if (resource == null || !resource.canRename()) {
                 return;
             }
             super.startEdit();
@@ -385,11 +386,11 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         m.setOnAction((event) -> handler.play(source, selectedItems.stream().map(TreeItem::getValue).collect(Collectors.toList())));
         contextMenu.getItems().add(m);
         m = FXUIUtils.createMenuItem("slowPlay", "Slow Play", "");
-        m.setDisable(item == null || !item.canRun() || selectedItems.size() != 1);
+        m.setDisable(item == null || !item.canPlaySingle() || selectedItems.size() != 1);
         m.setOnAction((event) -> handler.slowPlay(source, item));
         contextMenu.getItems().add(m);
         m = FXUIUtils.createMenuItem("debug", "Debug", "");
-        m.setDisable(item == null || !item.canRun() || selectedItems.size() != 1);
+        m.setDisable(item == null || !item.canPlaySingle() || selectedItems.size() != 1);
         m.setOnAction((event) -> handler.debug(source, item));
         contextMenu.getItems().add(m);
         contextMenu.getItems().add(new SeparatorMenuItem());
@@ -465,7 +466,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         } else {
             file = resource.getFilePath().getParent().toFile();
         }
-        File newFile = FXUIUtils.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new folder", file, true));
+        File newFile = FXUIUtils.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new folder", file, true),
+                "Create a folder with the given name", FXUIUtils.getIcon("fldr_obj"));
         if (newFile == null) {
             return;
         }
@@ -488,7 +490,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         } else {
             file = resource.getFilePath().getParent().toFile();
         }
-        File newFile = FXUIUtils.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new file", file, true));
+        File newFile = FXUIUtils.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new file", file, true),
+                "Create a new file with the given name", FXUIUtils.getIcon("file_obj"));
         if (newFile == null) {
             return;
         }

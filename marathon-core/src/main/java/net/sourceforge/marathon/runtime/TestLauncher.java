@@ -55,21 +55,12 @@ public class TestLauncher implements ITestLauncher {
         }
         try {
             proxy = launcherModel.createDriver(ps, -1, writerOutputStream);
+            messagePS.println("Successfully connected.\nYou can close this window now.\n");
+            messagePS.flush();
         } catch (Throwable t) {
             t.printStackTrace(writerOutputStream);
             writerOutputStream.flush();
-            messagePS
-                    .println("If you are using webstart/applet launchers this can happen if the policy files are not set properly");
-            messagePS.println(
-                    "Add the following lines to your policy file in <javahome>/lib/security/javaws.policy (see the above output for the java.home property)");
-            messagePS.println(
-                    "Add the following lines to your policy file in <javahome>/lib/security/java.policy (see the above output for the java.home property)");
-            messagePS.println("grant codeBase \"${marathon.agent}\" {");
-            messagePS.println("    permission java.security.AllPermission;");
-            messagePS.println("};");
-            messagePS.println("grant codeBase \"${marathon.recorder}\" {");
-            messagePS.println("    permission java.security.AllPermission;");
-            messagePS.println("};");
+            messagePS.println(launcherModel.getLaunchErrorMessage());
             messagePS.flush();
         }
         return selection;

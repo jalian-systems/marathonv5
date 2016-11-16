@@ -34,4 +34,6 @@ public interface IWebDriverRuntimeLauncherModel extends IRuntimeLauncherModel {
 
     public abstract boolean confirmConfiguration();
 
+    public abstract String getLaunchErrorMessage();
+
 }

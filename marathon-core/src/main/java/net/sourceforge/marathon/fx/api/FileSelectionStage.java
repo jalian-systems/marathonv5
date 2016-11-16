@@ -44,7 +44,7 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
     private IFileSelectionInfoHandler fileSelectionInfoHandler;
 
     public FileSelectionStage(FileSelectionInfo fileSelectionInfo) {
-        super(fileSelectionInfo.getTitle());
+        super(fileSelectionInfo.getTitle(), fileSelectionInfo.getSubTitle(), fileSelectionInfo.getIcon());
         this.fileSelectionInfo = fileSelectionInfo;
     }
 

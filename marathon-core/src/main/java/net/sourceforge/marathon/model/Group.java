@@ -74,6 +74,44 @@ public class Group {
                 return true;
             }
 
+            @Override public String fileCommentHeader() {
+                // @formatter:off
+                return  
+                    "# You can assign one or more tests to a suite. The suite file\n" +
+                    "# is in JSON format.\n" +
+                    "# Example:\n" +
+                    "# {\n" + 
+                    "#   \"tests\": [\n" + 
+                    "#     {\n" + 
+                    "#       \"name\": \"<test-name>\",\n" +
+                    "#       \"type\": \"TEST\"\n" + 
+                    "#     },\n" + 
+                    "#     {\n" + 
+                    "#       \"name\": \"<suite-file>\",\n" +
+                    "#       \"type\": \"SUITE\"\n" + 
+                    "#     },\n" + 
+                    "#     {\n" + 
+                    "#       \"name\": \"<feature-file>\",\n" +
+                    "#       \"type\": \"FEATURE\"\n" + 
+                    "#     },\n" + 
+                    "#     {\n" + 
+                    "#       \"name\": \"<story-file>\",\n" +
+                    "#       \"type\": \"STORY\"\n" + 
+                    "#     },\n" + 
+                    "#     {\n" + 
+                    "#       \"name\": \"<issue-file>\",\n" +
+                    "#       \"type\": \"ISSUE\"\n" + 
+                    "#     }\n" + 
+                    "#   ],\n" + 
+                    "#   \"name\": \"<suite-name>\"\n" +
+                    "# }\n" + 
+                    "# Once you assign tests, features, stories, issues or other stories to a suite\n" +
+                    "# you can run them from the navigator or from command line batch mode.\n" +
+                    "#\n" +      
+                    "# marathonite -batch <project-directory> +<suite-name|issue-file>\n\n";
+                // @formatter:on
+            }
+
         },
         FEATURE("Feature", Constants.getFeatureDirectory(), ".feature", "Features", "Show All Features", "tfeature",
                 EditorType.FEATURE) {
@@ -87,6 +125,33 @@ public class Group {
                     }
                 }
                 return true;
+            }
+
+            @Override public String fileCommentHeader() {
+                // @formatter:off
+                return
+                    "# You can assign one or more tests to a feature. The feature file\n" +
+                    "# is in JSON format.\n" +
+                    "# Example:\n" +
+                    "#    {\n" +
+                    "#      \"tests\": [\n" +
+                    "#        {\n" +
+                    "#          \"name\": \"<name-of-the-test>\",\n" +
+                    "#          \"type\": \"TEST\"\n" +
+                    "#        },\n" +
+                    "#        {\n" +
+                    "#          \"name\": \"<name-of-the-test-2>\",\n" +
+                    "#          \"type\": \"TEST\"\n" +
+                    "#        }\n" +
+                    "#      ],\n" +
+                    "#      \"name\": \"<Name of the Feature>\"\n" +
+                    "#    }\n" +
+                    "#\n" +
+                    "# Once you assign tests to a feature you can run them from the navigator\n" +
+                    "# or from command line batch mode.\n" +
+                    "#\n" +
+                    "# marathonite -batch <project-directory> @<feature-name|feature-file>\n\n";
+                // @formatter:on
             }
 
         },
@@ -103,6 +168,33 @@ public class Group {
                 return true;
             }
 
+            @Override public String fileCommentHeader() {
+                // @formatter:off
+                return
+                    "# You can assign one or more tests to a story. The story file\n" +
+                    "# is in JSON format.\n" +
+                    "# Example:\n" +
+                    "#    {\n" +
+                    "#      \"tests\": [\n" +
+                    "#        {\n" +
+                    "#          \"name\": \"<name-of-the-test>\",\n" +
+                    "#          \"type\": \"TEST\"\n" +
+                    "#        },\n" +
+                    "#        {\n" +
+                    "#          \"name\": \"<name-of-the-test-2>\",\n" +
+                    "#          \"type\": \"TEST\"\n" +
+                    "#        }\n" +
+                    "#      ],\n" +
+                    "#      \"name\": \"<Name of the Story>\"\n" +
+                    "#    }\n" +
+                    "#\n" +
+                    "# Once you assign tests to a story you can run them from the navigator\n" +
+                    "# or from command line batch mode.\n" +
+                    "#\n" +
+                    "# marathonite -batch <project-directory> #<story-name|story-file>\n\n";
+                // @formatter:on
+            }
+
         },
         ISSUE("Issue", Constants.getIssueDirectory(), ".issue", "Issues", "Show All Issues", "tissue", EditorType.ISSUE) {
             @Override public boolean droppable(List<File> files, Path self) {
@@ -115,6 +207,33 @@ public class Group {
                     }
                 }
                 return true;
+            }
+
+            @Override public String fileCommentHeader() {
+                // @formatter:off
+                return
+                    "# You can assign one or more tests to a issue. The issue file\n" +
+                    "# is in JSON format.\n" +
+                    "# Example:\n" +
+                    "#    {\n" +
+                    "#      \"tests\": [\n" +
+                    "#        {\n" +
+                    "#          \"name\": \"<name-of-the-test>\",\n" +
+                    "#          \"type\": \"TEST\"\n" +
+                    "#        },\n" +
+                    "#        {\n" +
+                    "#          \"name\": \"<name-of-the-test-2>\",\n" +
+                    "#          \"type\": \"TEST\"\n" +
+                    "#        }\n" +
+                    "#      ],\n" +
+                    "#      \"name\": \"<Issue ID>\"\n" +
+                    "#    }\n" +
+                    "#\n" +
+                    "# Once you assign tests to a issue you can run them from the navigator\n" +
+                    "# or from command line batch mode.\n" +
+                    "#\n" +
+                    "# marathonite -batch <project-directory> !<issue-id|issue-file>\n\n";
+                // @formatter:on
             }
 
         };
@@ -168,6 +287,8 @@ public class Group {
             return editorType;
         }
 
+        public abstract String fileCommentHeader();
+
     }
 
     private String name;
@@ -179,11 +300,7 @@ public class Group {
     private Group(File file) throws IOException {
         this.path = file.getCanonicalFile().toPath();
         String text = new String(Files.readAllBytes(this.path), Charset.defaultCharset());
-        try {
-            init(new JSONObject(text));
-        } catch (JSONException e) {
-            Logger.getLogger(Group.class.getName()).warning("Group not in JSON format.");
-        }
+        init(new JSONObject(text));
     }
 
     private Group(String name) {
@@ -249,7 +366,7 @@ public class Group {
             for (File file : list) {
                 try {
                     groups.add(new Group(file));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -317,7 +434,7 @@ public class Group {
         }
         Group group = new Group(name);
         try {
-            Files.write(path, group.toJSONString().getBytes());
+            Files.write(path, (type.fileCommentHeader() + group.toJSONString()).getBytes());
             return new Group(path.toFile());
         } catch (IOException e) {
             return null;

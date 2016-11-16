@@ -16,7 +16,6 @@
 package net.sourceforge.marathon.fx.projectselection;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -30,6 +29,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.MPFUtils;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 import net.sourceforge.marathon.runtime.fx.api.IPropertiesLayout;
 
 public class MPFConfigurationInfo {
@@ -100,12 +100,7 @@ public class MPFConfigurationInfo {
             Properties saveProps = getProperties(layouts);
             copyMarathonDirProperties(saveProps);
             saveProps.remove(Constants.PROP_PROJECT_DIR);
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(projectDir, Constants.PROJECT_FILE));
-            try {
-                saveProps.store(fileOutputStream, "Marathon Project File");
-            } finally {
-                fileOutputStream.close();
-            }
+            ProjectFile.updateProperties(projectDir, saveProps);
         } catch (RuntimeException e) {
             FXUIUtils.showMessageDialog(null, "Can't store the settings: " + e.getMessage(), "Error", AlertType.INFORMATION);
             return null;

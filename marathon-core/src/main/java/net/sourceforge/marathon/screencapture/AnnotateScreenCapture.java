@@ -38,7 +38,7 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
     private boolean isSaved = false;
 
     public AnnotateScreenCapture(File is, boolean edit) throws FileNotFoundException, IOException {
-        super("Annotate Screen Capture");
+        super("Annotate Screen Capture", "Annotate the screen image and save it in the report", FXUIUtils.getIcon("screencapture"));
         this.edit = edit;
         imagePanel = new ImagePanel(is, edit);
         initComponents();

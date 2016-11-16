@@ -15,8 +15,6 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -24,6 +22,7 @@ import java.util.Properties;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.ApplicationLayout;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public class FixtureStageInfo {
 
@@ -80,10 +79,7 @@ public class FixtureStageInfo {
 
     public void setProperties() {
         try {
-            FileInputStream fileInputStream = new FileInputStream(
-                    new File(System.getProperty(Constants.PROP_PROJECT_DIR), Constants.PROJECT_FILE));
-            Properties properties = new Properties();
-            properties.load(fileInputStream);
+            Properties properties = ProjectFile.getProjectProperties();
             properties.setProperty(Constants.PROP_PROJECT_DIR, System.getProperty(Constants.PROP_PROJECT_DIR));
             applicationLayout.setProperties(properties);
         } catch (IOException e) {

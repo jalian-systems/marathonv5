@@ -76,10 +76,6 @@ public class Constants {
         return new File(p);
     }
 
-    static {
-        PROJECT_FILE = System.getProperty("marathon.project.file", ".project");
-    }
-
     public static final String PROP_PROJECT_DIR = "marathon.project.dir";
     public static final String PROP_PROJECT_SCRIPT_MODEL = "marathon.project.script.model";
     public static final String PROP_IMAGE_CAPTURE_DIR = "marathon.image.capture.dir";
@@ -134,7 +130,6 @@ public class Constants {
     public static final String DIR_ISSUES = "Issues";
     public static final String DIR_TESTREPORTS = "TestReports";
     public static final String PROP_APPLICATION_LAUNCHTIME = "marathon.application.launchtime";
-    public static final String PROJECT_FILE;
     public static final String PROP_CUSTOM_CONTEXT_MENUS = "marathon.custom.context.menus";
     public static final String PROP_PROFILE_MAIN_CLASS = "marathon.runtime.profile.mainclass";
     public static final String LAUNCHER_MAIN_CLASS = "net.sourceforge.marathon.runtime.JavaRuntimeLauncher";
@@ -179,13 +174,16 @@ public class Constants {
     }
 
     public static String getFramework() {
-        String framework = System.getProperty(PROP_PROJECT_FRAMEWORK);
-        if (framework == null) {
-            IRuntimeLauncherModel launcherModel = LauncherModelHelper
-                    .getLauncherModel(System.getProperty(PROP_PROJECT_LAUNCHER_MODEL));
-            return launcherModel.getFramework();
-        }
-        return framework;
+        String launcher = System.getProperty(PROP_PROJECT_LAUNCHER_MODEL);
+        if (launcher == null)
+            return System.getProperty(PROP_PROJECT_FRAMEWORK);
+        IRuntimeLauncherModel launcherModel = LauncherModelHelper.getLauncherModel(launcher);
+        return launcherModel.getFramework();
+    }
+
+    public static String getFramework(String launcher) {
+        IRuntimeLauncherModel launcherModel = LauncherModelHelper.getLauncherModel(launcher);
+        return launcherModel.getFramework();
     }
 
     public static File getSuiteDirectory() {
@@ -251,5 +249,9 @@ public class Constants {
         Path issueDirectory = Constants.getIssueDirectory().toPath().toAbsolutePath();
         return file.isFile() && file.toPath().startsWith(issueDirectory) && file.getName().endsWith(".issue");
     }
+
+    public static final String AUT_WEBAPP_DEFAULT_BROWSER = "marathon.webapp.default.browser";
+    public static final String AUT_WEBAPP_BROWSER_OVERRIDE = "marathon.webapp.browser.override";
+
 
 }

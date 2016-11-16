@@ -130,6 +130,8 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private IWebdriverProxy webDriverProxy;
     private int recordingPort = -1;
     protected boolean reloadingScript;
+    private int recordingServerPort;
+    protected Exception reloadPosition;
 
     public WebDriverRuntime(IWebDriverRuntimeLauncherModel launcherModel) {
         this.launcherModel = launcherModel;
@@ -142,45 +144,55 @@ public class WebDriverRuntime implements IMarathonRuntime {
     }
 
     private int startRecordingServer() {
-        final int port = findPort();
-        recordingServer = new WSRecordingServer(port) {
+        recordingServerPort = findPort();
+        recordingServer = new WSRecordingServer(recordingServerPort) {
             @Override public void onClose(WebSocket conn, int code, String reason, boolean remote) {
                 super.onClose(conn, code, reason, remote);
-                scriptReloadScript(port);
+                scriptReloadScript(recordingServerPort);
             }
 
             @Override public void reloadScript(WebSocket conn, JSONObject query) {
-                scriptReloadScript(port);
+                scriptReloadScript(recordingServerPort);
             }
 
-            private void scriptReloadScript(final int port) {
-                if (!script.isDriverAvailable()) {
-                    destroy();
-                    return;
-                }
-                if (recordingServer.isRecording()) {
-                    synchronized (WebDriverRuntime.this) {
-                        if (WebDriverRuntime.this.reloadingScript) {
-                            return;
-                        }
-                    }
-                    Thread thread = new Thread(new Runnable() {
-                        @Override public void run() {
-                            synchronized (WebDriverRuntime.this) {
-                                WebDriverRuntime.this.reloadingScript = true;
-                            }
-                            script.onWSConnectionClose(port);
-                            synchronized (WebDriverRuntime.this) {
-                                WebDriverRuntime.this.reloadingScript = false;
-                            }
-                        }
-                    });
-                    thread.start();
-                }
-            }
         };
         recordingServer.start();
-        return port;
+        return recordingServerPort;
+    }
+
+    private void scriptReloadScript(final int port) {
+        if (!script.isDriverAvailable()) {
+            destroy();
+            return;
+        }
+        if (recordingServer.isRecording()) {
+            synchronized (WebDriverRuntime.this) {
+                if (WebDriverRuntime.this.reloadingScript) {
+                    Logger.getLogger(WebDriverRuntime.class.getName())
+                            .info("Script being reloaded already... Ignoring this reload request");
+                    new Exception("Script Reload called from here...").printStackTrace();
+                    reloadPosition.printStackTrace();
+                    return;
+                }
+            }
+            WebDriverRuntime.this.reloadPosition = new Exception("Reload going on from here...");
+            Thread thread = new Thread(new Runnable() {
+                @Override public void run() {
+                    synchronized (WebDriverRuntime.this) {
+                        if (recordingServer.isPaused() || WebDriverRuntime.this.reloadingScript)
+                            return;
+                        Logger.getLogger(WebDriverRuntime.class.getName()).info("About to reload script...");
+                        WebDriverRuntime.this.reloadingScript = true;
+                    }
+                    script.onWSConnectionClose(port);
+                    synchronized (WebDriverRuntime.this) {
+                        WebDriverRuntime.this.reloadingScript = false;
+                        Logger.getLogger(WebDriverRuntime.class.getName()).info("Script reloaded.");
+                    }
+                }
+            });
+            thread.start();
+        }
     }
 
     private int findPort() {
@@ -270,6 +282,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
             script.exec(function);
         } finally {
             recordingServer.resumeRecording();
+            script.onWSConnectionClose(recordingServerPort);
         }
     }
 

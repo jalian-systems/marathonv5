@@ -49,7 +49,7 @@ public class MarathonModuleStage extends ModalDialog<ModuleInfo> {
     private IModuleFunctionHandler moduleFunctionHandler;
 
     public MarathonModuleStage(ModuleInfo moduleInfo) {
-        super(moduleInfo.getTitle());
+        super(moduleInfo.getTitle(), null, null);
         this.moduleInfo = moduleInfo;
         initComponents();
     }

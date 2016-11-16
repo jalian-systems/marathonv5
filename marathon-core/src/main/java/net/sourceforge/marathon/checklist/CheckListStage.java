@@ -30,7 +30,7 @@ public class CheckListStage extends ModalDialog<CheckListFormNode> {
     private boolean dirty = false;
 
     public CheckListStage(CheckListFormNode checkListFormNode) {
-        super("");
+        super("", null, null);
         this.checkListFormNode = checkListFormNode;
     }
 

@@ -37,7 +37,7 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
     private String lastEvent;
     private String lastFile;
     private int lastLine;
-    private static final String RUBYJAVASUPPORT = System.getProperty("jruby.home") + "/lib/ruby/site_ruby/1.8/builtin";
+    private static final String RUBYJAVASUPPORT = System.getProperty("jruby.home");
 
     public RubyDebugger(Ruby pinterpreter) {
         this.interpreter = pinterpreter;
@@ -98,7 +98,7 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
     }
 
     private boolean shouldIgnore(String file) {
-        return file.equals("<string>") || file.startsWith(RUBYJAVASUPPORT);
+        return file.equals("<string>") || file.equals("<script>") || file.contains(RUBYJAVASUPPORT) || file.contains("uri:classloader");
     }
 
     private boolean repeat(String event, String file, Integer line) {

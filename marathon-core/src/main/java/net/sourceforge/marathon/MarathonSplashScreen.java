@@ -38,7 +38,7 @@ public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> 
     private static final Duration SPLASH_DISPLAY_TIME = new Duration(2000);
 
     public MarathonSplashScreen(VersionInfo versionInfo) {
-        super("");
+        super("", null, null);
         this.versionInfo = versionInfo;
     }
 

@@ -22,15 +22,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -44,9 +41,6 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     private MarathonPreferencesInfo preferenceInfo;
     private IPreferenceHandler preferenceHandler;
 
-    private ToolBar toolBar = new ToolBar();
-    private Label preferenceLabel1 = new Label("Preferences");
-    private Label preferenceLabel2 = new Label("Set marathon preferences");
     private TextField mouseTriggerField = new TextField();
     private Button mouseTriggerButton = new Button("Click here");
     private TextField keyTriggerField = new TextField("Ctrl+F8");
@@ -58,7 +52,7 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     private JSONObject prefs;
 
     public PreferencesStage(MarathonPreferencesInfo preferenceInfo) {
-        super("Preferences");
+        super("Preferences", "Set marathon preferences", FXUIUtils.getIcon("preferences"));
         this.preferenceInfo = preferenceInfo;
         this.prefs = preferenceInfo.getPreferences();
         initComponents();
@@ -76,7 +70,6 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
                 .addFormField("Hide MarathonITE options from view: ", doNotHideMarathonITEBlurbs);
         // @formatter:on
 
-        root.setTop(toolBar);
         root.setCenter(formPane);
         root.setBottom(buttonBar);
         return root;
@@ -88,10 +81,6 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     }
 
     private void initComponents() {
-        toolBar.setId("preference-toolbar");
-        preferenceLabel1.setId("preference-label-1");
-        preferenceLabel2.setId("preference-label-2");
-        toolBar.getItems().addAll(new VBox(preferenceLabel1, preferenceLabel2));
 
         mouseTriggerField.setEditable(false);
         mouseTriggerField.setText(FXContextMenuTriggers.getContextMenuModifiers());

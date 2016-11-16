@@ -49,7 +49,7 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
     private ApplicationLayout applicationLayout;
 
     public FixtureStage(FixtureStageInfo fixtureStageInfo) {
-        super("Create New Fixture");
+        super("New Fixture", "Create a new fixture to use with tests", FXUIUtils.getIcon("selectFixture"));
         this.fixtureStageInfo = fixtureStageInfo;
         initComponents();
     }

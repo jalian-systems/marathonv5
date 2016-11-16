@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -73,7 +71,7 @@ public class FXUIUtils {
         }
 
         public FontInfo(Font font, INamedCharacter namedChar) {
-            this(font, namedChar, Color.DARKBLUE);
+            this(font, namedChar, null);
         }
 
         public FontInfo(INamedCharacter namedChar) {
@@ -86,7 +84,8 @@ public class FXUIUtils {
             }
             Label label = new Label();
             label.setFont(font);
-            label.setTextFill(color);
+            if (color != null)
+                label.setTextFill(color);
             label.setText(namedChar.getChar() + "");
             return label;
         }
@@ -113,18 +112,18 @@ public class FXUIUtils {
         icoMoon = Font.loadFont(IcoMoon.getFontFile(), 16);
         materialDesignIcons = Font.loadFont(MaterialDesignIcons.getFontFile(), 16);
         fontIcons.put("ok", new FontInfo(fontAwesome, FontAwesome.ICON.CHECK, Color.DARKGREEN));
-        fontIcons.put("edit", new FontInfo(fontAwesome, FontAwesome.ICON.EDIT, Color.DARKBLUE));
-        fontIcons.put("new", new FontInfo(fontAwesome, FontAwesome.ICON.PLUS, Color.DARKBLUE));
+        fontIcons.put("edit", new FontInfo(fontAwesome, FontAwesome.ICON.EDIT));
+        fontIcons.put("new", new FontInfo(fontAwesome, FontAwesome.ICON.PLUS));
         fontIcons.put("cancel", new FontInfo(fontAwesome, FontAwesome.ICON.REMOVE, Color.ORANGERED));
-        fontIcons.put("browse", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FILE_TREE, Color.DARKBLUE));
-        fontIcons.put("newTestcase", new FontInfo(fontAwesome, FontAwesome.ICON.PLUS, Color.DARKBLUE));
+        fontIcons.put("browse", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FILE_TREE));
+        fontIcons.put("newTestcase", new FontInfo(fontAwesome, FontAwesome.ICON.PLUS));
         fontIcons.put("save", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CONTENT_SAVE, Color.STEELBLUE));
         fontIcons.put("saveAs", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CONTENT_SAVE_SETTINGS, Color.STEELBLUE));
         fontIcons.put("saveAll", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CONTENT_SAVE_ALL, Color.STEELBLUE));
         fontIcons.put("record", new FontInfo(fontAwesome, FontAwesome.ICON.CIRCLE, Color.RED));
         fontIcons.put("pause", new FontInfo(fontAwesome, FontAwesome.ICON.PAUSE));
         fontIcons.put("resumeRecording", new FontInfo(materialIcons, MaterialIcons.ICON.SKIP_NEXT));
-        fontIcons.put("insertScript", new FontInfo(materialIcons, MaterialIcons.ICON.PLAYLIST_ADD));
+        fontIcons.put("insertScript", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FUNCTION));
         fontIcons.put("insertChecklist", new FontInfo(materialIcons, MaterialIcons.ICON.PLAYLIST_ADD_CHECK));
         fontIcons.put("stop", new FontInfo(fontAwesome, FontAwesome.ICON.STOP, Color.RED));
         fontIcons.put("recorderConsole", new FontInfo(fontAwesome, FontAwesome.ICON.TERMINAL));
@@ -143,8 +142,8 @@ public class FXUIUtils {
         fontIcons.put("extractModule", new FontInfo(fontAwesome, FontAwesome.ICON.EXTERNAL_LINK));
         fontIcons.put("createDDT", new FontInfo(icoMoon, IcoMoon.ICON.TABLE2));
         fontIcons.put("createDataLoop", new FontInfo(icoMoon, IcoMoon.ICON.LOOP));
-        fontIcons.put("objectMapCreate", new FontInfo(fontAwesome, FontAwesome.ICON.MAP_PIN));
-        fontIcons.put("editObjectMap", new FontInfo(fontAwesome, FontAwesome.ICON.MAP));
+        fontIcons.put("objectMapCreate", new FontInfo(fontAwesome, FontAwesome.ICON.MAP_MARKER));
+        fontIcons.put("editObjectMap", new FontInfo(fontAwesome, FontAwesome.ICON.MAP_O));
         fontIcons.put("editObjectMapConfiguration", new FontInfo(fontAwesome, FontAwesome.ICON.SITEMAP));
         fontIcons.put("cut", new FontInfo(fontAwesome, FontAwesome.ICON.CUT));
         fontIcons.put("copy", new FontInfo(fontAwesome, FontAwesome.ICON.COPY));
@@ -169,15 +168,15 @@ public class FXUIUtils {
         fontIcons.put("add-to-right", new FontInfo(fontAwesome, FontAwesome.ICON.ANGLE_DOUBLE_RIGHT));
         fontIcons.put("up", new FontInfo(fontAwesome, FontAwesome.ICON.ARROW_UP));
         fontIcons.put("down", new FontInfo(fontAwesome, FontAwesome.ICON.ARROW_DOWN));
-        fontIcons.put("error", new FontInfo(materialIcons, MaterialIcons.ICON.ERROR));
+        fontIcons.put("info", new FontInfo(icoMoon, IcoMoon.ICON.INFO));
+        fontIcons.put("warn", new FontInfo(icoMoon, IcoMoon.ICON.WARNING, Color.ORANGE));
+        fontIcons.put("error", new FontInfo(icoMoon, IcoMoon.ICON.CANCEL_CIRCLE, Color.RED));
         fontIcons.put("rawRecord", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.MATRIX));
         fontIcons.put("console_view", new FontInfo(fontAwesome, FontAwesome.ICON.TERMINAL));
         fontIcons.put("clear", new FontInfo(materialIcons, MaterialIcons.ICON.PHONELINK_ERASE));
         fontIcons.put("export", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FILE_EXPORT));
         fontIcons.put("showreport", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.VIEW_LIST));
         fontIcons.put("show_message", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.MESSAGE_REPLY_TEXT));
-        fontIcons.put("warn", new FontInfo(icoMoon, IcoMoon.ICON.WARNING));
-        fontIcons.put("info", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.INFORMATION));
         fontIcons.put("et", new FontInfo(materialIcons, MaterialIcons.ICON.CENTER_FOCUS_STRONG));
         fontIcons.put("newModule", new FontInfo(SPACE));
         fontIcons.put("newFixture", new FontInfo(SPACE));
@@ -185,11 +184,13 @@ public class FXUIUtils {
         fontIcons.put("newCheckList", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CHECKBOX_MARKED_OUTLINE));
         fontIcons.put("exit", new FontInfo(fontAwesome, FontAwesome.ICON.SIGN_OUT));
         fontIcons.put("preferences", new FontInfo(materialIcons, MaterialIcons.ICON.SETTINGS));
-        fontIcons.put("selectFixture", new FontInfo(SPACE));
+        fontIcons.put("selectFixture", new FontInfo(materialIcons, MaterialIcons.ICON.GPS_FIXED));
+        fontIcons.put("empty", new FontInfo(SPACE));
         fontIcons.put("clearAllBreakpoints", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.TOGGLE_SWITCH_OFF));
         fontIcons.put("projectSettings", new FontInfo(fontAwesome, FontAwesome.ICON.GEARS));
         fontIcons.put("manageChecklists", new FontInfo(SPACE));
         fontIcons.put("Object Map Server...", new FontInfo(SPACE));
+        fontIcons.put("omapServer", new FontInfo(fontAwesome, FontAwesome.ICON.MAP_O));
         fontIcons.put("Welcome Message", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.BANK));
         fontIcons.put("Microsoft Edge", new FontInfo(fontAwesome, FontAwesome.ICON.EDGE));
         fontIcons.put("Firefox", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
@@ -216,8 +217,7 @@ public class FXUIUtils {
         fontIcons.put("textbox", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FORMAT_TEXT));
         fontIcons.put("expandall", new FontInfo(fontAwesome, FontAwesome.ICON.EXPAND));
         fontIcons.put("collapseall", new FontInfo(fontAwesome, FontAwesome.ICON.COMPRESS));
-        fontIcons.put("Search (No Image)", new FontInfo(SPACE));
-        fontIcons.put("Clear Search", new FontInfo(SPACE));
+        fontIcons.put("clearSearch", new FontInfo(fontAwesome, FontAwesome.ICON.SEARCH_MINUS));
         fontIcons.put("list", new FontInfo(materialIcons, MaterialIcons.ICON.FORMAT_LIST_BULLETED));
         fontIcons.put("open", new FontInfo(SPACE));
         fontIcons.put("params", new FontInfo(materialIcons, MaterialIcons.ICON.FORMAT_LIST_BULLETED));
@@ -256,8 +256,20 @@ public class FXUIUtils {
         fontIcons.put("addfolder", new FontInfo(materialIcons, MaterialIcons.ICON.CREATE_NEW_FOLDER));
         fontIcons.put("open-in-browser", new FontInfo(materialIcons, MaterialIcons.ICON.OPEN_IN_NEW));
         fontIcons.put("insert", new FontInfo(materialIcons, MaterialIcons.ICON.PLAYLIST_ADD_CHECK));
+        fontIcons.put("cleanObjectMapFolders", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FOLDER_REMOVE));
+        fontIcons.put("csvFile", new FontInfo(fontAwesome, FontAwesome.ICON.FILE_EXCEL_O));
+        fontIcons.put("addjar", new FontInfo(icoMoon, IcoMoon.ICON.FILE_ZIP));
+        fontIcons.put("credits", new FontInfo(fontAwesome, FontAwesome.ICON.THUMBS_O_UP));
+        fontIcons.put("properties", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.DOTS_HORIZONTAL));
+        fontIcons.put("goto", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CURSOR_DEFAULT_OUTLINE));
+        fontIcons.put("screencapture", new FontInfo(fontAwesome, FontAwesome.ICON.PICTURE_O));
+        fontIcons.put("next", new FontInfo(icoMoon, IcoMoon.ICON.ARROW_RIGHT));
+        fontIcons.put("prev", new FontInfo(icoMoon, IcoMoon.ICON.ARROW_LEFT));
+        fontIcons.put("help", new FontInfo(materialIcons, MaterialIcons.ICON.HELP_OUTLINE));
+        fontIcons.put("rotate", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.SCREEN_ROTATION));
+        fontIcons.put("Safari", new FontInfo(fontAwesome, FontAwesome.ICON.SAFARI));
     }
-
+    
     public static Button createButton(String name, String toolTip) {
         return createButton(name, toolTip, true);
     }
@@ -286,10 +298,6 @@ public class FXUIUtils {
             button.setText(buttonText);
         } else if (enabledIcon == null) {
             button.setText(name);
-        } else {
-            button.styleProperty()
-                    .bind(Bindings.when(button.hoverProperty()).then(new SimpleStringProperty("-fx-background-color:#f0f0f0"))
-                            .otherwise(new SimpleStringProperty("-fx-background-color:#f8f8f0")));
         }
         button.setDisable(!enabled);
         button.setMinWidth(Region.USE_PREF_SIZE);
@@ -364,7 +372,6 @@ public class FXUIUtils {
                 ;
             } else {
                 noFontIcon.add(name);
-                System.out.println("FXUIUtils.getImageFromX(`" + name + "`)");
             }
         }
         URL resource = FXUIUtils.class.getResource(from + name + ".gif");
@@ -382,7 +389,10 @@ public class FXUIUtils {
     }
 
     public static Image getImageURL(String name) {
-        return new Image(FXUIUtils.class.getResource("images/" + name + ".gif").toExternalForm());
+        URL resource = FXUIUtils.class.getResource("images/" + name + ".png");
+        if (resource == null)
+            resource = FXUIUtils.class.getResource("images/" + name + ".gif");
+        return new Image(resource.toExternalForm());
     }
 
     public static Node createFiller() {
@@ -463,8 +473,8 @@ public class FXUIUtils {
         showMessageDialog(null, message + ": " + e.getMessage(), "Error", AlertType.ERROR);
     }
 
-    public static File showMarathonSaveFileChooser(MarathonFileChooserInfo fileChooserInfo) {
-        MarathonFileChooser marathonFileChooser = new MarathonFileChooser(fileChooserInfo);
+    public static File showMarathonSaveFileChooser(MarathonFileChooserInfo fileChooserInfo, String subTitle, Node icon) {
+        MarathonFileChooser marathonFileChooser = new MarathonFileChooser(fileChooserInfo, subTitle, icon);
         marathonFileChooser.getStage().showAndWait();
         return fileChooserInfo.getSavedFile();
     }
@@ -500,13 +510,25 @@ public class FXUIUtils {
     }
 
     public static Node createImage(String imageName, String version) {
+        return createImageWithPadding(imageName, version, 48, 53);
+    }
+
+    public static Node createIteImage(String imageName, String version) {
+        return createImageWithPadding(imageName, version, 35, 58);
+    }
+
+    private static Node createImageWithPadding(String imageName, String version, int rightPadding, int topMargin) {
         ImageView splash = new ImageView(new Image(FXUIUtils.class.getResourceAsStream("images/" + imageName + ".png")));
         Label versionLabel = new Label(" Version: " + version);
+        HBox.setHgrow(versionLabel, Priority.ALWAYS);
+        versionLabel.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        versionLabel.setAlignment(Pos.CENTER_RIGHT);
+        versionLabel.setPadding(new Insets(0, rightPadding, 0, 0));
         versionLabel.setStyle("-fx-text-fill:#e3ff00;-fx-font-size:14pt;-fx-font-style:italic;-fx-font-weight:bold;");
         versionLabel.setId("versionLabel");
         StackPane stackPane = new StackPane(splash, versionLabel);
         StackPane.setAlignment(versionLabel, Pos.CENTER);
-        StackPane.setMargin(versionLabel, new Insets(40, 0, 0, 206));
+        StackPane.setMargin(versionLabel, new Insets(topMargin, 0, 0, 0));
         StackPane.setAlignment(splash, Pos.TOP_LEFT);
         stackPane.setPrefHeight(splash.getFitHeight());
         stackPane.setPrefWidth(splash.getFitWidth());
@@ -515,19 +537,4 @@ public class FXUIUtils {
         return stackPane;
     }
 
-    public static Node createIteImage(String imageName, String version) {
-        ImageView splash = new ImageView(new Image(FXUIUtils.class.getResourceAsStream("images/" + imageName + ".png")));
-        Label versionLabel = new Label(" Version: " + version);
-        versionLabel.setStyle("-fx-text-fill:#e3ff00;-fx-font-size:14pt;-fx-font-style:italic;-fx-font-weight:bold;");
-        versionLabel.setId("versionLabel");
-        StackPane stackPane = new StackPane(splash, versionLabel);
-        StackPane.setAlignment(versionLabel, Pos.CENTER);
-        StackPane.setMargin(versionLabel, new Insets(53, 0, 0, 247));
-        StackPane.setAlignment(splash, Pos.TOP_LEFT);
-        stackPane.setPrefHeight(splash.getFitHeight());
-        stackPane.setPrefWidth(splash.getFitWidth());
-        stackPane.setMaxHeight(splash.getFitHeight());
-        stackPane.setMaxWidth(splash.getFitWidth());
-        return stackPane;
-    }
 }

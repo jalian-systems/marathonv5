@@ -99,6 +99,7 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
     @Override public void remove(Dockable dockable) {
         dockables.remove(dockable);
         remove(dockable.getComponent());
+        desktop.fireDockableStateChangeEvent(dockable, State.DOCKED, State.CLOSED);
     }
 
     @Override public void split(Dockable base, Dockable dockable, Split position, double proportion) {
@@ -141,7 +142,6 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         dockKey.nameProperty().addListener((event, o, n) -> tab.setText(n));
         tab.setOnClosed((event) -> {
             remove(dockable);
-            desktop.fireDockableStateChangeEvent(dockable, State.DOCKED, State.CLOSED);
         });
         tab.setGraphic(dockKey.getIcon());
         tab.setOnCloseRequest((event) -> {

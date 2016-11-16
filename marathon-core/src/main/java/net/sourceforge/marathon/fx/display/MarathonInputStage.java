@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -36,8 +37,8 @@ public abstract class MarathonInputStage extends ModalDialog<String> {
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private ButtonBar buttonBar = new ButtonBar();
 
-    public MarathonInputStage(String title) {
-        super(title);
+    public MarathonInputStage(String title, String subTitle, Node icon) {
+        super(title, subTitle, icon);
         initComponents();
     }
 

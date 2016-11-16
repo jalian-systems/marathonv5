@@ -153,6 +153,10 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
 
     @Override public void setCaretLine(int line) {
         editorExecuteProc("setCaretLine", new JSONObject().put("row", line));
+        if (getCaretLine() != line) {
+            Platform.runLater(() -> editorExecuteProc("setCaretLine", new JSONObject().put("row", line)));
+        }
+
     }
 
     private void initComponent() {

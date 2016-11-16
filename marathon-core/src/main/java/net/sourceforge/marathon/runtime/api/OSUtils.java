@@ -21,6 +21,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.LogManager;
 
 import javax.swing.KeyStroke;
 
@@ -123,7 +125,7 @@ public class OSUtils {
             return "Shift";
         }
         if (keycode == KeyEvent.VK_META) {
-            return "Command";
+            return "Meta";
         }
         if (keycode == KeyEvent.VK_SPACE) {
             return "Space";
@@ -171,7 +173,7 @@ public class OSUtils {
             sb.append("Ctrl+");
         }
         if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
-            sb.append("Command+");
+            sb.append("Meta+");
         }
         if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
             sb.append("Alt+");
@@ -236,5 +238,17 @@ public class OSUtils {
             return null;
         }
         return f;
+    }
+
+    public static void setLogConfiguration(String projectDir) {
+        File logconfig = new File(projectDir, "logging.properties");
+        if (logconfig.exists()) {
+            try {
+                System.setProperty("java.util.logging.config.file", logconfig.getAbsolutePath());
+                LogManager.getLogManager().readConfiguration();
+            } catch (SecurityException e) {
+            } catch (IOException e) {
+            }
+        }
     }
 }

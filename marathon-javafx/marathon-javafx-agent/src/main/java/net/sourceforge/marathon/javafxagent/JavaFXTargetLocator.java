@@ -87,15 +87,23 @@ public class JavaFXTargetLocator {
         }
 
         public void deleteWindow() {
-            EventQueueWait.call_noexc(currentWindow, "dispose");
+            EventQueueWait.call_noexc(currentWindow, "close");
         }
 
         public Dimension2D getSize() {
-            return EventQueueWait.call_noexc(currentWindow, "getSize");
+            return EventQueueWait.exec(new Callable<Dimension2D>() {
+                @Override public Dimension2D call() throws Exception {
+                    return new Dimension2D(currentWindow.getWidth(), currentWindow.getHeight());
+                }
+            });
         }
 
         public Point2D getLocation() {
-            return EventQueueWait.call_noexc(currentWindow, "getLocation");
+            return EventQueueWait.exec(new Callable<Point2D>() {
+                @Override public Point2D call() throws Exception {
+                    return new Point2D(currentWindow.getX(), currentWindow.getY());
+                }
+            });
         }
 
         public void setSize(int width, int height) {
@@ -118,7 +126,7 @@ public class JavaFXTargetLocator {
 
         public void maximize() {
             if (currentWindow instanceof Stage) {
-                currentWindow.setMaximized(true);
+                javafx.application.Platform.runLater(() -> currentWindow.setMaximized(true));
             }
         }
 
@@ -388,6 +396,17 @@ public class JavaFXTargetLocator {
         return _getTopContainer();
     }
 
+    public JFXWindow getFocusedWindow() {
+        Stage[] windows = getValidWindows();
+        for (Stage stage : windows) {
+            if(stage.isFocused())
+                return new JFXWindow(stage);
+        }
+        if(windows.length > 0)
+            return new JFXWindow(windows[0]);
+        return null;
+    }
+    
     private JFXWindow _getTopContainer() {
         if (currentWindow == null) {
             Stage[] windows = getValidWindows();

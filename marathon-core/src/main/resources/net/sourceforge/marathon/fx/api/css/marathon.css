@@ -1,3 +1,14 @@
+.modaldialog-title {
+	-fx-font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}
+
+.modaldialog-subtitle {
+	-fx-font-family: 'Arial', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+	-fx-font-style: italic;
+}
+
 .form-pane {
 	-fx-padding: 10;
 	-fx-hgap: 5;
@@ -17,35 +28,6 @@
 	-fx-padding: 3 10 5 0;
 }
 
-.project-selection #ProjectTableLabel {
-	-fx-label-padding: 0 0 0 15;
-	-fx-font-weight: bold;
-	-fx-font-size: 1.5em;
-}
-
-.project-selection #ProjectSelectionBanner #BannerText {
-	-fx-font-size: 2.5em;
-	-fx-font-weight: bolder;
-}
-
-.mpf-configuration #banner {
-	-fx-padding: 5 5 2.5 5;
-}
-
-.mpf-configuration #MPFTitle {
-	-fx-font-size: 2.5em;
-	-fx-font-weight: bolder;
-}
-
-.mpf-configuration #MPFSubTitle {
-	-fx-font-size: 1.5em;
-	-fx-font-weight: bolder;
-}
-
-.mpf-configuration #subTitleBox {
-	-fx-padding: 0 0 2.5 2.5;
-}
-
 .marathonite-splash-screen .label {
 	-fx-font-size: 11;
 	-fx-font-weight: bold;
@@ -53,11 +35,6 @@
 
 .search #SearchSeparator {
 	-fx-padding: 8 0 0 0;
-}
-
-.preferences-stage #preference-toolbar #preference-label-1 {
-	-fx-font-weight: bold;
-	-fx-font-size: 1.5em;
 }
 
 .preferences-stage #mouse_trigger-field-1, .preferences-stage #keyboard_trigger-field-1
@@ -177,4 +154,8 @@
 
 .run-history-stage #vertical-buttonbar {
 	-fx-padding: 22 0 0 0;
+}
+
+.icon-button {
+	-fx-color: -fx-hover-base;
 }

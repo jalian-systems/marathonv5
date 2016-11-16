@@ -69,6 +69,7 @@ public class RubyScriptModel implements IScriptModel {
     static {
         RubyInstanceConfig.FULL_TRACE_ENABLED = true;
         ruby = JavaEmbedUtils.initialize(new ArrayList<String>());
+        System.setProperty("jruby.home", ruby.getJRubyHome());
     }
 
     protected FixtureGenerator getFixtureGenerator() {

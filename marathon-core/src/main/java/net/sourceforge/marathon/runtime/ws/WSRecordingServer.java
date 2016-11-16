@@ -276,11 +276,6 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             return new JSONObject();
         }
         try {
-            String name = null;
-            try {
-                name = query.getJSONObject("attributes").getString("suggestedName");
-            } catch (JSONException e) {
-            }
             JSONObject eventObject = query.getJSONObject("event");
             String type = eventObject.getString("type");
             if (type.equals("comment")) {
@@ -302,6 +297,11 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             if (type.equals("window_state_with_title")) {
                 recorder.record(new WindowStateScriptElement(query.getJSONObject("event")));
                 return new JSONObject();
+            }
+            String name = null;
+            try {
+                name = query.getJSONObject("attributes").getString("suggestedName");
+            } catch (JSONException e) {
             }
             String cName = ns.getName(query, name);
             recorder.record(new JSONScriptElement(windowId, cName, query.getJSONObject("event")));
@@ -347,6 +347,10 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
 
     @Override public void resumeRecording() {
         paused = false;
+    }
+
+    public boolean isPaused() {
+        return paused;
     }
 
     @Override public WindowId getFocusedWindowId() {
@@ -438,5 +442,47 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     public void reloadScript(WebSocket conn, JSONObject query) {
+    }
+
+    public void alert(WebSocket conn, JSONObject query) {
+        WindowId windowId;
+        try {
+            windowId = createWindowId(query.getJSONObject("container"));
+        } catch (JSONException | ObjectMapException e) {
+            e.printStackTrace();
+            return;
+        }
+        recorder.record(new IScriptElement() {
+            private static final long serialVersionUID = 1L;
+
+            @Override public String toScriptCode() {
+                String method = query.getString("method");
+                if (method.equals("prompt") || method.equals("confirm")) {
+                    String result = query.getString("result");
+                    if (result == null)
+                        return Indent.getIndent()
+                                + ScriptModel.getModel().getScriptCodeForGenericAction(method, query.optString("text", ""));
+                    else
+                        return Indent.getIndent()
+                                + ScriptModel.getModel().getScriptCodeForGenericAction(method, query.optString("text", ""), result);
+                } else {
+                    return Indent.getIndent()
+                            + ScriptModel.getModel().getScriptCodeForGenericAction(method, query.optString("text", ""));
+                }
+            }
+
+            @Override public WindowId getWindowId() {
+                return windowId;
+            }
+
+            @Override public IScriptElement getUndoElement() {
+                return null;
+            }
+
+            @Override public boolean isUndo() {
+                return false;
+            }
+
+        });
     }
 }

@@ -20,6 +20,7 @@ import java.nio.file.Path;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
+import net.sourceforge.marathon.junit.MarathonDDTestSuite;
 import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.IConsole;
@@ -39,15 +40,22 @@ public class GroupTestEntry extends GroupEntry {
     }
 
     @Override public String getName() {
+        if (test instanceof MarathonDDTestSuite)
+            return ((MarathonDDTestSuite) test).getName();
         return ((TestCase) test).getName();
     }
 
     @Override public Path getFilePath() {
+        if (test instanceof MarathonDDTestSuite)
+            return ((MarathonDDTestSuite) test).getFile().toPath();
         return ((MarathonTestCase) test).getFile().toPath();
     }
 
     @Override public void setName(String name) {
-        ((TestCase) test).setName(name);
+        if (test instanceof MarathonDDTestSuite)
+            ((MarathonDDTestSuite) test).setName(name);
+        else
+            ((TestCase) test).setName(name);
     }
 
     @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
@@ -96,7 +104,10 @@ public class GroupTestEntry extends GroupEntry {
     }
 
     @Override public void rename(String text) {
-        ((TestCase) test).setName(text);
+        if (test instanceof MarathonDDTestSuite)
+            ((MarathonDDTestSuite) test).setName(text);
+        else
+            ((TestCase) test).setName(text);
     }
 
 }

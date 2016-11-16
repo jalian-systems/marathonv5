@@ -230,13 +230,15 @@ public abstract class ListLayout implements IPropertiesLayout {
         if (isAddArchivesNeeded()) {
             addJarsButton = FXUIUtils.createButton("addjar", "Add JAR/ZIP files to class path", true, "Add Archives...");
             addJarsButton.setOnAction(new BrowseActionHandler(
-                    new FileSelectionInfo("Select Zip/Jar files", "Java Archives", new String[] { "*.jar", "*.zip" })));
+                    new FileSelectionInfo("Select Zip/Jar files", "Java Archives", new String[] { "*.jar", "*.zip" },
+                            "Add Zip/Jar files to the application classpath", FXUIUtils.getIcon("addjar"))));
             vBox.getChildren().add(addJarsButton);
         }
 
         if (isAddFoldersNeeded()) {
             addFoldersButton = FXUIUtils.createButton("addfolder", "Add folders to class path", true, "Add Folders...");
-            addFoldersButton.setOnAction(new BrowseActionHandler(new FileSelectionInfo("Select Folders", null, null)));
+            addFoldersButton.setOnAction(new BrowseActionHandler(new FileSelectionInfo("Select Folders", null, null,
+                    "Add class files from folders to classpath", FXUIUtils.getIcon("addfolder"))));
             addFoldersButton.setMaxWidth(Double.MAX_VALUE);
             vBox.getChildren().add(addFoldersButton);
         }

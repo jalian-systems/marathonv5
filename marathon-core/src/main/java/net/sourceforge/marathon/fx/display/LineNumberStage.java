@@ -15,12 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import net.sourceforge.marathon.fx.api.FXUIUtils;
+
 public class LineNumberStage extends MarathonInputStage {
 
     private int maxLine;
 
     public LineNumberStage() {
-        super("Goto");
+        super("Goto", "Goto a line", FXUIUtils.getIcon("goto"));
     }
 
     @Override protected String validateInput(String inputText) {

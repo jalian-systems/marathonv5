@@ -207,7 +207,7 @@ public class GroupResource extends Resource {
     }
 
     public void paste(int index, Clipboard clipboard, Operation operation) {
-        if (!clipboard.hasFiles()) {
+        if (!clipboard.hasFiles() || !type.droppable(clipboard.getFiles(), getFilePath())) {
             return;
         }
         List<File> files = clipboard.getFiles();

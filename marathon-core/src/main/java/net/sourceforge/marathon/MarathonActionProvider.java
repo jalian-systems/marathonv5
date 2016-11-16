@@ -127,7 +127,7 @@ public class MarathonActionProvider implements IActionProvider {
         };
         maction.setMenuName("Object Map");
         maction.setMenuMnemonic('O');
-        mactions.add(maction);
+//        mactions.add(maction);
         maction = new MarathonAction("editObjectMap", "Modify the recognition properties for objects", "", editorProvider, true,
                 true) {
 

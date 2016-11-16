@@ -34,7 +34,7 @@ public class MessageStage extends ModalDialog<MessageInfo> {
     private Button closeButton = FXUIUtils.createButton("cancel", "Close", true, "Close");
 
     public MessageStage(MessageInfo resultInfo) {
-        super(resultInfo.getTitle());
+        super(resultInfo.getTitle(), null, null);
         this.resultInfo = resultInfo;
         initComponents();
     }
