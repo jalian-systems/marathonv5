@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display.readline;
 
 import java.util.LinkedList;
@@ -20,8 +20,8 @@ import java.util.concurrent.Executor;
 
 public final class Join {
     public static final Executor TRIVIAL_EXECUTOR = new Executor() {
-        public void execute(Runnable command) {
-            (new Thread(command)).start();
+        @Override public void execute(Runnable command) {
+            new Thread(command).start();
         }
     };
 
@@ -79,7 +79,7 @@ public final class Join {
     }
 
     public boolean isAsync(int channel) {
-        return ((1L << channel) & asyncMask) != 0;
+        return (1L << channel & asyncMask) != 0;
     }
 
     public void send(int channel, Object message) {
@@ -128,9 +128,9 @@ public final class Join {
             super(message);
         }
 
-        public void activate(final Join join, final SyncReaction reaction, final Object[] args) {
+        @Override public void activate(final Join join, final SyncReaction reaction, final Object[] args) {
             join.executor.execute(new Runnable() {
-                public void run() {
+                @Override public void run() {
                     reaction.react(join, args);
                 }
             });
@@ -146,7 +146,7 @@ public final class Join {
             super(message);
         }
 
-        public synchronized void activate(Join join, SyncReaction reaction, Object[] args) {
+        @Override public synchronized void activate(Join join, SyncReaction reaction, Object[] args) {
             this.join = join;
             this.reaction = reaction;
             this.args = args;

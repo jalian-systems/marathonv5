@@ -1,3 +1,10 @@
+Marathon Version 5.0 (December 15 2016)
+
+1. UI has been rewritten to use Java/FX
+2. feat: Grouping of test cases in features, stories and issues
+3. feat: TestCase meta data TestID and linking to external system
+4. feat: Allure reporting framework integrated
+
 Marathon Version 4.2.2.0 (September 12 2016)
 
 1. Fixed: indexOfType() using type, but URP recorded using tag-name.

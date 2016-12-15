@@ -228,6 +228,10 @@ public class JSONTokener {
     public char nextClean() throws JSONException {
         for (;;) {
             char c = this.next();
+            if(c == '#') {
+                while(c >= 0 && c != '\r' && c != '\n')
+                    c = this.next();
+            }
             if (c == 0 || c > ' ') {
                 return c;
             }

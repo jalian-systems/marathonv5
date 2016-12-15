@@ -1,22 +1,20 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.junit;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -30,21 +28,23 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import junit.framework.Test;
 import junit.framework.TestCase;
-import net.sourceforge.marathon.Main;
+import junit.framework.TestResult;
+import net.sourceforge.marathon.api.GuiceInjector;
+import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
-import net.sourceforge.marathon.checklist.CheckListDialog;
-import net.sourceforge.marathon.checklist.CheckListForm;
-import net.sourceforge.marathon.checklist.CheckListForm.Mode;
+import net.sourceforge.marathon.checklist.CheckListFormNode;
+import net.sourceforge.marathon.checklist.CheckListStage;
+import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.resource.Project;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IConsole;
@@ -57,7 +57,6 @@ import net.sourceforge.marathon.runtime.api.IScript;
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
-import net.sourceforge.marathon.runtime.api.UIUtils;
 import net.sourceforge.marathon.screencapture.AnnotateScreenCapture;
 import net.sourceforge.marathon.util.LauncherModelHelper;
 
@@ -71,14 +70,13 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     private static IMarathonRuntime runtime = null;
     private final Object waitLock = new Object();
     private PlaybackResult result;
-    private String suffix;
     private IScript script;
     private ArrayList<CheckList> checkLists = new ArrayList<CheckList>();
     private ArrayList<File> screenCaptures = new ArrayList<File>();
     private boolean acceptChecklist;
     private IConsole console;
     private Properties dataVariables;
-    private String nameSuffix = "";
+    @SuppressWarnings("unused") private String nameSuffix = "";
 
     private String fullName;
 
@@ -95,11 +93,11 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
     MarathonTestCase(File file, IMarathonRuntime runtime) {
         this.file = file;
-        if (runtime != null)
+        if (runtime != null) {
             MarathonTestCase.runtime = runtime;
-        suffix = ScriptModel.getModel().getSuffix();
+        }
         this.acceptChecklist = false;
-        Injector injector = Main.getInjector();
+        Injector injector = GuiceInjector.get();
         injector.injectMembers(this);
     }
 
@@ -109,18 +107,23 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         this.nameSuffix = name;
     }
 
-    public String getName() {
-        String name = file.getName();
-
-        if (name.endsWith(suffix)) {
-            name = name.substring(0, name.length() - suffix.length());
-        }
-        return name + nameSuffix;
+    @Override public String getName() {
+        return Project.getTestName(file);
     }
 
-    protected synchronized void runTest() throws Throwable {
-        if (script == null)
+    @Override public void setName(String name) {
+        Project.setTestName(name, file);
+    }
+
+    @Override public void run(TestResult result) {
+        TestAttributes.put("test_object", this);
+        super.run(result);
+    }
+
+    @Override protected synchronized void runTest() throws Throwable {
+        if (script == null) {
             initialize();
+        }
         try {
             IPlayer player = script.getPlayer(MarathonTestCase.this, new PlaybackResult());
             player.setAcceptCheckList(acceptChecklist);
@@ -157,32 +160,35 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         return sWriter.toString();
     }
 
-    public void playbackFinished(PlaybackResult result, boolean shutdown) {
+    @Override public void playbackFinished(PlaybackResult result, boolean shutdown) {
         this.result = result;
         synchronized (waitLock) {
             waitLock.notify();
         }
     }
 
-    public int lineReached(SourceLine line) {
+    @Override public int lineReached(SourceLine line) {
         return CONTINUE;
     }
 
     private void confirmResult() {
         ignoreReuse = false;
-        if (result.failureCount() == 0)
+        if (result.failureCount() == 0) {
             return;
+        }
         ignoreReuse = true;
         String dirName = System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR);
         if (dirName != null) {
             File dir = new File(dirName);
             File[] files = dir.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
+                @Override public boolean accept(File dir, String name) {
                     return name.matches(Pattern.quote(getFullName()) + "-error[0-9]*.png");
                 }
             });
-            for (File file : files) {
-                addErrorScreenCapture(file);
+            if (files != null) {
+                for (File file : files) {
+                    addErrorScreenCapture(file);
+                }
             }
         }
         MarathonAssertion e = new MarathonAssertion(result.failures(), this.getName());
@@ -197,26 +203,24 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         return file;
     }
 
-    public int methodReturned(SourceLine line) {
+    @Override public int methodReturned(SourceLine line) {
         return CONTINUE;
     }
 
-    public int methodCalled(SourceLine line) {
+    @Override public int methodCalled(SourceLine line) {
         return CONTINUE;
     }
 
-    public int acceptChecklist(final String fileName) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                File file = new File(System.getProperty(Constants.PROP_CHECKLIST_DIR), fileName);
-                showAndEnterChecklist(file, runtime, null);
-                script.getDebugger().resume();
-            }
+    @Override public int acceptChecklist(final String fileName) {
+        Platform.runLater(() -> {
+            File file = new File(System.getProperty(Constants.PROP_CHECKLIST_DIR), fileName);
+            showAndEnterChecklist(file, runtime, null);
+            script.getDebugger().resume();
         });
         return 0;
     }
 
-    public int showChecklist(final String fileName) {
+    @Override public int showChecklist(final String fileName) {
         return 0;
     }
 
@@ -236,60 +240,45 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         screenCaptures.add(newFile);
     }
 
-    public CheckList showAndEnterChecklist(File file, final IMarathonRuntime runtime, final JFrame instance) {
+    public CheckList showAndEnterChecklist(File file, final IMarathonRuntime runtime, final Stage instance) {
         final CheckList checklist;
         try {
             checklist = CheckList.read(file);
-            CheckListForm checklistForm = new CheckListForm(checklist, Mode.ENTER);
-            final CheckListDialog dialog = new CheckListDialog((JFrame) null, checklistForm);
+            CheckListFormNode checklistForm = new CheckListFormNode(checklist, CheckListFormNode.Mode.ENTER);
+            final CheckListStage dialog = new CheckListStage(checklistForm);
 
-            JButton screenCapture = UIUtils.createScreenCaptureButton();
-            screenCapture.addActionListener(new ActionListener() {
+            Button screenCapture = FXUIUtils.createButton("Screen Capture", "Create screen capture");
+            screenCapture.setOnAction((e) -> {
                 File captureFile = null;
-
-                public void actionPerformed(ActionEvent e) {
-                    boolean iconify = false;
-                    int state = -1;
-                    try {
-                        if (instance != null && instance.getState() != JFrame.ICONIFIED) {
-                            iconify = true;
-                            state = instance.getState();
-                        }
-                        if (iconify)
-                            instance.setState(JFrame.ICONIFIED);
-                        dialog.setVisible(false);
-                        if (captureFile == null)
-                            captureFile = runtime.getScreenCapture();
-                        if (captureFile == null) {
-                            JOptionPane.showMessageDialog(null, "Could not create a screen capture");
-                            return;
-                        }
-                        try {
-                            AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, true);
-                            if (annotate.showDialog() == AnnotateScreenCapture.APPROVE_OPTION) {
-                                annotate.saveToFile(captureFile);
-                                checklist.setCaptureFile(captureFile.getName());
-                            }
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    } finally {
-                        if (iconify)
-                            instance.setState(state);
-                        dialog.setVisible(true);
+                try {
+                    if (captureFile == null) {
+                        captureFile = runtime.getScreenCapture();
                     }
+                    if (captureFile == null) {
+                        FXUIUtils.showMessageDialog(null, "Could not create a screen capture", "Error", AlertType.ERROR);
+                        return;
+                    }
+                    try {
+                        AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, true);
+                        annotate.getStage().showAndWait();
+                        if (annotate.isSaved()) {
+                            annotate.saveToFile(captureFile);
+                            checklist.setCaptureFile(captureFile.getName());
+                        }
+                    } catch (IOException x) {
+                        x.printStackTrace();
+                    }
+                } finally {
                 }
             });
-            JButton saveButton = UIUtils.createSaveButton();
-            saveButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    dialog.dispose();
-                }
+            Button saveButton = FXUIUtils.createButton("save", "Save", true, "Save");
+            saveButton.setOnAction((e) -> {
+                dialog.dispose();
             });
-            dialog.setActionButtons(new JButton[] { screenCapture, saveButton });
-            dialog.setVisible(true);
+            dialog.setActionButtons(new Button[] { screenCapture, saveButton });
+            dialog.getStage().showAndWait();
         } catch (Exception e1) {
-            JOptionPane.showMessageDialog(null, "Unable to read the checklist file");
+            FXUIUtils.showConfirmDialog(instance, "Unable to read the checklist file", "Warning", AlertType.WARNING);
             return null;
         }
         addChecklist(checklist);
@@ -306,13 +295,15 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
     public IRuntimeFactory getRuntimeFactory(String scriptText) {
         Map<String, Object> fixtureProperties = ScriptModel.getModel().getFixtureProperties(scriptText);
-        if (fixtureProperties == null || fixtureProperties.size() == 0)
+        if (fixtureProperties == null || fixtureProperties.size() == 0) {
             return runtimeFactory;
+        }
         reuseFixture = Boolean.valueOf((String) fixtureProperties.get(Constants.FIXTURE_REUSE)).booleanValue();
         String launcherModel = (String) fixtureProperties.get(Constants.PROP_PROJECT_LAUNCHER_MODEL);
         IRuntimeLauncherModel lm = LauncherModelHelper.getLauncherModel(launcherModel);
-        if (lm == null)
+        if (lm == null) {
             return runtimeFactory;
+        }
         return lm.getRuntimeFactory();
     }
 
@@ -320,13 +311,14 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         this.fullName = name;
     }
 
-    public String getFullName() {
+    @Override public String getFullName() {
         return fullName;
     }
 
     public static void reset() {
-        if (runtime != null)
+        if (runtime != null) {
             runtime.destroy();
+        }
         runtime = null;
     }
 
@@ -339,8 +331,9 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         if (runtime == null || !reuseFixture) {
             // This condition is added for Unit Testing purposes.
             if (runtime == null || !runtime.getClass().getName().equals("net.sourceforge.marathon.runtime.RuntimeStub")) {
-                if (runtime != null)
+                if (runtime != null) {
                     runtime.destroy();
+                }
                 shouldRunFixture = true;
                 runtime = rf.createRuntime();
             }

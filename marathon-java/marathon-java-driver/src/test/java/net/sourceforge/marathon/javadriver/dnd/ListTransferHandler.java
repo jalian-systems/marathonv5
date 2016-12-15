@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.dnd;
 
 /*
@@ -34,7 +34,7 @@ import javax.swing.TransferHandler;
     private int addIndex = -1; // Location where items were added
     private int addCount = 0; // Number of items added.
 
-    public boolean canImport(TransferHandler.TransferSupport info) {
+    @Override public boolean canImport(TransferHandler.TransferSupport info) {
         // Check for String flavor
         if (!info.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             return false;
@@ -42,15 +42,15 @@ import javax.swing.TransferHandler;
         return true;
     }
 
-    protected Transferable createTransferable(JComponent c) {
+    @Override protected Transferable createTransferable(JComponent c) {
         return new StringSelection(exportString(c));
     }
 
-    public int getSourceActions(JComponent c) {
+    @Override public int getSourceActions(JComponent c) {
         return TransferHandler.COPY_OR_MOVE;
     }
 
-    public boolean importData(TransferHandler.TransferSupport info) {
+    @Override public boolean importData(TransferHandler.TransferSupport info) {
         if (!info.isDrop()) {
             return false;
         }
@@ -79,7 +79,7 @@ import javax.swing.TransferHandler;
         return true;
     }
 
-    protected void exportDone(JComponent c, Transferable data, int action) {
+    @Override protected void exportDone(JComponent c, Transferable data, int action) {
         cleanup(c, action == TransferHandler.MOVE);
     }
 
@@ -133,8 +133,8 @@ import javax.swing.TransferHandler;
         addIndex = index;
         String[] values = str.split("\n");
         addCount = values.length;
-        for (int i = 0; i < values.length; i++) {
-            listModel.add(index++, values[i]);
+        for (String value : values) {
+            listModel.add(index++, value);
         }
     }
 

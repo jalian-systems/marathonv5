@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.lang.ref.WeakReference;
@@ -119,11 +119,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String _getText() {
         Node c = node;
-        if (this instanceof IPseudoElement)
+        if (this instanceof IPseudoElement) {
             c = ((IPseudoElement) this).getPseudoComponent();
+        }
         Object attributeObject = getAttributeObject(c, "text");
-        if (attributeObject == null)
+        if (attributeObject == null) {
             return null;
+        }
         return attributeObject.toString();
     }
 
@@ -137,17 +139,19 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public String _getValue() {
         Node c = node;
-        if (this instanceof IPseudoElement)
+        if (this instanceof IPseudoElement) {
             c = ((IPseudoElement) this).getPseudoComponent();
+        }
         Object attributeObject = getAttributeObject(c, "value");
-        if (attributeObject == null)
+        if (attributeObject == null) {
             return _getText();
+        }
         return attributeObject.toString();
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#isDisplayed()
      */
     final public boolean isDisplayed() {
@@ -160,7 +164,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#isSelected()
      */
     public final boolean isSelected() {
@@ -169,14 +173,15 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public boolean _isSelected() {
         String selected = _getAttribute("selected", true);
-        if (selected != null)
+        if (selected != null) {
             return Boolean.parseBoolean(selected);
+        }
         throw new UnsupportedCommandException("isSelected is not supported by " + node.getClass().getName(), null);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#isEnabled()
      */
     final public boolean isEnabled() {
@@ -193,7 +198,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getTagName()
      */
     public String getTagName() {
@@ -217,10 +222,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     private Class<?> findJavaClass(Node n) {
         Class<?> c = n.getClass();
-        if (this instanceof IPseudoElement)
+        if (this instanceof IPseudoElement) {
             c = ((IPseudoElement) this).getPseudoComponent().getClass();
-        while (c.getPackage() == null || (!c.getPackage().getName().startsWith("javafx.scene")))
+        }
+        while (c.getPackage() == null || !c.getPackage().getName().startsWith("javafx.scene")) {
             c = c.getSuperclass();
+        }
         return c;
     }
 
@@ -258,12 +265,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     private Node getTopNode(Node n) {
         Node parent = null;
         while (parent == null) {
-            if (ContextManager.isContext(n))
+            if (ContextManager.isContext(n)) {
                 parent = n;
-            else if (n.getScene().getRoot() == n)
+            } else if (n.getScene().getRoot() == n) {
                 parent = n;
-            else
+            } else {
                 n = n.getParent();
+            }
         }
         return parent;
     }
@@ -281,8 +289,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 node.getProperties().put("marathon.indexOfType", index);
                 return index;
             }
-            if (type.equals(getTagName(c)))
+            if (type.equals(getTagName(c))) {
                 index++;
+            }
         }
         Logger.getLogger(JavaFXElementPropertyAccessor.class.getName())
                 .warning("Could not find the component in allComponents: " + node.toString());
@@ -291,8 +300,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     final public String getFieldName() {
         List<String> fieldNames = getFieldNames();
-        if (fieldNames.size() == 0)
+        if (fieldNames.size() == 0) {
             return null;
+        }
         return fieldNames.get(0);
     }
 
@@ -313,8 +323,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             try {
                 field.setAccessible(true);
                 Object o = field.get(container);
-                if (o == current)
+                if (o == current) {
                     fieldNames.add(field.getName());
+                }
             } catch (Throwable t) {
             } finally {
                 field.setAccessible(accessible);
@@ -323,11 +334,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     final public String getCText() {
-        if (node instanceof TextInputControl)
+        if (node instanceof TextInputControl) {
             return null;
+        }
         Object o = getAttributeObject(getComponent(), "text");
-        if (o == null || !(o instanceof String) || o.equals(""))
+        if (o == null || !(o instanceof String) || o.equals("")) {
             return null;
+        }
         return (String) o;
     }
 
@@ -382,10 +395,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         allComponents.remove(this.node);
         for (List<String> list : rp) {
             Map<String, String> rpValues = findValues(list);
-            if (rpValues == null)
+            if (rpValues == null) {
                 continue;
-            if (!hasAComponentsByRP(allComponents, rpValues))
+            }
+            if (!hasAComponentsByRP(allComponents, rpValues)) {
                 return rpValues;
+            }
         }
         return findValues(LAST_RESORT_RECOGNITION_PROPERTIES);
     }
@@ -405,8 +420,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     private boolean hasAComponentsByRP(List<Node> allComponents, Map<String, String> rpValues) {
         for (Node component : allComponents) {
-            if (matchesRP(component, rpValues))
+            if (matchesRP(component, rpValues)) {
                 return true;
+            }
         }
         return false;
     }
@@ -415,8 +431,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         JavaFXElementPropertyAccessor pa = new JavaFXElementPropertyAccessor(component);
         Set<Entry<String, String>> entrySet = rpValues.entrySet();
         for (Entry<String, String> entry : entrySet) {
-            if (!entry.getValue().equals(pa.getAttribute(entry.getKey())))
+            if (!entry.getValue().equals(pa.getAttribute(entry.getKey()))) {
                 return false;
+            }
         }
         return true;
     }
@@ -424,23 +441,28 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((node == null) ? 0 : node.hashCode());
+        result = prime * result + (node == null ? 0 : node.hashCode());
         return result;
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         JavaFXElementPropertyAccessor other = (JavaFXElementPropertyAccessor) obj;
         if (node == null) {
-            if (other.node != null)
+            if (other.node != null) {
                 return false;
-        } else if (!node.equals(other.node))
+            }
+        } else if (!node.equals(other.node)) {
             return false;
+        }
         return true;
     }
 
@@ -448,8 +470,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Map<String, String> r = new HashMap<String, String>();
         for (String prop : props) {
             String value = getAttribute(prop);
-            if (value != null)
+            if (value != null) {
                 r.put(prop, value);
+            }
         }
         return r;
     }
@@ -494,8 +517,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         // return cellComponent.getText();
         // }
         // }
-        if (lastPathComponent == null || lastPathComponent.getValue() == null)
+        if (lastPathComponent == null || lastPathComponent.getValue() == null) {
             return "";
+        }
         return lastPathComponent.getValue().toString();
     }
 
@@ -524,17 +548,19 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         if (treeView.isShowRoot()) {
             String rootNodeText = unescapeSpecialCharacters(tokens[0]);
             searchedPath.append("/" + rootNodeText);
-            if (rootNode == null)
+            if (rootNode == null) {
                 throw new RuntimeException("TreeView does not have a root node!");
-            if (!searchedPath.toString().equals("/" + getPathText(treePath)))
+            }
+            if (!searchedPath.toString().equals("/" + getPathText(treePath))) {
                 throw new RuntimeException("TreeView root node does not match: Expected </" + getPathText(treePath) + "> Actual: <"
                         + searchedPath.toString() + ">");
+            }
         }
         for (int i = start; i < tokens.length; i++) {
             String childText = unescapeSpecialCharacters(tokens[i]);
             searchedPath.append("/" + childText);
             boolean matched = false;
-            TreeItem<?> item = (TreeItem<?>) treePath.get(treePath.size() - 1);
+            TreeItem<?> item = treePath.get(treePath.size() - 1);
             item.setExpanded(true);
             for (int j = 0; j < item.getChildren().size(); j++) {
                 Object child = item.getChildren().get(j);
@@ -546,8 +572,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                     break;
                 }
             }
-            if (!matched)
+            if (!matched) {
                 return null;
+            }
         }
         return treePath.get(treePath.size() - 1);
     }
@@ -567,8 +594,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         // }
         // }
         TreeItem<?> lastPathComponent = treePath.get(treePath.size() - 1);
-        if (lastPathComponent == null || lastPathComponent.getValue() == null)
+        if (lastPathComponent == null || lastPathComponent.getValue() == null) {
             return "";
+        }
         return lastPathComponent.getValue().toString();
     }
 
@@ -578,10 +606,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public int getSelection(CheckBox cb) {
         int selection;
-        if (cb.isAllowIndeterminate() && cb.isIndeterminate())
+        if (cb.isAllowIndeterminate() && cb.isIndeterminate()) {
             selection = 1;
-        else
+        } else {
             selection = cb.isSelected() ? 2 : 0;
+        }
         return selection;
     }
 
@@ -625,16 +654,18 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         int suffixIndex = 0;
         for (int i = 0; i < index; i++) {
             String current = getListItemText(listView, i);
-            if (current.equals(original))
+            if (current.equals(original)) {
                 itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
         }
         return itemText;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public ListCell getCellAt(ListView listView, Integer index) {
         ListCell<?> cell = getVisibleCellAt(listView, index);
-        if (cell != null)
+        if (cell != null) {
             return cell;
+        }
         try {
             Callback<ListView, ListCell> cellFactory = listView.getCellFactory();
             ListCell listCell = null;
@@ -687,8 +718,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell))
+        if (cell != null && isShowing(cell)) {
             return cell;
+        }
         return null;
     }
 
@@ -698,8 +730,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public Node getCellAt(TreeView treeView, TreeItem<?> treeItem1) {
         TreeCell visibleCell = getVisibleCellAt(treeView, treeItem1);
-        if (visibleCell != null)
+        if (visibleCell != null) {
             return visibleCell;
+        }
         try {
             Callback<TreeView, TreeCell> cellFactory = treeView.getCellFactory();
             TreeCell treeCell = null;
@@ -806,16 +839,18 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell))
+        if (cell != null && isShowing(cell)) {
             return cell;
+        }
         return null;
     }
 
     public String rowToPath(int row) {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         TreeItem<?> treeItem = treeView.getTreeItem(row);
-        if (treeItem == null)
+        if (treeItem == null) {
             throw new RuntimeException("Trying to create a tree item for row " + row + " which is invalid");
+        }
         return getTextForNode(treeView, treeItem);
     }
 
@@ -827,8 +862,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         ObservableList<?> items = listView.getItems();
         for (int i = 0; i < items.size(); i++) {
             String text = getListSelectionText(listView, i);
-            if (text.equals(string))
+            if (text.equals(string)) {
                 return i;
+            }
         }
         return -1;
     }
@@ -847,8 +883,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (selected == null)
+        if (selected == null) {
             return -1;
+        }
         return selected.getIndex();
     }
 
@@ -868,24 +905,27 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (selected == null)
+        if (selected == null) {
             return -1;
+        }
         return selected.getIndex();
     }
 
     public String getComboBoxText(ComboBox<?> comboBox, int index, boolean appendText) {
-        if (index == -1)
+        if (index == -1) {
             return null;
+        }
         String original = getComboBoxItemText(comboBox, index);
         String itemText = original;
         int suffixIndex = 0;
         for (int i = 0; i < index; i++) {
             String current = getComboBoxItemText(comboBox, i);
             if (current.equals(original)) {
-                if (appendText)
+                if (appendText) {
                     itemText = String.format("%s(%d)", original, ++suffixIndex);
-                else
+                } else {
                     itemText = original;
+                }
             }
         }
         return itemText;
@@ -898,8 +938,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     public String stripHTMLTags(String text) {
         Pattern p = Pattern.compile("(<\\s*html\\s*>)(.*)(<\\s*/html\\s*>)");
         Matcher m = p.matcher(text);
-        if (m.matches())
+        if (m.matches()) {
             text = stripTags(m.group(2));
+        }
         return text;
     }
 
@@ -927,8 +968,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         ObservableList<?> items = comboBox.getItems();
         for (int i = 0; i < items.size(); i++) {
             String text = getComboBoxText(comboBox, i, true);
-            if (text.equals(value))
+            if (text.equals(value)) {
                 return i;
+            }
         }
         return -1;
     }
@@ -942,15 +984,17 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public String getChoiceBoxText(ChoiceBox<?> choiceBox, int index) {
-        if (index == -1)
+        if (index == -1) {
             return null;
+        }
         String original = getChoiceBoxItemText(choiceBox, index);
         String itemText = original;
         int suffixIndex = 0;
         for (int i = 0; i < index; i++) {
             String current = getChoiceBoxItemText(choiceBox, i);
-            if (current.equals(original))
+            if (current.equals(original)) {
                 itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
         }
         return itemText;
     }
@@ -960,10 +1004,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         @SuppressWarnings("rawtypes")
         StringConverter converter = choiceBox.getConverter();
         String text = null;
-        if (converter == null)
-            text = (choiceBox.getItems().get(index)).toString();
-        else
+        if (converter == null) {
+            text = choiceBox.getItems().get(index).toString();
+        } else {
             text = converter.toString(choiceBox.getItems().get(index));
+        }
         return stripHTMLTags(text);
     }
 
@@ -980,8 +1025,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         ObservableList<?> items = choiceBox.getItems();
         for (int i = 0; i < items.size(); i++) {
             String text = getChoiceBoxText(choiceBox, i);
-            if (text.equals(value))
+            if (text.equals(value)) {
                 return i;
+            }
         }
         return -1;
     }
@@ -1008,15 +1054,17 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public int getColumnAt(TableView<?> tableView, Point2D point) {
         TableCell<?, ?> selected = getTableCellAt(tableView, point);
-        if (selected == null)
+        if (selected == null) {
             return -1;
+        }
         return tableView.getColumns().indexOf(selected.getTableColumn());
     }
 
     public int getRowAt(TableView<?> tableView, Point2D point) {
         TableCell<?, ?> selected = getTableCellAt(tableView, point);
-        if (selected == null)
+        if (selected == null) {
             return -1;
+        }
         return selected.getTableRow().getIndex();
     }
 
@@ -1041,19 +1089,22 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public String getTableCellText(TableView<?> tableView, int row, int column) {
-        if (column == -1 || row == -1)
+        if (column == -1 || row == -1) {
             return null;
+        }
         String scolumn = getColumnName(tableView, column);
-        if (scolumn == null || "".equals(scolumn))
+        if (scolumn == null || "".equals(scolumn)) {
             scolumn = "" + column;
+        }
         return new JSONObject().put("cell", new JSONArray().put(row).put(getColumnName(tableView, column))).toString();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" }) public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
         TableCell<?, ?> cell = getVisibleCellAt(tableView, row, column);
-        if (cell != null)
+        if (cell != null) {
             return cell;
-        TableColumn tableColumn = (TableColumn) tableView.getColumns().get(column);
+        }
+        TableColumn tableColumn = tableView.getColumns().get(column);
         cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
         Object value = tableColumn.getCellObservableValue(row).getValue();
         Method updateItem;
@@ -1079,8 +1130,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell))
+        if (cell != null && isShowing(cell)) {
             return cell;
+        }
         return null;
     }
 
@@ -1109,7 +1161,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> cells = row.lookupAll(".table-cell");
         for (Node node : cells) {
             TableCell<?, ?> cell = (TableCell<?, ?>) node;
-            if ((tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex)) {
+            if (tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex) {
                 Bounds bounds = cell.getBoundsInParent();
                 Point2D localToParent = cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
                 Point2D rowLocal = row.localToScene(localToParent, true);
@@ -1123,10 +1175,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         TableViewSelectionModel<?> selectionModel = tableView.getSelectionModel();
         if (!selectionModel.isCellSelectionEnabled()) {
             ObservableList<Integer> selectedIndices = selectionModel.getSelectedIndices();
-            if (tableView.getItems().size() == selectedIndices.size())
+            if (tableView.getItems().size() == selectedIndices.size()) {
                 return "all";
-            if (selectedIndices.size() == 0)
+            }
+            if (selectedIndices.size() == 0) {
                 return "";
+            }
             return getRowSelectionText(selectedIndices);
         }
 
@@ -1137,11 +1191,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         int rowCount = tableView.getItems().size();
         int columnCount = tableView.getColumns().size();
 
-        if (selectedCells.size() == (rowCount * columnCount))
+        if (selectedCells.size() == rowCount * columnCount) {
             return "all";
+        }
 
-        if (selectedCells.size() == 0)
+        if (selectedCells.size() == 0) {
             return "";
+        }
         JSONObject cells = new JSONObject();
         JSONArray value = new JSONArray();
         for (int i = 0; i < selectedCells.size(); i++) {
@@ -1159,8 +1215,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public List<String> getSelectedColumnText(TableView<?> tableView, int[] columns) {
         List<String> text = new ArrayList<String>();
-        for (int i = 0; i < columns.length; i++) {
-            String columnName = getColumnName(tableView, columns[i]);
+        for (int column : columns) {
+            String columnName = getColumnName(tableView, column);
             text.add(escapeSpecialCharacters(columnName));
         }
         return text;
@@ -1178,8 +1234,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         for (int i = 0; i < ncolumns; i++) {
             @SuppressWarnings("rawtypes")
             String column = ((TableColumn) columns.get(i)).getText();
-            if (columnName.equals(escapeSpecialCharacters(column)))
+            if (columnName.equals(escapeSpecialCharacters(column))) {
                 return i;
+            }
         }
         throw new RuntimeException("Could not find column " + columnName + " in table");
     }
@@ -1232,11 +1289,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public String getTreeTableCellText(TreeTableView<?> treeTableView, int row, int column) {
-        if (column == -1 || row == -1)
+        if (column == -1 || row == -1) {
             return null;
+        }
         String scolumn = getTreeTableColumnName(treeTableView, column);
-        if (scolumn == null || "".equals(scolumn))
+        if (scolumn == null || "".equals(scolumn)) {
             scolumn = "" + column;
+        }
         return new JSONObject()
                 .put("cell", new JSONArray()
                         .put(getTreeTableNodePath(treeTableView, treeTableView.getSelectionModel().getModelItem(row))).put(scolumn))
@@ -1259,23 +1318,26 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     protected int getTreeTableColumnAt(TreeTableView<?> treeTableView, Point2D point) {
         TreeTableCell<?, ?> selected = getTreeTableCellAt(treeTableView, point);
-        if (selected == null)
+        if (selected == null) {
             return -1;
+        }
         return treeTableView.getColumns().indexOf(selected.getTableColumn());
     }
 
     protected int getTreeTableRowAt(TreeTableView<?> treeTableView, Point2D point) {
         TreeTableCell<?, ?> selected = getTreeTableCellAt(treeTableView, point);
-        if (selected == null)
+        if (selected == null) {
             return -1;
+        }
         return selected.getTreeTableRow().getIndex();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" }) protected TreeTableCell<?, ?> getCellAt(TreeTableView<?> treeTableView, int row,
             int column) {
         TreeTableCell cell = getVisibleCellAt(treeTableView, row, column);
-        if (cell != null)
+        if (cell != null) {
             return cell;
+        }
         try {
             TreeTableColumn treeTableColumn = treeTableView.getColumns().get(column);
             Callback cellFactory = treeTableColumn.getCellFactory();
@@ -1307,16 +1369,19 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     @SuppressWarnings("unchecked") public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView,
             TreeItem<?> lastPathComponent) {
-        if (lastPathComponent == null || lastPathComponent.getValue() == null)
+        if (lastPathComponent == null || lastPathComponent.getValue() == null) {
             return "";
+        }
         @SuppressWarnings("rawtypes")
         TreeTableColumn treeTableColumn = treeTableView.getTreeColumn();
-        if (treeTableColumn == null)
+        if (treeTableColumn == null) {
             treeTableColumn = treeTableView.getColumns().get(0);
+        }
         ObservableValue<?> cellObservableValue = treeTableColumn.getCellObservableValue(lastPathComponent);
         String text = cellObservableValue.getValue().toString();
-        if (text != null)
+        if (text != null) {
             return text;
+        }
         return lastPathComponent.getValue().toString();
     }
 
@@ -1350,12 +1415,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         ObservableList<?> selectedCells = selectionModel.getSelectedCells();
         int rowCount = treeTableView.getExpandedItemCount();
         int columnCount = treeTableView.getColumns().size();
-        if (selectedIndices.size() == 0 || selectedCells.size() == 0)
+        if (selectedIndices.size() == 0 || selectedCells.size() == 0) {
             return "";
-        else if ((!selectionModel.isCellSelectionEnabled() && selectedIndices.size() == treeTableView.getExpandedItemCount())
-                || (selectionModel.isCellSelectionEnabled() && selectedCells.size() == (rowCount * columnCount)))
+        } else if (!selectionModel.isCellSelectionEnabled() && selectedIndices.size() == treeTableView.getExpandedItemCount()
+                || selectionModel.isCellSelectionEnabled() && selectedCells.size() == rowCount * columnCount) {
             return "all";
-        else if (!selectionModel.isCellSelectionEnabled()) {
+        } else if (!selectionModel.isCellSelectionEnabled()) {
             return getTreeTableRowSelectionText(treeTableView, selectionModel.getSelectedItems());
         } else {
             int[] rows = new int[selectedCells.size()];
@@ -1392,8 +1457,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         for (int i = 0; i < ncolumns; i++) {
             @SuppressWarnings("rawtypes")
             String column = ((TreeTableColumn) columns.get(i)).getText();
-            if (columnName.equals(escapeSpecialCharacters(column)))
+            if (columnName.equals(escapeSpecialCharacters(column))) {
                 return i;
+            }
         }
         throw new RuntimeException("Could not find column " + columnName + " in tree table");
     }
@@ -1408,19 +1474,21 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         if (treeTableView.isShowRoot()) {
             String rootNodeText = unescapeSpecialCharacters(tokens[0]);
             searchedPath.append("/" + rootNodeText);
-            if (rootNode == null)
+            if (rootNode == null) {
                 throw new RuntimeException("TreeTableView does not have a root node!");
+            }
             if (!searchedPath.toString()
-                    .equals("/" + getTextForTreeTableNodeObject(treeTableView, treePath.get(treePath.size() - 1))))
+                    .equals("/" + getTextForTreeTableNodeObject(treeTableView, treePath.get(treePath.size() - 1)))) {
                 throw new RuntimeException("TreeTableView root node does not match: Expected </"
                         + getTextForTreeTableNodeObject(treeTableView, treePath.get(treePath.size() - 1)) + "> Actual: <"
                         + searchedPath.toString() + ">");
+            }
         }
         for (int i = start; i < tokens.length; i++) {
             String childText = unescapeSpecialCharacters(tokens[i]);
             searchedPath.append("/" + childText);
             boolean matched = false;
-            TreeItem<?> item = (TreeItem<?>) treePath.get(treePath.size() - 1);
+            TreeItem<?> item = treePath.get(treePath.size() - 1);
             item.setExpanded(true);
             for (int j = 0; j < item.getChildren().size(); j++) {
                 Object child = item.getChildren().get(j);
@@ -1432,8 +1500,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                     break;
                 }
             }
-            if (!matched)
+            if (!matched) {
                 return -1;
+            }
         }
         @SuppressWarnings("rawtypes")
         TreeItem treeItem = treePath.get(treePath.size() - 1);
@@ -1443,8 +1512,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     protected int[] getTreeTableSelectedRows(TreeTableView<?> treeTableView, String value) {
         JSONArray o = new JSONObject(value).getJSONArray("rows");
         int[] rows = new int[o.length()];
-        for (int i = 0; i < o.length(); i++)
+        for (int i = 0; i < o.length(); i++) {
             rows[i] = getTreeTableNodeIndex(treeTableView, o.getString(i));
+        }
         return rows;
     }
 
@@ -1481,18 +1551,21 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     @SuppressWarnings("deprecation") private static String getTabNameFromIcon(TabPane tabPane, int index) {
         Node graphic = tabPane.getTabs().get(index).getGraphic();
-        if (graphic == null || !(graphic instanceof ImageView))
+        if (graphic == null || !(graphic instanceof ImageView)) {
             return "tabIndex-" + index;
+        }
         return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
     }
 
     private static String nameFromImage(String description) {
         try {
             String name = new URL(description).getPath();
-            if (name.lastIndexOf('/') != -1)
+            if (name.lastIndexOf('/') != -1) {
                 name = name.substring(name.lastIndexOf('/') + 1);
-            if (name.lastIndexOf('.') != -1)
+            }
+            if (name.lastIndexOf('.') != -1) {
                 name = name.substring(0, name.lastIndexOf('.'));
+            }
             return name;
         } catch (MalformedURLException e) {
             return description;
@@ -1515,8 +1588,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     private String getMenuText(ObservableList<Menu> menus, int index) {
         Menu menu = menus.get(index);
         String text = menu.getText();
-        if (text == null || "".equals(text))
+        if (text == null || "".equals(text)) {
             return getMenuTextFromIcon(menu, index);
+        }
         return text;
     }
 
@@ -1547,16 +1621,18 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     public String getMenuItemText(Menu parentMenu, int index) {
         MenuItem menuItem = parentMenu.getItems().get(index);
         String text = menuItem.getText();
-        if (text == null || "".equals(text))
+        if (text == null || "".equals(text)) {
             return getTextFromIcon(menuItem, index);
+        }
         return text;
     }
 
     @SuppressWarnings("deprecation") protected String getTextFromIcon(MenuItem menuItem, int index) {
         Node graphic = menuItem.getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
-            if (index == -1)
+            if (index == -1) {
                 return "EmptyTitleMenu";
+            }
             return "MenuItemIndex-" + index;
         }
         return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
@@ -1587,22 +1663,25 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public static String removeClassName(Object object) {
-        if (object == null)
+        if (object == null) {
             return "null";
+        }
         if (object.getClass().isArray()) {
             StringBuffer buffer = new StringBuffer();
             buffer.append("[");
             int length = Array.getLength(object);
             for (int i = 0; i < length; i++) {
                 buffer.append(removeClassName(Array.get(object, i)));
-                if (i != length - 1)
+                if (i != length - 1) {
                     buffer.append(", ");
+                }
             }
             buffer.append("]");
             return buffer.toString();
         }
-        if (object.getClass().isPrimitive() || object instanceof String)
+        if (object.getClass().isPrimitive() || object instanceof String) {
             return object.toString();
+        }
         try {
             return object.toString().replaceFirst(object.getClass().getName(), "");
         } catch (Throwable t) {

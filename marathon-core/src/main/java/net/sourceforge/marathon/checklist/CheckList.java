@@ -1,25 +1,23 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.checklist;
 
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,75 +26,74 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-
-import com.jgoodies.forms.builder.DefaultFormBuilder;
-import com.jgoodies.forms.layout.FormLayout;
-
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToolBar;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.screencapture.ImagePanel;
 import net.sourceforge.marathon.screencapture.ImagePanel.Annotation;
 
 public class CheckList {
-    public static abstract class CheckListItem {
-        private transient JPanel panel;
-        private String label;
 
+    public static abstract class CheckListItem {
+        private transient VBox vbox;
+        private String label;
         private static CheckListItem selectedItem;
 
         public CheckListItem(String label) {
             setLabel(label);
         }
 
+        public CheckListItem() {
+            this(null);
+        }
+
         public void setLabel(String label) {
             this.label = label;
         }
 
-        public CheckListItem() {
-            this.label = null;
+        protected abstract VBox createVBox(boolean selectable, boolean editable);
+
+        public VBox getVbox(boolean selectable, boolean editable) {
+            if (vbox == null) {
+                vbox = createVBox(selectable, editable);
+            }
+            if (selectable) {
+                setMouseListener(vbox);
+            }
+            return vbox;
         }
 
-        protected void setMouseListener(JComponent c) {
-            c.addMouseListener(new MouseAdapter() {
-                @Override public void mouseClicked(MouseEvent e) {
-                    if (selectedItem != null)
-                        selectedItem.deselect();
-                    selectedItem = CheckListItem.this;
-                    CheckListItem.this.select();
+        protected void setMouseListener(Node node) {
+            node.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> {
+                e.consume();
+                if (selectedItem != null) {
+                    selectedItem.deselect();
                 }
+                selectedItem = CheckListItem.this;
+                CheckListItem.this.select();
             });
         }
 
-        protected abstract JPanel createPanel(boolean selectable, boolean editable);
-
-        public JPanel getPanel(boolean selectable, boolean editable) {
-            if (panel == null) {
-                panel = createPanel(selectable, editable);
-                if (selectable)
-                    setMouseListener(panel);
-            }
-            return panel;
+        public void select() {
+            vbox.setStyle("-fx-border-color: blue;" + "-fx-border-width: 3");
         }
 
         public void deselect() {
-            panel.setBorder(BorderFactory.createEmptyBorder());
-        }
-
-        public void select() {
-            panel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+            vbox.setStyle("-fx-border-color: white;");
         }
 
         public String getLabel() {
@@ -120,14 +117,45 @@ public class CheckList {
         }
     }
 
+    public static class Header extends CheckListItem {
+        private static final String TYPE = "header";
+
+        public Header(String label) {
+            super(label);
+        }
+
+        public Header() {
+        }
+
+        @Override protected VBox createVBox(boolean selectable, boolean editable) {
+            VBox headerBox = new VBox();
+            HBox hBox = new HBox();
+            Separator separator = new Separator();
+            HBox.setHgrow(separator, Priority.ALWAYS);
+            separator.setStyle("-fx-padding: 8 0 0 3;");
+            hBox.getChildren().addAll(new Label(getLabel()), separator);
+            headerBox.getChildren().add(hBox);
+            return headerBox;
+        }
+
+        @Override public String getType() {
+            return TYPE;
+        }
+
+        @Override public String toString() {
+            return "<header label = \"" + getLabel() + "\" />";
+        }
+    }
+
     public static class FailureNote extends CheckListItem {
         private static final String TYPE = "checklist";
-        private JTextArea textArea;
-        private int selected = 0;
-        private JRadioButton success;
-        private JRadioButton fail;
-        private JRadioButton notes;
+        private RadioButton success;
+        private RadioButton fail;
+        private RadioButton notes;
+        private TextArea textArea = new TextArea();
+        private Label label;
         private String text = "";
+        private int selected = 0;
 
         public FailureNote(String label) {
             super(label);
@@ -136,111 +164,77 @@ public class CheckList {
         public FailureNote() {
         }
 
-        protected JPanel createPanel(final boolean selectable, final boolean editable) {
-            FormLayout layout = new FormLayout("pref,3dlu,pref:grow,pref,pref,pref,pref,pref,pref,pref", "pref,pref");
-            final JPanel panel = new JPanel();
-            DefaultFormBuilder builder = new DefaultFormBuilder(layout, panel);
-
-            JLabel jlabel = new JLabel(getLabel());
-            builder.append(jlabel);
-            builder.nextColumn(2);
-            ButtonGroup group = new ButtonGroup();
-            success = new JRadioButton("Success");
-            fail = new JRadioButton("Fail");
-            notes = new JRadioButton("Notes");
-            group.add(success);
-            group.add(fail);
-            group.add(notes);
-
-            builder.append(success);
-            builder.append(fail);
-            builder.append(notes);
-
-            textArea = new JTextArea();
-            textArea.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                    try {
-                        text = e.getDocument().getText(0, e.getDocument().getLength());
-                    } catch (BadLocationException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-                public void insertUpdate(DocumentEvent e) {
-                    try {
-                        text = e.getDocument().getText(0, e.getDocument().getLength());
-                    } catch (BadLocationException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-                public void removeUpdate(DocumentEvent e) {
-                    try {
-                        text = e.getDocument().getText(0, e.getDocument().getLength());
-                    } catch (BadLocationException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            });
-            textArea.setRows(4);
-            JScrollPane scroll = new JScrollPane(textArea);
-            scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            builder.append(scroll, 10);
-
-            success.addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e) {
-                    if (success.isSelected())
-                        selected = 1;
-                    textArea.setEnabled(!success.isSelected());
-                    if (panel != null)
-                        panel.repaint();
-                }
-            });
-            fail.addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e) {
-                    if (fail.isSelected())
-                        selected = 3;
-                    textArea.setEnabled(!success.isSelected());
-                    if (panel != null)
-                        panel.repaint();
-                }
-            });
-            notes.addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e) {
-                    if (notes.isSelected())
-                        selected = 2;
-                    textArea.setEnabled(!success.isSelected());
-                    if (panel != null)
-                        panel.repaint();
-                }
-            });
-            success.setEnabled(editable);
-            fail.setEnabled(editable);
-            notes.setEnabled(editable);
-            textArea.setEditable(editable);
-            textArea.setText(text);
-            if (selected == 1)
-                success.setSelected(true);
-            else if (selected == 3)
-                fail.setSelected(true);
-            else if (selected == 2)
-                notes.setSelected(true);
-            else
-                success.setSelected(editable);
-
+        @Override protected VBox createVBox(boolean selectable, boolean editable) {
+            VBox checkListBox = new VBox();
+            checkListBox.getChildren().addAll(createButtonBar(selectable, editable), createTextArea(selectable, editable));
             if (selectable) {
+                setMouseListener(checkListBox);
                 setMouseListener(success);
                 setMouseListener(fail);
                 setMouseListener(notes);
                 setMouseListener(textArea);
-                setMouseListener(jlabel);
+                setMouseListener(label);
             }
-            return builder.getPanel();
+            return checkListBox;
         }
 
-        @Override public String toString() {
-            return "<failureNote label = \"" + getLabel() + "\" />";
+        private ToolBar createButtonBar(boolean selectable, boolean editable) {
+            ToolBar toolBar = new ToolBar();
+            label = new Label(getLabel());
+            ToggleGroup toggleGroup = new ToggleGroup();
+            success = new RadioButton("Success");
+            fail = new RadioButton("Fail");
+            notes = new RadioButton("Notes");
+            success.setDisable(!editable);
+            fail.setDisable(!editable);
+            notes.setDisable(!editable);
+            success.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (success.isSelected()) {
+                    selected = 1;
+                }
+                textArea.setDisable(success.isSelected());
+            });
+            fail.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (fail.isSelected()) {
+                    selected = 3;
+                }
+                textArea.setDisable(success.isSelected());
+            });
+            notes.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (notes.isSelected()) {
+                    selected = 2;
+                }
+                textArea.setDisable(success.isSelected());
+            });
+            if (selected == 1) {
+                success.setSelected(true);
+            } else if (selected == 3) {
+                fail.setSelected(true);
+            } else if (selected == 2) {
+                notes.setSelected(true);
+            } else {
+                success.setSelected(editable);
+            }
+            toggleGroup.getToggles().addAll(success, fail, notes);
+            Region region = new Region();
+            HBox.setHgrow(region, Priority.ALWAYS);
+            toolBar.getItems().addAll(label, region, success, fail, notes);
+            return toolBar;
+        }
+
+        private Node createTextArea(boolean selectable, boolean editable) {
+            textArea.setPrefRowCount(4);
+            textArea.setEditable(editable);
+            textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+                text = textArea.getText();
+            });
+            textArea.setText(text);
+            ScrollPane scrollPane = new ScrollPane(textArea);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+            scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+            HBox.setHgrow(scrollPane, Priority.ALWAYS);
+            return scrollPane;
         }
 
         @Override public String getType() {
@@ -262,11 +256,15 @@ public class CheckList {
         @Override public void setText(String text) {
             this.text = text;
         }
+
+        @Override public String toString() {
+            return "<failureNote label = \"" + getLabel() + "\" />";
+        }
     }
 
     public static class CommentBox extends CheckListItem {
         private static final String TYPE = "comments";
-        private JTextArea textArea;
+        private TextArea textArea;
         private String text = "";
 
         public CommentBox(String label) {
@@ -276,54 +274,33 @@ public class CheckList {
         public CommentBox() {
         }
 
-        protected JPanel createPanel(boolean selectable, boolean editable) {
-            FormLayout layout = new FormLayout("pref:grow", "pref, pref");
-            DefaultFormBuilder builder = new DefaultFormBuilder(layout);
-            JLabel jlabel = new JLabel(getLabel());
-            builder.append(jlabel);
-            textArea = new JTextArea();
-            textArea.setRows(4);
-            JScrollPane scroll = new JScrollPane(textArea);
-            scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            builder.append(scroll);
-            JPanel panel = builder.getPanel();
-            textArea.setEditable(editable);
-            textArea.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                    try {
-                        text = e.getDocument().getText(0, e.getDocument().getLength());
-                    } catch (BadLocationException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-                public void insertUpdate(DocumentEvent e) {
-                    try {
-                        text = e.getDocument().getText(0, e.getDocument().getLength());
-                    } catch (BadLocationException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-                public void removeUpdate(DocumentEvent e) {
-                    try {
-                        text = e.getDocument().getText(0, e.getDocument().getLength());
-                    } catch (BadLocationException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            });
-            textArea.setText(text);
+        @Override protected VBox createVBox(boolean selectable, boolean editable) {
+            VBox textAreaBox = new VBox();
+            Label label = new Label(getLabel());
+            textAreaBox.getChildren().addAll(label, createTextArea(selectable, editable));
             if (selectable) {
-                setMouseListener(jlabel);
+                setMouseListener(label);
                 setMouseListener(textArea);
             }
-            return panel;
+            HBox.setHgrow(textAreaBox, Priority.ALWAYS);
+            return textAreaBox;
         }
 
-        @Override public String toString() {
-            return "<commentBox label = \"" + getLabel() + "\" />";
+        private Node createTextArea(boolean selectable, boolean editable) {
+            textArea = new TextArea();
+            textArea.setPrefRowCount(4);
+            textArea.setEditable(editable);
+            textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+                text = textArea.getText();
+            });
+            textArea.setText(text);
+            ScrollPane scrollPane = new ScrollPane(textArea);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+            scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+            scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+            HBox.setHgrow(scrollPane, Priority.ALWAYS);
+            return scrollPane;
         }
 
         @Override public String getType() {
@@ -337,34 +314,9 @@ public class CheckList {
         @Override public void setText(String text) {
             this.text = text;
         }
-    }
-
-    public static class Header extends CheckListItem {
-        private static final String TYPE = "header";
-
-        public Header(String label) {
-            super(label);
-        }
-
-        public Header() {
-        }
-
-        @Override protected JPanel createPanel(boolean selectable, boolean editable) {
-            FormLayout layout = new FormLayout("pref:grow", "pref");
-            DefaultFormBuilder builder = new DefaultFormBuilder(layout);
-            builder.appendSeparator(getLabel());
-            builder.appendUnrelatedComponentsGapRow();
-
-            JPanel panel = builder.getPanel();
-            return panel;
-        }
 
         @Override public String toString() {
-            return "<header label = \"" + getLabel() + "\" />";
-        }
-
-        @Override public String getType() {
-            return TYPE;
+            return "<commentBox label = \"" + getLabel() + "\" />";
         }
     }
 
@@ -378,78 +330,20 @@ public class CheckList {
         checkListItems = new ArrayList<CheckList.CheckListItem>();
     }
 
-    public static CheckList read(File file) throws Exception {
-        XMLDecoder decoder = new XMLDecoder(new FileInputStream(file));
-        try {
-            return (CheckList) decoder.readObject();
-        } finally {
-            decoder.close();
-        }
-    }
-
-    public void add(CheckListItem item) {
-        checkListItems.add(item);
-    }
-
-    public void save(OutputStream out) {
-        XMLEncoder encoder1;
-        encoder1 = new XMLEncoder(out);
-        encoder1.writeObject(this);
-        encoder1.close();
-    }
-
-    public Iterator<CheckList.CheckListItem> getItems() {
+    public Iterator<CheckListItem> getItems() {
         return checkListItems.iterator();
     }
 
-    public CommentBox createCommentBox(String label) {
-        CommentBox commentBox = new CommentBox(label);
-        add(commentBox);
-        return commentBox;
+    private void add(CheckListItem item) {
+        checkListItems.add(item);
     }
 
-    public FailureNote createFailureNote(String label) {
-        FailureNote note = new FailureNote(label);
-        add(note);
-        return note;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Header createHeader(String label) {
-        Header header = new Header(label);
-        add(header);
-        return header;
-    }
-
-    public void deleteSelected() {
-        if (CheckListItem.selectedItem != null) {
-            CheckListItem.selectedItem.deselect();
-            checkListItems.remove(CheckListItem.selectedItem);
-            CheckListItem.selectedItem = null;
-        }
-    }
-
-    public CheckListItem getSelected() {
-        return CheckListItem.selectedItem;
-    }
-
-    public void moveUpSelected() {
-        if (CheckListItem.selectedItem != null) {
-            int index = checkListItems.indexOf(CheckListItem.selectedItem);
-            if (index == -1 || index == 0)
-                return;
-            checkListItems.remove(index);
-            checkListItems.add(index - 1, CheckListItem.selectedItem);
-        }
-    }
-
-    public void moveDownSelected() {
-        if (CheckListItem.selectedItem != null) {
-            int index = checkListItems.indexOf(CheckListItem.selectedItem);
-            if (index == -1 || index == checkListItems.size() - 1)
-                return;
-            checkListItems.remove(index);
-            checkListItems.add(index + 1, CheckListItem.selectedItem);
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -460,14 +354,6 @@ public class CheckList {
         return description == null ? "" : description;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setCheckListItems(ArrayList<CheckList.CheckListItem> checkListItems) {
         this.checkListItems = checkListItems;
     }
@@ -476,28 +362,107 @@ public class CheckList {
         return checkListItems;
     }
 
-    private String getStatus() {
+    public Header createHeader(String label) {
+        Header header = new Header(label);
+        add(header);
+        return header;
+    }
+
+    public FailureNote createFailureNote(String label) {
+        FailureNote failureNote = new FailureNote(label);
+        add(failureNote);
+        return failureNote;
+    }
+
+    public CommentBox createCommentBox(String label) {
+        CommentBox commentBox = new CommentBox(label);
+        add(commentBox);
+        return commentBox;
+    }
+
+    public void moveUpSelected() {
+        if (CheckListItem.selectedItem != null) {
+            int index = checkListItems.indexOf(CheckListItem.selectedItem);
+            if (index == -1 || index == 0) {
+                return;
+            }
+            checkListItems.remove(index);
+            checkListItems.add(index - 1, CheckListItem.selectedItem);
+        }
+    }
+
+    public void moveDownSelected() {
+        if (CheckListItem.selectedItem != null) {
+            int index = checkListItems.indexOf(CheckListItem.selectedItem);
+            if (index == -1 || index == checkListItems.size() - 1) {
+                return;
+            }
+            checkListItems.remove(index);
+            checkListItems.add(index + 1, CheckListItem.selectedItem);
+        }
+    }
+
+    public void deleteSelected() {
+        if (CheckListItem.selectedItem != null) {
+            CheckListItem.selectedItem.deselect();
+            checkListItems.remove(CheckListItem.selectedItem);
+            CheckListItem.selectedItem = null;
+        }
+    }
+
+    public static CheckList read(File file) throws Exception {
+        XMLDecoder decoder = new XMLDecoder(new FileInputStream(file));
+        try {
+            return (CheckList) decoder.readObject();
+        } finally {
+            decoder.close();
+        }
+    }
+
+    public void save(OutputStream out) {
+        XMLEncoder encoder1;
+        encoder1 = new XMLEncoder(out);
+        encoder1.writeObject(this);
+        encoder1.close();
+    }
+
+    public void setCaptureFile(String file) {
+        this.captureFile = file;
+    }
+
+    public void xsetDataFile(File file) {
+        this.dataFile = file;
+    }
+
+    public File xgetDataFile() {
+        return dataFile;
+    }
+
+    public String getStatus() {
         int status = 0;
         for (CheckListItem item : checkListItems) {
-            if (status < item.getSelected())
+            if (status < item.getSelected()) {
                 status = item.getSelected();
+            }
         }
-        if (status == 3)
+        if (status == 3) {
             return "Fail";
-        else if (status == 2)
+        } else if (status == 2) {
             return "Notes";
+        }
         return "OK";
     }
 
-    public void saveXML(String indent, OutputStream baos, int index) {
+    public void saveXML(String indent, ByteArrayOutputStream baos, int index) {
         PrintWriter printWriter = new PrintWriter(baos);
         indent += "  ";
         printWriter.print(indent + "<checklist ");
         printWriter.print("name=\"" + quoteCharacters(getName()) + "\" ");
         printWriter.print("index=\"" + index + "\" ");
         printWriter.print("description=\"" + quoteCharacters(getDescription()) + "\" ");
-        if (captureFile != null)
+        if (captureFile != null) {
             printWriter.print("capture=\"" + captureFile + "\" ");
+        }
         printWriter.print("status=\"" + getStatus() + "\" ");
         printWriter.println(">");
 
@@ -505,8 +470,9 @@ public class CheckList {
             printWriter.print("<checkitem type=\"" + item.getType() + "\" ");
             printWriter.print("label=\"" + quoteCharacters(item.getLabel()) + "\" ");
             int selected = item.getSelected();
-            if (selected != 0)
+            if (selected != 0) {
                 printWriter.print("selected=\"" + selected + "\" ");
+            }
             String text = item.getText();
             if (text == null) {
                 printWriter.println("/>");
@@ -516,15 +482,16 @@ public class CheckList {
                 printWriter.println("\" />");
             }
         }
+        // TODO: Annotate screen capture.
         if (captureFile != null) {
             File file = new File(System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR), captureFile);
             try {
-                ImagePanel imagePanel = new ImagePanel(new FileInputStream(file), false);
-                ArrayList<Annotation> annotations = imagePanel.getAnnotations();
+                ImagePanel imagePanel = new ImagePanel(file, false);
+                List<Annotation> annotations = imagePanel.getAnnotations();
                 printWriter.println(indent + "  " + "<annotations>");
                 for (Annotation a : annotations) {
-                    printWriter.println(indent + "    " + "<annotation x=\"" + a.x + "\" y=\"" + a.y + "\" w=\"" + a.width
-                            + "\" h=\"" + a.height + "\" text=\"" + quoteCharacters(a.getText()) + "\"/>");
+                    printWriter.println(indent + "    " + "<annotation x=\"" + a.getX() + "\" y=\"" + a.getY() + "\" w=\""
+                            + a.getWidth() + "\" h=\"" + a.getHeight() + "\" text=\"" + quoteCharacters(a.getText()) + "\"/>");
                 }
                 printWriter.println(indent + "  " + "</annotations>");
             } catch (FileNotFoundException e) {
@@ -562,7 +529,7 @@ public class CheckList {
                     result = new StringBuffer(s);
                 }
                 result.replace(i + delta, i + delta + 1, replacement);
-                delta += (replacement.length() - 1);
+                delta += replacement.length() - 1;
             }
         }
         if (result == null) {
@@ -571,28 +538,39 @@ public class CheckList {
         return result.toString();
     }
 
-    /*
-     * Make XMLEncoder happy by not using standard bean property get/set methods
-     */
-    public void setCaptureFile(String file) {
-        this.captureFile = file;
-    }
-
-    /*
-     * Make XMLEncoder happy by not using standard bean property get/set methods
-     */
-    public void xsetDataFile(File file) {
-        this.dataFile = file;
-    }
-
-    /*
-     * Make XMLEncoder happy by not using standard bean property get/set methods
-     */
-    public File xgetDataFile() {
-        return dataFile;
-    }
-
     public String getCaptureFile() {
         return captureFile;
+    }
+
+    public void saveHTML(OutputStream baos) {
+        PrintWriter printWriter = new PrintWriter(baos);
+        printWriter.println("<html><head><title>Checklist: " + quoteCharacters(getName()) + "</title></head><body>");
+        printWriter.println("<h1>Checklist: " + quoteCharacters(getName()) + "(" + getStatus() + ")</h1>");
+        printWriter.println("<h2>" + quoteCharacters(getDescription()) + "</h2>");
+        for (CheckListItem item : checkListItems) {
+            String status = getStatus(item.getSelected());
+            printWriter.println("<h3>" + quoteCharacters(item.getLabel()) + status + "<h3><hr/>");
+            String text = item.getText();
+            if (text != null) {
+                printWriter.println("<p>" + quoteCharacters(text) + "</p>");
+            }
+        }
+        printWriter.println("</body></html>");
+
+        printWriter.close();
+    }
+
+    private String getStatus(int selected) {
+        if (selected == 0) {
+            return "";
+        }
+        if (selected == 1) {
+            return "(OK)";
+        }
+        if (selected == 2) {
+            return "(Notes)";
+        } else {
+            return "(Failure)";
+        }
     }
 }

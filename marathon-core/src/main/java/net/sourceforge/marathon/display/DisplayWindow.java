@@ -1,42 +1,22 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,253 +29,212 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.io.Writer;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
-import java.util.prefs.Preferences;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JRootPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.BevelBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.text.BadLocationException;
-import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
 
+import com.google.inject.Inject;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import net.sourceforge.marathon.Main;
 import net.sourceforge.marathon.api.LogRecord;
+import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
-import net.sourceforge.marathon.checklist.CheckListDialog;
 import net.sourceforge.marathon.checklist.CheckListForm;
-import net.sourceforge.marathon.checklist.CheckListForm.Mode;
-import net.sourceforge.marathon.checklist.MarathonCheckList;
-import net.sourceforge.marathon.display.ResultPane.IResultPaneSelectionListener;
+import net.sourceforge.marathon.checklist.CheckListForm.CheckListElement;
+import net.sourceforge.marathon.checklist.CheckListFormNode;
+import net.sourceforge.marathon.checklist.CheckListFormNode.Mode;
+import net.sourceforge.marathon.checklist.CheckListStage;
+import net.sourceforge.marathon.checklist.IInsertCheckListHandler;
+import net.sourceforge.marathon.checklist.MarathonCheckListStage;
+import net.sourceforge.marathon.checklist.NewChekListInputStage;
 import net.sourceforge.marathon.editor.IContentChangeListener;
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.editor.IEditor.IGutterListener;
 import net.sourceforge.marathon.editor.IEditorProvider;
 import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
+import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.fx.api.ModalDialog;
+import net.sourceforge.marathon.fx.display.AddPropertiesStage;
+import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
+import net.sourceforge.marathon.fx.display.FixtureStage;
+import net.sourceforge.marathon.fx.display.FixtureStageInfo;
+import net.sourceforge.marathon.fx.display.FunctionInfo;
+import net.sourceforge.marathon.fx.display.FunctionStage;
+import net.sourceforge.marathon.fx.display.IFixtureStageInfoHandler;
+import net.sourceforge.marathon.fx.display.IFunctionArgumentHandler;
+import net.sourceforge.marathon.fx.display.IInputHanler;
+import net.sourceforge.marathon.fx.display.IModuleFunctionHandler;
+import net.sourceforge.marathon.fx.display.IPreferenceHandler;
+import net.sourceforge.marathon.fx.display.LineNumberStage;
+import net.sourceforge.marathon.fx.display.LogView;
+import net.sourceforge.marathon.fx.display.MarathonInputStage;
+import net.sourceforge.marathon.fx.display.MarathonModuleStage;
+import net.sourceforge.marathon.fx.display.MarathonPreferencesInfo;
+import net.sourceforge.marathon.fx.display.ModuleInfo;
+import net.sourceforge.marathon.fx.display.PreferencesStage;
+import net.sourceforge.marathon.fx.display.ResultPane;
+import net.sourceforge.marathon.fx.display.ResultPane.IResultPaneSelectionListener;
+import net.sourceforge.marathon.fx.display.StatusBar;
+import net.sourceforge.marathon.fx.display.TestPropertiesInfo;
+import net.sourceforge.marathon.fx.display.TextAreaOutputFX;
+import net.sourceforge.marathon.fx.projectselection.MPFConfigurationInfo;
+import net.sourceforge.marathon.fx.projectselection.MPFConfigurationStage;
+import net.sourceforge.marathon.fxdocking.DockGroup;
+import net.sourceforge.marathon.fxdocking.DockKey;
+import net.sourceforge.marathon.fxdocking.Dockable;
+import net.sourceforge.marathon.fxdocking.DockableResolver;
+import net.sourceforge.marathon.fxdocking.DockableSelectionEvent;
+import net.sourceforge.marathon.fxdocking.DockableSelectionListener;
+import net.sourceforge.marathon.fxdocking.DockableState;
+import net.sourceforge.marathon.fxdocking.DockableStateChangeEvent;
+import net.sourceforge.marathon.fxdocking.DockableStateChangeListener;
+import net.sourceforge.marathon.fxdocking.DockableStateWillChangeEvent;
+import net.sourceforge.marathon.fxdocking.DockableStateWillChangeListener;
+import net.sourceforge.marathon.fxdocking.DockingConstants.Split;
+import net.sourceforge.marathon.fxdocking.DockingDesktop;
+import net.sourceforge.marathon.fxdocking.DockingUtilities;
+import net.sourceforge.marathon.fxdocking.TabbedDockableContainer;
+import net.sourceforge.marathon.fxdocking.ToolBarContainer;
+import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
+import net.sourceforge.marathon.fxdocking.ToolBarPanel;
+import net.sourceforge.marathon.fxdocking.VLToolBar;
 import net.sourceforge.marathon.junit.MarathonAssertion;
-import net.sourceforge.marathon.junit.MarathonResultReporter;
 import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.junit.StdOutConsole;
-import net.sourceforge.marathon.junit.textui.HTMLOutputter;
-import net.sourceforge.marathon.junit.textui.TestLinkXMLOutputter;
-import net.sourceforge.marathon.junit.textui.XMLOutputter;
-import net.sourceforge.marathon.mpf.MPFConfigurationUI;
-import net.sourceforge.marathon.navigator.IFileEventListener;
-import net.sourceforge.marathon.navigator.Navigator;
-import net.sourceforge.marathon.navigator.NavigatorFileAction;
+import net.sourceforge.marathon.model.Group;
+import net.sourceforge.marathon.model.Group.FeaturesPanel;
+import net.sourceforge.marathon.model.Group.GroupType;
+import net.sourceforge.marathon.model.Group.IssuesPanel;
+import net.sourceforge.marathon.model.Group.StoriesPanel;
+import net.sourceforge.marathon.model.Group.SuitesPanel;
+import net.sourceforge.marathon.resource.IResourceActionHandler;
+import net.sourceforge.marathon.resource.IResourceActionSource;
+import net.sourceforge.marathon.resource.IResourceChangeListener;
+import net.sourceforge.marathon.resource.Project;
+import net.sourceforge.marathon.resource.Resource;
+import net.sourceforge.marathon.resource.navigator.FileResource;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.ILogger;
 import net.sourceforge.marathon.runtime.api.IPlaybackListener;
+import net.sourceforge.marathon.runtime.api.IPreferenceChangeListener;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel.SCRIPT_FILE_TYPE;
-import net.sourceforge.marathon.runtime.api.Indent;
 import net.sourceforge.marathon.runtime.api.MPFUtils;
 import net.sourceforge.marathon.runtime.api.MarathonRuntimeException;
 import net.sourceforge.marathon.runtime.api.Module;
 import net.sourceforge.marathon.runtime.api.OSUtils;
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
+import net.sourceforge.marathon.runtime.api.Preferences;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
+import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
-import net.sourceforge.marathon.runtime.api.UIUtils;
 import net.sourceforge.marathon.screencapture.AnnotateScreenCapture;
-import net.sourceforge.marathon.testrunner.swingui.TestRunner;
+import net.sourceforge.marathon.suite.editor.GroupInputInfo;
+import net.sourceforge.marathon.suite.editor.GroupInputStage;
+import net.sourceforge.marathon.suite.editor.IGroupInputHanler;
+import net.sourceforge.marathon.testrunner.fxui.AllureMarathonRunListener;
+import net.sourceforge.marathon.testrunner.fxui.TestRunner;
 import net.sourceforge.marathon.util.AbstractSimpleAction;
+import net.sourceforge.marathon.util.AllureUtils;
 import net.sourceforge.marathon.util.ExceptionUtil;
-import net.sourceforge.marathon.util.FileHandler;
 import net.sourceforge.marathon.util.INameValidateChecker;
 import net.sourceforge.marathon.util.LauncherModelHelper;
-import net.sourceforge.marathon.util.PropertyEditor;
-import net.sourceforge.marathon.util.osx.IOSXApplicationListener;
-
-import org.xml.sax.SAXException;
-
-import com.google.inject.Inject;
-import com.vlsolutions.swing.docking.DockGroup;
-import com.vlsolutions.swing.docking.DockKey;
-import com.vlsolutions.swing.docking.Dockable;
-import com.vlsolutions.swing.docking.DockableActionCustomizer;
-import com.vlsolutions.swing.docking.DockableResolver;
-import com.vlsolutions.swing.docking.DockableState;
-import com.vlsolutions.swing.docking.DockingConstants;
-import com.vlsolutions.swing.docking.DockingDesktop;
-import com.vlsolutions.swing.docking.DockingUtilities;
-import com.vlsolutions.swing.docking.TabbedContainerActions;
-import com.vlsolutions.swing.docking.TabbedDockableContainer;
-import com.vlsolutions.swing.docking.event.DockableSelectionEvent;
-import com.vlsolutions.swing.docking.event.DockableSelectionListener;
-import com.vlsolutions.swing.docking.event.DockableStateChangeEvent;
-import com.vlsolutions.swing.docking.event.DockableStateChangeListener;
-import com.vlsolutions.swing.docking.event.DockableStateWillChangeEvent;
-import com.vlsolutions.swing.docking.event.DockableStateWillChangeListener;
-import com.vlsolutions.swing.docking.ui.DockingUISettings;
-import com.vlsolutions.swing.toolbars.ToolBarConstraints;
-import com.vlsolutions.swing.toolbars.ToolBarContainer;
-import com.vlsolutions.swing.toolbars.ToolBarPanel;
-import com.vlsolutions.swing.toolbars.VLToolBar;
 
 /**
  * DisplayWindow provides the main user interface for Marathon from which the
  * user selects various options for using Marathon.
  */
-public class DisplayWindow extends JFrame implements IOSXApplicationListener, PreferenceChangeListener, INameValidateChecker {
+public class DisplayWindow extends Stage implements INameValidateChecker, IResourceActionSource {
 
     private static final String EOL = System.getProperty("line.separator");
-    private static final Icon ICON_ERROR = new ImageIcon(
-            DisplayWindow.class.getResource("/net/sourceforge/marathon/display/icons/enabled/error.gif"));
 
     private static final Logger logger = Logger.getLogger(DisplayWindow.class.getCanonicalName());
 
-    private class NavigatorListener implements IFileEventListener {
-        public void fileRenamed(File from, File to) {
-            EditorDockable dockable = findEditorDockable(from);
-            if (dockable != null) {
-                FileHandler fileHandler = (FileHandler) dockable.getEditor().getData("filehandler");
-                try {
-                    fileHandler.readFile(to);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                dockable.getEditor().setData("filename", fileHandler.getCurrentFile().getName());
-                dockable.getEditor().setData("displayname", getDisplayName(fileHandler.getCurrentFile()));
-                dockable.updateKey();
-                updateDockName(dockable.getEditor());
-            }
-        }
-
-        public void fileDeleted(File file) {
-            EditorDockable dockable = findEditorDockable(file);
-            if (dockable != null) {
-                dockable.getEditor().setDirty(false);
-                workspace.close(dockable);
-            }
-            removeModDirFromProjFile(file.getAbsolutePath());
-        }
-
-        public void fileCopied(File from, File to) {
-        }
-
-        public void fileMoved(File from, File to) {
-            fileRenamed(from, to);
-        }
-
-        public void fileCreated(File file, boolean openInEditor) {
-            if (file.isFile()) {
-                navigator.refresh(new File[] { file });
-                if (openInEditor)
-                    openFile(file);
-            }
-        }
-
-        public void fileUpdated(File file) {
-            String selectedFileName = file.getAbsolutePath();
-            navigator.refresh(new File[] { new File(selectedFileName) });
-            EditorDockable dockable = findEditorDockable(new File(selectedFileName));
-            if (dockable != null) {
-                FileHandler fileHandler = (FileHandler) dockable.getEditor().getData("filehandler");
-                try {
-                    String script = fileHandler.readFile(new File(selectedFileName));
-                    dockable.getEditor().setText(script);
-                    dockable.getEditor().setDirty(false);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
-    private NavigatorListener navigatorListener;
-
-    private class CaretListenerImpl implements CaretListener {
-        public void caretUpdate(CaretEvent e) {
-            updateEditActions();
-        }
-    }
-
-    private CaretListenerImpl caretListener = new CaretListenerImpl();
+    private static DisplayWindow _instance;
 
     private class DockingListener
             implements DockableSelectionListener, DockableStateWillChangeListener, DockableStateChangeListener {
 
-        public void selectionChanged(DockableSelectionEvent e) {
+        @Override public void selectionChanged(DockableSelectionEvent e) {
             Dockable selectedDockable = e.getSelectedDockable();
             if (selectedDockable instanceof EditorDockable) {
                 setCurrentEditorDockable((EditorDockable) selectedDockable);
-            }
-        }
-
-        public void dockableStateWillChange(DockableStateWillChangeEvent event) {
-            if (resetWorkspaceOperation)
-                return;
-            DockableState dockableState = event.getFutureState();
-            Dockable dockable = dockableState.getDockable();
-            if (dockableState.isClosed() && !canCloseComponent(dockable))
-                event.cancel();
-            else {
-                if (dockable instanceof EditorDockable) {
-                    lastClosedEditorDockableContainer = DockingUtilities.findTabbedDockableContainer(dockable);
+                if (currentEditor != null) {
+                    currentEditor.runWhenReady(() -> currentEditor.refresh());
                 }
             }
+            if (selectedDockable == null && e.getPreviousDockable() instanceof EditorDockable)
+                setCurrentEditorDockable(null);
         }
 
-        public void dockableStateChanged(DockableStateChangeEvent event) {
+        @Override public void dockableStateWillChange(DockableStateWillChangeEvent event) {
+            if (resetWorkspaceOperation) {
+                return;
+            }
+            DockableState dockableState = event.getFutureState();
+            Dockable dockable = dockableState.getDockable();
+            if (dockableState.isClosed() && !canCloseComponent(dockable)) {
+                event.cancel();
+            }
+        }
+
+        @Override public void dockableStateChanged(DockableStateChangeEvent event) {
             DockableState dockableState = event.getNewState();
             Dockable dockable = dockableState.getDockable();
             if (dockableState.isClosed() && dockable instanceof EditorDockable) {
                 workspace.unregisterDockable(dockable);
-                Dockable selectedDockable = null;
-                if (lastClosedEditorDockableContainer != null) {
-                    selectedDockable = lastClosedEditorDockableContainer.getSelectedDockable();
-                    lastClosedEditorDockableContainer = null;
-                    if (selectedDockable == null) {
-                        selectedDockable = workspace.getSelectedDockable();
-                        if (!(selectedDockable instanceof EditorDockable)) {
-                            selectedDockable = null;
-                        }
-                    }
-                }
-                setCurrentEditorDockable((EditorDockable) selectedDockable);
             }
-            if (dockableState.isMaximized())
-                maximizedDockable = dockable;
         }
 
     }
@@ -303,7 +242,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private DockingListener dockingListener = new DockingListener();
 
     private class ContentChangeListener implements IContentChangeListener {
-        public void contentChanged() {
+        @Override public void contentChanged() {
             updateView();
         }
 
@@ -312,13 +251,11 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private ContentChangeListener contentChangeListener = new ContentChangeListener();
 
     private class GutterListener implements IGutterListener {
-        public ImageIcon getIconAtLine(int line) {
-            if (isBreakPointAtLine(line))
-                return DisplayWindow.BREAKPOINT;
-            return null;
+        @Override public boolean hasBreakpointAtLine(int line) {
+            return isBreakPointAtLine(line);
         }
 
-        public void gutterDoubleClickedAt(int caretLine) {
+        @Override public void gutterDoubleClickedAt(int caretLine) {
             toggleBreakPoint(caretLine);
         }
 
@@ -327,8 +264,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private GutterListener gutterListener = new GutterListener();
 
     private class ResultPaneSelectionListener implements IResultPaneSelectionListener {
-        public void resultSelected(SourceLine line) {
-            goToFile(line.fileName, line.lineNumber - 1);
+        @Override public void resultSelected(SourceLine line) {
+            goToFile(line.fileName, line.lineNumber);
         }
 
     }
@@ -336,68 +273,62 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     ResultPaneSelectionListener resultPaneSelectionListener = new ResultPaneSelectionListener();
 
     private class ScriptConsoleListener implements IScriptConsoleListener {
-        public String evaluateScript(String command) {
+        @Override public String evaluateScript(String command) {
             return display.evaluateScript(command);
         }
 
-        public void sessionClosed() {
+        @Override public void sessionClosed() {
             closeScriptConsole();
             setState();
             if (state.isRecordingPaused()) {
                 display.resume();
             }
         }
-
     }
 
-    private ScriptConsoleListener scriptConsoleListener = new ScriptConsoleListener();
-
     private class TestListener implements ITestListener {
-        public void openTest(Test suite) {
+        @Override public void openTest(Test suite) {
             Test test = null;
             if (suite instanceof TestSuite) {
                 test = ((TestSuite) suite).testAt(0);
-            } else
+            } else {
                 test = suite;
+            }
             if (test != null && test instanceof MarathonTestCase) {
                 openFile(((MarathonTestCase) test).getFile());
             }
         }
-
     }
 
     private TestListener testListener = new TestListener();
 
+    private ScriptConsoleListener scriptConsoleListener = new ScriptConsoleListener();
+
     public class DisplayView implements IDisplayView {
 
-        public void setError(Throwable exception, String message) {
+        @Override public void setError(Throwable exception, String message) {
             RuntimeLogger.getRuntimeLogger().error("Marathon", exception.getMessage(), ExceptionUtil.getTrace(exception));
-            recordWaitMessageDialog.setVisible(false);
+            WaitMessageDialog.setVisible(false);
             if (exception instanceof MarathonRuntimeException) {
-                if (!"true".equals(System.getProperty("marathon.unittests")))
-                    JOptionPane.showMessageDialog(DisplayWindow.this, "Application Under Test Aborted!!", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                if (!"true".equals(System.getProperty("marathon.unittests"))) {
+                    Platform.runLater(() -> FXUIUtils.showMessageDialog(DisplayWindow.this, "Application Under Test Aborted!!",
+                            "Error", AlertType.ERROR));
+                }
             } else {
-                if (!"true".equals(System.getProperty("marathon.unittests")))
-                    JOptionPane.showMessageDialog(DisplayWindow.this, message, "Error", JOptionPane.ERROR_MESSAGE);
+                if (!"true".equals(System.getProperty("marathon.unittests"))) {
+                    Platform.runLater(() -> FXUIUtils.showMessageDialog(DisplayWindow.this, message, "Error", AlertType.ERROR));
+                }
             }
         }
 
-        public void setState(final State newState) {
-            if (EventQueue.isDispatchThread())
+        @Override public void setState(final State newState) {
+            if (Platform.isFxApplicationThread()) {
                 _setState(newState);
-            else {
-                try {
-                    SwingUtilities.invokeAndWait(new Runnable() {
-                        public void run() {
-                            _setState(newState);
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+            } else {
+                Platform.runLater(() -> {
+                    _setState(newState);
+
+                });
             }
         }
 
@@ -414,208 +345,224 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             newTestcaseAction.setEnabled(state.isStopped());
             newModuleAction.setEnabled(state.isStopped());
             newFixtureAction.setEnabled(state.isStopped());
-            insertScriptAction.setEnabled(state.isRecording() && (getModuleFunctions() != null
-                    && getModuleFunctions().getChildren() != null && getModuleFunctions().getChildren().size() > 0));
+            newCheckListAction.setEnabled(state.isStopped());
+            insertScriptAction.setEnabled(state.isRecording() && getModuleFunctions() != null
+                    && getModuleFunctions().getChildren() != null && getModuleFunctions().getChildren().size() > 0);
             insertChecklistAction.setEnabled(state.isRecording());
             pauseAction.setEnabled(state.isRecording());
             resumeRecordingAction.setEnabled(state.isRecordingPaused());
             resumePlayingAction.setEnabled(state.isPlayingPaused());
             stopAction.setEnabled(!state.isStopped() && (state.isRecording() || state.isPlaying() || state.isPlayingPaused()));
-            saveAction.setEnabled(state.isStopped() && editor != null && editor.isDirty());
-            saveAsAction.setEnabled(state.isStopped() && editor != null && editor.getComponent().isEnabled());
+            saveAction.setEnabled(state.isStopped() && currentEditor != null && currentEditor.isDirty());
+            saveAsAction.setEnabled(state.isStopped() && currentEditor != null && !currentEditor.getNode().isDisabled()
+                    && currentEditor.canSaveAs());
             saveAllAction.setEnabled(state.isStopped() && nDirty() > 0);
-            searchAction.setEnabled(state.isStopped() && editor != null && editor.getComponent().isEnabled());
             openApplicationAction.setEnabled(state.isStoppedWithAppClosed() && isProjectFile());
             closeApplicationAction.setEnabled(state.isStoppedWithAppOpen());
             // update msg on status bar
             statusPanel.setApplicationState(state.toString());
-            if (oldState.isRecording() && !state.isRecording() && scriptConsole == null)
+            if (oldState.isRecording() && !state.isRecording() && scriptConsole == null) {
                 endController();
-            if (!oldState.isRecording() && state.isRecording())
+            }
+            if (!oldState.isRecording() && state.isRecording()) {
                 startController();
+            }
             stepIntoAction.setEnabled(state.isPlayingPaused());
             stepOverAction.setEnabled(state.isPlayingPaused());
             stepReturnAction.setEnabled(state.isPlayingPaused());
             playerConsoleAction.setEnabled(state.isPlayingPaused() && scriptConsole == null);
             recorderConsoleAction.setEnabled((state.isRecording() || state.isRecordingPaused()) && scriptConsole == null);
-            showReportAction.setEnabled(resultReporterHTMLFile != null);
+            showReportAction.setEnabled(runReportDir != null);
         }
 
-        public IStdOut getOutputPane() {
-            if (scriptConsole != null)
+        @Override public IStdOut getOutputPane() {
+            if (scriptConsole != null) {
                 return scriptConsole;
+            }
             return outputPane;
         }
 
-        public void setResult(PlaybackResult result) {
+        @Override public void setResult(PlaybackResult result) {
         }
 
-        public int trackProgress(final SourceLine line, int type) {
-            if (scriptConsole != null)
+        @Override public int trackProgress(final SourceLine line, int type) {
+            if (scriptConsole != null) {
                 return IPlaybackListener.CONTINUE;
-            if (getFilePath().equals(line.fileName)) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        editor.highlightLine(line.lineNumber - 1);
-                    }
-                });
             }
-            if (debugging == false)
+            if (getFilePath().equals(line.fileName)) {
+                if (Platform.isFxApplicationThread()) {
+                    currentEditor.highlightLine(line.lineNumber - 1);
+                } else {
+                    Platform.runLater(() -> {
+                        currentEditor.highlightLine(line.lineNumber - 1);
+                    });
+                }
+            }
+            if (debugging == false) {
                 return IPlaybackListener.CONTINUE;
+            }
             callStack.update(type, line);
             BreakPoint bp = new BreakPoint(line.fileName, line.lineNumber - 1);
             if (type == Display.LINE_REACHED && (stepIntoActive || breakpoints.contains(bp)
-                    || (breakStackDepth != -1 && callStack.getStackDepth() <= breakStackDepth))) {
+                    || breakStackDepth != -1 && callStack.getStackDepth() <= breakStackDepth)) {
                 if (!getFilePath().equals(line.fileName)) {
-                    try {
-                        File file = new File(line.fileName);
-                        if (file.exists()) {
-                            SwingUtilities.invokeAndWait(new Runnable() {
-                                public void run() {
-                                    goToFile(line.fileName, line.lineNumber - 1);
-                                }
-                            });
-                        } else
-                            return IPlaybackListener.CONTINUE;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    File file = new File(line.fileName);
+                    if (file.exists()) {
+                        Platform.runLater(new Runnable() {
+                            @Override public void run() {
+                                goToFile(line.fileName, line.lineNumber - 1);
+                            }
+                        });
+                    } else {
+                        return IPlaybackListener.CONTINUE;
                     }
                 }
                 stepIntoActive = false;
                 breakStackDepth = -1;
-                try {
-                    SwingUtilities.invokeAndWait(new Runnable() {
-                        public void run() {
-                            display.pausePlay();
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                Platform.runLater(() -> display.pausePlay());
                 return IPlaybackListener.PAUSE;
             }
             return IPlaybackListener.CONTINUE;
         }
 
-        public String getScript() {
-            return editor.getText();
+        @Override public String getScript() {
+            List<String> texts = new ArrayList<String>();
+            Object lock = new Object();
+            if (Platform.isFxApplicationThread()) {
+                texts.add(currentEditor.getText());
+            } else {
+                Platform.runLater(() -> {
+                    texts.add(currentEditor.getText());
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                });
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return texts.get(0);
         }
 
-        public String getFilePath() {
-            if (editor == null)
-                return null;
-            if (getFileHandler(editor).getCurrentFile() == null)
-                return (String) editor.getData("filename");
-            try {
-                return getFileHandler(editor).getCurrentFile().getCanonicalPath();
-            } catch (IOException e) {
-                e.printStackTrace();
+        @Override public String getFilePath() {
+            if (currentEditor == null) {
                 return null;
             }
+            return currentEditor.getResourcePath();
         }
 
-        public void insertScript(String script) {
-            if (controller.isVisible())
+        @Override public void insertScript(String script) {
+            if (controller.isShowing()) {
                 controller.insertScript(script);
-            editor.insertScript(script);
-        }
-
-        public void trackProgress() {
-            editor.highlightLine(-1);
-        }
-
-        public void startInserting() {
-            editor.startInserting();
-        }
-
-        public void stopInserting() {
-            editor.stopInserting();
-            if (exploratoryTest) {
-                displayView.endTest(null);
-                displayView.endTestRun();
-                File file = save();
-                if (file != null)
-                    navigator.makeVisible(file);
-                exploratoryTest = false;
             }
-            if (importStatements != null && importStatements.size() > 0) {
-                String text = scriptModel.updateScriptWithImports(editor.getText(), importStatements);
-                editor.setText(text);
-                importStatements = null;
+            Platform.runLater(() -> currentEditor.insertScript(script));
+        }
+
+        @Override public void trackProgress() {
+            currentEditor.highlightLine(-1);
+        }
+
+        @Override public void startInserting() {
+            currentEditor.startInserting();
+        }
+
+        @Override public void stopInserting() {
+            if (Platform.isFxApplicationThread()) {
+                currentEditor.stopInserting();
+                if (exploratoryTest) {
+                    displayView.endTest(null);
+                    displayView.endTestRun();
+                    save();
+                    exploratoryTest = false;
+                }
+                if (importStatements != null && importStatements.size() > 0) {
+                    String text = scriptModel.updateScriptWithImports(currentEditor.getText(), importStatements);
+                    currentEditor.setText(text);
+                    importStatements = null;
+                }
+            } else {
+                Platform.runLater(() -> {
+                    currentEditor.stopInserting();
+                    if (exploratoryTest) {
+                        displayView.endTest(null);
+                        displayView.endTestRun();
+                        save();
+                        exploratoryTest = false;
+                    }
+                    if (importStatements != null && importStatements.size() > 0) {
+                        String text = scriptModel.updateScriptWithImports(currentEditor.getText(), importStatements);
+                        currentEditor.setText(text);
+                        importStatements = null;
+                    }
+                });
             }
         }
 
-        public boolean isDebugging() {
+        @Override public boolean isDebugging() {
             return debugging;
         }
 
-        public int acceptChecklist(final String fileName) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    DisplayWindow.this.setState(JFrame.ICONIFIED);
-                    fillUpChecklist(fileName);
-                    DisplayWindow.this.setState(JFrame.NORMAL);
-                    display.resume();
-                }
-
+        @Override public int acceptChecklist(final String fileName) {
+            Platform.runLater(() -> {
+                fillUpChecklist(fileName);
+                display.resume();
             });
             return 0;
         }
 
-        public int showChecklist(final String fileName) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    final File file = new File(reportDir, fileName);
-                    final CheckList checklist;
-                    try {
-                        checklist = CheckList.read(file);
-                        CheckListForm checklistForm = new CheckListForm(checklist, Mode.DISPLAY);
-                        final CheckListDialog dialog = new CheckListDialog((JFrame) null, checklistForm);
+        @Override public int showChecklist(final String fileName) {
+            Platform.runLater(() -> {
+                final File file = new File(reportDir, fileName);
+                final CheckList checklist;
+                try {
+                    checklist = CheckList.read(file);
+                    CheckListFormNode checklistForm = new CheckListFormNode(checklist, Mode.DISPLAY);
+                    final CheckListStage dialog = new CheckListStage(checklistForm);
 
-                        JButton screenCapture = null;
-                        if (checklist.getCaptureFile() != null) {
-                            screenCapture = UIUtils.createScreenCaptureButton();
+                    Button screenCapture = null;
+                    if (checklist.getCaptureFile() != null) {
+                        screenCapture = FXUIUtils.createButton("Screen Capture", "Create screen capture");
 
-                            screenCapture.addActionListener(new ActionListener() {
-                                File captureFile = new File(file.getParent(), checklist.getCaptureFile());
+                        screenCapture.setOnAction(new EventHandler<ActionEvent>() {
+                            File captureFile = new File(file.getParent(), checklist.getCaptureFile());
 
-                                public void actionPerformed(ActionEvent e) {
-                                    try {
-                                        AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, false);
-                                        annotate.showDialog();
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
+                            @Override public void handle(ActionEvent e) {
+                                try {
+                                    AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, false);
+                                    annotate.getStage().show();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
                                 }
-                            });
-                        }
-                        JButton doneButton = UIUtils.createDoneButton();
-                        doneButton.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                dialog.dispose();
                             }
                         });
-                        if (screenCapture != null)
-                            dialog.setActionButtons(new JButton[] { screenCapture, doneButton });
-                        else
-                            dialog.setActionButtons(new JButton[] { doneButton });
-                        dialog.setVisible(true);
-                    } catch (Exception e1) {
-                        JOptionPane.showMessageDialog(null, "Unable to read the checklist file");
                     }
-                    display.resume();
+                    Button doneButton = FXUIUtils.createButton("ok", "Done", true, "Done");
+                    doneButton.setOnAction((e) -> {
+                        dialog.dispose();
+                    });
+                    if (screenCapture != null) {
+                        dialog.setActionButtons(new Button[] { screenCapture, doneButton });
+                    } else {
+                        dialog.setActionButtons(new Button[] { doneButton });
+                    }
+                    dialog.getStage().showAndWait();
+                } catch (Exception e1) {
+                    FXUIUtils.showMessageDialog(DisplayWindow.this, "Unable to read the checklist file", "Error",
+                            AlertType.INFORMATION);
                 }
+                display.resume();
             });
             return IPlaybackListener.PAUSE;
+
         }
 
-        public void insertChecklistAction(final String name) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+        @Override public void insertChecklistAction(final String name) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
                     insertChecklist(name);
                 }
             });
@@ -625,21 +572,24 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             return exploratoryTest || generateReportsMenuItem.isSelected();
         }
 
-        public void endTest(final PlaybackResult result) {
+        @Override public void endTest(final PlaybackResult result) {
             if (!exploratoryTest) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override public void run() {
                         resultPane.addResult(result);
                     }
                 });
             }
-            if (!needReports())
+            if (!needReports()) {
                 return;
+            }
             if (!exploratoryTest && result.hasFailure()) {
                 MarathonAssertion assertion = new MarathonAssertion(result.failures(), getFilePath());
-                resultReporter.addFailure(testCase, assertion);
+                runListener.testAssumptionFailure(
+                        new Failure(Description.createTestDescription(MarathonTestCase.class, getFilePath()), assertion));
             }
-            resultReporter.endTest(testCase);
+            TestAttributes.put("test_object", testCase);
+            runListener.testFinished(Description.createTestDescription(MarathonTestCase.class, getFilePath()));
             addScreenCaptures();
         }
 
@@ -648,71 +598,84 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             if (dirName != null) {
                 File dir = new File(dirName);
                 File[] files = dir.listFiles(new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
+                    @Override public boolean accept(File dir, String name) {
                         return name.matches("Display-error[0-9]*.png");
                     }
                 });
-                if (files == null || files.length == 0)
+                if (files == null || files.length == 0) {
                     return;
+                }
                 for (File file : files) {
                     testCase.addScreenCapture(file);
                 }
             }
         }
 
-        public void endTestRun() {
+        @Override public void endTestRun() {
             // Disable slowplay if set
             System.setProperty(Constants.PROP_RUNTIME_DELAY, "");
-            if (!needReports())
+            if (!needReports()) {
                 return;
+            }
             try {
-                resultReporterHTMLFile = new File(runReportDir, "results.html");
-                resultReporter.generateReport(new HTMLOutputter(), resultReporterHTMLFile.getCanonicalPath());
-                File resultReporterXMLFile = new File(runReportDir, "results.xml");
-                resultReporter.generateReport(new XMLOutputter(), resultReporterXMLFile.getCanonicalPath());
-                File resultReporterTestLinkXMLFile = new File(runReportDir, "testlink-results.xml");
-                resultReporter.generateReport(new TestLinkXMLOutputter(), resultReporterTestLinkXMLFile.getCanonicalPath());
-
                 if (exploratoryTest) {
                     ArrayList<CheckList> checklists = testCase.getChecklists();
                     for (CheckList checkList : checklists) {
                         File dataFile = checkList.xgetDataFile();
-                        if (dataFile != null)
+                        if (dataFile != null) {
                             checkList.save(new FileOutputStream(dataFile));
+                        }
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            navigator.refresh(new File[] { reportDir });
+            runListener.testRunFinished(null);
+            if (runReportDir != null) {
+                File reportsDir = new File(runReportDir, "reports");
+                File resultReporterHTMLFile = new File(reportsDir, "index.html");
+                if (!resultReporterHTMLFile.exists()) {
+                    String resultsDir = new File(runReportDir, "results").getAbsolutePath();
+                    System.setProperty("allure.results.directory", resultsDir);
+                    AllureUtils.launchAllure(resultsDir, reportsDir.getAbsolutePath());
+                }
+                if (resultReporterHTMLFile.exists()) {
+                    Platform.runLater(() -> {
+                        openFile(resultReporterHTMLFile);
+                    });
+                }
+            }
             DisplayWindow.this.setState();
         }
 
-        public void startTest() {
-            if (!needReports())
+        @Override public void startTest() {
+            if (!needReports()) {
                 return;
+            }
             testCase = new MarathonTestCase(new File(getFilePath()), false, new StdOutConsole()) {
                 String t_suffix = display.getDDTestRunner() == null ? "" : display.getDDTestRunner().getName();
                 String name = exploratoryTest ? runReportDir.getName() : super.getName() + t_suffix;
 
-                public String getName() {
+                @Override public String getName() {
                     return name;
                 };
             };
             testSuite.addTest(testCase);
 
-            resultReporter.startTest(testCase);
-            resultReporterHTMLFile = null;
+            TestAttributes.put("test_object", testCase);
+            runListener.testStarted(Description.createTestDescription(MarathonTestCase.class, getFilePath()));
         }
 
-        public void startTestRun() {
-            if (!needReports())
+        @Override public void startTestRun() {
+            if (!needReports()) {
                 return;
+            }
             runReportDir = new File(reportDir, createTestReportDirName());
             if (runReportDir.mkdir()) {
                 try {
                     System.setProperty(Constants.PROP_REPORT_DIR, runReportDir.getCanonicalPath());
                     System.setProperty(Constants.PROP_IMAGE_CAPTURE_DIR, runReportDir.getCanonicalPath());
+                    System.setProperty("allure.results.directory", new File(runReportDir, "results").getCanonicalPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -720,14 +683,20 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                 logger.warning("Unable to create report directory: " + runReportDir + " - Ignoring report option");
             }
             testSuite = new TestSuite("Marathon Test");
-            resultReporter = new MarathonResultReporter(testSuite);
+            runListener = new AllureMarathonRunListener();
+            try {
+                runListener.testRunStarted(Description.createTestDescription(MarathonTestCase.class, getFilePath()));
+            } catch (Exception e) {
+                logger.warning("Unable to start the test run: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
-        public void addImport(String ims) {
+        @Override public void addImport(String ims) {
             importStatements.add(ims);
         }
 
-        public void updateOMapFile() {
+        @Override public void updateOMapFile() {
             File omapFile = new File(System.getProperty(Constants.PROP_PROJECT_DIR),
                     System.getProperty(Constants.PROP_OMAP_FILE, Constants.FILE_OMAP));
             fileUpdated(omapFile);
@@ -741,35 +710,27 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     public DisplayView displayView = new DisplayView();
 
-    /**
-     * Added so that the compiler does not give warnings.
-     */
-    private static final long serialVersionUID = 1L;
-
-    private static final Icon EMPTY_ICON = new ImageIcon(DisplayWindow.class.getResource("icons/enabled/empty.gif"));
-
     private static final String MODULE = "Marathon";
 
     @Inject private Display display;
     @Inject private IScriptModel scriptModel;
     @Inject private FixtureSelector fixtureSelector;
-    @Inject private TextAreaOutput outputPane;
+    @Inject private TextAreaOutputFX outputPane;
     @Inject private ResultPane resultPane;
     @Inject private LogView logView;
     @Inject private StatusBar statusPanel;
     @Inject private CallStack callStack;
     @Inject private IEditorProvider editorProvider;
     @Inject(optional = true) private IActionProvider actionProvider;
-    @Inject(optional = true) private AboutDialog aboutDialog;
 
     /**
      * Editor panel
      */
-    private IEditor editor;
+    private IEditor currentEditor;
     /**
      * Line number dialog to accept a line number
      */
-    private LineNumberDialog lineNumberDialog = new LineNumberDialog(this, "Goto");
+    private LineNumberStage lineNumberStage = new LineNumberStage();
     /**
      * Default fixture to be used for new test cases
      */
@@ -777,7 +738,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     /**
      * Is current recording in raw mode?
      */
-    private boolean isRawRecording = false;
+    boolean isRawRecording = false;
     private boolean debugging = false;
     protected boolean exploratoryTest = false;
 
@@ -786,62 +747,28 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private File reportDir;
     private File runReportDir;
 
-    private JButton rawRecordButton;
+    Button rawRecordButton;
 
-    private static final class FnFDockable implements Dockable {
-        private DockKey dockKey;
-        private Component c = new JTextField();
-
-        public FnFDockable(String keyName) {
-            dockKey = new DockKey(keyName);
-        }
-
-        public DockKey getDockKey() {
-            return dockKey;
-        }
-
-        public Component getComponent() {
-            return c;
-        }
-    }
-
-    public static final class EditorDockable implements Dockable {
+    public static final class EditorDockable extends Dockable {
         private DockKey dockKey;
         private final IEditor dockableEditor;
         private final DockGroup dockGroup;
-        private DockableActionCustomizer actionCustomizer = new DockableActionCustomizer() {
-            public void visitTabSelectorPopUp(javax.swing.JPopupMenu popUpMenu, Dockable tabbedDockable) {
-                popUpMenu.add(TabbedContainerActions.createCloseAllAction(tabbedDockable, workspace));
-                popUpMenu.add(TabbedContainerActions.createCloseAllOtherAction(tabbedDockable, workspace));
-            };
-        };
-        private final DockingDesktop workspace;
 
-        public EditorDockable(IEditor e, DockGroup dockGroup, DockingDesktop workspace) {
+        public EditorDockable(IEditor e, DockGroup dockGroup) {
             this.dockableEditor = e;
             this.dockGroup = dockGroup;
-            this.workspace = workspace;
         }
 
-        public Component getComponent() {
-            return dockableEditor.getComponent();
+        @Override public Node getComponent() {
+            return dockableEditor.getNode();
         }
 
-        public DockKey getDockKey() {
+        @Override public DockKey getDockKey() {
             if (dockKey == null) {
-                FileHandler fileHandler = (FileHandler) dockableEditor.getData("filehandler");
-                File currentFile = fileHandler.getCurrentFile();
-                String key;
-                if (currentFile != null)
-                    key = currentFile.getAbsolutePath();
-                else
-                    key = (String) dockableEditor.getData("filename");
-                dockKey = new DockKey(key, (String) dockableEditor.getData("filename"));
+                String key = dockableEditor.getDockKey();
+                dockKey = new DockKey(key, dockableEditor.getName());
+                dockKey.setCloseOptions(true);
                 dockKey.setDockGroup(dockGroup);
-            }
-            if (dockKey.getActionCustomizer() == null) {
-                actionCustomizer.setTabSelectorPopUpCustomizer(true);
-                dockKey.setActionCustomizer(actionCustomizer);
             }
             return dockKey;
         }
@@ -855,39 +782,40 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         }
 
         public void updateKey() {
-            FileHandler fileHandler = (FileHandler) dockableEditor.getData("filehandler");
-            File currentFile = fileHandler.getCurrentFile();
-            String key;
-            if (currentFile != null)
-                key = currentFile.getAbsolutePath();
-            else
-                key = (String) dockableEditor.getData("filename");
-            dockKey.setKey(key);
+            dockKey.setKey(dockableEditor.getDockKey());
         }
     }
-
-    private enum TOOLBAR_OPTIONS {
-        ONLY_ICONS, ICONS_AND_TEXT
-    }
-
-    private TOOLBAR_OPTIONS toolbarView = TOOLBAR_OPTIONS.ONLY_ICONS;
 
     private TestSuite testSuite;
 
     /**
-     * Create JMenu with new file/folder options
+     * Create Menu with new file/folder options
      * 
      * @return
      */
-    private JMenu createNewMenu() {
-        JMenu newMenu = new JMenu("New");
-        newMenu.add(getMenuItemWithAccelKey(newTestcaseAction, "^+N"));
-        newMenu.add(etAction);
-        newMenu.add(newModuleAction);
-        newMenu.add(newFixtureAction);
-        newMenu.add(newModuleDirAction);
-        newMenu.add(newSuiteFileAction);
+    private Menu createNewMenu() {
+        Menu newMenu = new Menu("New");
+        newMenu.getItems().add(newTestcaseAction.getMenuItem());
+        newMenu.getItems().add(etAction.getMenuItem());
+        newMenu.getItems().add(newModuleAction.getMenuItem());
+        newMenu.getItems().add(newFixtureAction.getMenuItem());
+        newMenu.getItems().add(newCheckListAction.getMenuItem());
+        newMenu.getItems().add(newModuleDirAction.getMenuItem());
+        newMenu.getItems().add(newSuiteFileAction.getMenuItem());
+        newMenu.getItems().add(newFeatureFileAction.getMenuItem());
+        newMenu.getItems().add(newStoryFileAction.getMenuItem());
+        newMenu.getItems().add(newIssueFileAction.getMenuItem());
         return newMenu;
+    }
+
+    private SplitMenuButton createNewButton() {
+        SplitMenuButton newButton = new SplitMenuButton(newTestcaseAction.getMenuItem(), etAction.getMenuItem(),
+                newModuleAction.getMenuItem(), newFixtureAction.getMenuItem(), newModuleDirAction.getMenuItem(),
+                newSuiteFileAction.getMenuItem(), newFeatureFileAction.getMenuItem(), newStoryFileAction.getMenuItem(),
+                newIssueFileAction.getMenuItem());
+        newButton.setGraphic(newTestcaseAction.getButton().getGraphic());
+        newButton.setOnAction(newTestcaseAction.getButton().getOnAction());
+        return newButton;
     }
 
     /**
@@ -899,10 +827,11 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     public void removeModDirFromProjFile(String removeDir) {
         String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
         StringBuilder sbr = new StringBuilder();
-        for (int i = 0; i < moduleDirs.length; i++) {
-            if (moduleDirs[i].equals(removeDir))
+        for (String moduleDir : moduleDirs) {
+            if (moduleDir.equals(removeDir)) {
                 continue;
-            sbr.append(getProjectRelativeName(moduleDirs[i]) + ";");
+            }
+            sbr.append(getProjectRelativeName(moduleDir) + ";");
         }
         try {
             updateProjectFile(Constants.PROP_MODULE_DIRS, sbr.toString());
@@ -916,33 +845,36 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     public void onShowReport() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Desktop.getDesktop().open(resultReporterHTMLFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (runReportDir != null) {
+            File reportsDir = new File(runReportDir, "reports");
+            File resultReporterHTMLFile = new File(reportsDir, "index.html");
+            if (resultReporterHTMLFile.exists()) {
+                openFile(resultReporterHTMLFile);
             }
-        });
+        }
     }
 
     public void insertChecklist(String name) {
         if (exploratoryTest) {
             CheckList checklist = fillUpChecklist(name);
-            if (checklist == null)
+            if (checklist == null) {
                 return;
+            }
             try {
                 File file = File.createTempFile(name, ".data", runReportDir);
                 checklist.xsetDataFile(file);
                 display.recordShowChecklist(runReportDir.getName() + "/" + file.getName());
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Unable to create a checklist data file");
+                Platform.runLater(() -> {
+                    FXUIUtils.showMessageDialog(DisplayWindow.this, "Unable to create a checklist data file", "Error",
+                            AlertType.INFORMATION);
+                });
                 e.printStackTrace();
                 return;
             }
-        } else
+        } else {
             display.insertChecklist(name);
+        }
     }
 
     private void resumePlay() {
@@ -964,8 +896,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             os = new ObjectOutputStream(new FileOutputStream(new File(projectDir, ".breakpoints")));
             List<BreakPoint> bps = new ArrayList<BreakPoint>();
             for (BreakPoint breakPoint : breakpoints) {
-                if (breakPoint.shouldSave())
+                if (breakPoint.shouldSave()) {
                     bps.add(breakPoint);
+                }
             }
             os.writeObject(bps);
             os.close();
@@ -989,18 +922,20 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             e.printStackTrace();
         } finally {
             try {
-                if (is != null)
+                if (is != null) {
                     is.close();
+                }
             } catch (IOException e) {
             }
         }
     }
 
     public void toggleBreakPoint(int line) {
-        if (editor == null)
+        if (currentEditor == null) {
             return;
-        editor.setFocus();
-        if (getFileHandler(editor).isProjectFile()) {
+        }
+        currentEditor.setFocus();
+        if (currentEditor.isProjectFile()) {
             BreakPoint bp = new BreakPoint(displayView.getFilePath(), line);
             if (breakpoints.contains(bp)) {
                 breakpoints.remove(bp);
@@ -1008,126 +943,67 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                 breakpoints.add(bp);
             }
             setState();
-            editor.refresh();
+            currentEditor.refresh();
         }
     }
 
     /**
      * The Navigator panel.
      */
-    private Navigator navigator;
-    /**
-     * The TestView panel is obtained from the testRunner.
-     */
-    private TestRunner testRunner;
+    private NavigatorPanel navigatorPanel;
+    @Inject @SuitesPanel private AbstractGroupsPanel suitesPanel;
+    @Inject @FeaturesPanel private AbstractGroupsPanel featuresPanel;
+    @Inject @StoriesPanel private AbstractGroupsPanel storiesPanel;
+    @Inject @IssuesPanel private AbstractGroupsPanel issuesPanel;
+
     /**
      * The current state of Marathon.
      */
-    private State state = State.STOPPED_WITH_APP_CLOSED;
+    State state = State.STOPPED_WITH_APP_CLOSED;
 
-    private int windowState;
+    public class ControllerStage extends Stage implements IErrorListener {
 
-    /**
-     * Controller provides a small Window for controlling Marathon while
-     * recording
-     */
-    public class Controller extends JFrame implements WindowStateListener, IErrorListener {
-        private static final long serialVersionUID = 1L;
-        private JToolBar toolBar = null;
-        private JTextArea textArea = new JTextArea(5, 40);
-        private int pressX;
-        private int pressY;
-        private JLabel msgLabel;
+        VBox content = new VBox();
+        private ToolBar toolBar = new ToolBar();
+        private TextArea textArea = new TextArea();
+        private Label msgLabel = new Label("    ");
+        private DisplayWindow displayWindow;
 
-        /**
-         * Construct a controller
-         */
-        public Controller() {
-            setName("ControllerWindow");
-            createToolbar();
-            textArea.setBackground(Color.BLACK);
-            textArea.setForeground(Color.GREEN);
-            textArea.setEditable(false);
-            textArea.addMouseListener(new MouseAdapter() {
-                public void mousePressed(MouseEvent e) {
-                    pressX = e.getX();
-                    pressY = e.getY();
-                }
-            });
-            textArea.addMouseMotionListener(new MouseMotionListener() {
-                public void mouseDragged(MouseEvent e) {
-                    setLocation(getLocation().x + (e.getX() - pressX), getLocation().y + (e.getY() - pressY));
-                }
-
-                public void mouseMoved(MouseEvent e) {
-                }
-            });
-            getContentPane().setLayout(new BorderLayout());
-            getContentPane().add(textArea, BorderLayout.CENTER);
-            getContentPane().add(toolBar, BorderLayout.WEST);
-            msgLabel = new JLabel("   ");
-            msgLabel.setBorder(new BevelBorder(BevelBorder.RAISED));
-            getContentPane().add(msgLabel, BorderLayout.SOUTH);
-            setResizable(false);
-            pack();
-            Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-            setLocation(size.width - getWidth(), 0);
-            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            setAlwaysOnTopIfAvailable();
-            addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    DisplayWindow.this.setState(NORMAL);
-                }
-            });
-            DisplayWindow.this.addWindowStateListener(this);
-        }
-
-        public void clear() {
-            textArea.setText("");
-            isRawRecording = false;
-            rawRecordButton.setSelected(false);
-            msgLabel.setText("   ");
-            msgLabel.setIcon(null);
-        }
-
-        /**
-         * Create the controller toolbar
-         */
-        private void createToolbar() {
-            toolBar = new JToolBar("miniController", JToolBar.VERTICAL);
+        public ControllerStage(DisplayWindow stage) {
+            this.displayWindow = stage;
             setTitle("Marathon Control Center");
-            toolBar.add(getActionButton(pauseAction));
-            toolBar.add(getActionButton(resumeRecordingAction));
-            toolBar.add(getActionButton(insertScriptAction));
-            toolBar.add(getActionButton(insertChecklistAction));
-            toolBar.add(getActionButton(stopAction));
-            rawRecordButton = getActionButton(rawRecordAction);
-            rawRecordButton.setSelectedIcon(rawRecordButton.getDisabledIcon());
-            toolBar.add(rawRecordButton);
-            toolBar.setFloatable(false);
-            toolBar.add(getActionButton(recorderConsoleAction));
+            getIcons().add(FXUIUtils.getImageURL("logo16"));
+            getIcons().add(FXUIUtils.getImageURL("logo32"));
+            initComponents();
+            setScene(new Scene(content));
+            setAlwaysOnTop(true);
+            setOnShown((e) -> {
+                Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+                setX(screenBounds.getWidth() - getWidth());
+                setY(0);
+            });
+            sizeToScene();
+            setResizable(false);
         }
 
-        /**
-         * Set AlwayOnTop property - available only from Java 5 - hence the
-         * reflection API
-         */
-        private void setAlwaysOnTopIfAvailable() {
-            Method method = null;
-            try {
-                method = this.getClass().getMethod("setAlwaysOnTop", new Class[] { Boolean.class });
-                method.invoke(this, new Object[] { Boolean.TRUE });
-            } catch (Throwable e) {
-                return;
-            }
-        }
-
-        public void windowStateChanged(WindowEvent e) {
-            if (e.getNewState() == NORMAL)
-                Controller.this.setVisible(false);
-            else if (e.getNewState() == ICONIFIED && DisplayWindow.this.state.isRecording()) {
-                Controller.this.setVisible(true);
-            }
+        private void initComponents() {
+            toolBar.setId("controller-toolbar");
+            toolBar.setOrientation(javafx.geometry.Orientation.VERTICAL);
+            this.displayWindow.rawRecordButton = this.displayWindow.getActionButton(this.displayWindow.rawRecordAction);
+            toolBar.getItems().addAll(this.displayWindow.getActionButton(this.displayWindow.pauseAction),
+                    this.displayWindow.getActionButton(this.displayWindow.insertScriptAction),
+                    this.displayWindow.getActionButton(this.displayWindow.insertChecklistAction),
+                    this.displayWindow.getActionButton(this.displayWindow.stopAction),
+                    this.displayWindow.getActionButton(this.displayWindow.rawRecordAction),
+                    this.displayWindow.getActionButton(this.displayWindow.recorderConsoleAction));
+            textArea.setId("textArea");
+            textArea.setEditable(false);
+            textArea.setStyle(
+                    "-fx-background-color: black;-fx-control-inner-background: black;-fx-text-inner-color: rgb(0, 250, 0);-fx-text-fill: rgb(0, 250, 0);-fx-font: normal 16px monospace;");
+            HBox top = new HBox();
+            top.getChildren().add(toolBar);
+            top.getChildren().add(textArea);
+            content.getChildren().addAll(top, msgLabel);
         }
 
         public void insertScript(String script) {
@@ -1138,102 +1014,101 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             try {
                 while ((line = reader.readLine()) != null) {
                     lines[index++] = line;
-                    if (index == 5)
+                    if (index == 5) {
                         index = 0;
+                    }
                 }
             } catch (IOException e) {
             }
             StringBuilder text = new StringBuilder();
             for (int i = 0; i < 5; i++) {
-                if (lines[index] != null)
+                if (lines[index] != null) {
                     text.append(lines[index].trim()).append('\n');
-                if (++index == 5)
+                }
+                if (++index == 5) {
                     index = 0;
+                }
             }
             textArea.setText(text.toString());
         }
 
-        public void addError(final LogRecord result) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    msgLabel.setIcon(ICON_ERROR);
-                    msgLabel.setText(result.getMessage());
-                }
-            });
+        @Override public void addError(LogRecord result) {
+            msgLabel.setGraphic(FXUIUtils.getIcon("error"));
+            msgLabel.setText(result.getMessage());
         }
+
+        public void clear() {
+            textArea.setText("");
+            this.displayWindow.isRawRecording = false;
+            // this.displayWindow.rawRecordButton.setSelected(false);
+            msgLabel.setText("   ");
+            msgLabel.setGraphic(null);
+        }
+
     }
 
     void endController() {
-        controller.setVisible(false);
-        setExtendedState(windowState);
+        show();
+        controller.close();
     }
 
     void startController() {
-        windowState = getExtendedState();
-        recordWaitMessageDialog.setVisible(false);
-        controller.setVisible(true);
-        setExtendedState(ICONIFIED);
+        WaitMessageDialog.setVisible(false);
+        controller.show();
+        close();
     }
 
-    private Controller controller;
+    private ControllerStage controller;
     private boolean stepIntoActive;
     private ScriptConsole scriptConsole;
     protected int breakStackDepth = -1;
-    private JMenuItem enableChecklistMenuItem;
-    private File resultReporterHTMLFile;
-    private JCheckBoxMenuItem generateReportsMenuItem;
-    private JButton recordActionButton;
+    private CheckMenuItem enableChecklistMenuItem;
+    private CheckMenuItem generateReportsMenuItem;
+    private Button recordActionButton;
 
     private DockingDesktop workspace;
 
-    private SearchDialog searchDialog;
+    private TestRunner testRunner;
+
+    private IResourceActionHandler resourceActionHandler;
+    private IResourceChangeListener resourceChangeListener;
+
+    private Project project;
 
     /**
      * Constructs a DisplayWindow object.
      */
     public DisplayWindow() {
-        getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
-        DockingUISettings.getInstance().installUI();
+        WaitMessageDialog.setVisible(false);
         new ActionInjector(DisplayWindow.this).injectActions();
-        controller = new Controller();
-        reportDir = new File(new File(System.getProperty(Constants.PROP_PROJECT_DIR)), "TestReports");
-        if (!reportDir.exists())
+        controller = new ControllerStage(this);
+        reportDir = new File(new File(System.getProperty(Constants.PROP_PROJECT_DIR)), Constants.DIR_TESTREPORTS);
+        if (!reportDir.exists()) {
             if (!reportDir.mkdir()) {
                 logger.warning("Unable to create report directory: " + reportDir + " - Marathon might not function properly");
             }
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        if (isMac()) {
-            setupMacMenuItems();
         }
         breakpoints = new ArrayList<BreakPoint>();
-        fileEventHandler = new FileEventHandler();
-        navigatorListener = new NavigatorListener();
-        fileEventHandler.addFileEventListener(navigatorListener);
+        _instance = this;
+        project = new Project();
+        resourceActionHandler = new ResourceActionHandler();
+        resourceChangeListener = new ResourceChangeListener();
+        GlobalResourceChangeListener.set(resourceChangeListener);
     }
 
     @Inject public void setDisplay() {
         initUI();
         display.setView(displayView);
         setDefaultFixture(getDefaultFixture());
-        Indent.setDefaultIndent(editorProvider.getTabConversion(), editorProvider.getTabSize());
         logViewLogger = new LogViewLogger(logView);
         RuntimeLogger.setRuntimeLogger(logViewLogger);
         logView.setErrorListener(controller);
     }
 
     public void dispose() {
-        super.dispose();
-        if (controller != null)
-            controller.dispose();
-    }
-
-    private void setupMacMenuItems() {
-        try {
-            Class<?> utilOSX = Class.forName("net.sourceforge.marathon.util.osx.OSXUtil");
-            Constructor<?> constructor = utilOSX.getConstructor(new Class<?>[] { IOSXApplicationListener.class });
-            constructor.newInstance(new Object[] { this });
-        } catch (Throwable e) {
-            logger.info(e.getMessage());
+        super.close();
+        if (controller != null) {
+            controller.close();
         }
     }
 
@@ -1266,23 +1141,10 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     public void setDefaultFixture(String fixture) {
         this.fixture = fixture;
         statusPanel.setFixture(" " + fixture + " ");
-        Preferences p = Preferences.userNodeForPackage(this.getClass());
-        p.put(getPrefKey("fixture.", System.getProperty(Constants.PROP_PROJECT_DIR, "NoProject")), fixture);
-        try {
-            p.flush();
-        } catch (BackingStoreException e) {
-            e.printStackTrace();
-        }
+        JSONObject p = Preferences.instance().getSection("project");
+        p.put("fixture", fixture);
+        Preferences.instance().save("project");
         display.setDefaultFixture(fixture);
-    }
-
-    public static String getPrefKey(String prefix, String dir) {
-        String key = prefix + dir;
-        if (key.length() <= Preferences.MAX_KEY_LENGTH)
-            return key;
-        int len = Preferences.MAX_KEY_LENGTH - prefix.length();
-        String suffix = dir.substring(dir.length() - len);
-        return prefix + suffix;
     }
 
     /**
@@ -1291,8 +1153,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * @return
      */
     public String getDefaultFixture() {
-        Preferences p = Preferences.userNodeForPackage(this.getClass());
-        return p.get(getPrefKey("fixture.", System.getProperty(Constants.PROP_PROJECT_DIR, "NoProject")), "default");
+        JSONObject p = Preferences.instance().getSection("project");
+        return p.optString("fixture", "default");
     }
 
     /**
@@ -1301,33 +1163,82 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private void initUI() {
         setName("DisplayWindow");
 
-        Preferences p = Preferences.userNodeForPackage(this.getClass());
-        int x = p.getInt(getPrefKey("window.x", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
-        int y = p.getInt(getPrefKey("window.y", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
-        int w = p.getInt(getPrefKey("window.w", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
-        int h = p.getInt(getPrefKey("window.h", System.getProperty(Constants.PROP_PROJECT_DIR)), -1);
-        if (x < 0 || y < 0 || w < 0 || h < 0)
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-        else {
-            setSize(w, h);
-            setLocation(x, y);
+        setWindowState();
+        setTheme();
+        String projectName = System.getProperty(Constants.PROP_PROJECT_NAME, "");
+        if (projectName.equals("")) {
+            projectName = "Marathon";
         }
-
-        setIconImage(java.awt.Toolkit.getDefaultToolkit()
-                .getImage(this.getClass().getClassLoader().getResource("net/sourceforge/marathon/display/images/logo16.gif")));
-        setJMenuBar(createMenuBar());
+        setTitle(projectName);
+        getIcons().add(FXUIUtils.getImageURL("logo16"));
+        getIcons().add(FXUIUtils.getImageURL("logo32"));
+        getIcons().add(FXUIUtils.getImageURL("logo64"));
+        getIcons().add(FXUIUtils.getImageURL("logo128"));
+        getIcons().add(FXUIUtils.getImageURL("logo256"));
         workspace = new DockingDesktop("Marathon");
         workspace.addDockableSelectionListener(dockingListener);
         workspace.addDockableStateWillChangeListener(dockingListener);
         workspace.addDockableStateChangeListener(dockingListener);
-        ToolBarContainer container = ToolBarContainer.createDefaultContainer(true, true, true, true);
+        ToolBarContainer container = ToolBarContainer.createDefaultContainer(Orientation.LEFT);
         createToolBar(container);
-        container.add(workspace, BorderLayout.CENTER);
-        this.getContentPane().add(container, BorderLayout.CENTER);
-        this.getContentPane().add(statusPanel, BorderLayout.SOUTH);
+        container.setContent(workspace);
+        BorderPane fxBorderPane = new BorderPane(container);
+        fxBorderPane.setTop(createMenuBar());
+        fxBorderPane.setBottom(statusPanel);
+        Scene scene = new Scene(fxBorderPane);
+        scene.getStylesheets().add(ModalDialog.class.getClassLoader()
+                .getResource("net/sourceforge/marathon/fx/api/css/marathon.css").toExternalForm());
+        setScene(scene);
         initStatusBar();
         initDesktop();
+        addEventFilter(KeyEvent.KEY_PRESSED, (event) -> {
+            if (event.getCode() == KeyCode.F10)
+                setFullScreen(true);
+        });
         setExitHook();
+    }
+
+    public void setWindowState() {
+        JSONObject p = Preferences.instance().getSection("display");
+        if (p.optBoolean("iconified"))
+            setIconified(p.optBoolean("maximized"));
+        else if (p.optBoolean("maximized"))
+            setMaximized(p.optBoolean("iconified"));
+        else if (p.optBoolean("fullscreen"))
+            setFullScreen(p.optBoolean("fullscreen"));
+        else {
+            double x = p.optDouble("window.x", 0);
+            double y = p.optDouble("window.y", 0);
+            double w = p.optDouble("window.w", 1280);
+            double h = p.optDouble("window.h", 1024);
+            setWidth(w);
+            setHeight(h);
+            setX(x);
+            setY(y);
+        }
+    }
+
+    public void setTheme() {
+        JSONObject themeSection = Preferences.instance().getSection("theme");
+        boolean builtin = themeSection.optBoolean("builtin");
+        String path = themeSection.optString("path", "/themes/marathon.css");
+        String name = themeSection.optString("name", "Marathon");
+        if (builtin) {
+            if (name != null) {
+                Application.setUserAgentStylesheet(name);
+            }
+        } else {
+            if (path != null) {
+                URL resource = getClass().getResource(path);
+                if (resource != null) {
+                    Application.setUserAgentStylesheet(resource.toExternalForm());
+                }
+            }
+        }
+    }
+
+    private void setName(String name) {
+        // TODO Set ID or name for stage
     }
 
     /**
@@ -1337,94 +1248,147 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     public void initDesktop() {
         loadBreakPoints();
         createNavigatorPanel();
+        createGroupPanels();
         createJUnitPanel();
         resultPane.addSelectionListener(resultPaneSelectionListener);
 
         editorDockGroup = new DockGroup("Editors");
-        workspace.getContext().setDockableResolver(new DockableResolver() {
-            public Dockable resolveDockable(final String keyName) {
-                if (keyName.equals("Navigator"))
-                    return navigator;
-                else if (keyName.equals("JUnit"))
-                    return testRunner;
-                else if (keyName.equals("Output"))
-                    return outputPane;
-                else if (keyName.equals("Results"))
-                    return resultPane;
-                else if (keyName.equals("Log"))
-                    return logView;
-                else {
-                    File file = new File(keyName);
-                    IEditor e;
-                    if (!file.exists())
-                        return new FnFDockable(keyName);
-                    e = createEditor(file);
-                    Dockable dockable = (Dockable) e.getData("dockable");
-                    return dockable;
-                }
-            }
-        });
-        try {
-            Preferences preferences = Preferences.userNodeForPackage(DisplayWindow.class);
-            String bytes = preferences.get(getPrefKey("workspace.", System.getProperty(Constants.PROP_PROJECT_DIR)), null);
-            if (bytes != null) {
-                workspace.readXML(new ByteArrayInputStream(bytes.getBytes()));
-                DockableState[] dockables = workspace.getDockables();
-                for (final DockableState dockableState : dockables) {
-                    if (dockableState.getDockable() instanceof FnFDockable || !dockableState.isDocked()) {
-                        workspace.unregisterDockable(dockableState.getDockable());
+        JSONObject preferences = Preferences.instance().getSection("workspace");
+        JSONObject state = preferences.optJSONObject("state");
+        if (state != null) {
+            List<Dockable> dockables = workspace.readDockableState(state, new DockableResolver() {
+                @Override public Dockable resolveDockable(final String keyName) {
+                    if (keyName.equals("Navigator")) {
+                        return navigatorPanel;
+                    } else if (keyName.equals("Suites")) {
+                        return suitesPanel;
+                    } else if (keyName.equals("Features")) {
+                        return featuresPanel;
+                    } else if (keyName.equals("Stories")) {
+                        return storiesPanel;
+                    } else if (keyName.equals("Issues")) {
+                        return issuesPanel;
+                    } else if (keyName.equals("TestRunner")) {
+                        return testRunner;
+                    } else if (keyName.equals("Output")) {
+                        return outputPane;
+                    } else if (keyName.equals("Results")) {
+                        return resultPane;
+                    } else if (keyName.equals("Log")) {
+                        return logView;
+                    } else {
+                        Path projectPath = Constants.getProjectPath();
+                        File file = projectPath.resolve(keyName).toFile();
+                        if (!file.exists()) {
+                            return null;
+                        }
+                        IEditor e;
+                        e = createEditor(file);
+                        Dockable dockable = (Dockable) e.getData("dockable");
+                        return dockable;
                     }
                 }
-                dockables = workspace.getDockables();
-                for (DockableState ds : dockables) {
-                    if (ds.getDockable() instanceof EditorDockable) {
-                        editor = ((EditorDockable) ds.getDockable()).getEditor();
-                        break;
-                    }
-                }
-                return;
-            }
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (ParserConfigurationException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (SAXException e1) {
-            e1.printStackTrace();
-        }
 
+            });
+            createWorkspace(dockables);
+            return;
+        }
         EditorDockable[] editors = new EditorDockable[] {};
         IEditor readmeEditor = null;
         try {
             readmeEditor = getReadmeEditor();
-            if (readmeEditor != null)
+            if (readmeEditor != null) {
                 editors = new EditorDockable[] { (EditorDockable) readmeEditor.getData("dockable") };
+            }
         } catch (IOException e1) {
             e1.printStackTrace();
         }
         createDefaultWorkspace(editors);
     }
 
-    @Override public void setVisible(boolean b) {
-        super.setVisible(b);
-        if (editor != null && b)
-            editor.setFocus();
+    private void createJUnitPanel() {
+        testRunner = new TestRunner(resourceActionHandler, taConsole);
+        testRunner.setTestOpenListener(testListener);
+        testRunner.addResultPaneListener(resultPaneSelectionListener);
+        testRunner.setAcceptChecklist(enableChecklistMenuItem.isSelected());
+    }
+
+    public void setVisible(boolean b) {
+        if (b) {
+            show();
+        }
+        if (currentEditor != null && b) {
+            currentEditor.setFocus();
+        }
+        updateView();
     }
 
     private void createDefaultWorkspace(EditorDockable[] editorDockables) {
+        EditorDockable selectedEditor = null;
+        if (currentEditor != null) {
+            selectedEditor = (EditorDockable) currentEditor.getData("dockable");
+        }
         DockableState[] dockableStates = workspace.getDockables();
         for (DockableState dockableState : dockableStates) {
             workspace.close(dockableState.getDockable());
         }
         workspace.addDockable(resultPane);
-        workspace.setBackground(Color.WHITE);
-        workspace.split(resultPane, navigator, DockingConstants.SPLIT_LEFT, 0.2);
-        workspace.createTab(navigator, testRunner, 1, false);
+        workspace.split(resultPane, navigatorPanel, Split.LEFT, 0.4);
         workspace.createTab(resultPane, outputPane, 0, false);
         workspace.createTab(resultPane, logView, 1, false);
-        for (EditorDockable e : editorDockables) {
-            setCurrentEditorDockable(e);
+        Dockable dockable = null;
+        int order = 1;
+        for (EditorDockable editorDockable : editorDockables) {
+            if (dockable == null) {
+                workspace.split(outputPane, editorDockable, Split.TOP, 0.7);
+            } else {
+                workspace.createTab(dockable, editorDockable, order++, false);
+            }
+            dockable = editorDockable;
+            if (selectedEditor == null) {
+                selectedEditor = editorDockable;
+            }
+        }
+        if (selectedEditor != null) {
+            selectEditor(selectedEditor);
+        }
+    }
+
+    private void createWorkspace(List<Dockable> dockables) {
+        EditorDockable selectedEditor = null;
+        workspace.addDockable(resultPane);
+        workspace.split(resultPane, navigatorPanel, Split.LEFT, 0.4);
+        int index = 1;
+        if (dockables.contains(suitesPanel)) {
+            workspace.createTab(navigatorPanel, suitesPanel, index++, false);
+        }
+        if (dockables.contains(featuresPanel)) {
+            workspace.createTab(navigatorPanel, featuresPanel, index++, false);
+        }
+        if (dockables.contains(storiesPanel)) {
+            workspace.createTab(navigatorPanel, storiesPanel, index++, false);
+        }
+        if (dockables.contains(issuesPanel)) {
+            workspace.createTab(navigatorPanel, issuesPanel, index++, false);
+        }
+        if (dockables.contains(testRunner)) {
+            workspace.createTab(navigatorPanel, testRunner, index++, false);
+        }
+        workspace.createTab(resultPane, outputPane, 1, false);
+        workspace.createTab(resultPane, logView, 1, false);
+        int order = 1;
+        for (Dockable dockable : dockables) {
+            if (dockable instanceof EditorDockable) {
+                if (selectedEditor == null) {
+                    selectedEditor = (EditorDockable) dockable;
+                    workspace.split(outputPane, dockable, Split.TOP, 0.7);
+                } else {
+                    workspace.createTab(selectedEditor, dockable, order++, false);
+                }
+            }
+        }
+        if (selectedEditor != null) {
+            selectEditor(selectedEditor);
         }
     }
 
@@ -1435,7 +1399,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * @return Component containing the contents of readme file.
      */
     private IEditor getReadmeEditor() throws IOException {
-        File readmeFile = new File(System.getProperty(Constants.PROP_HOME) + "/README.txt");
+        File readmeFile = new File(System.getProperty(Constants.PROP_HOME) + "/readme/index.html");
         if (readmeFile.exists()) {
             return createEditor(readmeFile);
         }
@@ -1446,36 +1410,19 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * Initialize the status bar
      */
     private void initStatusBar() {
-        statusPanel.getFixtureLabel().addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                onSelectFixture();
-            }
+        statusPanel.getFixtureLabel().setOnMouseClicked((e) -> {
+            onSelectFixture();
         });
-        statusPanel.getRowLabel().addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                gotoLine();
-            }
+        statusPanel.getRowLabel().setOnMouseClicked((e) -> {
+            gotoLine();
         });
-        statusPanel.getInsertLabel().addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                if (editor != null)
-                    editor.toggleInsertMode();
-            }
+        statusPanel.getInsertLabel().setOnMouseClicked((e) -> {
+            Platform.runLater(() -> {
+                if (currentEditor != null) {
+                    currentEditor.toggleInsertMode();
+                }
+            });
         });
-    }
-
-    /**
-     * Initialize the JUnit panel
-     * 
-     * @return junitpanel, a Dockable
-     */
-    private TestRunner createJUnitPanel() {
-        testRunner = new TestRunner(taConsole, fileEventHandler);
-        testRunner.setAcceptChecklist(false);
-        testRunner.setTestOpenListener(testListener);
-        testRunner.addResultPaneListener(resultPaneSelectionListener);
-        fileEventHandler.addFileEventListener(testRunner);
-        return testRunner;
     }
 
     /**
@@ -1485,68 +1432,25 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * @param editor
      */
     private void setAcceleratorKeys(IEditor editor) {
-        editor.addKeyBinding("^+g", new GotoLineAction());
-        editor.addKeyBinding("^+s", saveAction);
-        editor.addKeyBinding("^S+a", saveAsAction);
-        editor.addKeyBinding("^+p", playAction);
-        editor.addKeyBinding("^+r", recordAction);
-        editor.addKeyBinding("^+b", toggleBreakpointAction);
-        editor.addKeyBinding("^+n", newTestcaseAction);
+        editor.addKeyBinding("^-S", saveAction);
+        editor.addKeyBinding("^-Shift-A", saveAsAction);
+        editor.addKeyBinding("^-P", playAction);
+        editor.addKeyBinding("^-R", recordAction);
+        editor.addKeyBinding("^-B", toggleBreakpointAction);
+        editor.addKeyBinding("^-N", newTestcaseAction);
     }
 
     /**
      * Set the exit hook for the Main window.
      */
     private void setExitHook() {
-        this.addWindowListener(new WindowAdapter() {
-            public void windowOpened(WindowEvent e) {
-                windowActivated(e);
-            }
-
-            public void windowActivated(WindowEvent e) {
-            }
-
-            public void windowClosing(WindowEvent e) {
-                exitAction.actionPerformed(null);
+        setOnCloseRequest((e) -> {
+            if (!handleQuit()) {
+                e.consume();
+            } else {
+                System.exit(0);
             }
         });
-    }
-
-    private int commonParentDirectory(File directory, List<String> Directories) {
-        for (int i = 0; i < Directories.size(); i++) {
-            File rootDirectory = new File(Directories.get(i));
-            try {
-                if (directory != null && rootDirectory != null) {
-                    String dirPath = directory.getCanonicalPath();
-                    String rootPath = rootDirectory.getCanonicalPath();
-                    if (dirPath.startsWith(rootPath)) {
-                        return (i + 1);
-                    }
-                    if (rootPath.startsWith(dirPath)) {
-                        return -(i + 1);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return 0;
-    }
-
-    private String[] getProjectDirectories() {
-        List<String> Directories = new ArrayList<String>();
-        Directories.add(System.getProperty(Constants.PROP_PROJECT_DIR));
-        String[] dirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
-        for (int j = 0; j < dirs.length; j++) {
-            File dir = new File(dirs[j]);
-            int common = commonParentDirectory(dir, Directories);
-            if (common == 0) {
-                Directories.add(dirs[j]);
-            } else if (common < 0) {
-                Directories.set(Math.abs(common) - 1, dirs[j]);
-            }
-        }
-        return Directories.toArray(new String[0]);
     }
 
     /**
@@ -1555,41 +1459,15 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * 
      * @return navigatorPanel, new Navigator panel.
      */
-    private Navigator createNavigatorPanel() {
-        String[] dirs = getProjectDirectories();
-        String[] rootDirs = getProjectDirectories();
-        dirs[0] = System.getProperty(Constants.PROP_PROJECT_NAME);
-        for (int i = 1; i < dirs.length; i++) {
-            dirs[i] = new File(dirs[i]).getName();
-        }
-        String[] rootDesc = dirs;
-        try {
-            NavigatorFileAction openAction = new NavigatorFileAction() {
-                public void actionPerformed(File file, boolean useSystemApplication) {
-                    if (file.isFile()) {
-                        if (useSystemApplication)
-                            desktopOpen(file);
-                        else
-                            openFile(file);
-                    }
-                }
-            };
-            navigator = new Navigator(rootDirs, null, rootDesc, fileEventHandler, this);
-            navigator.setInitialExpansion(Constants.getAllMarathonDirectoriesAsStringArray());
-            navigator.setActions(openAction, null);
-            FileHandler fileHandler = new FileHandler(new MarathonFileFilter(scriptModel.getSuffix(), scriptModel),
-                    new File(System.getProperty(Constants.PROP_TEST_DIR)), new File(System.getProperty(Constants.PROP_FIXTURE_DIR)),
-                    Constants.getMarathonDirectories(Constants.PROP_MODULE_DIRS), this);
-            DisplayWindowNavigatorActions actions = new DisplayWindowNavigatorActions(this, navigator, fileHandler);
-            navigator.setMenuItems(actions.getMenuItems());
-            navigator.setToolbar(actions.getToolBar());
-            navigator.addNavigatorListener(navigatorListener);
-            fileEventHandler.addFileEventListener(navigator);
-            return navigator;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private void createNavigatorPanel() {
+        navigatorPanel = new NavigatorPanel(resourceActionHandler, resourceChangeListener, project);
+    }
+
+    private void createGroupPanels() {
+        suitesPanel.initialize(resourceActionHandler, resourceChangeListener);
+        featuresPanel.initialize(resourceActionHandler, resourceChangeListener);
+        storiesPanel.initialize(resourceActionHandler, resourceChangeListener);
+        issuesPanel.initialize(resourceActionHandler, resourceChangeListener);
     }
 
     protected void desktopOpen(File file) {
@@ -1605,172 +1483,247 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * 
      * @return menubar
      */
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("File");
-        menu.setMnemonic('f');
-        menu.add(createNewMenu());
-        menu.add(getMenuItemWithAccelKey(saveAction, "^+S"));
-        menu.add(getMenuItemWithAccelKey(saveAsAction, "^S+A"));
-        menu.add(getMenuItemWithAccelKey(saveAllAction, "^S+S"));
-        if (!isMac()) {
-            menu.addSeparator();
-            menu.add(getMenuItemWithAccelKey(exitAction, "A+F4"));
-        }
-        menuBar.add(menu);
-        menu = new JMenu("Edit");
-        menu.setMnemonic('e');
-        menu.add(getMenuItemWithAccelKey(undoAction, "^+Z"));
-        menu.add(getMenuItemWithAccelKey(redoAction, "^S+Z"));
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(cutAction, "^+X"));
-        menu.add(getMenuItemWithAccelKey(copyAction, "^+C"));
-        menu.add(getMenuItemWithAccelKey(pasteAction, "^+V"));
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(searchAction, "^+F"));
-        menu.add(getMenuItemWithAccelKey(findNextAction, "^+K"));
-        menu.add(getMenuItemWithAccelKey(findPreviousAction, "^S+K"));
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(refreshAction, "F5"));
-        menu.add(getMenuItemWithAccelKey(new GotoLineAction(), "^+L"));
-        if (!isMac()) {
-            menu.addSeparator();
-            menu.add(preferencesAction);
-        }
-        menuBar.add(menu);
-        menu = new JMenu("Marathon");
-        menu.setMnemonic('m');
-        menu.add(getMenuItemWithAccelKey(playAction, "^+P"));
-        menu.add(getMenuItemWithAccelKey(slowPlayAction, "^S+P"));
-        menu.add(getMenuItemWithAccelKey(debugAction, "^A+P"));
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(recordAction, "^+R"));
-        menu.add(getMenuItemWithAccelKey(etAction, "^S+R"));
-        menu.add(stopAction);
-        menu.addSeparator();
-        menu.add(openApplicationAction);
-        menu.add(closeApplicationAction);
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(selectFixtureAction, "^+F5"));
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(toggleBreakpointAction, "^S+B"));
-        menu.add(clearAllBreakpointsAction);
-        menu.addSeparator();
-        menu.add(getMenuItemWithAccelKey(showReportAction, "^+F6"));
-        menu.addSeparator();
-        menu.add(projectSettingsAction);
-        if (editorProvider.isEditorSettingsAvailable())
-            menu.add(editorProvider.getEditorSettingsMenuItem(this));
-        menu.add(scriptConsoleSettingsAction);
-        if (editorProvider.isEditorShortcutKeysAvailable())
-            menu.add(editorProvider.getEditorShortcutMenuItem(this));
-        menu.addSeparator();
-        menu.add(manageChecklistsAction);
-        enableChecklistMenuItem = new JCheckBoxMenuItem("Enable Checklists", EMPTY_ICON);
-        enableChecklistMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                display.setAcceptChecklist(enableChecklistMenuItem.isSelected());
-                testRunner.setAcceptChecklist(enableChecklistMenuItem.isSelected());
-                if (enableChecklistMenuItem.isSelected() && !generateReportsMenuItem.isSelected()) {
-                    JOptionPane.showMessageDialog(DisplayWindow.this, "Enabling generate reports (needed for checklists)");
-                    generateReportsMenuItem.setSelected(true);
-                }
+    private MenuBar createMenuBar() {
+        MenuBar menuBar = new MenuBar();
+        Menu menu = new Menu("File");
+        menu.getItems().add(createNewMenu());
+        menu.getItems().add(saveAction.getMenuItem());
+        menu.getItems().add(saveAsAction.getMenuItem());
+        menu.getItems().add(saveAllAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(exitAction.getMenuItem());
+        menuBar.getMenus().add(menu);
+        menu = new Menu("Edit");
+        menu.getItems().add(refreshAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(preferencesAction.getMenuItem());
+        menuBar.getMenus().add(menu);
+        menu = new Menu("Marathon");
+        menu.getItems().add(playAction.getMenuItem());
+        menu.getItems().add(slowPlayAction.getMenuItem());
+        menu.getItems().add(debugAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(recordAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(openApplicationAction.getMenuItem());
+        menu.getItems().add(closeApplicationAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(selectFixtureAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(toggleBreakpointAction.getMenuItem());
+        menu.getItems().add(clearAllBreakpointsAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(projectSettingsAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        enableChecklistMenuItem = new CheckMenuItem("Enable Checklists");
+        enableChecklistMenuItem.setOnAction((e) -> {
+            display.setAcceptChecklist(enableChecklistMenuItem.isSelected());
+            testRunner.setAcceptChecklist(enableChecklistMenuItem.isSelected());
+            if (enableChecklistMenuItem.isSelected() && !generateReportsMenuItem.isSelected()) {
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "Enabling generate reports (needed for checklists)", "Info",
+                        AlertType.INFORMATION);
+                generateReportsMenuItem.setSelected(true);
             }
         });
         enableChecklistMenuItem.setSelected(false);
         display.setAcceptChecklist(false);
-        menu.add(enableChecklistMenuItem);
-        menu.addSeparator();
-        generateReportsMenuItem = new JCheckBoxMenuItem("Generate Reports", EMPTY_ICON);
-        generateReportsMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resultReporterHTMLFile = null;
-                Properties props = System.getProperties();
-                props.remove(Constants.PROP_IMAGE_CAPTURE_DIR);
-                if (enableChecklistMenuItem.isSelected() && !generateReportsMenuItem.isSelected()) {
-                    JOptionPane.showMessageDialog(DisplayWindow.this, "Disabling checklists (Generate reports required)");
-                    enableChecklistMenuItem.setSelected(false);
-                }
-                setState();
+        menu.getItems().add(enableChecklistMenuItem);
+        menu.getItems().add(new SeparatorMenuItem());
+        generateReportsMenuItem = new CheckMenuItem("Generate Reports");
+        generateReportsMenuItem.setOnAction((e) -> {
+            Properties props = System.getProperties();
+            props.remove(Constants.PROP_IMAGE_CAPTURE_DIR);
+            if (enableChecklistMenuItem.isSelected() && !generateReportsMenuItem.isSelected()) {
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "Disabling checklists (Generate reports required)", "Info",
+                        AlertType.INFORMATION);
+                enableChecklistMenuItem.setSelected(false);
             }
+            setState();
         });
         generateReportsMenuItem.setSelected(false);
-        menu.add(generateReportsMenuItem);
-        menuBar.add(menu);
+        menu.getItems().add(generateReportsMenuItem);
+        menuBar.getMenus().add(menu);
         if (actionProvider != null) {
             IMarathonAction[] actions = actionProvider.getActions();
             for (IMarathonAction action : actions) {
-                if (!action.isMenuBarAction())
+                if (!action.isMenuBarAction()) {
                     continue;
+                }
                 String menuName = action.getMenuName();
-                if (menuName == null)
+                if (menuName == null) {
                     continue;
-                JMenu menux = findMenu(menuBar, menuName);
+                }
+                Menu menux = findMenu(menuBar, menuName);
                 if (action.isSeperator()) {
-                    menux.addSeparator();
+                    menux.getItems().add(new SeparatorMenuItem());
                     continue;
                 }
                 if (action.isPopupMenu()) {
-                    menux.add(action.getPopupMenu());
+                    menux.getItems().add(action.getPopupMenu());
                     continue;
                 }
-                menux.setMnemonic(action.getMenuMnemonic());
                 String accelKey = action.getAccelKey();
                 if (accelKey != null) {
-                    menux.add(getMenuItemWithAccelKey(createAction(action), accelKey));
+                    menux.getItems().add(createAction(action).getMenuItem());
                 } else {
                     if (action.getButtonGroup() != null) {
-                        ButtonGroup group = action.getButtonGroup();
-                        JRadioButtonMenuItem radio = new JRadioButtonMenuItem(createAction(action));
-                        group.add(radio);
-                        menux.add(radio);
-                        if (action.isSelected())
-                            radio.doClick();
-                    } else
-                        menux.add(createAction(action));
+                        ToggleGroup group = action.getButtonGroup();
+                        AbstractSimpleAction asa = createAction(action);
+                        RadioMenuItem radio = new RadioMenuItem(action.getName(), asa.getIcon());
+                        radio.setOnAction((e) -> {
+                            asa.handle(e);
+                        });
+                        radio.setToggleGroup(group);
+                        menux.getItems().add(radio);
+                        if (action.isSelected()) {
+                            radio.setSelected(true);
+                        }
+                    } else {
+                        menux.getItems().add(createAction(action).getMenuItem());
+                    }
                 }
             }
         }
-        menu = new JMenu("Window");
-        menu.setMnemonic('W');
-        menu.add(resetWorkspaceAction);
-        menuBar.add(menu);
-        menu = new JMenu("Help");
-        menu.setMnemonic('h');
-        menu.add(releaseNotes);
-        menu.add(changeLog);
-        menu.add(visitWebsite);
-        menu.add(helpAboutAction);
-        menuBar.add(menu);
+        menu = new Menu("Window");
+        menu.getItems().add(resetWorkspaceAction.getMenuItem());
+        menu.getItems().add(new SeparatorMenuItem());
+        addThemeMenu(menu);
+        addViews(menu);
+        menuBar.getMenus().add(menuBar.getMenus().size() - 1, menu);
+        menu = findMenu(menuBar, "Help");
+        menu.getItems().add(0, releaseNotes.getMenuItem());
+        menu.getItems().add(1, changeLog.getMenuItem());
+        menu.getItems().add(2, visitWebsite.getMenuItem());
         return menuBar;
     }
 
-    private JMenu findMenu(JMenuBar menuBar, String menuName) {
-        int n = menuBar.getMenuCount();
-        for (int i = 0; i < n; i++) {
-            JMenu menu = menuBar.getMenu(i);
-            if (menu.getText().equals(menuName))
-                return menu;
-        }
-        JMenu menu = new JMenu(menuName);
-        menuBar.add(menu);
-        return menu;
+    private void addViews(Menu windowMenu) {
+        MenuItem menu = FXUIUtils.createMenuItem("testrunner", "Test Runner", "");
+        menu.setOnAction((e) -> {
+            if (testRunner.getContainer() == null) {
+                workspace.createTab(navigatorPanel, testRunner, 1, false);
+            }
+            selectDockable(testRunner);
+        });
+        windowMenu.getItems().add(menu);
+        menu = FXUIUtils.createMenuItem("tsuite", "Test Suites", "");
+        menu.setOnAction((e) -> {
+            if (suitesPanel.getContainer() == null) {
+                workspace.createTab(navigatorPanel, suitesPanel, 2, false);
+            }
+            selectDockable(suitesPanel);
+        });
+        windowMenu.getItems().add(menu);
+        menu = FXUIUtils.createMenuItem("tfeature", "Features", "");
+        menu.setOnAction((e) -> {
+            if (featuresPanel.getContainer() == null) {
+                workspace.createTab(navigatorPanel, featuresPanel, 3, false);
+            }
+            selectDockable(featuresPanel);
+        });
+        windowMenu.getItems().add(menu);
+        menu = FXUIUtils.createMenuItem("tstory", "Stories", "");
+        menu.setOnAction((e) -> {
+            if (storiesPanel.getContainer() == null) {
+                workspace.createTab(navigatorPanel, storiesPanel, 3, false);
+            }
+            selectDockable(storiesPanel);
+        });
+        windowMenu.getItems().add(menu);
+        menu = FXUIUtils.createMenuItem("tissue", "Issues", "");
+        menu.setOnAction((e) -> {
+            if (issuesPanel.getContainer() == null) {
+                workspace.createTab(navigatorPanel, issuesPanel, 3, false);
+            }
+            selectDockable(issuesPanel);
+        });
+        windowMenu.getItems().add(menu);
     }
 
-    /**
-     * Given a SimpleAction and a keySequence return the menu item with the
-     * accelerator key.
-     * 
-     * @param action
-     * @param keySequence
-     * @return item, a JMenuItem
-     */
-    protected JMenuItem getMenuItemWithAccelKey(Action action, String keySequence) {
-        JMenuItem item = new JMenuItem(action);
-        KeyStroke keyStroke = OSUtils.parseKeyStroke(keySequence);
-        if (keyStroke != null)
-            item.setAccelerator(keyStroke);
-        return item;
+    private void selectDockable(Dockable dockable) {
+        TabbedDockableContainer container = DockingUtilities.findTabbedDockableContainer(dockable);
+        if (container != null) {
+            container.setSelectedDockable(dockable);
+        }
+        dockable.getComponent().requestFocus();
+    }
+
+    public void addThemeMenu(Menu windowMenu) {
+        Menu menu = new Menu("Theme");
+        ToggleGroup tg = new ToggleGroup();
+        String name = Preferences.instance().getSection("theme").optString("name");
+        String[] themes = new String[] { "Modena", "Caspian" };
+        for (String theme : themes) {
+            RadioMenuItem mi = new RadioMenuItem(theme);
+            mi.setToggleGroup(tg);
+            if (theme.equals(name)) {
+                mi.setSelected(true);
+            }
+            mi.selectedProperty().addListener((event, o, n) -> {
+                if (!n) {
+                    return;
+                }
+                JSONObject themeSection = Preferences.instance().getSection("theme");
+                themeSection.put("name", theme);
+                themeSection.put("builtin", true);
+                Preferences.instance().save("theme");
+            });
+            menu.getItems().add(mi);
+        }
+        try {
+            JSONArray customThemes = new JSONArray(
+                    IOUtils.toString(getClass().getResourceAsStream("/themes.json"), Charset.defaultCharset()));
+            for (int i = 0; i < customThemes.length(); i++) {
+                JSONObject theme = customThemes.getJSONObject(i);
+                String nm = theme.getString("name");
+                RadioMenuItem mi = new RadioMenuItem(nm);
+                mi.setToggleGroup(tg);
+                if (nm.equals(name)) {
+                    mi.setSelected(true);
+                }
+                mi.selectedProperty().addListener((event, o, n) -> {
+                    if (!n) {
+                        return;
+                    }
+                    JSONObject themeSection = Preferences.instance().getSection("theme");
+                    themeSection.put("name", nm);
+                    themeSection.put("path", theme.getString("path"));
+                    themeSection.put("builtin", false);
+                    Preferences.instance().save("theme");
+                });
+                menu.getItems().add(mi);
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        Preferences.instance().addPreferenceChangeListener("theme", new IPreferenceChangeListener() {
+            @Override public void preferencesChanged(String section, JSONObject preferences) {
+                setTheme();
+                ObservableList<MenuItem> items = menu.getItems();
+                for (MenuItem menuItem : items) {
+                    String theme = preferences.getString("name");
+                    if(menuItem.getText().equals(theme))
+                        ((RadioMenuItem) menuItem).setSelected(true);
+                }
+            }
+        });
+        windowMenu.getItems().add(menu);
+    }
+
+    private Menu findMenu(MenuBar menuBar, String menuName) {
+        ObservableList<Menu> menus = menuBar.getMenus();
+        int n = menus.size();
+        for (int i = 0; i < n; i++) {
+            Menu menu = menus.get(i);
+            if (menu.getText().equals(menuName)) {
+                return menu;
+            }
+        }
+        Menu menu = new Menu(menuName);
+        menuBar.getMenus().add(menu);
+        return menu;
     }
 
     /**
@@ -1780,37 +1733,22 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * @param container
      */
     private void createToolBar(ToolBarContainer container) {
-        ToolBarPanel toolBarPanel = container.getToolBarPanelAt(BorderLayout.NORTH);
+        ToolBarPanel toolBarPanel = container.getToolBarPanel();
         VLToolBar toolBar = new VLToolBar();
-        toolBar.add(getActionButton(newTestcaseAction));
-        toolBar.add(getActionButton(etAction));
-        toolBar.add(getActionButton(newModuleAction));
+        toolBar.add(createNewButton());
         toolBar.add(getActionButton(saveAction));
         toolBar.add(getActionButton(saveAsAction));
         toolBar.add(getActionButton(saveAllAction));
-        toolBarPanel.add(toolBar, new ToolBarConstraints(0, 0));
-        toolBar = new VLToolBar();
-        toolBar.add(getActionButton(undoAction));
-        toolBar.add(getActionButton(redoAction));
-        toolBar.add(getActionButton(cutAction));
-        toolBar.add(getActionButton(copyAction));
-        toolBar.add(getActionButton(pasteAction));
-        toolBar.add(getActionButton(searchAction));
-        toolBarPanel.add(toolBar, new ToolBarConstraints(0, 1));
+        toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         recordActionButton = getActionButton(recordAction);
         toolBar.add(recordActionButton);
-        toolBar.add(getActionButton(pauseAction));
         toolBar.add(getActionButton(resumeRecordingAction));
-        toolBar.add(getActionButton(insertScriptAction));
-        toolBar.add(getActionButton(insertChecklistAction));
-        toolBar.add(getActionButton(stopAction));
-        toolBar.add(getActionButton(recorderConsoleAction));
-        toolBarPanel.add(toolBar, new ToolBarConstraints(0, 2));
+        toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         toolBar.add(getActionButton(openApplicationAction));
         toolBar.add(getActionButton(closeApplicationAction));
-        toolBarPanel.add(toolBar, new ToolBarConstraints(0, 3));
+        toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         toolBar.add(getActionButton(playAction));
         toolBar.add(getActionButton(slowPlayAction));
@@ -1822,33 +1760,33 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         toolBar.add(getActionButton(stepReturnAction));
         toolBar.add(getActionButton(playerConsoleAction));
         toolBar.add(getActionButton(showReportAction));
-        toolBarPanel.add(toolBar, new ToolBarConstraints(0, 4));
+        toolBarPanel.add(toolBar);
         if (actionProvider != null) {
             toolBar = new VLToolBar();
             IMarathonAction[] actions = actionProvider.getActions();
-            for (int i = 0; i < actions.length; i++) {
-                final IMarathonAction action = actions[i];
-                if (!action.isToolBarAction())
+            for (IMarathonAction action2 : actions) {
+                final IMarathonAction action = action2;
+                if (!action.isToolBarAction()) {
                     continue;
+                }
                 if (action.isSeperator()) {
-                    toolBarPanel.add(toolBar, new ToolBarConstraints(0, 5));
+                    toolBarPanel.add(toolBar);
                     toolBar = new VLToolBar();
                 } else {
                     toolBar.add(getActionButton(createAction(action)));
                 }
             }
-            toolBarPanel.add(toolBar, new ToolBarConstraints(0, 5));
+            toolBarPanel.add(toolBar);
         }
         showReportAction.setEnabled(false);
         return;
     }
 
     private AbstractSimpleAction createAction(final IMarathonAction action) {
-        return new AbstractSimpleAction(action.getName(), action.getDescription(), action.getMneumonic(), action.getEnabledIcon(),
-                action.getDisabledIcon()) {
+        return new AbstractSimpleAction(action.getName(), action.getDescription(), action.getMneumonic(), action.getCommand()) {
             private static final long serialVersionUID = 1L;
 
-            public void actionPerformed(ActionEvent arg0) {
+            @Override public void handle(ActionEvent arg0) {
                 try {
                     int selectionStart = -1;
                     int selectionEnd = -1;
@@ -1859,23 +1797,22 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                     int endOffsetOfEndLine = -1;
                     int endLine = -1;
 
-                    if (editor != null) {
-                        selectionStart = editor.getSelectionStart();
-                        selectionEnd = editor.getSelectionEnd();
-                        startLine = editor.getLineOfOffset(selectionStart);
-                        endLine = editor.getLineOfOffset(selectionEnd);
-                        startOffsetOfStartLine = editor.getLineStartOffset(startLine);
-                        startOffsetOfEndLine = editor.getLineStartOffset(endLine);
-                        text = editor.getText();
-                        if (selectionEnd == startOffsetOfEndLine && selectionStart != selectionEnd)
+                    if (currentEditor != null) {
+                        selectionStart = currentEditor.getSelectionStart();
+                        selectionEnd = currentEditor.getSelectionEnd();
+                        startLine = currentEditor.getLineOfOffset(selectionStart);
+                        endLine = currentEditor.getLineOfOffset(selectionEnd);
+                        startOffsetOfStartLine = currentEditor.getLineStartOffset(startLine);
+                        startOffsetOfEndLine = currentEditor.getLineStartOffset(endLine);
+                        text = currentEditor.getText();
+                        if (selectionEnd == startOffsetOfEndLine && selectionStart != selectionEnd) {
                             endLine = endLine - 1;
-                        endOffsetOfEndLine = editor.getLineEndOffset(endLine);
+                        }
+                        endOffsetOfEndLine = currentEditor.getLineEndOffset(endLine);
                     }
 
                     action.actionPerformed(DisplayWindow.this, scriptModel, text, startOffsetOfStartLine, endOffsetOfEndLine,
                             startLine);
-                } catch (BadLocationException e) {
-                    e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1884,15 +1821,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         };
     }
 
-    private JButton getActionButton(Action action) {
-        if (action instanceof AbstractSimpleAction)
-            return ((AbstractSimpleAction) action).getButton();
-        JButton button = UIUtils.createActionButton(action);
-        button.setHorizontalTextPosition(SwingConstants.CENTER);
-        button.setVerticalTextPosition(SwingConstants.BOTTOM);
-        if (action.getValue(Action.SMALL_ICON) != null && toolbarView == TOOLBAR_OPTIONS.ONLY_ICONS)
-            button.setText(null);
-        return button;
+    Button getActionButton(AbstractSimpleAction action) {
+        return action.getButton();
     }
 
     private int nDirty() {
@@ -1911,8 +1841,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     private void setState() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
                 displayView.setState(state);
             }
         });
@@ -1930,8 +1860,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             if (dockable instanceof EditorDockable) {
                 IEditor editor = ((EditorDockable) dockable).getEditor();
                 if (editor.isDirty()) {
-                    if (!closeEditor(editor))
+                    if (!closeEditor(editor)) {
                         return false;
+                    }
                 }
             }
         }
@@ -1940,27 +1871,11 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     /**
-     * Goto a given line. This action is attached to the row number of the
-     * status bar.
-     */
-    public class GotoLineAction extends AbstractAction implements ActionListener {
-        private static final long serialVersionUID = 1L;
-
-        public GotoLineAction() {
-            super("Go to line...", EMPTY_ICON);
-        }
-
-        public void actionPerformed(ActionEvent evt) {
-            gotoLine();
-        }
-    }
-
-    /**
      * Get the insertAction - for testing purpose.
      * 
      * @return
      */
-    public Action getInsertAction() {
+    public AbstractSimpleAction getInsertAction() {
         return insertScriptAction;
     }
 
@@ -1977,29 +1892,40 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * Select a fixture from the available fixtures.
      */
     public void onSelectFixture() {
-        setDefaultFixture(fixtureSelector.selectFixture(this, getFixtures(), fixture));
+        Platform.runLater(() -> {
+            String selectedFixture = fixtureSelector.selectFixture(this, getFixtures(), fixture);
+            if (selectedFixture != null) {
+                setDefaultFixture(selectedFixture);
+            }
+        });
     }
 
     /**
      * Goto a line
      */
     private void gotoLine() {
-        if (editor == null)
-            return;
-        int lastOffset = editor.getText().length();
-        int lastLine;
-        try {
-            lastLine = editor.getLineOfOffset(lastOffset);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
+        if (currentEditor == null || currentEditor.getData("editorType") != IEditorProvider.EditorType.OTHER) {
             return;
         }
-        lineNumberDialog.setMaxLineNumber(lastLine + 1);
-        lineNumberDialog.setLine(editor.getCaretLine() + 1);
-        lineNumberDialog.setLocationRelativeTo(DisplayWindow.this);
-        lineNumberDialog.setVisible(true);
-        if (lineNumberDialog.getLineNumber() != -1) {
-            editor.setCaretLine(lineNumberDialog.getLineNumber() - 1);
+        int lastOffset = currentEditor.getText().length();
+        int lastLine;
+        lastLine = currentEditor.getLineOfOffset(lastOffset);
+        Platform.runLater(() -> {
+            Stage stage = lineNumberStage.getStage();
+            lineNumberStage.setMaxLineNumber(lastLine + 1);
+            lineNumberStage.setLine(currentEditor.getCaretLine() + 1);
+            lineNumberStage.setInputHandler(new GoToLineHandler());
+            stage.showAndWait();
+        });
+    }
+
+    public class GoToLineHandler implements IInputHanler {
+
+        @Override public void handleInput(String line) {
+            int lineNumber = Integer.parseInt(line);
+            if (lineNumber != -1) {
+                currentEditor.setCaretLine(lineNumber - 1);
+            }
         }
     }
 
@@ -2014,14 +1940,14 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         File file = new File(fileName);
         if (file.exists()) {
             openFile(file);
-            editor.setCaretLine(lineNumber - 1);
-            editor.highlightLine(lineNumber);
-        } else if (fileName.startsWith(NEW_FILE)) {
+            currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(lineNumber - 1));
+            currentEditor.highlightLine(lineNumber);
+        } else {
             EditorDockable editorDockable = findEditorDockable(fileName);
             if (editorDockable != null) {
-                selectDockable(editorDockable);
-                editor.setCaretLine(lineNumber - 1);
-                editor.highlightLine(lineNumber);
+                selectEditor(editorDockable);
+                currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(lineNumber - 1));
+                currentEditor.highlightLine(lineNumber);
             }
         }
     }
@@ -2033,37 +1959,26 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      */
     public void updateView() {
         String projectName = System.getProperty(Constants.PROP_PROJECT_NAME, "");
-        if (projectName.equals(""))
+        if (projectName.equals("")) {
             projectName = "Marathon";
+        }
         String suffix = "";
-        if (editor != null && editor.isDirty()) {
+        if (currentEditor != null && currentEditor.isDirty()) {
             suffix = "*";
         }
-        if (editor != null && editor.getData("displayname") != null) {
-            setTitle(projectName + " - " + (editor.getData("displayname") + suffix));
-            updateDockName(editor);
-        } else
-            setTitle(projectName);
-        updateEditActions();
+        if (currentEditor != null) {
+            setStageTitle(projectName + " - " + currentEditor.getDisplayName() + suffix);
+            updateDockName(currentEditor);
+        } else {
+            setStageTitle(projectName);
+        }
         setState();
     }
 
-    /**
-     * Update the Editor related actions in Menu and Toolbars.
-     */
-    private void updateEditActions() {
-        Clipboard clipBoard = getToolkit().getSystemClipboard();
-        try {
-            clipBoard.getContents(this).getTransferData(DataFlavor.stringFlavor);
-            pasteAction.setEnabled(true && displayView.getFilePath() != null);
-        } catch (Exception exception) {
-            pasteAction.setEnabled(false);
-        }
-        boolean contentSelected = editor != null && editor.getSelectionStart() != editor.getSelectionEnd();
-        cutAction.setEnabled(contentSelected);
-        copyAction.setEnabled(contentSelected);
-        undoAction.setEnabled(editor != null && editor.canUndo());
-        redoAction.setEnabled(editor != null && editor.canRedo());
+    private void setStageTitle(String title) {
+        Platform.runLater(() -> {
+            DisplayWindow.this.setTitle(title);
+        });
     }
 
     /**
@@ -2073,7 +1988,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * @return true, if the file belongs to Marathon project.
      */
     private boolean isProjectFile() {
-        return editor != null && getFileHandler(editor).isProjectFile();
+        return currentEditor != null && currentEditor.isProjectFile();
     }
 
     /**
@@ -2082,7 +1997,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * @return true, if the current file is a test file.
      */
     public boolean isTestFile() {
-        return editor != null && getFileHandler(editor).isTestFile();
+        return currentEditor != null && currentEditor.isTestFile();
     }
 
     /**
@@ -2090,12 +2005,17 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * 
      * @return true, if the module is created.
      */
-    private boolean newModuleFile() {
-        MarathonModuleDialog moduleDialog = new MarathonModuleDialog(this, "New Module Function", scriptModel.getSuffix());
-        moduleDialog.setVisible(true);
+    private void newModuleFile() {
+        String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
+        MarathonModuleStage marathonModuleStage = new MarathonModuleStage(
+                new ModuleInfo("New Module Function", Arrays.asList(moduleDirs), scriptModel.getSuffix()));
+        marathonModuleStage.setModuleFunctionHandler(new ModuleFunctionHandler());
+        marathonModuleStage.getStage().showAndWait();
+    }
 
-        if (moduleDialog.isOk()) {
-            File moduleFile = new File(moduleDialog.getModuleDirectory(), moduleDialog.getFileName());
+    class ModuleFunctionHandler implements IModuleFunctionHandler {
+        @Override public void handleModule(ModuleInfo moduleInfo) {
+            File moduleFile = new File(moduleInfo.getModuleDirElement().getFile(), moduleInfo.getFileName());
             int offset = 0;
             try {
                 boolean fileExists = moduleFile.exists();
@@ -2104,26 +2024,30 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                     offset = (int) moduleFile.length();
                 }
                 FileWriter writer = new FileWriter(moduleFile, true);
-                writer.write(
-                        (offset > 0 ? EOL : "") + getModuleHeader(moduleDialog.getFunctionName(), moduleDialog.getDescription()));
+                writer.write((offset > 0 ? EOL : "")
+                        + getModuleHeader(moduleInfo.getModuleFunctionName(), moduleInfo.getModulefunctionDescription()));
                 writer.close();
                 fileUpdated(moduleFile);
-                openFile(moduleFile);
+                Platform.runLater(new Runnable() {
+                    @Override public void run() {
+                        openFile(moduleFile);
+                    }
+                });
                 final int o = offset;
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        editor.setCaretPosition(scriptModel.getLinePositionForInsertionModule() + o);
+                Platform.runLater(new Runnable() {
+                    @Override public void run() {
+                        currentEditor.setCaretPosition(scriptModel.getLinePositionForInsertionModule() + o);
                     }
                 });
                 resetModuleFunctions();
-                return true;
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(DisplayWindow.this, "IOError: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "IOError: " + e.getMessage(), "Error", AlertType.ERROR);
+                return;
             }
         }
-        return false;
+
     }
 
     /**
@@ -2135,8 +2059,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      */
     private void addImportStatement(File moduleFile, boolean fileExists) throws IOException {
         String importStatement = scriptModel.getPlaybackImportStatement();
-        if (importStatement == null || importStatement.trim().length() == 0)
+        if (importStatement == null || importStatement.trim().length() == 0) {
             return;
+        }
         String startMarker = scriptModel.getMarathonStartMarker();
         String endMarker = scriptModel.getMarathonEndMarker();
         String defaultMarkersImportStmt = startMarker + "\n" + importStatement + "\n" + endMarker + "\n";
@@ -2195,8 +2120,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private boolean importStatementExists(String statement, String contents) {
         String[] lines = contents.split("\n");
         boolean importStatementFound = false;
-        for (int i = 0; i < lines.length; i++) {
-            if (lines[i].equals(statement)) {
+        for (String line : lines) {
+            if (line.equals(statement)) {
                 importStatementFound = true;
                 break;
             }
@@ -2223,103 +2148,119 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         return moduleContents.toString();
     }
 
-    @SuppressWarnings("serial") private void newModuleDir() {
-        try {
-            MarathonInputDialog mid = new MarathonInputDialog(this, "New Module Directory") {
+    private void newFXModuleDir() {
+        MarathonInputStage mid = new MarathonInputStage("New Module Directory",
+                "Create a new module folder to store extracted methods", FXUIUtils.getIcon("fldr")) {
 
-                @Override protected String validateInput(String moduleDirName) {
-                    String errorMessage = null;
-                    if (moduleDirName.length() == 0 || moduleDirName.trim().isEmpty())
-                        errorMessage = "Enter a valid folder name";
-                    else if (moduleDirName.charAt(0) == ' ' || moduleDirName.charAt(moduleDirName.length() - 1) == ' ') {
-                        errorMessage = "Module Directory Name cannot begin/end with a whitespace.";
-                    }
-                    return errorMessage;
+            @Override protected String validateInput(String moduleDirName) {
+                String errorMessage = null;
+                if (moduleDirName.length() == 0 || moduleDirName.trim().isEmpty()) {
+                    errorMessage = "Enter a valid folder name";
+                } else if (moduleDirName.charAt(0) == ' ' || moduleDirName.charAt(moduleDirName.length() - 1) == ' ') {
+                    errorMessage = "Module Directory Name cannot begin/end with a whitespace.";
                 }
-
-                @Override protected JButton createOKButton() {
-                    return UIUtils.createOKButton();
-                }
-
-                @Override protected JButton createCancelButton() {
-                    return UIUtils.createCancelButton();
-                }
-
-                @Override protected String getFieldLabel() {
-                    return "&Module Directory: ";
-                }
-            };
-            mid.setVisible(true);
-            if (!mid.isOk())
-                return;
-            String moduleDirName = mid.getValue();
-            if (moduleDirName == null || moduleDirName.trim().equals(""))
-                return;
-            File moduleDir = new File(new File(System.getProperty(Constants.PROP_PROJECT_DIR)), moduleDirName);
-            if (moduleDir.exists()) {
-                JOptionPane.showMessageDialog(this, "A directory with the given name already exits", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
+                return errorMessage;
             }
-            if (!moduleDir.mkdir())
-                throw new IOException("Unable to create module folder: " + moduleDir);
-            fileEventHandler.fireNewEvent(moduleDir, false);
-            addModuleDirToMPF(moduleDirName);
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Could not complete creation of module directory.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Could not complete creation of module directory.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+
+            @Override protected String getInputFiledLabelText() {
+                return "Module Directory: ";
+            }
+
+            @Override protected void setDefaultButton() {
+                okButton.setDefaultButton(true);
+            }
+        };
+        mid.setInputHandler(new NewModuleDirHandler());
+        mid.getStage().showAndWait();
     }
 
-    @SuppressWarnings("serial") private void newSuiteFile() {
-        try {
-            MarathonInputDialog mid = new MarathonInputDialog(this, "New Suite File") {
+    class NewModuleDirHandler implements IInputHanler {
 
-                @Override protected String validateInput(String inputText) {
-                    return inputText.length() == 0 ? "Enter a valid suite file name" : null;
+        @Override public void handleInput(String moduleDirName) {
+            try {
+                if (moduleDirName == null || moduleDirName.trim().equals("")) {
+                    return;
                 }
-
-                @Override protected JButton createOKButton() {
-                    return UIUtils.createOKButton();
+                File moduleDir = new File(new File(System.getProperty(Constants.PROP_PROJECT_DIR)), moduleDirName);
+                if (moduleDir.exists()) {
+                    FXUIUtils.showMessageDialog(DisplayWindow.this, "A directory with the given name already exits", "Error",
+                            AlertType.ERROR);
+                    return;
                 }
-
-                @Override protected JButton createCancelButton() {
-                    return UIUtils.createCancelButton();
+                if (!moduleDir.mkdir()) {
+                    throw new IOException("Unable to create module folder: " + moduleDir);
                 }
-
-                @Override protected String getFieldLabel() {
-                    return "&Suite File(without extension): ";
-                }
-            };
-            mid.setVisible(true);
-            if (!mid.isOk())
-                return;
-            String suiteFileName = mid.getValue();
-            if (suiteFileName == null || suiteFileName.trim().equals(""))
-                return;
-            File suiteFile = new File(new File(System.getProperty(Constants.PROP_SUITE_DIR)), suiteFileName + ".suite");
-            if (suiteFile.exists()) {
-                JOptionPane.showMessageDialog(this, "A suite file with the given name already exists", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
+                addModuleDirToMPF(moduleDirName);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "Could not complete creation of module directory.", "Error",
+                        AlertType.ERROR);
+            } catch (IOException e) {
+                e.printStackTrace();
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "Could not complete creation of module directory.", "Error",
+                        AlertType.ERROR);
             }
-            if (!suiteFile.createNewFile())
-                throw new IOException("Unable to create suite file: " + suiteFile);
-            navigatorListener.fileCreated(suiteFile, true);
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Could not complete creation of module directory.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Could not complete creation of module directory.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
+
+    }
+
+    private void newFXSuiteFile() {
+        GroupInputStage suiteInputStage = new GroupInputStage(Group.GroupType.SUITE);
+        suiteInputStage.setInputHandler(new NewGroupHandler(Group.GroupType.SUITE));
+        suiteInputStage.show(this);
+    }
+
+    private void newFXFeatureFile() {
+        GroupInputStage suiteInputStage = new GroupInputStage(Group.GroupType.FEATURE);
+        suiteInputStage.setInputHandler(new NewGroupHandler(Group.GroupType.FEATURE));
+        suiteInputStage.show(this);
+    }
+
+    private void newFXStoryFile() {
+        GroupInputStage suiteInputStage = new GroupInputStage(Group.GroupType.STORY);
+        suiteInputStage.setInputHandler(new NewGroupHandler(Group.GroupType.STORY));
+        suiteInputStage.show(this);
+    }
+
+    private void newFXIssueFile() {
+        GroupInputStage suiteInputStage = new GroupInputStage(Group.GroupType.ISSUE);
+        suiteInputStage.setInputHandler(new NewGroupHandler(Group.GroupType.ISSUE));
+        suiteInputStage.show(this);
+    }
+
+    private class NewGroupHandler implements IGroupInputHanler {
+
+        private GroupType type;
+
+        public NewGroupHandler(GroupType type) {
+            this.type = type;
+        }
+
+        @Override public void handleInput(GroupInputInfo info) {
+            try {
+                File file = info.getFile();
+                if (file == null) {
+                    return;
+                }
+                Group group = Group.createGroup(type, file.toPath(), info.getName());
+                if (group == null) {
+                    return;
+                }
+                fileUpdated(file);
+                navigatorPanel.updated(DisplayWindow.this, new FileResource(file.getParentFile()));
+                suitesPanel.updated(DisplayWindow.this, new FileResource(file));
+                featuresPanel.updated(DisplayWindow.this, new FileResource(file));
+                storiesPanel.updated(DisplayWindow.this, new FileResource(file));
+                issuesPanel.updated(DisplayWindow.this, new FileResource(file));
+                Platform.runLater(() -> openFile(file));
+            } catch (Exception e) {
+                e.printStackTrace();
+                FXUIUtils.showConfirmDialog(DisplayWindow.this,
+                        "Could not complete creation of " + type.fileType().toLowerCase() + " file.",
+                        "Error in creating a " + type.fileType().toLowerCase() + " file", AlertType.ERROR);
+            }
+        }
+
     }
 
     /**
@@ -2331,8 +2272,8 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private void addModuleDirToMPF(String moduleDirName) throws IOException {
         String[] currentModuleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
         StringBuilder sbr = new StringBuilder();
-        for (int i = 0; i < currentModuleDirs.length; i++) {
-            sbr.append(getProjectRelativeName(currentModuleDirs[i]) + ";");
+        for (String currentModuleDir : currentModuleDirs) {
+            sbr.append(getProjectRelativeName(currentModuleDir) + ";");
         }
         sbr.append("%" + Constants.PROP_PROJECT_DIR + "%/" + moduleDirName);
         updateProjectFile(Constants.PROP_MODULE_DIRS, sbr.toString());
@@ -2349,22 +2290,16 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private String getProjectRelativeName(String path) {
         String projDirPath = System.getProperty(Constants.PROP_PROJECT_DIR);
         int index = path.indexOf(projDirPath);
-        if (index != 0)
+        if (index != 0) {
             return path;
+        }
         String relativePath = path.replace(projDirPath, "%" + Constants.PROP_PROJECT_DIR + "%");
         return relativePath;
     }
 
     private void updateProjectFile(String property, String value) throws IOException {
-        File projectFile = new File(System.getProperty(Constants.PROP_PROJECT_DIR), Constants.PROJECT_FILE);
-        FileInputStream input = new FileInputStream(projectFile);
-        Properties mpfProps = new Properties();
-        mpfProps.load(input);
-        input.close();
-        mpfProps.put(property, value);
-        FileOutputStream out = new FileOutputStream(projectFile);
-        mpfProps.store(out, "Marathon Project File");
-        out.close();
+        ProjectFile.updateProjectProperty(property, value);
+        Properties mpfProps = ProjectFile.getProjectProperties();
         MPFUtils.replaceEnviron(mpfProps);
         String sysModDirs = mpfProps.getProperty(property).replace(';', File.pathSeparatorChar);
         sysModDirs = sysModDirs.replace('/', File.separatorChar);
@@ -2378,25 +2313,16 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     public IEditor newFile(String script, File directory) {
         IEditor newEditor = createEditor(IEditorProvider.EditorType.OTHER);
-        getFileHandler(newEditor).setCurrentDirectory(directory);
-        getFileHandler(newEditor).clearCurrentFile();
-        String newFileName = newFileNameGenerator.getNewFileName();
-        newEditor.setText(script);
-        newEditor.setMode(getFileHandler(newEditor).getMode(newFileName));
-        newEditor.setData("filename", newFileName);
-        newEditor.setData("displayname", newFileName);
-        newEditor.clearUndo();
-        newEditor.setDirty(false);
+        newEditor.createNewResource(script, directory);
         setCurrentEditorDockable((EditorDockable) newEditor.getData("dockable"));
-        newEditor.setFocus();
         return newEditor;
     }
 
     private void setCurrentEditorDockable(EditorDockable editorDockable) {
         if (editorDockable == null) {
-            editor = null;
-        } else if (editor != null) {
-            Dockable dockable = (Dockable) editor.getData("dockable");
+            setCurrentEditor(null);
+        } else if (currentEditor != null) {
+            Dockable dockable = (Dockable) currentEditor.getData("dockable");
             TabbedDockableContainer dockableContainer = DockingUtilities.findTabbedDockableContainer(dockable);
             int order = 1;
             if (dockableContainer != null) {
@@ -2407,25 +2333,21 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
                 workspace.createTab(dockable, editorDockable, order, true);
             }
         } else {
-            if (maximizedDockable != null) {
-                DockableState dockableState = workspace.getDockableState(maximizedDockable);
-                if (dockableState != null && dockableState.isMaximized())
-                    workspace.restore(maximizedDockable);
-            }
             DockableState dockableState = workspace.getDockableState(editorDockable);
             DockableState OPDockableState = workspace.getDockableState(outputPane);
-            if (dockableState == null && OPDockableState != null && OPDockableState.isDocked())
-                workspace.split(outputPane, editorDockable, DockingConstants.SPLIT_TOP, 0.8);
-            else if (dockableState == null) {
+            if (dockableState == null && OPDockableState != null && OPDockableState.isDocked()) {
+                workspace.split(outputPane, editorDockable, Split.TOP, 0.8);
+            } else if (dockableState == null) {
                 DockableState RDockableState = workspace.getDockableState(resultPane);
-                if (RDockableState != null && RDockableState.isDocked())
-                    workspace.split(resultPane, editorDockable, DockingConstants.SPLIT_TOP, 0.8);
-                else
+                if (RDockableState != null && RDockableState.isDocked()) {
+                    workspace.split(resultPane, editorDockable, Split.TOP, 0.8);
+                } else {
                     workspace.addDockable(editorDockable);
+                }
             }
         }
         if (editorDockable != null) {
-            this.editor = editorDockable.getEditor();
+            setCurrentEditor(editorDockable.getEditor());
         }
         updateView();
     }
@@ -2437,15 +2359,22 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      */
     public void newTestCaseFile() {
         String testHeader = getDefaultTestHeader();
-        if (testHeader == null)
+        if (testHeader == null) {
             return;
+        }
         newFile(testHeader, new File(System.getProperty(Constants.PROP_TEST_DIR)));
         final int line = scriptModel.getLinePositionForInsertion();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                editor.setCaretLine(line);
-            }
-        });
+        currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(line));
+    }
+
+    public void newCheckListFile() {
+        NewChekListInputStage chekListInputStage = new NewChekListInputStage();
+        chekListInputStage.getStage().showAndWait();
+        if (chekListInputStage.isOk()) {
+            IEditor newEditor = createEditor(IEditorProvider.EditorType.CHECKLIST);
+            newEditor.createNewResource(chekListInputStage.getScript(), new File(System.getProperty(Constants.PROP_CHECKLIST_DIR)));
+            setCurrentEditorDockable((EditorDockable) newEditor.getData("dockable"));
+        }
     }
 
     /**
@@ -2456,7 +2385,10 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private String getDefaultTestHeader() {
         File fixtureFile = new File(System.getProperty(Constants.PROP_FIXTURE_DIR), fixture + scriptModel.getSuffix());
         if (!fixtureFile.exists()) {
-            JOptionPane.showMessageDialog(this, "Selected Fixture does not exists", "Invalid Fixture", JOptionPane.ERROR_MESSAGE);
+            Platform.runLater(() -> {
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "Selected Fixture does not exists", "Invalid Fixture",
+                        AlertType.ERROR);
+            });
             return null;
         }
         return scriptModel.getDefaultTestHeader(fixture);
@@ -2465,25 +2397,32 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     /**
      * Create a new Fixture file.
      */
-    public void newFixtureFile() {
-        FixtureDialog fixtureDialog = new FixtureDialog(this, getFixtures());
-        fixtureDialog.setVisible(true);
 
-        if (fixtureDialog.isOk()) {
-            newFile(getFixtureHeader(fixtureDialog.getProperties(), fixtureDialog.getSelectedLauncher()),
+    private void newFixtureFile() {
+        FixtureStage fixtureStage = new FixtureStage(new FixtureStageInfo(Arrays.asList(getFixture())));
+        fixtureStage.setFixtureStageInfoHandler(new NewFixtureHandler());
+        fixtureStage.getStage().showAndWait();
+    }
+
+    class NewFixtureHandler implements IFixtureStageInfoHandler {
+
+        @Override public void handle(FixtureStageInfo fixtureInfo) {
+            newFile(getFixtureHeader(fixtureInfo.getProperties(), fixtureInfo.getSelectedLauncher()),
                     new File(System.getProperty(Constants.PROP_FIXTURE_DIR)));
-            editor.setDirty(true);
+            currentEditor.setDirty(true);
             File fixtureFile = new File(System.getProperty(Constants.PROP_FIXTURE_DIR),
-                    fixtureDialog.getFixtureName() + scriptModel.getSuffix());
+                    fixtureInfo.getFixtureName() + scriptModel.getSuffix());
             try {
+                currentEditor.setData("filename", fixtureFile.getName());
                 saveTo(fixtureFile);
+                currentEditor.setDirty(false);
+                updateView();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Unable to save the fixture: " + e.getMessage(), "Invalid File",
-                        JOptionPane.ERROR_MESSAGE);
+                FXUIUtils.showMessageDialog(DisplayWindow.this, "Unable to save the fixture: " + e.getMessage(), "Invalid File",
+                        AlertType.ERROR);
                 return;
             }
-            setDefaultFixture(fixtureDialog.getFixtureName());
-            navigator.refresh(new File[] { fixtureFile });
+            setDefaultFixture(fixtureInfo.getFixtureName());
         }
     }
 
@@ -2501,41 +2440,49 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      */
     private String getFixtureHeader(Properties props, String launcher) {
         IRuntimeLauncherModel launcherModel = LauncherModelHelper.getLauncherModel(launcher);
-        if (launcherModel == null)
+        if (launcherModel == null) {
             return "";
+        }
         return scriptModel.getDefaultFixtureHeader(props, launcher, launcherModel.getPropertyKeys());
     }
 
     void openFile(File file) {
+        openFile(file, null);
+    }
+
+    void openFile(File file, EditorType type) {
         final EditorDockable dockable = findEditorDockable(file);
         if (dockable != null) {
-            selectDockable(dockable);
+            selectEditor(dockable);
             return;
         }
-        IEditor openEditor = createEditor(file);
+        IEditor openEditor = createEditor(file, type);
         if (openEditor != null) {
             setCurrentEditorDockable((EditorDockable) openEditor.getData("dockable"));
             openEditor.setFocus();
         }
     }
 
-    private void selectDockable(final EditorDockable dockable) {
+    private void selectEditor(final EditorDockable dockable) {
         TabbedDockableContainer container = DockingUtilities.findTabbedDockableContainer(dockable);
         if (container != null) {
             container.setSelectedDockable(dockable);
         }
         dockable.getEditor().setFocus();
+        setCurrentEditor(dockable.getEditor());
         return;
     }
 
     private EditorDockable findEditorDockable(File file) {
         DockableState[] dockables = workspace.getDockables();
+        EditorType editorType = findEditorType(file);
         for (DockableState dockableState : dockables) {
             if (dockableState.getDockable() instanceof EditorDockable) {
                 EditorDockable editorDockable = (EditorDockable) dockableState.getDockable();
-                File editorFile = ((FileHandler) editorDockable.getEditor().getData("filehandler")).getCurrentFile();
-                if (editorFile != null && file.equals(editorFile))
+                IEditor e = editorDockable.getEditor();
+                if (e.isEditingResource(file) || !e.isFileBased() && editorType.equals(e.getData("editorType"))) {
                     return editorDockable;
+                }
             }
         }
         return null;
@@ -2546,9 +2493,10 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         for (DockableState dockableState : dockables) {
             if (dockableState.getDockable() instanceof EditorDockable) {
                 EditorDockable editorDockable = (EditorDockable) dockableState.getDockable();
-                String name = (String) editorDockable.getEditor().getData("filename");
-                if (fileName.equals(name))
+                String name = editorDockable.getEditor().getName();
+                if (fileName.equals(name)) {
                     return editorDockable;
+                }
             }
         }
         return null;
@@ -2568,12 +2516,10 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     private File saveAs() {
         File file = null;
         try {
-            file = getFileHandler(editor).saveAs(editor.getText(), this, (String) editor.getData("filename"));
+            file = currentEditor.saveAs();
             if (file != null) {
-                editor.setData("filename", getFileHandler(editor).getCurrentFile().getName());
-                editor.setData("displayname", getDisplayName(getFileHandler(editor).getCurrentFile()));
-                editor.setDirty(false);
-                EditorDockable dockable = (EditorDockable) editor.getData("dockable");
+                currentEditor.setDirty(false);
+                EditorDockable dockable = (EditorDockable) currentEditor.getData("dockable");
                 dockable.updateKey();
             }
             updateView();
@@ -2605,8 +2551,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             String testName = runReportDir.getName() + scriptModel.getSuffix();
             File testDir = new File(System.getProperty(Constants.PROP_TEST_DIR), "ExploratoryTests");
             if (!testDir.exists()) {
-                if (!testDir.mkdir())
+                if (!testDir.mkdir()) {
                     throw new RuntimeException("Unable to create the test directory: " + testDir);
+                }
             }
             File file = new File(testDir, testName);
             try {
@@ -2617,29 +2564,42 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             }
             return file;
         }
-        return save(editor);
+        return save(currentEditor);
     }
 
     private File save(IEditor e) {
         File file = null;
         try {
-            FileHandler fileHandler = getFileHandler(e);
-            file = fileHandler.save(e.getText(), this, (String) e.getData("filename"));
+            file = e.save();
             if (file != null) {
-                e.setData("filename", fileHandler.getCurrentFile().getName());
                 e.setDirty(false);
                 if (isModuleFile()) {
                     scriptModel.fileUpdated(file, SCRIPT_FILE_TYPE.MODULE);
                 }
-                navigator.refresh(new File[] { file });
+            } else if (!e.isFileBased()) {
+                e.setDirty(false);
             }
             updateDockName(e);
             updateView();
             ((EditorDockable) e.getData("dockable")).updateKey();
-            if (fileHandler.isModuleFile())
+            if (e.isModuleFile()) {
                 resetModuleFunctions();
-        } catch (IOException e1) {
-            reportException(e1);
+            }
+        } catch (Exception e1) {
+            FXUIUtils.showMessageDialog(this, "Unable to save file: " + e1.getMessage(), "Error in Saving", AlertType.ERROR);
+        }
+        if (file != null) {
+            navigatorPanel.updated(DisplayWindow.this, new FileResource(file));
+            suitesPanel.updated(DisplayWindow.this, new FileResource(file));
+            featuresPanel.updated(DisplayWindow.this, new FileResource(file));
+            storiesPanel.updated(DisplayWindow.this, new FileResource(file));
+            issuesPanel.updated(DisplayWindow.this, new FileResource(file));
+            if (file.getName().equals("logging.properties"))
+                OSUtils.setLogConfiguration(Constants.getMarathonProjectDirectory().getAbsolutePath());
+            if (file.getName().equals("project.json"))
+                Preferences.resetInstance();
+            e.refreshResource();
+            e.refresh();
         }
         return file;
     }
@@ -2650,7 +2610,7 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             suffix = "*";
         }
         String title = "";
-        title = e.getData("filename") + suffix;
+        title = e.getName() + suffix;
         Dockable dockable = (Dockable) e.getData("dockable");
         if (dockable != null) {
             DockKey dk = dockable.getDockKey();
@@ -2659,51 +2619,15 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     public void saveTo(File file) throws IOException {
-        getFileHandler(editor).saveTo(file, editor.getText());
-        if (file != null) {
-            String name = getFileHandler(editor).getCurrentFile().getName();
-            editor.setData("filename", name);
-            editor.setData("displayname", getDisplayName(getFileHandler(editor).getCurrentFile()));
-            editor.setDirty(false);
-        }
-    }
-
-    private String getDisplayName(File currentFile) {
-        try {
-            String projectPath = Constants.getMarathonProjectDirectory().getCanonicalPath();
-            String filePath = currentFile.getCanonicalPath();
-            if(filePath.startsWith(projectPath)) {
-                filePath = filePath.substring(projectPath.length() + 1);
+        currentEditor.runWhenReady(() -> {
+            try {
+                currentEditor.saveTo(file);
+            } catch (IOException e) {
             }
-            return filePath;
-        } catch (IOException e) {
-        }
-        return currentFile.getName();
-    }
-
-    /**
-     * Save the current desktop preferences (layout) to user preferences.
-     */
-
-    public void handleAbout() {
-        helpAboutAction.actionPerformed(null);
-    }
-
-    public void handlePreferences() {
-        preferencesAction.actionPerformed(null);
-    }
-
-    public void showSearchDialog() {
-        if (searchDialog == null) {
-            searchDialog = new SearchDialog(editor, this);
-        } else {
-            searchDialog.setEditor(editor);
-        }
-        editor.showSearchDialog(searchDialog);
-    }
-
-    private boolean isMac() {
-        return Boolean.getBoolean("marathon.useAppleMenuBar") && OSUtils.isMac();
+            if (file != null) {
+                currentEditor.setDirty(false);
+            }
+        });
     }
 
     private CheckList fillUpChecklist(final String fileName) {
@@ -2719,15 +2643,19 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     private boolean closeEditor(IEditor e) {
-        if (e == null)
+        if (e == null) {
             return true;
+        }
         if (e.isDirty()) {
-            int shouldSaveFile = JOptionPane.showConfirmDialog(this,
-                    "File \"" + e.getData("filename") + "\" Modified. Do you want to save the changes ",
-                    "File \"" + e.getData("filename") + "\" Modified", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (shouldSaveFile == JOptionPane.CANCEL_OPTION)
+            Optional<ButtonType> result = FXUIUtils.showConfirmDialog(DisplayWindow.this,
+                    "File \"" + e.getName() + "\" Modified. Do you want to save the changes ",
+                    "File \"" + e.getName() + "\" Modified", AlertType.CONFIRMATION, ButtonType.YES, ButtonType.NO,
+                    ButtonType.CANCEL);
+            ButtonType shouldSaveFile = result.get();
+            if (shouldSaveFile == ButtonType.CANCEL) {
                 return false;
-            if (shouldSaveFile == JOptionPane.YES_OPTION) {
+            }
+            if (shouldSaveFile == ButtonType.YES) {
                 File file = save(e);
                 if (file == null) {
                     return false;
@@ -2743,103 +2671,100 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
      * Marathon Actions available from Menu/Toolbars
      */
 
-    @ISimpleAction(mneumonic = 'p', description = "Play the testcase") AbstractSimpleAction playAction;
+    @ISimpleAction(mneumonic = "Shortcut+P", description = "Play the testcase") AbstractSimpleAction playAction;
 
-    @ISimpleAction(mneumonic = 'r', description = "Show report for last test run") Action showReportAction;
+    @ISimpleAction(description = "Show report for last test run") AbstractSimpleAction showReportAction;
 
-    @ISimpleAction(mneumonic = 'u', description = "Debug the testcase") AbstractSimpleAction debugAction;
+    @ISimpleAction(mneumonic = "Shortcut+Alt+P", description = "Debug the testcase") AbstractSimpleAction debugAction;
 
-    @ISimpleAction(mneumonic = 'y', description = "Play the testcase with a delay") AbstractSimpleAction slowPlayAction;
+    @ISimpleAction(mneumonic = "Shortcut+Shift+P", description = "Play the testcase with a delay") AbstractSimpleAction slowPlayAction;
 
-    @ISimpleAction(mneumonic = 'a', description = "Pause recording") Action pauseAction;
+    @ISimpleAction(description = "Pause recording") AbstractSimpleAction pauseAction;
 
-    @ISimpleAction(mneumonic = 'm', description = "Resume recording") Action resumeRecordingAction;
+    @ISimpleAction(description = "Resume recording") AbstractSimpleAction resumeRecordingAction;
 
-    @ISimpleAction(mneumonic = 'm', description = "Resume playing") Action resumePlayingAction;
+    @ISimpleAction(description = "Resume playing") AbstractSimpleAction resumePlayingAction;
 
-    @ISimpleAction(mneumonic = 'f') Action selectFixtureAction;
+    @ISimpleAction() AbstractSimpleAction selectFixtureAction;
 
-    @ISimpleAction(mneumonic = 'r', description = "Start recording") Action recordAction;
+    @ISimpleAction(mneumonic = "Shortcut+R", description = "Start recording") AbstractSimpleAction recordAction;
 
-    @ISimpleAction(value = "Exploratory Test", mneumonic = 'R', description = "Record an exploratory test") Action etAction;
+    @ISimpleAction(mneumonic = "Shortcut+Shift+N", value = "Exploratory Test", description = "Record an exploratory test") AbstractSimpleAction etAction;
 
-    @ISimpleAction(mneumonic = 's', description = "Stop recording") Action stopAction;
+    @ISimpleAction(description = "Stop recording") AbstractSimpleAction stopAction;
 
-    @ISimpleAction(mneumonic = 'r', description = "Start raw recording") Action rawRecordAction;
+    @ISimpleAction(description = "Start raw recording") AbstractSimpleAction rawRecordAction;
 
-    @ISimpleAction(mneumonic = 'o', description = "Open Application") Action openApplicationAction;
+    @ISimpleAction(description = "Open Application") AbstractSimpleAction openApplicationAction;
 
-    @ISimpleAction(mneumonic = 'c', description = "Close Application") Action closeApplicationAction;
+    @ISimpleAction(description = "Close Application") AbstractSimpleAction closeApplicationAction;
 
-    @ISimpleAction(mneumonic = 'i', description = "Insert a module method") Action insertScriptAction;
+    @ISimpleAction(description = "Insert a module method") AbstractSimpleAction insertScriptAction;
 
-    @ISimpleAction(mneumonic = 'l', description = "Insert a checklist") Action insertChecklistAction;
+    @ISimpleAction(description = "Insert a checklist") AbstractSimpleAction insertChecklistAction;
 
-    @ISimpleAction(mneumonic = 'e', description = "Change project settings", value = "Project Settings...") Action projectSettingsAction;
+    @ISimpleAction(description = "Change project settings", value = "Project Settings...") AbstractSimpleAction projectSettingsAction;
 
-    @ISimpleAction(mneumonic = 'l', description = "Mangage checklists", value = "Manage Checklists...") Action manageChecklistsAction;
+    @ISimpleAction(mneumonic = "Shortcut+N", description = "Create a new testcase") AbstractSimpleAction newTestcaseAction;
 
-    @ISimpleAction(mneumonic = 'e', description = "Change settings for script console", value = "Script Console Settings...") Action scriptConsoleSettingsAction;
+    @ISimpleAction(description = "Create a new module method") AbstractSimpleAction newModuleAction;
 
-    @ISimpleAction(mneumonic = 'n', description = "Create a new testcase") Action newTestcaseAction;
+    @ISimpleAction(description = "Create a new fixture") AbstractSimpleAction newFixtureAction;
 
-    @ISimpleAction(mneumonic = 'c', description = "Create a new module method") Action newModuleAction;
+    @ISimpleAction(description = "Create a new CheckList") AbstractSimpleAction newCheckListAction;
 
-    @ISimpleAction(mneumonic = 'f', description = "Create a new fixture") Action newFixtureAction;
+    @ISimpleAction(mneumonic = "Shortcut+S", description = "Save current file") AbstractSimpleAction saveAction;
 
-    @ISimpleAction(mneumonic = 's', description = "Save current file") Action saveAction;
+    @ISimpleAction(description = "Save as") AbstractSimpleAction saveAsAction;
 
-    @ISimpleAction(mneumonic = 'a', description = "Save as") Action saveAsAction;
+    @ISimpleAction(mneumonic = "Shortcut+Shift+S", description = "Save all modifications") AbstractSimpleAction saveAllAction;
 
-    @ISimpleAction(mneumonic = 'l', description = "Save all modifications") Action saveAllAction;
+    @ISimpleAction(mneumonic = "Shortcut+Q", description = "Exit Marathon") AbstractSimpleAction exitAction;
 
-    @ISimpleAction(mneumonic = 'x', description = "Exit Marathon") Action exitAction;
+    @ISimpleAction(description = "Show release notes", value = "Read me") AbstractSimpleAction releaseNotes;
 
-    @ISimpleAction(mneumonic = 'b', description = "About Marathon", value = "About...") Action helpAboutAction;
+    @ISimpleAction(description = "Show change log") AbstractSimpleAction changeLog;
 
-    @ISimpleAction(mneumonic = 'r', description = "Show release notes", value = "Read me") Action releaseNotes;
+    @ISimpleAction(description = "Show marathon website", value = "Marathon on web") AbstractSimpleAction visitWebsite;
 
-    @ISimpleAction(mneumonic = 'c', description = "Show change log") Action changeLog;
+    @ISimpleAction(description = "Change preferences", value = "Preferences...") AbstractSimpleAction preferencesAction;
 
-    @ISimpleAction(mneumonic = 'w', description = "Show marathon website", value = "Marathon on web") Action visitWebsite;
+    @ISimpleAction(description = "Reset workspace to default") AbstractSimpleAction resetWorkspaceAction;
 
-    @ISimpleAction(mneumonic = 'u', description = "Undo last edit") Action undoAction;
+    @ISimpleAction(mneumonic = "Shortcut+B", description = "Toggle breakpoint at the current line") AbstractSimpleAction toggleBreakpointAction;
 
-    @ISimpleAction(mneumonic = 'r', description = "Redo last undo") Action redoAction;
+    @ISimpleAction(description = "Remove all breakpoints", value = "Remove all breakpoints") AbstractSimpleAction clearAllBreakpointsAction;
 
-    @ISimpleAction(mneumonic = 't', description = "Cut selected text") Action cutAction;
+    @ISimpleAction(description = "Step into the method") AbstractSimpleAction stepIntoAction;
 
-    @ISimpleAction(mneumonic = 'c', description = "Copy selected text") Action copyAction;
+    @ISimpleAction(description = "Step over the method") AbstractSimpleAction stepOverAction;
 
-    @ISimpleAction(mneumonic = 'p', description = "Paste") Action pasteAction;
+    @ISimpleAction(description = "Return from current method") AbstractSimpleAction stepReturnAction;
 
-    @ISimpleAction(mneumonic = 'f', description = "Search and replace", value = "Find & Replace...") Action searchAction;
+    @ISimpleAction(description = "Player console") AbstractSimpleAction playerConsoleAction;
 
-    @ISimpleAction(mneumonic = 'n', description = "Find next") Action findNextAction;
+    @ISimpleAction(description = "Recorder console") AbstractSimpleAction recorderConsoleAction;
 
-    @ISimpleAction(mneumonic = 'p', description = "Find previous") Action findPreviousAction;
+    @ISimpleAction(description = "Create a new Module directory", value = "New Module Directory") AbstractSimpleAction newModuleDirAction;
 
-    @ISimpleAction(mneumonic = 'e', description = "Change preferences", value = "Preferences...") Action preferencesAction;
+    @ISimpleAction(description = "Create a new Suite file", value = "New Suite") AbstractSimpleAction newSuiteFileAction;
 
-    @ISimpleAction(mneumonic = 'r', description = "Reset workspace to default") Action resetWorkspaceAction;
+    @ISimpleAction(description = "Create a new Feature file", value = "New Feature") AbstractSimpleAction newFeatureFileAction;
 
-    @ISimpleAction(mneumonic = 'b', description = "Toggle breakpoint at the current line") Action toggleBreakpointAction;
+    @ISimpleAction(description = "Create a new Story file", value = "New Story") AbstractSimpleAction newStoryFileAction;
 
-    @ISimpleAction(mneumonic = 't', description = "Remove all breakpoints", value = "Remove all breakpoints") Action clearAllBreakpointsAction;
+    @ISimpleAction(description = "Create a new Issue file", value = "New Issue") AbstractSimpleAction newIssueFileAction;
 
-    @ISimpleAction(mneumonic = 't', description = "Step into the method") Action stepIntoAction;
+    AbstractSimpleAction refreshAction = new AbstractSimpleAction("refresh", "Refresh Editor", "F5", "Refresh Editor Content") {
+        private static final long serialVersionUID = 1L;
 
-    @ISimpleAction(mneumonic = 'o', description = "Step over the method") Action stepOverAction;
-
-    @ISimpleAction(mneumonic = 'u', description = "Return from current method") Action stepReturnAction;
-
-    @ISimpleAction(mneumonic = 'u', description = "Player console") Action playerConsoleAction;
-
-    @ISimpleAction(mneumonic = 'u', description = "Recorder console") Action recorderConsoleAction;
-
-    @ISimpleAction(mneumonic = 'u', description = "Create a new Module directory", value = "New Module Directory") Action newModuleDirAction;
-
-    @ISimpleAction(mneumonic = 's', description = "Create a new Suite file", value = "New Suite File") Action newSuiteFileAction;
+        @Override public void handle(ActionEvent e) {
+            if (currentEditor != null) {
+                currentEditor.refreshResource();
+                currentEditor.refresh();
+            }
+        }
+    };;
 
     private DockGroup editorDockGroup;
 
@@ -2850,9 +2775,6 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     public transient ILogger logViewLogger;
 
     private HashSet<String> importStatements;
-
-    public static final ImageIcon BREAKPOINT = new ImageIcon(DisplayWindow.class.getClassLoader()
-            .getResource("net/sourceforge/marathon/display/icons/enabled/togglebreakpoint.gif"));
 
     public void onPlay() {
         resultPane.clear();
@@ -2875,8 +2797,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     public void onSlowPlay() {
         String delay = System.getProperty(Constants.PROP_RUNTIME_DEFAULT_DELAY, "1000");
-        if (delay.equals(""))
+        if (delay.equals("")) {
             delay = "1000";
+        }
         System.setProperty(Constants.PROP_RUNTIME_DELAY, delay);
         resultPane.clear();
         outputPane.clear();
@@ -2899,60 +2822,33 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         resumePlay();
     }
 
-    private static class WaitMessageDialog extends JFrame {
-        private static final long serialVersionUID = 1L;
-
-        public WaitMessageDialog() {
-            setUndecorated(true);
-            getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-            setAlwaysOnTop(true);
-            initComponents();
-        }
-
-        private void initComponents() {
-            Container contentPane = getContentPane();
-            contentPane.setLayout(new BorderLayout());
-            contentPane.add(new JLabel(new ImageIcon(DisplayWindow.class.getResource("wait.gif"), "Wait Message")),
-                    BorderLayout.CENTER);
-            JLabel label = new JLabel("This window closes once Marathon is ready for recording");
-            label.setOpaque(true);
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setBackground(Color.BLACK);
-            label.setForeground(Color.WHITE);
-            Dimension preferredSize = label.getPreferredSize();
-            preferredSize.height = 30;
-            label.setPreferredSize(preferredSize);
-            contentPane.add(label, BorderLayout.SOUTH);
-            pack();
-        }
-    }
-
-    WaitMessageDialog recordWaitMessageDialog = new WaitMessageDialog();
-
     public void onRecord() {
+        if (editingObjectMap())
+            return;
         importStatements = new HashSet<String>();
         resultPane.clear();
         outputPane.clear();
         controller.clear();
-        recordWaitMessageDialog.setLocationRelativeTo(null);
-        recordWaitMessageDialog.setVisible(true);
+        WaitMessageDialog.setVisible(true);
         new Thread(new Runnable() {
             @Override public void run() {
                 display.record(taConsole);
             }
         }).start();
-        displayView._setState(State.RECORDING_ABOUT_TO_START);
+        displayView.setState(State.RECORDING_ABOUT_TO_START);
     }
 
     public void onEt() {
+        if (editingObjectMap())
+            return;
         exploratoryTest = true;
         etAction.setEnabled(false);
         newTestCaseFile();
         displayView.startTestRun();
         displayView.startTest();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                recordActionButton.doClick();
+        currentEditor.runWhenContentLoaded(new Runnable() {
+            @Override public void run() {
+                recordActionButton.fire();
             }
         });
     }
@@ -2962,16 +2858,14 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         if (exploratoryTest) {
             displayView.endTest(null);
             displayView.endTestRun();
-            File file = save();
-            if (file != null)
-                navigator.makeVisible(file);
+            save();
             exploratoryTest = false;
         }
     }
 
     public void onRawRecord() {
         isRawRecording = !isRawRecording;
-        rawRecordButton.setSelected(isRawRecording);
+        // rawRecordButton.setSelected(isRawRecording);
         display.setRawRecording(isRawRecording);
     }
 
@@ -2986,47 +2880,92 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     public void onInsertScript() {
-        Module root = getModuleFunctions();
-        FunctionDialog dialog = new FunctionDialog(DisplayWindow.this, root, display.getTopWindowName());
-        dialog.setVisible(true);
+        Platform.runLater(() -> {
+            Module root = getModuleFunctions();
+            FunctionStage functionStage = new FunctionStage(new FunctionInfo(DisplayWindow.this, display.getTopWindowName(), root));
+            functionStage.setFunctionArgumentHandler(new FunctionArgumentHandler(functionStage));
+            functionStage.getStage().showAndWait();
+        });
+    }
+
+    private final class FunctionArgumentHandler implements IFunctionArgumentHandler {
+        private FunctionStage functionStage;
+
+        public FunctionArgumentHandler(FunctionStage functionStage) {
+            this.functionStage = functionStage;
+        }
+
+        @Override public void handle(String[] arguments, Function function) {
+            new Thread() {
+                @Override public void run() {
+                    insertScript(ScriptModel.getModel().getFunctionCallForInsertDialog(function, arguments));
+                    Platform.runLater(() -> functionStage.dispose());
+                }
+            }.start();
+        }
     }
 
     public void onInsertChecklist() {
         String checklistDir = System.getProperty(Constants.PROP_CHECKLIST_DIR);
         File dir = new File(checklistDir);
-        MarathonCheckList dialog;
-        if (controller != null && controller.isShowing())
-            dialog = new MarathonCheckList(controller, dir, true);
-        else
-            dialog = new MarathonCheckList(DisplayWindow.this, dir, true);
-        dialog.setVisible(true);
-        navigator.refresh(new File[] { dir });
-        if (dialog.isOK()) {
-            File selectedChecklist = dialog.getSelectedChecklist();
-            insertChecklist(selectedChecklist.getName());
-        }
+        CheckListForm checkListInfo = new CheckListForm(dir, true);
+        MarathonCheckListStage checklistStage = new MarathonCheckListStage(checkListInfo);
+        checklistStage.setInsertCheckListHandler(new IInsertCheckListHandler() {
+            @Override public boolean insert(CheckListElement selectedItem) {
+                insertChecklist(selectedItem.getFile().getName());
+                return true;
+            }
+        });
+        Stage stage = checklistStage.getStage();
+        stage.showAndWait();
     }
 
     public void onProjectSettings() {
-        String projectDir = System.getProperty(Constants.PROP_PROJECT_DIR);
-        MPFConfigurationUI ui = new MPFConfigurationUI(projectDir, DisplayWindow.this);
-        ui.setVisible(true);
-        Main.processMPF(projectDir);
-        RuntimeLogger.setRuntimeLogger(logViewLogger);
+        Platform.runLater(() -> {
+            String projectDir = System.getProperty(Constants.PROP_PROJECT_DIR);
+            List<Boolean> projectEdited = new ArrayList<>();
+            String title = "Configure";
+            Properties properties = new Properties();
+            try {
+                properties = ProjectFile.getProjectProperties();
+            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
+            } finally {
+            }
+            properties.setProperty(Constants.PROP_PROJECT_DIR, projectDir);
+            setFrameWork(properties);
+            String name = properties.getProperty(Constants.PROP_PROJECT_NAME);
+            if (name != null) {
+                title = "Configure - " + name;
+            }
+            MPFConfigurationInfo mpfConfigurationInfo = new MPFConfigurationInfo(title, projectDir, properties);
+            MPFConfigurationStage mpfConfigurationStage = new MPFConfigurationStage(null, mpfConfigurationInfo) {
+                @Override public void onSave() {
+                    if (validInupt()) {
+                        mpfConfigurationInfo.saveProjectFile(layouts);
+                        System.getProperty(Constants.PROP_PROJECT_NAME);
+                        projectEdited.add(true);
+                        dispose();
+                        Preferences.resetInstance();
+                        navigatorPanel.updated(DisplayWindow.this,
+                                new FileResource(new File(projectDir, ProjectFile.PROJECT_FILE)));
+                    }
+                }
+            };
+            mpfConfigurationStage.getStage().showAndWait();
+            RuntimeLogger.setRuntimeLogger(logViewLogger);
+        });
     }
 
-    public void onManageChecklists() {
-        String projectDir = System.getProperty(Constants.PROP_CHECKLIST_DIR);
-        File dir = new File(projectDir);
-        MarathonCheckList dialog = new MarathonCheckList(DisplayWindow.this, dir, false);
-        dialog.setVisible(true);
-        navigator.refresh(new File[] { dir });
-    }
-
-    public void onScriptConsoleSettings() {
-        URL defaultProperties = ScriptConsole.class.getResource("scriptconsole.props");
-        PropertyEditor propertyEditor = new PropertyEditor(this, ScriptConsole.class, defaultProperties, "Script Console Settings");
-        propertyEditor.setVisible(true);
+    private void setFrameWork(Properties properties) {
+        String framework = properties.getProperty(Constants.PROP_PROJECT_FRAMEWORK);
+        if (framework != null) {
+            System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, framework);
+        }
+        String launcherModel = properties.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL);
+        if (launcherModel != null) {
+            System.setProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL, launcherModel);
+        }
     }
 
     public void onNewTestcase() {
@@ -3034,27 +2973,39 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     public void onNewModule() {
-        newModuleFile();
+        Platform.runLater(() -> newModuleFile());
     }
 
     public void onNewModuleDir() {
-        newModuleDir();
+        Platform.runLater(() -> newFXModuleDir());
     }
 
     public void onNewSuiteFile() {
-        newSuiteFile();
+        Platform.runLater(() -> newFXSuiteFile());
+    }
+
+    public void onNewFeatureFile() {
+        Platform.runLater(() -> newFXFeatureFile());
+    }
+
+    public void onNewStoryFile() {
+        Platform.runLater(() -> newFXStoryFile());
+    }
+
+    public void onNewIssueFile() {
+        Platform.runLater(() -> newFXIssueFile());
     }
 
     public void onNewFixture() {
-        newFixtureFile();
+        Platform.runLater(() -> newFixtureFile());
+    }
+
+    public void onNewCheckList() {
+        newCheckListFile();
     }
 
     public void onSave() {
-        File file = save();
-        if (file != null) {
-            navigator.makeVisible(file);
-            testRunner.resetTestView();
-        }
+        save();
     }
 
     public void onSaveAs() {
@@ -3063,81 +3014,59 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
             if (isModuleFile()) {
                 scriptModel.fileUpdated(file, SCRIPT_FILE_TYPE.MODULE);
             }
-            navigator.makeVisible(file);
-            testRunner.resetTestView();
         }
     }
 
     public void onSaveAll() {
         saveAll();
-        navigator.refresh();
-        testRunner.resetTestView();
     }
 
     public boolean handleQuit() {
-        if (!saveFileIfNeeded())
+        if (!saveFileIfNeeded()) {
             return false;
-        saveBreakPoints();
-        Preferences preferences = Preferences.userNodeForPackage(DisplayWindow.class);
-        saveWorkspaceLayout(preferences);
-        saveWindowState(preferences);
-        try {
-            preferences.flush();
-        } catch (BackingStoreException e) {
-            e.printStackTrace();
         }
+        saveBreakPoints();
+        saveWorkspaceLayout();
+        saveWindowState();
+        display.destroyRuntime();
         return true;
     }
 
-    private void saveWindowState(Preferences preferences) {
-        int extendedState = getExtendedState();
-        int x = -1, y = -1, w = -1, h = -1;
-        if ((extendedState & MAXIMIZED_BOTH) == 0) {
-            Dimension size = getSize();
-            Point location = getLocationOnScreen();
-            x = location.x;
-            y = location.y;
-            w = size.width;
-            h = size.height;
-        }
-        preferences.putInt(getPrefKey("window.x", System.getProperty(Constants.PROP_PROJECT_DIR)), x);
-        preferences.putInt(getPrefKey("window.y", System.getProperty(Constants.PROP_PROJECT_DIR)), y);
-        preferences.putInt(getPrefKey("window.w", System.getProperty(Constants.PROP_PROJECT_DIR)), w);
-        preferences.putInt(getPrefKey("window.h", System.getProperty(Constants.PROP_PROJECT_DIR)), h);
+    private void saveWindowState() {
+        JSONObject preferences = Preferences.instance().getSection("display");
+        preferences.put("maximized", isMaximized());
+        preferences.put("fullScreen", isFullScreen());
+        preferences.put("iconified", isIconified());
+        preferences.put("window.x", getX());
+        preferences.put("window.y", getY());
+        preferences.put("window.w", getWidth());
+        preferences.put("window.h", getHeight());
+        Preferences.instance().save("display");
     }
 
-    private void saveWorkspaceLayout(Preferences preferences) {
-        try {
-            DockableState[] dockables = workspace.getDockables();
-            for (DockableState dockableState : dockables) {
-                if (dockableState.getDockable() instanceof EditorDockable && !dockableState.isDocked())
-                    workspace.unregisterDockable(dockableState.getDockable());
+    private void saveWorkspaceLayout() {
+        DockableState[] dockables = workspace.getDockables();
+        for (DockableState dockableState : dockables) {
+            if (dockableState.getDockable() instanceof EditorDockable && !dockableState.isDocked()) {
+                workspace.unregisterDockable(dockableState.getDockable());
             }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            workspace.writeXML(baos);
-            preferences.put(getPrefKey("workspace.", System.getProperty(Constants.PROP_PROJECT_DIR)),
-                    new String(baos.toByteArray()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        JSONObject state = workspace.saveDockableState();
+        if (state != null) {
+            JSONObject workspace = Preferences.instance().getSection("workspace");
+            workspace.put("state", state);
+            Preferences.instance().save("workspace");
         }
     }
 
     public void onExit() {
         if (handleQuit()) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    System.exit(0);
-                }
-            });
+            System.exit(0);
         }
     }
 
-    public void onHelpAbout() {
-        aboutDialog.display();
-    }
-
     public void onReleaseNotes() {
-        showFile(System.getProperty(Constants.PROP_HOME), "README.txt");
+        showFile(System.getProperty(Constants.PROP_HOME) + "/readme", "index.html");
     }
 
     public void onChangeLog() {
@@ -3152,54 +3081,40 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         }
     }
 
-    public void onUndo() {
-        editor.undo();
-    }
-
-    public void onRedo() {
-        editor.redo();
-    }
-
-    public void onCut() {
-        editor.cut();
-    }
-
-    public void onCopy() {
-        editor.copy();
-    }
-
-    public void onPaste() {
-        editor.paste();
-    }
-
-    public void onSearch() {
-        showSearchDialog();
-    }
-
-    public void onFindNext() {
-        editor.find(IEditor.FIND_NEXT);
-    }
-
-    public void onFindPrevious() {
-        editor.find(IEditor.FIND_PREV);
-    }
-
     public void onPreferences() {
-        PreferencesDialog dialog = new PreferencesDialog(DisplayWindow.this);
-        dialog.setVisible(true);
-        if (!dialog.isNeedRefresh())
-            return;
-        navigator.refresh();
-        testRunner.resetTestView();
-        editor.refresh();
+        Platform.runLater(() -> {
+            MarathonPreferencesInfo preferenceInfo = new MarathonPreferencesInfo(false);
+            PreferencesStage preferencesStage = new PreferencesStage(preferenceInfo);
+            preferencesStage.setPreferenceHandler(new PreferenceHandler());
+            preferencesStage.getStage().showAndWait();
+        });
+    }
+
+    public class PreferenceHandler implements IPreferenceHandler {
+
+        @Override public void setPreferences(MarathonPreferencesInfo preferenceInfo) {
+            JSONObject prefs = preferenceInfo.getPreferences();
+            prefs.put(Constants.PREF_RECORDER_MOUSE_TRIGGER, preferenceInfo.getMouseTriggerText());
+            prefs.put(Constants.PREF_RECORDER_KEYBOARD_TRIGGER, preferenceInfo.getKeyTriggerText());
+            prefs.put(Constants.PREF_ITE_BLURBS, Boolean.toString(preferenceInfo.isHideBlurb()));
+            preferenceInfo.save();
+            System.setProperty(Constants.PROP_RECORDER_KEYTRIGGER, preferenceInfo.getKeyTriggerText());
+            System.setProperty(Constants.PROP_RECORDER_MOUSETRIGGER, preferenceInfo.getMouseTriggerText());
+            FXContextMenuTriggers.setContextMenuKey();
+            FXContextMenuTriggers.setContextMenuModifiers();
+            if (currentEditor != null) {
+                currentEditor.refresh();
+            }
+        }
     }
 
     public void onResetWorkspace() {
         DockableState[] dockableStates = workspace.getDockables();
         List<EditorDockable> editorDockables = new ArrayList<DisplayWindow.EditorDockable>();
         for (DockableState dockableState : dockableStates) {
-            if (dockableState.getDockable() instanceof EditorDockable)
+            if (dockableState.getDockable() instanceof EditorDockable) {
                 editorDockables.add((EditorDockable) dockableState.getDockable());
+            }
         }
         resetWorkspaceOperation = true;
         createDefaultWorkspace(editorDockables.toArray(new EditorDockable[editorDockables.size()]));
@@ -3207,14 +3122,15 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     public void onToggleBreakpoint() {
-        if (isProjectFile() && editor != null)
-            toggleBreakPoint(editor.getCaretLine());
+        if (isProjectFile() && currentEditor != null) {
+            toggleBreakPoint(currentEditor.getCaretLine());
+        }
     }
 
     public void onClearAllBreakpoints() {
         breakpoints.clear();
         setState();
-        editor.refresh();
+        currentEditor.refresh();
     }
 
     public void onStepInto() {
@@ -3229,30 +3145,26 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     public void onStepReturn() {
         breakStackDepth = callStack.getStackDepth() - 1;
-        if (breakStackDepth < 0)
+        if (breakStackDepth < 0) {
             breakStackDepth = 0;
+        }
         resumePlay();
     }
 
     public void onPlayerConsole() {
-        scriptConsole = new ScriptConsole(DisplayWindow.this, ((Component) editor).getFont(), scriptConsoleListener,
-                scriptModel.getSuffix());
+        scriptConsole = new ScriptConsole(scriptConsoleListener, scriptModel.getSuffix());
         scriptConsole.setVisible(true);
         setState();
     }
 
     public void onRecorderConsole() {
-        scriptConsole = new ScriptConsole(controller.isVisible() ? null : DisplayWindow.this, ((Component) editor).getFont(),
-                scriptConsoleListener, scriptModel.getSuffix());
+        scriptConsole = new ScriptConsole(scriptConsoleListener, scriptModel.getSuffix());
         scriptConsole.setVisible(true);
         System.setProperty(Constants.PROP_RUNTIME_DELAY, "0");
-        if (!state.isRecordingPaused())
+        if (!state.isRecordingPaused()) {
             display.pauseRecording();
+        }
         setState();
-    }
-
-    public void setResultReporterHTMLFile(File resultReporterHTMLFile) {
-        this.resultReporterHTMLFile = resultReporterHTMLFile;
     }
 
     public String getFixture() {
@@ -3270,18 +3182,14 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     private IEditor createEditor(EditorType editorType) {
         try {
-            FileHandler fileHandler = new FileHandler(new MarathonFileFilter(scriptModel.getSuffix(), scriptModel),
-                    new File(System.getProperty(Constants.PROP_TEST_DIR)), new File(System.getProperty(Constants.PROP_FIXTURE_DIR)),
-                    Constants.getMarathonDirectories(Constants.PROP_MODULE_DIRS), this);
-            IEditor e = editorProvider.get(true, 1, editorType);
-            e.setData("filehandler", fileHandler);
+            IEditor e = editorProvider.get(true, 1, editorType, true);
+            e.setData("fileHandler", e.createResourceHandler(editorType, this));
             e.addGutterListener(gutterListener);
             e.addContentChangeListener(contentChangeListener);
-            e.addCaretListener(caretListener);
             setAcceleratorKeys(e);
             setMenuItems(e);
             e.setStatusBar(statusPanel);
-            Dockable editorDockable = new EditorDockable(e, editorDockGroup, workspace);
+            Dockable editorDockable = new EditorDockable(e, editorDockGroup);
             e.setData("dockable", editorDockable);
             return e;
         } catch (IOException e1) {
@@ -3290,52 +3198,22 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         return null;
     }
 
-    Action refreshAction = new AbstractAction("Refresh") {
-        private static final long serialVersionUID = 1L;
-
-        public void actionPerformed(ActionEvent e) {
-            if (editor != null) {
-                File currentFile = getFileHandler(editor).getCurrentFile();
-                try {
-                    String script = getFileHandler(editor).readFile(currentFile);
-                    editor.setText(script);
-                    editor.setDirty(false);
-                } catch (IOException e1) {
-                }
-            }
-        }
-    };;
-
     private void setMenuItems(IEditor e) {
-        e.setMenuItems(new JMenuItem[] { getMenuItemWithAccelKey(undoAction, "^+Z"), getMenuItemWithAccelKey(redoAction, "^S+Z"),
-                null, getMenuItemWithAccelKey(playAction, "^+P"), getMenuItemWithAccelKey(slowPlayAction, "^S+P"),
-                getMenuItemWithAccelKey(debugAction, "^A+P"), null, getMenuItemWithAccelKey(cutAction, "^+X"),
-                getMenuItemWithAccelKey(copyAction, "^+C"), getMenuItemWithAccelKey(pasteAction, "^+V"),
-                getMenuItemWithAccelKey(refreshAction, "F5") });
     }
 
     private IEditor createEditor(File file) {
+        return createEditor(file, null);
+    }
+
+    private IEditor createEditor(File file, EditorType type) {
         try {
-            EditorType editorType;
-            if (file.getName().endsWith(".csv")) {
-                editorType = IEditorProvider.EditorType.CSV;
-            } else if (file.getName().endsWith(".suite")) {
-                editorType = IEditorProvider.EditorType.SUITE;
-            } else {
-                editorType = IEditorProvider.EditorType.OTHER;
-            }
+            EditorType editorType = type == null ? findEditorType(file) : type;
             IEditor e = createEditor(editorType);
-            String script = getFileHandler(e).readFile(file);
-            if (script != null) {
-                String name = getFileHandler(e).getCurrentFile().getName();
-                e.setText(script);
-                e.setMode(getFileHandler(e).getMode(name));
-                e.setData("filename", name);
-                e.setData("displayname", getDisplayName(getFileHandler(e).getCurrentFile()));
-                e.setCaretLine(0);
-                e.setDirty(false);
-            }
-            e.clearUndo();
+            e.setData("editorType", editorType);
+            e.readResource(file);
+            e.runWhenReady(() -> e.refresh());
+            e.runWhenContentLoaded(() -> e.setCaretLine(0));
+            e.setDirty(false);
             return e;
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -3343,67 +3221,54 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         return null;
     }
 
-    public void setResultReporter(MarathonResultReporter resultReporter) {
-        this.resultReporter = resultReporter;
-    }
-
-    public MarathonResultReporter getResultReporter() {
-        return resultReporter;
+    private EditorType findEditorType(File file) {
+        EditorType editorType;
+        String checklistDir = "";
+        try {
+            checklistDir = Constants.getMarathonDirectory(Constants.PROP_CHECKLIST_DIR).toPath().toAbsolutePath().toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (file.getName().endsWith(".csv")) {
+            editorType = IEditorProvider.EditorType.CSV;
+        } else if (Constants.isSuiteFile(file)) {
+            editorType = IEditorProvider.EditorType.SUITE;
+        } else if (Constants.isFeatureFile(file)) {
+            editorType = IEditorProvider.EditorType.FEATURE;
+        } else if (Constants.isStoryFile(file)) {
+            editorType = IEditorProvider.EditorType.STORY;
+        } else if (Constants.isIssueFile(file)) {
+            editorType = IEditorProvider.EditorType.ISSUE;
+        } else if (file.getName().endsWith(".html")) {
+            editorType = IEditorProvider.EditorType.HTML;
+        } else if (file.getName().equals("omap-configuration.yaml")) {
+            editorType = IEditorProvider.EditorType.OBJECTMAP_CONFIGURATION;
+        } else if (file.getName().equals("omap.yaml")) {
+            editorType = IEditorProvider.EditorType.OBJECTMAP;
+        } else if (file.getName().endsWith(".xml") && file.toPath().startsWith(checklistDir)) {
+            editorType = IEditorProvider.EditorType.CHECKLIST;
+        } else {
+            editorType = IEditorProvider.EditorType.OTHER;
+        }
+        return editorType;
     }
 
     public void setGenerateReports(boolean b) {
         generateReportsMenuItem.setSelected(true);
     }
 
-    private FileHandler getFileHandler(IEditor editor) {
-        return (FileHandler) editor.getData("filehandler");
-    }
-
-    /**
-     * Title for the new files created.
-     */
-    public static final String NEW_FILE = "Untitled";
-
-    private static class NewFileNameGenerator {
-        public int newFileCount = 0;
-
-        public String getNewFileName() {
-            if (newFileCount == 0) {
-                newFileCount++;
-                return NEW_FILE;
-            }
-            return NEW_FILE + newFileCount++;
-        }
-
-    }
-
-    private NewFileNameGenerator newFileNameGenerator = new NewFileNameGenerator();
-
-    private TabbedDockableContainer lastClosedEditorDockableContainer;
-
-    private Dockable maximizedDockable;
-
-    private MarathonResultReporter resultReporter;
-
+    private AllureMarathonRunListener runListener;
     private Module moduleFunctions;
-
-    private FileEventHandler fileEventHandler;
-
-    /** Caret listener **/
-    public void caretUpdate(CaretEvent e) {
-        updateEditActions();
-    }
 
     /** Listener for test runner */
     public void testFinished() {
-        navigator.refresh();
     }
 
     public void testStarted() {
     }
 
     public void updateScript(String script) {
-        editor.setText(script);
+        currentEditor.setText(script);
     }
 
     public void insertScript(String function) {
@@ -3412,7 +3277,6 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     public void fileUpdated(File selectedFile) {
-        navigatorListener.fileUpdated(selectedFile);
     }
 
     public IEditorProvider getEditorProvider() {
@@ -3420,8 +3284,9 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
     }
 
     private Module getModuleFunctions() {
-        if (moduleFunctions == null)
+        if (moduleFunctions == null) {
             moduleFunctions = display.getModuleFuctions();
+        }
         return moduleFunctions;
     }
 
@@ -3434,41 +3299,39 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
         moduleFunctions = null;
     }
 
-    public void preferenceChange(PreferenceChangeEvent evt) {
-        String key = evt.getKey();
-        if ("editor.tabconversion".equals(key) || "editor.tabsize".equals(key))
-            Indent.setDefaultIndent(editorProvider.getTabConversion(), editorProvider.getTabSize());
-    }
-
     public boolean canAppend(File file) {
         EditorDockable dockable = findEditorDockable(file);
-        if (dockable == null)
+        if (dockable == null) {
             return true;
-        if (!dockable.getEditor().isDirty())
+        }
+        if (!dockable.getEditor().isDirty()) {
             return true;
-        int option = JOptionPane.showConfirmDialog(this, "File " + file.getName() + " being edited. Do you want to save the file?",
-                "Save Module", JOptionPane.YES_NO_OPTION);
-        if (option == JOptionPane.YES_OPTION) {
+        }
+        Optional<ButtonType> result = FXUIUtils.showConfirmDialog(DisplayWindow.this,
+                "File " + file.getName() + " being edited. Do you want to save the file?", "Save Module", AlertType.CONFIRMATION,
+                ButtonType.YES, ButtonType.NO);
+        ButtonType option = result.get();
+        if (option == ButtonType.YES) {
             save(dockable.getEditor());
             return true;
         }
         return false;
     }
 
-    public boolean okToOverwrite(File file) {
+    @Override public boolean okToOverwrite(File file) {
         EditorDockable dockable = findEditorDockable(file);
-        if (dockable == null)
+        if (dockable == null) {
             return true;
-        JOptionPane.showMessageDialog(this, "The selected file is being edited in another editor. Close it and try");
+        }
+        Platform.runLater(() -> {
+            FXUIUtils.showMessageDialog(DisplayWindow.this, "The selected file is being edited in another editor. Close it and try",
+                    "Error", AlertType.INFORMATION);
+        });
         return false;
     }
 
     public boolean isModuleFile() {
-        return editor != null && getFileHandler(editor).isModuleFile();
-    }
-
-    public FileEventHandler getFileEventHandler() {
-        return fileEventHandler;
+        return currentEditor != null && currentEditor.isModuleFile();
     }
 
     public void onOMapCreation() {
@@ -3477,5 +3340,232 @@ public class DisplayWindow extends JFrame implements IOSXApplicationListener, Pr
 
     public StatusBar getStatusPanel() {
         return statusPanel;
+    }
+
+    public static DisplayWindow instance() {
+        return _instance;
+    }
+
+    public void onEditObjectMapConfiguration() {
+        openFile(new File(Constants.getMarathonProjectDirectory(), "omap-configuration.yaml"));
+    }
+
+    public void onObjectMapEdit() {
+        openFile(new File(Constants.getMarathonProjectDirectory(), "omap.yaml"));
+    }
+
+    public class ResourceActionHandler implements IResourceActionHandler {
+
+        @Override public void openAsText(IResourceActionSource source, Resource resource) {
+            Path filePath = resource.getFilePath();
+            if (filePath != null) {
+                openFile(filePath.toFile(), EditorType.OTHER);
+            }
+        }
+
+        @Override public void openWithSystem(IResourceActionSource source, Resource resource) {
+            Path filePath = resource.getFilePath();
+            if (filePath != null) {
+                try {
+                    Desktop.getDesktop().open(filePath.toFile());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override public void open(IResourceActionSource source, Resource resource) {
+            Path filePath = resource.getFilePath();
+            if (filePath != null) {
+                openFile(filePath.toFile());
+            }
+        }
+
+        @Override public void play(IResourceActionSource source, List<Resource> resources) {
+            Test test = null;
+            if (resources.size() == 1 && resources.get(0).canPlaySingle()) {
+                open(source, resources.get(0));
+                currentEditor.runWhenReady(() -> onPlay());
+            } else {
+                TestSuite suite;
+                if (resources.size() == 1) {
+                    try {
+                        test = resources.get(0).getTest(enableChecklistMenuItem.isSelected(), taConsole);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    suite = new TestSuite(makeName(resources));
+                    resources.forEach((r) -> {
+                        try {
+                            Test testx = r.getTest(enableChecklistMenuItem.isSelected(), taConsole);
+                            if (testx != null) {
+                                suite.addTest(testx);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    test = suite;
+                }
+                if (test != null) {
+                    if (testRunner.getContainer() == null) {
+                        workspace.createTab(navigatorPanel, testRunner, 1, true);
+                    }
+                    selectDockable(testRunner);
+                    testRunner.run(test);
+                }
+            }
+        }
+
+        private String makeName(List<Resource> resources) {
+            return "Multiple Tests";
+        }
+
+        @Override public void slowPlay(IResourceActionSource source, Resource resource) {
+            open(source, resource);
+            currentEditor.runWhenReady(() -> onSlowPlay());
+        }
+
+        @Override public void debug(IResourceActionSource source, Resource resource) {
+            open(source, resource);
+            currentEditor.runWhenReady(() -> onDebug());
+        }
+
+        @Override public void addProperties(IResourceActionSource source, Resource item) {
+            AddPropertiesStage propertiesStage = new AddPropertiesStage(new TestPropertiesInfo(item.getFilePath().toFile()));
+            propertiesStage.getStage().showAndWait();
+        }
+    }
+
+    public class ResourceChangeListener implements IResourceChangeListener {
+
+        @Override public void deleted(IResourceActionSource source, Resource resource) {
+            if (resource.getFilePath() != null) {
+                File file = resource.getFilePath().toFile();
+                EditorDockable dockable = findEditorDockable(file);
+                if (dockable != null) {
+                    workspace.close(dockable);
+                }
+            }
+            if (source != navigatorPanel) {
+                navigatorPanel.deleted(source, resource);
+            }
+            if (source != suitesPanel) {
+                suitesPanel.deleted(source, resource);
+            }
+            if (source != featuresPanel) {
+                featuresPanel.deleted(source, resource);
+            }
+            if (source != storiesPanel) {
+                storiesPanel.deleted(source, resource);
+            }
+            if (source != issuesPanel) {
+                issuesPanel.deleted(source, resource);
+            }
+        }
+
+        @Override public void updated(IResourceActionSource source, Resource resource) {
+            if (resource.getFilePath() != null) {
+                File file = resource.getFilePath().toFile();
+                EditorDockable dockable = findEditorDockable(file);
+                if (dockable != null) {
+                    IEditor editor = dockable.getEditor();
+                    if (editor.isDirty() && !editor.isNewFile()) {
+                        Optional<ButtonType> option = FXUIUtils.showConfirmDialog(DisplayWindow.this,
+                                "File `" + file + "` has been modified outside the editor. Do you want to reload it?",
+                                "File being modified", AlertType.CONFIRMATION);
+                        if (option.isPresent() && option.get() == ButtonType.OK) {
+                            Platform.runLater(() -> editor.refreshResource());
+                        }
+                    } else {
+                        Platform.runLater(() -> editor.refreshResource());
+                    }
+                }
+            }
+            if (source != navigatorPanel) {
+                navigatorPanel.updated(source, resource);
+            }
+            if (source != suitesPanel) {
+                suitesPanel.updated(source, resource);
+            }
+            if (source != featuresPanel) {
+                featuresPanel.updated(source, resource);
+            }
+            if (source != storiesPanel) {
+                storiesPanel.updated(source, resource);
+            }
+            if (source != issuesPanel) {
+                issuesPanel.updated(source, resource);
+            }
+        }
+
+        @Override public void moved(IResourceActionSource source, Resource from, Resource to) {
+            if (from.getFilePath() != null && to.getFilePath() != null) {
+                File file = from.getFilePath().toFile();
+                EditorDockable dockable = findEditorDockable(file);
+                if (dockable != null) {
+                    IEditor editor = dockable.getEditor();
+                    Platform.runLater(() -> {
+                        editor.changeResource(to.getFilePath().toFile());
+                        updateView();
+                    });
+                }
+            }
+            if (source != navigatorPanel) {
+                navigatorPanel.moved(source, from, to);
+            }
+            if (source != suitesPanel) {
+                suitesPanel.moved(source, from, to);
+            }
+            if (source != featuresPanel) {
+                featuresPanel.moved(source, from, to);
+            }
+            if (source != storiesPanel) {
+                storiesPanel.moved(source, from, to);
+            }
+            if (source != issuesPanel) {
+                issuesPanel.moved(source, from, to);
+            }
+        }
+
+        @Override public void copied(IResourceActionSource source, Resource from, Resource to) {
+            if (source != navigatorPanel) {
+                navigatorPanel.copied(source, from, to);
+            }
+            if (source != suitesPanel) {
+                suitesPanel.copied(source, from, to);
+            }
+            if (source != featuresPanel) {
+                featuresPanel.copied(source, from, to);
+            }
+            if (source != storiesPanel) {
+                storiesPanel.copied(source, from, to);
+            }
+            if (source != issuesPanel) {
+                issuesPanel.copied(source, from, to);
+            }
+        }
+    }
+
+    private boolean editingObjectMap() {
+        if (editingFile(new File(Constants.getMarathonProjectDirectory(), "omap.yaml"))) {
+            FXUIUtils.showMessageDialog(DisplayWindow.this,
+                    "Object map is being edited and there are unsaved changes.\n" + "Please save the object map before proceeding.",
+                    "Unsaved Changes in Object Map", AlertType.WARNING);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean editingFile(File file) {
+        final EditorDockable dockable = findEditorDockable(file);
+        if (dockable == null || !dockable.getEditor().isDirty())
+            return false;
+        return true;
+    }
+
+    public void setCurrentEditor(IEditor currentEditor) {
+        this.currentEditor = currentEditor;
     }
 }

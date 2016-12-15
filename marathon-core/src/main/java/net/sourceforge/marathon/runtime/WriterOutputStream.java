@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.nio.charset.CodingErrorAction;
 
 /**
  * A WriterOutputStream converts java.io.Writer to java.io.OutputStream.
- * 
+ *
  * @author Yoko Harada <yokolet@gmail.com>
  */
 public class WriterOutputStream extends OutputStream {
@@ -40,7 +40,7 @@ public class WriterOutputStream extends OutputStream {
     /**
      * Creates WriterOutputStream from given java.io.Writer object with a
      * default encoding.
-     * 
+     *
      * @param writer
      *            java.io.Writer object to be converted to.
      */
@@ -51,7 +51,7 @@ public class WriterOutputStream extends OutputStream {
     /**
      * Creates WriterOutputStream from given java.io.Writer object with a
      * specified encoding.
-     * 
+     *
      * @param writer
      *            java.io.Writer object to be converted to.
      */
@@ -77,7 +77,7 @@ public class WriterOutputStream extends OutputStream {
      * closes the output stream. A closed stream cannot perform output
      * operations and cannot be reopened.
      * <p>
-     * 
+     *
      * @exception IOException
      *                if an I/O error occurs.
      */
@@ -105,7 +105,7 @@ public class WriterOutputStream extends OutputStream {
      * passed to the operating system for writing; it does not guarantee that
      * they are actually written to a physical device such as a disk drive.
      * <p>
-     * 
+     *
      * @exception IOException
      *                if an I/O error occurs.
      */
@@ -123,7 +123,7 @@ public class WriterOutputStream extends OutputStream {
      * <code>write</code> is that one byte is written to the output stream. The
      * byte to be written is the eight low-order bits of the argument
      * <code>b</code>. The 24 high-order bits of <code>b</code> are ignored.
-     * 
+     *
      * @param b
      *            the <code>byte</code>.
      * @exception IOException
@@ -141,7 +141,7 @@ public class WriterOutputStream extends OutputStream {
      * output stream. The general contract for <code>write(b)</code> is that it
      * should have exactly the same effect as the call
      * <code>write(b, 0, b.length)</code>.
-     * 
+     *
      * @param b
      *            the data.
      * @exception IOException
@@ -163,7 +163,7 @@ public class WriterOutputStream extends OutputStream {
      * If <code>off</code> is negative, or <code>len</code> is negative, or
      * <code>off+len</code> is greater than the length of the array
      * <code>b</code>, then an <tt>IndexOutOfBoundsException</tt> is thrown.
-     * 
+     *
      * @param b
      *            the data.
      * @param off
@@ -180,7 +180,7 @@ public class WriterOutputStream extends OutputStream {
             if (!isOpen) {
                 return;
             }
-            if (off < 0 || len <= 0 || (off + len) > b.length) {
+            if (off < 0 || len <= 0 || off + len > b.length) {
                 throw new IndexOutOfBoundsException();
             }
             ByteBuffer bytes = ByteBuffer.wrap(b, off, len);

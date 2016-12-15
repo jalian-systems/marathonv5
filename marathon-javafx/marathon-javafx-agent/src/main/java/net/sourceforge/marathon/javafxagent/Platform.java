@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.util.regex.Matcher;
@@ -131,7 +131,7 @@ public enum Platform {
 
     /**
      * Get current platform (not necessarily the same as operating system).
-     * 
+     *
      * @return current platform
      */
     public static Platform getCurrent() {
@@ -142,7 +142,7 @@ public enum Platform {
      * Extracts platforms based on system properties in Java and uses a
      * heuristic to determine the most likely operating system. If unable to
      * determine the operating system, it will default to UNIX.
-     * 
+     *
      * @param osName
      *            the operating system name to determine the platform of
      * @return the most likely platform based on given operating system name
@@ -155,7 +155,7 @@ public enum Platform {
      * Extracts platforms based on system properties in Java and uses a
      * heuristic to determine the most likely operating system. If unable to
      * determine the operating system, it will default to UNIX.
-     * 
+     *
      * @param osName
      *            the operating system name to determine the platform of
      * @param osVersion
@@ -198,7 +198,7 @@ public enum Platform {
     /**
      * Decides whether the previous match is better or not than the current
      * match. If previous match is null, the newer match is always better.
-     * 
+     *
      * @param previous
      *            the previous match
      * @param matcher
@@ -214,7 +214,7 @@ public enum Platform {
      * same thing as operating systems) are found to be approximately similar in
      * nature, this will return true. For instance the LINUX platform is similar
      * to UNIX, and will give a positive result if compared.
-     * 
+     *
      * @param compareWith
      *            the platform to compare with
      * @return true if platforms are approximately similar, false otherwise
@@ -233,7 +233,7 @@ public enum Platform {
 
     /**
      * Returns the major version of this platform.
-     * 
+     *
      * @return the major version of specified platform
      */
     public int getMajorVersion() {
@@ -242,7 +242,7 @@ public enum Platform {
 
     /**
      * Returns the minor version of this platform.
-     * 
+     *
      * @return the minor version of specified platform
      */
     public int getMinorVersion() {

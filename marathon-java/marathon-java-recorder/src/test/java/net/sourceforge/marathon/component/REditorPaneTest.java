@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.BorderLayout;
@@ -280,11 +280,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     }
 
     private void parseLastClickSpecX(String spec) {
-        if (spec.startsWith("text="))
+        if (spec.startsWith("text=")) {
             searchAsText(spec.substring(5), true);
-        else if (spec.startsWith("link="))
+        } else if (spec.startsWith("link=")) {
             searchAsText(spec.substring(5), false);
-        else {
+        } else {
             try {
                 int index = spec.lastIndexOf(SEPARATER);
                 if (index >= 0) {
@@ -314,8 +314,9 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
             spec = spec.substring(0, lastIndexOf);
         }
-        if (!(document instanceof HTMLDocument))
+        if (!(document instanceof HTMLDocument)) {
             return;
+        }
         HTMLDocument hdoc = (HTMLDocument) document;
         Iterator iterator = hdoc.getIterator(HTML.Tag.A);
         int curIndex = 0;
@@ -323,14 +324,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             String t;
             AttributeSet attributes = iterator.getAttributes();
             try {
-                if (isText)
+                if (isText) {
                     t = hdoc.getText(iterator.getStartOffset(), iterator.getEndOffset() - iterator.getStartOffset());
-                else
+                } else {
                     t = attributes.getAttribute(HTML.Attribute.HREF).toString();
+                }
             } catch (BadLocationException e1) {
                 return;
             }
-            if (t.contains(spec) && ((isText && curIndex++ == textIndex) || (!isText && curIndex++ == hRefIndex))) {
+            if (t.contains(spec) && (isText && curIndex++ == textIndex || !isText && curIndex++ == hRefIndex)) {
                 if (attributes != null && attributes.getAttribute(HTML.Attribute.HREF) != null) {
                     try {
                         text = hdoc.getText(iterator.getStartOffset(), iterator.getEndOffset() - iterator.getStartOffset()).trim();

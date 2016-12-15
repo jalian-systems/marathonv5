@@ -1,22 +1,21 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
 import java.awt.BorderLayout;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -70,7 +69,6 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteStatus;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.SessionId;
@@ -236,8 +234,9 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         Platform[] values = Platform.values();
         Platform otherPlatform = null;
         for (Platform platform : values) {
-            if (Platform.getCurrent().is(platform))
+            if (Platform.getCurrent().is(platform)) {
                 continue;
+            }
             otherPlatform = platform;
             break;
         }
@@ -279,12 +278,6 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaDriver(caps, caps);
         Capabilities capabilities = ((RemoteWebDriver) driver).getCapabilities();
         AssertJUnit.assertTrue(!capabilities.is("nativeEvents"));
-    }
-
-    public void remoteStatus() {
-        driver = new JavaDriver();
-        RemoteStatus remoteStatus = ((RemoteWebDriver) driver).getRemoteStatus();
-        AssertJUnit.assertNotNull(remoteStatus);
     }
 
     public void getWindowHandles() throws Throwable {
@@ -1050,7 +1043,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 frame.setVisible(true);
             }
         });
-        List<WebElement> elements = driver.findElements(By.cssSelector("menu"));
+        List<WebElement> elements = driver.findElements(By.cssSelector("menu[text/='File']"));
         AssertJUnit.assertNotNull(elements);
         AssertJUnit.assertEquals(1, elements.size());
         AssertJUnit.assertEquals("File", elements.get(0).getText());
@@ -1232,13 +1225,15 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                     }
 
                     @Override public void keyReleased(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altReleased = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
 
                     @Override public void keyPressed(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altPressed = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
                 });
                 frame.setLocationRelativeTo(null);
@@ -1264,13 +1259,15 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                     }
 
                     @Override public void keyReleased(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altReleased = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
 
                     @Override public void keyPressed(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                        if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altPressed = e.getKeyCode() == KeyEvent.VK_ALT;
+                        }
                     }
                 });
                 frame.setLocationRelativeTo(null);
@@ -1360,7 +1357,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         }
     }
 
-    public void windowWithEmptyTitleUsesNextAvailableOption() throws Throwable {
+    public void windowWithEmptyTitleUsesFirstAvailableLabel() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override public void run() {
@@ -1370,7 +1367,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 frame.setVisible(true);
             }
         });
-        AssertJUnit.assertEquals("javax.swing.JFrame", driver.getTitle());
+        AssertJUnit.assertEquals("Enter The Text", driver.getTitle());
     }
 
     public void nonFrameDialogWindowUsesClassNameAsTitleOnLastResort() throws Throwable {
@@ -1545,22 +1542,4 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         }
     }
 
-    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
-                java.awt.Window window = new java.awt.Window(null);
-                window.setFocusableWindowState(true);
-                window.setName("awt-window");
-                window.setLayout(new BorderLayout());
-                TextField tf = new TextField(80);
-                tf.setText("Hello World");
-                window.add(tf);
-                tf.requestFocusInWindow();
-                window.pack();
-                window.setLocationRelativeTo(null);
-                window.setVisible(true);
-                System.out.println("JavaDriverTest.main(...).new Runnable() {...}.run(): " + window.isFocusableWindow() );
-            }
-        });
-    }
 }

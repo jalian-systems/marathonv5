@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -28,16 +28,14 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
-import net.sourceforge.marathon.javaagent.components.JEditorPaneTagJavaElement;
-import net.sourceforge.marathon.javaagent.components.PropertyHelper;
-
-import org.json.JSONObject;
 
 public class JEditorPaneJavaElement extends AbstractJavaElement {
 
@@ -52,8 +50,9 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
             Enumeration<Object> keys = p.keys();
             while (keys.hasMoreElements()) {
                 String object = (String) keys.nextElement();
-                if (!p.getProperty(object).equals(e.getAttribute(object)))
+                if (!p.getProperty(object).equals(e.getAttribute(object))) {
                     return false;
+                }
             }
             return true;
         }
@@ -74,8 +73,9 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
                 return r;
             }
             final Tag tag = findTag((String) params[0]);
-            if (tag == null)
+            if (tag == null) {
                 return r;
+            }
             if (params.length == 1) {
                 EventQueueWait.exec(new Runnable() {
                     @Override public void run() {
@@ -165,8 +165,9 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
         int index = 0;
         while (iterator.isValid()) {
             JEditorPaneTagJavaElement e = new JEditorPaneTagJavaElement(this, tag, index++);
-            if (predicate.isValid(e))
+            if (predicate.isValid(e)) {
                 r.add(e);
+            }
             iterator.next();
         }
     }
@@ -184,8 +185,9 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
 
     private Tag findTag(String tagName) {
         for (Tag tag : allTags) {
-            if (tagName.toUpperCase().equals(tag.toString().toUpperCase()))
+            if (tagName.toUpperCase().equals(tag.toString().toUpperCase())) {
                 return tag;
+            }
         }
         return null;
     }

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.util.List;
@@ -22,16 +22,16 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.javaagent.IJavaAgent;
-import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.JavaAgent;
-import net.sourceforge.marathon.testhelpers.ComponentUtils;
-
 import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test public class JListJavaElementTest extends JavaElementTest {
 
@@ -70,8 +70,9 @@ import org.testng.annotations.Test;
     public void cssSelector() throws Throwable {
         IJavaElement list = driver.findElementByName("list-1");
         JSONArray a = new JSONArray();
-        for (int i = 1; i <= 30; i++)
+        for (int i = 1; i <= 30; i++) {
             a.put("List Item - " + i);
+        }
         JSONArray b = new JSONArray();
         b.put(a);
         AssertJUnit.assertEquals(b.toString(), list.getAttribute("content"));
@@ -81,8 +82,9 @@ import org.testng.annotations.Test;
         AssertJUnit.assertEquals("List Item - 1", listItem.getText());
         listItems = driver.findElementsByCssSelector("#list-1::all-items");
         AssertJUnit.assertEquals(30, listItems.size());
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 30; i++) {
             AssertJUnit.assertEquals("List Item - " + (i + 1), listItems.get(i).getText());
+        }
         List<IJavaElement> firstItem = driver.findElementsByCssSelector("#list-1::all-items[text='List Item - 1']");
         AssertJUnit.assertEquals(1, firstItem.size());
         AssertJUnit.assertEquals("List Item - 1", firstItem.get(0).getText());

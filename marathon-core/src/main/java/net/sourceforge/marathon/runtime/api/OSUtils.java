@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
 import java.awt.Component;
@@ -21,9 +21,10 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.LogManager;
 
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 
 public class OSUtils {
 
@@ -33,12 +34,13 @@ public class OSUtils {
     private static final String OS_NAME = System.getProperty("os.name");
 
     static {
-        if ((MENU_MASK & InputEvent.META_MASK) != 0)
+        if ((MENU_MASK & InputEvent.META_MASK) != 0) {
             MOUSE_MENU_MASK = InputEvent.META_DOWN_MASK;
-        else if ((MENU_MASK & InputEvent.CTRL_MASK) != 0)
+        } else if ((MENU_MASK & InputEvent.CTRL_MASK) != 0) {
             MOUSE_MENU_MASK = InputEvent.CTRL_DOWN_MASK;
-        else
+        } else {
             MOUSE_MENU_MASK = MENU_MASK;
+        }
     }
 
     /**
@@ -48,14 +50,15 @@ public class OSUtils {
      * <i>shortcut</i> is either a single character, or a keycode name from the
      * <code>KeyEvent</code> class, without the <code>VK_</code> prefix. Using ^
      * for modifier uses Platform specific Menu Shortcut mask.
-     * 
+     *
      * @param keyStroke
      *            A string description of the key stroke
      */
     public static KeyStroke parseKeyStroke(String keyStroke) {
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-        if (keyStroke == null)
+        if (keyStroke == null) {
             return null;
+        }
         int modifiers = 0;
         int index = keyStroke.indexOf('+');
         if (index != -1) {
@@ -82,10 +85,11 @@ public class OSUtils {
         String key = keyStroke.substring(index + 1);
         if (key.length() == 1) {
             char ch = Character.toUpperCase(key.charAt(0));
-            if (modifiers == 0)
+            if (modifiers == 0) {
                 return KeyStroke.getKeyStroke(ch);
-            else
+            } else {
                 return KeyStroke.getKeyStroke(ch, modifiers);
+            }
         } else if (key.length() == 0) {
             return null;
         } else {
@@ -99,20 +103,6 @@ public class OSUtils {
         }
     }
 
-    /**
-     * Sets the LAF for the application dynamically looking for JGoodies Looks
-     * library.
-     * 
-     */
-    public static void setLookAndFeel() {
-        if (System.getProperty("swing.defaultlaf") != null)
-            return;
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-        }
-    }
-
     public static boolean isMac() {
         return OS_NAME.startsWith("Mac");
     }
@@ -122,63 +112,88 @@ public class OSUtils {
     }
 
     public static String keyEventGetKeyText(int keycode) {
-        if (keycode == KeyEvent.VK_TAB)
+        if (keycode == KeyEvent.VK_TAB) {
             return "Tab";
-        if (keycode == KeyEvent.VK_CONTROL)
+        }
+        if (keycode == KeyEvent.VK_CONTROL) {
             return "Ctrl";
-        if (keycode == KeyEvent.VK_ALT)
+        }
+        if (keycode == KeyEvent.VK_ALT) {
             return "Alt";
-        if (keycode == KeyEvent.VK_SHIFT)
+        }
+        if (keycode == KeyEvent.VK_SHIFT) {
             return "Shift";
-        if (keycode == KeyEvent.VK_META)
-            return "Command";
-        if (keycode == KeyEvent.VK_SPACE)
+        }
+        if (keycode == KeyEvent.VK_META) {
+            return "Meta";
+        }
+        if (keycode == KeyEvent.VK_SPACE) {
             return "Space";
-        if (keycode == KeyEvent.VK_BACK_SPACE)
+        }
+        if (keycode == KeyEvent.VK_BACK_SPACE) {
             return "Backspace";
-        if (keycode == KeyEvent.VK_HOME)
+        }
+        if (keycode == KeyEvent.VK_HOME) {
             return "Home";
-        if (keycode == KeyEvent.VK_END)
+        }
+        if (keycode == KeyEvent.VK_END) {
             return "End";
-        if (keycode == KeyEvent.VK_DELETE)
+        }
+        if (keycode == KeyEvent.VK_DELETE) {
             return "Delete";
-        if (keycode == KeyEvent.VK_PAGE_UP)
+        }
+        if (keycode == KeyEvent.VK_PAGE_UP) {
             return "Pageup";
-        if (keycode == KeyEvent.VK_PAGE_DOWN)
+        }
+        if (keycode == KeyEvent.VK_PAGE_DOWN) {
             return "Pagedown";
-        if (keycode == KeyEvent.VK_UP)
+        }
+        if (keycode == KeyEvent.VK_UP) {
             return "Up";
-        if (keycode == KeyEvent.VK_DOWN)
+        }
+        if (keycode == KeyEvent.VK_DOWN) {
             return "Down";
-        if (keycode == KeyEvent.VK_LEFT)
+        }
+        if (keycode == KeyEvent.VK_LEFT) {
             return "Left";
-        if (keycode == KeyEvent.VK_RIGHT)
+        }
+        if (keycode == KeyEvent.VK_RIGHT) {
             return "Right";
-        if (keycode == KeyEvent.VK_ENTER)
+        }
+        if (keycode == KeyEvent.VK_ENTER) {
             return "Enter";
+        }
         return KeyEvent.getKeyText(keycode);
     }
 
     public static String inputEventGetModifiersExText(int modifiers) {
         StringBuffer sb = new StringBuffer();
 
-        if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0)
+        if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
             sb.append("Ctrl+");
-        if ((modifiers & InputEvent.META_DOWN_MASK) != 0)
-            sb.append("Command+");
-        if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
+            sb.append("Meta+");
+        }
+        if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
             sb.append("Alt+");
-        if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
             sb.append("Shift+");
-        if ((modifiers & InputEvent.BUTTON1_DOWN_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.BUTTON1_DOWN_MASK) != 0) {
             sb.append("Button1+");
-        if ((modifiers & InputEvent.BUTTON2_DOWN_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.BUTTON2_DOWN_MASK) != 0) {
             sb.append("Button2+");
-        if ((modifiers & InputEvent.BUTTON3_DOWN_MASK) != 0)
+        }
+        if ((modifiers & InputEvent.BUTTON3_DOWN_MASK) != 0) {
             sb.append("Button3+");
+        }
         String text = sb.toString();
-        if (text.equals(""))
+        if (text.equals("")) {
             return text;
+        }
         return text.substring(0, text.length() - 1);
     }
 
@@ -188,16 +203,52 @@ public class OSUtils {
 
     public static MouseEvent convert(MouseEvent e) {
         if (isMac()) {
-            int checkMask1 = MouseEvent.CTRL_DOWN_MASK | MouseEvent.BUTTON1_DOWN_MASK;
-            int checkMask2 = MouseEvent.CTRL_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
+            int checkMask1 = InputEvent.CTRL_DOWN_MASK | InputEvent.BUTTON1_DOWN_MASK;
+            int checkMask2 = InputEvent.CTRL_DOWN_MASK | InputEvent.BUTTON3_DOWN_MASK;
             int modifiers = e.getModifiersEx();
             if ((modifiers & checkMask1) == checkMask1 || (modifiers & checkMask2) == checkMask2) {
                 modifiers &= ~(checkMask1 | checkMask2);
-                modifiers |= MouseEvent.BUTTON3_DOWN_MASK;
+                modifiers |= InputEvent.BUTTON3_DOWN_MASK;
                 e = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), modifiers, e.getX(), e.getY(),
                         e.getClickCount(), true, e.getButton());
             }
         }
         return e;
+    }
+
+    public static File createUniqueFile(String prefix, String suffix, File parent) {
+        int index = 0;
+        while (true) {
+            File f = createFile(prefix, suffix, parent, index++);
+            if (f != null) {
+                return f;
+            }
+        }
+    }
+
+    private static File createFile(String prefix, String suffix, File parent, int index) {
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(prefix.replaceAll("\\W+", "-"));
+        if (index > 0) {
+            fileName.append("-").append(index);
+        }
+        fileName.append(suffix);
+        File f = new File(parent, fileName.toString());
+        if (f.exists()) {
+            return null;
+        }
+        return f;
+    }
+
+    public static void setLogConfiguration(String projectDir) {
+        File logconfig = new File(projectDir, "logging.properties");
+        if (logconfig.exists()) {
+            try {
+                System.setProperty("java.util.logging.config.file", logconfig.getAbsolutePath());
+                LogManager.getLogManager().readConfiguration();
+            } catch (SecurityException e) {
+            } catch (IOException e) {
+            }
+        }
     }
 }

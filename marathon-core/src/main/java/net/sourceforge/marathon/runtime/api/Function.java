@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
 import java.io.Serializable;
@@ -46,8 +46,9 @@ public class Function implements Serializable {
     }
 
     public String getDocumentation() {
-        if (doc != null)
+        if (doc != null) {
             return doc;
+        }
         return "";
     }
 
@@ -68,14 +69,16 @@ public class Function implements Serializable {
         int defaultStart = -1;
         for (int i = 0; i < arguments.size(); i++) {
             argArray[i] = arguments.get(i).getName();
-            if (arguments.get(i).getDefault() != null && defaultStart == -1)
+            if (arguments.get(i).getDefault() != null && defaultStart == -1) {
                 defaultStart = i;
+            }
         }
         String[] defaults = new String[0];
         if (defaultStart != -1) {
             defaults = new String[arguments.size() - defaultStart];
-            for (int i = defaultStart; i < arguments.size(); i++)
+            for (int i = defaultStart; i < arguments.size(); i++) {
                 defaults[i - defaultStart] = arguments.get(i).getDefault();
+            }
         }
         return new String[][] { argArray, defaults };
     }

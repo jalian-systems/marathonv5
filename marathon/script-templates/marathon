@@ -30,7 +30,7 @@ MARATHONHOME=\$DIST
 
 if [ `uname -s` = Darwin ]
 then
-  java -Xdock:icon="\$MARATHONHOME/applet.icns" -Dcom.apple.mrj.application.growbox.intrudes=false -Dcom.apple.mrj.application.live-resize=true -Dcom.apple.macos.smallTabs=true -Xdock:name=Marathon -Dmarathon.useAppleMenuBar=true -jar "\$MARATHONHOME/$marathonJar" \$*
+  java -Xmx512m -Xdock:icon="\$MARATHONHOME/applet.icns" -Dfile.encoding=utf8 -Dcom.apple.mrj.application.growbox.intrudes=false -Dcom.apple.mrj.application.live-resize=true -Dcom.apple.macos.smallTabs=true -Xdock:name=Marathon -Dmarathon.useAppleMenuBar=true -jar "\$MARATHONHOME/$marathonJar" \$*
 else
-  java -jar "\$MARATHONHOME/$marathonJar" \$*
+  java -Xmx512m -Dfile.encoding=utf8 -jar "\$MARATHONHOME/$marathonJar" \$*
 fi

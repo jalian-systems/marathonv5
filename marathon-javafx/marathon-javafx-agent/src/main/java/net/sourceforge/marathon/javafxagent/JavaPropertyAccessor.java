@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.lang.reflect.Array;
@@ -46,22 +46,26 @@ public class JavaPropertyAccessor {
         String first = split[0];
         Object attributeObject = null;
         try {
-            if (!skipSelf)
+            if (!skipSelf) {
                 attributeObject = getAttributeObject(this, first);
+            }
         } catch (UnsupportedCommandException e) {
         }
         if (attributeObject == null) {
             Object o = object;
-            if (this instanceof IPseudoElement)
+            if (this instanceof IPseudoElement) {
                 o = ((IPseudoElement) this).getPseudoComponent();
+            }
             attributeObject = getAttributeObject(o, first);
-            if (attributeObject == null)
+            if (attributeObject == null) {
                 return null;
+            }
         }
         for (int i = 1; i < split.length; i++) {
             attributeObject = getAttributeObject(attributeObject, split[i]);
-            if (attributeObject == null)
+            if (attributeObject == null) {
                 return null;
+            }
         }
         return toString(attributeObject);
     }
@@ -72,8 +76,9 @@ public class JavaPropertyAccessor {
         try {
             o = EventQueueWait.call(component, isMethod);
         } catch (Throwable e) {
-            if (!(e instanceof NoSuchMethodException))
+            if (!(e instanceof NoSuchMethodException)) {
                 return null;
+            }
         }
         try {
             if (o == null) {
@@ -126,22 +131,25 @@ public class JavaPropertyAccessor {
     }
 
     public static String removeClassName(Object object) {
-        if (object == null)
+        if (object == null) {
             return "null";
+        }
         if (object.getClass().isArray()) {
             StringBuffer buffer = new StringBuffer();
             buffer.append("[");
             int length = Array.getLength(object);
             for (int i = 0; i < length; i++) {
                 buffer.append(removeClassName(Array.get(object, i)));
-                if (i != length - 1)
+                if (i != length - 1) {
                     buffer.append(", ");
+                }
             }
             buffer.append("]");
             return buffer.toString();
         }
-        if (object.getClass().isPrimitive() || object instanceof String)
+        if (object.getClass().isPrimitive() || object instanceof String) {
             return object.toString();
+        }
         try {
             return object.toString().replaceFirst(object.getClass().getName(), "");
         } catch (Throwable t) {
@@ -161,8 +169,9 @@ public class JavaPropertyAccessor {
                 klass = klass.getSuperclass();
             }
         }
-        if (f == null)
+        if (f == null) {
             return null;
+        }
         boolean accessible = f.isAccessible();
         try {
             f.setAccessible(true);
@@ -177,7 +186,7 @@ public class JavaPropertyAccessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#hasAttribue(java.lang
      * .String)

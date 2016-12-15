@@ -1,20 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-
-
+ ******************************************************************************/
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +34,7 @@ public class ProcessLauncher {
         }
 
         private String getShell() {
-            if(Platform.getCurrent().is(Platform.WINDOWS)) {
+            if (Platform.getCurrent().is(Platform.WINDOWS)) {
                 return "cmd.exe";
             } else {
                 return "/bin/sh";
@@ -49,11 +47,11 @@ public class ProcessLauncher {
             execArgs[1] = shell.endsWith("sh") ? "-c" : "/c";
 
             StringBuilder command = new StringBuilder();
-            boolean first = true ;
+            boolean first = true;
             for (String cmd : this.command) {
-                if(first) {
+                if (first) {
                     cmd = cmd.replace('/', '\\');
-                    if(cmd.contains(" ")) {
+                    if (cmd.contains(" ")) {
                         cmd = '"' + cmd + '"';
                     }
                     first = false;
@@ -69,11 +67,12 @@ public class ProcessLauncher {
             }
             return execArgs;
         }
-        
+
     }
+
     public static String launch(String... params) throws IOException {
         LaunchConfig config = new LaunchConfig(params);
-        
+
         ProcessBuilder pb = new ProcessBuilder(config.getExecArgs());
         Process process = pb.start();
         InputStream output = process.getInputStream();
@@ -84,8 +83,8 @@ public class ProcessLauncher {
         Reader r = new BufferedReader(new InputStreamReader(output));
         StringBuilder sb = new StringBuilder();
         char[] buf = new char[1024];
-        int n ;
-        while((n = r.read(buf, 0, 1024)) != -1) {
+        int n;
+        while ((n = r.read(buf, 0, 1024)) != -1) {
             sb.append(buf, 0, n);
         }
         return sb.toString().replaceAll("\r\n", "\n");

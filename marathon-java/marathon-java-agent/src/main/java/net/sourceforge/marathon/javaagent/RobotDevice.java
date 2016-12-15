@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.AWTException;
@@ -58,10 +58,11 @@ public class RobotDevice extends Device {
         public void toggleKeyState(Component component, JavaAgentKeys key) {
             Boolean pressed = !keyStates.get(key);
             keyStates.put(key, pressed);
-            if (pressed)
+            if (pressed) {
                 pressKey(component, key);
-            else
+            } else {
                 releaseKey(component, key);
+            }
         }
 
         private boolean isModifier(CharSequence key) {
@@ -71,8 +72,9 @@ public class RobotDevice extends Device {
 
         private void resetModifierState(Component component) {
             for (Entry<JavaAgentKeys, Boolean> keyState : keyStates.entrySet()) {
-                if (keyState.getValue())
+                if (keyState.getValue()) {
                     toggleKeyState(component, keyState.getKey());
+                }
             }
         }
     }
@@ -83,8 +85,9 @@ public class RobotDevice extends Device {
         component = Device.getActiveComponent(component);
         EventQueueWait.requestFocus(component);
         for (CharSequence seq : keysToSend) {
-            for (int i = 0; i < seq.length(); i++)
+            for (int i = 0; i < seq.length(); i++) {
                 sendKey(component, seq.charAt(i));
+            }
         }
     }
 
@@ -112,8 +115,7 @@ public class RobotDevice extends Device {
         }
         for (CharSequence[] keys : keysList) {
             // Generate Key Press
-            for (int i = 0; i < keys.length; i++) {
-                CharSequence key = keys[i];
+            for (CharSequence key : keys) {
                 if (deviceState.isModifier(key)) {
                     pressKey(component, (JavaAgentKeys) key);
                 } else {
@@ -174,12 +176,13 @@ public class RobotDevice extends Device {
     @Override public void click(Component component, Buttons button, int clickCount, int xoffset, int yoffset) {
         ensureVisible(component, new Rectangle(xoffset, yoffset, 50, 50));
         int b = InputEvent.BUTTON1_MASK;
-        if (button.getButton() == 0)
+        if (button.getButton() == 0) {
             b = InputEvent.BUTTON1_MASK;
-        else if (button.getButton() == 1)
+        } else if (button.getButton() == 1) {
             b = InputEvent.BUTTON2_MASK;
-        else if (button.getButton() == 2)
+        } else if (button.getButton() == 2) {
             b = InputEvent.BUTTON3_MASK;
+        }
         Point compLocation = component.getLocationOnScreen();
         int x = compLocation.x + xoffset;
         int y = compLocation.y + yoffset;
@@ -196,7 +199,7 @@ public class RobotDevice extends Device {
     static {
         Field[] declaredFields = KeyEvent.class.getDeclaredFields();
         for (Field field : declaredFields) {
-            if (field.getName().startsWith("VK_"))
+            if (field.getName().startsWith("VK_")) {
                 try {
                     keyCodeToString.put(field.getInt(null), field.getName().substring(3));
                 } catch (IllegalArgumentException e) {
@@ -204,6 +207,7 @@ public class RobotDevice extends Device {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+            }
         }
         buttonToString.put(InputEvent.BUTTON1_MASK, "BUTTON1");
         buttonToString.put(InputEvent.BUTTON2_MASK, "BUTTON2");
@@ -259,10 +263,11 @@ public class RobotDevice extends Device {
 
     private void robotXkeyRelease(int keyCode) {
         String s = keyCodeToString.get(keyCode);
-        if (s != null)
+        if (s != null) {
             Logger.getLogger(RobotDevice.class.getName()).info("robot.keyReleases(" + s + ")");
-        else
+        } else {
             Logger.getLogger(RobotDevice.class.getName()).info("robot.keyReleases(" + keyCode + ")");
+        }
         try {
             robot.keyRelease(keyCode);
         } catch (IllegalThreadStateException e) {
@@ -277,10 +282,11 @@ public class RobotDevice extends Device {
 
     private void robotXkeyPress(int keyCode) {
         String s = keyCodeToString.get(keyCode);
-        if (s != null)
+        if (s != null) {
             Logger.getLogger(RobotDevice.class.getName()).info("robot.keyPress(" + s + ")");
-        else
+        } else {
             Logger.getLogger(RobotDevice.class.getName()).info("robot.keyPress(" + keyCode + ")");
+        }
         try {
             robot.keyPress(keyCode);
         } catch (IllegalThreadStateException e) {
@@ -295,11 +301,13 @@ public class RobotDevice extends Device {
 
     private void robotXsetAutoDelay() {
         int delay = 50;
-        if (Platform.getCurrent().is(Platform.LINUX))
+        if (Platform.getCurrent().is(Platform.LINUX)) {
             delay = 50;
+        }
         delay = Integer.getInteger("marathon.robot.delay", delay);
-        if (delay == 0)
+        if (delay == 0) {
             return;
+        }
         Logger.getLogger(RobotDevice.class.getName()).info("robot.setAutoDelay(" + delay + ")");
         robot.setAutoDelay(delay);
     }

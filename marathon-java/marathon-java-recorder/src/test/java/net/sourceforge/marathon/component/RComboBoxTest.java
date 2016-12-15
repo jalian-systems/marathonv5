@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.BorderLayout;
@@ -21,9 +21,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.component.LoggingRecorder.Call;
-import net.sourceforge.marathon.testhelpers.ComponentUtils;
-
 import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
@@ -31,6 +28,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.sun.swingset3.demos.combobox.ComboBoxDemo;
+
+import net.sourceforge.marathon.component.LoggingRecorder.Call;
+import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test public class RComboBoxTest extends RComponentTest {
     protected JFrame frame;

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.Component;
@@ -27,7 +27,6 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
-import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
@@ -42,8 +41,9 @@ public class REditorPane extends RComponent {
 
     public REditorPane(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
-        if (!isHtmlDocument())
+        if (!isHtmlDocument()) {
             return;
+        }
         if (point != null) {
             int location = ((JEditorPane) component).viewToModel(point);
             Document document = ((JEditorPane) component).getDocument();
@@ -67,22 +67,24 @@ public class REditorPane extends RComponent {
         if (hRef != null && !"".equals(hRef)) {
             return "link=" + hRef + (hRefIndex > 0 ? "(" + hRefIndex + ")" : "");
         }
-        String result = (linkPosition > 0) ? "" + linkPosition : null;
-        if (hRef != null && !hRef.equals(""))
+        String result = linkPosition > 0 ? "" + linkPosition : null;
+        if (hRef != null && !hRef.equals("")) {
             result = hRef + SEPARATER + result;
+        }
         return result;
 
     }
 
     public boolean isHtmlDocument() {
-        return "text/html".equalsIgnoreCase((String) ((JEditorPane) component).getContentType());
+        return "text/html".equalsIgnoreCase(((JEditorPane) component).getContentType());
     }
 
     public void setHRef(int pos, Document doc) {
         hRef = null;
         text = null;
-        if (!(doc instanceof HTMLDocument))
+        if (!(doc instanceof HTMLDocument)) {
             return;
+        }
         HTMLDocument hdoc = (HTMLDocument) doc;
         Iterator iterator = hdoc.getIterator(HTML.Tag.A);
         while (iterator.isValid()) {
@@ -117,10 +119,12 @@ public class REditorPane extends RComponent {
                         String t = hdoc.getText(iterator.getStartOffset(), iterator.getEndOffset() - iterator.getStartOffset())
                                 .trim();
                         String h = attributes.getAttribute(HTML.Attribute.HREF).toString();
-                        if (t.equals(text))
+                        if (t.equals(text)) {
                             this.textIndex++;
-                        if (h.equals(hRef))
+                        }
+                        if (h.equals(hRef)) {
                             this.hRefIndex++;
+                        }
                     } catch (BadLocationException e) {
                         e.printStackTrace();
                     }

@@ -1,23 +1,25 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.css;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.json.JSONException;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
@@ -25,8 +27,6 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
-
-import org.json.JSONException;
 
 public class SimpleSelector implements Selector {
 
@@ -41,12 +41,14 @@ public class SimpleSelector implements Selector {
     }
 
     public void addFilter(SelectorFilter filter) {
-        if (nthFilter != null)
+        if (nthFilter != null) {
             throw new ParserException("Only a single nth psuedoclass may be specified and it should be the last one", null);
-        if (filter instanceof PseudoClassFilter && ((PseudoClassFilter) filter).isNth())
+        }
+        if (filter instanceof PseudoClassFilter && ((PseudoClassFilter) filter).isNth()) {
             nthFilter = (PseudoClassFilter) filter;
-        else
+        } else {
             filters.add(filter);
+        }
     }
 
     @Override public String toString() {
@@ -55,8 +57,9 @@ public class SimpleSelector implements Selector {
         for (SelectorFilter selectorFilter : filters) {
             sb.append(selectorFilter.toString());
         }
-        if (nthFilter != null)
+        if (nthFilter != null) {
             sb.append(nthFilter.toString());
+        }
         return sb.toString();
     }
 
@@ -103,16 +106,21 @@ public class SimpleSelector implements Selector {
                 }
             }.wait_noexc("Unable to find component", implicitWait, 50);
         }
-        if (r[0] instanceof NoSuchWindowException)
+        if (r[0] instanceof NoSuchWindowException) {
             throw (NoSuchWindowException) r[0];
-        if (r[0] instanceof UnsupportedCommandException)
+        }
+        if (r[0] instanceof UnsupportedCommandException) {
             throw (UnsupportedCommandException) r[0];
-        if (r[0] instanceof JSONException)
+        }
+        if (r[0] instanceof JSONException) {
             throw (JSONException) r[0];
-        if (r[0] instanceof RuntimeException)
+        }
+        if (r[0] instanceof RuntimeException) {
             throw (RuntimeException) r[0];
-        if (r[0] instanceof Exception)
+        }
+        if (r[0] instanceof Exception) {
             throw new RuntimeException(((Exception) r[0]).getMessage(), (Exception) r[0]);
+        }
         List<IJavaElement> list = (List<IJavaElement>) r[0];
         return list;
     }
@@ -130,17 +138,19 @@ public class SimpleSelector implements Selector {
             r.add(topContainer.addElement(component));
         }
         if (nthFilter != null) {
-            if (nthFilter.getNthIndex() - 1 < r.size())
+            if (nthFilter.getNthIndex() - 1 < r.size()) {
                 return Arrays.asList(r.get(nthFilter.getNthIndex() - 1));
-            else
+            } else {
                 return new ArrayList<IJavaElement>();
+            }
         }
         return r;
     }
 
     private void findByTagName(IJavaElement je, List<IJavaElement> cs, IJavaAgent driver, boolean addThis) {
-        if (addThis)
+        if (addThis) {
             cs.addAll(matchesSelector(je));
+        }
         IJavaElement[] components = je.getComponents();
         for (IJavaElement javaElement : components) {
             findByTagName(javaElement, cs, driver, true);

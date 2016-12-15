@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -25,15 +25,15 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JComboBoxOptionJavaElement extends AbstractJavaElement implements IPseudoElement {
 
@@ -49,15 +49,16 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
     @Override public Component getPseudoComponent() {
         return EventQueueWait.exec(new Callable<Component>() {
             @Override public Component call() throws Exception {
-                return getRendererComponent(((JComboBox) parent.getComponent()), option);
+                return getRendererComponent((JComboBox) parent.getComponent(), option);
             }
         });
     }
 
     private static Component getRendererComponent(JComboBox comboBox, int option) {
         ComboBoxModel model = comboBox.getModel();
-        if (option >= model.getSize())
+        if (option >= model.getSize()) {
             throw new NoSuchElementException("Index out-of-bounds error on JComboBox: " + option, null);
+        }
         Component rendererComponent = comboBox.getRenderer().getListCellRendererComponent(new JList(model),
                 model.getElementAt(option), option, false, false);
         return rendererComponent;
@@ -75,16 +76,18 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
             EventQueueWait.exec(new Runnable() {
                 @Override public void run() {
                     List<IJavaElement> menus = parent.getDriver().findElementsByCssSelector("basic-combo-popup");
-                    if (menus.size() == 0)
+                    if (menus.size() == 0) {
                         try {
                             List<IJavaElement> dropdown = parent.findElementsByCssSelector(":instance-of('javax.swing.JButton')");
-                            if (dropdown.size() == 0)
+                            if (dropdown.size() == 0) {
                                 parent.click();
-                            else
+                            } else {
                                 dropdown.get(0).click();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }
                 }
             });
             EventQueueWait.empty();
@@ -116,10 +119,11 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
         for (int i = 0; i < index; i++) {
             String current = getItemText(combo, i);
             if (current.equals(original)) {
-                if (appendIndex)
+                if (appendIndex) {
                     itemText = String.format("%s(%d)", original, ++suffixIndex);
-                else
+                } else {
                     itemText = original;
+                }
             }
         }
         return itemText;
@@ -138,8 +142,9 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
     protected static String stripHTMLTags(String text) {
         Pattern p = Pattern.compile("(<\\s*html\\s*>)(.*)(<\\s*/html\\s*>)");
         Matcher m = p.matcher(text);
-        if (m.matches())
+        if (m.matches()) {
             text = stripTags(m.group(2));
+        }
         return text;
     }
 

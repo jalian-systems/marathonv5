@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.util.LinkedList;
@@ -43,9 +43,10 @@ public class RFXMenuItem extends RFXComponent {
     public void record(ActionEvent event) {
         MenuItem source = (MenuItem) event.getSource();
         String tagForMenu = getTagForMenu(source);
-        String menuPath = getSelectedMenuPath((MenuItem) source);
-        if (!(ownerNode instanceof ChoiceBox<?>))
+        String menuPath = getSelectedMenuPath(source);
+        if (!(ownerNode instanceof ChoiceBox<?>)) {
             recorder.recordSelectMenu(new RFXUnknownComponent(ownerNode, oMapConfig, null, recorder), tagForMenu, menuPath);
+        }
     }
 
     private String getTagForMenu(MenuItem source) {
@@ -96,8 +97,9 @@ public class RFXMenuItem extends RFXComponent {
                 return parentMenuText(menus, menus.indexOf(menuItem));
             }
             String text = menuItem.getText();
-            if (text == null || "".equals(text))
+            if (text == null || "".equals(text)) {
                 return getTextFromIcon(menuItem, -1);
+            }
             return text;
         }
         return getTextForMenuItem(menuItem, parentMenu);
@@ -110,7 +112,7 @@ public class RFXMenuItem extends RFXComponent {
         return sb.toString();
     }
 
-    protected String escapeSpecialCharacters(String name) {
+    @Override protected String escapeSpecialCharacters(String name) {
         return name.replaceAll(">", "\\\\>");
     }
 }

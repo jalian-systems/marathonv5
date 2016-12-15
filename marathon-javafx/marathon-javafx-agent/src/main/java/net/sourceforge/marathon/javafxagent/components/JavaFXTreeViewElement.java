@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.ArrayList;
@@ -37,9 +37,9 @@ public class JavaFXTreeViewElement extends JavaFXElement {
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("select-by-properties"))
+        if (selector.equals("select-by-properties")) {
             return findNodeByProperties(new JSONObject((String) params[0]));
-        else if (selector.equals("root")) {
+        } else if (selector.equals("root")) {
             return Arrays.asList(new JavaFXTreeViewNodeElement(this, 0));
         } else if (selector.equals("nth-node")) {
             return Arrays.asList(new JavaFXTreeViewNodeElement(this, ((Integer) params[0]).intValue() - 1));
@@ -79,8 +79,9 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         treeView.getSelectionModel().clearSelection();
         for (@SuppressWarnings("rawtypes")
         TreeItem treeItem : paths) {
-            if (getVisibleCellAt(treeView, treeItem) == null)
+            if (getVisibleCellAt(treeView, treeItem) == null) {
                 treeView.scrollTo(treeView.getRow(treeItem));
+            }
             treeView.getSelectionModel().select(treeItem);
         }
         return true;

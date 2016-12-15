@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.kbmap;
 
 import java.awt.AWTException;
@@ -151,10 +151,11 @@ public class Generator extends JFrame {
                 Collections.sort(mappings);
                 for (KeyMap keyMap : mappings) {
                     String s;
-                    if (keyMap.shiftDown)
+                    if (keyMap.shiftDown) {
                         s = "SHIFT " + keyCodeText.get(keyMap.keyCode).substring(3);
-                    else
+                    } else {
                         s = "" + keyCodeText.get(keyMap.keyCode).substring(3);
+                    }
                     writer.println(keyMap.keyChar + " (" + s + ")");
                 }
                 writer.close();
@@ -174,8 +175,9 @@ public class Generator extends JFrame {
             }
 
             @Override public void keyReleased(KeyEvent e) {
-                if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+                if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                     return;
+                }
                 KeyMap m = new KeyMap(e.isShiftDown(), e.getKeyChar(), e.getKeyCode());
                 mappings.add(m);
             }
@@ -219,15 +221,17 @@ public class Generator extends JFrame {
         List<Integer> succeeded = new ArrayList<Integer>();
         for (Integer keyCode : asciiKeycodes) {
             try {
-                if (withShift)
+                if (withShift) {
                     robot.keyPress(KeyEvent.VK_SHIFT);
+                }
                 robot.keyPress(keyCode);
                 robot.keyRelease(keyCode);
                 succeeded.add(keyCode);
             } catch (Throwable t) {
             } finally {
-                if (withShift)
+                if (withShift) {
                     robot.keyRelease(KeyEvent.VK_SHIFT);
+                }
             }
         }
         return succeeded;
@@ -239,8 +243,9 @@ public class Generator extends JFrame {
         List<Integer> out = new ArrayList<Integer>();
         for (Entry<Integer, String> entry : entrySet) {
             String keyText = KeyEvent.getKeyText(entry.getKey());
-            if (keyText.length() == 1 && asciiEncoder.canEncode(keyText))
+            if (keyText.length() == 1 && asciiEncoder.canEncode(keyText)) {
                 out.add(entry.getKey());
+            }
         }
         return out;
     }

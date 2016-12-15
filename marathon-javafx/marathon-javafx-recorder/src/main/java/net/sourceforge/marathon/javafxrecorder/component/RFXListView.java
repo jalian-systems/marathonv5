@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import javafx.geometry.Point2D;
@@ -36,7 +36,7 @@ public class RFXListView extends RFXComponent {
     }
 
     @Override public void focusGained(RFXComponent prev) {
-        ListView<?> listView = ((ListView<?>) node);
+        ListView<?> listView = (ListView<?>) node;
         index = getIndexAt(listView, point);
         cellValue = getListCellValue(listView, index);
         cellText = getListSelectionText(listView, index);
@@ -44,8 +44,9 @@ public class RFXListView extends RFXComponent {
     }
 
     private String getListCellValue(ListView<?> listView, int index) {
-        if (index == -1)
+        if (index == -1) {
             return null;
+        }
         ListCell<?> listCell = getCellAt(listView, index);
         RFXComponent cellComponent = getFinder().findRawRComponent(listCell, null, recorder);
         String ctext = cellComponent.getValue();
@@ -53,7 +54,7 @@ public class RFXListView extends RFXComponent {
     }
 
     @Override public void focusLost(RFXComponent next) {
-        ListView<?> listView = ((ListView<?>) node);
+        ListView<?> listView = (ListView<?>) node;
         String currCellText = getListCellValue(listView, index);
         if (currCellText != null && !currCellText.equals(cellValue)) {
             recorder.recordSelect2(this, currCellText, true);
@@ -99,15 +100,19 @@ public class RFXListView extends RFXComponent {
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         RFXListView other = (RFXListView) obj;
-        if (index != other.index)
+        if (index != other.index) {
             return false;
+        }
         return true;
     }
 

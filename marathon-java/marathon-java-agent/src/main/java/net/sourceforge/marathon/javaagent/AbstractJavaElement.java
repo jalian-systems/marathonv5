@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
@@ -29,12 +29,12 @@ import java.util.UUID;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.css.FindByCssSelector;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public abstract class AbstractJavaElement extends JavaElementPropertyAccessor implements IJavaElement {
 
@@ -55,7 +55,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#click()
      */
     @Override public void click() {
@@ -68,7 +68,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#sendKeys(java.lang.
      * CharSequence)
      */
@@ -82,7 +82,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#clear()
      */
     @Override public void clear() {
@@ -96,15 +96,17 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
             ((JTextComponent) active).setText("");
         } else if (active instanceof TextComponent) {
             ((TextComponent) active).setText("");
-        } else
+        } else {
             throw new UnsupportedCommandException("Clear not supported on " + active.getClass().getName(), null);
+        }
     }
 
     @Override public String getAttribute(final String name) {
-        if (name.startsWith("matches-css-"))
+        if (name.startsWith("matches-css-")) {
             return matchesCSS(name.substring("matches-css-".length()));
-        else if (name.startsWith("call-"))
+        } else if (name.startsWith("call-")) {
             return callMethod(new JSONObject(name.substring("call-".length())));
+        }
         return super.getAttribute(name);
     }
 
@@ -120,7 +122,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#getCssValue(java.lang
      * .String)
@@ -141,31 +143,34 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     private void verifyElementNotStale() {
         String handle = driver.getWindowHandle();
-        if (handle == null || !handle.equals(window.getHandle()))
+        if (handle == null || !handle.equals(window.getHandle())) {
             throw new StaleElementReferenceException(
                     "Element appears to be stale. Did you navigate away from the window that contained it? "
                             + " And is the current window focussed the same as the one holding this element?",
                     null);
+        }
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementByName(java
      * .lang.String)
      */
     @Override public final IJavaElement findElementByName(String using) {
         List<IJavaElement> elements = findElementsByName(using);
-        if (elements.size() == 0)
+        if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
+        }
         return elements.get(0);
     }
 
     @Override public IJavaElement findElementByClassName(String using) {
         List<IJavaElement> elements = findElementsByClassName(using);
-        if (elements.size() == 0)
+        if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
+        }
         return elements.get(0);
     }
 
@@ -174,15 +179,17 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     }
 
     protected List<IJavaElement> findByCss(String css) {
-        if (!(component instanceof Container))
-            throw new UnsupportedCommandException("findByCss unsupported for non container objects: " + component.getClass().getName(), null);
+        if (!(component instanceof Container)) {
+            throw new UnsupportedCommandException(
+                    "findByCss unsupported for non container objects: " + component.getClass().getName(), null);
+        }
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(css);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementsByName(java
      * .lang.String)
@@ -193,7 +200,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getHandle()
      */
     @Override final public String getHandle() {
@@ -209,7 +216,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getId()
      */
     @Override public UUID getId() {
@@ -218,21 +225,22 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementByTagName(
      * java.lang.String)
      */
     @Override public final IJavaElement findElementByTagName(String using) {
         List<IJavaElement> elements = findElementsByTagName(using);
-        if (elements.size() == 0)
+        if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
+        }
         return elements.get(0);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementsByTagName
      * (java.lang.String)
@@ -243,56 +251,61 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementByCssSelector
      * (java.lang.String)
      */
     @Override public final IJavaElement findElementByCssSelector(String using) {
         List<IJavaElement> elements = findElementsByCssSelector(using);
-        if (elements.size() == 0)
+        if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
+        }
         return elements.get(0);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementsByCssSelector
      * (java.lang.String)
      */
     @Override public List<IJavaElement> findElementsByCssSelector(String using) {
-        if (!(component instanceof Container))
-            throw new UnsupportedCommandException("findElementsByCssSelector unsupported for non container objects: " + component.getClass().getName(), new Exception());
+        if (!(component instanceof Container)) {
+            throw new UnsupportedCommandException(
+                    "findElementsByCssSelector unsupported for non container objects: " + component.getClass().getName(),
+                    new Exception());
+        }
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#filterByPseudoClass(java
      * .lang.String, java.lang.Object)
      */
     @Override public boolean filterByPseudoClass(String function, Object... args) {
-        if (function.equals("enabled"))
+        if (function.equals("enabled")) {
             return isEnabled();
-        else if (function.equals("disabled"))
+        } else if (function.equals("disabled")) {
             return !isEnabled();
-        else if (function.equals("displayed"))
+        } else if (function.equals("displayed")) {
             return isDisplayed();
-        else if (function.equals("hidden"))
+        } else if (function.equals("hidden")) {
             return !isDisplayed();
-        else if (function.equals("selected") && hasAttribue("selected"))
+        } else if (function.equals("selected") && hasAttribue("selected")) {
             return isSelected();
-        else if (function.equals("unselected") && hasAttribue("selected"))
+        } else if (function.equals("unselected") && hasAttribue("selected")) {
             return !isSelected();
-        else if (function.equals("deselected") && hasAttribue("selected"))
+        } else if (function.equals("deselected") && hasAttribue("selected")) {
             return !isSelected();
-        else if (function.equals("instance-of"))
+        } else if (function.equals("instance-of")) {
             return isInstance((String) args[0]);
+        }
         throw new UnsupportedCommandException(
                 "Unsupported psuedo class " + function + " component = " + component.getClass().getName(), null);
     }
@@ -314,7 +327,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getComponents()
      */
     @Override public IJavaElement[] getComponents() {
@@ -339,61 +352,68 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + (id == null ? 0 : id.hashCode());
         return result;
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         AbstractJavaElement other = (AbstractJavaElement) obj;
         if (id == null) {
-            if (other.getId() != null)
+            if (other.getId() != null) {
                 return false;
-        } else if (!getHandle().equals(other.getHandle()))
+            }
+        } else if (!getHandle().equals(other.getHandle())) {
             return false;
+        }
         return true;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#getByPseudoElement(java
      * .lang.String, java.lang.Object[])
      */
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("call-select")) {
-            if (marathon_select((String) params[0]))
+            if (marathon_select((String) params[0])) {
                 return Arrays.asList((IJavaElement) this);
+            }
             return Arrays.<IJavaElement> asList();
         }
         if (selector.equals("call-select-by-properties")) {
-            if (marathon_select(new JSONArray((String) params[0])))
+            if (marathon_select(new JSONArray((String) params[0]))) {
                 return Arrays.asList((IJavaElement) this);
+            }
             return Arrays.<IJavaElement> asList();
         }
         throw new UnsupportedCommandException(
                 "Pseudo element selector " + selector + " is not applicable for " + component.getClass().getName(), null);
     }
 
-    public boolean marathon_select(JSONArray jsonArray) {
+    @Override public boolean marathon_select(JSONArray jsonArray) {
         throw new UnsupportedCommandException("Select method by properties" + " is not applicable for "
                 + component.getClass().getName() + " (" + this.getClass().getName() + ")", null);
     }
 
-    public boolean marathon_select(String value) {
+    @Override public boolean marathon_select(String value) {
         throw new UnsupportedCommandException("Select method" + " is not applicable for " + component.getClass().getName() + " ("
                 + this.getClass().getName() + ")", null);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#createId()
      */
     @Override public String createId() {
@@ -403,7 +423,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#setId(java.util.UUID)
      */
@@ -462,7 +482,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     @Override public void submit() {
         if (component instanceof JComponent) {
             JComponent tc = (JComponent) component;
-            Object clientProperty = (Object) tc.getClientProperty("marathon.celleditor.parent");
+            Object clientProperty = tc.getClientProperty("marathon.celleditor.parent");
             if (clientProperty != null) {
                 EventQueueWait.call_noexc(clientProperty, "stopEditing");
             }

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
             exitItem = new MenuItem("Exit");
             exitItem.setOnAction(new EventHandler<ActionEvent>() {
 
-                public void handle(ActionEvent event) {
+                @Override public void handle(ActionEvent event) {
                     exitItemCalled = true;
                 }
             });
@@ -92,19 +92,24 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
                 @Override public void handle(MouseEvent e) {
                     String s = "clicked";
                     if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
-                        if (e.isPopupTrigger())
+                        if (e.isPopupTrigger()) {
                             s = "contextClicked";
+                        }
                         mouseText.append(getModifiersExText(e) + s + "(" + e.getClickCount() + ") ");
                         clickedButton = e.getButton();
                     }
-                    if (e.getEventType() == MouseEvent.MOUSE_PRESSED)
+                    if (e.getEventType() == MouseEvent.MOUSE_PRESSED) {
                         mouseText.append(getModifiersExText(e) + "pressed ");
-                    if (e.getEventType() == MouseEvent.MOUSE_RELEASED)
+                    }
+                    if (e.getEventType() == MouseEvent.MOUSE_RELEASED) {
                         mouseText.append(getModifiersExText(e) + "released ");
-                    if (e.getEventType() == MouseEvent.MOUSE_ENTERED)
+                    }
+                    if (e.getEventType() == MouseEvent.MOUSE_ENTERED) {
                         mouseText.append(getModifiersExText(e) + "entered ");
-                    if (e.getEventType() == MouseEvent.MOUSE_EXITED)
+                    }
+                    if (e.getEventType() == MouseEvent.MOUSE_EXITED) {
                         mouseText.append(getModifiersExText(e) + "exited ");
+                    }
                 }
             });
             checkBox = new CheckBox("Check Me!!");
@@ -151,10 +156,12 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
 
     private static void addToList(KeyEvent e) {
         final StringBuilder sb = new StringBuilder();
-        if (e.getEventType() == KeyEvent.KEY_PRESSED)
+        if (e.getEventType() == KeyEvent.KEY_PRESSED) {
             sb.append(checkModifier(e) + " pressed " + e.getCode());
-        if (e.getEventType() == KeyEvent.KEY_RELEASED)
+        }
+        if (e.getEventType() == KeyEvent.KEY_RELEASED) {
             sb.append(checkModifier(e) + " released " + e.getCode());
+        }
         kss.add(sb.toString().trim());
     }
 

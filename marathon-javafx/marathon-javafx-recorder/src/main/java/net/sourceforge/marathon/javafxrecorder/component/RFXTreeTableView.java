@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import javafx.collections.ObservableList;
@@ -35,8 +35,9 @@ public class RFXTreeTableView extends RFXComponent {
     public RFXTreeTableView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
         TreeTableView<?> treeTableView = (TreeTableView<?>) source;
-        if (source == null)
+        if (source == null) {
             return;
+        }
         if (treeTableView.getEditingCell() != null) {
             TreeTablePosition<?, ?> editingCell = treeTableView.getEditingCell();
             row = editingCell.getRow();
@@ -69,8 +70,9 @@ public class RFXTreeTableView extends RFXComponent {
     }
 
     public String getTreeTableCellValueAt(TreeTableView<?> treeTableView, int row, int column) {
-        if (row == -1 || column == -1)
+        if (row == -1 || column == -1) {
             return null;
+        }
         TreeTableCell<?, ?> tableCell = getCellAt(treeTableView, row, column);
         RFXComponent cellComponent = getFinder().findRawRComponent(tableCell, null, recorder);
         String ctext = cellComponent.getValue();
@@ -85,8 +87,9 @@ public class RFXTreeTableView extends RFXComponent {
         }
         if (next == null || next.getComponent() != getComponent()) {
             String currentTreeTableText = getTreeTableSelection(treeTableView);
-            if (!currentTreeTableText.equals(treeTableText))
+            if (!currentTreeTableText.equals(treeTableText)) {
                 recorder.recordSelect(this, getTreeTableSelection(treeTableView));
+            }
         }
     }
 
@@ -99,17 +102,22 @@ public class RFXTreeTableView extends RFXComponent {
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         RFXTreeTableView other = (RFXTreeTableView) obj;
-        if (column != other.column)
+        if (column != other.column) {
             return false;
-        if (row != other.row)
+        }
+        if (row != other.row) {
             return false;
+        }
         return true;
     }
 
@@ -136,8 +144,9 @@ public class RFXTreeTableView extends RFXComponent {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 String valueAt = getTreeTableCellValueAt(treeTableView, i, j);
-                if (valueAt == null)
+                if (valueAt == null) {
                     valueAt = "";
+                }
                 content[i][j] = valueAt;
             }
         }

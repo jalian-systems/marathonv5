@@ -1,27 +1,24 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringReader;
-
-import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
-import net.sourceforge.marathon.testhelpers.MissingException;
 
 import org.apache.commons.exec.OS;
 import org.openqa.selenium.WebDriverException;
@@ -30,7 +27,9 @@ import org.testng.AssertJUnit;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
-import com.thoughtworks.selenium.Wait;
+import net.sourceforge.marathon.javaagent.Wait;
+import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
+import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test public class JavaProfileTest {
 
@@ -59,8 +58,9 @@ import com.thoughtworks.selenium.Wait;
         };
         BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
         String line = reader.readLine();
-        while (line != null && !line.contains("java version"))
+        while (line != null && !line.contains("java version")) {
             line = reader.readLine();
+        }
         AssertJUnit.assertTrue(line.contains("java version"));
     }
 
@@ -68,7 +68,8 @@ import com.thoughtworks.selenium.Wait;
         File f = new File(".").getCanonicalFile();
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE).addClassPath(f);
         CommandLine commandLine = profile.getCommandLine();
-        AssertJUnit.assertTrue(commandLine.toString().contains("-cp " + f.getAbsolutePath()));
+        AssertJUnit.assertTrue(commandLine.toString().contains("-cp"));
+        AssertJUnit.assertTrue(commandLine.toString().contains(f.getAbsolutePath()));
     }
 
     public void getJavaCommandLineWithClasspathErr() throws Throwable {
@@ -89,8 +90,9 @@ import com.thoughtworks.selenium.Wait;
     }
 
     public void executeWSCommand() throws Throwable {
-        if (OS.isFamilyWindows())
+        if (OS.isFamilyWindows()) {
             throw new SkipException("Test not valid for Windows");
+        }
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART).addWSArgument("-verbose").addVMArgument("-Dx.y.z=hello");
         final CommandLine commandLine = profile.getCommandLine();
         AssertJUnit.assertNotNull(commandLine);

@@ -1,69 +1,62 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display;
 
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
-import javax.swing.JMenu;
-
+import javafx.scene.control.Menu;
+import javafx.scene.control.ToggleGroup;
 import net.sourceforge.marathon.editor.IEditorProvider;
 
 public abstract class MarathonAction implements IMarathonAction {
 
-    private Icon enabledIcon;
-    private Icon disabledIcon;
     private String name;
     private String description;
-    private char mneumonic;
+    private String mneumonic;
     private final IEditorProvider editorProvider;
     private final boolean toolbar;
     private final boolean menubar;
     private String menuName;
     private String accelKey;
     private char menuMnemonic;
+    private String command;
 
-    public MarathonAction(String name, String description, char mneumonic, Icon enabledIcon, Icon disabledIcon,
-            IEditorProvider editorProvider, boolean toolbar, boolean menubar) {
+    public MarathonAction(String name, String description, String mneumonic, IEditorProvider editorProvider, boolean toolbar,
+            boolean menubar) {
+        this(name, description, mneumonic, editorProvider, toolbar, menubar, null);
+    }
+
+    public MarathonAction(String name, String description, String mneumonic, IEditorProvider editorProvider, boolean toolbar,
+            boolean menubar, String command) {
         this.name = name;
         this.description = description;
         this.mneumonic = mneumonic;
-        this.enabledIcon = enabledIcon;
-        this.disabledIcon = disabledIcon;
         this.editorProvider = editorProvider;
         this.toolbar = toolbar;
         this.menubar = menubar;
+        this.command = command;
     }
 
-    public Icon getDisabledIcon() {
-        return disabledIcon;
-    }
-
-    public String getName() {
+    @Override public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    @Override public String getDescription() {
         return description;
     }
 
-    public Icon getEnabledIcon() {
-        return enabledIcon;
-    }
-
-    public char getMneumonic() {
+    @Override public String getMneumonic() {
         return mneumonic;
     }
 
@@ -71,11 +64,11 @@ public abstract class MarathonAction implements IMarathonAction {
         return editorProvider;
     }
 
-    public boolean isToolBarAction() {
+    @Override public boolean isToolBarAction() {
         return toolbar;
     }
 
-    public boolean isMenuBarAction() {
+    @Override public boolean isMenuBarAction() {
         return menubar;
     }
 
@@ -83,7 +76,7 @@ public abstract class MarathonAction implements IMarathonAction {
         this.menuName = menuName;
     }
 
-    public String getMenuName() {
+    @Override public String getMenuName() {
         return menuName;
     }
 
@@ -91,11 +84,11 @@ public abstract class MarathonAction implements IMarathonAction {
         this.accelKey = accelKey;
     }
 
-    public String getAccelKey() {
+    @Override public String getAccelKey() {
         return accelKey;
     }
 
-    public boolean isSeperator() {
+    @Override public boolean isSeperator() {
         return false;
     }
 
@@ -103,15 +96,15 @@ public abstract class MarathonAction implements IMarathonAction {
         this.menuMnemonic = mnemonicChar;
     }
 
-    public char getMenuMnemonic() {
+    @Override public char getMenuMnemonic() {
         return menuMnemonic;
     }
 
-    public ButtonGroup getButtonGroup() {
+    @Override public ToggleGroup getButtonGroup() {
         return null;
     }
 
-    public boolean isSelected() {
+    @Override public boolean isSelected() {
         return false;
     }
 
@@ -119,7 +112,11 @@ public abstract class MarathonAction implements IMarathonAction {
         return false;
     }
 
-    @Override public JMenu getPopupMenu() {
+    @Override public Menu getPopupMenu() {
         return null;
+    }
+
+    @Override public String getCommand() {
+        return command;
     }
 }

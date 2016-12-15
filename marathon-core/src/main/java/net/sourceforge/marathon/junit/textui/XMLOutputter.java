@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.junit.textui;
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +39,7 @@ public class XMLOutputter implements IOutputter {
         super();
     }
 
-    public void output(Writer writer, Test testSuite, Map<Test, MarathonTestResult> testOutputMap) {
+    @Override public void output(Writer writer, Test testSuite, Map<Test, MarathonTestResult> testOutputMap) {
         try {
             writer.write("<?xml version=\"1.0\" ?>\n");
             String reportDir = new File(System.getProperty(Constants.PROP_REPORT_DIR)).getName();
@@ -59,18 +59,19 @@ public class XMLOutputter implements IOutputter {
             writer.write(indent + "<testsuite name=\"" + suite.getName() + "\" >\n");
             Enumeration<Test> testsEnum = suite.tests();
             while (testsEnum.hasMoreElements()) {
-                printResult(indent + "  ", writer, (Test) testsEnum.nextElement(), testOutputMap);
+                printResult(indent + "  ", writer, testsEnum.nextElement(), testOutputMap);
             }
             writer.write(indent + "</testsuite>\n");
         } else {
-            MarathonTestResult result = (MarathonTestResult) testOutputMap.get(test);
+            MarathonTestResult result = testOutputMap.get(test);
             writeResultXML(indent, writer, result, test);
         }
     }
 
     private void writeResultXML(String indent, Writer writer, MarathonTestResult result, Test test) throws IOException {
-        if (result == null)
+        if (result == null) {
             return;
+        }
         String durationStr = NumberFormat.getInstance().format(result.getDuration());
         int status = result.getStatus();
         StringBuilder xml = new StringBuilder();
@@ -99,14 +100,15 @@ public class XMLOutputter implements IOutputter {
         } else {
             String stackTrace = " ";
             Throwable throwable = result.getThrowable();
-            if (throwable != null)
+            if (throwable != null) {
                 stackTrace = BaseTestRunner.getFilteredTrace(throwable);
+            }
             String captureDir = System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR);
             if (captureDir != null && test instanceof MarathonTestCase) {
                 File[] files = ((MarathonTestCase) test).getScreenCaptures();
                 List<File> fileList = new ArrayList<File>();
-                for (int i = 0; i < files.length; i++) {
-                    fileList.add(files[i]);
+                for (File file : files) {
+                    fileList.add(file);
                 }
                 /**
                  * We have to sort them, because they are not guaranteed to be
@@ -118,7 +120,7 @@ public class XMLOutputter implements IOutputter {
                     xml.append("<screen_captures>");
                     Iterator<File> it = fileList.iterator();
                     while (it.hasNext()) {
-                        File file = (File) it.next();
+                        File file = it.next();
                         xml.append("<screen_capture file=\"").append(file.getName()).append("\"/>");
                     }
                     xml.append("</screen_captures>");

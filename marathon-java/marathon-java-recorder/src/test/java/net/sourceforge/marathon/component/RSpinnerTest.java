@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.BorderLayout;
@@ -27,16 +27,15 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.DateEditor;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.component.LoggingRecorder.Call;
-import net.sourceforge.marathon.testhelpers.MissingException;
-import net.sourceforge.marathon.testhelpers.ComponentUtils;
-
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import components.SpinnerDemo2;
+import net.sourceforge.marathon.component.LoggingRecorder.Call;
+import net.sourceforge.marathon.testhelpers.ComponentUtils;
+import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test public class RSpinnerTest extends RComponentTest {
     protected JFrame frame;
@@ -67,7 +66,7 @@ import components.SpinnerDemo2;
         siw(new Runnable() {
             @Override public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
-                JSpinner listSpinner = (JSpinner) (spinnerComponents.get(0));
+                JSpinner listSpinner = (JSpinner) spinnerComponents.get(0);
                 RSpinner rSpinner = new RSpinner(listSpinner, null, null, lr);
                 rSpinner.focusGained(null);
                 listSpinner.setValue("March");
@@ -85,7 +84,7 @@ import components.SpinnerDemo2;
         siw(new Runnable() {
             @Override public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
-                JSpinner listSpinner = (JSpinner) (spinnerComponents.get(0));
+                JSpinner listSpinner = (JSpinner) spinnerComponents.get(0);
                 RSpinner rSpinner = new RSpinner(listSpinner, null, null, lr);
                 rSpinner.focusGained(null);
                 try {
@@ -99,8 +98,9 @@ import components.SpinnerDemo2;
                 rSpinner.focusLost(null);
             }
         });
-        if (exc[0] != null)
+        if (exc[0] != null) {
             throw exc[0];
+        }
     }
 
     public void numberSpinner() {
@@ -108,7 +108,7 @@ import components.SpinnerDemo2;
         siw(new Runnable() {
             @Override public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
-                JSpinner numberSpinner = (JSpinner) (spinnerComponents.get(1));
+                JSpinner numberSpinner = (JSpinner) spinnerComponents.get(1);
                 RSpinner rSpinner = new RSpinner(numberSpinner, null, null, lr);
                 rSpinner.focusGained(null);
                 numberSpinner.setValue(new Integer(2000));
@@ -125,7 +125,7 @@ import components.SpinnerDemo2;
         siw(new Runnable() {
             @Override public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
-                JSpinner dateSpinner = (JSpinner) (spinnerComponents.get(2));
+                JSpinner dateSpinner = (JSpinner) spinnerComponents.get(2);
                 RSpinner rSpinner = new RSpinner(dateSpinner, null, null, lr);
                 rSpinner.focusGained(null);
                 String dateString = "04/2014";

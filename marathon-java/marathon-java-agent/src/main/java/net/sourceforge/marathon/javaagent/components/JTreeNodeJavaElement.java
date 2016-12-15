@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -32,6 +32,9 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
@@ -39,9 +42,6 @@ import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudoElement {
 
@@ -80,8 +80,9 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
                 TreePath pathForRow = tree.getPathForRow(viewRow);
                 tree.startEditingAtPath(pathForRow);
                 Component c = getEditingComponent(tree);
-                if (c instanceof JComponent)
+                if (c instanceof JComponent) {
                     ((JComponent) c).putClientProperty("marathon.celleditor", true);
+                }
                 return c;
             }
 
@@ -98,8 +99,9 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
                         logger.warning("Unable to find editingComponent for " + ui.getClass());
                         t.printStackTrace();
                     } finally {
-                        if (cField != null)
+                        if (cField != null) {
                             cField.setAccessible(false);
+                        }
                     }
                 }
                 return null;
@@ -126,8 +128,9 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
 
     private void validateRow() {
         int rowCount = ((JTree) parent.getComponent()).getRowCount();
-        if (viewRow >= 0 && viewRow < rowCount)
+        if (viewRow >= 0 && viewRow < rowCount) {
             return;
+        }
         throw new NoSuchElementException("Invalid row for JTree: (" + viewRow + ")", null);
     }
 

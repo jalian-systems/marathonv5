@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
@@ -53,8 +53,9 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
     private String rowToTreeTablePath(int rowView) {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
         TreeItem<?> treeItem = treeTableView.getTreeItem(rowView);
-        if (treeItem == null)
+        if (treeItem == null) {
             throw new RuntimeException("Trying to create a tree item for row " + rowView + " which is invalid");
+        }
         return getTextForTreeTableNode(treeTableView, treeItem);
     }
 
@@ -78,8 +79,9 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("editor"))
+        if (selector.equals("editor")) {
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
+        }
         return super.getByPseudoElement(selector, params);
     }
 
@@ -98,15 +100,17 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
 
     public String getViewColumnName() {
         String columnName = getTreeTableColumnName((TreeTableView<?>) parent.getComponent(), viewColumn);
-        if (columnName == null)
+        if (columnName == null) {
             return "" + (viewColumn + 1);
+        }
         return columnName;
     }
 
     public String getColumn() {
         String columnName = getTreeTableColumnName((TreeTableView<?>) parent.getComponent(), viewColumn);
-        if (columnName == null)
+        if (columnName == null) {
             return "" + viewColumn;
+        }
         return columnName;
     }
 

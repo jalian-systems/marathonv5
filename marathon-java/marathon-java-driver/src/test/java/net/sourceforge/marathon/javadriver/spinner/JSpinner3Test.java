@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.spinner;
 
 import java.awt.BorderLayout;
@@ -89,8 +89,9 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
                 frame.dispose();
             }
         });
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public void chooseValues() throws Throwable {
@@ -194,13 +195,13 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
             String[] split = spinnerDateField.getText().split("/");
             String monthValue = split[0];
 
-            if ((monthValue.equals("03")) || (monthValue.equals("04")) || (monthValue.equals("05"))) {
+            if (monthValue.equals("03") || monthValue.equals("04") || monthValue.equals("05")) {
                 AssertJUnit.assertEquals("[r=0,g=204,b=51]", spinnerDateField.getAttribute("foreground"));
 
-            } else if ((monthValue.equals("06")) || (monthValue.equals("07")) || (monthValue.equals("08"))) {
+            } else if (monthValue.equals("06") || monthValue.equals("07") || monthValue.equals("08")) {
                 AssertJUnit.assertEquals("[r=255,g=0,b=0]", spinnerDateField.getAttribute("foreground"));
 
-            } else if ((monthValue.equals("09")) || (monthValue.equals("10")) || (monthValue.equals("11"))) {
+            } else if (monthValue.equals("09") || monthValue.equals("10") || monthValue.equals("11")) {
                 AssertJUnit.assertEquals("[r=255,g=153,b=0]", spinnerDateField.getAttribute("foreground"));
 
             } else {

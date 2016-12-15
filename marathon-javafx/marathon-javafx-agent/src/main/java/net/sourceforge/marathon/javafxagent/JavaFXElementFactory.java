@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
 import java.lang.reflect.Constructor;
@@ -93,8 +93,9 @@ public class JavaFXElementFactory {
             return found;
         }
         Class<? extends IJavaFXElement> klass = get(component);
-        if (klass == null)
+        if (klass == null) {
             return new JavaFXElement(component, driver, window);
+        }
         try {
             Constructor<? extends IJavaFXElement> constructor = klass.getConstructor(Node.class, IJavaFXAgent.class,
                     JFXWindow.class);
@@ -115,8 +116,9 @@ public class JavaFXElementFactory {
         }
 
         @Override public Class<? extends IJavaFXElement> get(Node component) {
-            if (componentKlass.isInstance(component))
+            if (componentKlass.isInstance(component)) {
                 return javaElementKlass;
+            }
             return null;
         }
     }
@@ -166,8 +168,9 @@ public class JavaFXElementFactory {
     public static Class<? extends IJavaFXElement> get(Node component) {
         for (IJavaElementFinder entry : entries) {
             Class<? extends IJavaFXElement> k = entry.get(component);
-            if (k != null)
+            if (k != null) {
                 return k;
+            }
         }
         return null;
     }

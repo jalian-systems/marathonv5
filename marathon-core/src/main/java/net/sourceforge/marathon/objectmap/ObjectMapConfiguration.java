@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.objectmap;
 
 import java.io.File;
@@ -27,13 +27,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import net.sourceforge.marathon.runtime.api.Constants;
-
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.representer.Representer;
+
+import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ObjectMapConfiguration {
 
@@ -99,8 +99,9 @@ public class ObjectMapConfiguration {
         }
 
         public void addPropertyList(PropertyList pl) {
-            if (propertyLists == null)
+            if (propertyLists == null) {
                 propertyLists = new ArrayList<PropertyList>();
+            }
             propertyLists.add(pl);
         }
 
@@ -187,7 +188,7 @@ public class ObjectMapConfiguration {
         new Yaml(options).dump(this, writer);
     }
 
-    public File getConfigFile() {
+    public static File getConfigFile() {
         return new File(System.getProperty(Constants.PROP_PROJECT_DIR),
                 System.getProperty(Constants.PROP_OMAP_CONFIGURATION_FILE, Constants.FILE_OMAP_CONFIGURATION));
     }

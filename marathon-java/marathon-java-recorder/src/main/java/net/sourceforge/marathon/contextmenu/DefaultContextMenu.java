@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
 import java.awt.BorderLayout;
@@ -101,12 +101,13 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
             valueStyle = new SimpleAttributeSet();
             StyleConstants.setForeground(valueStyle, valueForegroundColor);
             propertyStyle = new SimpleAttributeSet();
-            if (fgNonSel != null)
+            if (fgNonSel != null) {
                 StyleConstants.setForeground(propertyStyle, fgNonSel);
+            }
         }
 
-        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
-                int row, boolean hasFocus) {
+        @Override public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+                boolean leaf, int row, boolean hasFocus) {
             JTextPane pane = new JTextPane();
             if (sel) {
                 pane.setBackground(bgSel);
@@ -144,7 +145,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         super(window, recorder, finder);
     }
 
-    public Component getContent() {
+    @Override public Component getContent() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         JSplitPane splitPane = getAssertionPanel();
@@ -159,13 +160,13 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         buttonPanel.setLayout(new GridLayout(1, 2));
         insertAssertionButton = UIUtils.createInsertAssertionButton();
         insertAssertionButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override public void actionPerformed(ActionEvent e) {
                 recordAction(ASSERT_ACTION);
             }
         });
         insertWaitButton = UIUtils.createInsertWaitButton();
         insertWaitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override public void actionPerformed(ActionEvent e) {
                 recordAction(WAIT_ACTION);
             }
         });
@@ -197,8 +198,9 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
             }
 
             private void handleSearch(final String text) {
-                if (timer != null)
+                if (timer != null) {
                     timer.stop();
+                }
                 timer = new Timer(300, new ActionListener() {
                     @Override public void actionPerformed(ActionEvent e) {
                         DefaultContextMenu.this.searchText = text;
@@ -206,8 +208,9 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
                         int n = text.split("\\.").length;
                         for (int i = 0; i < n; i++) {
                             int rowCount = tree.getRowCount();
-                            for (int j = rowCount - 1; j >= 0; j--)
+                            for (int j = rowCount - 1; j >= 0; j--) {
                                 tree.expandRow(j);
+                            }
                         }
                         timer = null;
                     }
@@ -220,15 +223,17 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
             private LinkedList<AssertionTreeNode> nodeList = new LinkedList<AssertionTreeNode>();
 
             @Override public boolean apply(AssertionTreeNode o) {
-                if (searchText == null || "".equals(searchText) || searchText.length() < 3)
+                if (searchText == null || "".equals(searchText) || searchText.length() < 3) {
                     return true;
+                }
                 return isValidNode(searchText.split("\\."), findNodes(o));
             }
 
             protected boolean isValidNode(String[] searchFields, AssertionTreeNode[] nodes) {
                 int nodeStart = tree.isRootVisible() ? 0 : 1;
-                if (searchFields.length < nodes.length - nodeStart)
+                if (searchFields.length < nodes.length - nodeStart) {
                     return true;
+                }
                 int last = Math.min(searchFields.length - 1, nodes.length - 1 - nodeStart);
                 return nodes[last + nodeStart].toString().toLowerCase().startsWith(searchFields[last].toLowerCase());
             }
@@ -259,13 +264,13 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         assertionTree.setShowsRootHandles(true);
         assertionTree.setModel(getTreeModel());
         assertionTree.addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
+            @Override public void valueChanged(TreeSelectionEvent e) {
                 AssertionTreeNode lastPathComponent = (AssertionTreeNode) e.getPath().getLastPathComponent();
                 textArea.setText(lastPathComponent.getDisplayValue());
             }
         });
         assertionTree.addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
+            @Override public void valueChanged(TreeSelectionEvent e) {
                 if (assertionTree.getSelectionCount() > 0) {
                     insertWaitButton.setEnabled(true);
                     insertAssertionButton.setEnabled(true);
@@ -277,7 +282,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         });
         assertionTree.setCellRenderer(new AssertionTreeNodeRenderer());
         assertionTree.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+            @Override public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) {
                     if (assertionTree.getSelectionCount() > 0) {
                         recordAction(ASSERT_ACTION);
@@ -301,8 +306,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
 
     private void recordAction(int action) {
         TreePath[] selectionPaths = assertionTree.getSelectionPaths();
-        for (int i = 0; i < selectionPaths.length; i++) {
-            TreePath path = selectionPaths[i];
+        for (TreePath path : selectionPaths) {
             Object[] objects = path.getPath();
             final StringBuffer sb = new StringBuffer();
             RComponent forComponent = rcomponent;
@@ -315,18 +319,20 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
                 }
                 sb.append(node.getProperty());
                 if (j < objects.length - 1) {
-                    if (!((AssertionTreeNode) objects[j + 1]).getProperty().startsWith("["))
+                    if (!((AssertionTreeNode) objects[j + 1]).getProperty().startsWith("[")) {
                         sb.append(".");
+                    }
                 } else {
                     String property = sb.toString();
                     Object value = null;
                     if (property.equals("Content")) {
                         value = forComponent.getContent();
                     } else {
-                        if (property.equals("Text"))
+                        if (property.equals("Text")) {
                             value = forComponent.getText();
-                        else
+                        } else {
                             value = forComponent.getAttribute(property);
+                        }
                     }
                     getRecorder().recordAction(forComponent, action == ASSERT_ACTION ? "assert" : "wait", property, value);
                 }
@@ -334,7 +340,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         }
     }
 
-    public void setComponent(Component component, Point point, boolean isTriggered) {
+    @Override public void setComponent(Component component, Point point, boolean isTriggered) {
         rcomponent = getFinder().findRComponent(component, point, recorder);
         if (rcomponent == null) {
             return;
@@ -345,7 +351,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         assertionTree.setSelectionRow(0);
     }
 
-    public String getName() {
+    @Override public String getName() {
         return "Assertions";
     }
 

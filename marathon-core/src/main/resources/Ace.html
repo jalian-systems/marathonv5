@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>ACE in Action</title>
+<style type="text/css" media="screen">
+    #editor { 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+	.ace_gutter-cell.current_line {
+	    background-image: url('data:image/gif;base64,R0lGODlhEAAQALMAABBcnC1wp0N/sXKfxXaix4Kqy42y0P///////wAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAgALAAAAAAQABAAAAQ3EMlJq733HGxP2JymAQB4BSQQECUGGDDMmhRQ3LjQVsDg+zraBEUKBDGiA0mY+XAomqd0SqVGAAA7');
+	    background-position: 2px center;
+	}
+	.ace_gutter-cell.breakpoint {
+	    background-image: url('data:image/gif;base64,R0lGODlhEAAQAKIAAAJzQD2SWlmjapjMpa7XuHGxdv3+/f///yH5BAEAAAcALAAAAAAQABAAAAM0eLrc/jBGQ6k0JIBADDQDIBQCMHiOEYwFGaCNAbQ0ADMq694LKJImXi+z6VwqQolyyWwuEgA7');
+	    background-position: 2px center;
+	}
+</style>
+</head>
+<body>
+<div id="editor"></div>
+<script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-builds/src-noconflict/ext-themelist.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-builds/src-noconflict/keybinding-vim.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-builds/src-noconflict/keybinding-emacs.js" type="text/javascript" charset="utf-8"></script>
+<script src="aceeditor.js" type="text/javascript" charset="utf-8"></script>
+<script>
+
+window.Range = ace.require("ace/range").Range;
+if(!window.$editor) {
+	window.$editor = new ACEEditor();
+}
+window.onerror = function(message, source, line) {
+	console.log("Error: " + message + " at " + source + ":" + line);
+}
+</script>
+</body>
+</html>

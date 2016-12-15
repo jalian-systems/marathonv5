@@ -1,22 +1,23 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,12 +62,13 @@ public class RTree extends RComponent {
         }
         if (next == null || next.getComponent() != component) {
             int[] selectionRows = tree.getSelectionRows();
-            if (selectionRows == null)
+            if (selectionRows == null) {
                 selectionRows = new int[0];
+            }
             List<Properties> pa = new ArrayList<Properties>();
-            for (int i = 0; i < selectionRows.length; i++) {
+            for (int selectionRow : selectionRows) {
                 Properties p = new Properties();
-                p.put("Path", getTextForNode(tree, selectionRows[i]));
+                p.put("Path", getTextForNode(tree, selectionRow));
                 pa.add(p);
             }
             recorder.recordSelect(this, PropertyHelper.toString(pa.toArray(new Properties[pa.size()]), new String[] { "Path" }));
@@ -77,32 +79,37 @@ public class RTree extends RComponent {
         text = getText();
     }
 
-    public String getText() {
+    @Override public String getText() {
         JTree tree = (JTree) component;
-        if (row == -1)
+        if (row == -1) {
             return null;
+        }
         TreePath rowPath = tree.getPathForRow(row);
-        if (rowPath == null)
+        if (rowPath == null) {
             return null;
+        }
         Object lastPathComponent = rowPath.getLastPathComponent();
-        if (lastPathComponent != null)
+        if (lastPathComponent != null) {
             return getTextForNodeObject(tree, lastPathComponent);
+        }
         return null;
     }
 
     private String getTextForNode(JTree tree, int row) {
         TreePath treePath = tree.getPathForRow(row);
-        if (treePath == null)
+        if (treePath == null) {
             return row + "";
+        }
         StringBuilder sb = new StringBuilder();
         int start = tree.isRootVisible() ? 0 : 1;
         Object[] objs = treePath.getPath();
         for (int i = start; i < objs.length; i++) {
             String pathString;
-            if (objs[i].toString() == null)
+            if (objs[i].toString() == null) {
                 pathString = "";
-            else
+            } else {
                 pathString = escapeSpecialCharacters(getTextForNodeObject(tree, objs[i]));
+            }
             sb.append("/" + pathString);
         }
         return sb.toString();
@@ -110,8 +117,9 @@ public class RTree extends RComponent {
 
     private String getTextForNodeObject(JTree tree, Object lastPathComponent) {
         TreeCellRenderer renderer = tree.getCellRenderer();
-        if (renderer == null)
+        if (renderer == null) {
             return null;
+        }
         Component c = renderer.getTreeCellRendererComponent(tree, lastPathComponent, false, false, false, 0, false);
         if (c != null && c instanceof JLabel) {
             return ((JLabel) c).getText();
@@ -131,38 +139,46 @@ public class RTree extends RComponent {
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         RTree other = (RTree) obj;
-        if (row != other.row)
+        if (row != other.row) {
             return false;
+        }
         return true;
     }
 
     @Override protected void mousePressed(MouseEvent me) {
         // Ignore double clicks on non-leaf tree nodes
-        if (me.getButton() == MouseEvent.BUTTON1 && me.getModifiersEx() == MouseEvent.BUTTON1_DOWN_MASK) {
-            if (me.getClickCount() == 1)
+        if (me.getButton() == MouseEvent.BUTTON1 && me.getModifiersEx() == InputEvent.BUTTON1_DOWN_MASK) {
+            if (me.getClickCount() == 1) {
                 return;
+            }
             TreePath path = ((JTree) component).getPathForRow(row);
             if (path != null) {
                 Object lastPathComponent = path.getLastPathComponent();
                 if (lastPathComponent instanceof TreeNode) {
                     TreeNode node = (TreeNode) lastPathComponent;
-                    if (node.getChildCount() != 0)
+                    if (node.getChildCount() != 0) {
                         return;
+                    }
                 }
             }
         }
         // Ignore Ctrl+Clicks used to select the nodes
-        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me))
+        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me)) {
             return;
-        if (me.getButton() != MouseEvent.BUTTON1)
+        }
+        if (me.getButton() != MouseEvent.BUTTON1) {
             focusLost(null);
+        }
         super.mousePressed(me);
     }
 

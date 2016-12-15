@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -47,8 +47,9 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
             Enumeration<Object> keys = p.keys();
             while (keys.hasMoreElements()) {
                 String object = (String) keys.nextElement();
-                if (!p.getProperty(object).equals(e.getAttribute(object)))
+                if (!p.getProperty(object).equals(e.getAttribute(object))) {
                     return false;
+                }
             }
             return true;
         }
@@ -65,15 +66,16 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
     @Override public String _getText() {
         int nitems = getCount();
         JSONArray r = new JSONArray();
-        for (int i = 0; i < nitems; i++)
+        for (int i = 0; i < nitems; i++) {
             r.put(new JTableHeaderItemJavaElement(this, i)._getText());
+        }
         return r.toString();
     }
 
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("nth-item"))
+        if (selector.equals("nth-item")) {
             return Arrays.asList((IJavaElement) new JTableHeaderItemJavaElement(this, ((Integer) params[0]).intValue() - 1));
-        else if (selector.equals("all-items")) {
+        } else if (selector.equals("all-items")) {
             int nitems = getCount();
             List<IJavaElement> r = new ArrayList<IJavaElement>();
             for (int i = 0; i < nitems; i++) {
@@ -107,8 +109,9 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
         int col = columnModel.getColumnCount();
         for (int i = 0; i < col; i++) {
             JTableHeaderItemJavaElement e = new JTableHeaderItemJavaElement(this, i);
-            if (p.isValid(e))
+            if (p.isValid(e)) {
                 r.add(e);
+            }
         }
         return r;
     }

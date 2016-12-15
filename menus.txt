@@ -1,0 +1,64 @@
+File >> New >> New Testcase            (Shortcut+N)
+File >> New >> Exploratory Test        (Shortcut+Shift+N)
+File >> New >> New Module
+File >> New >> New Fixture
+File >> New >> New Check List
+File >> New >> New Module Directory
+File >> New >> New Suite File
+File >> Save                            (Shortcut+S)
+File >> Save As                         
+File >> Save All                        (Shortcut+Shift+S)
+File >> Exit                            (Shortcut+Q)
+File >> Welcome  Message
+Edit >> Refresh
+Edit >> Preferences...
+Marathon >> Play                        (Shortcut+P)
+Marathon >> Slow Play                   (Shortcut+Shift+P)
+Marathon >> Debug                       (Shortcut+Alt+P)
+Marathon >> Record                      (Shortcut+R)
+Marathon >> Exploratory Test
+Marathon >> Stop
+Marathon >> Open Application
+Marathon >> Close Application
+Marathon >> Select Fixture
+Marathon >> Toggle Breakpoint           (Shortcut+B)
+Marathon >> Remove all breakpoints
+Marathon >> Show Report
+Marathon >> Project Settings...
+Marathon >> Manage Checklists...
+Marathon >> Enable Checklists
+Marathon >> Generate Reports
+Refactor >> Extract Module
+Refactor >> Create DDT...
+Refactor >> Create Data Loop...
+Object Map >> Create Object Map
+Object Map >> Edit Object Map
+Object Map >> Edit Object Map Configuration...
+Object Map >> Cleanup >> Enable cleanup options...
+Object Map >> Cleanup >> Mark all components as unused
+Object Map >> Cleanup >> Start marking used components
+Object Map >> Cleanup >> Remove unused entries
+Object Map >> Cleanup >> Clean object map folder
+Object Map >> Object  Map  Server...
+Window >> Reset Workspace
+Window >> Modena
+Window >> Caspian
+Window >> Twilight
+Window >> SolarizedLight
+Window >> Pista
+Window >> Cherries
+Window >> Blueberry
+Window >> Ambience
+Window >> Cobalt
+Window >> Idlefingers
+Window >> SolarizedDark
+Window >> VibrantInk
+Help >> Read me
+Help >> Change Log
+Help >> Marathon on web
+Help >> About...
+FXUIUtils.getImageFromX(`defaultEditor`)
+FXUIUtils.getImageFromX(`textEditor`)
+FXUIUtils.getImageFromX(`systemEditor`)
+FXUIUtils.getImageFromX(`window`)
+FXUIUtils.getImageFromX(`control`)

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.css;
 
 import java.awt.Component;
@@ -20,10 +20,15 @@ import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.marathon.javaagent.*;
-import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-
 import org.json.JSONException;
+
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.javaagent.JavaElementFactory;
+import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.javaagent.NoSuchWindowException;
+import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class ChildSelector implements Selector {
 
@@ -42,8 +47,9 @@ public class ChildSelector implements Selector {
     @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
             final IJavaElement container, long implicitWait) {
         final List<IJavaElement> pElements = parent.findElements(driver, container, implicitWait);
-        if (pElements.size() == 0)
+        if (pElements.size() == 0) {
             return pElements;
+        }
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
             EventQueueWait.exec(new Runnable() {
@@ -80,20 +86,24 @@ public class ChildSelector implements Selector {
                 }
             }.wait_noexc("Unable to find component", implicitWait, 50);
         }
-        if (r[0] instanceof NoSuchWindowException)
+        if (r[0] instanceof NoSuchWindowException) {
             throw (NoSuchWindowException) r[0];
-        if (r[0] instanceof UnsupportedCommandException)
+        }
+        if (r[0] instanceof UnsupportedCommandException) {
             throw (UnsupportedCommandException) r[0];
-        if (r[0] instanceof JSONException)
+        }
+        if (r[0] instanceof JSONException) {
             throw (JSONException) r[0];
+        }
         return (List<IJavaElement>) r[0];
     }
 
     protected List<IJavaElement> found(List<IJavaElement> pElements, IJavaAgent driver) {
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         for (IJavaElement je : pElements) {
-            if (!(je.getComponent() instanceof Container))
+            if (!(je.getComponent() instanceof Container)) {
                 continue;
+            }
             JWindow topContainer = driver.switchTo().getTopContainer();
             Component[] components = ((Container) je.getComponent()).getComponents();
             for (Component c : components) {
@@ -101,8 +111,9 @@ public class ChildSelector implements Selector {
                 List<IJavaElement> matched = child.matchesSelector(je2);
                 for (IJavaElement javaElement : matched) {
                     IJavaElement e = topContainer.addElement(javaElement);
-                    if (!r.contains(e))
+                    if (!r.contains(e)) {
                         r.add(e);
+                    }
                 }
             }
         }

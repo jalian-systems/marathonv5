@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
@@ -31,14 +31,14 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import net.sourceforge.marathon.javaagent.AbstractJavaElement;
-import net.sourceforge.marathon.javaagent.EventQueueWait;
-import net.sourceforge.marathon.javaagent.IJavaElement;
-import net.sourceforge.marathon.javaagent.IJavaAgent;
-import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import net.sourceforge.marathon.javaagent.AbstractJavaElement;
+import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaAgent;
+import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JTreeJavaElement extends AbstractJavaElement {
 
@@ -51,18 +51,19 @@ public class JTreeJavaElement extends AbstractJavaElement {
     }
 
     @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("root"))
+        if (selector.equals("root")) {
             return Arrays.asList((IJavaElement) new JTreeNodeJavaElement(this, 0));
-        else if (selector.equals("nth-node"))
+        } else if (selector.equals("nth-node")) {
             return Arrays.asList((IJavaElement) new JTreeNodeJavaElement(this, ((Integer) params[0]).intValue() - 1));
-        else if (selector.equals("all-nodes") || selector.equals("all-cells")) {
+        } else if (selector.equals("all-nodes") || selector.equals("all-cells")) {
             return collectNodes(new ArrayList<IJavaElement>(), new Predicate() {
                 @Override public boolean isValid(JTreeNodeJavaElement e) {
                     return true;
                 }
             });
-        } else if (selector.equals("select-by-properties"))
+        } else if (selector.equals("select-by-properties")) {
             return findNodeByProperties(new JSONObject((String) params[0]));
+        }
         return super.getByPseudoElement(selector, params);
     }
 
@@ -70,20 +71,23 @@ public class JTreeJavaElement extends AbstractJavaElement {
         int rows = ((JTree) component).getRowCount();
         for (int i = 0; i < rows; i++) {
             JTreeNodeJavaElement e = new JTreeNodeJavaElement(this, i);
-            if (p.isValid(e))
+            if (p.isValid(e)) {
                 r.add(e);
+            }
         }
         return r;
     }
 
     private List<IJavaElement> findNodeByProperties(JSONObject o) {
-        if (!o.has("select"))
+        if (!o.has("select")) {
             return Collections.<IJavaElement> emptyList();
+        }
         String path = o.getString("select");
         TreePath treePath = getPath((JTree) component, path);
         int rowForPath = ((JTree) component).getRowForPath(treePath);
-        if (rowForPath == -1)
+        if (rowForPath == -1) {
             return Collections.<IJavaElement> emptyList();
+        }
         return Arrays.asList((IJavaElement) new JTreeNodeJavaElement(this, rowForPath));
     }
 
@@ -118,15 +122,17 @@ public class JTreeJavaElement extends AbstractJavaElement {
                     Enumeration<Object> keys = p.keys();
                     while (keys.hasMoreElements()) {
                         String key = (String) keys.nextElement();
-                        if (!p.getProperty(key).equals(e.getAttribute(key)))
+                        if (!p.getProperty(key).equals(e.getAttribute(key))) {
                             return false;
+                        }
                     }
                     return true;
                 }
             });
         }
-        if (nodes.size() != jsonArray.length())
+        if (nodes.size() != jsonArray.length()) {
             return false;
+        }
         int[] rows = new int[nodes.size()];
         int index = 0;
         for (IJavaElement node : nodes) {
@@ -143,13 +149,15 @@ public class JTreeJavaElement extends AbstractJavaElement {
             return true;
         }
         List<TreePath> paths = new ArrayList<TreePath>();
-        for (int i = 0; i < properties.length; i++) {
-            TreePath path = getPath(tree, properties[i].getProperty("Path"));
-            if (path != null)
+        for (Properties propertie : properties) {
+            TreePath path = getPath(tree, propertie.getProperty("Path"));
+            if (path != null) {
                 paths.add(path);
+            }
         }
-        if (paths.size() != properties.length)
+        if (paths.size() != properties.length) {
             return false;
+        }
         tree.setSelectionPaths(paths.toArray(new TreePath[paths.size()]));
         return true;
     }
@@ -157,8 +165,9 @@ public class JTreeJavaElement extends AbstractJavaElement {
     private TreePath getPath(JTree tree, String path) {
         String[] tokens = path.substring(1).split("(?<!\\\\)/");
         TreeModel treeModel = tree.getModel();
-        if (treeModel == null)
+        if (treeModel == null) {
             throw new RuntimeException("Could not find model for tree");
+        }
         Object rootNode = treeModel.getRoot();
         int start = tree.isRootVisible() ? 1 : 0;
         TreePath treePath = new TreePath(rootNode);
@@ -184,16 +193,18 @@ public class JTreeJavaElement extends AbstractJavaElement {
                     break;
                 }
             }
-            if (!matched)
+            if (!matched) {
                 return null;
+            }
         }
         tree.expandPath(treePath);
         return treePath;
     }
 
     private void assertTrue(String message, boolean b) {
-        if (!b)
+        if (!b) {
             throw new RuntimeException(message);
+        }
     }
 
     public String unescapeSpecialCharacters(String name) {
@@ -202,15 +213,17 @@ public class JTreeJavaElement extends AbstractJavaElement {
 
     private String getPathText(JTree tree, TreePath path) {
         Object lastPathComponent = path.getLastPathComponent();
-        if (lastPathComponent == null)
+        if (lastPathComponent == null) {
             return "";
+        }
         return getTextForNodeObject(tree, lastPathComponent);
     }
 
     private String getTextForNodeObject(JTree tree, Object lastPathComponent) {
         TreeCellRenderer renderer = tree.getCellRenderer();
-        if (renderer == null)
+        if (renderer == null) {
             return null;
+        }
         Component c = renderer.getTreeCellRendererComponent(tree, lastPathComponent, false, false, false, 0, false);
         if (c != null && c instanceof JLabel) {
             return ((JLabel) c).getText();
@@ -223,7 +236,7 @@ public class JTreeJavaElement extends AbstractJavaElement {
     }
 
     public static String[][] getContent(JTree component) {
-        TreeModel model = ((JTree) component).getModel();
+        TreeModel model = component.getModel();
         int rowCount = getNodeCount(model, model.getRoot()) + 1;
         String[][] content = new String[1][rowCount];
         List<String> treeContent = new Vector<String>(rowCount);
@@ -234,8 +247,9 @@ public class JTreeJavaElement extends AbstractJavaElement {
 
     private static void getTreeContent(TreeModel model, Object root, List<String> treeContent) {
         treeContent.add(root.toString());
-        for (int i = 0; i < model.getChildCount(root); i++)
+        for (int i = 0; i < model.getChildCount(root); i++) {
             getTreeContent(model, model.getChild(root, i), treeContent);
+        }
     }
 
     private static int getNodeCount(TreeModel model, Object root) {

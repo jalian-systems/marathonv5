@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder;
 
 import java.awt.Component;
@@ -33,8 +33,6 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 @Test public class JSONOMapConfigTest {
     // @formatter:off
@@ -332,7 +330,7 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
                     "  ]," +
                     "  \"hCode\": 396049691" +
                     "}" ;
-    
+
     // @formatter:on
 
     private JSONOMapConfig config;
@@ -396,8 +394,9 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
                 if (o1prio == o2prio) {
                     Class<?> o1class = (Class<?>) o1.get("class");
                     Class<?> o2class = (Class<?>) o2.get("class");
-                    if (o1class.isAssignableFrom(o2class))
+                    if (o1class.isAssignableFrom(o2class)) {
                         return 1;
+                    }
                     return -1;
                 }
                 return o2prio - o1prio;

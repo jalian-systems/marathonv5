@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
 import java.io.IOException;
@@ -30,15 +30,15 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
-import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.ITestLauncher;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.Wait;
 
 public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDriverRuntimeLauncherModel, IRuntimeLauncherModel {
-    public ITestLauncher createLauncher(Properties props) {
+    @Override public ITestLauncher createLauncher(Properties props) {
         Map<String, Object> ps = new HashMap<String, Object>();
         Enumeration<Object> ks = props.keys();
         while (ks.hasMoreElements()) {
@@ -54,8 +54,9 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         profile.copyOutputTo(outputStream);
         DesiredCapabilities caps = new DesiredCapabilities();
         boolean nativeEvents = false;
-        if (props.containsKey("nativeEvents"))
+        if (props.containsKey("nativeEvents")) {
             nativeEvents = ((Boolean) props.get("nativeEvents")).booleanValue();
+        }
         caps.setCapability("nativeEvents", nativeEvents);
         JavaDriver driver = new JavaDriver(profile, caps, caps);
         RuntimeLogger.getRuntimeLogger().info("WebDriverRuntime", "Launching application", "Launching: " + driver);
@@ -77,8 +78,9 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
     @Override public URL getProfileAsURL(Map<String, Object> props, int recordingPort, OutputStream outputStream)
             throws URISyntaxException, IOException {
         final JavaProfile profile = createProfile(props, recordingPort > 0 ? MarathonMode.RECORDING : MarathonMode.PLAYING);
-        if (recordingPort != -1)
+        if (recordingPort != -1) {
             throw new RuntimeException("createLauncher: illegal operation(recording) for grid launcher");
+        }
         profile.setRecordingPort(recordingPort);
         profile.copyOutputTo(outputStream);
         return profile.asURL();
@@ -88,15 +90,11 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         return true;
     }
 
-    @Override public boolean isWebStart() {
-        return false;
-    }
-
-    @Override public boolean isApplet() {
-        return false;
-    }
-
     @Override public String getFramework() {
         return Constants.FRAMEWORK_SWING;
+    }
+
+    @Override public boolean confirmConfiguration() {
+        return true;
     }
 }

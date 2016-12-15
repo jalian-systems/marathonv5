@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.Component;
@@ -63,14 +63,15 @@ public class RComponentFactory {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
          * .Component)
          */
         @Override public Class<? extends RComponent> get(Component component) {
-            if (componentKlass.isInstance(component))
+            if (componentKlass.isInstance(component)) {
                 return rComponentKlass;
+            }
             return null;
         }
     }
@@ -129,8 +130,9 @@ public class RComponentFactory {
     public RComponent findRawRComponent(Component source, Point point, IJSONRecorder recorder) {
         for (IRComponentFinder entry : entries) {
             Class<? extends RComponent> k = entry.get(source);
-            if (k == null)
+            if (k == null) {
                 continue;
+            }
             try {
                 Constructor<? extends RComponent> cons = k.getConstructor(Component.class, JSONOMapConfig.class, Point.class,
                         IJSONRecorder.class);
@@ -165,12 +167,14 @@ public class RComponentFactory {
             realComponent = getComponent(parent, location);
         } else if (greatgrandparent instanceof ComboPopup) {
             realComponent = null;
-            if (greatgrandparent instanceof BasicComboPopup)
+            if (greatgrandparent instanceof BasicComboPopup) {
                 realComponent = getComponent(((BasicComboPopup) greatgrandparent).getInvoker(), location);
+            }
         } else if (component instanceof ComboPopup) {
             realComponent = null;
-            if (component instanceof BasicComboPopup)
+            if (component instanceof BasicComboPopup) {
                 realComponent = getComponent(((BasicComboPopup) component).getInvoker(), location);
+            }
         } else if (parent instanceof JSpinner) {
             realComponent = parent;
         } else if (grandparent instanceof JSpinner) {
@@ -186,8 +190,9 @@ public class RComponentFactory {
     private JColorChooser getColorChooser(Component component) {
         Component parent = component;
         while (parent != null) {
-            if (parent instanceof JColorChooser)
+            if (parent instanceof JColorChooser) {
                 return (JColorChooser) parent;
+            }
             parent = parent.getParent();
         }
         return null;
@@ -196,8 +201,9 @@ public class RComponentFactory {
     private JFileChooser getFileChooser(Component component) {
         Component parent = component;
         while (parent != null) {
-            if (parent instanceof JFileChooser)
+            if (parent instanceof JFileChooser) {
                 return (JFileChooser) parent;
+            }
             parent = parent.getParent();
         }
         return null;
@@ -205,7 +211,7 @@ public class RComponentFactory {
 
     /**
      * Sets the location to a point the table.
-     * 
+     *
      * @param table
      * @param location
      */

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
 import java.io.BufferedReader;
@@ -32,17 +32,20 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 import org.jruby.Ruby;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.javasupport.JavaEmbedUtils;
 
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.Argument;
 import net.sourceforge.marathon.runtime.api.Argument.Type;
 import net.sourceforge.marathon.runtime.api.Constants;
@@ -50,9 +53,9 @@ import net.sourceforge.marathon.runtime.api.FixturePropertyHelper;
 import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.IScript;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
-import net.sourceforge.marathon.runtime.api.ISubPropertiesPanel;
 import net.sourceforge.marathon.runtime.api.Module;
 import net.sourceforge.marathon.runtime.api.WindowId;
+import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class RubyScriptModel implements IScriptModel {
 
@@ -66,29 +69,7 @@ public class RubyScriptModel implements IScriptModel {
     static {
         RubyInstanceConfig.FULL_TRACE_ENABLED = true;
         ruby = JavaEmbedUtils.initialize(new ArrayList<String>());
-    }
-
-    public void createDefaultFixture(JDialog parent, Properties props, File fixtureDir, List<String> keys) {
-        FixtureGenerator fixtureGenerator = getFixtureGenerator();
-        File fixtureFile = new File(fixtureDir, "default.rb");
-        if (fixtureFile.exists()) {
-            int option = JOptionPane.showConfirmDialog(parent, "File " + fixtureFile + " exists\nDo you want to overwrite",
-                    "File Exists", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (option != JOptionPane.YES_OPTION)
-                return;
-        }
-        PrintStream ps = null;
-        try {
-            ps = new PrintStream(new FileOutputStream(fixtureFile));
-            String launcher = props.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL);
-            props.setProperty(Constants.FIXTURE_DESCRIPTION, props.getProperty(Constants.FIXTURE_DESCRIPTION, "Default Fixture"));
-            fixtureGenerator.printFixture(props, ps, launcher, keys);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (ps != null)
-                ps.close();
-        }
+        System.setProperty("jruby.home", ruby.getJRubyHome());
     }
 
     protected FixtureGenerator getFixtureGenerator() {
@@ -96,14 +77,14 @@ public class RubyScriptModel implements IScriptModel {
         return fixtureGenerator;
     }
 
-    public String getDefaultFixtureHeader(Properties props, String launcher, List<String> keys) {
+    @Override public String getDefaultFixtureHeader(Properties props, String launcher, List<String> keys) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         new FixtureGenerator().printFixture(props, ps, launcher, keys);
         return baos.toString();
     }
 
-    public String getDefaultTestHeader(String fixture) {
+    @Override public String getDefaultTestHeader(String fixture) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         ps.println(MARATHON_START_MARKER);
@@ -120,20 +101,23 @@ public class RubyScriptModel implements IScriptModel {
         return new String(baos.toByteArray());
     }
 
-    public String getFixtureHeader(String fixture) {
+    @Override public String getFixtureHeader(String fixture) {
         return "require_fixture '" + fixture + "'\n";
     }
 
-    public String[] getFixtures() {
+    @Override public String[] getFixtures() {
         File fixtureDir = new File(System.getProperty(Constants.PROP_FIXTURE_DIR));
         File[] fixtureFiles = fixtureDir.listFiles(new FileFilter() {
-            public boolean accept(File pathname) {
+            @Override public boolean accept(File pathname) {
                 if (pathname.getName().endsWith(".rb")) {
                     return true;
                 }
                 return false;
             }
         });
+        if (fixtureFiles == null) {
+            fixtureFiles = new File[0];
+        }
         String[] fixtures = new String[fixtureFiles.length];
         for (int i = 0; i < fixtureFiles.length; i++) {
             File file = fixtureFiles[i];
@@ -144,13 +128,14 @@ public class RubyScriptModel implements IScriptModel {
     }
 
     private String encodeArg(String text, Argument argument) {
-        if (argument.getType() == Type.REGEX)
+        if (argument.getType() == Type.REGEX) {
             return "/" + text + "/";
+        }
         String decoded = ruby.evalScriptlet("\"" + text + "\"").toString();
         return encode(decoded);
     }
 
-    public String getFunctionCallForInsertDialog(Function function, String[] arguments) {
+    @Override public String getFunctionCallForInsertDialog(Function function, String[] arguments) {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < arguments.length - 1; i += 1) {
             buffer.append(encodeArg(arguments[i], function.getArguments().get(i)));
@@ -174,20 +159,17 @@ public class RubyScriptModel implements IScriptModel {
         return require.toString();
     }
 
-    public String getModuleHeader(String moduleFunction, String description) {
+    @Override public String getModuleHeader(String moduleFunction, String description) {
         String prefix = "=begin" + EOL + description + EOL + "=end" + EOL + EOL + "def " + moduleFunction + "()" + EOL + EOL
                 + "    ";
         lastModuleInsertionPoint = prefix.length();
         return prefix + EOL + "end" + EOL;
     }
 
-    public ISubPropertiesPanel[] getSubPanels(JDialog parent) {
-        return new ISubPropertiesPanel[] { new RubyPathPanel(parent) };
-    }
-
     public static String escape(String encode) {
-        if (encode.startsWith("/"))
+        if (encode.startsWith("/")) {
             return "/" + encode;
+        }
         return encode;
     }
 
@@ -201,29 +183,27 @@ public class RubyScriptModel implements IScriptModel {
         return result;
     }
 
-    public String getScriptCodeForImportAction(String pkg, String function) {
+    @Override public String getScriptCodeForImportAction(String pkg, String function) {
         return "require '" + pkg + "'";
     }
 
-    public String getScriptCodeForWindow(WindowId windowId2) {
-        if (windowId2.isFrame())
-            return "with_frame(" + encode(windowId2.getTitle()) + ") {\n";
-        return "with_window(" + encode(windowId2.getTitle()) + ") {\n";
+    @Override public String getScriptCodeForWindow(WindowId windowId2) {
+        return "with_" + windowId2.getContainerType() + "(" + encode(windowId2.getTitle()) + ") {\n";
     }
 
-    public String getScriptCodeForWindowClose(WindowId windowId) {
+    @Override public String getScriptCodeForWindowClose(WindowId windowId) {
         return "}\n";
     }
 
-    public String getSuffix() {
+    @Override public String getSuffix() {
         return ".rb";
     }
 
-    public boolean isSourceFile(File f) {
+    @Override public boolean isSourceFile(File f) {
         return f.getName().endsWith(".rb") && !f.getName().startsWith(".");
     }
 
-    public String[] parseMessage(String msg) {
+    @Override public String[] parseMessage(String msg) {
         Pattern p = Pattern.compile(".*\\((.*.rb):(.*)\\).*");
         Matcher matcher = p.matcher(msg);
         String[] elements = null;
@@ -235,29 +215,32 @@ public class RubyScriptModel implements IScriptModel {
         return elements;
     }
 
-    public String getFunctionFromInsertDialog(String function) {
+    @Override public String getFunctionFromInsertDialog(String function) {
         String pkg = getPackageName(function);
-        if (pkg != null)
+        if (pkg != null) {
             return function.substring(pkg.length() + 1);
+        }
         return function;
     }
 
-    public String getPackageFromInsertDialog(String function) {
+    @Override public String getPackageFromInsertDialog(String function) {
         return getPackageName(function);
     }
 
     private String getPackageName(String f) {
         int index = f.indexOf('(');
-        if (index != -1)
+        if (index != -1) {
             f = f.substring(0, index);
+        }
         f = f.trim();
         index = f.lastIndexOf('/');
-        if (index == -1)
+        if (index == -1) {
             return null;
+        }
         return f.substring(0, index);
     }
 
-    public boolean isTestFile(File file) {
+    @Override public boolean isTestFile(File file) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
@@ -273,7 +256,7 @@ public class RubyScriptModel implements IScriptModel {
         return false;
     }
 
-    public int getLinePositionForInsertion() {
+    @Override public int getLinePositionForInsertion() {
         return 6;
     }
 
@@ -281,17 +264,18 @@ public class RubyScriptModel implements IScriptModel {
         return "window_closed(" + encode(id.toString()) + ")\n";
     }
 
-    public String getScriptCodeForInsertChecklist(String fileName) {
+    @Override public String getScriptCodeForInsertChecklist(String fileName) {
         return "accept_checklist(" + encode(fileName) + ")\n";
     }
 
-    public String getScriptCodeForShowChecklist(String fileName) {
+    @Override public String getScriptCodeForShowChecklist(String fileName) {
         return "show_checklist(" + encode(fileName) + ")\n";
     }
 
     public static String encode(String name) {
-        if (name == null)
+        if (name == null) {
             name = "";
+        }
         return inspect(name);
     }
 
@@ -303,7 +287,7 @@ public class RubyScriptModel implements IScriptModel {
             char c = chars[i];
             if (c == '"' || c == '\\') {
                 sb.append("\\").append(c);
-            } else if (c == '#' && chars[i + 1] == '{') {
+            } else if (c == '#' && chars.length != i + 1 && chars[i + 1] == '{') {
                 sb.append("\\").append(c);
             } else if (c == '\n') {
                 sb.append("\\").append('n');
@@ -329,11 +313,11 @@ public class RubyScriptModel implements IScriptModel {
         return sb.toString();
     }
 
-    public int getLinePositionForInsertionModule() {
+    @Override public int getLinePositionForInsertionModule() {
         return lastModuleInsertionPoint;
     }
 
-    public String updateScriptWithImports(String text, HashSet<String> importStatements) {
+    @Override public String updateScriptWithImports(String text, HashSet<String> importStatements) {
         StringBuilder sb = new StringBuilder(text);
         int endOffset = sb.indexOf(RubyScriptModel.MARATHON_END_MARKER);
         if (endOffset == -1) {
@@ -348,8 +332,9 @@ public class RubyScriptModel implements IScriptModel {
             sb.replace(0, 0, sw.toString());
         } else {
             int startOffset = sb.indexOf(MARATHON_START_MARKER);
-            if (startOffset == -1)
+            if (startOffset == -1) {
                 startOffset = 0;
+            }
             String header = text.substring(startOffset, endOffset);
             for (String ims : importStatements) {
                 if (!header.contains(ims)) {
@@ -369,36 +354,37 @@ public class RubyScriptModel implements IScriptModel {
         return "$java_recorded_version=\"" + System.getProperty("java.version") + "\"";
     }
 
-    public void fileUpdated(File file, SCRIPT_FILE_TYPE type) {
-        if(type == SCRIPT_FILE_TYPE.MODULE || type == SCRIPT_FILE_TYPE.FIXTURE)
+    @Override public void fileUpdated(File file, SCRIPT_FILE_TYPE type) {
+        if (type == SCRIPT_FILE_TYPE.MODULE || type == SCRIPT_FILE_TYPE.FIXTURE) {
             RubyInterpreters.clear();
+        }
     }
 
-    public String getMarathonStartMarker() {
+    @Override public String getMarathonStartMarker() {
         return MARATHON_START_MARKER;
     }
 
-    public String getMarathonEndMarker() {
+    @Override public String getMarathonEndMarker() {
         return MARATHON_END_MARKER;
     }
 
-    public String getPlaybackImportStatement() {
+    @Override public String getPlaybackImportStatement() {
         return "";
     }
 
     private static final Pattern FIXTURE_IMPORT_MATCHER = Pattern.compile("\\s*require_fixture\\s\\s*['\"](.*)['\"].*");
 
-    public Map<String, Object> getFixtureProperties(String script) {
+    @Override public Map<String, Object> getFixtureProperties(String script) {
         return new FixturePropertyHelper(this).getFixtureProperties(script, FIXTURE_IMPORT_MATCHER);
     }
 
-    public Object eval(String script) {
+    @Override public Object eval(String script) {
         return ruby.evalScriptlet(script);
     }
 
     @Override public IScript createScript(Writer out, Writer err, String scriptText, String filePath, boolean isRecording,
-            boolean isDebugging, Properties dataVariables) {
-        return new RubyScript(out, err, scriptText, filePath, isDebugging, dataVariables);
+            boolean isDebugging, Properties dataVariables, String framework) {
+        return new RubyScript(out, err, scriptText, filePath, isDebugging, dataVariables, framework);
     }
 
     @Override public String getScriptCodeForGenericAction(String method, String name, Object... params) {
@@ -406,17 +392,50 @@ public class RubyScriptModel implements IScriptModel {
     }
 
     private String paramString(Object[] params) {
-        if (params.length == 0)
+        if (params.length == 0) {
             return "";
+        }
         StringBuilder sb = new StringBuilder(", ");
         for (int i = 0; i < params.length; i++) {
-            if (params[i] instanceof String)
+            if (params[i] instanceof String) {
                 sb.append(encode((String) params[i]));
-            else
+            } else {
                 sb.append(params[i].toString());
-            if (i != params.length - 1)
+            }
+            if (i != params.length - 1) {
                 sb.append(", ");
+            }
         }
         return sb.toString();
+    }
+
+    @Override public void createDefaultFixture(Stage window, Properties props, File fixtureDir, List<String> keys) {
+        FixtureGenerator fixtureGenerator = getFixtureGenerator();
+        File fixtureFile = new File(fixtureDir, "default.rb");
+        if (fixtureFile.exists()) {
+            Optional<ButtonType> result = FXUIUtils.showConfirmDialog(null,
+                    "File " + fixtureFile + " exists\nDo you want to overwrite", "File Exists", AlertType.CONFIRMATION,
+                    ButtonType.YES, ButtonType.NO);
+            if (result.get() != ButtonType.YES) {
+                return;
+            }
+        }
+        PrintStream ps = null;
+        try {
+            ps = new PrintStream(new FileOutputStream(fixtureFile));
+            String launcher = props.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL);
+            props.setProperty(Constants.FIXTURE_DESCRIPTION, props.getProperty(Constants.FIXTURE_DESCRIPTION, "Default Fixture"));
+            fixtureGenerator.printFixture(props, ps, launcher, keys);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+        }
+    }
+
+    @Override public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
+        return new ISubPropertiesLayout[] { new RubyPathLayout(parent) };
     }
 }

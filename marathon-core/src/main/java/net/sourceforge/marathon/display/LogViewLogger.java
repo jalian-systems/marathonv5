@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.display;
 
 import java.util.Date;
@@ -20,6 +20,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import net.sourceforge.marathon.api.LogRecord;
+import net.sourceforge.marathon.fx.display.LogView;
 import net.sourceforge.marathon.runtime.api.ILogger;
 
 public class LogViewLogger implements ILogger {
@@ -32,7 +33,6 @@ public class LogViewLogger implements ILogger {
     public LogViewLogger(LogView logView) {
         this.logView = logView;
         setLogLevel();
-        logView.setLogger(this);
     }
 
     private void setLogLevel() {
@@ -44,31 +44,31 @@ public class LogViewLogger implements ILogger {
         logView.addLog(r);
     }
 
-    public void info(String module, String message) {
+    @Override public void info(String module, String message) {
         log(new LogRecord(ILogger.INFO, message, null, module, new Date()));
     }
 
-    public void info(String module, String message, String description) {
+    @Override public void info(String module, String message, String description) {
         log(new LogRecord(ILogger.INFO, message, description, module, new Date()));
     }
 
-    public void warning(String module, String message) {
+    @Override public void warning(String module, String message) {
         log(new LogRecord(ILogger.WARN, message, null, module, new Date()));
     }
 
-    public void warning(String module, String message, String description) {
+    @Override public void warning(String module, String message, String description) {
         log(new LogRecord(ILogger.WARN, message, description, module, new Date()));
     }
 
-    public void error(String module, String message) {
+    @Override public void error(String module, String message) {
         log(new LogRecord(ILogger.ERROR, message, null, module, new Date()));
     }
 
-    public void error(String module, String message, String description) {
+    @Override public void error(String module, String message, String description) {
         log(new LogRecord(ILogger.ERROR, message, description, module, new Date()));
     }
 
-    public void setLogLevel(int level) {
+    @Override public void setLogLevel(int level) {
         Preferences p = Preferences.userNodeForPackage(LogViewLogger.class);
         p.putInt("loglevel", level);
         try {
@@ -78,15 +78,15 @@ public class LogViewLogger implements ILogger {
         this.level = level;
     }
 
-    public int getLogLevel() {
+    @Override public int getLogLevel() {
         return level;
     }
 
-    public void msg(String module, String message) {
+    @Override public void msg(String module, String message) {
         log(new LogRecord(ILogger.MESSAGE, message, null, module, new Date()));
     }
 
-    public void msg(String module, String message, String description) {
+    @Override public void msg(String module, String message, String description) {
         log(new LogRecord(ILogger.MESSAGE, message, description, module, new Date()));
     }
 

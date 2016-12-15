@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.component;
 
 import java.awt.BorderLayout;
@@ -27,9 +27,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
-import net.sourceforge.marathon.component.LoggingRecorder.Call;
-import net.sourceforge.marathon.testhelpers.ComponentUtils;
-
 import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
@@ -37,6 +34,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import components.TableFilterDemo;
+import net.sourceforge.marathon.component.LoggingRecorder.Call;
+import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test public class RTableTest extends RComponentTest {
 
@@ -143,8 +142,9 @@ import components.TableFilterDemo;
             @Override public void run() {
                 JTableHeader tableHeader = table.getTableHeader();
                 String[] columnNames = new String[table.getColumnCount()];
-                for (int i = 0; i < table.getColumnCount(); i++)
+                for (int i = 0; i < table.getColumnCount(); i++) {
                     columnNames[i] = table.getColumnName(i);
+                }
                 columnNames[3] = " # of \\Years[0,20]";
                 TableModel model = table.getModel();
                 try {
@@ -203,8 +203,9 @@ import components.TableFilterDemo;
         siw(new Runnable() {
             @Override public void run() {
                 String[] columnNames = new String[table.getColumnCount()];
-                for (int i = 0; i < table.getColumnCount(); i++)
+                for (int i = 0; i < table.getColumnCount(); i++) {
                     columnNames[i] = table.getColumnName(i);
+                }
                 columnNames[3] = " # of \\Years[0,20]";
                 TableModel model = table.getModel();
                 try {
@@ -221,7 +222,7 @@ import components.TableFilterDemo;
                 table.addColumnSelectionInterval(3, 3);
                 RTable rTable = new RTable(table, null, null, lr);
                 rTable.focusGained(null);
-                model = (AbstractTableModel) table.getModel();
+                model = table.getModel();
                 model.setValueAt("100", 2, 3);
                 rTable.focusLost(null);
             }

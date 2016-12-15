@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javarecorder;
 
 import java.awt.AWTEvent;
@@ -27,11 +27,13 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -41,13 +43,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.json.JSONObject;
+
 import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.component.RUnknownComponent;
 import net.sourceforge.marathon.contextmenu.ContextMenuHandler;
-import net.sourceforge.marathon.javarecorder.http.HTTPRecorder;
-
-import org.json.JSONObject;
+import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
 
 public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
 
@@ -67,15 +69,14 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     private RComponentFactory finder;
     private IJSONRecorder recorder;
     private RComponent current;
-    private boolean rawRecording;
-    private int contextMenuKeyModifiers;
-    private int contextMenuKey;
-    private int menuModifiers;
+    private String contextMenuKeyModifiers;
+    private String contextMenuKey;
+    private String menuModifiers;
     private ContextMenuHandler contextMenuHandler;
 
     public JavaRecorderHook(int port) {
         try {
-            recorder = new HTTPRecorder(port);
+            recorder = new WSRecorder(port);
             objectMapConfiguration = recorder.getObjectMapConfiguration();
             setContextMenuTriggers(recorder.getContextMenuTriggers());
             finder = new RComponentFactory(objectMapConfiguration);
@@ -106,15 +107,17 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                             removeListener(c, listener);
                         }
                     } else if (event.getID() == ComponentEvent.COMPONENT_MOVED) {
-                        if (c instanceof Window)
+                        if (c instanceof Window) {
                             handleWindowStateEvent((Window) c);
+                        }
                         if (hasListener(c, listener)) {
                             removeListener(c, listener);
                             addListener(c, listener);
                         }
                     } else if (event.getID() == ComponentEvent.COMPONENT_RESIZED) {
-                        if (c instanceof Window)
+                        if (c instanceof Window) {
                             handleWindowStateEvent((Window) c);
+                        }
                         if (hasListener(c, listener)) {
                             removeListener(c, listener);
                             addListener(c, listener);
@@ -129,12 +132,15 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
     private void handleWindowStateEvent(Window window) {
-        if (!rawRecording || !window.isVisible())
+        if (!recorder.isRawRecording() || !window.isVisible()) {
             return;
+        }
         Rectangle bounds = null;
         if (window instanceof Frame) {
             Frame w = (Frame) window;
@@ -159,8 +165,9 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                 // No state to capture for dialogs - cannot maximise etc.
             }
         }
-        if (bounds == null)
+        if (bounds == null) {
             return;
+        }
         RComponent r = finder.findRComponent(window, null, recorder);
         recorder.recordWindowState(r, bounds);
     }
@@ -173,14 +180,16 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     private void addListeners(Container c, Class<?> listener) {
-        if (hasListener(c, listener))
+        if (hasListener(c, listener)) {
             addListener(c, listener);
+        }
         Component[] components = c.getComponents();
         for (Component component : components) {
-            if (component instanceof Container)
+            if (component instanceof Container) {
                 addListeners((Container) component, listener);
-            else if (hasListener(component, listener))
+            } else if (hasListener(component, listener)) {
                 addListener(component, listener);
+            }
         }
     }
 
@@ -212,25 +221,26 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     private void setContextMenuTriggers(JSONObject jsonObject) {
-        contextMenuKeyModifiers = jsonObject.getInt("contextMenuKeyModifiers");
-        contextMenuKey = jsonObject.getInt("contextMenuKey");
-        menuModifiers = jsonObject.getInt("menuModifiers");
+        contextMenuKeyModifiers = jsonObject.getString("contextMenuKeyModifiers");
+        contextMenuKey = jsonObject.getString("contextMenuKey");
+        menuModifiers = jsonObject.getString("menuModifiers");
     }
 
     public static void premain(final String args) throws Exception {
-        logger.info("JavaVersion: " + System.getProperty("java.version"));
         final int port;
-        if (args != null && args.trim().length() > 0)
+        if (args != null && args.trim().length() > 0) {
             port = Integer.parseInt(args.trim());
-        else
+        } else {
             throw new Exception("Port number not specified");
+        }
         windowTitle = System.getProperty("start.window.title", "");
         final AWTEventListener listener = new AWTEventListener() {
             boolean done = false;
 
             @Override public void eventDispatched(AWTEvent event) {
-                if (done)
+                if (done) {
                     return;
+                }
                 logger.info("Checking for window: " + Thread.currentThread());
                 if (!"".equals(windowTitle)) {
                     if (!isValidWindow()) {
@@ -239,6 +249,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                     }
                 }
                 done = true;
+                logger.info("JavaVersion: " + System.getProperty("java.version"));
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
                     @Override public Object run() {
                         return new JavaRecorderHook(port);
@@ -250,21 +261,24 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                 Window[] windows = Window.getWindows();
                 for (Window window : windows) {
                     if (windowTitle.startsWith("/")) {
-                        if (getTitle(window).matches(windowTitle.substring(1)))
+                        if (getTitle(window).matches(windowTitle.substring(1))) {
                             return true;
+                        }
                     } else {
-                        if (getTitle(window).equals(windowTitle))
+                        if (getTitle(window).equals(windowTitle)) {
                             return true;
+                        }
                     }
                 }
                 return false;
             }
 
             private String getTitle(Window window) {
-                if (window instanceof Dialog)
+                if (window instanceof Dialog) {
                     return ((Dialog) window).getTitle();
-                else if (window instanceof Frame)
+                } else if (window instanceof Frame) {
                     return ((Frame) window).getTitle();
+                }
                 return window.getClass().getName();
             }
 
@@ -277,8 +291,9 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             AccessController.doPrivileged(new PrivilegedAction<Object>() {
                 @Override public Object run() {
                     Object source = event.getSource();
-                    if (!(source instanceof Component))
+                    if (!(source instanceof Component)) {
                         return null;
+                    }
                     if (event instanceof WindowEvent) {
                         handleWindowEvent((WindowEvent) event);
                         return null;
@@ -290,39 +305,46 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                     }
                     if (event instanceof MouseEvent && isContextMenuSequence((MouseEvent) event)) {
                         ((MouseEvent) event).consume();
-                        if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
+                        if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null) {
                             current.focusLost(null);
+                        }
                         contextMenuHandler.showPopup((MouseEvent) event);
                         return null;
                     }
-                    if (contextMenuHandler.isContextMenuOn())
+                    if (contextMenuHandler.isContextMenuOn()) {
                         return null;
+                    }
                     Component component = (Component) source;
-                    if (SwingUtilities.getWindowAncestor(component) == null)
+                    if (SwingUtilities.getWindowAncestor(component) == null) {
                         return null;
-                    if (rawRecording) {
-                        new RUnknownComponent(component, objectMapConfiguration, null, recorder)
-                                .handleRawRecording(recorder, event);
+                    }
+                    if (recorder.isRawRecording()) {
+                        new RUnknownComponent(component, objectMapConfiguration, null, recorder).handleRawRecording(recorder,
+                                event);
                         return null;
                     }
                     int id = event.getID();
                     AWTEvent eventx;
-                    if (event instanceof MouseEvent)
+                    if (event instanceof MouseEvent) {
                         eventx = SwingUtilities.convertMouseEvent(((MouseEvent) event).getComponent(), (MouseEvent) event,
                                 (Component) source);
-                    else
+                    } else {
                         eventx = event;
-                    RComponent c = finder.findRComponent(component, eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint()
-                            : null, recorder);
+                    }
+                    RComponent c = finder.findRComponent(component,
+                            eventx instanceof MouseEvent ? ((MouseEvent) eventx).getPoint() : null, recorder);
                     if (isFocusChangeEvent(id) && !c.equals(current)) {
-                        if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null)
+                        if (current != null && SwingUtilities.getWindowAncestor(current.getComponent()) != null) {
                             current.focusLost(c);
+                        }
                         c.focusGained(current);
                         current = c;
                     }
-                    // We need this. Note that c.equals(current) is not same as c == current
-                    if (c.equals(current))
+                    // We need this. Note that c.equals(current) is not same as
+                    // c == current
+                    if (c.equals(current)) {
                         c = current;
+                    }
                     c.processEvent(eventx);
                     return null;
                 }
@@ -336,15 +358,6 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         if (event.getID() == WindowEvent.WINDOW_CLOSING) {
             RComponent r = finder.findRComponent(event.getWindow(), null, recorder);
             recorder.recordWindowClosing(r);
-        }
-        if (event.getID() == WindowEvent.WINDOW_GAINED_FOCUS) {
-            if (recorder != null) {
-                try {
-                    rawRecording = recorder.isRawRecording();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         if (event.getID() != WindowEvent.WINDOW_CLOSING) {
             RComponent r = finder.findRComponent(event.getWindow(), null, recorder);
@@ -361,7 +374,38 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     public boolean isContextMenuSequence(MouseEvent e) {
-        return (e.getID() == MouseEvent.MOUSE_PRESSED) && (e.getModifiersEx() == menuModifiers);
+        return e.getID() == MouseEvent.MOUSE_PRESSED && inputEventGetModifiersExText(e.getModifiersEx()).equals(menuModifiers);
+    }
+
+    public static String inputEventGetModifiersExText(int modifiers) {
+        StringBuffer sb = new StringBuffer();
+
+        if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
+            sb.append("Ctrl+");
+        }
+        if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
+            sb.append("Meta+");
+        }
+        if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
+            sb.append("Alt+");
+        }
+        if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
+            sb.append("Shift+");
+        }
+        if ((modifiers & InputEvent.BUTTON1_DOWN_MASK) != 0) {
+            sb.append("Button1+");
+        }
+        if ((modifiers & InputEvent.BUTTON2_DOWN_MASK) != 0) {
+            sb.append("Button2+");
+        }
+        if ((modifiers & InputEvent.BUTTON3_DOWN_MASK) != 0) {
+            sb.append("Button3+");
+        }
+        String text = sb.toString();
+        if (text.equals("")) {
+            return text;
+        }
+        return text.substring(0, text.length() - 1);
     }
 
     public boolean isContextMenuKeySequence(KeyEvent event) {
@@ -369,24 +413,82 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     public boolean isContextMenuKey(KeyEvent event) {
-        return event.getKeyCode() == contextMenuKey && event.getModifiersEx() == contextMenuKeyModifiers;
+        return keyEventGetKeyText(event.getKeyCode()).equals(contextMenuKey)
+                && inputEventGetModifiersExText(event.getModifiersEx()).equals(contextMenuKeyModifiers);
+    }
+
+    public static String keyEventGetKeyText(int keycode) {
+        if (keycode == KeyEvent.VK_TAB) {
+            return "Tab";
+        }
+        if (keycode == KeyEvent.VK_CONTROL) {
+            return "Ctrl";
+        }
+        if (keycode == KeyEvent.VK_ALT) {
+            return "Alt";
+        }
+        if (keycode == KeyEvent.VK_SHIFT) {
+            return "Shift";
+        }
+        if (keycode == KeyEvent.VK_META) {
+            return "Meta";
+        }
+        if (keycode == KeyEvent.VK_SPACE) {
+            return "Space";
+        }
+        if (keycode == KeyEvent.VK_BACK_SPACE) {
+            return "Backspace";
+        }
+        if (keycode == KeyEvent.VK_HOME) {
+            return "Home";
+        }
+        if (keycode == KeyEvent.VK_END) {
+            return "End";
+        }
+        if (keycode == KeyEvent.VK_DELETE) {
+            return "Delete";
+        }
+        if (keycode == KeyEvent.VK_PAGE_UP) {
+            return "Pageup";
+        }
+        if (keycode == KeyEvent.VK_PAGE_DOWN) {
+            return "Pagedown";
+        }
+        if (keycode == KeyEvent.VK_UP) {
+            return "Up";
+        }
+        if (keycode == KeyEvent.VK_DOWN) {
+            return "Down";
+        }
+        if (keycode == KeyEvent.VK_LEFT) {
+            return "Left";
+        }
+        if (keycode == KeyEvent.VK_RIGHT) {
+            return "Right";
+        }
+        if (keycode == KeyEvent.VK_ENTER) {
+            return "Enter";
+        }
+        return KeyEvent.getKeyText(keycode);
     }
 
     @Override public void stateChanged(ChangeEvent e) {
-        if (rawRecording) {
+        if (recorder.isRawRecording()) {
             return;
         }
-        if (!(e.getSource() instanceof Component) || current == null || e.getSource() != current.getComponent())
+        if (!(e.getSource() instanceof Component) || current == null || e.getSource() != current.getComponent()) {
             return;
+        }
         current.stateChanged(e);
     }
 
     @Override public void actionPerformed(ActionEvent e) {
-        if (rawRecording) {
+        if (recorder.isRawRecording()) {
             return;
         }
-        if (!(e.getSource() instanceof Component))
+        if (!(e.getSource() instanceof Component)) {
             return;
+        }
         Component component = (Component) e.getSource();
         RComponent c = finder.findRComponent(component, null, recorder);
         c.actionPerformed(e);

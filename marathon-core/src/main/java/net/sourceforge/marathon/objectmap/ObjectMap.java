@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.objectmap;
 
 import java.io.FileNotFoundException;
@@ -23,12 +23,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import net.sourceforge.marathon.fx.objectmap.ObjectMapItem;
 import net.sourceforge.marathon.runtime.api.ILogger;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.PropertiesPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 
-public class ObjectMap extends ObjectMapModel {
+public class ObjectMap extends ObjectMapItem {
 
     private static final ILogger logger = RuntimeLogger.getRuntimeLogger();
 
@@ -42,8 +43,9 @@ public class ObjectMap extends ObjectMapModel {
         OMapContainer currentContainer;
         List<OMapContainer> matched = new ArrayList<OMapContainer>();
         for (OMapContainer com : data) {
-            if (com.isMatched(pa))
+            if (com.isMatched(pa)) {
                 matched.add(com);
+            }
         }
         if (matched.size() == 1) {
             currentContainer = matched.get(0);
@@ -56,12 +58,14 @@ public class ObjectMap extends ObjectMapModel {
                 currentContainer = createNewContainer(pa, rproperties, gproperties, title);
             }
         } else if (matched.size() == 0) {
-            if (createIfNeeded)
+            if (createIfNeeded) {
                 currentContainer = createNewContainer(pa, rproperties, gproperties, title);
-            else
-                throw new ObjectMapException("No top level component matched for the given properties");
-        } else
+            } else {
+                throw new ObjectMapException("No top level component matched for the given properties: " + pa);
+            }
+        } else {
             throw new ObjectMapException("More than one toplevel container matched for given properties");
+        }
         currentContainer.addTitle(title);
         return currentContainer;
     }
@@ -70,8 +74,9 @@ public class ObjectMap extends ObjectMapModel {
         OMapContainer currentContainer;
         List<OMapContainer> matched = new ArrayList<OMapContainer>();
         for (OMapContainer com : data) {
-            if (com.isMatched(pa))
+            if (com.isMatched(pa)) {
                 matched.add(com);
+            }
         }
         if (matched.size() == 1) {
             currentContainer = matched.get(0);
@@ -87,8 +92,9 @@ public class ObjectMap extends ObjectMapModel {
             }
         } else if (matched.size() == 0) {
             throw new ObjectMapException("No top level component matched for the given properties");
-        } else
+        } else {
             throw new ObjectMapException("More than one toplevel container matched for given properties");
+        }
         currentContainer.addTitle(title);
         return currentContainer;
     }
@@ -156,8 +162,9 @@ public class ObjectMap extends ObjectMapModel {
 
     private boolean validProperties(IPropertyAccessor pa, List<String> proplist) {
         for (String p : proplist) {
-            if (pa.getProperty(p) == null)
+            if (pa.getProperty(p) == null) {
                 return false;
+            }
         }
         return true;
     }
@@ -165,8 +172,9 @@ public class ObjectMap extends ObjectMapModel {
     public OMapComponent findComponentByName(String name, OMapContainer currentContainer) {
         OMapComponent omapComponent = currentContainer.findComponentByName(name);
         logger.info(MODULE, "findComponentByName(" + name + "): " + omapComponent);
-        if (omapComponent == null)
+        if (omapComponent == null) {
             return null;
+        }
         omapComponent.setUsed(true);
         return omapComponent;
     }
@@ -184,8 +192,9 @@ public class ObjectMap extends ObjectMapModel {
         OMapComponent omapComponent = currentContainer.insertNameForComponent(name, w, rprops, rproperties, nproperties,
                 gproperties);
         logger.info(MODULE, "insertNameForComponent(" + name + "): " + omapComponent);
-        if (omapComponent != null)
+        if (omapComponent != null) {
             setDirty(true);
+        }
         return omapComponent;
     }
 
@@ -234,8 +243,9 @@ public class ObjectMap extends ObjectMapModel {
         logger.info(MODULE, "insertNameForComponent(" + name + ")");
         OMapComponent omapComponent = currentContainer.insertNameForComponent(name, urp, properties);
         logger.info(MODULE, "insertNameForComponent(" + name + "): " + omapComponent);
-        if (omapComponent != null)
+        if (omapComponent != null) {
             setDirty(true);
+        }
         // Check this out
         // omapComponent.markEntryNeeded(true);
         return omapComponent;
@@ -275,8 +285,9 @@ public class ObjectMap extends ObjectMapModel {
         OMapContainer currentContainer;
         List<OMapContainer> matched = new ArrayList<OMapContainer>();
         for (OMapContainer com : data) {
-            if (com.isMatched(pa))
+            if (com.isMatched(pa)) {
                 matched.add(com);
+            }
         }
         String title = getTitle(attributes);
         if (matched.size() == 1) {
@@ -291,16 +302,18 @@ public class ObjectMap extends ObjectMapModel {
             }
         } else if (matched.size() == 0) {
             currentContainer = createNewContainer(attributes, urp);
-        } else
+        } else {
             throw new ObjectMapException("More than one toplevel container matched for given properties");
+        }
         currentContainer.addTitle(title);
         return currentContainer;
     }
 
     private String getTitle(Properties attributes) {
         String title = attributes.getProperty("title");
-        if (title == null)
+        if (title == null) {
             title = "<NO_TITLE>";
+        }
         return title;
     }
 

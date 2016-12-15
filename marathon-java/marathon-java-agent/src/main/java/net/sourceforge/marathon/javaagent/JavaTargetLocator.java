@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
@@ -111,7 +111,7 @@ public class JavaTargetLocator {
 
         public void maximize() {
             if (currentWindow instanceof JFrame) {
-                EventQueueWait.call_noexc(currentWindow, "setExtendedState", JFrame.MAXIMIZED_BOTH);
+                EventQueueWait.call_noexc(currentWindow, "setExtendedState", Frame.MAXIMIZED_BOTH);
             }
         }
 
@@ -146,8 +146,9 @@ public class JavaTargetLocator {
                 id = idPart;
             }
             IJavaElement e = elements.get(id);
-            if (e == null)
+            if (e == null) {
                 throw new NoSuchElementException("Could not find element for the given id in the topmost window", null);
+            }
             if (info == null) {
                 return e;
             }
@@ -155,8 +156,9 @@ public class JavaTargetLocator {
             String selector = pobj.getString("selector");
             JSONArray parray = pobj.getJSONArray("parameters");
             Object[] params = new Object[parray.length()];
-            for (int i = 0; i < parray.length(); i++)
+            for (int i = 0; i < parray.length(); i++) {
                 params[i] = parray.get(i);
+            }
             e = e.getByPseudoElement(selector, params).get(0);
             return e;
         }
@@ -190,20 +192,25 @@ public class JavaTargetLocator {
             if (currentWindow instanceof Frame || currentWindow instanceof Window || currentWindow instanceof Dialog) {
                 String className = currentWindow.getClass().getName();
                 Package pkg = currentWindow.getClass().getPackage();
-                if (pkg == null)
+                if (pkg == null) {
                     return className;
+                }
                 String pkgName = pkg.getName();
-                if (!pkgName.startsWith("javax.swing") && !pkgName.startsWith("java.awt"))
+                if (!pkgName.startsWith("javax.swing") && !pkgName.startsWith("java.awt")) {
                     return className;
-                if (className.equals("javax.swing.ColorChooserDialog"))
+                }
+                if (className.equals("javax.swing.ColorChooserDialog")) {
                     return className;
+                }
                 if (currentWindow instanceof JDialog) {
                     Component[] components = ((JDialog) currentWindow).getContentPane().getComponents();
-                    if (components.length == 1 && components[0] instanceof JFileChooser)
+                    if (components.length == 1 && components[0] instanceof JFileChooser) {
                         return JFileChooser.class.getName() + "#Dialog";
-                    if (components.length == 1 && components[0] instanceof JOptionPane)
+                    }
+                    if (components.length == 1 && components[0] instanceof JOptionPane) {
                         return JOptionPane.class.getName() + "#Dialog_" + ((JOptionPane) components[0]).getMessageType() + "_"
                                 + ((JOptionPane) components[0]).getOptionType();
+                    }
                 }
                 return null;
             }
@@ -297,10 +304,12 @@ public class JavaTargetLocator {
         for (AppContext appContext : appContexts) {
             Window[] windows = getWindows(appContext);
             for (Window window : windows) {
-                if (window.getClass().getName().equals("javax.swing.SwingUtilities$SharedOwnerFrame"))
+                if (window.getClass().getName().equals("javax.swing.SwingUtilities$SharedOwnerFrame")) {
                     continue;
-                if (window.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow"))
+                }
+                if (window.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow")) {
                     continue;
+                }
                 if (window.isVisible()) {
                     valid.add(window);
                 }
@@ -362,8 +371,9 @@ public class JavaTargetLocator {
 
         }.wait("No focused window available", 60000, 500);
         Window focusWindow = findFocusWindow();
-        if(focusWindow != null)
+        if (focusWindow != null) {
             return new JWindow(focusWindow).getTitle();
+        }
         return null;
     }
 
@@ -398,6 +408,17 @@ public class JavaTargetLocator {
         return _getTopContainer();
     }
 
+    public JWindow getFocusedWindow() {
+        Window[] windows = getValidWindows();
+        for (Window window : windows) {
+            if(window.isFocused())
+                return new JWindow(window);
+        }
+        if(windows.length > 0)
+            return new JWindow(windows[0]);
+        return null;
+    }
+
     private JWindow _getTopContainer() {
         if (currentWindow == null) {
             Window[] windows = getValidWindows();
@@ -408,17 +429,19 @@ public class JavaTargetLocator {
                         null);
             }
         }
-        if (currentWindow == null)
+        if (currentWindow == null) {
             throw new NoSuchWindowException(
                     "No top level window is set. Java driver is unable to find a suitable implicit candidate", null);
+        }
         return currentWindow;
     }
 
     public JWindow getWindowForHandle(String windowHandle) {
         Window[] windows = getValidWindows();
         for (Window window : windows) {
-            if (windowHandle.equals(getWindowHandle(window)))
+            if (windowHandle.equals(getWindowHandle(window))) {
                 return new JWindow(window);
+            }
         }
         throw new NoSuchWindowException("No window found corresponding to the given window Handle", null);
     }
@@ -430,8 +453,9 @@ public class JavaTargetLocator {
     public IJavaElement getActiveElement() {
         JWindow top = getTopContainer();
         Component active = top.getWindow().getFocusOwner();
-        if (active == null)
+        if (active == null) {
             throw new NoSuchElementException("Could not find focus owner for the topmost window", null);
+        }
         return top.findElement(active);
     }
 

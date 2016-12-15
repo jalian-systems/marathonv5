@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent.css;
 
 import java.io.IOException;
@@ -25,21 +25,25 @@ public class SelectorLexer extends AbstractLexer {
         super(new PushbackReader(new StringReader(selector)));
     }
 
-    protected Token getNextToken() {
+    @Override protected Token getNextToken() {
 
         int c;
         try {
             while ((c = reader.read()) != -1) {
                 int la = reader.read();
-                if (la != -1)
+                if (la != -1) {
                     reader.unread(la);
+                }
                 if (Character.isWhitespace(c)) {
-                    while (Character.isWhitespace(c))
+                    while (Character.isWhitespace(c)) {
                         c = reader.read();
-                    if (c != -1)
+                    }
+                    if (c != -1) {
                         reader.unread(c);
-                    if (ignoreWhitespace)
+                    }
+                    if (ignoreWhitespace) {
                         continue;
+                    }
                     return new Token(TokenType.TT_WHITESPACE);
                 } else if (c == '"' || c == '\'') {
                     return readString(c);
@@ -78,8 +82,9 @@ public class SelectorLexer extends AbstractLexer {
                 } else if (c == '#') {
                     return readId();
                 } else if (c == ':') {
-                    if (la == ':')
+                    if (la == ':') {
                         reader.read();
+                    }
                     return readPseudoItem(la == ':' ? TokenType.TT_PSEUDO_ELEMENT : TokenType.TT_PSEUDO_CLASS);
                 } else if (Character.isDigit(c)) {
                     return readInteger(c);
@@ -106,8 +111,9 @@ public class SelectorLexer extends AbstractLexer {
                 }
                 if (Character.isJavaIdentifierPart(c) || c == '-') {
                     sb.append((char) c);
-                } else
+                } else {
                     break;
+                }
             }
             if (c != -1) {
                 reader.unread(c);
@@ -115,8 +121,9 @@ public class SelectorLexer extends AbstractLexer {
         } catch (IOException e) {
             throw new LexerException("IOError: " + e.getMessage(), e);
         }
-        if (sb.length() == 0)
+        if (sb.length() == 0) {
             throw new LexerException("While reading hashed id -- unexpected character '" + (char) c + "'", null);
+        }
         return new Token(TokenType.TT_ID, sb.toString());
     }
 
@@ -132,22 +139,25 @@ public class SelectorLexer extends AbstractLexer {
                     sb.append((char) c);
                 } else if ((c == '-' || Character.isJavaIdentifierPart(c)) && c != '$') {
                     sb.append((char) c);
-                } else
+                } else {
                     break;
+                }
             }
             if (c == '(') {
-                if (tt == TokenType.TT_PSEUDO_CLASS)
+                if (tt == TokenType.TT_PSEUDO_CLASS) {
                     type = TokenType.TT_PSEUDO_CLASS_ARGS;
-                else
+                } else {
                     type = TokenType.TT_PSEUDO_ELEMENT_ARGS;
+                }
             } else if (c != -1) {
                 reader.unread(c);
             }
         } catch (IOException e) {
             throw new LexerException("IOError: " + e.getMessage(), e);
         }
-        if (sb.length() == 0)
+        if (sb.length() == 0) {
             throw new LexerException("While reading pseudo element/class -- unexpected character '" + (char) c + "'", null);
+        }
         return new Token(type, sb.toString());
     }
 
@@ -160,13 +170,16 @@ public class SelectorLexer extends AbstractLexer {
         try {
             while ((c = reader.read()) != -1) {
                 if ((c == '-' || c == '.' || Character.isJavaIdentifierPart(c)) && c != '$') {
-                    if (c == '.')
+                    if (c == '.') {
                         isAttr = true;
-                    if (c == '-')
+                    }
+                    if (c == '-') {
                         isTag = true;
+                    }
                     sb.append((char) c);
-                } else
+                } else {
                     break;
+                }
             }
             if (c != -1) {
                 reader.unread(c);
@@ -174,20 +187,24 @@ public class SelectorLexer extends AbstractLexer {
         } catch (IOException e) {
             throw new LexerException("IOError: " + e.getMessage(), e);
         }
-        if (sb.length() == 0)
+        if (sb.length() == 0) {
             throw new LexerException("While reading identifier -- unexpected character '" + (char) c + "'", null);
+        }
         String value = sb.toString();
-        if (value.equals("true"))
+        if (value.equals("true")) {
             return new Token(TokenType.TT_BOOLEAN, value);
-        else if (value.equals("false"))
+        } else if (value.equals("false")) {
             return new Token(TokenType.TT_BOOLEAN, value);
-        if (isAttr && isTag)
+        }
+        if (isAttr && isTag) {
             throw new LexerException("Unable to distinguish between tag and attribute.", null);
+        }
         TokenType type = TokenType.TT_IDENTIFIER;
-        if (isAttr)
+        if (isAttr) {
             type = TokenType.TT_ATTRIBUTE;
-        else if (isTag)
+        } else if (isTag) {
             type = TokenType.TT_TAG;
+        }
         return new Token(type, value);
     }
 
@@ -198,15 +215,18 @@ public class SelectorLexer extends AbstractLexer {
         boolean number = false;
         try {
             while ((c = reader.read()) != -1) {
-                if (Character.isDigit(c) || (!number && c == '.')) {
-                    if (c == '.')
+                if (Character.isDigit(c) || !number && c == '.') {
+                    if (c == '.') {
                         number = true;
+                    }
                     sb.append((char) c);
-                } else
+                } else {
                     break;
+                }
             }
-            if (c != -1)
+            if (c != -1) {
                 reader.unread(c);
+            }
         } catch (IOException e) {
             throw new LexerException("IOError: " + e.getMessage(), e);
         }
@@ -224,10 +244,11 @@ public class SelectorLexer extends AbstractLexer {
                     continue;
                 }
                 if (escape) {
-                    if (c == 'n')
+                    if (c == 'n') {
                         sb.append('\n');
-                    else
+                    } else {
                         sb.append((char) c);
+                    }
                     escape = false;
                     continue;
                 }

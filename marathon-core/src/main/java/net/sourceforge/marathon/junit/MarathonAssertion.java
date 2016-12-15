@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.junit;
 
 import java.io.BufferedReader;
@@ -35,15 +35,15 @@ public class MarathonAssertion extends AssertionFailedError {
         this.failures = failures;
     }
 
-    public void printStackTrace() {
+    @Override public void printStackTrace() {
         super.printStackTrace(System.err);
     }
 
-    public void printStackTrace(PrintStream s) {
+    @Override public void printStackTrace(PrintStream s) {
         super.printStackTrace(new PrintWriter(s));
     }
 
-    public void printStackTrace(PrintWriter s) {
+    @Override public void printStackTrace(PrintWriter s) {
         StringWriter output;
         PrintWriter writer = new PrintWriter(output = new StringWriter());
         super.printStackTrace(writer);
@@ -57,12 +57,13 @@ public class MarathonAssertion extends AssertionFailedError {
         s.println(line);
         try {
             if (failures != null) {
-                for (int i = 0; i < failures.length; i++) {
-                    s.println("\tFailure: " + failures[i].getMessage());
-                    if (failures[i].getTraceback().length > 0)
-                        s.println("\tat " + failures[i].getTraceback()[0].functionName + "("
-                                + getRelativeFileName(failures[i].getTraceback()[0].fileName) + ":"
-                                + failures[i].getTraceback()[0].lineNumber + ")");
+                for (Failure failure : failures) {
+                    s.println("\tFailure: " + failure.getMessage());
+                    if (failure.getTraceback().length > 0) {
+                        s.println("\tat " + failure.getTraceback()[0].functionName + "("
+                                + getRelativeFileName(failure.getTraceback()[0].fileName) + ":"
+                                + failure.getTraceback()[0].lineNumber + ")");
+                    }
                 }
             }
         } catch (IOException e1) {
@@ -88,8 +89,9 @@ public class MarathonAssertion extends AssertionFailedError {
         fileName = new File(fileName).getCanonicalPath();
         if (fileName.startsWith(currentDir)) {
             fileName = fileName.substring(currentDir.length() + 1);
-            if (fileName.equals(""))
+            if (fileName.equals("")) {
                 fileName = ".";
+            }
         }
         return fileName.replace('\\', '/');
     }

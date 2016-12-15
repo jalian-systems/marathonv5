@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ public class JavaFXTableViewElement extends JavaFXElement {
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
-        if (selector.equals("mnth-cell"))
+        if (selector.equals("mnth-cell")) {
             return Arrays.asList(
                     new JavaFXTableCellElement(this, ((Integer) params[0]).intValue() - 1, ((Integer) params[1]).intValue() - 1));
-        else if (selector.equals("all-cells")) {
+        } else if (selector.equals("all-cells")) {
             TableView<?> tableView = (TableView<?>) getComponent();
             int rowCount = tableView.getItems().size();
             int columnCount = tableView.getColumns().size();
@@ -75,8 +75,9 @@ public class JavaFXTableViewElement extends JavaFXElement {
             return true;
         } else if (value.equals("all")) {
             int rowSize = tableView.getItems().size();
-            for (int i = 0; i < rowSize; i++)
+            for (int i = 0; i < rowSize; i++) {
                 selectionModel.select(i);
+            }
             return true;
         } else if (selectionModel.isCellSelectionEnabled()) {
             selectCells(tableView, value);
@@ -84,10 +85,10 @@ public class JavaFXTableViewElement extends JavaFXElement {
         } else {
             int[] selectedRows = getSelectedRows(value);
             selectionModel.clearSelection();
-            for (int i = 0; i < selectedRows.length; i++) {
-                int rowIndex = selectedRows[i];
-                if (getVisibleCellAt(tableView, rowIndex, tableView.getColumns().size() - 1) == null)
+            for (int rowIndex : selectedRows) {
+                if (getVisibleCellAt(tableView, rowIndex, tableView.getColumns().size() - 1) == null) {
                     tableView.scrollTo(rowIndex);
+                }
                 selectionModel.select(rowIndex);
             }
             return true;
@@ -113,8 +114,9 @@ public class JavaFXTableViewElement extends JavaFXElement {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 String valueAt = new JavaFXTableCellElement(this, i, j)._getText();
-                if (valueAt == null)
+                if (valueAt == null) {
                     valueAt = "";
+                }
                 content[i][j] = valueAt;
             }
         }

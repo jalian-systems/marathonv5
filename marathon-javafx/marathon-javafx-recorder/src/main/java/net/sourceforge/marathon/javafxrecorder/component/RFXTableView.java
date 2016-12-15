@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import javafx.collections.ObservableList;
@@ -39,8 +39,9 @@ public class RFXTableView extends RFXComponent {
     public RFXTableView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
         TableView<?> table = (TableView<?>) source;
-        if (source == null)
+        if (source == null) {
             return;
+        }
         if (table.getEditingCell() != null) {
             TablePosition<?, ?> editingCell = table.getEditingCell();
             row = editingCell.getRow();
@@ -73,15 +74,17 @@ public class RFXTableView extends RFXComponent {
     }
 
     public String getTableCellValueAt(TableView<?> tableView, int row, int column) {
-        if (row == -1 || column == -1)
+        if (row == -1 || column == -1) {
             return null;
+        }
         TableCell<?, ?> tableCell = getCellAt(tableView, row, column);
-        if(tableCell == null) {
+        if (tableCell == null) {
             throw new RuntimeException("Got a null tableCell for " + new Point2D(row, column));
         }
         RFXComponent cellComponent = getFinder().findRawRComponent(tableCell, null, recorder);
-        if(cellComponent == null)
+        if (cellComponent == null) {
             throw new RuntimeException("Got a null RFXComponent for " + tableCell.getClass().getName());
+        }
         String ctext = cellComponent.getValue();
         return ctext;
     }
@@ -94,8 +97,9 @@ public class RFXTableView extends RFXComponent {
         }
         if (next == null || next.getComponent() != getComponent()) {
             String currentTableText = getSelection(tableView);
-            if (!currentTableText.equals(tableText))
+            if (!currentTableText.equals(tableText)) {
                 recorder.recordSelect(this, getSelection(tableView));
+            }
         }
     }
 
@@ -108,17 +112,22 @@ public class RFXTableView extends RFXComponent {
     }
 
     @Override public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         RFXTableView other = (RFXTableView) obj;
-        if (column != other.column)
+        if (column != other.column) {
             return false;
-        if (row != other.row)
+        }
+        if (row != other.row) {
             return false;
+        }
         return true;
     }
 
@@ -145,8 +154,9 @@ public class RFXTableView extends RFXComponent {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 String valueAt = getTableCellValueAt(tableView, i, j);
-                if (valueAt == null)
+                if (valueAt == null) {
                     valueAt = "";
+                }
                 content[i][j] = valueAt;
             }
         }

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.ArrayList;
@@ -30,8 +30,9 @@ public class SelectorParser {
         Selector result = readSimpleSelector();
         while (true) {
             Token isEof = lexer.expect1r0(TokenType.TT_EOF);
-            if (isEof != null)
+            if (isEof != null) {
                 return result;
+            }
             Token combinator = lexer.expect1r0(TokenType.TT_GREATER, TokenType.TT_PLUS, TokenType.TT_TILDE);
             if (combinator == null) {
                 result = new DescendentSelector(result, readSimpleSelector());
@@ -58,9 +59,9 @@ public class SelectorParser {
         }
 
         while (t != null) {
-            if (t.getType() == TokenType.TT_WHITESPACE)
+            if (t.getType() == TokenType.TT_WHITESPACE) {
                 return selector;
-            else if (t.getType() == TokenType.TT_ID) {
+            } else if (t.getType() == TokenType.TT_ID) {
                 selector.addFilter(new IdFilter(t.getValue()));
             } else if (t.getType() == TokenType.TT_PSEUDO_CLASS) {
                 selector.addFilter(new PseudoClassFilter(t.getValue()));
@@ -94,8 +95,9 @@ public class SelectorParser {
         while (true) {
             args.add(collectArgument());
             Token t = lexer.expect1(TokenType.TT_COMMA, TokenType.TT_CLOSE_PAREN);
-            if (t.getType() == TokenType.TT_CLOSE_PAREN)
+            if (t.getType() == TokenType.TT_CLOSE_PAREN) {
                 break;
+            }
         }
         return args.toArray(new Argument[args.size()]);
     }

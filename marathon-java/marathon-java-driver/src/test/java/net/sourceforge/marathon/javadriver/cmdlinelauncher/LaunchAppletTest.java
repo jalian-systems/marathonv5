@@ -1,26 +1,22 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javadriver.cmdlinelauncher;
 
 import java.io.File;
 import java.util.List;
-
-import net.sourceforge.marathon.javadriver.JavaDriver;
-import net.sourceforge.marathon.javadriver.JavaProfile;
-import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
 import org.apache.commons.exec.OS;
 import org.openqa.selenium.By;
@@ -34,6 +30,10 @@ import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
 
+import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.javadriver.JavaProfile;
+import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
+
 @Test public class LaunchAppletTest {
 
     private JavaDriver driver;
@@ -42,14 +42,16 @@ import com.google.common.base.Predicate;
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_APPLET);
         File f = findFile();
         profile.setAppletURL(f.getAbsolutePath());
-        if (title != null)
+        if (title != null) {
             profile.setStartWindowTitle(title);
+        }
         driver = new JavaDriver(profile);
     }
 
     @AfterMethod public void quitDriver() {
-        if (driver != null)
+        if (driver != null) {
             driver.quit();
+        }
     }
 
     public static String formatDate() {
@@ -127,8 +129,9 @@ import com.google.common.base.Predicate;
 
     private File findFile() {
         File f = new File(System.getProperty("applet.html", "../marathon-test-helpers/swingset3/applet.html"));
-        if (f.exists())
+        if (f.exists()) {
             return f;
+        }
         return null;
     }
 
@@ -153,11 +156,13 @@ import com.google.common.base.Predicate;
             String[] split = path.split(";");
             File file = new File(split[0]);
             File[] listFiles = file.listFiles();
-            for (int i = 0; i < listFiles.length; i++) {
-                if (listFiles[i].getName().contains(".exe")) {
-                    profile.setJavaCommand(listFiles[i].getAbsolutePath());
-                    actual = listFiles[i].getAbsolutePath();
-                    break;
+            if (listFiles != null) {
+                for (File listFile : listFiles) {
+                    if (listFile.getName().contains(".exe")) {
+                        profile.setJavaCommand(listFile.getAbsolutePath());
+                        actual = listFile.getAbsolutePath();
+                        break;
+                    }
                 }
             }
         } else {

@@ -35,10 +35,10 @@ for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-h goto :batch
 for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-help goto :batch
 for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-i goto :batch
 for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-ignore goto :batch
-start javaw -jar "%MARATHONHOME%/$marathonJar" %1 %2 %3 %4 %5 %6 %7 %8 %9
+start javaw -Xmx512m -Dfile.encoding=utf8 -jar "%MARATHONHOME%/$marathonJar" %1 %2 %3 %4 %5 %6 %7 %8 %9
 goto end
 :batch
-java -jar "%MARATHONHOME%/$marathonJar" %1 %2 %3 %4 %5 %6 %7 %8 %9
+java -Xmx512m -Dfile.encoding=utf8 -jar "%MARATHONHOME%/$marathonJar" %1 %2 %3 %4 %5 %6 %7 %8 %9
 goto :end
 
 :nodist

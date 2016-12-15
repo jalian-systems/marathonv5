@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
 import java.awt.AWTEvent;
@@ -42,8 +42,8 @@ import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.component.RComponent;
+import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.util.UIUtils;
 
@@ -81,7 +81,7 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         Action close = new AbstractAction("Close") {
             private static final long serialVersionUID = 1L;
 
-            public void actionPerformed(ActionEvent e) {
+            @Override public void actionPerformed(ActionEvent e) {
                 ContextMenuWindow.this.setVisible(false);
             }
         };
@@ -97,7 +97,7 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         JTabbedPane tabbedPane = new JTabbedPane();
         Iterator<IContextMenu> iterator = contextMenus.iterator();
         while (iterator.hasNext()) {
-            IContextMenu menu = (IContextMenu) iterator.next();
+            IContextMenu menu = iterator.next();
             tabbedPane.addTab(menu.getName(), menu.getContent());
         }
         contentPane.add(tabbedPane, BorderLayout.CENTER);
@@ -109,13 +109,13 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
 
     private void setWindowMove(Component c) {
         c.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
+            @Override public void mousePressed(MouseEvent e) {
                 startX = e.getX();
                 startY = e.getY();
             }
         });
         c.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
+            @Override public void mouseDragged(MouseEvent e) {
                 ContextMenuWindow.this.setLocation(ContextMenuWindow.this.getX() + e.getX() - startX,
                         ContextMenuWindow.this.getY() + e.getY() - startY);
             }
@@ -126,7 +126,7 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
     public void setComponent(Component component, Point point, boolean isTriggered) {
         Iterator<IContextMenu> iterator = contextMenus.iterator();
         while (iterator.hasNext()) {
-            IContextMenu menu = (IContextMenu) iterator.next();
+            IContextMenu menu = iterator.next();
             menu.setComponent(component, point, isTriggered);
         }
         RComponent RComponent = finder.findRComponent(component, point, recorder);
@@ -143,24 +143,27 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
     }
 
     public void show(Component parent, int x, int y) {
-        if (parentComponent == null)
+        if (parentComponent == null) {
             parentComponent = parent;
+        }
         Point p = new Point(x, y);
         SwingUtilities.convertPointToScreen(p, parent);
         setLocation(p);
         setVisible(true);
     }
 
-    public void setVisible(boolean b) {
+    @Override public void setVisible(boolean b) {
         if (b) {
             Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK);
         } else {
             disposeOverlay();
             Toolkit.getDefaultToolkit().removeAWTEventListener(this);
-            if (parentWindow != null)
+            if (parentWindow != null) {
                 parentWindow.requestFocus();
-            if (parentComponent != null)
+            }
+            if (parentComponent != null) {
                 parentComponent.requestFocusInWindow();
+            }
         }
         super.setVisible(b);
     }
@@ -172,23 +175,26 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         }
     }
 
-    public void eventDispatched(AWTEvent event) {
-        if (ignoreMouseEvents)
+    @Override public void eventDispatched(AWTEvent event) {
+        if (ignoreMouseEvents) {
             return;
+        }
         Component root = SwingUtilities.getRoot((Component) event.getSource());
         if (root instanceof IRecordingArtifact || root.getName().startsWith("###")) {
             return;
         }
-        if (!(event instanceof MouseEvent))
+        if (!(event instanceof MouseEvent)) {
             return;
+        }
         MouseEvent mouseEvent = (MouseEvent) event;
         mouseEvent.consume();
         if (event.getID() == MouseEvent.MOUSE_PRESSED) {
             disposeOverlay();
             Component mouseComponent = SwingUtilities.getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(),
                     mouseEvent.getY());
-            if (mouseComponent == null)
+            if (mouseComponent == null) {
                 return;
+            }
             mouseEvent = SwingUtilities.convertMouseEvent(mouseEvent.getComponent(), mouseEvent, mouseComponent);
             setComponent(mouseComponent, mouseEvent.getPoint(), true);
             return;

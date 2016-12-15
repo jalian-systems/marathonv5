@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.TextField;
@@ -39,10 +39,10 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.marathon.javaagent.Device.Type;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import net.sourceforge.marathon.javaagent.Device.Type;
 
 public abstract class DeviceTest {
 
@@ -68,8 +68,9 @@ public abstract class DeviceTest {
                     Logger.getLogger(DeviceTest.class.getName()).warning(e.getClass().getName() + ": " + e.getMessage());
                     long currentTimeMillis = System.currentTimeMillis();
                     timeoutInMilliseconds = 5000 - (currentTimeMillis - lastTimeInMillis);
-                    if (timeoutInMilliseconds <= 0)
+                    if (timeoutInMilliseconds <= 0) {
                         break;
+                    }
                 }
             }
         }
@@ -208,8 +209,9 @@ public abstract class DeviceTest {
                 button.addMouseListener(new MouseListener() {
                     @Override public void mouseClicked(MouseEvent e) {
                         String s = "clicked";
-                        if (e.isPopupTrigger())
+                        if (e.isPopupTrigger()) {
                             s = "contextclicked";
+                        }
                         mouseText.append(getModifiersExText(e.getModifiersEx()) + s + "(" + e.getClickCount() + ") ");
                         buttonClicked = true;
                         popupTriggerClicked = e.isPopupTrigger();

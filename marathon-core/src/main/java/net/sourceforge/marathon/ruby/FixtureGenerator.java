@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
 import java.io.BufferedReader;
@@ -56,14 +56,16 @@ public class FixtureGenerator {
         printKeyValue(Constants.PROP_PROJECT_LAUNCHER_MODEL, launcher, ps, false);
         keys = new ArrayList<String>(keys);
         int size = keys.size();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             printProperty(props, keys.get(i), ps, false);
+        }
 
         Enumeration<Object> allKeys = props.keys();
         while (allKeys.hasMoreElements()) {
             String key = (String) allKeys.nextElement();
-            if (key.startsWith(Constants.PROP_PROPPREFIX))
+            if (key.startsWith(Constants.PROP_PROPPREFIX)) {
                 printProperty(props, key, ps, false);
+            }
         }
         printProperty(props, Constants.FIXTURE_REUSE, ps, true);
         ps.print(Indent.getDefaultIndent());
@@ -120,10 +122,11 @@ public class FixtureGenerator {
         ps.print(Indent.getDefaultIndent());
         ps.print("'" + key + "' => ");
         ps.print(RubyScriptModel.encode(value));
-        if (last)
+        if (last) {
             ps.println();
-        else
+        } else {
             ps.println(",");
+        }
     }
 
     private void printComments(PrintStream ps, String d, String indent) {
@@ -132,8 +135,9 @@ public class FixtureGenerator {
         String line;
         try {
             while ((line = reader.readLine()) != null) {
-                if ("=end".equals(line))
+                if ("=end".equals(line)) {
                     line = "\\=end";
+                }
                 ps.print(indent);
                 ps.println(line);
             }

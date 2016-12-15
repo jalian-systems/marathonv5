@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.fxcontextmenu;
 
 import javafx.beans.value.ChangeListener;
@@ -103,8 +103,9 @@ public class AssertionPanel extends GridPane {
         attributes.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<PropertyWrapper>>() {
             @Override public void changed(ObservableValue<? extends TreeItem<PropertyWrapper>> observable,
                     TreeItem<PropertyWrapper> oldValue, TreeItem<PropertyWrapper> newValue) {
-                if (newValue != null)
+                if (newValue != null) {
                     textArea.setText(newValue.getValue().displayValue.toString());
+                }
             }
         });
         ButtonBar bar = new ButtonBar();
@@ -134,8 +135,9 @@ public class AssertionPanel extends GridPane {
 
     private void recordAction(ActionEvent event, String action) {
         TreeItem<PropertyWrapper> selectedItem = attributes.getSelectionModel().getSelectedItem();
-        if (selectedItem == null)
+        if (selectedItem == null) {
             return;
+        }
         StringBuilder sb = new StringBuilder();
         TreeItem<PropertyWrapper> w = selectedItem;
         while (w.getParent() != null) {

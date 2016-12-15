@@ -1,25 +1,24 @@
 /*******************************************************************************
  * Copyright 2016 Jalian Systems Pvt. Ltd.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 package net.sourceforge.marathon.recorder;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.SwingUtilities;
-
+import javafx.application.Platform;
 import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.TagInserter;
@@ -44,15 +43,15 @@ public class ScriptRecorder implements IRecorder {
     }
 
     private final Runnable processRecordEventsRunnable = new Runnable() {
-        public void run() {
+        @Override public void run() {
             RecordEvent evt;
 
             while ((evt = recordEvents.poll()) != null) {
                 IScriptElement recordable = evt.getRecordable();
                 WindowId windowId = recordable.getWindowId();
-                if (windowId == null)
+                if (windowId == null) {
                     tagInserter.add(recordable);
-                else {
+                } else {
                     windowId.addToTagInserter(tagInserter, recordable);
                 }
                 updateScript();
@@ -64,14 +63,14 @@ public class ScriptRecorder implements IRecorder {
         this.scriptListener = scriptListener;
     }
 
-    public void record(IScriptElement recordable) {
+    @Override public void record(IScriptElement recordable) {
         recordEvents.add(new RecordEvent(recordable));
         if (recordEvents.size() == 1) {
-            SwingUtilities.invokeLater(processRecordEventsRunnable);
+            Platform.runLater(processRecordEventsRunnable);
         }
     }
 
-    public void updateScript() {
+    @Override public void updateScript() {
         if (scriptListener != null) {
             synchronized (scriptListener) {
                 scriptListener.setScript(toScriptCode());
@@ -83,15 +82,15 @@ public class ScriptRecorder implements IRecorder {
         return tagInserter.getRootTag().toScriptCode();
     }
 
-    public void abortRecording() {
+    @Override public void abortRecording() {
         scriptListener.abortRecording();
     }
 
-    public void insertChecklist(String name) {
+    @Override public void insertChecklist(String name) {
         scriptListener.insertChecklistAction(name);
     }
 
-    public String recordInsertScriptElement(WindowId windowId, String function) {
+    @Override public String recordInsertScriptElement(WindowId windowId, String function) {
         InsertScriptElement recordable = new InsertScriptElement(windowId, function);
         record(recordable);
         String ims = recordable.getImportStatement();
@@ -101,15 +100,15 @@ public class ScriptRecorder implements IRecorder {
         return ims;
     }
 
-    public void recordInsertChecklistElement(WindowId topWindowId, String fileName) {
+    @Override public void recordInsertChecklistElement(WindowId topWindowId, String fileName) {
         record(new InsertChecklistElement(topWindowId, fileName));
     }
 
-    public void recordShowChecklistElement(WindowId windowId, String fileName) {
+    @Override public void recordShowChecklistElement(WindowId windowId, String fileName) {
         record(new ShowChecklistElement(windowId, fileName));
     }
 
-    public boolean isCreatingObjectMap() {
+    @Override public boolean isCreatingObjectMap() {
         return false;
     }
 }
