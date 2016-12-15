@@ -30,19 +30,42 @@ import com.google.common.io.Files;
 
 public class Preferences {
 
-    private static Preferences _instance = new Preferences();
+    private static Preferences _instance;
     private JSONObject prefs;
 
     private Map<String, Set<IPreferenceChangeListener>> listeners = new HashMap<>();
+    private File mpd;
 
     private Preferences() {
+        this(Constants.getMarathonProjectDirectory());
+    }
+
+    Preferences(File mpd) {
+        this.mpd = mpd;
         prefs = getProjectPreferences();
     }
 
     public static Preferences instance() {
+        if(_instance == null)
+            _instance = new Preferences();
         return _instance;
     }
 
+    public static void resetInstance() {
+        if(Constants.getMarathonProjectDirectory() == null) {
+            _instance = null;
+            return;
+        }
+        Preferences oldInstance = _instance;
+        _instance = new Preferences();
+        _instance.listeners = oldInstance.listeners;
+        String[] names = JSONObject.getNames(_instance.prefs);
+        if(names != null)
+            for (String section : names) {
+                _instance.firePreferenceChange(section);
+            }
+    }
+    
     public JSONObject getSection(String section) {
         if (!prefs.has(section)) {
             prefs.put(section, new JSONObject());
@@ -50,8 +73,13 @@ public class Preferences {
         return prefs.getJSONObject(section);
     }
 
+    public void saveSection(String section, JSONObject o) {
+        prefs.put(section, o);
+        save(section);
+    }
+
     private JSONObject getProjectPreferences() {
-        File preferenceFile = new File(Constants.getMarathonProjectDirectory(), "project.json");
+        File preferenceFile = new File(mpd, "project.json");
         if (preferenceFile.exists()) {
             try {
                 return new JSONObject(Files.toString(preferenceFile, Charset.forName("utf-8")));
@@ -63,7 +91,7 @@ public class Preferences {
     }
 
     public void save(String section) {
-        File preferenceFile = new File(Constants.getMarathonProjectDirectory(), "project.json");
+        File preferenceFile = new File(mpd, "project.json");
         try {
             Files.write(prefs.toString(2).getBytes(), preferenceFile);
         } catch (JSONException | IOException e) {
@@ -110,15 +138,4 @@ public class Preferences {
         save(section);
     }
 
-    public int getRememberedRunCount() {
-        if (!prefs.has("remembered-count")) {
-            setRememberedRunCount(10);
-        }
-        return prefs.getInt("remembered-count");
-    }
-
-    public void setRememberedRunCount(int count) {
-        prefs.put("remembered-count", count);
-        save("remembered-count");
-    }
 }

@@ -25,12 +25,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -44,10 +41,6 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private AceEditorPreferencesInfo preferenceInfo;
     private IAceEditorPreferenceHandler preferenceHandler;
 
-    private VBox banner = new VBox();
-    private Separator separator = new Separator();
-    private Label preferenceLabel1 = new Label("Editor Preferences");
-    private Label preferenceLabel2 = new Label("Set preferences for the editor");
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private Button defaultsButton = FXUIUtils.createButton("Save as Default", "Save these settings for all editors", true,
@@ -67,7 +60,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private String previousFontSize;
 
     public AceEditorPreferencesStage(AceEditorPreferencesInfo preferenceInfo) {
-        super("Ace Editor Preferences");
+        super("Editor Preferences", "Change editor settings like themes etc.", FXUIUtils.getIcon("settings"));
         this.preferenceInfo = preferenceInfo;
         previousTheme = preferenceInfo.getSelectedTheme();
         previousKeyboardHandler = preferenceInfo.getKeyboardHandler();
@@ -127,18 +120,12 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
                 .addFormField("", showLineNumbersCheckBox);
         // @formatter:on
 
-        root.setTop(banner);
         root.setCenter(formPane);
         root.setBottom(buttonBar);
         return root;
     }
 
     private void initComponents() {
-        banner.setId("ace-editor-preference-toolbar");
-        preferenceLabel1.setId("preference-label-1");
-        preferenceLabel2.setId("preference-label-2");
-        banner.getChildren().addAll(preferenceLabel1, preferenceLabel2, separator);
-
         okButton.setOnAction((e) -> onOk());
         cancelButton.setOnAction((e) -> onCancel());
         defaultsButton.setOnAction((e) -> onDefault());

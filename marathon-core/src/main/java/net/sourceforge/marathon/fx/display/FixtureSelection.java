@@ -20,10 +20,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -32,8 +30,6 @@ import net.sourceforge.marathon.fx.api.ModalDialog;
 public class FixtureSelection extends ModalDialog<String> {
 
     private ObservableList<String> fixtuers;
-    private HBox banner = new HBox();
-    private Text mainText = new Text("Select Fixture");
     private ListView<String> fixtureList = new ListView<>();
     private ButtonBar buttonBar = new ButtonBar();
     private Button selectButton = FXUIUtils.createButton("ok", "Select fixture", true, "Select");
@@ -42,7 +38,7 @@ public class FixtureSelection extends ModalDialog<String> {
     private String selectedFixture;
 
     public FixtureSelection(ObservableList<String> fixtuers, String selectedFixture) {
-        super("Marathon - Select Fixture");
+        super("Marathon - Select Fixture", "Set the fixture to be used for new test scripts", FXUIUtils.getIcon("selectFixture"));
         this.fixtuers = fixtuers;
         this.selectedFixture = selectedFixture;
         initComponents();
@@ -52,7 +48,7 @@ public class FixtureSelection extends ModalDialog<String> {
         VBox root = new VBox();
         root.getStyleClass().add("fixture-selection");
         root.setId("fixtureSelection");
-        root.getChildren().addAll(banner, fixtureList, buttonBar);
+        root.getChildren().addAll(fixtureList, buttonBar);
         return root;
     }
 
@@ -62,13 +58,6 @@ public class FixtureSelection extends ModalDialog<String> {
     }
 
     private void initComponents() {
-        banner.setId("fixture-selection-toolbar");
-        mainText.setId("fixture-selection-title");
-        VBox vBox = new VBox(2, mainText, new Text("Fixtures allows to customize the setup to be done for a test case"),
-                new Text("Note that you need to create a new testcase for this fixture to be used"), new Text("for recording"));
-        vBox.setId("fixture-selection-titleBox");
-        banner.getChildren().addAll(vBox);
-
         VBox.setVgrow(fixtureList, Priority.ALWAYS);
         fixtureList.setId("fixture-list-view");
         fixtureList.setItems(fixtuers);

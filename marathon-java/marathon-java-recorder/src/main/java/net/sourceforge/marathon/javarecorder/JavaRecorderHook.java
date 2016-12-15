@@ -384,7 +384,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             sb.append("Ctrl+");
         }
         if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
-            sb.append("Command+");
+            sb.append("Meta+");
         }
         if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
             sb.append("Alt+");
@@ -431,7 +431,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             return "Shift";
         }
         if (keycode == KeyEvent.VK_META) {
-            return "Command";
+            return "Meta";
         }
         if (keycode == KeyEvent.VK_SPACE) {
             return "Space";

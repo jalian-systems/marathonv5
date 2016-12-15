@@ -357,7 +357,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         }
     }
 
-    private void destroyRuntime() {
+    public void destroyRuntime() {
         if (runtime != null) {
             logger.info("Destroying VM. autShutdown = " + autShutdown);
             try {

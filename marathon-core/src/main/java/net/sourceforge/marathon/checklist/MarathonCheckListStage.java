@@ -50,7 +50,7 @@ public class MarathonCheckListStage extends ModalDialog<CheckListForm> {
     private Button doneButton;
 
     public MarathonCheckListStage(CheckListForm checkListInfo) {
-        super(checkListInfo.getTitle());
+        super(checkListInfo.getTitle(), null, FXUIUtils.getIcon("newCheckList"));
         this.checkListInfo = checkListInfo;
         initComponents();
     }

@@ -191,8 +191,8 @@ public class FileHandler implements IResourceHandler {
     }
 
     private File askForFile(Window parent, String filename) {
-        fileChooserInfo = new MarathonFileChooserInfo("Saving '" + filename + "'", filename, rootDirectory, isTestFile());
-        File selectedFile = FXUIUtils.showMarathonSaveFileChooser(fileChooserInfo);
+        fileChooserInfo = new MarathonFileChooserInfo("Save File", filename, rootDirectory, isTestFile());
+        File selectedFile = FXUIUtils.showMarathonSaveFileChooser(fileChooserInfo, "Saving '" + filename + "'", FXUIUtils.getIcon("saveAs"));
         if (selectedFile != null) {
             String suffix = filter.getSuffix();
             if (suffix == null) {

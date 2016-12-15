@@ -229,6 +229,7 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
 
     protected void replaceText(String replacement) {
         area.setText(replacement);
+        area.positionCaret(replacement.length());
     }
 
     protected String getLine() {

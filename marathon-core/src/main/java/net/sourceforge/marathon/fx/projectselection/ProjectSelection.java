@@ -16,7 +16,6 @@
 package net.sourceforge.marathon.fx.projectselection;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,39 +27,29 @@ import java.util.prefs.Preferences;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import net.sourceforge.marathon.api.GuiceInjector;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public class ProjectSelection extends ModalDialog<ProjectInfo> {
 
-    private HBox banner = new HBox();
-    private Text bannerTitle = new Text("Create and manage configuration");
-    private Region toolBarSpacer = new Region();
-    private Separator separator = new Separator();
-    private Label tableLabel = new Label("Select a project");
     private TableView<ProjectInfo> projectInfotable = new TableView<ProjectInfo>();
     private ContextMenu contextMenu = new ContextMenu();
     private Button newButton = FXUIUtils.createButton("new", "New project", true, "New");
@@ -77,7 +66,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
     private List<List<String>> frameworks;
 
     public ProjectSelection(ObservableList<ProjectInfo> projects, List<List<String>> frameworks) {
-        super("Select a Project");
+        super("Select a Project", "Select a project or create a new project from the list", FXUIUtils.getIcon("play"));
         this.projects = projects;
         this.frameworks = frameworks;
         initComponents();
@@ -85,33 +74,17 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
 
     @Override protected void initialize(Stage stage) {
         super.initialize(stage);
-        stage.setX(20.0);
-        stage.setY(20.0);
     }
 
     @Override protected Parent getContentPane() {
         VBox content = new VBox();
         content.setId("ProjectSelectionParent");
         content.getStyleClass().add("project-selection");
-        content.getChildren().addAll(banner, separator, tableLabel, projectInfotable, buttonBar);
+        content.getChildren().addAll(projectInfotable, buttonBar);
         return content;
     }
 
     private void initComponents() {
-        banner.setId("ProjectSelectionBanner");
-        bannerTitle.setId("BannerText");
-        VBox titleBox = new VBox();
-        titleBox.getChildren().add(bannerTitle);
-        titleBox.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(toolBarSpacer, Priority.ALWAYS);
-        VBox logoBox = new VBox();
-        logoBox.getChildren().add(FXUIUtils.getImage("banner"));
-        logoBox.setAlignment(Pos.CENTER_RIGHT);
-        banner.getChildren().addAll(titleBox, toolBarSpacer, logoBox);
-
-        tableLabel.setId("ProjectTableLabel");
-        tableLabel.setLabelFor(projectInfotable);
-
         projectInfotable.setItems(projects);
         projectInfotable.setId("ProjectInfoTable");
         projectInfotable.setRowFactory(new Callback<TableView<ProjectInfo>, TableRow<ProjectInfo>>() {
@@ -162,18 +135,24 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
             if (selectedItem != null) {
                 initailDirectory = new File(selectedItem.getFolder()).getParentFile();
             }
-            File projectFile = FXUIUtils.showDirectoryChooser(null, initailDirectory, getStage());
-            if (projectFile != null) {
-                if (isValidProjectDirectory(projectFile)) {
-                    loadProperties(projectFile);
-                    ProjectInfo projectInfo = projectExists(projectFile.getAbsolutePath());
-                    if (projectInfo == null) {
-                        projectInfo = new ProjectInfo(System.getProperty(Constants.PROP_PROJECT_NAME),
-                                System.getProperty(Constants.PROP_PROJECT_DESCRIPTION), projectFile.getAbsolutePath(),
-                                System.getProperty(Constants.PROP_PROJECT_FRAMEWORK));
-                        projects.add(0, projectInfo);
+            File projectDir = FXUIUtils.showDirectoryChooser(null, initailDirectory, getStage());
+            if (projectDir != null) {
+                if (ProjectFile.isValidProjectDirectory(projectDir)) {
+                    try {
+                        Properties properties = loadProperties(projectDir);
+                        ProjectInfo projectInfo = projectExists(projectDir.getAbsolutePath());
+                        if (projectInfo == null) {
+                            projectInfo = new ProjectInfo(properties.getProperty(Constants.PROP_PROJECT_NAME),
+                                    properties.getProperty(Constants.PROP_PROJECT_DESCRIPTION), projectDir.getAbsolutePath(),
+                                    Constants.getFramework(properties.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL)));
+                            projects.add(0, projectInfo);
+                            storeFileNames();
+                        }
+                        projectInfotable.getSelectionModel().select(projects.indexOf(projectInfo));
+                    } catch (IOException e1) {
+                        FXUIUtils.showMessageDialog(getStage(), "Not a valid Marathon Project Directory: " + e1.getMessage(), "",
+                                AlertType.INFORMATION);
                     }
-                    projectInfotable.getSelectionModel().select(projects.indexOf(projectInfo));
                 } else {
                     FXUIUtils.showMessageDialog(getStage(), "Not a valid Marathon Project Directory", "", AlertType.INFORMATION);
                 }
@@ -195,12 +174,10 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         for (List<String> framework : frameworks) {
             items.add(getFrameworkMenuItem(framework.get(0), framework.get(1)));
         }
-        System.out.println("ProjectSelection.getAvailableFrameworks(" + GuiceInjector.get() + ")");
         return items;
     }
 
     private void onDelete() {
-        System.out.println("ProjectSelection.onDelete()");
         ProjectInfo selectedItem = projectInfotable.getSelectionModel().getSelectedItem();
         projects.remove(selectedItem);
         removeFromPreferences(selectedItem);
@@ -213,7 +190,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         try {
             keys = p.keys();
             for (int i = 0; i < keys.length; i++) {
-                String key = "dirName" + i;
+                String key = keys[i];
                 String fName = p.get(key, null);
                 if (fName.equals(selectedItem.getFolder())) {
                     p.remove(key);
@@ -238,38 +215,8 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         dispose();
     }
 
-    private void loadProperties(File projectFile) {
-        Properties properties = getProperties(projectFile);
-        System.setProperty(Constants.PROP_PROJECT_NAME, properties.getProperty(Constants.PROP_PROJECT_NAME));
-        System.setProperty(Constants.PROP_PROJECT_DESCRIPTION, properties.getProperty(Constants.PROP_PROJECT_DESCRIPTION));
-        System.setProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL, properties.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL));
-        System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, Constants.getFramework());
-    }
-
-    private String getProperty(Properties properties, String key) {
-        return properties.getProperty(key);
-    }
-
-    private Properties getProperties(File projectFile) {
-        Properties properties = new Properties();
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(new File(projectFile.getAbsolutePath(), Constants.PROJECT_FILE));
-            properties.load(fileInputStream);
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (IOException e) {
-            return null;
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        return properties;
+    private Properties loadProperties(File projectFile) throws FileNotFoundException, IOException {
+        return ProjectFile.getProjectProperties(projectFile.getAbsolutePath());
     }
 
     public MenuItem getFrameworkMenuItem(String name, final String framework) {
@@ -324,6 +271,8 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
             p = Preferences.userNodeForPackage(this.getClass());
             int itemCount = projectInfotable.getItems().size();
             int selected = projectInfotable.getSelectionModel().getSelectedIndex();
+            if(selected == -1)
+                selected = 0;
             ProjectInfo pi = projectInfotable.getItems().get(selected);
             p.put("dirName0", pi.getFolder());
             for (int i = 0, j = 1; i < itemCount; i++) {
@@ -341,17 +290,21 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         try {
             String[] keys = p.keys();
             for (int i = 0; i < keys.length; i++) {
-                String fName = p.get("dirName" + i, null);
-                if (fName == null) {
+                String dirName = p.get(keys[i], null);
+                if (dirName == null) {
                     continue;
                 }
-                File file = new File(fName);
-                if (isValidProjectDirectory(file)) {
-                    System.setProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL,
-                            getProperty(getProperties(file), Constants.PROP_PROJECT_LAUNCHER_MODEL));
-                    projects.add(new ProjectInfo(getProperty(getProperties(file), Constants.PROP_PROJECT_NAME),
-                            getProperty(getProperties(file), Constants.PROP_PROJECT_DESCRIPTION), file.getAbsolutePath(),
-                            Constants.getFramework()));
+                File dir = new File(dirName);
+                if (ProjectFile.isValidProjectDirectory(dir)) {
+                    try {
+                        Properties projectProperties = ProjectFile.getProjectProperties(dirName);
+                        projects.add(new ProjectInfo(projectProperties.getProperty(Constants.PROP_PROJECT_NAME),
+                                projectProperties.getProperty(Constants.PROP_PROJECT_DESCRIPTION), dir.getAbsolutePath(),
+                                Constants.getFramework(projectProperties.getProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL))));
+                    } catch (Exception e) {
+                        new RuntimeException("Processing " + dirName, e).printStackTrace();
+                        continue;
+                    }
                 }
             }
             if (projects.size() > 0) {
@@ -360,10 +313,6 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         } catch (BackingStoreException e) {
             return;
         }
-    }
-
-    private boolean isValidProjectDirectory(File file) {
-        return file.exists() && file.isDirectory() && new File(file, Constants.PROJECT_FILE).exists();
     }
 
     @Override protected void setDefaultButton() {

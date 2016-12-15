@@ -30,7 +30,7 @@ public class FavouriteHistoryStage extends RunHistoryStage {
     private Button removeAllButton = FXUIUtils.createButton("clearSavedHistory", "Clear All", false, "Clear all");
 
     public FavouriteHistoryStage(RunHistoryInfo runHistoryInfo) {
-        super("Favourites Run History", runHistoryInfo, false);
+        super("Favourites Run History", runHistoryInfo, false, "Saved test runs", null);
         this.runHistoryInfo = runHistoryInfo;
         initComponents();
     }

@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import net.sourceforge.marathon.editor.FileBasedEditor;
 import net.sourceforge.marathon.editor.IEditor;
@@ -41,6 +42,17 @@ public class HTMLView extends FileBasedEditor implements IEditor {
         viewport.setContent(webView);
         VLToolBar bar = new VLToolBar();
         Button openInBrowser = FXUIUtils.createButton("open-in-browser", "Open in External Browser", true);
+        Button prevPage = FXUIUtils.createButton("prev", "Previous Page", false);
+        WebHistory history = webView.getEngine().getHistory();
+        prevPage.setOnAction((event) -> {
+           history.go(-1); 
+        });
+        bar.add(prevPage);
+        Button nextPage = FXUIUtils.createButton("next", "Next Page", false);
+        nextPage.setOnAction((event) -> {
+           history.go(1); 
+        });
+        bar.add(nextPage);
         openInBrowser.setOnAction((event) -> {
             try {
                 Desktop.getDesktop().open(fileHandler.getCurrentFile());
@@ -49,6 +61,10 @@ public class HTMLView extends FileBasedEditor implements IEditor {
             }
         });
         bar.add(openInBrowser);
+        history.currentIndexProperty().addListener((ob, o, n) -> {
+            nextPage.setDisable(n.intValue() == history.getEntries().size() - 1);
+            prevPage.setDisable(n.intValue() == 0);
+        });
         viewport.getToolBarPanel().add(bar);
     }
 

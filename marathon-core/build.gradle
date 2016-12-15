@@ -51,7 +51,6 @@ dependencies {
   compile "ru.yandex.qatools.allure:allure-junit-adaptor:${allure_version}"
   compile "ru.yandex.qatools.allure:allure-commandline:${allure_version}"
   compile "ru.yandex.qatools.allure:allure-bundle:${allure_version}"
-  compile "org.aspectj:aspectjweaver:${aspectj_version}"
   compile "jline:jline:${jline_version}"
   testCompile "org.testng:testng:${testng_version}"
 }

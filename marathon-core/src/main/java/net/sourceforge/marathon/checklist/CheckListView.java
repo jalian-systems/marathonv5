@@ -22,7 +22,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
@@ -63,6 +65,12 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
             verticalButtonBar.setStyle("-fx-padding: 5px");
             verticalButtonBar.setDisable(true);
         }
+        VBox titleBox = new VBox();
+        Label titleLabel = new Label("Editing CheckList", FXUIUtils.getIcon("newCheckList"));
+        titleLabel.getStyleClass().add("modaldialog-title");
+        titleBox.getChildren().add(titleLabel);
+        titleBox.getChildren().add(new Separator());
+        setTop(titleBox);
     }
 
     public void setCheckListNode(Node node) {
@@ -170,7 +178,7 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
         private ButtonBar buttonBar = new ButtonBar();
 
         public InputStage(String title, String labelText) {
-            super(title);
+            super(title, null, FXUIUtils.getIcon("newCheckList"));
             this.labelText = labelText;
             initComponents();
         }

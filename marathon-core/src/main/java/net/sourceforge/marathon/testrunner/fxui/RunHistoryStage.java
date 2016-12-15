@@ -52,8 +52,8 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
     private Button doneButton = FXUIUtils.createButton("ok", null, true, "Done");
     private boolean countNeeded;
 
-    public RunHistoryStage(String title, RunHistoryInfo runHistoryInfo, boolean countNeeded) {
-        super(title);
+    public RunHistoryStage(String title, RunHistoryInfo runHistoryInfo, boolean countNeeded, String subTitle, Node icon) {
+        super(title, subTitle, icon);
         this.runHistoryInfo = runHistoryInfo;
         this.countNeeded = countNeeded;
         initComponents();

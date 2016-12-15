@@ -92,7 +92,7 @@ is being used to size a border should also be in pixels.
     /* A light grey that is the base color for objects.  Instead of using
      * -fx-base directly, the sections in this file will typically use -fx-color.
      */
-    -fx-base: #244064;
+    -fx-base: #002b36;
 
     /* A very light grey used for the background of windows.  See also
      * -fx-text-background-color, which should be used as the -fx-text-fill
@@ -119,13 +119,13 @@ is being used to size a border should also be in pixels.
      * -fx-text-inner-color for text on top of -fx-control-inner-color
      * -fx-selection-bar-text for text on top of -fx-selection-bar
      */
-    -fx-dark-text-color: #0F0F7A;
-    -fx-mid-text-color: #52565D;
-    -fx-light-text-color: #AAD0FF;
+    -fx-dark-text-color: black;
+    -fx-mid-text-color: #333;
+    -fx-light-text-color: white;
 
     /* A bright blue for highlighting/accenting objects.  For example: selected
      * text; selected items in menus, lists, trees, and tables; progress bars */
-    -fx-accent: #AACFFF;
+    -fx-accent: #0096C9;
 
     /* Default buttons color, this is similar to accent but more subtle */
     -fx-default-button: #ABD8ED;
@@ -635,7 +635,7 @@ is being used to size a border should also be in pixels.
  ******************************************************************************/
 
 .label {
-    -fx-text-fill: #AAD0FF;
+    -fx-text-fill: -fx-text-background-color;
 }
 
 /*******************************************************************************

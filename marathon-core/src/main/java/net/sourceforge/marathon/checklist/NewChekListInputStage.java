@@ -31,9 +31,10 @@ public class NewChekListInputStage extends ModalDialog<String> {
     private TextField nameField = new TextField();
     private TextArea descriptionField = new TextArea();
     private ButtonBar buttonBar = new ButtonBar();
+    private boolean ok = false ;
 
     public NewChekListInputStage() {
-        super("New CheckList");
+        super("New CheckList", "Create a new check list", FXUIUtils.getIcon("newCheckList"));
         initComponents();
     }
 
@@ -55,33 +56,36 @@ public class NewChekListInputStage extends ModalDialog<String> {
         cancelButton.setOnAction((e) -> onCancle());
     }
 
-    private boolean onCancle() {
+    private void onCancle() {
         dispose();
-        return false;
     }
 
-    public boolean onOk() {
+    public void onOk() {
         dispose();
-        return true;
+        ok = true;
     }
 
+    public boolean isOk() {
+        return ok;
+    }
+    
     @Override protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 
     public String getScript() {
             //@formatter:off
-              String script= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
-                                  "<java version=\"1.8.0_102\" class=\"java.beans.XMLDecoder\">"+
-                                      "<object class=\"net.sourceforge.marathon.checklist.CheckList\">"+
-                                          "<void property=\"description\">"+
-                                              "<string>"+descriptionField.getText()+"</string>"+
-                                                  "</void>"+
-                                           "<void property=\"name\">"+
-                                               "<string>"+nameField.getText() +"</string>"+
-                                                   "</void>"+
-                                       "</object>"+
-                                    "</java>";
+              String script= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
+                              "<java version=\"1.8.0_102\" class=\"java.beans.XMLDecoder\">\n"+
+                                  "<object class=\"net.sourceforge.marathon.checklist.CheckList\">\n"+
+                                      "<void property=\"description\">\n"+
+                                          "<string>"+descriptionField.getText()+"</string>\n"+
+                                              "</void>\n"+
+                                       "<void property=\"name\">\n"+
+                                           "<string>"+nameField.getText() +"</string>\n"+
+                                               "</void>\n"+
+                                   "</object>\n"+
+                                "</java>\n";
               //@formatter:on
         return script;
     }

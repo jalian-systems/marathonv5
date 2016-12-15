@@ -20,6 +20,7 @@ import java.util.Properties;
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
 
+import net.sourceforge.marathon.checklist.CheckListEditorProvider;
 import net.sourceforge.marathon.display.AbstractGroupsPanel;
 import net.sourceforge.marathon.display.Display.IDisplayProperties;
 import net.sourceforge.marathon.display.FixtureSelector;
@@ -50,7 +51,8 @@ public class MarathonGuiceModule extends AbstractModule {
         editorProvider.add(new HTMLEditorProvider(), false);
         IEditorProvider aceEditorProvider = new ACEEditorProvider();
         editorProvider.add(aceEditorProvider, true);
-
+        CheckListEditorProvider marathonCheckListEditorProvider = new CheckListEditorProvider();
+        editorProvider.add(marathonCheckListEditorProvider, false);
     }
 
     @Override protected void configure() {

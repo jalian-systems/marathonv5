@@ -16,7 +16,6 @@
 package net.sourceforge.marathon.fx.projectselection;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import java.util.Properties;
 
 import javafx.stage.Stage;
 import net.sourceforge.marathon.runtime.api.Constants;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public class EditProjectHandler implements IEditProjectHandler {
 
@@ -39,20 +39,10 @@ public class EditProjectHandler implements IEditProjectHandler {
         String title = "Configure";
         String dirName = selected.getFolder();
         Properties properties = new Properties();
-        FileInputStream fileInputStream = null;
         try {
-            fileInputStream = new FileInputStream(new File(dirName, Constants.PROJECT_FILE));
-            properties.load(fileInputStream);
+            properties = ProjectFile.getProjectProperties(dirName);
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
         }
         properties.setProperty(Constants.PROP_PROJECT_DIR, dirName);
         setFrameWork(properties);

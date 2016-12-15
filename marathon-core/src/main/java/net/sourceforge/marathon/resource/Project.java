@@ -104,8 +104,11 @@ public class Project {
     }
 
     private static void lookForMatches(File file, Map<String, List<Pattern>> lookfor, Properties props) {
+        if (!file.exists())
+            return;
+        List<String> lines;
         try {
-            List<String> lines = Files.readAllLines(file.toPath());
+            lines = Files.readAllLines(file.toPath());
             for (String line : lines) {
                 if (testPattern.matcher(line).matches()) {
                     break;
@@ -122,6 +125,7 @@ public class Project {
                 }
             }
         } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

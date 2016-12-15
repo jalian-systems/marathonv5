@@ -18,8 +18,6 @@ package net.sourceforge.marathon.display;
 import java.io.File;
 
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
@@ -42,7 +40,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -56,7 +53,6 @@ import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
 
-    private HBox banner = new HBox();
     private ToolBar toolBar = new ToolBar();
     private Button newFolderButton = FXUIUtils.createButton("addfolder", "Create new empty folder", false);
     private VBox folderView = new VBox();
@@ -75,8 +71,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     private IFileChooserHandler fileChooserHandler;
     private boolean doesAllowChildren;
 
-    public MarathonFileChooser(MarathonFileChooserInfo fileChooserInfo) {
-        super(fileChooserInfo.getTitle());
+    public MarathonFileChooser(MarathonFileChooserInfo fileChooserInfo, String subTitle, Node icon) {
+        super(fileChooserInfo.getTitle(), subTitle, icon);
         this.fileChooserInfo = fileChooserInfo;
         this.fileChooserHandler = fileChooserInfo.getFileChooserHandler();
         this.doesAllowChildren = fileChooserInfo.doesAllowChidren();
@@ -84,29 +80,6 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     }
 
     private void initComponents() {
-        banner.setId("marathon-save-banner");
-        Node image;
-        if (fileChooserInfo.isFileCreation()) {
-            image = FXUIUtils.getImage("create");
-            Text text = new Text("Create New");
-            text.setId("marathon-save-title");
-            banner.setAlignment(Pos.CENTER_LEFT);
-            banner.getChildren().addAll(text);
-            banner.setPadding(new Insets(5, 5, 5, 5));
-        } else {
-            VBox bannerBox = new VBox(5);
-            bannerBox.setId("marathon-save-titleBox");
-            bannerBox.setPadding(new Insets(0, 0, 0, 5));
-            Text mainText;
-            mainText = new Text("Save As");
-            mainText.setId("marathon-save-title");
-            bannerBox.getChildren().addAll(mainText, new Text("Save file to another location"));
-            banner.getChildren().addAll(bannerBox);
-            image = FXUIUtils.getImage("save_as");
-        }
-        Region bannerRegion = new Region();
-        HBox.setHgrow(bannerRegion, Priority.ALWAYS);
-        banner.getChildren().addAll(bannerRegion, image);
         initListView();
 
         if (doesAllowChildren) {
@@ -145,7 +118,6 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
 
         root.getStyleClass().add("MarathonFileChooser");
         root.setId("marathon-file-chooser");
-        root.setTop(banner);
         if (doesAllowChildren) {
             if (!fileChooserInfo.isFileCreation()) {
                 propertiesView = new AddPropertiesView(new TestPropertiesInfo(fileChooserInfo.getFileToSave()));
@@ -190,7 +162,7 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     }
 
     private void onNewFolder() {
-        MarathonInputStage testNameStage = new MarathonInputStage("Folder name") {
+        MarathonInputStage testNameStage = new MarathonInputStage("Folder name", "Create a new folder", FXUIUtils.getIcon("fldr_closed")) {
 
             @Override protected String validateInput(String name) {
                 String errorMessage = null;

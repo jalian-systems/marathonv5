@@ -30,7 +30,7 @@ public class AddPropertiesStage extends ModalDialog<TestPropertiesInfo> {
     private AddPropertiesView root;
 
     public AddPropertiesStage(TestPropertiesInfo issueInfo) {
-        super("Add Properties");
+        super("Add Properties", "Set properties to the test script", FXUIUtils.getIcon("properties"));
         this.issueInfo = issueInfo;
     }
 

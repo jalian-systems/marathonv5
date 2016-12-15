@@ -74,6 +74,8 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -98,6 +100,7 @@ import net.sourceforge.marathon.editor.IEditor.IGutterListener;
 import net.sourceforge.marathon.editor.IEditorProvider;
 import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.display.AddPropertiesStage;
 import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
 import net.sourceforge.marathon.fx.display.FixtureStage;
@@ -162,14 +165,17 @@ import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.ILogger;
 import net.sourceforge.marathon.runtime.api.IPlaybackListener;
+import net.sourceforge.marathon.runtime.api.IPreferenceChangeListener;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel.SCRIPT_FILE_TYPE;
 import net.sourceforge.marathon.runtime.api.MPFUtils;
 import net.sourceforge.marathon.runtime.api.MarathonRuntimeException;
 import net.sourceforge.marathon.runtime.api.Module;
+import net.sourceforge.marathon.runtime.api.OSUtils;
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.Preferences;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
@@ -204,10 +210,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             Dockable selectedDockable = e.getSelectedDockable();
             if (selectedDockable instanceof EditorDockable) {
                 setCurrentEditorDockable((EditorDockable) selectedDockable);
-                if (editor != null) {
-                    editor.runWhenReady(() -> editor.refresh());
+                if (currentEditor != null) {
+                    currentEditor.runWhenReady(() -> currentEditor.refresh());
                 }
             }
+            if (selectedDockable == null && e.getPreviousDockable() instanceof EditorDockable)
+                setCurrentEditorDockable(null);
         }
 
         @Override public void dockableStateWillChange(DockableStateWillChangeEvent event) {
@@ -218,10 +226,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             Dockable dockable = dockableState.getDockable();
             if (dockableState.isClosed() && !canCloseComponent(dockable)) {
                 event.cancel();
-            } else {
-                if (dockable instanceof EditorDockable) {
-                    lastClosedEditorDockableContainer = DockingUtilities.findTabbedDockableContainer(dockable);
-                }
             }
         }
 
@@ -230,18 +234,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             Dockable dockable = dockableState.getDockable();
             if (dockableState.isClosed() && dockable instanceof EditorDockable) {
                 workspace.unregisterDockable(dockable);
-                Dockable selectedDockable = null;
-                if (lastClosedEditorDockableContainer != null) {
-                    selectedDockable = lastClosedEditorDockableContainer.getSelectedDockable();
-                    lastClosedEditorDockableContainer = null;
-                    if (selectedDockable == null) {
-                        selectedDockable = workspace.getSelectedDockable();
-                        if (!(selectedDockable instanceof EditorDockable)) {
-                            selectedDockable = null;
-                        }
-                    }
-                }
-                setCurrentEditorDockable((EditorDockable) selectedDockable);
             }
         }
 
@@ -361,8 +353,9 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             resumeRecordingAction.setEnabled(state.isRecordingPaused());
             resumePlayingAction.setEnabled(state.isPlayingPaused());
             stopAction.setEnabled(!state.isStopped() && (state.isRecording() || state.isPlaying() || state.isPlayingPaused()));
-            saveAction.setEnabled(state.isStopped() && editor != null && editor.isDirty());
-            saveAsAction.setEnabled(state.isStopped() && editor != null && !editor.getNode().isDisabled() && editor.canSaveAs());
+            saveAction.setEnabled(state.isStopped() && currentEditor != null && currentEditor.isDirty());
+            saveAsAction.setEnabled(state.isStopped() && currentEditor != null && !currentEditor.getNode().isDisabled()
+                    && currentEditor.canSaveAs());
             saveAllAction.setEnabled(state.isStopped() && nDirty() > 0);
             openApplicationAction.setEnabled(state.isStoppedWithAppClosed() && isProjectFile());
             closeApplicationAction.setEnabled(state.isStoppedWithAppOpen());
@@ -398,10 +391,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
             if (getFilePath().equals(line.fileName)) {
                 if (Platform.isFxApplicationThread()) {
-                    editor.highlightLine(line.lineNumber - 1);
+                    currentEditor.highlightLine(line.lineNumber - 1);
                 } else {
                     Platform.runLater(() -> {
-                        editor.highlightLine(line.lineNumber - 1);
+                        currentEditor.highlightLine(line.lineNumber - 1);
                     });
                 }
             }
@@ -436,10 +429,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             List<String> texts = new ArrayList<String>();
             Object lock = new Object();
             if (Platform.isFxApplicationThread()) {
-                texts.add(editor.getText());
+                texts.add(currentEditor.getText());
             } else {
                 Platform.runLater(() -> {
-                    texts.add(editor.getText());
+                    texts.add(currentEditor.getText());
                     synchronized (lock) {
                         lock.notifyAll();
                     }
@@ -456,30 +449,30 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
 
         @Override public String getFilePath() {
-            if (editor == null) {
+            if (currentEditor == null) {
                 return null;
             }
-            return editor.getResourcePath();
+            return currentEditor.getResourcePath();
         }
 
         @Override public void insertScript(String script) {
             if (controller.isShowing()) {
                 controller.insertScript(script);
             }
-            Platform.runLater(() -> editor.insertScript(script));
+            Platform.runLater(() -> currentEditor.insertScript(script));
         }
 
         @Override public void trackProgress() {
-            editor.highlightLine(-1);
+            currentEditor.highlightLine(-1);
         }
 
         @Override public void startInserting() {
-            editor.startInserting();
+            currentEditor.startInserting();
         }
 
         @Override public void stopInserting() {
             if (Platform.isFxApplicationThread()) {
-                editor.stopInserting();
+                currentEditor.stopInserting();
                 if (exploratoryTest) {
                     displayView.endTest(null);
                     displayView.endTestRun();
@@ -487,13 +480,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     exploratoryTest = false;
                 }
                 if (importStatements != null && importStatements.size() > 0) {
-                    String text = scriptModel.updateScriptWithImports(editor.getText(), importStatements);
-                    editor.setText(text);
+                    String text = scriptModel.updateScriptWithImports(currentEditor.getText(), importStatements);
+                    currentEditor.setText(text);
                     importStatements = null;
                 }
             } else {
                 Platform.runLater(() -> {
-                    editor.stopInserting();
+                    currentEditor.stopInserting();
                     if (exploratoryTest) {
                         displayView.endTest(null);
                         displayView.endTestRun();
@@ -501,8 +494,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         exploratoryTest = false;
                     }
                     if (importStatements != null && importStatements.size() > 0) {
-                        String text = scriptModel.updateScriptWithImports(editor.getText(), importStatements);
-                        editor.setText(text);
+                        String text = scriptModel.updateScriptWithImports(currentEditor.getText(), importStatements);
+                        currentEditor.setText(text);
                         importStatements = null;
                     }
                 });
@@ -733,7 +726,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     /**
      * Editor panel
      */
-    private IEditor editor;
+    private IEditor currentEditor;
     /**
      * Line number dialog to accept a line number
      */
@@ -938,11 +931,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void toggleBreakPoint(int line) {
-        if (editor == null) {
+        if (currentEditor == null) {
             return;
         }
-        editor.setFocus();
-        if (editor.isProjectFile()) {
+        currentEditor.setFocus();
+        if (currentEditor.isProjectFile()) {
             BreakPoint bp = new BreakPoint(displayView.getFilePath(), line);
             if (breakpoints.contains(bp)) {
                 breakpoints.remove(bp);
@@ -950,7 +943,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 breakpoints.add(bp);
             }
             setState();
-            editor.refresh();
+            currentEditor.refresh();
         }
     }
 
@@ -979,6 +972,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         public ControllerStage(DisplayWindow stage) {
             this.displayWindow = stage;
             setTitle("Marathon Control Center");
+            getIcons().add(FXUIUtils.getImageURL("logo16"));
+            getIcons().add(FXUIUtils.getImageURL("logo32"));
             initComponents();
             setScene(new Scene(content));
             setAlwaysOnTop(true);
@@ -996,7 +991,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             toolBar.setOrientation(javafx.geometry.Orientation.VERTICAL);
             this.displayWindow.rawRecordButton = this.displayWindow.getActionButton(this.displayWindow.rawRecordAction);
             toolBar.getItems().addAll(this.displayWindow.getActionButton(this.displayWindow.pauseAction),
-                    this.displayWindow.getActionButton(this.displayWindow.resumeRecordingAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertScriptAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertChecklistAction),
                     this.displayWindow.getActionButton(this.displayWindow.stopAction),
@@ -1080,8 +1074,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private IResourceChangeListener resourceChangeListener;
 
     private Project project;
-
-    private boolean fullScreen, maximized, iconified;
 
     /**
      * Constructs a DisplayWindow object.
@@ -1173,7 +1165,16 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
         setWindowState();
         setTheme();
+        String projectName = System.getProperty(Constants.PROP_PROJECT_NAME, "");
+        if (projectName.equals("")) {
+            projectName = "Marathon";
+        }
+        setTitle(projectName);
         getIcons().add(FXUIUtils.getImageURL("logo16"));
+        getIcons().add(FXUIUtils.getImageURL("logo32"));
+        getIcons().add(FXUIUtils.getImageURL("logo64"));
+        getIcons().add(FXUIUtils.getImageURL("logo128"));
+        getIcons().add(FXUIUtils.getImageURL("logo256"));
         workspace = new DockingDesktop("Marathon");
         workspace.addDockableSelectionListener(dockingListener);
         workspace.addDockableStateWillChangeListener(dockingListener);
@@ -1184,25 +1185,37 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         BorderPane fxBorderPane = new BorderPane(container);
         fxBorderPane.setTop(createMenuBar());
         fxBorderPane.setBottom(statusPanel);
-        setScene(new Scene(fxBorderPane));
+        Scene scene = new Scene(fxBorderPane);
+        scene.getStylesheets().add(ModalDialog.class.getClassLoader()
+                .getResource("net/sourceforge/marathon/fx/api/css/marathon.css").toExternalForm());
+        setScene(scene);
         initStatusBar();
         initDesktop();
+        addEventFilter(KeyEvent.KEY_PRESSED, (event) -> {
+            if (event.getCode() == KeyCode.F10)
+                setFullScreen(true);
+        });
         setExitHook();
     }
 
     public void setWindowState() {
         JSONObject p = Preferences.instance().getSection("display");
-        maximized = p.optBoolean("maximized");
-        iconified = p.optBoolean("iconified");
-        fullScreen = p.optBoolean("fullScreen");
-        double x = p.optDouble("window.x", 0);
-        double y = p.optDouble("window.y", 0);
-        double w = p.optDouble("window.w", 1280);
-        double h = p.optDouble("window.h", 1024);
-        setWidth(w);
-        setHeight(h);
-        setX(x);
-        setY(y);
+        if (p.optBoolean("iconified"))
+            setIconified(p.optBoolean("maximized"));
+        else if (p.optBoolean("maximized"))
+            setMaximized(p.optBoolean("iconified"));
+        else if (p.optBoolean("fullscreen"))
+            setFullScreen(p.optBoolean("fullscreen"));
+        else {
+            double x = p.optDouble("window.x", 0);
+            double y = p.optDouble("window.y", 0);
+            double w = p.optDouble("window.w", 1280);
+            double h = p.optDouble("window.h", 1024);
+            setWidth(w);
+            setHeight(h);
+            setX(x);
+            setY(y);
+        }
     }
 
     public void setTheme() {
@@ -1304,15 +1317,16 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         if (b) {
             show();
         }
-        if (editor != null && b) {
-            editor.setFocus();
+        if (currentEditor != null && b) {
+            currentEditor.setFocus();
         }
+        updateView();
     }
 
     private void createDefaultWorkspace(EditorDockable[] editorDockables) {
         EditorDockable selectedEditor = null;
-        if (editor != null) {
-            selectedEditor = (EditorDockable) editor.getData("dockable");
+        if (currentEditor != null) {
+            selectedEditor = (EditorDockable) currentEditor.getData("dockable");
         }
         DockableState[] dockableStates = workspace.getDockables();
         for (DockableState dockableState : dockableStates) {
@@ -1404,8 +1418,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         });
         statusPanel.getInsertLabel().setOnMouseClicked((e) -> {
             Platform.runLater(() -> {
-                if (editor != null) {
-                    editor.toggleInsertMode();
+                if (currentEditor != null) {
+                    currentEditor.toggleInsertMode();
                 }
             });
         });
@@ -1431,7 +1445,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      */
     private void setExitHook() {
         setOnCloseRequest((e) -> {
-            exitAction.handle(null);
+            if (!handleQuit()) {
+                e.consume();
+            } else {
+                System.exit(0);
+            }
         });
     }
 
@@ -1486,8 +1504,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menu.getItems().add(debugAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(recordAction.getMenuItem());
-        menu.getItems().add(etAction.getMenuItem());
-        menu.getItems().add(stopAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(openApplicationAction.getMenuItem());
         menu.getItems().add(closeApplicationAction.getMenuItem());
@@ -1496,8 +1512,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(toggleBreakpointAction.getMenuItem());
         menu.getItems().add(clearAllBreakpointsAction.getMenuItem());
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(showReportAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(projectSettingsAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
@@ -1652,7 +1666,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 JSONObject themeSection = Preferences.instance().getSection("theme");
                 themeSection.put("name", theme);
                 themeSection.put("builtin", true);
-                Application.setUserAgentStylesheet(theme);
+                Preferences.instance().save("theme");
             });
             menu.getItems().add(mi);
         }
@@ -1671,11 +1685,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     if (!n) {
                         return;
                     }
-                    Application.setUserAgentStylesheet(getClass().getResource(theme.getString("path")).toExternalForm());
                     JSONObject themeSection = Preferences.instance().getSection("theme");
                     themeSection.put("name", nm);
                     themeSection.put("path", theme.getString("path"));
                     themeSection.put("builtin", false);
+                    Preferences.instance().save("theme");
                 });
                 menu.getItems().add(mi);
             }
@@ -1684,6 +1698,17 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        Preferences.instance().addPreferenceChangeListener("theme", new IPreferenceChangeListener() {
+            @Override public void preferencesChanged(String section, JSONObject preferences) {
+                setTheme();
+                ObservableList<MenuItem> items = menu.getItems();
+                for (MenuItem menuItem : items) {
+                    String theme = preferences.getString("name");
+                    if(menuItem.getText().equals(theme))
+                        ((RadioMenuItem) menuItem).setSelected(true);
+                }
+            }
+        });
         windowMenu.getItems().add(menu);
     }
 
@@ -1718,12 +1743,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         toolBar = new VLToolBar();
         recordActionButton = getActionButton(recordAction);
         toolBar.add(recordActionButton);
-        toolBar.add(getActionButton(pauseAction));
         toolBar.add(getActionButton(resumeRecordingAction));
-        toolBar.add(getActionButton(insertScriptAction));
-        toolBar.add(getActionButton(insertChecklistAction));
-        toolBar.add(getActionButton(stopAction));
-        toolBar.add(getActionButton(recorderConsoleAction));
         toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         toolBar.add(getActionButton(openApplicationAction));
@@ -1777,18 +1797,18 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     int endOffsetOfEndLine = -1;
                     int endLine = -1;
 
-                    if (editor != null) {
-                        selectionStart = editor.getSelectionStart();
-                        selectionEnd = editor.getSelectionEnd();
-                        startLine = editor.getLineOfOffset(selectionStart);
-                        endLine = editor.getLineOfOffset(selectionEnd);
-                        startOffsetOfStartLine = editor.getLineStartOffset(startLine);
-                        startOffsetOfEndLine = editor.getLineStartOffset(endLine);
-                        text = editor.getText();
+                    if (currentEditor != null) {
+                        selectionStart = currentEditor.getSelectionStart();
+                        selectionEnd = currentEditor.getSelectionEnd();
+                        startLine = currentEditor.getLineOfOffset(selectionStart);
+                        endLine = currentEditor.getLineOfOffset(selectionEnd);
+                        startOffsetOfStartLine = currentEditor.getLineStartOffset(startLine);
+                        startOffsetOfEndLine = currentEditor.getLineStartOffset(endLine);
+                        text = currentEditor.getText();
                         if (selectionEnd == startOffsetOfEndLine && selectionStart != selectionEnd) {
                             endLine = endLine - 1;
                         }
-                        endOffsetOfEndLine = editor.getLineEndOffset(endLine);
+                        endOffsetOfEndLine = currentEditor.getLineEndOffset(endLine);
                     }
 
                     action.actionPerformed(DisplayWindow.this, scriptModel, text, startOffsetOfStartLine, endOffsetOfEndLine,
@@ -1884,16 +1904,16 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * Goto a line
      */
     private void gotoLine() {
-        if (editor == null || editor.getData("editorType") != IEditorProvider.EditorType.OTHER) {
+        if (currentEditor == null || currentEditor.getData("editorType") != IEditorProvider.EditorType.OTHER) {
             return;
         }
-        int lastOffset = editor.getText().length();
+        int lastOffset = currentEditor.getText().length();
         int lastLine;
-        lastLine = editor.getLineOfOffset(lastOffset);
+        lastLine = currentEditor.getLineOfOffset(lastOffset);
         Platform.runLater(() -> {
             Stage stage = lineNumberStage.getStage();
             lineNumberStage.setMaxLineNumber(lastLine + 1);
-            lineNumberStage.setLine(editor.getCaretLine() + 1);
+            lineNumberStage.setLine(currentEditor.getCaretLine() + 1);
             lineNumberStage.setInputHandler(new GoToLineHandler());
             stage.showAndWait();
         });
@@ -1904,7 +1924,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         @Override public void handleInput(String line) {
             int lineNumber = Integer.parseInt(line);
             if (lineNumber != -1) {
-                editor.setCaretLine(lineNumber - 1);
+                currentEditor.setCaretLine(lineNumber - 1);
             }
         }
     }
@@ -1920,14 +1940,14 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         File file = new File(fileName);
         if (file.exists()) {
             openFile(file);
-            editor.setCaretLine(lineNumber - 1);
-            editor.highlightLine(lineNumber);
+            currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(lineNumber - 1));
+            currentEditor.highlightLine(lineNumber);
         } else {
             EditorDockable editorDockable = findEditorDockable(fileName);
             if (editorDockable != null) {
                 selectEditor(editorDockable);
-                editor.setCaretLine(lineNumber - 1);
-                editor.highlightLine(lineNumber);
+                currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(lineNumber - 1));
+                currentEditor.highlightLine(lineNumber);
             }
         }
     }
@@ -1943,12 +1963,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             projectName = "Marathon";
         }
         String suffix = "";
-        if (editor != null && editor.isDirty()) {
+        if (currentEditor != null && currentEditor.isDirty()) {
             suffix = "*";
         }
-        if (editor != null) {
-            setStageTitle(projectName + " - " + editor.getDisplayName() + suffix);
-            updateDockName(editor);
+        if (currentEditor != null) {
+            setStageTitle(projectName + " - " + currentEditor.getDisplayName() + suffix);
+            updateDockName(currentEditor);
         } else {
             setStageTitle(projectName);
         }
@@ -1968,7 +1988,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * @return true, if the file belongs to Marathon project.
      */
     private boolean isProjectFile() {
-        return editor != null && editor.isProjectFile();
+        return currentEditor != null && currentEditor.isProjectFile();
     }
 
     /**
@@ -1977,7 +1997,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * @return true, if the current file is a test file.
      */
     public boolean isTestFile() {
-        return editor != null && editor.isTestFile();
+        return currentEditor != null && currentEditor.isTestFile();
     }
 
     /**
@@ -2016,7 +2036,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 final int o = offset;
                 Platform.runLater(new Runnable() {
                     @Override public void run() {
-                        editor.setCaretPosition(scriptModel.getLinePositionForInsertionModule() + o);
+                        currentEditor.setCaretPosition(scriptModel.getLinePositionForInsertionModule() + o);
                     }
                 });
                 resetModuleFunctions();
@@ -2129,7 +2149,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private void newFXModuleDir() {
-        MarathonInputStage mid = new MarathonInputStage("New Module Directory") {
+        MarathonInputStage mid = new MarathonInputStage("New Module Directory",
+                "Create a new module folder to store extracted methods", FXUIUtils.getIcon("fldr")) {
 
             @Override protected String validateInput(String moduleDirName) {
                 String errorMessage = null;
@@ -2277,15 +2298,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private void updateProjectFile(String property, String value) throws IOException {
-        File projectFile = new File(System.getProperty(Constants.PROP_PROJECT_DIR), Constants.PROJECT_FILE);
-        FileInputStream input = new FileInputStream(projectFile);
-        Properties mpfProps = new Properties();
-        mpfProps.load(input);
-        input.close();
-        mpfProps.put(property, value);
-        FileOutputStream out = new FileOutputStream(projectFile);
-        mpfProps.store(out, "Marathon Project File");
-        out.close();
+        ProjectFile.updateProjectProperty(property, value);
+        Properties mpfProps = ProjectFile.getProjectProperties();
         MPFUtils.replaceEnviron(mpfProps);
         String sysModDirs = mpfProps.getProperty(property).replace(';', File.pathSeparatorChar);
         sysModDirs = sysModDirs.replace('/', File.separatorChar);
@@ -2306,9 +2320,9 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     private void setCurrentEditorDockable(EditorDockable editorDockable) {
         if (editorDockable == null) {
-            editor = null;
-        } else if (editor != null) {
-            Dockable dockable = (Dockable) editor.getData("dockable");
+            setCurrentEditor(null);
+        } else if (currentEditor != null) {
+            Dockable dockable = (Dockable) currentEditor.getData("dockable");
             TabbedDockableContainer dockableContainer = DockingUtilities.findTabbedDockableContainer(dockable);
             int order = 1;
             if (dockableContainer != null) {
@@ -2333,7 +2347,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
         if (editorDockable != null) {
-            this.editor = editorDockable.getEditor();
+            setCurrentEditor(editorDockable.getEditor());
         }
         updateView();
     }
@@ -2350,13 +2364,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
         newFile(testHeader, new File(System.getProperty(Constants.PROP_TEST_DIR)));
         final int line = scriptModel.getLinePositionForInsertion();
-        editor.setCaretLine(line);
+        currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(line));
     }
 
     public void newCheckListFile() {
         NewChekListInputStage chekListInputStage = new NewChekListInputStage();
         chekListInputStage.getStage().showAndWait();
-        if (chekListInputStage.onOk()) {
+        if (chekListInputStage.isOk()) {
             IEditor newEditor = createEditor(IEditorProvider.EditorType.CHECKLIST);
             newEditor.createNewResource(chekListInputStage.getScript(), new File(System.getProperty(Constants.PROP_CHECKLIST_DIR)));
             setCurrentEditorDockable((EditorDockable) newEditor.getData("dockable"));
@@ -2395,13 +2409,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         @Override public void handle(FixtureStageInfo fixtureInfo) {
             newFile(getFixtureHeader(fixtureInfo.getProperties(), fixtureInfo.getSelectedLauncher()),
                     new File(System.getProperty(Constants.PROP_FIXTURE_DIR)));
-            editor.setDirty(true);
+            currentEditor.setDirty(true);
             File fixtureFile = new File(System.getProperty(Constants.PROP_FIXTURE_DIR),
                     fixtureInfo.getFixtureName() + scriptModel.getSuffix());
             try {
-                editor.setData("filename", fixtureFile.getName());
+                currentEditor.setData("filename", fixtureFile.getName());
                 saveTo(fixtureFile);
-                editor.setDirty(false);
+                currentEditor.setDirty(false);
                 updateView();
             } catch (IOException e) {
                 FXUIUtils.showMessageDialog(DisplayWindow.this, "Unable to save the fixture: " + e.getMessage(), "Invalid File",
@@ -2455,7 +2469,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             container.setSelectedDockable(dockable);
         }
         dockable.getEditor().setFocus();
-        editor = dockable.getEditor();
+        setCurrentEditor(dockable.getEditor());
         return;
     }
 
@@ -2502,10 +2516,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private File saveAs() {
         File file = null;
         try {
-            file = editor.saveAs();
+            file = currentEditor.saveAs();
             if (file != null) {
-                editor.setDirty(false);
-                EditorDockable dockable = (EditorDockable) editor.getData("dockable");
+                currentEditor.setDirty(false);
+                EditorDockable dockable = (EditorDockable) currentEditor.getData("dockable");
                 dockable.updateKey();
             }
             updateView();
@@ -2550,7 +2564,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
             return file;
         }
-        return save(editor);
+        return save(currentEditor);
     }
 
     private File save(IEditor e) {
@@ -2580,6 +2594,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             featuresPanel.updated(DisplayWindow.this, new FileResource(file));
             storiesPanel.updated(DisplayWindow.this, new FileResource(file));
             issuesPanel.updated(DisplayWindow.this, new FileResource(file));
+            if (file.getName().equals("logging.properties"))
+                OSUtils.setLogConfiguration(Constants.getMarathonProjectDirectory().getAbsolutePath());
+            if (file.getName().equals("project.json"))
+                Preferences.resetInstance();
             e.refreshResource();
             e.refresh();
         }
@@ -2601,13 +2619,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void saveTo(File file) throws IOException {
-        editor.runWhenReady(() -> {
+        currentEditor.runWhenReady(() -> {
             try {
-                editor.saveTo(file);
+                currentEditor.saveTo(file);
             } catch (IOException e) {
             }
             if (file != null) {
-                editor.setDirty(false);
+                currentEditor.setDirty(false);
             }
         });
     }
@@ -2729,21 +2747,21 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     @ISimpleAction(description = "Create a new Module directory", value = "New Module Directory") AbstractSimpleAction newModuleDirAction;
 
-    @ISimpleAction(description = "Create a new Suite file", value = "New Suite File") AbstractSimpleAction newSuiteFileAction;
+    @ISimpleAction(description = "Create a new Suite file", value = "New Suite") AbstractSimpleAction newSuiteFileAction;
 
-    @ISimpleAction(description = "Create a new Feature file", value = "New Feature File") AbstractSimpleAction newFeatureFileAction;
+    @ISimpleAction(description = "Create a new Feature file", value = "New Feature") AbstractSimpleAction newFeatureFileAction;
 
-    @ISimpleAction(description = "Create a new Story file", value = "New Story File") AbstractSimpleAction newStoryFileAction;
+    @ISimpleAction(description = "Create a new Story file", value = "New Story") AbstractSimpleAction newStoryFileAction;
 
-    @ISimpleAction(description = "Create a new Issue file", value = "New Issue File") AbstractSimpleAction newIssueFileAction;
+    @ISimpleAction(description = "Create a new Issue file", value = "New Issue") AbstractSimpleAction newIssueFileAction;
 
-    AbstractSimpleAction refreshAction = new AbstractSimpleAction("refresh", "Refresh", "F5", null) {
+    AbstractSimpleAction refreshAction = new AbstractSimpleAction("refresh", "Refresh Editor", "F5", "Refresh Editor Content") {
         private static final long serialVersionUID = 1L;
 
         @Override public void handle(ActionEvent e) {
-            if (editor != null) {
-                editor.refreshResource();
-                editor.refresh();
+            if (currentEditor != null) {
+                currentEditor.refreshResource();
+                currentEditor.refresh();
             }
         }
     };;
@@ -2805,6 +2823,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onRecord() {
+        if (editingObjectMap())
+            return;
         importStatements = new HashSet<String>();
         resultPane.clear();
         outputPane.clear();
@@ -2819,12 +2839,14 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onEt() {
+        if (editingObjectMap())
+            return;
         exploratoryTest = true;
         etAction.setEnabled(false);
         newTestCaseFile();
         displayView.startTestRun();
         displayView.startTest();
-        editor.runWhenContentLoaded(new Runnable() {
+        currentEditor.runWhenContentLoaded(new Runnable() {
             @Override public void run() {
                 recordActionButton.fire();
             }
@@ -2861,14 +2883,25 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         Platform.runLater(() -> {
             Module root = getModuleFunctions();
             FunctionStage functionStage = new FunctionStage(new FunctionInfo(DisplayWindow.this, display.getTopWindowName(), root));
-            functionStage.setFunctionArgumentHandler(new FunctionArgumentHandler());
+            functionStage.setFunctionArgumentHandler(new FunctionArgumentHandler(functionStage));
             functionStage.getStage().showAndWait();
         });
     }
 
     private final class FunctionArgumentHandler implements IFunctionArgumentHandler {
+        private FunctionStage functionStage;
+
+        public FunctionArgumentHandler(FunctionStage functionStage) {
+            this.functionStage = functionStage;
+        }
+
         @Override public void handle(String[] arguments, Function function) {
-            insertScript(ScriptModel.getModel().getFunctionCallForInsertDialog(function, arguments));
+            new Thread() {
+                @Override public void run() {
+                    insertScript(ScriptModel.getModel().getFunctionCallForInsertDialog(function, arguments));
+                    Platform.runLater(() -> functionStage.dispose());
+                }
+            }.start();
         }
     }
 
@@ -2893,20 +2926,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             List<Boolean> projectEdited = new ArrayList<>();
             String title = "Configure";
             Properties properties = new Properties();
-            FileInputStream fileInputStream = null;
             try {
-                fileInputStream = new FileInputStream(new File(projectDir, Constants.PROJECT_FILE));
-                properties.load(fileInputStream);
+                properties = ProjectFile.getProjectProperties();
             } catch (FileNotFoundException e) {
             } catch (IOException e) {
             } finally {
-                if (fileInputStream != null) {
-                    try {
-                        fileInputStream.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
             }
             properties.setProperty(Constants.PROP_PROJECT_DIR, projectDir);
             setFrameWork(properties);
@@ -2922,13 +2946,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         System.getProperty(Constants.PROP_PROJECT_NAME);
                         projectEdited.add(true);
                         dispose();
-                        navigatorPanel.updated(DisplayWindow.this, new FileResource(new File(projectDir, Constants.PROJECT_FILE)));
+                        Preferences.resetInstance();
+                        navigatorPanel.updated(DisplayWindow.this,
+                                new FileResource(new File(projectDir, ProjectFile.PROJECT_FILE)));
                     }
                 }
             };
             mpfConfigurationStage.getStage().showAndWait();
-            // if (projectEdited.size() != 0)
-            // RealMain.processMPF(projectDir);
             RuntimeLogger.setRuntimeLogger(logViewLogger);
         });
     }
@@ -3004,14 +3028,15 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         saveBreakPoints();
         saveWorkspaceLayout();
         saveWindowState();
+        display.destroyRuntime();
         return true;
     }
 
     private void saveWindowState() {
         JSONObject preferences = Preferences.instance().getSection("display");
-        preferences.put("maximized", maximized);
-        preferences.put("fullScreen", fullScreen);
-        preferences.put("iconified", iconified);
+        preferences.put("maximized", isMaximized());
+        preferences.put("fullScreen", isFullScreen());
+        preferences.put("iconified", isIconified());
         preferences.put("window.x", getX());
         preferences.put("window.y", getY());
         preferences.put("window.w", getWidth());
@@ -3077,8 +3102,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             System.setProperty(Constants.PROP_RECORDER_MOUSETRIGGER, preferenceInfo.getMouseTriggerText());
             FXContextMenuTriggers.setContextMenuKey();
             FXContextMenuTriggers.setContextMenuModifiers();
-            if (editor != null) {
-                editor.refresh();
+            if (currentEditor != null) {
+                currentEditor.refresh();
             }
         }
     }
@@ -3097,15 +3122,15 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onToggleBreakpoint() {
-        if (isProjectFile() && editor != null) {
-            toggleBreakPoint(editor.getCaretLine());
+        if (isProjectFile() && currentEditor != null) {
+            toggleBreakPoint(currentEditor.getCaretLine());
         }
     }
 
     public void onClearAllBreakpoints() {
         breakpoints.clear();
         setState();
-        editor.refresh();
+        currentEditor.refresh();
     }
 
     public void onStepInto() {
@@ -3187,7 +3212,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             e.setData("editorType", editorType);
             e.readResource(file);
             e.runWhenReady(() -> e.refresh());
-            e.setCaretLine(0);
+            e.runWhenContentLoaded(() -> e.setCaretLine(0));
             e.setDirty(false);
             return e;
         } catch (Exception e1) {
@@ -3232,8 +3257,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         generateReportsMenuItem.setSelected(true);
     }
 
-    private TabbedDockableContainer lastClosedEditorDockableContainer;
-
     private AllureMarathonRunListener runListener;
     private Module moduleFunctions;
 
@@ -3245,7 +3268,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void updateScript(String script) {
-        editor.setText(script);
+        currentEditor.setText(script);
     }
 
     public void insertScript(String function) {
@@ -3308,7 +3331,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public boolean isModuleFile() {
-        return editor != null && editor.isModuleFile();
+        return currentEditor != null && currentEditor.isModuleFile();
     }
 
     public void onOMapCreation() {
@@ -3362,7 +3385,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             Test test = null;
             if (resources.size() == 1 && resources.get(0).canPlaySingle()) {
                 open(source, resources.get(0));
-                editor.runWhenReady(() -> onPlay());
+                currentEditor.runWhenReady(() -> onPlay());
             } else {
                 TestSuite suite;
                 if (resources.size() == 1) {
@@ -3401,12 +3424,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
         @Override public void slowPlay(IResourceActionSource source, Resource resource) {
             open(source, resource);
-            editor.runWhenReady(() -> onSlowPlay());
+            currentEditor.runWhenReady(() -> onSlowPlay());
         }
 
         @Override public void debug(IResourceActionSource source, Resource resource) {
             open(source, resource);
-            editor.runWhenReady(() -> onDebug());
+            currentEditor.runWhenReady(() -> onDebug());
         }
 
         @Override public void addProperties(IResourceActionSource source, Resource item) {
@@ -3523,5 +3546,26 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 issuesPanel.copied(source, from, to);
             }
         }
+    }
+
+    private boolean editingObjectMap() {
+        if (editingFile(new File(Constants.getMarathonProjectDirectory(), "omap.yaml"))) {
+            FXUIUtils.showMessageDialog(DisplayWindow.this,
+                    "Object map is being edited and there are unsaved changes.\n" + "Please save the object map before proceeding.",
+                    "Unsaved Changes in Object Map", AlertType.WARNING);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean editingFile(File file) {
+        final EditorDockable dockable = findEditorDockable(file);
+        if (dockable == null || !dockable.getEditor().isDirty())
+            return false;
+        return true;
+    }
+
+    public void setCurrentEditor(IEditor currentEditor) {
+        this.currentEditor = currentEditor;
     }
 }

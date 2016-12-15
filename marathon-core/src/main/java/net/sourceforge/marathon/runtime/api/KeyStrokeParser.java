@@ -52,9 +52,9 @@ public class KeyStrokeParser {
             String keyText = toke.nextToken();
             Integer keycode = (Integer) keyCodes.get(keyText);
             if (keycode == null && keyText.equals("Meta")) {
-                keycode = (Integer) keyCodes.get("Command");
+                keycode = (Integer) keyCodes.get("Meta");
             }
-            if (keycode == null && keyText.equals("Command")) {
+            if (keycode == null && keyText.equals("Meta")) {
                 keycode = (Integer) keyCodes.get("Meta");
             }
             if (keycode == null) {
@@ -112,7 +112,7 @@ public class KeyStrokeParser {
         keyCodes.put("Enter", Integer.valueOf(KeyEvent.VK_ENTER));
         keyCodes.put("Alt", Integer.valueOf(KeyEvent.VK_ALT));
         keyCodes.put("Enter", Integer.valueOf(KeyEvent.VK_ENTER));
-        keyCodes.put("Command", Integer.valueOf(KeyEvent.VK_META));
+        keyCodes.put("Meta", Integer.valueOf(KeyEvent.VK_META));
         keyCodes.put("Space", Integer.valueOf(KeyEvent.VK_SPACE));
         keyCodes.put("Escape", Integer.valueOf(KeyEvent.VK_ESCAPE));
 
@@ -121,7 +121,7 @@ public class KeyStrokeParser {
         keyCodes.put(Integer.valueOf(KeyEvent.VK_ENTER), "Enter");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_ALT), "Alt");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_ENTER), "Enter");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_META), "Command");
+        keyCodes.put(Integer.valueOf(KeyEvent.VK_META), "Meta");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_SPACE), "Space");
         keyCodes.put(Integer.valueOf(KeyEvent.VK_ESCAPE), "Escape");
     }

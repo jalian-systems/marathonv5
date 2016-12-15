@@ -37,7 +37,7 @@ public class AboutStage extends ModalDialog<VersionInfo> {
     private VersionInfo versionInfo;
 
     public AboutStage(VersionInfo versionInfo) {
-        super("About");
+        super("About Marathon", "Marathon - GUI Testing Framework", FXUIUtils.getIcon("helpAbout"));
         this.versionInfo = versionInfo;
         creditsStageHandler = new ICreditsStageHandler() {
             @Override public void createCreditsStage() {

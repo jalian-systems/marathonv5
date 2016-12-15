@@ -178,33 +178,36 @@ public class ArgumentProcessor {
      */
     public void help(String errorMessage) {
         if (!isBatchMode()) {
-            StringBuffer message = new StringBuffer();
-            if (!errorMessage.equals("")) {
-                message.append("Error: " + errorMessage + "<br><br>");
-            }
-            message.append("Usage:<br>");
-            message.append(
-                    "java net.sourceforge.marathon.Main -batch [-reportdir &lt;report-directory&gt; [-acceptchecklists ] [-capture]] &lt;Project Directory&gt; [ (&lt;TestCase&gt;|+&lt;TestSuite&gt;) ...]<br>");
-            message.append("or<br>");
-            message.append("java net.sourceforge.marathon.Main [-ignore] [-nosplash] [&lt;Project Directory&gt;]<br>");
             if (errorMessage.equals("")) {
-                FXUIUtils.showMessageDialog(null, message.toString(), "Usage", AlertType.INFORMATION);
+                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Usage", AlertType.INFORMATION);
             } else {
-                FXUIUtils.showMessageDialog(null, message.toString(), "Error", AlertType.ERROR);
+                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Error", AlertType.INFORMATION);
             }
         } else {
-            StringBuffer message = new StringBuffer();
-            if (!errorMessage.equals("")) {
-                message.append("Error: " + errorMessage + "\n\n");
-            }
-            message.append("Usage:\n");
-            message.append(
-                    "java net.sourceforge.marathon.Main -batch [-reportdir <report-directory> [-acceptchecklists ] [-capture]] <Project Directory> [ (<TestCase>|+<TestSuite>) ...]<br>");
-            message.append("or\n");
-            message.append("java net.sourceforge.marathon.Main [-ignore] [-nosplash] [<Project Directory>]\n");
-            logger.severe(message.toString());
+            String message = createHelpMessage(errorMessage);
+            System.err.println(message);
         }
         System.exit(0);
+    }
+
+    private String createHelpMessage(String errorMessage) {
+        StringBuffer message = new StringBuffer();
+        if (!errorMessage.equals("")) {
+            message.append("Error: " + errorMessage + "\n\n");
+        }
+        message.append("Usage:\n");
+        message.append("marathon [-nosplash] [<Project Directory>]\n");
+        message.append("or\n");
+        // @formatter:off
+        message.append("marathon -batch ")
+            .append("[-reportdir <report-directory> (default: marathon-reports)] ")
+            .append("[-acceptchecklists] ")
+            .append("[-capture] ")
+            .append("<Project Directory> ")
+            .append("[(<TestCase>|+<TestSuite>|@<Feature>|#<Story>|!<Issue>|~<SavedRun>) ...]")
+            .append("\n");
+        // @formatter: on
+        return message.toString();
     }
 
     public boolean getAcceptChecklists() {

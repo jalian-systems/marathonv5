@@ -18,32 +18,49 @@ package net.sourceforge.marathon.fx.api;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public abstract class ModalDialog<T> {
 
-    private Stage stage;
+	private static final Image LOGO16 = FXUIUtils.getImageURL("logo16");
+	private static final Image LOGO32 = FXUIUtils.getImageURL("logo32");
+	private static final Image LOGO64 = FXUIUtils.getImageURL("logo64");
+	private static final Image LOGO128 = FXUIUtils.getImageURL("logo128");
+	private static final Image LOGO256 = FXUIUtils.getImageURL("logo256");
+
+	private Stage stage;
     private T returnValue;
     private String title;
     private double sceneWidth;
     private double sceneHeight;
     private ICancelHandler cancelHandler;
+    private String subTitle;
+    private Node icon;
 
-    public ModalDialog(String title) {
+    public ModalDialog(String title, String subTitle, Node icon) {
         this.title = title;
+        this.subTitle = subTitle;
+        this.icon = icon;
     }
 
     public T show(Window parent) {
@@ -56,6 +73,8 @@ public abstract class ModalDialog<T> {
 
     private boolean focusOnFirstControl(Node node) {
         if (node.isFocusTraversable()) {
+            if (node instanceof TableView<?>)
+                return false;
             Platform.runLater(() -> node.requestFocus());
             return true;
         } else if (node instanceof Parent) {
@@ -74,11 +93,28 @@ public abstract class ModalDialog<T> {
             return stage;
         }
         Parent contentPane = getContentPane();
+        BorderPane sceneContent = new BorderPane();
+        if (title != null && !"".equals(title)) {
+            VBox titleBox = new VBox();
+            Label titleLabel = new Label(title, icon);
+            titleLabel.getStyleClass().add("modaldialog-title");
+            titleBox.getChildren().add(titleLabel);
+            if (subTitle != null) {
+                Label subTitleLabel = new Label(subTitle);
+                subTitleLabel.getStyleClass().add("modaldialog-subtitle");
+                if (icon != null)
+                    subTitleLabel.setPadding(new Insets(0, 0, 0, 20));
+                titleBox.getChildren().add(subTitleLabel);
+            }
+            titleBox.getChildren().add(new Separator());
+            sceneContent.setTop(titleBox);
+        }
+        sceneContent.setCenter(contentPane);
         Scene scene;
         if (sceneWidth > 0 && sceneHeight > 0) {
-            scene = new Scene(contentPane, sceneWidth, sceneHeight);
+            scene = new Scene(sceneContent, sceneWidth, sceneHeight);
         } else {
-            scene = new Scene(contentPane);
+            scene = new Scene(sceneContent);
         }
         scene.getStylesheets().add(ModalDialog.class.getClassLoader()
                 .getResource("net/sourceforge/marathon/fx/api/css/marathon.css").toExternalForm());
@@ -105,8 +141,17 @@ public abstract class ModalDialog<T> {
         focusOnFirstControl(stage.getScene().getRoot());
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.sizeToScene();
+        addIcons();
         return stage;
     }
+
+	private void addIcons() {
+		stage.getIcons().add(LOGO16);
+		stage.getIcons().add(LOGO32);
+		stage.getIcons().add(LOGO64);
+		stage.getIcons().add(LOGO128);
+		stage.getIcons().add(LOGO256);
+	}
 
     public void addToolTips(Node node) {
         ObservableList<Node> children = getChildren(node);

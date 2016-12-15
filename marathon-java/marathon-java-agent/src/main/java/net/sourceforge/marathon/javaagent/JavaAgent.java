@@ -345,7 +345,7 @@ public class JavaAgent implements IJavaAgent {
      */
     @Override public byte[] getScreenShot() throws IOException {
         BufferedImage bufferedImage;
-        Window window = targetLocator.getTopContainer().getWindow();
+        Window window = targetLocator.getFocusedWindow().getWindow();
         try {
             Dimension windowSize = window.getSize();
             Robot robot = new Robot();

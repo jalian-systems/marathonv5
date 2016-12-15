@@ -176,7 +176,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 sb.append("Ctrl+");
             }
             if (event.isMetaDown()) {
-                sb.append("Command+");
+                sb.append("Meta+");
             }
             if (event.isAltDown()) {
                 sb.append("Alt+");
@@ -205,7 +205,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 return "Shift";
             }
             if (keyCode == KeyCode.META) {
-                return "Command";
+                return "Meta";
             }
             if (keyCode == KeyCode.SPACE) {
                 return "Space";
@@ -256,7 +256,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 sb.append("Ctrl+");
             }
             if (event.isMetaDown()) {
-                sb.append("Command+");
+                sb.append("Meta+");
             }
             if (event.isAltDown()) {
                 sb.append("Alt+");

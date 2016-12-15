@@ -17,7 +17,6 @@ package net.sourceforge.marathon.fx.projectselection;
 
 import java.util.Properties;
 
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -25,11 +24,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.api.ITestApplication;
@@ -43,16 +39,14 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
     private TabPane tabPane;
     private Button saveButton;
     private Button testButton;
-    private HBox banner = new HBox();
     private MPFConfigurationInfo mpfConfigurationInfo;
     protected IPropertiesLayout[] layouts;
     private Stage parent;
 
     public MPFConfigurationStage(Stage parent, MPFConfigurationInfo mpfConfigurationInfo) {
-        super(mpfConfigurationInfo.getTitle());
+        super(mpfConfigurationInfo.getTitle(), null, FXUIUtils.getIcon("prj_obj"));
         this.parent = parent;
         this.mpfConfigurationInfo = mpfConfigurationInfo;
-        initComponents();
     }
 
     @Override protected void initialize(Stage stage) {
@@ -65,34 +59,9 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
         VBox root = new VBox();
         root.setId("MPFConfigurationParent");
         root.getStyleClass().add("mpf-configuration");
-        root.getChildren().addAll(banner, createTabPane(), createButtonBar());
+        root.getChildren().addAll(createTabPane(), createButtonBar());
         setProperties(mpfConfigurationInfo.getUserProperties());
         return root;
-    }
-
-    private void initComponents() {
-        banner.setId("banner");
-        Text titleText = new Text("Create and manage configuration");
-        titleText.setId("MPFTitle");
-        Text subTitleText = mpfConfigurationInfo.getDirName() == null ? new Text("Create a marathon project")
-                : new Text("Update a Marathon Project");
-        subTitleText.setId("MPFSubTitle");
-        HBox subTitleBox = new HBox();
-        subTitleBox.setId("subTitleBox");
-        subTitleBox.getChildren().add(subTitleText);
-        VBox titleBox = new VBox();
-        titleBox.setAlignment(Pos.CENTER_LEFT);
-        titleBox.getChildren().addAll(titleText, subTitleBox);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        VBox logoBox = new VBox();
-        logoBox.getChildren().add(FXUIUtils.getImage("mpf-banner"));
-        logoBox.setAlignment(Pos.CENTER_RIGHT);
-
-        banner.getChildren().addAll(titleBox, spacer, logoBox);
-        HBox.setHgrow(banner, Priority.ALWAYS);
     }
 
     private TabPane createTabPane() {

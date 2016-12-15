@@ -79,7 +79,7 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
 
     public FunctionStage(FunctionInfo functionInfo) {
-        super("Insert Script");
+        super("Insert Method", "Insert a method into the recorded script", FXUIUtils.getIcon("insertScript"));
         this.functionInfo = functionInfo;
         initComponents();
     }
@@ -236,6 +236,9 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
         @Override public void changed(ObservableValue<? extends TreeItem<Object>> observable, TreeItem<Object> oldValue,
                 TreeItem<Object> newValue) {
             if (newValue == null) {
+                okButton.setDisable(true);
+                documentArea.setText("");
+                argumentPane.getChildren().clear();
                 return;
             }
             TreeItem<Object> item = tree.getSelectionModel().getSelectedItem();
@@ -301,7 +304,6 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
             children = sp.getChildren();
             String[] arguments = getArguments(children);
             functionArgumentHandler.handle(arguments, (Function) functionItem.getValue());
-            FunctionStage.this.dispose();
         }
 
         private String[] getArguments(ObservableList<Node> children) {

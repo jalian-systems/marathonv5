@@ -408,6 +408,17 @@ public class JavaTargetLocator {
         return _getTopContainer();
     }
 
+    public JWindow getFocusedWindow() {
+        Window[] windows = getValidWindows();
+        for (Window window : windows) {
+            if(window.isFocused())
+                return new JWindow(window);
+        }
+        if(windows.length > 0)
+            return new JWindow(windows[0]);
+        return null;
+    }
+
     private JWindow _getTopContainer() {
         if (currentWindow == null) {
             Window[] windows = getValidWindows();

@@ -1043,7 +1043,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 frame.setVisible(true);
             }
         });
-        List<WebElement> elements = driver.findElements(By.cssSelector("menu"));
+        List<WebElement> elements = driver.findElements(By.cssSelector("menu[text/='File']"));
         AssertJUnit.assertNotNull(elements);
         AssertJUnit.assertEquals(1, elements.size());
         AssertJUnit.assertEquals("File", elements.get(0).getText());

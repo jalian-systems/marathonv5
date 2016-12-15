@@ -15,12 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.resource.navigator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Properties;
 
 import javafx.event.Event;
 import junit.framework.Test;
@@ -32,6 +28,7 @@ import net.sourceforge.marathon.resource.RootResource;
 import net.sourceforge.marathon.resource.Watcher;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
+import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public final class ProjectFolderResource extends FolderResource implements RootResource {
     private String name;
@@ -43,13 +40,10 @@ public final class ProjectFolderResource extends FolderResource implements RootR
     }
 
     public void setName() {
-        Properties props = new Properties();
         try {
-            props.load(new FileInputStream(new File(Constants.getMarathonProjectDirectory(), Constants.PROJECT_FILE)));
-            name = props.getProperty(Constants.PROP_PROJECT_NAME);
+            name = ProjectFile.getProjectProperty(Constants.PROP_PROJECT_NAME) ;
         } catch (IOException e) {
             e.printStackTrace();
-            name = "";
         }
     }
 
@@ -58,14 +52,12 @@ public final class ProjectFolderResource extends FolderResource implements RootR
     }
 
     @Override public Resource rename(String text) {
-        Properties props = new Properties();
         try {
-            props.load(new FileInputStream(new File(Constants.getMarathonProjectDirectory(), Constants.PROJECT_FILE)));
-            props.setProperty(Constants.PROP_PROJECT_NAME, text);
-            props.store(new FileOutputStream(new File(Constants.getMarathonProjectDirectory(), Constants.PROJECT_FILE)), "");
+            ProjectFile.updateProjectProperty(Constants.PROP_PROJECT_NAME, text);
             name = text;
             Event.fireEvent(this, new ResourceModificationEvent(ResourceModificationEvent.UPDATE, this));
         } catch (IOException e) {
+            e.printStackTrace();
         }
         return this;
     }
@@ -78,7 +70,7 @@ public final class ProjectFolderResource extends FolderResource implements RootR
     }
 
     @Override public void updated(Resource resource) {
-        Path projectFilePath = super.getFilePath().resolve(Constants.PROJECT_FILE);
+        Path projectFilePath = super.getFilePath().resolve(ProjectFile.PROJECT_FILE);
         if (projectFilePath.equals(resource.getFilePath())) {
             setName();
             Event.fireEvent(this, new TreeModificationEvent<Resource>(valueChangedEvent(), this, this));
