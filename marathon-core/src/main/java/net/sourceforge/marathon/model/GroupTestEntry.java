@@ -27,35 +27,33 @@ import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class GroupTestEntry extends GroupEntry {
 
-    private Test test;
     private Path path;
 
     public GroupTestEntry(String name) throws IOException {
         super(GroupEntryType.TEST, name);
-        test = new TestCreator(false, null).getTest(name);
-        if (test == null) {
+        if (getTest() == null) {
             throw new IOException("Failed to create test: " + name);
         }
         path = getFilePath();
     }
 
     @Override public String getName() {
-        if (test instanceof MarathonDDTestSuite)
-            return ((MarathonDDTestSuite) test).getName();
-        return ((TestCase) test).getName();
+        if (getTest() instanceof MarathonDDTestSuite)
+            return ((MarathonDDTestSuite) getTest()).getName();
+        return ((TestCase) getTest()).getName();
     }
 
     @Override public Path getFilePath() {
-        if (test instanceof MarathonDDTestSuite)
-            return ((MarathonDDTestSuite) test).getFile().toPath();
-        return ((MarathonTestCase) test).getFile().toPath();
+        if (getTest() instanceof MarathonDDTestSuite)
+            return ((MarathonDDTestSuite) getTest()).getFile().toPath();
+        return ((MarathonTestCase) getTest()).getFile().toPath();
     }
 
     @Override public void setName(String name) {
-        if (test instanceof MarathonDDTestSuite)
-            ((MarathonDDTestSuite) test).setName(name);
+        if (getTest() instanceof MarathonDDTestSuite)
+            ((MarathonDDTestSuite) getTest()).setName(name);
         else
-            ((TestCase) test).setName(name);
+            ((TestCase) getTest()).setName(name);
     }
 
     @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
@@ -63,7 +61,7 @@ public class GroupTestEntry extends GroupEntry {
     }
 
     @Override public boolean canPlaySingle() {
-        return test instanceof TestCase;
+        return getTest() instanceof TestCase;
     }
 
     @Override public String toString() {
@@ -104,10 +102,18 @@ public class GroupTestEntry extends GroupEntry {
     }
 
     @Override public void rename(String text) {
-        if (test instanceof MarathonDDTestSuite)
-            ((MarathonDDTestSuite) test).setName(text);
+        if (getTest() instanceof MarathonDDTestSuite)
+            ((MarathonDDTestSuite) getTest()).setName(text);
         else
-            ((TestCase) test).setName(text);
+            ((TestCase) getTest()).setName(text);
+    }
+
+    public Test getTest() {
+        try {
+            return new TestCreator(false, null).getTest(name);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

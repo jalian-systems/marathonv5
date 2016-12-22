@@ -50,7 +50,7 @@ public abstract class GroupEntry {
     }
 
     private GroupEntryType type;
-    private String name;
+    protected String name;
 
     public GroupEntry(GroupEntryType type, String name) {
         this.type = type;
