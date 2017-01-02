@@ -124,10 +124,14 @@ public abstract class EventQueueWait extends Wait {
         final Object[] r = new Object[] { null };
         invokeAndWait(new Runnable() {
             @Override public void run() {
+                boolean accessible = method.isAccessible();
                 try {
+                    method.setAccessible(true);
                     r[0] = method.invoke(o, args);
                 } catch (Exception e) {
                     r[0] = e;
+                } finally {
+                    method.setAccessible(accessible);
                 }
             }
         });
