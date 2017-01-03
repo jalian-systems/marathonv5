@@ -109,6 +109,7 @@ public class FXUIUtils {
         icoMoon = Font.loadFont(IcoMoon.getFontFile(), 16);
         materialDesignIcons = Font.loadFont(MaterialDesignIcons.getFontFile(), 16);
         fontIcons.put("ok", new FontInfo(fontAwesome, FontAwesome.ICON.CHECK, Color.DARKGREEN));
+        fontIcons.put("tag", new FontInfo(fontAwesome, FontAwesome.ICON.HASHTAG));
         fontIcons.put("edit", new FontInfo(fontAwesome, FontAwesome.ICON.EDIT));
         fontIcons.put("new", new FontInfo(fontAwesome, FontAwesome.ICON.PLUS));
         fontIcons.put("cancel", new FontInfo(fontAwesome, FontAwesome.ICON.REMOVE, Color.ORANGERED));

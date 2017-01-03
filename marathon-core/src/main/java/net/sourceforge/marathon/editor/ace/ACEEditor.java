@@ -15,38 +15,57 @@
  ******************************************************************************/
 package net.sourceforge.marathon.editor.ace;
 
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import net.sourceforge.marathon.editor.FileBasedEditor;
 import net.sourceforge.marathon.editor.IContentChangeListener;
 import net.sourceforge.marathon.editor.IEditor;
+import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
 import net.sourceforge.marathon.editor.IStatusBar;
 import net.sourceforge.marathon.fx.api.EventListenerList;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
+import net.sourceforge.marathon.model.Group;
+import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.fxdocking.ToolBarPanel;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
+import net.sourceforge.marathon.resource.Project;
+import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IPreferenceChangeListener;
 import net.sourceforge.marathon.runtime.api.Preferences;
 import net.sourceforge.marathon.util.AbstractSimpleAction;
+import net.sourceforge.marathon.util.INameValidateChecker;
+import net.sourceforge.marathon.util.IResourceHandler;
 import netscape.javascript.JSObject;
 
 public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListener, IEditor, ClipboardListener {
@@ -73,6 +92,7 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
     private boolean editorDefined;
     private boolean withToolbar;
     private boolean setContentCalled;
+    private MenuButton infoButton;
 
     public ACEEditor(boolean showLinenumbers, int startLineNumber, boolean withToolbar) {
         this.showLinenumbers = showLinenumbers;
@@ -200,6 +220,11 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
     }
 
     private void createToolBars(ToolBarPanel toolBarPanel) {
+        VLToolBar infoToolBar = new VLToolBar();
+        infoButton = new MenuButton(null, FXUIUtils.getIcon("info"));
+        infoButton.setDisable(true);
+        infoToolBar.add(infoButton);
+        toolBarPanel.add(infoToolBar);
         VLToolBar clipboardToolBar = new VLToolBar();
         cutButton = FXUIUtils.createButton("cut", "Remove selected text and copy to clipboard");
         cutButton.setOnAction((event) -> cut());
@@ -633,5 +658,57 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
 
     @Override public boolean canSaveAs() {
         return true;
+    }
+
+    @Override public IResourceHandler createResourceHandler(EditorType type, INameValidateChecker nameChecker) throws IOException {
+        IResourceHandler handler = super.createResourceHandler(type, nameChecker);
+        infoButton.showingProperty().addListener(new InvalidationListener() {
+            @Override public void invalidated(Observable observable) {
+                infoButton.getItems().clear();
+                populateInfoMenu();
+            }
+        });
+        Platform.runLater(() -> {
+            populateInfoMenu();
+        });
+        return handler;
+    }
+
+    private void populateInfoMenu() {
+        if (isTestFile()) {
+            File currentFile = fileHandler.getCurrentFile();
+            boolean disable = true;
+            if (currentFile != null) {
+                String testID = Project.getTestID(currentFile);
+                if (testID != null && !"".equals(testID)) {
+                    createURLLink(System.getProperty(Constants.PROP_TMS_PATTERN), testID, "tag");
+                    disable = false;
+                }
+                List<Group> groups = Group.getGroups(GroupType.ISSUE).stream().filter((g) -> g.hasTest(currentFile.toPath()))
+                        .collect(Collectors.toList());
+                for (Group group : groups) {
+                    createURLLink(System.getProperty(Constants.PROP_ISSUE_PATTERN), group.getName(), "debug");
+                }
+            }
+
+            infoButton.setDisable(disable);
+        }
+    }
+
+    private void createURLLink(String pattern, String id, String icon) {
+        MenuItem tmsMenuItem = new MenuItem(id, FXUIUtils.getIcon(icon));
+        if (pattern != null && pattern.length() > 0) {
+            String url = String.format(pattern, id);
+            tmsMenuItem.setOnAction((event) -> {
+                try {
+                    Desktop.getDesktop().browse(new URI(url));
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            tmsMenuItem.setDisable(true);
+        }
+        infoButton.getItems().add(tmsMenuItem);
     }
 }
