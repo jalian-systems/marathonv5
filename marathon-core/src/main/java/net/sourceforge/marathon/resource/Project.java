@@ -209,7 +209,7 @@ public class Project {
                     nameLine = fallbackLine;
                 }
             }
-            lines.set(nameLine, new String("name('" + name + "')"));
+            lines.set(nameLine, new String("name(\"" + name + "\")"));
             Files.write(file.toPath(), lines);
         } catch (IOException e) {
             e.printStackTrace();
@@ -311,7 +311,7 @@ public class Project {
                 }
             }
             description = inspect(description);
-            lines.set(descriptionLine, new String("description('" + description + "')"));
+            lines.set(descriptionLine, new String("description(\"" + description + "\")"));
             Files.write(file.toPath(), lines);
         } catch (IOException e) {
             e.printStackTrace();
@@ -408,7 +408,7 @@ public class Project {
                     severityLine = fallbackLine;
                 }
             }
-            lines.set(severityLine, new String("severity('" + severity + "')"));
+            lines.set(severityLine, new String("severity(\"" + severity + "\")"));
             Files.write(file.toPath(), lines);
         } catch (IOException e) {
             e.printStackTrace();
@@ -505,7 +505,7 @@ public class Project {
                     idLine = fallbackLine;
                 }
             }
-            lines.set(idLine, new String("id('" + id + "')"));
+            lines.set(idLine, new String("id(\"" + id + "\")"));
             Files.write(file.toPath(), lines);
         } catch (IOException e) {
             e.printStackTrace();
