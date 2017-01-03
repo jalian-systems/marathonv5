@@ -40,6 +40,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.display.readline.TextAreaReadline;
@@ -59,6 +60,7 @@ public class ScriptConsole extends Stage implements IStdOut {
 
     public ScriptConsole(IScriptConsoleListener l, String spoolSuffix) {
         setTitle("Script Console");
+        initModality(Modality.APPLICATION_MODAL);
         text = new TextField();
         scrollPane = new ScrollPane(output);
         output.prefWidthProperty().bind(scrollPane.widthProperty());
