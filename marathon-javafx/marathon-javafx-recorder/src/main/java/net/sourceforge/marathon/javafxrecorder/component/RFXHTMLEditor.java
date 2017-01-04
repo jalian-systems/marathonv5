@@ -43,4 +43,8 @@ public class RFXHTMLEditor extends RFXComponent {
     @Override public String _getText() {
         return getHTMLEditorText((HTMLEditor) node);
     }
+
+    @Override public String getTagName() {
+        return "html-editor";
+    }
 }
