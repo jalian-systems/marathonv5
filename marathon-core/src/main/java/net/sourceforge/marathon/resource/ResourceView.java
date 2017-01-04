@@ -183,6 +183,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             if (textField == null) {
                 createTextField();
             }
+            textField.setText(getString());
             setText(null);
             setGraphic(textField);
             textField.selectAll();
