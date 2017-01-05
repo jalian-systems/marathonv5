@@ -249,6 +249,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
             Button screenCapture = FXUIUtils.createButton("Screen Capture", "Create screen capture");
             screenCapture.setOnAction((e) -> {
+                dialog.getStage().setIconified(true);
                 File captureFile = null;
                 try {
                     if (captureFile == null) {
@@ -261,6 +262,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
                     try {
                         AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, true);
                         annotate.getStage().showAndWait();
+                        dialog.getStage().setIconified(false);
                         if (annotate.isSaved()) {
                             annotate.saveToFile(captureFile);
                             checklist.setCaptureFile(captureFile.getName());
