@@ -429,6 +429,7 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
                     collectAction();
                 }
                 enterAction(event);
+                area.setEditable(false);
             }
             break;
         case UP:

@@ -48,7 +48,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ScriptConsole extends Stage implements IStdOut {
 
-    private TextField text;
+    private TextField textField;
     private TextFlow output = new TextFlow();
     private BorderPane root = new BorderPane();
     private TextAreaReadline textAreaReadline;
@@ -61,7 +61,7 @@ public class ScriptConsole extends Stage implements IStdOut {
     public ScriptConsole(IScriptConsoleListener l, String spoolSuffix) {
         setTitle("Script Console");
         initModality(Modality.APPLICATION_MODAL);
-        text = new TextField();
+        textField = new TextField();
         scrollPane = new ScrollPane(output);
         output.prefWidthProperty().bind(scrollPane.widthProperty());
         output.heightProperty().addListener((observable, oldValue, newValue) -> {
@@ -69,7 +69,7 @@ public class ScriptConsole extends Stage implements IStdOut {
         });
         output.setPadding(new Insets(0, 8, 0, 8));
         root.setCenter(scrollPane);
-        HBox.setHgrow(text, Priority.ALWAYS);
+        HBox.setHgrow(textField, Priority.ALWAYS);
 
         Text promptText = new Text(">>");
         promptText.setFont(Font.font("Verdana", FontWeight.MEDIUM, 12));
@@ -77,9 +77,9 @@ public class ScriptConsole extends Stage implements IStdOut {
         TextFlow textFlow = new TextFlow(promptText);
         textFlow.setStyle("-fx-background-color: white;");
         HBox.setMargin(textFlow, new Insets(5, 0, 0, 0));
-        root.setBottom(new HBox(textFlow, text));
+        root.setBottom(new HBox(textFlow, textField));
         setScene(new Scene(root, 640, 480));
-        textAreaReadline = new TextAreaReadline(text, output, "Marathon Script Console \n\n") {
+        textAreaReadline = new TextAreaReadline(textField, output, "Marathon Script Console \n\n") {
             @Override public void handle(KeyEvent event) {
                 if (event.getEventType() == KeyEvent.KEY_PRESSED && event.getCode() == KeyCode.ESCAPE) {
                     textAreaReadline.shutdown();
@@ -148,7 +148,7 @@ public class ScriptConsole extends Stage implements IStdOut {
     }
 
     @Override public String getText() {
-        return text.getText();
+        return textField.getText();
     }
 
     @Override public void append(String text, int type) {
@@ -170,6 +170,8 @@ public class ScriptConsole extends Stage implements IStdOut {
                         if (stream != null) {
                             try {
                                 stream.close();
+                                if (!textField.isEditable())
+                                    textField.setEditable(true);
                             } catch (IOException e) {
                             }
                         }
@@ -197,7 +199,7 @@ public class ScriptConsole extends Stage implements IStdOut {
     }
 
     @Override public void clear() {
-        text.setText("");
+        textField.setText("");
     }
 
     private void resetStdStreams() {
@@ -240,6 +242,8 @@ public class ScriptConsole extends Stage implements IStdOut {
             if (stream != null) {
                 try {
                     stream.close();
+                    if (!textField.isEditable())
+                        textField.setEditable(true);
                 } catch (IOException e) {
                 }
             }
