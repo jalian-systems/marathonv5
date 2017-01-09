@@ -3516,7 +3516,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     IEditor editor = dockable.getEditor();
                     Platform.runLater(() -> {
                         editor.changeResource(to.getFilePath().toFile());
-                        updateView();
+                        updateView(editor);
                     });
                 }
             }
@@ -3554,6 +3554,24 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 issuesPanel.copied(source, from, to);
             }
         }
+    }
+
+    private void updateView(IEditor editor) {
+        String projectName = System.getProperty(Constants.PROP_PROJECT_NAME, "");
+        if (projectName.equals("")) {
+            projectName = "Marathon";
+        }
+        String suffix = "";
+        if (editor != null && editor.isDirty()) {
+            suffix = "*";
+        }
+        if (editor != null) {
+            setStageTitle(projectName + " - " + editor.getDisplayName() + suffix);
+            updateDockName(editor);
+        } else {
+            setStageTitle(projectName);
+        }
+        setState();
     }
 
     private boolean editingObjectMap() {
