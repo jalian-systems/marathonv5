@@ -234,6 +234,12 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
                         Resource renamed = value.rename(textField.getText());
                         if (renamed != null) {
                             commitEdit(renamed);
+                            Resource parent = (Resource) value.getParent();
+                            if(parent != null) {
+                                int index = parent.getChildren().indexOf(value);
+                                parent.getChildren().remove(index);
+                                parent.getChildren().add(index, renamed);
+                            }
                         } else {
                             cancelEdit();
                         }
