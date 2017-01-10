@@ -2576,6 +2576,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private File save(IEditor e) {
+        int caretLine = e.getCaretPosition();
         File file = null;
         try {
             file = e.save();
@@ -2608,6 +2609,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 Preferences.resetInstance();
             e.refreshResource();
             e.refresh();
+            e.runWhenContentLoaded(() -> e.setCaretPosition(caretLine));
         }
         return file;
     }
