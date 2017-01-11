@@ -211,7 +211,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         testTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         testTree.setCellFactory(new Callback<TreeView<Test>, TreeCell<Test>>() {
             @Override public TreeCell<Test> call(TreeView<Test> param) {
-                return new TestTreeItemCell(TestRunner.this);
+                return new TestTreeItemCell();
             }
         });
         testTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -321,7 +321,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
             console.clear();
             progressBar.reset(test.countTestCases());
             status.setText("Ready");
-            TestTreeItem root = new TestTreeItem(test);
+            TestTreeItem root = new TestTreeItem(test, this);
             testTree.setRoot(root);
             setState(root, testJSON);
             root.setExpanded(true);
@@ -502,7 +502,10 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     }
 
     public void onFailures() {
-        expandTreeView(testTree.getRoot());
+        TreeItem<Test> root = testTree.getRoot();
+        testTree.setRoot(null);
+        testTree.setRoot(root);
+        root.setExpanded(true);
         testTree.refresh();
     }
 
@@ -694,7 +697,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         final Test testSuite = getSelectedTest();
         if (testSuite != null) {
             progressBar.reset(testSuite.countTestCases());
-            TestTreeItem value = new TestTreeItem(testSuite);
+            TestTreeItem value = new TestTreeItem(testSuite, this);
             testTree.setRoot(value);
             doRunTest(testSuite);
         }
@@ -885,7 +888,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         errorMsgLabel.setVisible(false);
         console.clear();
         progressBar.reset(test.countTestCases());
-        TestTreeItem value = new TestTreeItem(test);
+        TestTreeItem value = new TestTreeItem(test, this);
         testTree.setRoot(value);
         value.setExpanded(true);
         doRunTest(test);

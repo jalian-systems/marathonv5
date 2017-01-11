@@ -17,7 +17,6 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
-import javafx.scene.layout.Region;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -26,10 +25,7 @@ import net.sourceforge.marathon.testrunner.fxui.TestTreeItem.State;
 
 public class TestTreeItemCell extends TreeCell<Test> {
 
-    private TestRunner testRunner;
-
-    public TestTreeItemCell(TestRunner testRunner) {
-        this.testRunner = testRunner;
+    public TestTreeItemCell() {
     }
 
     @Override protected void updateItem(Test test, boolean empty) {
@@ -75,12 +71,6 @@ public class TestTreeItemCell extends TreeCell<Test> {
                 }
             }
             setGraphic(icon);
-            setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-            if (testRunner.showFailures() && state != State.FAILURE && state != State.ERROR) {
-                setGraphic(null);
-                setText(null);
-                setPrefSize(0.0, 0.0);
-            }
         } else {
             setText(null);
             setGraphic(null);

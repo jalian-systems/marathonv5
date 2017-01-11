@@ -15,6 +15,10 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -29,30 +33,44 @@ public class TestTreeItem extends TreeItem<Test> {
 
     private State state;
     private Test test;
-    private ObservableList<TreeItem<Test>> children;
-
+    private ObservableList<TreeItem<Test>> allChildren = FXCollections.observableArrayList();
     private Throwable exception;
+    private TestRunner testRunner;
 
-    public TestTreeItem(Test test) {
+    public TestTreeItem(Test test, TestRunner testRunner) {
         setValue(test);
+        this.testRunner = testRunner;
         this.state = State.NORMAL;
         this.test = test;
     }
 
     @Override public ObservableList<TreeItem<Test>> getChildren() {
-        if (children != null) {
-            return super.getChildren();
-        }
-        children = FXCollections.observableArrayList();
-        if (test instanceof TestSuite) {
-            TestSuite suite = (TestSuite) test;
-            int countTestCases = suite.testCount();
-            for (int i = 0; i < countTestCases; i++) {
-                children.add(new TestTreeItem(suite.testAt(i)));
+        ObservableList<TreeItem<Test>> children = super.getChildren();
+        if (!children.isEmpty()) {
+            if (testRunner.showFailures()) {
+                List<TreeItem<Test>> failures = children.stream().filter(new Predicate<TreeItem<Test>>() {
+                    @Override public boolean test(TreeItem<Test> t) {
+                        return ((TestTreeItem) t).getState() == State.ERROR || ((TestTreeItem) t).getState() == State.FAILURE;
+                    }
+                }).collect(Collectors.toList());
+                children.setAll(failures);
+            } else {
+                if (children.containsAll(allChildren)) {
+                    return children;
+                }
+                children.setAll(allChildren);
+            }
+        } else {
+            if (test instanceof TestSuite) {
+                TestSuite suite = (TestSuite) test;
+                int countTestCases = suite.testCount();
+                for (int i = 0; i < countTestCases; i++) {
+                    children.add(new TestTreeItem(suite.testAt(i), testRunner));
+                }
+                allChildren.setAll(children);
             }
         }
-        super.getChildren().setAll(children);
-        return super.getChildren();
+        return children;
     }
 
     @Override public boolean isLeaf() {
@@ -91,7 +109,6 @@ public class TestTreeItem extends TreeItem<Test> {
             return ((TestTreeItem) getParent()).getIndex() + getParent().getChildren().indexOf(this) + 1;
         }
         return 0;
-
     }
 
     public void setThrowable(Throwable exception) {
