@@ -15,6 +15,7 @@ java_import 'net.sourceforge.marathon.runtime.api.Constants'
 java_import 'net.sourceforge.marathon.api.TestAttributes'
 
 require 'marathon/results'
+require 'cgi'
 
 class RubyMarathon < MarathonRuby
 
@@ -205,7 +206,7 @@ class RubyMarathon < MarathonRuby
     
     def assertProperty(id, property, expected)
         e = get_leaf_component(id)
-        actual = e.attribute property
+        actual = e.attribute CGI::escape(property)
         begin
           throw
         rescue

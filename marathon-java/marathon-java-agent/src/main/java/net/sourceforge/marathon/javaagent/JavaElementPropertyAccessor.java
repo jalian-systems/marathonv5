@@ -46,6 +46,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
 import javax.swing.Box.Filler;
@@ -76,6 +78,7 @@ import net.sourceforge.marathon.javaagent.components.ContextManager;
 public class JavaElementPropertyAccessor {
 
     protected Component component;
+    private static final Pattern arrayPattern = Pattern.compile("(.*)\\[(\\d*)\\]$");
 
     public JavaElementPropertyAccessor(Component component) {
         this.component = component;
@@ -154,10 +157,22 @@ public class JavaElementPropertyAccessor {
      * .lang.String)
      */
     public Object getAttributeObject(Object component, String name) {
-        String isMethod = getIsMethod(name);
         Object o = null;
+        Matcher matcher = arrayPattern.matcher(name);
+        if (matcher.matches()) {
+            try {
+                o = getAttributeObject(component, getGetMethod(matcher.group(1)));
+                if (o != null) {
+                    o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
+                }
+            } catch (NoSuchMethodException e) {
+            }
+        }
         try {
-            o = EventQueueWait.call(component, isMethod);
+            if (o == null) {
+                String isMethod = getIsMethod(name);
+                o = EventQueueWait.call(component, isMethod);
+            }
         } catch (Throwable e) {
             if (!(e instanceof NoSuchMethodException)) {
                 return null;

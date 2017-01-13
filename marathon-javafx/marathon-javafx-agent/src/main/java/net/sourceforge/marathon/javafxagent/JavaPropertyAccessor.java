@@ -20,10 +20,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JavaPropertyAccessor {
 
     private Object object;
+    private static final Pattern arrayPattren = Pattern.compile("(.*)\\[(\\d*)\\]$");
 
     public JavaPropertyAccessor(Object stage) {
         this.object = stage;
@@ -71,10 +74,22 @@ public class JavaPropertyAccessor {
     }
 
     public final Object getAttributeObject(Object component, String name) {
-        String isMethod = getIsMethod(name);
         Object o = null;
+        Matcher matcher = arrayPattren.matcher(name);
+        if (matcher.matches()) {
+            try {
+                o = getAttributeObject(component, getGetMethod(matcher.group(1)));
+                if (o != null) {
+                    o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
+                }
+            } catch (NoSuchMethodException e) {
+            }
+        }
         try {
-            o = EventQueueWait.call(component, isMethod);
+            if (o == null) {
+                String isMethod = getIsMethod(name);
+                o = EventQueueWait.call(component, isMethod);
+            }
         } catch (Throwable e) {
             if (!(e instanceof NoSuchMethodException)) {
                 return null;
