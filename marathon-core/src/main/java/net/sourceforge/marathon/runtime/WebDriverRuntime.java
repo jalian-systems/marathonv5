@@ -166,20 +166,11 @@ public class WebDriverRuntime implements IMarathonRuntime {
             return;
         }
         if (recordingServer.isRecording()) {
-            synchronized (WebDriverRuntime.this) {
-                if (WebDriverRuntime.this.reloadingScript) {
-                    Logger.getLogger(WebDriverRuntime.class.getName())
-                            .info("Script being reloaded already... Ignoring this reload request");
-                    new Exception("Script Reload called from here...").printStackTrace();
-                    reloadPosition.printStackTrace();
-                    return;
-                }
-            }
             WebDriverRuntime.this.reloadPosition = new Exception("Reload going on from here...");
             Thread thread = new Thread(new Runnable() {
                 @Override public void run() {
                     synchronized (WebDriverRuntime.this) {
-                        if (recordingServer.isPaused() || WebDriverRuntime.this.reloadingScript)
+                        if (recordingServer.isPaused())
                             return;
                         Logger.getLogger(WebDriverRuntime.class.getName()).info("About to reload script...");
                         WebDriverRuntime.this.reloadingScript = true;
