@@ -162,6 +162,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
 
     private void scriptReloadScript(final int port) {
         if (!script.isDriverAvailable()) {
+            releaseInterpreters();
             destroy();
             return;
         }
@@ -248,6 +249,11 @@ public class WebDriverRuntime implements IMarathonRuntime {
         if (webDriverProxy != null) {
             webDriverProxy.quit();
         }
+    }
+    
+    @Override public void releaseInterpreters() {
+        if(script != null)
+        script.releaseInterpreters();
     }
 
     @Override public Module getModuleFunctions() {

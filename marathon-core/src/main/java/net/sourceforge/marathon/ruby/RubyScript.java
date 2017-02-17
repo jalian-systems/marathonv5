@@ -411,9 +411,11 @@ public class RubyScript implements IScript {
             runtime.quit();
         } catch (Throwable t) {
             logger.warning("Ignoring exception " + t.getClass().getName() + " on quit()");
-        } finally {
-            RubyInterpreters.release(interpreter);
         }
+    }
+
+    @Override public void releaseInterpreters() {
+        RubyInterpreters.release(interpreter);
     }
 
     @Override public File getScreenCapture() {
@@ -436,4 +438,5 @@ public class RubyScript implements IScript {
     @Override public boolean isDriverAvailable() {
         return runtime.isDriverAvailable();
     }
+
 }
