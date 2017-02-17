@@ -443,4 +443,14 @@ public class WSRecorder implements IJSONRecorder {
         return null;
     }
 
+    @Override public void recordFileDialog(String state) {
+        JSONObject event = new JSONObject();
+        event.put("type", "select_file_dialog");
+        event.put("value", state);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        o.put("container", new JSONObject());
+        sendRecordMessage(o);
+    }
+
 }

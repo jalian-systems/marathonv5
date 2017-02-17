@@ -128,6 +128,34 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
 
     }
 
+    private static final class FileDialogScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String type;
+        private String value;
+
+        public FileDialogScriptElement(JSONObject o) {
+            type = "#fileDialog";
+            value = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select_file_dialog", type, value);
+        }
+
+        @Override public WindowId getWindowId() {
+            return null;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
     private static final class WindowClosingScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
         private String title;
@@ -280,6 +308,10 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             String type = eventObject.getString("type");
             if (type.equals("comment")) {
                 recorder.record(new CommentScriptElement(eventObject.getString("comment")));
+                return new JSONObject();
+            }
+            if (type.equals("select_file_dialog")) {
+                recorder.record(new FileDialogScriptElement(query.getJSONObject("event")));
                 return new JSONObject();
             }
             WindowId windowId = createWindowId(query.getJSONObject("container"));

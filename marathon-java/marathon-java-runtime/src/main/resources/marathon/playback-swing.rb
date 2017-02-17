@@ -327,13 +327,8 @@ class RubyMarathon < MarathonRuby
     def hover
     end
     
-    def select_file_chooser(name, s)
+    def select_file_dialog(name, s)
       e = driver.find_element(:tag_name, name)
-      if(name.eql?("#filechooser"))
-      	s = ChooserHelper.decode(s)
-      else
-      	s = ChooserHelper.decodeFile(s)
-      end
       e.send_keys(s)
     end
     
@@ -693,8 +688,8 @@ def features(s, *others)
   TestAttributes.put("marathon.test.features", [ s, others ].flatten.to_java(:String))
 end
 
-def select_file_chooser(name, s)
-  $marathon.select_file_chooser(name, s)
+def select_file_dialog(name, s)
+  $marathon.select_file_dialog(name, s)
 end
 
 def select_folder_chooser(name, s)

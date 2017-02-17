@@ -58,4 +58,6 @@ public interface IJSONRecorder {
 
     public abstract void recordFocusedWindow(RComponent r) throws IOException;
 
+    public abstract void recordFileDialog(String string);
+
 }
