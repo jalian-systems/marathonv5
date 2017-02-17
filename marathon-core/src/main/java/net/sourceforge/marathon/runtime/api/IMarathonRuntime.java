@@ -98,4 +98,6 @@ public interface IMarathonRuntime {
 
     void insertScript(String function);
 
+    void releaseInterpreters();
+
 }

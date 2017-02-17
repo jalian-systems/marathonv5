@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,10 +53,10 @@ import net.sourceforge.marathon.fx.api.EventListenerList;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
-import net.sourceforge.marathon.model.Group;
-import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.fxdocking.ToolBarPanel;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
+import net.sourceforge.marathon.model.Group;
+import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.resource.Project;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IPreferenceChangeListener;
@@ -678,17 +678,18 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
             boolean disable = true;
             if (currentFile != null) {
                 String testID = Project.getTestID(currentFile);
+                String tmsPattern = System.getProperty(Constants.PROP_TMS_PATTERN);
                 if (testID != null && !"".equals(testID)) {
-                    createURLLink(System.getProperty(Constants.PROP_TMS_PATTERN), testID, "tag");
+                    createURLLink(tmsPattern, testID, "tag");
                     disable = false;
                 }
                 List<Group> groups = Group.getGroups(GroupType.ISSUE).stream().filter((g) -> g.hasTest(currentFile.toPath()))
                         .collect(Collectors.toList());
                 for (Group group : groups) {
                     createURLLink(System.getProperty(Constants.PROP_ISSUE_PATTERN), group.getName(), "debug");
+                    disable = false;
                 }
             }
-
             infoButton.setDisable(disable);
         }
     }

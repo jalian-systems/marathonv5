@@ -32,6 +32,7 @@ import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.api.ApplicationLaunchException;
+import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
 import net.sourceforge.marathon.junit.DDTestRunner;
 import net.sourceforge.marathon.junit.IHasFullname;
@@ -321,6 +322,8 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
             runtime = null;
         } else {
             setState(State.STOPPED_WITH_APP_OPEN);
+            if (runtime != null)
+                runtime.releaseInterpreters();
         }
         if (shouldClose) {
             closeApplication(closeApplicationNeeded);
@@ -361,6 +364,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         if (runtime != null) {
             logger.info("Destroying VM. autShutdown = " + autShutdown);
             try {
+                runtime.releaseInterpreters();
                 if (!autShutdown) {
                     runtime.destroy();
                 }
@@ -545,6 +549,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
             return runtimeFactory;
         }
         reuseFixture = Boolean.valueOf((String) fixtureProperties.get(Constants.FIXTURE_REUSE));
+        TestAttributes.put("reuseFixture", reuseFixture && (TestAttributes.get("reuseFixture") == null));
         String launcherModel = (String) fixtureProperties.get(Constants.PROP_PROJECT_LAUNCHER_MODEL);
         IRuntimeLauncherModel lm = LauncherModelHelper.getLauncherModel(launcherModel);
         if (lm == null) {
