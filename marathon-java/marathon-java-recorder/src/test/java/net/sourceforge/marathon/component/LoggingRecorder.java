@@ -140,4 +140,9 @@ public final class LoggingRecorder implements IJSONRecorder {
     @Override public void recordFocusedWindow(RComponent r) {
     }
 
+    @Override public void recordFileDialog(String string) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
