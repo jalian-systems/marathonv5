@@ -25,6 +25,7 @@ import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -638,7 +639,12 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public String getElementAttribute(JSONObject query, JSONObject uriParams, Session session, IJavaElement element) {
-        String attribute = element.getAttribute(uriParams.getString("name"));
+        String attribute = null;
+        try {
+            attribute = element.getAttribute(URLDecoder.decode(uriParams.getString("name"), "UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (attribute == null) {
             return NULL_OBJECT;
         }
