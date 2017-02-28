@@ -344,7 +344,8 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     public JSONObject focusedWindow(WebSocket conn, JSONObject query) throws IOException, JSONException, ObjectMapException {
-        focusedWindowId = createWindowId(query.getJSONObject("container"));
+        if (query.has("container") && query.get("container") != JSONObject.NULL)
+            focusedWindowId = createWindowId(query.getJSONObject("container"));
         return new JSONObject();
     }
 
@@ -444,7 +445,8 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             method.invoke(this, conn, query);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
-            throw new RuntimeException(cause.getMessage(), cause);
+            String message = method.getName() + "(" + query.toString() + ")";
+            throw new RuntimeException(message, cause);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (IllegalAccessException e) {
