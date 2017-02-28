@@ -84,15 +84,18 @@ public class JSONScriptElement implements IScriptElement {
                 method = "assert_content";
             }
         }
+        Object value = event.get("value");
+        if(value == null || value == JSONObject.NULL)
+            value = "";
         if (method.equals("assert_content")) {
-            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, event.get("value"));
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, value);
         }
         if (cellinfo == null || "".equals(cellinfo)) {
             return Indent.getIndent()
-                    + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, event.get("value"));
+                    + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, value);
         } else {
             return Indent.getIndent()
-                    + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, event.get("value"), cellinfo);
+                    + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, value, cellinfo);
         }
     }
 
