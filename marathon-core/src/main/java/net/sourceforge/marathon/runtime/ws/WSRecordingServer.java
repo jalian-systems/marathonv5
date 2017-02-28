@@ -128,6 +128,34 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
 
     }
 
+    private static final class FileDialogScriptElement implements IScriptElement {
+        private static final long serialVersionUID = 1L;
+        private String type;
+        private String value;
+
+        public FileDialogScriptElement(JSONObject o) {
+            type = "#fileDialog";
+            value = o.getString("value");
+        }
+
+        @Override public String toScriptCode() {
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("select_file_dialog", type, value);
+        }
+
+        @Override public WindowId getWindowId() {
+            return null;
+        }
+
+        @Override public IScriptElement getUndoElement() {
+            return null;
+        }
+
+        @Override public boolean isUndo() {
+            return false;
+        }
+
+    }
+
     private static final class WindowClosingScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
         private String title;
@@ -282,6 +310,10 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
                 recorder.record(new CommentScriptElement(eventObject.getString("comment")));
                 return new JSONObject();
             }
+            if (type.equals("select_file_dialog")) {
+                recorder.record(new FileDialogScriptElement(query.getJSONObject("event")));
+                return new JSONObject();
+            }
             WindowId windowId = createWindowId(query.getJSONObject("container"));
             if (type.equals("select_file_chooser") || type.equals("select_folder_chooser")) {
                 recorder.record(new ChooserScriptElement(query.getJSONObject("event")));
@@ -312,7 +344,8 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     public JSONObject focusedWindow(WebSocket conn, JSONObject query) throws IOException, JSONException, ObjectMapException {
-        focusedWindowId = createWindowId(query.getJSONObject("container"));
+        if (query.has("container") && query.get("container") != JSONObject.NULL)
+            focusedWindowId = createWindowId(query.getJSONObject("container"));
         return new JSONObject();
     }
 
@@ -412,7 +445,8 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             method.invoke(this, conn, query);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
-            throw new RuntimeException(cause.getMessage(), cause);
+            String message = method.getName() + "(" + query.toString() + ")";
+            throw new RuntimeException(message, cause);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (IllegalAccessException e) {

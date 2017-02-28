@@ -72,7 +72,15 @@ public class FileResource extends Resource {
 
     @Override public Resource rename(String text) {
         try {
-            Path moved = Files.move(path, path.resolveSibling(text));
+            File sourceFile = path.toFile();
+            File destinationFile = path.resolveSibling(text).toFile();
+            Path moved;
+            if (!sourceFile.getParent().equals(destinationFile.getParent())) {
+                moved = Files.move(path, path.resolveSibling(text));
+            } else {
+                sourceFile.renameTo(destinationFile);
+                moved = destinationFile.toPath();
+            }
             FileResource to = new FileResource(moved.toFile());
             Event.fireEvent(this, new ResourceModificationEvent(ResourceModificationEvent.MOVED, this, to));
             return to;

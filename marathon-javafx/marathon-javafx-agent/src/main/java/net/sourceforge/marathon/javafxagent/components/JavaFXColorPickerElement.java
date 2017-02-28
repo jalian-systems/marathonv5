@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
@@ -33,6 +35,7 @@ public class JavaFXColorPickerElement extends JavaFXElement {
         if (!value.equals("")) {
             try {
                 colorPicker.setValue(Color.valueOf(value));
+                Event.fireEvent(colorPicker, new ActionEvent());
                 return true;
             } catch (Throwable t) {
                 throw new IllegalArgumentException("Invalid value for '" + value + "' for color-picker '");

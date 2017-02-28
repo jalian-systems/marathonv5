@@ -141,7 +141,12 @@ public class AssertionPanel extends GridPane {
         StringBuilder sb = new StringBuilder();
         TreeItem<PropertyWrapper> w = selectedItem;
         while (w.getParent() != null) {
-            sb.insert(0, w.getValue().property + ".");
+            String s = w.getValue().property;
+            if (sb.toString().startsWith("[") && sb.toString().contains("]")) {
+                sb.insert(0, s);
+            } else {
+                sb.insert(0, s + ".");
+            }
             w = w.getParent();
         }
         sb.setLength(sb.length() - 1);

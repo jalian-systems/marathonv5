@@ -47,7 +47,7 @@ public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> 
         root.setStyle("-fx-background-color:black");
         root.setId("marathonITESplashScreen");
         root.getStyleClass().add("marathonite-splash-screen");
-        root.getChildren().addAll(FXUIUtils.createImage("marathon-splash", versionInfo.getVersion()), createInfo());
+        root.getChildren().addAll(FXUIUtils.getImage("marathon-splash"), createInfo());
         Timeline timeline = new Timeline(new KeyFrame(SPLASH_DISPLAY_TIME, (e) -> {
             dispose();
         }));

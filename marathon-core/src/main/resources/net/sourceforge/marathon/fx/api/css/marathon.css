@@ -58,7 +58,7 @@
 }
 
 .about-stage .label {
-	-fx-text-fill: white;
+	-fx-text-fill: black;
 }
 
 .about-stage #titleBar {

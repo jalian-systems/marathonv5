@@ -360,8 +360,11 @@ public class WSRecorder implements IJSONRecorder {
 
     @Override public void recordFocusedWindow(RComponent r) throws IOException {
         JSONObject o = new JSONObject();
-        o.put("container", r.findContextHeirarchy((Container) r.getComponent()));
-        postJSON("focusedWindow", o);
+        JSONObject container = r.findContextHeirarchy((Container) r.getComponent());
+        if (container != null) {
+            o.put("container", container);
+            postJSON("focusedWindow", o);
+        }
     }
 
     public void post(final String method) throws IOException {
@@ -441,6 +444,16 @@ public class WSRecorder implements IJSONRecorder {
             }
         }
         return null;
+    }
+
+    @Override public void recordFileDialog(String state) {
+        JSONObject event = new JSONObject();
+        event.put("type", "select_file_dialog");
+        event.put("value", state);
+        JSONObject o = new JSONObject();
+        o.put("event", event);
+        o.put("container", new JSONObject());
+        sendRecordMessage(o);
     }
 
 }

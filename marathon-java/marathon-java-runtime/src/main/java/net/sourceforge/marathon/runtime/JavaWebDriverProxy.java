@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
+import org.openqa.selenium.remote.service.DriverService;
+
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 
@@ -29,8 +31,7 @@ public class JavaWebDriverProxy implements IWebdriverProxy {
     }
 
     @Override public String getURL() {
-        String url = profile.getURL();
-        return url;
+        return profile.getURL();
     }
 
     @Override public void quit() {
@@ -39,5 +40,10 @@ public class JavaWebDriverProxy implements IWebdriverProxy {
 
     @Override public String toString() {
         return driver.toString();
+    }
+
+    @Override public DriverService createService(int port) {
+        // Do nothing.
+        return null;
     }
 }

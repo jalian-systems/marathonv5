@@ -44,6 +44,7 @@ import javax.swing.JOptionPane;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import net.sourceforge.marathon.javaagent.components.FileDialogElement;
 import sun.awt.AppContext;
 
 public class JavaTargetLocator {
@@ -215,6 +216,12 @@ public class JavaTargetLocator {
                 return null;
             }
             return null;
+        }
+
+        public IJavaElement findFileDialogElement(JWindow dialog) {
+            IJavaElement e = new FileDialogElement(dialog, driver, this);
+            elements.put(e.createId(), e);
+            return e;
         }
 
     }
@@ -411,10 +418,10 @@ public class JavaTargetLocator {
     public JWindow getFocusedWindow() {
         Window[] windows = getValidWindows();
         for (Window window : windows) {
-            if(window.isFocused())
+            if (window.isFocused())
                 return new JWindow(window);
         }
-        if(windows.length > 0)
+        if (windows.length > 0)
             return new JWindow(windows[0]);
         return null;
     }
@@ -466,6 +473,16 @@ public class JavaTargetLocator {
 
     public JSONObject getWindowProperties() {
         return getTopContainer().getWindowProperties();
+    }
+
+    public JWindow getFileDialogContainer() {
+        Window[] pwindows = getValidWindows();
+        for (Window window : pwindows) {
+            if (window.getClass().getName().equals("java.awt.FileDialog")) {
+                return new JWindow(window);
+            }
+        }
+        throw new NoSuchElementException("Couldn't find file dialog window", null);
     }
 
 }

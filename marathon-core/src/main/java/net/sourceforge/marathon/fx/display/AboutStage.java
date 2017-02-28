@@ -50,12 +50,13 @@ public class AboutStage extends ModalDialog<VersionInfo> {
 
     public void initComponents() {
         HBox bulrbTitleBox = createBlurbTitle();
-        Label companyLabel = new Label(versionInfo.getBlurbCompany());
+        Label companyLabel = createLabel(versionInfo.getBlurbCompany());
         companyLabel.setId("companyName");
-        Label websiteLabel = new Label(versionInfo.getBlurbWebsite());
+        Label websiteLabel = createLabel(versionInfo.getBlurbWebsite());
         websiteLabel.setId("websiteAddress");
-        Label creditsLabel = new Label(versionInfo.getBlurbCredits());
+        Label creditsLabel = createLabel(versionInfo.getBlurbCredits());
         creditsLabel.setId("creditsLabel");
+        infoBox.setId("infoBox");
         infoBox.setAlignment(Pos.TOP_CENTER);
         infoBox.getChildren().addAll(bulrbTitleBox, companyLabel, websiteLabel, creditsLabel);
 
@@ -72,7 +73,7 @@ public class AboutStage extends ModalDialog<VersionInfo> {
         root.setStyle("-fx-background-color:black");
         root.getStyleClass().add("about-stage");
         root.setId("aboutStage");
-        root.getChildren().addAll(FXUIUtils.createImage("marathon-about", versionInfo.getVersion()), infoBox, buttonBar);
+        root.getChildren().addAll(FXUIUtils.getImage("marathon-splash"), infoBox, buttonBar);
         return root;
     }
 
@@ -83,7 +84,7 @@ public class AboutStage extends ModalDialog<VersionInfo> {
     }
 
     private HBox createBlurbTitle() {
-        Label bulrbTitleLabel = new Label(versionInfo.getBlurbTitle());
+        Label bulrbTitleLabel = createLabel(versionInfo.getBlurbTitle());
         bulrbTitleLabel.setId("blurbTitle");
         bulrbTitleLabel.setAlignment(Pos.TOP_CENTER);
 
@@ -92,6 +93,12 @@ public class AboutStage extends ModalDialog<VersionInfo> {
         titleBox.setAlignment(Pos.TOP_CENTER);
         titleBox.getChildren().addAll(bulrbTitleLabel);
         return titleBox;
+    }
+
+    private Label createLabel(String labelText) {
+        Label l = new Label(labelText);
+        l.setStyle("-fx-text-fill:white");
+        return l;
     }
 
     protected void onOK() {

@@ -15,6 +15,7 @@ java_import 'net.sourceforge.marathon.runtime.api.Constants'
 java_import 'net.sourceforge.marathon.api.TestAttributes'
 
 require 'marathon/results'
+require 'cgi'
 
 class RubyMarathon < MarathonRuby
 
@@ -205,7 +206,7 @@ class RubyMarathon < MarathonRuby
     
     def assertProperty(id, property, expected)
         e = get_leaf_component(id)
-        actual = e.attribute property
+        actual = getElementAttribute(e, property)
         begin
           throw
         rescue
@@ -263,7 +264,7 @@ class RubyMarathon < MarathonRuby
         end
         wait = Selenium::WebDriver::Wait.new(:timeout => @cwms/1000)
         wait.until {
-        	expected == e.attribute(property)
+        	expected == getElementAttribute(e, property)
         }
     end
 
@@ -298,7 +299,11 @@ class RubyMarathon < MarathonRuby
     end
 
     def getProperty(id, property)
-      get_leaf_component(id).attribute property 
+      getElementAttribute(get_leaf_component(id), property) 
+    end
+    
+    def getElementAttribute(e, property)
+      e.attribute CGI::escape(property)
     end
     
     def getComponent_any(id)
@@ -322,13 +327,8 @@ class RubyMarathon < MarathonRuby
     def hover
     end
     
-    def select_file_chooser(name, s)
+    def select_file_dialog(name, s)
       e = driver.find_element(:tag_name, name)
-      if(name.eql?("#filechooser"))
-      	s = ChooserHelper.decode(s)
-      else
-      	s = ChooserHelper.decodeFile(s)
-      end
       e.send_keys(s)
     end
     
@@ -688,8 +688,8 @@ def features(s, *others)
   TestAttributes.put("marathon.test.features", [ s, others ].flatten.to_java(:String))
 end
 
-def select_file_chooser(name, s)
-  $marathon.select_file_chooser(name, s)
+def select_file_dialog(name, s)
+  $marathon.select_file_dialog(name, s)
 end
 
 def select_folder_chooser(name, s)

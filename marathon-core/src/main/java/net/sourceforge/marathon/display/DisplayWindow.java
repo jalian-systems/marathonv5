@@ -1200,21 +1200,29 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public void setWindowState() {
         JSONObject p = Preferences.instance().getSection("display");
-        if (p.optBoolean("iconified"))
-            setIconified(p.optBoolean("maximized"));
-        else if (p.optBoolean("maximized"))
-            setMaximized(p.optBoolean("iconified"));
+        if (p.optBoolean("maximized"))
+            setMaximized(true);
         else if (p.optBoolean("fullscreen"))
-            setFullScreen(p.optBoolean("fullscreen"));
+            setFullScreen(true);
         else {
             double x = p.optDouble("window.x", 0);
             double y = p.optDouble("window.y", 0);
             double w = p.optDouble("window.w", 1280);
             double h = p.optDouble("window.h", 1024);
+            if (x < 0)
+                x = 0;
+            if (y < 0)
+                y = 0;
+            if (w < 0)
+                w = 1280;
+            if (h < 0)
+                h = 1024;
             setWidth(w);
             setHeight(h);
             setX(x);
             setY(y);
+            if (p.optBoolean("iconified"))
+                setIconified(true);
         }
     }
 
@@ -1704,7 +1712,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 ObservableList<MenuItem> items = menu.getItems();
                 for (MenuItem menuItem : items) {
                     String theme = preferences.getString("name");
-                    if(menuItem.getText().equals(theme))
+                    if (menuItem.getText().equals(theme))
                         ((RadioMenuItem) menuItem).setSelected(true);
                 }
             }
@@ -2568,6 +2576,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private File save(IEditor e) {
+        int caretLine = e.getCaretPosition();
         File file = null;
         try {
             file = e.save();
@@ -2600,6 +2609,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 Preferences.resetInstance();
             e.refreshResource();
             e.refresh();
+            e.runWhenContentLoaded(() -> e.setCaretPosition(caretLine));
         }
         return file;
     }
@@ -3508,7 +3518,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     IEditor editor = dockable.getEditor();
                     Platform.runLater(() -> {
                         editor.changeResource(to.getFilePath().toFile());
-                        updateView();
+                        updateView(editor);
                     });
                 }
             }
@@ -3546,6 +3556,24 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 issuesPanel.copied(source, from, to);
             }
         }
+    }
+
+    private void updateView(IEditor editor) {
+        String projectName = System.getProperty(Constants.PROP_PROJECT_NAME, "");
+        if (projectName.equals("")) {
+            projectName = "Marathon";
+        }
+        String suffix = "";
+        if (editor != null && editor.isDirty()) {
+            suffix = "*";
+        }
+        if (editor != null) {
+            setStageTitle(projectName + " - " + editor.getDisplayName() + suffix);
+            updateDockName(editor);
+        } else {
+            setStageTitle(projectName);
+        }
+        setState();
     }
 
     private boolean editingObjectMap() {

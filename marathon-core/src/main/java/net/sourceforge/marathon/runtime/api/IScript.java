@@ -47,4 +47,6 @@ public interface IScript {
 
     public abstract boolean isDriverAvailable();
 
+    public abstract void releaseInterpreters();
+
 }

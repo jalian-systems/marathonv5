@@ -17,7 +17,9 @@ package net.sourceforge.marathon.javaagent.server;
 
 import java.awt.AWTException;
 import java.awt.Point;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
@@ -321,12 +323,36 @@ public class JavaServer extends NanoHTTPD {
         }
         logmsg.append(") = ");
         Response response = serve_internal(uri, method, jsonQuery == null ? new JSONObject() : jsonQuery);
-        logmsg.append(response);
+        logmsg.append(toString(response));
         if (latestSession != null && !uri.contains("/log")) {
             latestSession.log(Level.INFO, logmsg.toString());
         }
         logger.info(logmsg.toString());
         return response;
+    }
+
+    private String toString(Response response) {
+        Map<String, String> r = new HashMap<String, String>();
+        r.put("status", response.getStatus().toString());
+        InputStream data = response.getData();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int b;
+        try {
+            while ((b = data.read()) != -1)
+                baos.write(b);
+        } catch (IOException e) {
+        } finally {
+            try {
+                data.reset();
+            } catch (IOException e) {
+            }
+        }
+        r.put("data", new String(baos.toByteArray()));
+        try {
+            baos.close();
+        } catch (IOException e) {
+        }
+        return r.toString();
     }
 
     public Response serve_internal(String uri, Method method, JSONObject jsonQuery) {

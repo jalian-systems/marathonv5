@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -45,7 +43,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -112,6 +109,7 @@ public class FXUIUtils {
         icoMoon = Font.loadFont(IcoMoon.getFontFile(), 16);
         materialDesignIcons = Font.loadFont(MaterialDesignIcons.getFontFile(), 16);
         fontIcons.put("ok", new FontInfo(fontAwesome, FontAwesome.ICON.CHECK, Color.DARKGREEN));
+        fontIcons.put("tag", new FontInfo(fontAwesome, FontAwesome.ICON.HASHTAG));
         fontIcons.put("edit", new FontInfo(fontAwesome, FontAwesome.ICON.EDIT));
         fontIcons.put("new", new FontInfo(fontAwesome, FontAwesome.ICON.PLUS));
         fontIcons.put("cancel", new FontInfo(fontAwesome, FontAwesome.ICON.REMOVE, Color.ORANGERED));
@@ -507,34 +505,6 @@ public class FXUIUtils {
         directoryChooser.setTitle(title);
         directoryChooser.setInitialDirectory(initialDirectory);
         return directoryChooser.showDialog(ownerWindow);
-    }
-
-    public static Node createImage(String imageName, String version) {
-        return createImageWithPadding(imageName, version, 48, 53);
-    }
-
-    public static Node createIteImage(String imageName, String version) {
-        return createImageWithPadding(imageName, version, 35, 58);
-    }
-
-    private static Node createImageWithPadding(String imageName, String version, int rightPadding, int topMargin) {
-        ImageView splash = new ImageView(new Image(FXUIUtils.class.getResourceAsStream("images/" + imageName + ".png")));
-        Label versionLabel = new Label(" Version: " + version);
-        HBox.setHgrow(versionLabel, Priority.ALWAYS);
-        versionLabel.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        versionLabel.setAlignment(Pos.CENTER_RIGHT);
-        versionLabel.setPadding(new Insets(0, rightPadding, 0, 0));
-        versionLabel.setStyle("-fx-text-fill:#e3ff00;-fx-font-size:14pt;-fx-font-style:italic;-fx-font-weight:bold;");
-        versionLabel.setId("versionLabel");
-        StackPane stackPane = new StackPane(splash, versionLabel);
-        StackPane.setAlignment(versionLabel, Pos.CENTER);
-        StackPane.setMargin(versionLabel, new Insets(topMargin, 0, 0, 0));
-        StackPane.setAlignment(splash, Pos.TOP_LEFT);
-        stackPane.setPrefHeight(splash.getFitHeight());
-        stackPane.setPrefWidth(splash.getFitWidth());
-        stackPane.setMaxHeight(splash.getFitHeight());
-        stackPane.setMaxWidth(splash.getFitWidth());
-        return stackPane;
     }
 
 }

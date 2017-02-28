@@ -19,6 +19,7 @@ import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -32,6 +33,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -45,8 +47,10 @@ import javax.swing.event.ChangeListener;
 
 import org.json.JSONObject;
 
+import net.sourceforge.marathon.component.FileDialogTransformer;
 import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.component.RComponentFactory;
+import net.sourceforge.marathon.component.RFileDialog;
 import net.sourceforge.marathon.component.RUnknownComponent;
 import net.sourceforge.marathon.contextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
@@ -226,7 +230,8 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         menuModifiers = jsonObject.getString("menuModifiers");
     }
 
-    public static void premain(final String args) throws Exception {
+    public static void premain(final String args, Instrumentation instrumentation) throws Exception {
+        instrumentation.addTransformer(new FileDialogTransformer());
         final int port;
         if (args != null && args.trim().length() > 0) {
             port = Integer.parseInt(args.trim());
@@ -291,6 +296,10 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             AccessController.doPrivileged(new PrivilegedAction<Object>() {
                 @Override public Object run() {
                     Object source = event.getSource();
+                    if (event instanceof ActionEvent && source instanceof FileDialog) {
+                        handleFileDialog((ActionEvent) event);
+                        return null;
+                    }
                     if (!(source instanceof Component)) {
                         return null;
                     }
@@ -352,6 +361,18 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private void handleFileDialog(ActionEvent event) {
+        FileDialog fileDialog = (FileDialog) event.getSource();
+        String file = event.getActionCommand();
+        String filePath;
+        if (file == null || "".equals(file)) {
+            filePath = "";
+        } else {
+            filePath = fileDialog.getDirectory() + file;
+        }
+        new RFileDialog(recorder).record(filePath);
     }
 
     private void handleWindowEvent(WindowEvent event) {

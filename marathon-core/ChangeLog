@@ -1,3 +1,37 @@
+Marathon Version 5.0.1.0 (February 28 2017)
+1.  fix: focusedWindow being called with a container = null
+2.  feat: reuse fixture for web application.
+3.  feat: to record and playback Java/AWT FileDialog window.
+4.  feat: Creating driver service in their respective web driver proxy
+    class, so that driverservice is not executed multiple times.
+5.  fix: Ruby runtime engine loading multiple times in some cases
+    where it is not needed.
+6.  fix: encoding property while assertion to avoid invalid URI
+    errors.
+7.  fix: assertion of element from an array - recording improper.
+8.  fix: show failures in test runner.
+9.  fix: Changing console code page to 65001 (UTF8)
+10. fix: caret position change when file is saved.
+11. fix: Updating editor name which is not set to current editor.
+11. fix: Rename not changing editor name
+12. fix: scriptconsole wasn't waiting till the command is
+    executed.
+13. feat: iconify screencapture. When using screencapture, the
+    window is iconified so that it doesn't overlap the captured
+		image.
+14. fix: JavaFXColoPicker firing action event after set the value.
+15. fix: while editing file name, text field's text was not proper in navigator view.
+16. fix: application modality to script console
+17. fix: tagname while recording htmleditor.
+18. fix: Changing only the case of a filename not working on
+    Mac/Windows where file names are not case sensitive.
+19. fix: name, description, seveity and id inside double quotes in test file.
+20. feat: Added info menu to testscripts
+21. fix: unable to access properties accessible by V3
+    Not setting accessible flag in EventQueueWait#call doesn't allow accessing
+    objects of anonymouse class objects.
+22. fix: setting window state for restoring when relaunched.
+
 Marathon Version 5.0 (December 15 2016)
 
 1. UI has been rewritten to use Java/FX

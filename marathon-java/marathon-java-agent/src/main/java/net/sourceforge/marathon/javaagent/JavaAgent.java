@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
@@ -219,6 +220,10 @@ public class JavaAgent implements IJavaAgent {
      * lang.String)
      */
     @Override public List<IJavaElement> findElementsByTagName(final String using) {
+        if (using.equals("#fileDialog")) {
+            JWindow topContainer = targetLocator.getTopContainer();
+            return Arrays.asList(topContainer.findFileDialogElement(targetLocator.getFileDialogContainer()));
+        }
         return findByCss(using);
     }
 

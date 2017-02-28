@@ -135,6 +135,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         } catch (Throwable t) {
             throw t;
         } finally {
+            if (runtime != null)
+                runtime.releaseInterpreters();
             if (runtime != null && (!reuseFixture || ignoreReuse)) {
                 logger.info("Destroying VM");
                 runtime.destroy();
@@ -249,6 +251,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
             Button screenCapture = FXUIUtils.createButton("Screen Capture", "Create screen capture");
             screenCapture.setOnAction((e) -> {
+                dialog.getStage().setIconified(true);
                 File captureFile = null;
                 try {
                     if (captureFile == null) {
@@ -261,6 +264,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
                     try {
                         AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, true);
                         annotate.getStage().showAndWait();
+                        dialog.getStage().setIconified(false);
                         if (annotate.isSaved()) {
                             annotate.saveToFile(captureFile);
                             checklist.setCaptureFile(captureFile.getName());
@@ -299,6 +303,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
             return runtimeFactory;
         }
         reuseFixture = Boolean.valueOf((String) fixtureProperties.get(Constants.FIXTURE_REUSE)).booleanValue();
+        System.out.println("MarathonTestCase.getRuntimeFactory() " + TestAttributes.get("reuseFixture"));
         String launcherModel = (String) fixtureProperties.get(Constants.PROP_PROJECT_LAUNCHER_MODEL);
         IRuntimeLauncherModel lm = LauncherModelHelper.getLauncherModel(launcherModel);
         if (lm == null) {
@@ -317,6 +322,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
     public static void reset() {
         if (runtime != null) {
+            runtime.releaseInterpreters();
             runtime.destroy();
         }
         runtime = null;
@@ -328,6 +334,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         String scriptText = getScriptContents();
         IRuntimeFactory rf = getRuntimeFactory(scriptText);
         shouldRunFixture = false;
+        if (runtime != null)
+            runtime.releaseInterpreters();
         if (runtime == null || !reuseFixture) {
             // This condition is added for Unit Testing purposes.
             if (runtime == null || !runtime.getClass().getName().equals("net.sourceforge.marathon.runtime.RuntimeStub")) {

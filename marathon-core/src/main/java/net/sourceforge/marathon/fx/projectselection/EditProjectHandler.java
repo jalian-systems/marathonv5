@@ -64,6 +64,7 @@ public class EditProjectHandler implements IEditProjectHandler {
         };
         mpfConfigurationStage.getStage().showAndWait();
         if (projectEdited.size() == 0) {
+            System.clearProperty(Constants.PROP_PROJECT_LAUNCHER_MODEL);
             return false;
         }
         return true;
