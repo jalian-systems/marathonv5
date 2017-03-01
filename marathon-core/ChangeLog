@@ -1,3 +1,9 @@
+Marathon Version 5.0.2.0 (March 1 2017)
+1. fix: Invisible components are being returned by CSS (Swing)
+2. fix: Accessing Collections (without a get) and Map (Swing)
+3. chore: Changed default theme to marathon
+4. fix: Unix shell script(?)
+
 Marathon Version 5.0.1.0 (February 28 2017)
 1.  fix: focusedWindow being called with a container = null
 2.  feat: reuse fixture for web application.
