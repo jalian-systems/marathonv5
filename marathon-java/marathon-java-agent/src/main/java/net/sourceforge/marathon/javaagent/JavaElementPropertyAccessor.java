@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,8 +78,10 @@ import net.sourceforge.marathon.javaagent.components.ContextManager;
 
 public class JavaElementPropertyAccessor {
 
+    private static Logger logger = Logger.getLogger(JavaElementPropertyAccessor.class.getName());
+    
     protected Component component;
-    private static final Pattern arrayPattern = Pattern.compile("(.*)\\[(\\d*)\\]$");
+    private static final Pattern arrayPattern = Pattern.compile("(.*)\\[([^\\]]*)\\]$");
 
     public JavaElementPropertyAccessor(Component component) {
         this.component = component;
@@ -156,22 +159,28 @@ public class JavaElementPropertyAccessor {
      * net.sourceforge.marathon.javaagent.IJavaElement#getAttributeObject(java
      * .lang.String)
      */
-    public Object getAttributeObject(Object component, String name) {
+    public Object getAttributeObject(Object srcobj, String name) {
         Object o = null;
         Matcher matcher = arrayPattern.matcher(name);
         if (matcher.matches()) {
             try {
-                o = getAttributeObject(component, getGetMethod(matcher.group(1)));
+                o = getAttributeObject(srcobj, getGetMethod(matcher.group(1)));
                 if (o != null) {
-                    o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
+                    if (o instanceof Map<?, ?>) {
+                        o = ((Map<?, ?>)o).get(matcher.group(2));
+                        logger.info("Accessing map with " + matcher.group(2) + " = " + o);
+                    }
+                    else
+                        o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
                 }
             } catch (NoSuchMethodException e) {
+                logger.info("Method get not found for " + o.getClass());
             }
         }
         try {
             if (o == null) {
                 String isMethod = getIsMethod(name);
-                o = EventQueueWait.call(component, isMethod);
+                o = EventQueueWait.call(srcobj, isMethod);
             }
         } catch (Throwable e) {
             if (!(e instanceof NoSuchMethodException)) {
@@ -181,19 +190,19 @@ public class JavaElementPropertyAccessor {
         try {
             if (o == null) {
                 String getMethod = getGetMethod(name);
-                o = EventQueueWait.call(component, getMethod);
+                o = EventQueueWait.call(srcobj, getMethod);
             }
         } catch (Throwable e) {
         }
         try {
             if (o == null) {
-                o = EventQueueWait.call(component, name);
+                o = EventQueueWait.call(srcobj, name);
             }
         } catch (Throwable e) {
         }
         try {
             if (o == null) {
-                o = getFieldValue(component, name);
+                o = getFieldValue(srcobj, name);
             }
         } catch (Throwable e) {
         }
@@ -205,9 +214,26 @@ public class JavaElementPropertyAccessor {
             }
             o = lo;
         }
-        if (o == null && component instanceof Collection<?>) {
+        if (o != null && o instanceof Map<?, ?>) {
+            Map<String, Object> lm = new HashMap<String, Object>();
+            Map<?, ?> om = (Map<?, ?>) o;
+            Set<?> keySet = om.keySet();
+            for (Object object : keySet) {
+                lm.put(object.toString(), om.get(object));
+            }
+            o = lm;
+        }
+        if (o != null && o instanceof Collection<?>) {
             ArrayList<Object> lo = new ArrayList<Object>();
-            Collection<?> c = (Collection<?>) component;
+            Collection<?> oa = (Collection<?>) o;
+            for (Object object : oa) {
+                lo.add(object);
+            }
+            o = lo;
+        }
+        if (o == null && srcobj instanceof Collection<?>) {
+            ArrayList<Object> lo = new ArrayList<Object>();
+            Collection<?> c = (Collection<?>) srcobj;
             for (Object object : c) {
                 lo.add(getAttributeObject(object, name));
             }
