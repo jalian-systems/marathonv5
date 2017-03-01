@@ -488,4 +488,14 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
             }
         }
     }
+    
+    public boolean isVisible() {
+        Component c = component ;
+        while(c != null) {
+            if(!c.isVisible())
+                return false;
+            c = c.getParent();
+        }
+        return true;
+    }
 }
