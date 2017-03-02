@@ -243,8 +243,8 @@ public class WebDriverRuntime implements IMarathonRuntime {
     }
     
     @Override public void releaseInterpreters() {
-        if(script != null)
-        script.releaseInterpreters();
+        if (script != null)
+            script.releaseInterpreters();
     }
 
     @Override public Module getModuleFunctions() {
