@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fxcontextmenu;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -114,11 +115,21 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
                 fillMapValues((Map<?, ?>) object, r);
             } else if (object.getClass().isArray()) {
                 fillArrayValues(object, r);
+            } else if (object instanceof Collection<?>) {
+                fillCollectionValues((Collection<?>) object, r);
             } else {
                 fillObjectValues(object, r);
             }
             super.getChildren().setAll(r);
             return super.getChildren();
+        }
+
+        private void fillCollectionValues(Collection<?> object, ArrayList<TreeItem<PropertyWrapper>> r) {
+            int length = Array.getLength(object.toArray());
+            r.add(new AssertionTreeItem(new AssertionTreeView.PropertyWrapper(length, "size")));
+            for (int i = 0; i < length; i++) {
+                r.add(new AssertionTreeItem(new AssertionTreeView.PropertyWrapper(Array.get(object.toArray(), i), "[" + i + "]")));
+            }
         }
 
         private void fillArrayValues(Object object, ArrayList<TreeItem<AssertionTreeView.PropertyWrapper>> r) {
@@ -173,7 +184,7 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
             Set<?> entrySet = object.entrySet();
             for (Object o : entrySet) {
                 Entry<?, ?> entry = (Entry<?, ?>) o;
-                r.add(new AssertionTreeItem(entry.getValue(), entry.getKey().toString()));
+                r.add(new AssertionTreeItem(entry.getValue(), "[" + entry.getKey().toString() + "]"));
             }
         }
 
