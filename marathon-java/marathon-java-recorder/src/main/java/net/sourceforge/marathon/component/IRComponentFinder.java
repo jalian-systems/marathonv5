@@ -21,4 +21,6 @@ public interface IRComponentFinder {
 
     Class<? extends RComponent> get(Component component);
 
+    Component getActiveSource(Component source);
+
 }

@@ -40,6 +40,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.ComboPopup;
@@ -73,6 +74,10 @@ public class RComponentFactory {
                 return rComponentKlass;
             }
             return null;
+        }
+
+        @Override public Component getActiveSource(Component source) {
+            return source;
         }
     }
 
@@ -136,7 +141,11 @@ public class RComponentFactory {
             try {
                 Constructor<? extends RComponent> cons = k.getConstructor(Component.class, JSONOMapConfig.class, Point.class,
                         IJSONRecorder.class);
-                return cons.newInstance(source, omapConfig, point, recorder);
+                Component active = entry.getActiveSource(source);
+                if(active != source) {
+                    point = SwingUtilities.convertPoint(source, point, active);
+                }
+                return cons.newInstance(active, omapConfig, point, recorder);
             } catch (Exception e) {
                 e.printStackTrace();
             }
