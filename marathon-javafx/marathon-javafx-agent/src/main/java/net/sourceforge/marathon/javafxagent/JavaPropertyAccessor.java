@@ -19,6 +19,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +29,7 @@ import java.util.regex.Pattern;
 public class JavaPropertyAccessor {
 
     private Object object;
-    private static final Pattern arrayPattren = Pattern.compile("(.*)\\[(\\d*)\\]$");
+    private static final Pattern arrayPattren = Pattern.compile("(.*)\\[([^\\]]*)\\]$");
 
     public JavaPropertyAccessor(Object stage) {
         this.object = stage;
@@ -80,7 +83,10 @@ public class JavaPropertyAccessor {
             try {
                 o = getAttributeObject(component, getGetMethod(matcher.group(1)));
                 if (o != null) {
-                    o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
+                    if (o instanceof Map<?, ?>) {
+                        o = ((Map<?, ?>) o).get(matcher.group(2));
+                    } else
+                        o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
                 }
             } catch (NoSuchMethodException e) {
             }
@@ -117,6 +123,23 @@ public class JavaPropertyAccessor {
         if (o != null && o.getClass().isArray() && !o.getClass().getComponentType().isPrimitive()) {
             ArrayList<Object> lo = new ArrayList<Object>();
             Object[] oa = (Object[]) o;
+            for (Object object : oa) {
+                lo.add(object);
+            }
+            o = lo;
+        }
+        if (o != null && o instanceof Map<?, ?>) {
+            Map<String, Object> lm = new HashMap<String, Object>();
+            Map<?, ?> om = (Map<?, ?>) o;
+            Set<?> keySet = om.keySet();
+            for (Object object : keySet) {
+                lm.put(object.toString(), om.get(object));
+            }
+            o = lm;
+        }
+        if (o != null && o instanceof Collection<?>) {
+            ArrayList<Object> lo = new ArrayList<Object>();
+            Collection<?> oa = (Collection<?>) o;
             for (Object object : oa) {
                 lo.add(object);
             }
