@@ -346,4 +346,14 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return finder.findElements(using);
     }
 
+    public boolean isVisible() {
+        Node c = node;
+        while (c != null) {
+            if (!c.isVisible())
+                return false;
+            c = c.getParent();
+        }
+        return true;
+    }
+
 }

@@ -355,10 +355,6 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     private String createTitle(JSONObject container) throws JSONException, ObjectMapException {
-        return createRawTitle(container);
-    }
-
-    private String createRawTitle(JSONObject container) throws JSONException, ObjectMapException {
         if (!"window".equals(container.getString("container_type"))) {
             return ns.getContainerName(container);
         }
@@ -366,6 +362,8 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         if (urp.has("title")) {
             return urp.getString("title");
         }
+        if (urp.has("name"))
+            return urp.getString("name");
         urp = container.getJSONObject("containerURP");
         if (urp.has("title")) {
             return urp.getString("title");

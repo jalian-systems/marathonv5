@@ -70,35 +70,6 @@ public class ObjectMap extends ObjectMapItem {
         return currentContainer;
     }
 
-    public OMapContainer getTopLevelComponent(IPropertyAccessor pa, String title) throws ObjectMapException {
-        OMapContainer currentContainer;
-        List<OMapContainer> matched = new ArrayList<OMapContainer>();
-        for (OMapContainer com : data) {
-            if (com.isMatched(pa)) {
-                matched.add(com);
-            }
-        }
-        if (matched.size() == 1) {
-            currentContainer = matched.get(0);
-            try {
-                currentContainer.load();
-                logger.info(MODULE, "Setting current container to: " + currentContainer);
-            } catch (FileNotFoundException e) {
-                logger.error(MODULE,
-                        "File not found for container: " + currentContainer + ". Recreating object map file for container.");
-                data.remove(currentContainer);
-                throw new ObjectMapException(
-                        "File not found for container: " + currentContainer + ". Recreating object map file for container.");
-            }
-        } else if (matched.size() == 0) {
-            throw new ObjectMapException("No top level component matched for the given properties");
-        } else {
-            throw new ObjectMapException("More than one toplevel container matched for given properties");
-        }
-        currentContainer.addTitle(title);
-        return currentContainer;
-    }
-
     private OMapContainer createNewContainer(IPropertyAccessor pa, List<List<String>> rproperties, List<String> gproperties,
             String title) {
         OMapContainer container = new OMapContainer(this, title);
@@ -251,35 +222,6 @@ public class ObjectMap extends ObjectMapItem {
         return omapComponent;
     }
 
-    public OMapContainer createTopLevelComponent(IPropertyAccessor e, Properties urp, Properties properties, String title) {
-        OMapContainer container = new OMapContainer(this, title);
-        setDirty(true);
-        add(container);
-        List<OMapRecognitionProperty> omapRProps = new ArrayList<OMapRecognitionProperty>();
-        for (Object rprop : urp.keySet()) {
-            OMapRecognitionProperty rproperty = new OMapRecognitionProperty();
-            rproperty.setName(rprop.toString());
-            rproperty.setMethod(IPropertyAccessor.METHOD_EQUALS);
-            rproperty.setValue(urp.getProperty(rprop.toString()));
-            omapRProps.add(rproperty);
-        }
-        container.setContainerRecognitionProperties(omapRProps);
-        List<OMapProperty> others = new ArrayList<OMapProperty>();
-        for (Object otherProp : properties.keySet()) {
-            String v = properties.getProperty(otherProp.toString());
-            if (v != null && !"".equals(v)) {
-                OMapProperty p = new OMapProperty();
-                p.setName(otherProp.toString());
-                p.setValue(v);
-                others.add(p);
-            }
-        }
-        container.setContainerGeneralProperties(others);
-        container.addTitle(title);
-        logger.info(MODULE, "Created a new container: " + container);
-        return container;
-    }
-
     public OMapContainer getTopLevelComponent(Properties attributes, Properties urp) throws ObjectMapException {
         IPropertyAccessor pa = new PropertiesPropertyAccessor(attributes);
         OMapContainer currentContainer;
@@ -337,6 +279,7 @@ public class ObjectMap extends ObjectMapItem {
             OMapProperty omp = new OMapProperty();
             omp.setName(key);
             omp.setValue(attributes.getProperty(key));
+            ompl.add(omp);
         }
         return ompl;
     }
