@@ -38,10 +38,14 @@ public class RFXTreeView extends RFXComponent {
 
     @Override public void focusGained(RFXComponent prev) {
         TreeView<?> treeView = (TreeView<?>) node;
+        cellText = getCellText(treeView, point);
+        treeText = getSelectedTreeNodeText(treeView, treeView.getSelectionModel().getSelectedItems());
+    }
+
+    private String getCellText(TreeView<?> treeView, Point2D point2) {
         row = getRowAt(treeView, point);
         cellValue = getTreeCellValue(treeView, row);
-        cellText = getTextForNode(treeView, treeView.getTreeItem(row));
-        treeText = getSelectedTreeNodeText(treeView, treeView.getSelectionModel().getSelectedItems());
+        return getTextForNode(treeView, treeView.getTreeItem(row));
     }
 
     private String getTreeCellValue(TreeView<?> treeView, int index) {
@@ -70,6 +74,8 @@ public class RFXTreeView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
+        TreeView<?> treeView = (TreeView<?>) node;
+        cellText = getCellText(treeView, point);
         return cellText;
     }
 

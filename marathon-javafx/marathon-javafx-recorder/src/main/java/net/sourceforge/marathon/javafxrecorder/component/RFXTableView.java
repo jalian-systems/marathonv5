@@ -132,6 +132,11 @@ public class RFXTableView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
+        TableView<?> tableView = (TableView<?>) node;
+        if (row != -1 && column != -1) {
+            cellValue = getTableCellValueAt(tableView, row, column);
+            cellText = getTableCellText(tableView, row, column);
+        }
         return cellText;
     }
 
