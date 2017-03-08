@@ -20,6 +20,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -153,8 +154,8 @@ public class AssertionPanel extends GridPane {
         recorder.recordAction(current, action, sb.toString(), selectedItem.getValue().value);
     }
 
-    public void setContent(Event event) {
-        current = finder.findRComponent((Node) event.getTarget(), null, recorder);
+    public void setContent(Event event, Point2D point) {
+        current = finder.findRComponent((Node) event.getTarget(), point, recorder);
         attributes.setRootObject(current);
     }
 }

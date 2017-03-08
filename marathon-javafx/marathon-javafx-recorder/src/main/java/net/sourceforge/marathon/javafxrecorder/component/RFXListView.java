@@ -68,6 +68,10 @@ public class RFXListView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
+        ListView<?> listView = (ListView<?>) node;
+        index = getIndexAt(listView, point);
+        cellValue = getListCellValue(listView, index);
+        cellText = getListSelectionText(listView, index);
         return cellText;
     }
 
@@ -115,7 +119,7 @@ public class RFXListView extends RFXComponent {
         }
         return true;
     }
-
+    
     @Override public String toString() {
         return "RFXListView [index=" + index + ", cellText=" + cellText + ", listText=" + listText + "]";
     }

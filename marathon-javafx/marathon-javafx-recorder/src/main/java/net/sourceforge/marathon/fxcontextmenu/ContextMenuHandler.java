@@ -17,6 +17,7 @@ package net.sourceforge.marathon.fxcontextmenu;
 
 import javafx.event.Event;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -40,7 +41,22 @@ public class ContextMenuHandler {
 
     public void showPopup(Event event) {
         if (event instanceof KeyEvent || event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-            root.setContent(event);
+            if (event.getEventType().equals(KeyEvent.KEY_RELEASED))
+                return;
+            Point2D point;
+            if (event instanceof MouseEvent) {
+                point = new Point2D(((MouseEvent) event).getX(), ((MouseEvent) event).getY());
+            } else {
+                Node source;
+                source = (Node) event.getSource();
+                if (event.getTarget() instanceof Node) {
+                    source = (Node) event.getTarget();
+                }
+                Bounds bounds = source.getBoundsInLocal();
+                bounds = source.localToScreen(bounds);
+                point = new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() + bounds.getHeight() / 2);
+            }
+            root.setContent(event, point);
         }
         if (popup.isShowing()) {
             return;
