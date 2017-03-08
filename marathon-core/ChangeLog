@@ -1,3 +1,12 @@
+Marathon Version 5.0.3.0 (March 7 2017)
+1. fix: with_window() recording only title. Added support for name.
+2. feat: Marathon extensions support fixed. Now a class can be named
+   ending with MarathonExtension instead of name being MarathonExtension.
+3. fix: asserting collection without get and map.
+4. fix: tabpane recording the same tab selected previously.
+5. fix: invisible node are being returned by css
+6. feat: Added a Bare launcher, a fixture that doesn't start a AUT
+
 Marathon Version 5.0.2.0 (March 1 2017)
 1. fix: Invisible components are being returned by CSS (Swing)
 2. fix: Accessing Collections (without a get) and Map (Swing)

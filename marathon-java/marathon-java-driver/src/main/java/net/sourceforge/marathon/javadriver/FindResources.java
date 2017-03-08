@@ -114,7 +114,7 @@ public class FindResources {
     }
 
     public static Collection<String> findClasses(final String klassName) {
-        final Pattern pattern = Pattern.compile(".*/" + klassName + "\\.class$");
+        final Pattern pattern = Pattern.compile(".*" + klassName + "\\.class$");
         final Collection<String> list = FindResources.getResources(pattern);
         final Collection<String> classes = new ArrayList<String>();
         for (final String name : list) {
