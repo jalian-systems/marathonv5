@@ -42,6 +42,12 @@ class RubyMarathon < MarathonRuby
         end
     end
 
+    def set_delay(delayInMS)
+      @cwms = delayInMS
+      System.setProperty("marathon.COMPONENT_WAIT_MS", delayInMS.to_s)
+      @webdriver.manage.timeouts.implicit_wait=@cwms/1000
+    end
+    
     def driver()
       @webdriver
     end
@@ -714,6 +720,10 @@ def driver()
 end
 
 def use_native_events
+end
+
+def set_delay(delayInMS)
+  $marathon.set_delay(delayInMS)
 end
 
 def execute_script(args)

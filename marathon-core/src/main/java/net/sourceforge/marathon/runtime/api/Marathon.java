@@ -98,29 +98,20 @@ public class Marathon {
     protected INamingStrategy namingStrategy;
     private HashMap<Integer, Keys> keyMapping;
     public PlaybackResult result = null;
-    private final int delayInMS;
 
     protected List<ICloseHandler> closeHandlers = new ArrayList<ICloseHandler>();
 
     public Marathon(String driverURL) {
-        String property = System.getProperty(Constants.PROP_RUNTIME_DELAY);
-        int delayInMS = 0;
-        if (property == null || "".equals(property)) {
-            delayInMS = 0;
-        } else {
-            try {
-                delayInMS = Integer.parseInt(property);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        this.delayInMS = delayInMS;
         namingStrategy = NamingStrategyFactory.get();
         initKeyMap();
     }
 
     public int getDelayInMS() {
-        return delayInMS;
+        try {
+            return Integer.parseInt(System.getProperty(Constants.PROP_RUNTIME_DELAY, "0"));
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public void window(final String title, long timeout) {
@@ -170,6 +161,18 @@ public class Marathon {
     }
 
     public void sleepForSlowPlay() {
+        if(Boolean.getBoolean("marathon.demo.pause")) {
+            while(!Boolean.getBoolean("marathon.demo.resume")) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.setProperty("marathon.demo.pause", "false");
+            System.setProperty("marathon.demo.resume", "false");
+            return;
+        }
         int ms = getDelayInMS();
         if (ms != 0) {
             try {
@@ -565,7 +568,7 @@ public class Marathon {
 
     public void saveScreenShotOnError() {
     }
-
+    
     public boolean windowMatchingTitle(String title) {
         IPropertyAccessor propertyAccessor = getDriverAsAccessor();
         List<List<String>> namingProperties = namingStrategy.getContainerNamingProperties("window");
