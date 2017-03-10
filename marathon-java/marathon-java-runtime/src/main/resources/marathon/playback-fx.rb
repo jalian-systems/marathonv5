@@ -722,7 +722,7 @@ end
 def use_native_events
 end
 
-def set_delay(delayInMS)
+def set_component_wait_ms(delayInMS)
   $marathon.set_delay(delayInMS)
 end
 
