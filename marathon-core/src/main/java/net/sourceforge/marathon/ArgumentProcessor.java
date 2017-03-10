@@ -91,6 +91,11 @@ public class ArgumentProcessor {
                 AbstractFileConsole.setConsoleLogNeeded(false);
             } else if (args[i].equals("-capture")) {
                 capture = true;
+            } else if (args[i].equals("-delay")) {
+                i++;
+                checkArgs(args, i);
+                int delay = Integer.parseInt(args[i]);
+                System.setProperty(Constants.PROP_RUNTIME_DEFAULT_DELAY, delay + "");
             } else if (args[i].equals("-reportdir")) {
                 i++;
                 checkArgs(args, i);
@@ -203,6 +208,7 @@ public class ArgumentProcessor {
             .append("[-reportdir <report-directory> (default: marathon-reports)] ")
             .append("[-acceptchecklists] ")
             .append("[-capture] ")
+            .append("[-delay <slowPlayDelayInMS>]")
             .append("<Project Directory> ")
             .append("[(<TestCase>|+<TestSuite>|@<Feature>|#<Story>|!<Issue>|~<SavedRun>) ...]")
             .append("\n");
