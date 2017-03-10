@@ -161,6 +161,8 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
                 method.setAccessible(true);
                 Object value = method.invoke(object, new Object[] {});
                 if (value != null) {
+                    if (value.getClass().isArray())
+                        value = RFXComponent.unboxPremitiveArray(value);
                     return new AssertionTreeItem(value, getPropertyName(method.getName()));
                 }
             } catch (Throwable t) {

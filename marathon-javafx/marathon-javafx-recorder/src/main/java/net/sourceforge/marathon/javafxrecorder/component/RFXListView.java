@@ -33,11 +33,11 @@ public class RFXListView extends RFXComponent {
     public RFXListView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
         this.point = point;
+        index = getIndexAt((ListView<?>) node, point);
     }
 
     @Override public void focusGained(RFXComponent prev) {
         ListView<?> listView = (ListView<?>) node;
-        index = getIndexAt(listView, point);
         cellValue = getListCellValue(listView, index);
         cellText = getListSelectionText(listView, index);
         listText = getListSelectionText(listView);
@@ -93,6 +93,9 @@ public class RFXListView extends RFXComponent {
     }
 
     @Override public String _getText() {
+        if (index != -1) {
+            return getListSelectionText((ListView<?>) node, index);
+        }
         return getListSelectionText((ListView<?>) node);
     }
 
@@ -119,7 +122,7 @@ public class RFXListView extends RFXComponent {
         }
         return true;
     }
-    
+
     @Override public String toString() {
         return "RFXListView [index=" + index + ", cellText=" + cellText + ", listText=" + listText + "]";
     }

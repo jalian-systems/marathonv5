@@ -236,7 +236,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
     public ArrayList<Method> getMethods() {
         // @formatter:off
 		String[] methods = new String[] { "isEnabled", "getRowCount", "getColumnCount", "getItemCount", "getModelSize",
-				"getInstanceOf", "getType", "getFieldName", "getFieldNames", "getTooltipText",
+				"getInstanceOf", "getFieldName", "getFieldNames", "getTooltipText",
 				"getAccessibleName", "getId" };
 		// @formatter:on
         ArrayList<Method> l = new ArrayList<Method>();
@@ -249,7 +249,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         if (getLabeledBy() != null) {
             addMethod(l, "getLabeledBy");
         }
-        addMethod(l, "getTagName");
         Arrays.sort(methods, new Comparator<String>() {
             @Override public int compare(String o1, String o2) {
                 if (o1.startsWith("is")) {
