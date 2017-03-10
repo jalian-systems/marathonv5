@@ -104,6 +104,9 @@ public class RFXTreeView extends RFXComponent {
     }
 
     @Override public String _getText() {
+        row = getRowAt((TreeView<?>) node, point);
+        if (row != -1)
+            return cellValue = getTreeCellValue((TreeView<?>) node, row);
         return getSelectedTreeNodeText((TreeView<?>) node, ((TreeView<?>) node).getSelectionModel().getSelectedItems());
     }
 

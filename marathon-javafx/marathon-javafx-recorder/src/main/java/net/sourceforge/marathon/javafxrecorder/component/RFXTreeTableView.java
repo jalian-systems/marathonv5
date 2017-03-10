@@ -131,6 +131,9 @@ public class RFXTreeTableView extends RFXComponent {
     }
 
     @Override public String _getText() {
+        if (row != -1 && column != -1) {
+            return getTreeTableCellValueAt((TreeTableView<?>) node, row, column);
+        }
         return getTreeTableSelection((TreeTableView<?>) node);
     }
 
