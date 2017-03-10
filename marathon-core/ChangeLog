@@ -1,3 +1,9 @@
+Marathon Version 5.0.4.0 (March 10 2017)
+1. feat: Added set_component_wait_ms. Sets the component wait time
+   and updated driver.implicit_wait if supported
+2. fix: (FX) getText based on index, row and column for composite node.
+3. fix: (FX) passing null point to RFXComponents.
+
 Marathon Version 5.0.3.0 (March 7 2017)
 1. fix: with_window() recording only title. Added support for name.
 2. feat: Marathon extensions support fixed. Now a class can be named

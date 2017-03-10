@@ -325,7 +325,7 @@ public class WSRecorder implements IJSONRecorder {
     @Override public void recordAction(RFXComponent r, String action, String property, Object value) {
         JSONObject event = new JSONObject();
         event.put("type", action);
-        event.put("value", value != null ? value.toString() : value);
+        event.put("value", value);
         event.put("property", property);
         event.put("cellinfo", r.getCellInfo());
         recordEvent(r, event);

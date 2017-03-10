@@ -15,11 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxcontextmenu;
 
+import org.json.JSONArray;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -150,11 +153,22 @@ public class AssertionPanel extends GridPane {
             w = w.getParent();
         }
         sb.setLength(sb.length() - 1);
-        recorder.recordAction(current, action, sb.toString(), selectedItem.getValue().value);
+        String property = sb.toString();
+        Object value = null;
+        if (property.equals("content")) {
+            value = new JSONArray(current.getContent());
+        } else {
+            if (property.equals("text")) {
+                value = current.getText();
+            } else {
+                value = current.getAttribute(property);
+            }
+        }
+        recorder.recordAction(current, action, sb.toString(), value);
     }
 
-    public void setContent(Event event) {
-        current = finder.findRComponent((Node) event.getTarget(), null, recorder);
+    public void setContent(Event event, Point2D point) {
+        current = finder.findRComponent((Node) event.getTarget(), point, recorder);
         attributes.setRootObject(current);
     }
 }

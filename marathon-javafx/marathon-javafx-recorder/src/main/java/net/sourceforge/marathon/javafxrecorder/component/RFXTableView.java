@@ -47,7 +47,7 @@ public class RFXTableView extends RFXComponent {
             row = editingCell.getRow();
             column = editingCell.getColumn();
         } else {
-            if (point != null) {
+            if (point != null && point.getX() > 0 && point.getY() > 0) {
                 column = getColumnAt(table, point);
                 row = getRowAt(table, point);
             } else {
@@ -132,10 +132,19 @@ public class RFXTableView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
+        TableView<?> tableView = (TableView<?>) node;
+        if (row != -1 && column != -1) {
+            cellValue = getTableCellValueAt(tableView, row, column);
+            cellText = getTableCellText(tableView, row, column);
+        }
         return cellText;
     }
 
     @Override public String _getText() {
+        TableView<?> tableView = (TableView<?>) node;
+        if (row != -1 && column != -1) {
+            return getTableCellValueAt(tableView, row, column);
+        }
         return getSelection((TableView<?>) getComponent());
     }
 

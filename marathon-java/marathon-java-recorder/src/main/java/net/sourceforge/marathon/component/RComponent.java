@@ -216,7 +216,7 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         String[] methods = new String[] {
                 "isEnabled", "getBackground", "getForeground", "getRowCount",
                 "getColumnCount", "getItemCount", "getModelSize", "getFont",
-                "getFontFamily", "getBorder", "getTagName", "getInstanceOf",
+                "getFontFamily", "getBorder", "getInstanceOf",
                 "getType", "getSize", "getLocation", "getPosition", "getPrecedingLabel",
                 "getFieldName", "getFieldNames", "getTooltipText", "getAccessibleName",
                 "getLabeledBy", "getLabelText", "getIconFile", "getOMapClassName"
