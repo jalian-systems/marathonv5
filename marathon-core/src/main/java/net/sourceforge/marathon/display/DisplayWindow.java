@@ -214,7 +214,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     currentEditor.runWhenReady(() -> currentEditor.refresh());
                 }
             }
-            if (selectedDockable == null && e.getPreviousDockable() instanceof EditorDockable)
+            if (selectedDockable == null)
                 setCurrentEditorDockable(null);
         }
 
