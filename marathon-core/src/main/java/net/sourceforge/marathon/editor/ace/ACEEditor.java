@@ -396,7 +396,9 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         req.put("method", method);
         req.put("data", o.toString());
         engine.executeScript("$editor.executeScript('" + escape(req.toString()) + "');");
-        setContentCalled = "setContent".equals(method);
+        if (!setContentCalled) {
+            setContentCalled = "setContent".equals(method);
+        }
     }
 
     private boolean editorDefined() {
@@ -519,10 +521,10 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
     }
 
     @Override public void runWhenContentLoaded(Runnable r) {
-        if (engine == null || !editorDefined() || setContentCalled) {
+        if ((engine == null || !editorDefined()) || !setContentCalled) {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
-                    runWhenReady(r);
+                    runWhenContentLoaded(r);
                 }
             });
             return;

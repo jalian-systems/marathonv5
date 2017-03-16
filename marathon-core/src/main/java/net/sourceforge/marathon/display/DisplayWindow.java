@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -2407,7 +2408,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      */
 
     private void newFixtureFile() {
-        FixtureStage fixtureStage = new FixtureStage(new FixtureStageInfo(Arrays.asList(getFixture())));
+        FixtureStage fixtureStage = new FixtureStage(
+                new FixtureStageInfo(Arrays.asList(new File(System.getProperty(Constants.PROP_FIXTURE_DIR)).list())));
         fixtureStage.setFixtureStageInfoHandler(new NewFixtureHandler());
         fixtureStage.getStage().showAndWait();
     }
@@ -2629,7 +2631,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void saveTo(File file) throws IOException {
-        currentEditor.runWhenReady(() -> {
+        currentEditor.runWhenContentLoaded(() -> {
             try {
                 currentEditor.saveTo(file);
             } catch (IOException e) {
@@ -3456,6 +3458,15 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 EditorDockable dockable = findEditorDockable(file);
                 if (dockable != null) {
                     workspace.close(dockable);
+                }
+                File fixtureDirectory = new File(System.getProperty(Constants.PROP_FIXTURE_DIR));
+                if (file.getParentFile().toPath().equals(fixtureDirectory.toPath())) {
+                    String[] fixtures = fixtureDirectory.list();
+                    List<String> list = Arrays.asList(fixtures).stream().map(p -> p.substring(0, p.indexOf(".")))
+                            .collect(Collectors.toList());
+                    if (list.size() > 0) {
+                        setDefaultFixture(list.get(0));
+                    }
                 }
             }
             if (source != navigatorPanel) {
