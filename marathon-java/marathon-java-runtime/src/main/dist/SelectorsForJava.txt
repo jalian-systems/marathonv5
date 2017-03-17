@@ -19,7 +19,9 @@ JEditorPane: tag(name) => name is one of 'a', 'ol', 'ul' etc.
 
 JList: nth-item(index), all-items
 
-JTabbedPane: nth-tab(index), all-tabs
+JTabbedPane: nth-tab(index), all-tabs, selected-tab
+
+JTabbedPane:Tab: component, tab-component
 
 JTableHeader: nth-item(index), all-items
 
