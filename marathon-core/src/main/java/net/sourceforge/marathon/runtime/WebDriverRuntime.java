@@ -241,7 +241,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
             webDriverProxy.quit();
         }
     }
-    
+
     @Override public void releaseInterpreters() {
         if (script != null)
             script.releaseInterpreters();
@@ -279,7 +279,6 @@ public class WebDriverRuntime implements IMarathonRuntime {
             script.exec(function);
         } finally {
             recordingServer.resumeRecording();
-            script.onWSConnectionClose(recordingServerPort);
         }
     }
 
