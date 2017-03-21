@@ -59,6 +59,13 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         if (selector.equals("component")) {
             return Arrays.asList(JavaElementFactory.createElement(getTabComponent(tabIndex), getDriver(), getWindow()));
         }
+        if (selector.equals("tab-component")) {
+            Component tc = getTabTabComponent(tabIndex);
+            if(tc != null)
+                return Arrays.asList(JavaElementFactory.createElement(tc, getDriver(), getWindow()));
+            else
+                return Arrays.asList();
+        }
         throw new UnsupportedCommandException("JTabbedPane does not support pseudoelement " + selector, null);
     }
 
@@ -67,6 +74,15 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         return EventQueueWait.exec(new Callable<Component>() {
             @Override public Component call() throws Exception {
                 return ((JTabbedPane) getComponent()).getComponentAt(tabIndex);
+            }
+        });
+    }
+
+    private Component getTabTabComponent(final int tabIndex) {
+        validateTab();
+        return EventQueueWait.exec(new Callable<Component>() {
+            @Override public Component call() throws Exception {
+                return ((JTabbedPane) getComponent()).getTabComponentAt(tabIndex);
             }
         });
     }
