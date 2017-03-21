@@ -1,0 +1,21 @@
+{"project-settings": {
+  "marathon.application.vm.arguments": "",
+  "marathon.project.launcher.model": "net.sourceforge.marathon.runtime.RuntimeLauncherModel",
+  "marathon.application.working.dir": "",
+  "marathon.project.name": "Marathon Project for SwingSet3",
+  "marathon.capture.dir": "%marathon.project.dir%/Modules",
+  "marathon.application.launchtime": "60000",
+  "marathon.application.rubyhome": "",
+  "marathon.suite.dir": "%marathon.project.dir%/TestSuites",
+  "marathon.application.arguments": "",
+  "marathon.test.dir": "%marathon.project.dir%/TestCases",
+  "marathon.application.java.home": "",
+  "marathon.checklist.dir": "%marathon.project.dir%/Checklists",
+  "marathon.project.script.model": "net.sourceforge.marathon.ruby.RubyScriptModel",
+  "marathon.data.dir": "%marathon.project.dir%/TestData",
+  "marathon.application.mainclass": "com.sun.swingset3.SwingSet3",
+  "marathon.project.description": "",
+  "marathon.fixture.dir": "%marathon.project.dir%/Fixtures",
+  "marathon.application.classpath": "%marathon.project.dir%/../swingset3/lib/AnimatedTransitions.jar;%marathon.project.dir%/../swingset3/lib/AppFramework.jar;%marathon.project.dir%/../swingset3/lib/TimingFramework.jar;%marathon.project.dir%/../swingset3/lib/javaws.jar;%marathon.project.dir%/../swingset3/lib/swing-worker.jar;%marathon.project.dir%/../swingset3/lib/swingx.jar;%marathon.project.dir%/../swingset3/SwingSet3.jar",
+  "marathon.application.rubypath": ""
+}}
