@@ -47,6 +47,10 @@ class RubyMarathon < MarathonRuby
         @collector.callprotected(teardown, result)
     end
 
+    def addfailure(message, backtrace)
+      @collector.addfailure(message, backtrace)
+    end
+    
     def handleFailure(e)
         raise e if result == nil
         @collector.addfailure(e, result) unless e.isAbortTestCase
