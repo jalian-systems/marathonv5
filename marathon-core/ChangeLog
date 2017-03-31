@@ -1,3 +1,13 @@
+Marathon Version 5.0.5.0 (March 31 2017)
+1. fix: save_screenshot takes a full screen capture instead of top level
+   window.
+2. fix: Showing a warning not to select no launcher for application type when
+   creating a project.
+3. feat: Added selected-tab pseudo class to JTabbedPane
+4. feat: Added tab-component pseudo class to JTabbedPaneTab
+5. fix: creating empty fixture file.
+6. fix: new editor open when omap file is deleted.
+
 Marathon Version 5.0.4.0 (March 10 2017)
 1. feat: Added set_component_wait_ms. Sets the component wait time
    and updated driver.implicit_wait if supported
