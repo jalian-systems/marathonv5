@@ -27,16 +27,8 @@ class Collector
       return 0
   end
 
-  def addfailure(exception, result)
-    @playbackresult = result
-    $assertion.assertionFailed()
-    backtrace = nil
-    begin
-      raise NameError
-    rescue
-      backtrace = $!.backtrace
-    end
-	_addfailure(exception.message, backtrace, exception)
+  def addfailure(message, backtrace)
+    _addfailure(message, backtrace, nil)
   end
 
   def addrubyerror(exception)
@@ -69,10 +61,7 @@ class Collector
   end
 
   def excluded(item)
-    item = item[6,item.length] if(item.index('file:/') == 0)
-    item =~ /(.*):(.*):(.*)/
-    file = $1
-    dir = java.lang.System.getProperty 'marathon.project.dir'
-    return file.index(dir) != 0 && file.index('Untitled') != 0
+    dir = File.absolute_path(java.lang.System.getProperty('marathon.project.dir'))
+    item.index("uri:") == 0 || !item.include?(dir)
   end
 end

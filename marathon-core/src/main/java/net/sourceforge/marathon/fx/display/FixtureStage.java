@@ -143,7 +143,7 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
 
     private boolean exists(String fixtureName) {
         List<String> fixtures = fixtureStageInfo.getFixtures();
-        return fixtures.contains(fixtureName);
+        return fixtures.contains(fixtureName + ".rb");
     }
 
     @Override protected void setDefaultButton() {

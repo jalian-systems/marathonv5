@@ -1,0 +1,21 @@
+{"project-settings": {
+  "marathon.application.vm.arguments": "",
+  "marathon.project.launcher.model": "net.sourceforge.marathon.runtime.FXRuntimeLauncherModel",
+  "marathon.application.working.dir": "",
+  "marathon.project.name": "Marathon Ensemble Project",
+  "marathon.capture.dir": "%marathon.project.dir%/Modules",
+  "marathon.application.launchtime": "60000",
+  "marathon.application.rubyhome": "",
+  "marathon.suite.dir": "%marathon.project.dir%/TestSuites",
+  "marathon.application.arguments": "",
+  "marathon.test.dir": "%marathon.project.dir%/TestCases",
+  "marathon.application.java.home": "",
+  "marathon.checklist.dir": "%marathon.project.dir%/Checklists",
+  "marathon.project.script.model": "net.sourceforge.marathon.ruby.RubyScriptModel",
+  "marathon.data.dir": "%marathon.project.dir%/TestData",
+  "marathon.application.mainclass": "ensemble.Ensemble2",
+  "marathon.project.description": "",
+  "marathon.fixture.dir": "%marathon.project.dir%/Fixtures",
+  "marathon.application.classpath": "%marathon.project.dir%/../javafx-samples-2.2.80/Ensemble.jar",
+  "marathon.application.rubypath": ""
+}}

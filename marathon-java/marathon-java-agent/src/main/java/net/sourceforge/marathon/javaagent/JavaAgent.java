@@ -20,6 +20,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -349,20 +350,15 @@ public class JavaAgent implements IJavaAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getScreenShot()
      */
     @Override public byte[] getScreenShot() throws IOException {
-        BufferedImage bufferedImage;
-        Window window = targetLocator.getFocusedWindow().getWindow();
-        try {
-            Dimension windowSize = window.getSize();
-            Robot robot = new Robot();
-            bufferedImage = robot
-                    .createScreenCapture(new Rectangle(window.getX(), window.getY(), windowSize.width, windowSize.height));
-        } catch (AWTException e) {
-            Rectangle rec = window.getBounds();
-            bufferedImage = new BufferedImage(rec.width, rec.height, BufferedImage.TYPE_INT_ARGB);
-            window.paint(bufferedImage.getGraphics());
-        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", baos);
+        try {
+            BufferedImage bufferedImage;
+            Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+            bufferedImage = new Robot().createScreenCapture(new Rectangle(0, 0, windowSize.width, windowSize.height));
+            ImageIO.write(bufferedImage, "png", baos);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
         return baos.toByteArray();
     }
 
