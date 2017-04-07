@@ -61,7 +61,6 @@ class Collector
   end
 
   def excluded(item)
-    dir = File.absolute_path(java.lang.System.getProperty('marathon.project.dir'))
-    item.index("uri:") == 0 || !item.include?(dir)
+    item.index("uri:") == 0 || !item.tr('\\', '/').include?($marathon_project_dir.tr('\\', '/'))
   end
 end
