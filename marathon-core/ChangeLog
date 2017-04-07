@@ -1,3 +1,6 @@
+Marathon Version 5.0.6.0 (7th April 2017)
+1. fix: Regression - processing of ruby stacktrace
+
 Marathon Version 5.0.5.0 (March 31 2017)
 1. fix: save_screenshot takes a full screen capture instead of top level
    window.
