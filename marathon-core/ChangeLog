@@ -1,3 +1,7 @@
+Marathon Version 5.0.7.0 (12th April 2017)
+1. fix: marathon-grid enable javascriptexecutor option
+2. fix: UserLibs add an empty JAR so that allure report generation works
+
 Marathon Version 5.0.6.0 (7th April 2017)
 1. fix: Regression - processing of ruby stacktrace
 
