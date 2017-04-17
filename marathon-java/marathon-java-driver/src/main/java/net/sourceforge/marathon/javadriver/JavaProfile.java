@@ -112,6 +112,7 @@ public class JavaProfile {
     private String command;
     private String appletURL;
     private static String dirOfMarathonJavaDriverJar;
+    private boolean keepLog = false ;
 
     static {
         dirOfMarathonJavaDriverJar = ClassPathHelper.getClassPath(JavaProfile.class.getName());
@@ -261,6 +262,7 @@ public class JavaProfile {
 
     private String getToolOptions() {
         StringBuilder java_tool_options = new StringBuilder();
+        java_tool_options.append("-DkeepLog=" + Boolean.toString(keepLog)).append(" ");
         java_tool_options.append("-Dmarathon.launch.mode=" + launchMode.getName()).append(" ");
         java_tool_options.append("-Dmarathon.mode=" + (recordingPort != -1 ? "recording" : "playing")).append(" ");
         if (startWindowTitle != null) {
@@ -583,6 +585,7 @@ public class JavaProfile {
         if (executableJar != null) {
             builder.addParameter("executablejar", executableJar);
         }
+        builder.addParameter("keepLog", Boolean.toString(keepLog));
         return builder.build().toURL();
     }
 
@@ -644,6 +647,9 @@ public class JavaProfile {
         }
         if (hasValueFor(values, "nativeevents")) {
             nativeEvents = true;
+        }
+        if (hasValueFor(values, "keepLog")) {
+            keepLog = Boolean.parseBoolean(findValueOf(values, "vmcommand"));
         }
     }
 
@@ -871,5 +877,9 @@ public class JavaProfile {
 
     public LaunchType getLaunchType() {
         return launchType;
+    }
+    
+    public void setKeepLog(boolean keepLog) {
+        this.keepLog = keepLog;
     }
 }
