@@ -28,7 +28,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -44,31 +44,25 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.display.readline.TextAreaReadline;
+import net.sourceforge.marathon.fx.display.TextAreaLimited;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ScriptConsole extends Stage implements IStdOut {
 
     private TextField textField;
-    private TextFlow output = new TextFlow();
     private BorderPane root = new BorderPane();
     private TextAreaReadline textAreaReadline;
     protected PrintWriter spooler;
     private PrintStream oldOut;
     private PrintStream oldErr;
     private List<TextNodeInfo> textNodes = new ArrayList<>();
-    private ScrollPane scrollPane;
+    private TextArea textArea = new TextAreaLimited();
 
     public ScriptConsole(IScriptConsoleListener l, String spoolSuffix) {
         setTitle("Script Console");
         initModality(Modality.APPLICATION_MODAL);
         textField = new TextField();
-        scrollPane = new ScrollPane(output);
-        output.prefWidthProperty().bind(scrollPane.widthProperty());
-        output.heightProperty().addListener((observable, oldValue, newValue) -> {
-            scrollPane.setVvalue(scrollPane.getVmax());
-        });
-        output.setPadding(new Insets(0, 8, 0, 8));
-        root.setCenter(scrollPane);
+        root.setCenter(textArea);
         HBox.setHgrow(textField, Priority.ALWAYS);
 
         Text promptText = new Text(">>");
@@ -79,7 +73,7 @@ public class ScriptConsole extends Stage implements IStdOut {
         HBox.setMargin(textFlow, new Insets(5, 0, 0, 0));
         root.setBottom(new HBox(textFlow, textField));
         setScene(new Scene(root, 640, 480));
-        textAreaReadline = new TextAreaReadline(textField, output, "Marathon Script Console \n\n") {
+        textAreaReadline = new TextAreaReadline(textField, textArea, "Marathon Script Console \n\n") {
             @Override public void handle(KeyEvent event) {
                 if (event.getEventType() == KeyEvent.KEY_PRESSED && event.getCode() == KeyCode.ESCAPE) {
                     textAreaReadline.shutdown();

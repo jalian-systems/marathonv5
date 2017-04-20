@@ -23,21 +23,20 @@ import java.io.UnsupportedEncodingException;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import jline.History;
 
 public class TextAreaReadline implements EventHandler<KeyEvent> {
 
     private static final String EMPTY_LINE = "";
     private TextField area;
-    private TextFlow output;
+    private TextArea output;
     private String currentLine;
     private final InputStream inputStream = new Input();
     private final OutputStream outputStream = new Output(1);
@@ -175,7 +174,7 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
     private Style errorStyle = new Style(Color.RED, Font.font("Verdana", FontWeight.MEDIUM, 12));
     private StringBuffer functionText = new StringBuffer();
 
-    public TextAreaReadline(TextField text, TextFlow output, final String message) {
+    public TextAreaReadline(TextField text, TextArea output, final String message) {
         this.area = text;
         this.output = output;
         readline = new Readline();
@@ -300,11 +299,7 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
      * @param fill
      **/
     protected void append(String toAppend, Style style) {
-        Text text = new Text(toAppend);
-        text.setFill(style.getFillColor());
-        text.setFont(style.getFont());
-        text.setWrappingWidth(640);
-        output.getChildren().add(text);
+        output.appendText(toAppend);
     }
 
     private void writeLineUnsafe(final String line, int type) {

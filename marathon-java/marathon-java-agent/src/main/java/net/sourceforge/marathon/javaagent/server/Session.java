@@ -48,10 +48,8 @@ public class Session {
     }
 
     public void log(Level level, String message) {
-        if (Boolean.getBoolean("keepLog")) {
-            if (level.intValue() >= logLevel.intValue()) {
-                logEntries.add(new LogEntry(level, message));
-            }
+        if (level.intValue() >= logLevel.intValue()) {
+            logEntries.add(new LogEntry(level, message));
         }
     }
 

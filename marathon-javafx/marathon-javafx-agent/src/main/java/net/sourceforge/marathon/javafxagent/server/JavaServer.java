@@ -15,7 +15,9 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
@@ -299,11 +301,6 @@ public class JavaServer extends NanoHTTPD {
             Map<String, String> files) {
         JSONObject jsonQuery = null;
         String query = files.get("postData");
-        // try {
-        // if (query != null)
-        // query = URLDecoder.decode(query, "UTF8");
-        // } catch (UnsupportedEncodingException e1) {
-        // }
         logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
         if (query != null) {
             try {
@@ -320,11 +317,40 @@ public class JavaServer extends NanoHTTPD {
         }
         logmsg.append(") = ");
         Response response = serve_internal(uri, method, jsonQuery == null ? new JSONObject() : jsonQuery);
-        logmsg.append(response);
+        logmsg.append(toString(response));
         if (latestSession != null && !uri.contains("/log")) {
-            latestSession.log(Level.INFO, logmsg.toString());
+            if (Boolean.getBoolean("keepLog"))
+                latestSession.log(Level.INFO, logmsg.toString());
         }
         return response;
+    }
+
+    private String toString(Response response) {
+        Map<String, String> r = new HashMap<String, String>();
+        r.put("status", response.getStatus().toString());
+        InputStream data = response.getData();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int b;
+        int n = 1024;
+        try {
+            while ((b = data.read()) != -1 && n-- > 0)
+                baos.write(b);
+        } catch (IOException e) {
+        } finally {
+            try {
+                data.reset();
+            } catch (IOException e) {
+            }
+        }
+        if(n <= 0)
+            r.put("data", new String(baos.toByteArray()) + "...");
+        else
+            r.put("data", new String(baos.toByteArray()));
+        try {
+            baos.close();
+        } catch (IOException e) {
+        }
+        return r.toString();
     }
 
     public Response serve_internal(String uri, Method method, JSONObject jsonQuery) {

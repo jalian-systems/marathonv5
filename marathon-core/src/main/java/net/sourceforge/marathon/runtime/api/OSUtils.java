@@ -26,6 +26,10 @@ import java.util.logging.LogManager;
 
 import javax.swing.KeyStroke;
 
+import org.apache.commons.io.FileUtils;
+
+import net.sourceforge.marathon.fx.projectselection.MPFConfigurationStage;
+
 public class OSUtils {
 
     public static final int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -242,6 +246,14 @@ public class OSUtils {
 
     public static void setLogConfiguration(String projectDir) {
         File logconfig = new File(projectDir, "logging.properties");
+        if (!logconfig.exists()) {
+            try {
+                FileUtils.copyInputStreamToFile(MPFConfigurationStage.class.getResourceAsStream("/logging.properties"), logconfig);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
         if (logconfig.exists()) {
             try {
                 System.setProperty("java.util.logging.config.file", logconfig.getAbsolutePath());

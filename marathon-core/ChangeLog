@@ -1,3 +1,8 @@
+Marathon Version 5.0.9.0 (20th April 2017)
+1. fix: OOM when the output console overflows.
+2. feat: Added default logging.properties
+3. feat: Added wordwrap option for output console.
+
 Marathon Version 5.0.8.0 (17th April 2017)
 1. fix: Made webdriver log generation optional. Causing OOM errors with
    screencapture.
