@@ -155,13 +155,13 @@ public class MPFConfigurationInfo {
                 logger.warning("Unable to copy Checklists folder from " + srcDir + " to " + destDir);
                 e1.printStackTrace();
             }
-            File destFile = new File(projectDir, "logging.properties");
-            try {
-                FileUtils.copyInputStreamToFile(MPFConfigurationStage.class.getResourceAsStream("/logging.properties"), destFile);
-            } catch (IOException e) {
-                logger.warning("Copy file failed: " + destFile);
-                e.printStackTrace();
-            }
+        }
+        File destFile = new File(projectDir, "logging.properties");
+        try {
+            FileUtils.copyInputStreamToFile(MPFConfigurationStage.class.getResourceAsStream("/logging.properties"), destFile);
+        } catch (IOException e) {
+            logger.warning("Copy file failed: " + destFile);
+            e.printStackTrace();
         }
         if (props.getProperty(Constants.PROP_MODULE_DIRS) == null) {
             createMarathonDir(projectDir, Constants.DIR_MODULE);

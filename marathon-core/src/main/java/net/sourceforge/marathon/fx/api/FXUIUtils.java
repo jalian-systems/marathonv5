@@ -266,6 +266,7 @@ public class FXUIUtils {
         fontIcons.put("help", new FontInfo(materialIcons, MaterialIcons.ICON.HELP_OUTLINE));
         fontIcons.put("rotate", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.SCREEN_ROTATION));
         fontIcons.put("Safari", new FontInfo(fontAwesome, FontAwesome.ICON.SAFARI));
+        fontIcons.put("wordWrap", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.WRAP));
     }
     
     public static Button createButton(String name, String toolTip) {
