@@ -314,11 +314,11 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
                 recorder.record(new FileDialogScriptElement(query.getJSONObject("event")));
                 return new JSONObject();
             }
-            WindowId windowId = createWindowId(query.getJSONObject("container"));
             if (type.equals("select_file_chooser") || type.equals("select_folder_chooser")) {
                 recorder.record(new ChooserScriptElement(query.getJSONObject("event")));
                 return new JSONObject();
             } else if (type.equals("select_fx_menu")) {
+                WindowId windowId = createWindowId(query.getJSONObject("container"));
                 recorder.record(new MenuItemScriptElement(query.getJSONObject("event"), windowId));
                 return new JSONObject();
             }
@@ -336,7 +336,11 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             } catch (JSONException e) {
             }
             String cName = ns.getName(query, name);
+            WindowId windowId = createWindowId(query.getJSONObject("container"));
             recorder.record(new JSONScriptElement(windowId, cName, query.getJSONObject("event")));
+        } catch (JSONException je) {
+            je.printStackTrace();
+            System.err.println(query.toString(2));
         } catch (Throwable t) {
             t.printStackTrace();
         }

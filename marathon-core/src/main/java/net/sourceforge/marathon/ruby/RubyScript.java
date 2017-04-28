@@ -341,7 +341,7 @@ public class RubyScript implements IScript {
 
     private void findAssertionProviderMethods() {
         IRubyObject ro = interpreter.evalScriptlet("Object.private_instance_methods");
-        Object[] methods = ((RubyArray) JavaEmbedUtils.rubyToJava(interpreter, ro, String[].class)).toArray();
+        String[] methods = (String[]) JavaEmbedUtils.rubyToJava(interpreter, ro, String[].class);
         assertionProviderList = new ArrayList<String>();
         for (Object method : methods) {
             if (method.toString().startsWith("marathon_assert_")) {
