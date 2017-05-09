@@ -42,7 +42,7 @@ import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class WSRecordingServer extends WebSocketServer implements IRecordingServer {
 
-    private static final Logger logger = Logger.getLogger(WSRecordingServer.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(WSRecordingServer.class.getName());
 
     private static class MenuItemScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
@@ -299,7 +299,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     public JSONObject record(WebSocket conn, JSONObject query) throws IOException {
-        logger.info("WSRecordingServer.record(" + query.toString(2) + ")");
+        LOGGER.info("WSRecordingServer.record(" + query.toString(2) + ")");
         if (paused || recorder == null) {
             return new JSONObject();
         }
@@ -417,7 +417,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
                 jsonQuery = new JSONObject(data);
             } catch (JSONException e) {
                 e.printStackTrace();
-                logger.warning("Could not convert `" + data + "` to JSON");
+                LOGGER.warning("Could not convert `" + data + "` to JSON");
                 return;
             }
         }
@@ -429,7 +429,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         if (method != null) {
             handleRoute(method, conn, jsonQuery);
         } else if (method == null) {
-            logger.warning("Unknown method `" + methodName + "` called with " + jsonQuery);
+            LOGGER.warning("Unknown method `" + methodName + "` called with " + jsonQuery);
         }
     }
 
@@ -438,7 +438,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             invoke(method, conn, query);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.warning("Unable to execute method `" + method.getName() + "` with data " + query);
+            LOGGER.warning("Unable to execute method `" + method.getName() + "` with data " + query);
         }
     }
 

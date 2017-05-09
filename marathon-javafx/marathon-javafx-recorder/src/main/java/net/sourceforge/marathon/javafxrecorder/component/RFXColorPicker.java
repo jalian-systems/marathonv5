@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXColorPicker extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXColorPicker.class.getName());
 
     private String prevColor;
 

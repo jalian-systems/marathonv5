@@ -34,7 +34,7 @@ import net.sourceforge.marathon.runtime.fx.api.IPropertiesLayout;
 
 public class MPFConfigurationInfo {
 
-    private final static Logger logger = Logger.getLogger(MPFConfigurationStage.class.getName());
+    public final static Logger LOGGER = Logger.getLogger(MPFConfigurationStage.class.getName());
 
     private String title;
     private String dirName;
@@ -152,7 +152,7 @@ public class MPFConfigurationInfo {
             try {
                 FileUtils.copyDirectory(srcDir, destDir);
             } catch (IOException e1) {
-                logger.warning("Unable to copy Checklists folder from " + srcDir + " to " + destDir);
+                LOGGER.warning("Unable to copy Checklists folder from " + srcDir + " to " + destDir);
                 e1.printStackTrace();
             }
         }
@@ -160,7 +160,7 @@ public class MPFConfigurationInfo {
         try {
             FileUtils.copyInputStreamToFile(MPFConfigurationStage.class.getResourceAsStream("/logging.properties"), destFile);
         } catch (IOException e) {
-            logger.warning("Copy file failed: " + destFile);
+            LOGGER.warning("Copy file failed: " + destFile);
             e.printStackTrace();
         }
         if (props.getProperty(Constants.PROP_MODULE_DIRS) == null) {
@@ -224,7 +224,7 @@ public class MPFConfigurationInfo {
         File file = new File(projectDir, dir);
         if (!file.mkdirs()) {
             if (!file.exists() || !file.isDirectory()) {
-                logger.warning("Unable to create folder: " + file + " - Marathon might not be able to use the project folder");
+                LOGGER.warning("Unable to create folder: " + file + " - Marathon might not be able to use the project folder");
             }
         }
     }

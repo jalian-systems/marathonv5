@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.checklist;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.editor.IEditorProvider;
 
 public class CheckListEditorProvider implements IEditorProvider {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckListEditorProvider.class.getName());
 
     @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         return new CheckListEditor();

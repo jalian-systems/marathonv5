@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.util;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 
 public class LauncherModelHelper {
+
+    public static final Logger LOGGER = Logger.getLogger(LauncherModelHelper.class.getName());
 
     public static IRuntimeLauncherModel getLauncherModel(String launcher) {
         Class<?> klass;

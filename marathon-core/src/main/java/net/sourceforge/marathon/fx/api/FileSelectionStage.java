@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.api;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -37,6 +38,8 @@ import net.sourceforge.marathon.runtime.fx.api.FileSelectionHandler;
 import net.sourceforge.marathon.runtime.fx.api.IFileSelectedAction;
 
 public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implements IFileSelectedAction {
+
+    public static final Logger LOGGER = Logger.getLogger(FileSelectionStage.class.getName());
 
     private TextField dirField;
     private Button okButton;

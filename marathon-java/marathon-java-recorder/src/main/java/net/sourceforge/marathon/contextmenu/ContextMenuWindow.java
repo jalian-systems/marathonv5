@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -48,6 +49,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.util.UIUtils;
 
 public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AWTEventListener {
+
+    public static final Logger LOGGER = Logger.getLogger(ContextMenuWindow.class.getName());
 
     private static final long serialVersionUID = 1L;
     private TransparentFrame overlayFrame;

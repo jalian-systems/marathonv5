@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.projectselection;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -24,6 +26,8 @@ import net.sourceforge.marathon.runtime.fx.api.CompositeLayout;
 import net.sourceforge.marathon.runtime.fx.api.IPropertiesLayout;
 
 public class ScriptLayout extends CompositeLayout implements IPropertiesLayout {
+
+    public static final Logger LOGGER = Logger.getLogger(ScriptLayout.class.getName());
 
     public ScriptLayout(ModalDialog<?> parent) {
         super(parent);

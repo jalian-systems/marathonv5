@@ -17,6 +17,7 @@ package net.sourceforge.marathon.model;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -26,6 +27,8 @@ import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class GroupTestEntry extends GroupEntry {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupTestEntry.class.getName());
 
     private Path path;
 

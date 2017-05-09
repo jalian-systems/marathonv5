@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon;
 
+import java.util.logging.Logger;
+
 public class MarathonSplashScreenInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonSplashScreenInfo.class.getName());
 
     private String version;
     private String blurbTitle;

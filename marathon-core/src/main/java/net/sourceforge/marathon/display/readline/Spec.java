@@ -17,8 +17,12 @@ package net.sourceforge.marathon.display.readline;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
+import java.util.logging.Logger;
 
 public class Spec {
+    
+    public static final Logger LOGGER = Logger.getLogger(Spec.class.getName());
+
     private ArrayList<ArrayList<Reaction>> reactionsPerChannel = new ArrayList<ArrayList<Reaction>>();
     private long asyncMask = 0;
     private long mask = 0;

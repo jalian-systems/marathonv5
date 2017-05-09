@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.event.ChangeEvent;
 
@@ -47,6 +48,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXComponent.class.getName());
 
     protected IJSONRecorder recorder;
     protected JSONOMapConfig omapConfig;

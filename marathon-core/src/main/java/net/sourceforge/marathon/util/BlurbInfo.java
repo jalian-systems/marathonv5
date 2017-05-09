@@ -16,8 +16,11 @@
 package net.sourceforge.marathon.util;
 
 import java.net.URL;
+import java.util.logging.Logger;
 
 public class BlurbInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(BlurbInfo.class.getName());
 
     private URL url;
     private String title;

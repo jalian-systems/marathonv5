@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.junit.Ignore;
@@ -71,6 +72,8 @@ import ru.yandex.qatools.allure.utils.AnnotationManager;
  * @author Dmitry Baev charlie@yandex-team.ru Date: 20.12.13
  */
 public class AllureMarathonRunListener extends RunListener {
+
+    public static final Logger LOGGER = Logger.getLogger(AllureMarathonRunListener.class.getName());
 
     private Allure lifecycle;;
 

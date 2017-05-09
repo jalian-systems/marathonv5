@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RSpinner extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RSpinner.class.getName());
 
     private String oldValue;
 

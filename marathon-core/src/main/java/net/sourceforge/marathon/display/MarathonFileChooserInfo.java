@@ -16,10 +16,13 @@
 package net.sourceforge.marathon.display;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.fx.display.AddPropertiesView;
 
 public class MarathonFileChooserInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonFileChooserInfo.class.getName());
 
     private String title;
     private boolean doesAllowChildren;

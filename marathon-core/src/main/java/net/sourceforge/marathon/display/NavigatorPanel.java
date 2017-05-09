@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -39,6 +41,8 @@ import net.sourceforge.marathon.resource.Watcher;
 import net.sourceforge.marathon.resource.navigator.ProjectFolderResource;
 
 public class NavigatorPanel extends Dockable implements IResourceActionSource, IResourceChangeListener {
+
+    public static final Logger LOGGER = Logger.getLogger(NavigatorPanel.class.getName());
 
     private static final DockKey DOCK_KEY = new DockKey("Navigator", "Navigator", "Display files and folders",
             FXUIUtils.getIcon("browse"), TabPolicy.NotClosable, Side.LEFT);

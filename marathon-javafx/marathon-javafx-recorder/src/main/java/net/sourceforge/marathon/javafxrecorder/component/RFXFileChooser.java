@@ -17,11 +17,15 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javafxagent.components.ChooserHelper;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 
 public class RFXFileChooser extends ChooserHelper {
+    
+    public static final Logger LOGGER = Logger.getLogger(RFXFileChooser.class.getName());
+
     private IJSONRecorder recorder;
 
     public RFXFileChooser(IJSONRecorder recorder) {

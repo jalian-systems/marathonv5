@@ -17,6 +17,7 @@ package net.sourceforge.marathon.resource;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -26,6 +27,8 @@ import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TreeItem;
 
 public class CollatedTreeItem<T> extends TreeItem<T> {
+
+    public static final Logger LOGGER = Logger.getLogger(CollatedTreeItem.class.getName());
 
     private Predicate<T> filter = t -> true;
     private ObservableList<TreeItem<T>> children;

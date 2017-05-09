@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public class Indent {
     private static String DEFAULT_INDENT;
     private static String INDENT;
     private static final String SPACES = "        ";
+
+    public static final Logger LOGGER = Logger.getLogger(Indent.class.getName());
 
     static {
         INDENT = DEFAULT_INDENT = SPACES.substring(0, 4);

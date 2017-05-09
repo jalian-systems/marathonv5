@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
@@ -23,6 +24,9 @@ import net.sourceforge.marathon.javaagent.JavaAgentKeys;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JTreeEditingContainerJavaElement extends AbstractJavaElement {
+    
+    public static final Logger LOGGER = Logger.getLogger(JTreeEditingContainerJavaElement.class.getName());
+
     public JTreeEditingContainerJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }

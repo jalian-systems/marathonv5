@@ -21,10 +21,14 @@ package net.sourceforge.marathon.runtime.api;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 public class ImageCompareAction {
+    
+    public static final Logger LOGGER = Logger.getLogger(ImageCompareAction.class.getName());
+
     /**
      * @param path1
      * @param path2

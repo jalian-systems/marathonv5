@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.util;
 
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -33,6 +34,9 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public abstract class Blurb {
+    
+    public static final Logger LOGGER = Logger.getLogger(Blurb.class.getName());
+
     private URL url;
     private String title;
     private ButtonType selection;

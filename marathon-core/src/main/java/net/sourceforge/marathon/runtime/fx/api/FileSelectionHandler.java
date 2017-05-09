@@ -18,6 +18,7 @@ package net.sourceforge.marathon.runtime.fx.api;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class FileSelectionHandler implements EventHandler<ActionEvent> {
+
+    public static final Logger LOGGER = Logger.getLogger(FileSelectionHandler.class.getName());
 
     public static final int FILE_CHOOSER = 0;
     public static final int DIRECTORY_CHOOSER = 1;

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.JEditorPane;
 import javax.swing.text.html.HTML;
@@ -38,6 +39,8 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class JEditorPaneJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JEditorPaneJavaElement.class.getName());
 
     private static final class PropertyPredicate implements Predicate {
         private final Properties p;

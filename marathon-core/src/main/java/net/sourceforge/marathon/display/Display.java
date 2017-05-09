@@ -62,6 +62,8 @@ import net.sourceforge.marathon.util.LauncherModelHelper;
 
 public class Display implements IPlaybackListener, IScriptListener, IExceptionReporter, IHasFullname {
 
+    public static final Logger LOGGER = Logger.getLogger(Display.class.getName());
+
     public static final class DummyRecorder implements IRecorder {
         @Override public void record(IScriptElement element) {
         }

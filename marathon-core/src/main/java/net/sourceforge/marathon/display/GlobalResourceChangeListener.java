@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.resource.IResourceChangeListener;
 
 public class GlobalResourceChangeListener {
+
+    public static final Logger LOGGER = Logger.getLogger(GlobalResourceChangeListener.class.getName());
 
     private static IResourceChangeListener resourceChangeListener;
 

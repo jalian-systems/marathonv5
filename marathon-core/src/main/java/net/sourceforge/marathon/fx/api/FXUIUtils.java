@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -55,6 +56,8 @@ import net.sourceforge.marathon.display.MarathonFileChooser;
 import net.sourceforge.marathon.display.MarathonFileChooserInfo;
 
 public class FXUIUtils {
+
+    public static final Logger LOGGER = Logger.getLogger(FXUIUtils.class.getName());
 
     private static class FontInfo {
         private Font font;

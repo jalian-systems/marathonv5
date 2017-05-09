@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -31,6 +33,8 @@ import net.sourceforge.marathon.editor.IStatusBar;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class StatusBar extends HBox implements IStatusBar {
+
+    public static final Logger LOGGER = Logger.getLogger(StatusBar.class.getName());
 
     private Label rowLabel;
     private Label columnLabel;

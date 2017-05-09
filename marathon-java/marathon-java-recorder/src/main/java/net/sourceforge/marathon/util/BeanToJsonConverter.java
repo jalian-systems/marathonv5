@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +39,8 @@ import org.json.JSONObject;
  * Utility class for converting between JSON and Java Objects.
  */
 public class BeanToJsonConverter {
+
+    public static final Logger LOGGER = Logger.getLogger(BeanToJsonConverter.class.getName());
 
     private static final int MAX_DEPTH = 10;
 

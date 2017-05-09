@@ -19,11 +19,14 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ModuleInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(ModuleInfo.class.getName());
 
     private List<String> moduleDirs;
     private List<ModuleDirElement> moduleDirElements = new ArrayList<>();

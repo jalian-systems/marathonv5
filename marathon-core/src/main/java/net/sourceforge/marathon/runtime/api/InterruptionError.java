@@ -15,8 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public class InterruptionError extends Error {
     private static final long serialVersionUID = 1L;
+
+    public static final Logger LOGGER = Logger.getLogger(InterruptionError.class.getName());
 
     public static void wait(Object monitor) {
         try {

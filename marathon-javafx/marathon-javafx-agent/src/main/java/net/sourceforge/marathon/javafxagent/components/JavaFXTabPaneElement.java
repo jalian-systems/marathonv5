@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTabPaneElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTabPaneElement.class.getName());
 
     public JavaFXTabPaneElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

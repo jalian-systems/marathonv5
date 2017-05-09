@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.event.Event;
 import net.sourceforge.marathon.fxdocking.DockableState.State;
 
 public class DockableStateWillChangeEvent {
+
+    public static final Logger LOGGER = Logger.getLogger(DockableStateWillChangeEvent.class.getName());
 
     private DockableState current;
     private DockableState future;

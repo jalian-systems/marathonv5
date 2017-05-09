@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.api.IVersion;
 
 /**
@@ -22,6 +24,9 @@ import net.sourceforge.marathon.api.IVersion;
  * Version.java. Version.java is not part of the source code control.
  */
 public class Version {
+    
+    public static final Logger LOGGER = Logger.getLogger(Version.class.getName());
+
     private final static IVersion version;
 
     static {

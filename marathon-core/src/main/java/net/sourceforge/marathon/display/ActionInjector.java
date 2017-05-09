@@ -18,11 +18,14 @@ package net.sourceforge.marathon.display;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import net.sourceforge.marathon.util.AbstractSimpleAction;
 
 public class ActionInjector {
+
+    public static final Logger LOGGER = Logger.getLogger(ActionInjector.class.getName());
 
     private final Object o;
 

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javafx.animation.KeyFrame;
@@ -63,6 +64,9 @@ import net.sourceforge.marathon.resource.navigator.FileResource;
 import net.sourceforge.marathon.resource.navigator.FolderResource;
 
 public class ResourceView extends TreeView<Resource> implements IResourceChangeListener {
+    
+    public static final Logger LOGGER = Logger.getLogger(ResourceView.class.getName());
+
     private IResourceActionHandler handler;
     private Operation clipboardOperation;
     private ContextMenu contextMenu = new ContextMenu();

@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RFileChooser extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFileChooser.class.getName());
 
     public RFileChooser(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);

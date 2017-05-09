@@ -29,6 +29,8 @@ import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 
 public class ObjectMapService implements IObjectMapService {
 
+    public static final Logger LOGGER = Logger.getLogger(ObjectMapService.class.getName());
+
     protected ObjectMapConfiguration configuration;
     protected ObjectMap objectMap;
 

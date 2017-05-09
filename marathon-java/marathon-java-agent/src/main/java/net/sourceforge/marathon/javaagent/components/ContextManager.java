@@ -17,10 +17,13 @@ package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javax.swing.JInternalFrame;
 
 public class ContextManager {
+
+    public static final Logger LOGGER = Logger.getLogger(ContextManager.InstanceCheck.class.getName());
 
     private static class InstanceCheck implements IContextChecker {
 

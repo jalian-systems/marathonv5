@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.display;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -52,6 +53,8 @@ import net.sourceforge.marathon.fx.display.TestPropertiesInfo;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonFileChooser.class.getName());
 
     private ToolBar toolBar = new ToolBar();
     private Button newFolderButton = FXUIUtils.createButton("addfolder", "Create new empty folder", false);

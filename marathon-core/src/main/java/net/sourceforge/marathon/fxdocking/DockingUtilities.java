@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 public class DockingUtilities {
+
+    public static final Logger LOGGER = Logger.getLogger(DockingUtilities.class.getName());
 
     public static TabbedDockableContainer findTabbedDockableContainer(Dockable dockable) {
         // TODO Auto-generated method stub

@@ -17,6 +17,7 @@ package net.sourceforge.marathon.checklist;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -39,6 +40,9 @@ import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class CheckListView extends BorderPane implements IContentChangeListener {
+    
+    public static final Logger LOGGER = Logger.getLogger(CheckListView.class.getName());
+
     private CheckListFormNode checkListFormNode;
     private boolean dirty = false;
     ArrayList<IContentChangeListener> contentChangeListeners = new ArrayList<IContentChangeListener>();

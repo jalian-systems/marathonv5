@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Node;
@@ -25,6 +27,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXColorPickerElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXColorPickerElement.class.getName());
 
     public JavaFXColorPickerElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

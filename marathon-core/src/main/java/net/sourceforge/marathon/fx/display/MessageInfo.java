@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.control.TextInputControl;
 
 public class MessageInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(MessageInfo.class.getName());
 
     private String title;
     private TextInputControl textInputControl;

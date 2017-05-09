@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
@@ -23,6 +25,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXChoiceBoxTableCell extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXChoiceBoxTableCell.class.getName());
 
     public RFXChoiceBoxTableCell(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);

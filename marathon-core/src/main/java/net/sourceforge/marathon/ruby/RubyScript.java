@@ -55,7 +55,7 @@ import net.sourceforge.marathon.runtime.api.ScriptException;
 
 public class RubyScript implements IScript {
 
-    private static final Logger logger = Logger.getLogger(RubyScript.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(RubyScript.class.getName());
 
     private static final Pattern FUNCTION_PATTERN = Pattern.compile("(.*)/(.*\\(.*)", Pattern.DOTALL | Pattern.MULTILINE);
     public static final String PROP_APPLICATION_RUBYPATH = "marathon.application.rubypath";
@@ -409,7 +409,7 @@ public class RubyScript implements IScript {
         try {
             runtime.quit();
         } catch (Throwable t) {
-            logger.warning("Ignoring exception " + t.getClass().getName() + " on quit()");
+            LOGGER.warning("Ignoring exception " + t.getClass().getName() + " on quit()");
         }
     }
 

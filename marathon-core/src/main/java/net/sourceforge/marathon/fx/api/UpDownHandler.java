@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.api;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +25,8 @@ import javafx.scene.control.MultipleSelectionModel;
 import net.sourceforge.marathon.runtime.fx.api.ListLayout.ClassPathElement;
 
 public class UpDownHandler implements EventHandler<ActionEvent> {
+
+    public static final Logger LOGGER = Logger.getLogger(UpDownHandler.class.getName());
 
     private ListView<ClassPathElement> classPathListView;
     private boolean shouldMoveUp;

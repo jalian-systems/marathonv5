@@ -17,6 +17,7 @@ package net.sourceforge.marathon.editor.ace;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -29,6 +30,8 @@ import javafx.util.Duration;
 import net.sourceforge.marathon.fx.api.EventListenerList;
 
 public class SystemClipboard implements EventHandler<ActionEvent> {
+
+    public static final Logger LOGGER = Logger.getLogger(SystemClipboard.class.getName());
 
     private EventListenerList listeners = new EventListenerList();
     private Clipboard clipboard;

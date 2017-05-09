@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
@@ -53,6 +54,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class GroupResource extends Resource {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupResource.class.getName());
 
     private Group group;
     private boolean loaded;

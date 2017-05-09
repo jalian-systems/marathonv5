@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,6 +24,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class RunHistoryInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(RunHistoryInfo.class.getName());
 
     private String section;
 

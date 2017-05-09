@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 
 public class DockKey {
+
+    public static final Logger LOGGER = Logger.getLogger(DockKey.class.getName());
 
     public enum TabPolicy {
         NotClosable, Closable

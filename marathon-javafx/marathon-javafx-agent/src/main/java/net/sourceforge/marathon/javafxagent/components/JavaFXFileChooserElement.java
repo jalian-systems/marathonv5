@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 
@@ -34,6 +35,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXFileChooserElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXFileChooserElement.class.getName());
 
     public static class FileChooserNode extends Node {
 

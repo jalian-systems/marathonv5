@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -32,6 +33,8 @@ import javafx.scene.control.TreeView;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 
 final public class AssertionTreeView extends TreeView<AssertionTreeView.PropertyWrapper> {
+
+    public static final Logger LOGGER = Logger.getLogger(AssertionTreeView.class.getName());
 
     public static class PropertyWrapper {
         public PropertyWrapper(Object value, String property) {

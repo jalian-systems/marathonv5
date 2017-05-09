@@ -21,6 +21,7 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.JColorChooser;
@@ -51,6 +52,9 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RComponentFactory {
+    
+    public static final Logger LOGGER = Logger.getLogger(RComponentFactory.class.getName());
+
     private JSONOMapConfig omapConfig;
 
     private static class InstanceCheckFinder implements IRComponentFinder {

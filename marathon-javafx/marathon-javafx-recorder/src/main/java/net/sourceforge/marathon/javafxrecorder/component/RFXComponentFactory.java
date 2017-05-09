@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -63,6 +64,9 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXComponentFactory {
+    
+    public static final Logger LOGGER = Logger.getLogger(RFXComponentFactory.class.getName());
+
     private JSONOMapConfig omapConfig;
 
     private static class InstanceCheckFinder implements IRFXComponentFinder {

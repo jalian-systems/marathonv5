@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
+import java.util.logging.Logger;
 
 import javax.swing.JColorChooser;
 
@@ -25,6 +26,9 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RColorChooser extends RComponent {
+    
+    public static final Logger LOGGER = Logger.getLogger(RColorChooser.class.getName());
+
     private String color;
 
     public RColorChooser(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {

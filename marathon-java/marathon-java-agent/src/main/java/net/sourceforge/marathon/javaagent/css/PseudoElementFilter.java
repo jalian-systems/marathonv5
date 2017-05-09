@@ -16,10 +16,13 @@
 package net.sourceforge.marathon.javaagent.css;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javaagent.IJavaElement;
 
 public class PseudoElementFilter implements SelectorFilter {
+
+    public static final Logger LOGGER = Logger.getLogger(PseudoElementFilter.class.getName());
 
     private String function;
     private Argument[] args;

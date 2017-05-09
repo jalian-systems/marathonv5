@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.api;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 
 public class FileSelectionInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(FileSelectionInfo.class.getName());
 
     private String title;
     private String fileType;

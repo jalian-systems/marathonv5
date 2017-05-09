@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import com.sun.javafx.PlatformUtil;
 
 import javafx.scene.input.KeyCode;
@@ -22,6 +24,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public class OSFXUtils {
+
+    public static final Logger LOGGER = Logger.getLogger(OSFXUtils.class.getName());
 
     public static final String MOUSE_MENU_MASK = getMenuMask();
 

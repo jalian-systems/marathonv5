@@ -59,7 +59,7 @@ import net.sourceforge.marathon.javafxagent.script.JSONScriptRunner;
 
 public class JavaServer extends NanoHTTPD {
 
-    private static final Logger logger = Logger.getLogger(JavaServer.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaServer.class.getName());
 
     public static final String MIME_JSON = "application/json;charset=UTF-8";
 
@@ -301,12 +301,12 @@ public class JavaServer extends NanoHTTPD {
             Map<String, String> files) {
         JSONObject jsonQuery = null;
         String query = files.get("postData");
-        logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
+        LOGGER.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
         if (query != null) {
             try {
                 jsonQuery = new JSONObject(query);
             } catch (JSONException e) {
-                logger.info("JavaServer.serve(): " + query);
+                LOGGER.info("JavaServer.serve(): " + query);
                 return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
             }
         }
@@ -366,7 +366,7 @@ public class JavaServer extends NanoHTTPD {
                 return newFixedLengthResponse(Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Not Implemented: route = " + route);
             }
         } catch (Throwable e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
         }
         return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
@@ -433,7 +433,7 @@ public class JavaServer extends NanoHTTPD {
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
             return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (Exception e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
             r.put("status", ErrorCodes.UNHANDLED_ERROR);
             r.put("value", new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
                     getStackTrace(e)));

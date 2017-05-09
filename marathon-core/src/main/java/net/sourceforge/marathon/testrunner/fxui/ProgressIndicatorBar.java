@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,6 +30,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 class ProgressIndicatorBar extends StackPane {
+
+    public static final Logger LOGGER = Logger.getLogger(ProgressIndicatorBar.class.getName());
 
     final private ProgressBar bar = new ProgressBar();
     final private HBox progressBarString = new HBox();

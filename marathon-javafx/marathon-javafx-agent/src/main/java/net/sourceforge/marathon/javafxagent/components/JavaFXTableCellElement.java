@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 
 public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTableCellElement.class.getName());
 
     private JavaFXElement parent;
     private int viewRow;

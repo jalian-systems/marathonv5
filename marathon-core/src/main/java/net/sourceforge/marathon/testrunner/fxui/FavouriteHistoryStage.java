@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,6 +24,8 @@ import javafx.scene.control.Button;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class FavouriteHistoryStage extends RunHistoryStage {
+
+    public static final Logger LOGGER = Logger.getLogger(FavouriteHistoryStage.class.getName());
 
     private Button upButton = FXUIUtils.createButton("up", "Move up", false, "Up");
     private Button downButton = FXUIUtils.createButton("down", "Move down", false, "Down");

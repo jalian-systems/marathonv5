@@ -17,11 +17,14 @@ package net.sourceforge.marathon.editor.ace;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AceEditorPreferencesInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(AceEditorPreferencesInfo.class.getName());
 
     private List<AceEditorTheme> themes = new ArrayList<>();
     private JSONObject options;

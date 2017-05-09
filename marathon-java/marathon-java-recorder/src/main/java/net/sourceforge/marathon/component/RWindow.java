@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.Window;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RWindow extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RWindow.class.getName());
 
     public RWindow(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);

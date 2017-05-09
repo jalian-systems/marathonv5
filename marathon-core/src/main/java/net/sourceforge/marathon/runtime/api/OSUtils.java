@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
@@ -31,6 +32,8 @@ import org.apache.commons.io.FileUtils;
 import net.sourceforge.marathon.fx.projectselection.MPFConfigurationStage;
 
 public class OSUtils {
+
+    public static final Logger LOGGER = Logger.getLogger(OSUtils.class.getName());
 
     public static final int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     public static final int MOUSE_MENU_MASK;

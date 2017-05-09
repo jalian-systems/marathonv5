@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 
@@ -38,6 +39,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
 public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXElement.class.getName());
 
     protected IJavaFXAgent driver;
     protected JFXWindow window;

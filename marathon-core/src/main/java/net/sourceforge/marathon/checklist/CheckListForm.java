@@ -17,11 +17,14 @@ package net.sourceforge.marathon.checklist;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CheckListForm {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckListForm.class.getName());
 
     private boolean insert;
     private File checklistDir;

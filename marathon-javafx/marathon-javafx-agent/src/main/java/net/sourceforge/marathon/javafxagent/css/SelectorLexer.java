@@ -18,8 +18,11 @@ package net.sourceforge.marathon.javafxagent.css;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.StringReader;
+import java.util.logging.Logger;
 
 public class SelectorLexer extends AbstractLexer {
+
+    public static final Logger LOGGER = Logger.getLogger(SelectorLexer.class.getName());
 
     public SelectorLexer(String selector) {
         super(new PushbackReader(new StringReader(selector)));

@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -38,6 +39,8 @@ import net.sourceforge.marathon.runtime.fx.api.IPropertiesLayout;
 import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IPropertiesLayout {
+
+    public static final Logger LOGGER = Logger.getLogger(MainLayout.class.getName());
 
     private ModalDialog<?> parent;
     private TextField classNameField = new TextField();

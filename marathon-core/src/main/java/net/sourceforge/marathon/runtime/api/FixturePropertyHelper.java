@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
 
 public class FixturePropertyHelper {
 
+    public static final Logger LOGGER = Logger.getLogger(FixturePropertyHelper.class.getName());
+    
     private static final String FIXTURE_START = "#{{{ Fixture Properties";
     private static final String FIXTURE_END = "#}}}";
     private static final Logger logger = Logger.getLogger(FixturePropertyHelper.class.getName());

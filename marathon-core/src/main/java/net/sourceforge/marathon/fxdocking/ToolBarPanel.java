@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -23,6 +25,9 @@ import javafx.scene.layout.Priority;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
 
 public class ToolBarPanel extends HBox {
+
+    public static final Logger LOGGER = Logger.getLogger(ToolBarPanel.class.getName());
+
     private Orientation orientation;
 
     public ToolBarPanel(Orientation orientation) {

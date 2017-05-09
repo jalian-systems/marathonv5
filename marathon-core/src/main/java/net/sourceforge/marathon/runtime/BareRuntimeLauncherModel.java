@@ -3,6 +3,7 @@ package net.sourceforge.marathon.runtime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
@@ -12,6 +13,8 @@ import net.sourceforge.marathon.runtime.api.ITestLauncher;
 import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class BareRuntimeLauncherModel implements IRuntimeLauncherModel {
+
+    public static final Logger LOGGER = Logger.getLogger(BareRuntimeLauncherModel.class.getName());
 
     @Override public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
         return new ISubPropertiesLayout[0];

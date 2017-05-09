@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.fx.objectmap.ObjectMapItem;
 import net.sourceforge.marathon.runtime.api.ILogger;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.runtime.api.PropertiesPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 
 public class ObjectMap extends ObjectMapItem {
+
+    public static final Logger LOGGER = Logger.getLogger(ObjectMap.class.getName());
 
     private static final ILogger logger = RuntimeLogger.getRuntimeLogger();
 

@@ -16,10 +16,13 @@
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaElement.class.getName());
 
     public JavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

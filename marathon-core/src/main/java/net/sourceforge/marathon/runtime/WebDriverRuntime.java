@@ -42,6 +42,8 @@ import net.sourceforge.marathon.runtime.ws.WSRecordingServer;
 
 public class WebDriverRuntime implements IMarathonRuntime {
 
+    public static final Logger LOGGER = Logger.getLogger(WebDriverRuntime.class.getName());
+
     private static boolean mergeOutput = Boolean.getBoolean("marathon.merge.output");
 
     private static class ScriptOutput extends ConsoleWriter {

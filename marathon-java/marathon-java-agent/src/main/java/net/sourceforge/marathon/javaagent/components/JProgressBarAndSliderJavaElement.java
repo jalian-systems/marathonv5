@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JProgressBarAndSliderJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JProgressBarAndSliderJavaElement.class.getName());
 
     public JProgressBarAndSliderJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

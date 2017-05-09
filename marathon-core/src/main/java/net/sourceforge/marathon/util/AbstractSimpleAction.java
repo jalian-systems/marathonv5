@@ -17,6 +17,7 @@ package net.sourceforge.marathon.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,6 +33,9 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
  * actionPeformed method as well
  */
 public abstract class AbstractSimpleAction extends ActionEvent implements EventHandler<ActionEvent> {
+    
+    public static final Logger LOGGER = Logger.getLogger(AbstractSimpleAction.class.getName());
+
     private static final long serialVersionUID = 1L;
 
     private String name;

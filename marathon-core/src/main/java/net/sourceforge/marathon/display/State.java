@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.logging.Logger;
+
 public class State {
+    
+    public static final Logger LOGGER = Logger.getLogger(State.class.getName());
+
     public final static State STOPPED_WITH_APP_CLOSED = new State("Stopped with application closed");
     public final static State STOPPED_WITH_APP_OPEN = new State("Stopped with application open");
     public final static State PLAYING = new State("Playing");

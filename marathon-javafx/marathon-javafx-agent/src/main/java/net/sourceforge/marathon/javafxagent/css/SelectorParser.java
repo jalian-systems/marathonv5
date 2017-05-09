@@ -17,8 +17,11 @@ package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SelectorParser {
+
+    public static final Logger LOGGER = Logger.getLogger(SelectorParser.class.getName());
 
     private AbstractLexer lexer;
 

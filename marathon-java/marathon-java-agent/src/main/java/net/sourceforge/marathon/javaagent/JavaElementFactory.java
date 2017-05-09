@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent;
 import java.awt.Component;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
@@ -59,6 +60,8 @@ import net.sourceforge.marathon.javaagent.components.JTreeEditingContainerJavaEl
 import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
 
 public class JavaElementFactory {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaElementFactory.class.getName());
 
     public static IJavaElement createElement(Component component, IJavaAgent driver, JWindow window) {
         if (component == null) {

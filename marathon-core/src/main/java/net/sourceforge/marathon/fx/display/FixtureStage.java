@@ -17,6 +17,7 @@ package net.sourceforge.marathon.fx.display;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
@@ -36,6 +37,8 @@ import net.sourceforge.marathon.fx.projectselection.FormPane;
 import net.sourceforge.marathon.runtime.TestApplication;
 
 public class FixtureStage extends ModalDialog<FixtureStageInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(FixtureStage.class.getName());
 
     private TextField nameField = new TextField();
     private TextArea descriptionArea = new TextArea();

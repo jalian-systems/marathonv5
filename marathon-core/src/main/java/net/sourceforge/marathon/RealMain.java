@@ -80,7 +80,7 @@ import net.sourceforge.marathon.runtime.api.RuntimeLogger;
  */
 public class RealMain {
 
-    private static final Logger logger = Logger.getLogger(RealMain.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(RealMain.class.getName());
 
     private static ArgumentProcessor argProcessor = new ArgumentProcessor();
 
@@ -131,7 +131,7 @@ public class RealMain {
             }
             System.exit(junit.textui.TestRunner.SUCCESS_EXIT);
         } catch (Exception e) {
-            logger.severe(e.getMessage());
+            LOGGER.severe(e.getMessage());
             System.exit(junit.textui.TestRunner.EXCEPTION_EXIT);
         }
     }

@@ -19,8 +19,11 @@ import java.io.PushbackReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class AbstractLexer implements ILexer {
+
+    public static final Logger LOGGER = Logger.getLogger(AbstractLexer.class.getName());
 
     protected PushbackReader reader;
     private Token laToken;

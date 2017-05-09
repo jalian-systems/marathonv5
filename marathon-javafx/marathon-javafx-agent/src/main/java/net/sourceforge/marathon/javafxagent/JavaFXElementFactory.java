@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -86,6 +87,8 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableViewElemen
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
 
 public class JavaFXElementFactory {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXElementFactory.class.getName());
 
     public static IJavaFXElement createElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         IJavaFXElement found = window.findElementFromMap(component);

@@ -42,6 +42,8 @@ import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class WSRecorder implements IJSONRecorder {
 
+    public static final Logger LOGGER = Logger.getLogger(WSRecorder.class.getName());
+
     private Timer clickTimer;
     private static Integer timerinterval;
     private Timer windowStateTimer;

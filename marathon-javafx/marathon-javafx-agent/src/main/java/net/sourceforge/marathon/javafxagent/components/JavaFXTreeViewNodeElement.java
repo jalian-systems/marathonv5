@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,6 +34,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 
 public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeViewNodeElement.class.getName());
 
     private JavaFXTreeViewElement parent;
     private String path;

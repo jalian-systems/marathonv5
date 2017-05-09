@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 
 public abstract class AbstractContextMenu implements IContextMenu {
+
+    public static final Logger LOGGER = Logger.getLogger(AbstractContextMenu.class.getName());
 
     protected final IJSONRecorder recorder;
     private final RComponentFactory finder;

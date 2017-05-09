@@ -17,6 +17,7 @@ package net.sourceforge.marathon.resource.navigator;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 import javafx.event.Event;
 import junit.framework.Test;
@@ -31,6 +32,9 @@ import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public final class ProjectFolderResource extends FolderResource implements RootResource {
+    
+    public static final Logger LOGGER = Logger.getLogger(ProjectFolderResource.class.getName());
+
     private String name;
 
     public ProjectFolderResource(Watcher watcher) {

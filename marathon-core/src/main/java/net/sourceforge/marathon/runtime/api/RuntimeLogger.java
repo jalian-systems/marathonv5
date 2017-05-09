@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public class RuntimeLogger {
+
+    public static final Logger LOGGER = Logger.getLogger(RuntimeLogger.class.getName());
 
     private static ILogger runtimeLogger;
 

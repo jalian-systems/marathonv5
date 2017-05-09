@@ -19,12 +19,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.JavaPropertyAccessor;
 import net.sourceforge.marathon.javafxagent.WindowTitle;
 
 public class FXStagePropertyAccessor extends JavaPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(FXStagePropertyAccessor.class.getName());
 
     private Stage stage;
 

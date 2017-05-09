@@ -17,6 +17,7 @@ package net.sourceforge.marathon.component;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.util.logging.Logger;
 
 import javax.swing.text.JTextComponent;
 
@@ -24,6 +25,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RTextComponent extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RTextComponent.class.getName());
 
     private String text = null;
 

@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -35,6 +36,8 @@ import net.sourceforge.marathon.fxdocking.ToolBarPanel;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
 
 public class CheckListEditor extends FileBasedEditor implements IContentChangeListener {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckListEditor.class.getName());
 
     private HashMap<String, Object> dataMap = new HashMap<String, Object>();
     private ToolBarContainer container = ToolBarContainer.createDefaultContainer(Orientation.RIGHT);

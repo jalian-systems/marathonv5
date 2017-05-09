@@ -17,6 +17,7 @@ package net.sourceforge.marathon.component;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RTabbedPane extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RTabbedPane.class.getName());
 
     public RTabbedPane(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);

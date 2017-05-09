@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableCell;
@@ -24,6 +26,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTableViewCellElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTableViewCellElement.class.getName());
 
     public JavaFXTableViewCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

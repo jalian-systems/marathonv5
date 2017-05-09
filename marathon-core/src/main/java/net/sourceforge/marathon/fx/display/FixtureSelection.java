@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -28,6 +30,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class FixtureSelection extends ModalDialog<String> {
+
+    public static final Logger LOGGER = Logger.getLogger(FixtureSelection.class.getName());
 
     private ObservableList<String> fixtuers;
     private ListView<String> fixtureList = new ListView<>();

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
@@ -23,6 +25,8 @@ import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 import net.sourceforge.marathon.runtime.fx.api.ListLayout;
 
 public class ClassPathLayout extends ListLayout implements ISubPropertiesLayout {
+
+    public static final Logger LOGGER = Logger.getLogger(ClassPathLayout.class.getName());
 
     public ClassPathLayout(ModalDialog<?> parent) {
         super(parent, true);

@@ -17,8 +17,11 @@ package net.sourceforge.marathon.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.logging.Logger;
 
 public class ExceptionUtil {
+
+    public static final Logger LOGGER = Logger.getLogger(ExceptionUtil.class.getName());
 
     public static String getTrace(Throwable t) {
         StringWriter w = new StringWriter();

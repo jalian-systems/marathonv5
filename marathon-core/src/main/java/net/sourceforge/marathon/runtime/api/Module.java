@@ -18,11 +18,15 @@ package net.sourceforge.marathon.runtime.api;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javafx.scene.control.TreeItem;
 
 public class Module implements Serializable {
+    
+    public static final Logger LOGGER = Logger.getLogger(Module.class.getName());
+
     private static final long serialVersionUID = 1L;
     private String name;
     private List<Module> children;

@@ -22,6 +22,7 @@ import java.util.Enumeration;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -43,6 +44,8 @@ import net.sourceforge.marathon.fx.projectselection.FormPane;
 import net.sourceforge.marathon.runtime.api.PlugInModelInfo;
 
 public abstract class CompositeLayout implements IPropertiesLayout {
+
+    public static final Logger LOGGER = Logger.getLogger(CompositeLayout.class.getName());
 
     private ComboBox<PlugInModelInfo> optionBox = new ComboBox<>();
     private TabPane optionTabpane = new TabPane();

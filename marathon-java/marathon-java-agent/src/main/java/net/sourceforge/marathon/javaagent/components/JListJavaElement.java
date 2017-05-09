@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JList;
 
@@ -36,6 +37,8 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JListJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JListJavaElement.class.getName());
 
     private interface Predicate {
         public boolean isValid(JListItemJavaElement e);

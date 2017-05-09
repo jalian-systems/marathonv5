@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXSpinnerElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXSpinnerElement.class.getName());
 
     public JavaFXSpinnerElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.Cell;
 import javafx.scene.control.TextInputControl;
@@ -24,6 +26,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTextInputControlElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTextInputControlElement.class.getName());
 
     public JavaFXTextInputControlElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

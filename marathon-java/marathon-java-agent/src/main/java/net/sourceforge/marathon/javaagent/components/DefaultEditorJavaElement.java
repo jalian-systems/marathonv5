@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import javax.swing.JSpinner.DefaultEditor;
 
@@ -24,6 +25,8 @@ import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class DefaultEditorJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(DefaultEditorJavaElement.class.getName());
 
     public DefaultEditorJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

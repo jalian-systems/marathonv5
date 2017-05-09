@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,6 +35,8 @@ import net.sourceforge.marathon.fxdocking.DockingConstants.Split;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class DockingDesktop extends BorderPane {
+
+    public static final Logger LOGGER = Logger.getLogger(DockingDesktop.class.getName());
 
     public static final String DOCKING_CONTAINER = "dockContainer";
     @SuppressWarnings("unused") private String name;

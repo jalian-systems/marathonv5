@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.api;
 
+import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,6 +43,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public abstract class ModalDialog<T> {
+
+    public static final Logger LOGGER = Logger.getLogger(ModalDialog.class.getName());
 
 	private static final Image LOGO16 = FXUIUtils.getImageURL("logo16");
 	private static final Image LOGO32 = FXUIUtils.getImageURL("logo32");

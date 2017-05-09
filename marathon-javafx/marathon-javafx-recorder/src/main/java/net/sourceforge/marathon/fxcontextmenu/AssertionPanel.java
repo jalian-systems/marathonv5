@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxcontextmenu;
 
+import java.util.logging.Logger;
+
 import org.json.JSONArray;
 
 import javafx.beans.value.ChangeListener;
@@ -43,6 +45,8 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 
 public class AssertionPanel extends GridPane {
+
+    public static final Logger LOGGER = Logger.getLogger(AssertionPanel.class.getName());
 
     private AssertionTreeView attributes;
     private RFXComponentFactory finder;

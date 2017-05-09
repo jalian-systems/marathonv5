@@ -15,9 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.projectselection;
 
+import java.util.logging.Logger;
+
 import javafx.beans.property.SimpleStringProperty;
 
 public class ProjectInfo {
+    
+    public static final Logger LOGGER = Logger.getLogger(ProjectInfo.class.getName());
+
     private final SimpleStringProperty name;
     private final SimpleStringProperty folder;
     private SimpleStringProperty frameWork;

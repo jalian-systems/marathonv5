@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.fx.display;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +25,8 @@ import net.sourceforge.marathon.resource.Project;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class TestPropertiesInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(TestPropertiesInfo.class.getName());
 
     private String path;
     private String name;

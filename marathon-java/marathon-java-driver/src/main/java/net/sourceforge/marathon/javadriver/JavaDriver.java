@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javadriver;
 
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
@@ -32,6 +33,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class JavaDriver extends RemoteWebDriver {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaDriver.class.getName());
 
     public static final String JAVA6PLUS = "1.6+";
     public static final String JAVA6 = "1.6";

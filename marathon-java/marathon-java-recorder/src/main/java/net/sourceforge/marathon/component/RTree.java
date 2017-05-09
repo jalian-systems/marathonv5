@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -35,6 +36,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RTree extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RTree.class.getName());
 
     private int row = -1;
     private String text = null;

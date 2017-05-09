@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 
@@ -29,6 +30,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXComboBoxElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXComboBoxElement.class.getName());
 
     public JavaFXComboBoxElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

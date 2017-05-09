@@ -39,6 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -56,6 +57,8 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class Generator extends JFrame {
+
+    public static final Logger LOGGER = Logger.getLogger(Generator.class.getName());
 
     private static final long serialVersionUID = 1L;
     public static final ImageIcon BANNER = new ImageIcon(

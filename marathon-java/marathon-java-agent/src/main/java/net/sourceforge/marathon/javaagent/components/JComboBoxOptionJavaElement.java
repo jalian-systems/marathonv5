@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +37,8 @@ import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JComboBoxOptionJavaElement extends AbstractJavaElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JComboBoxOptionJavaElement.class.getName());
 
     private JComboBoxJavaElement parent;
     private int option;

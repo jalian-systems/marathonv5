@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JEditorPane;
 import javax.swing.text.AttributeSet;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class REditorPane extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(REditorPane.class.getName());
 
     private int linkPosition;
     private String hRef;

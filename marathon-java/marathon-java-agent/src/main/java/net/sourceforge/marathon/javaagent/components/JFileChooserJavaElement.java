@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.javaagent.JavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JFileChooserJavaElement extends JavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JFileChooserJavaElement.class.getName());
 
     public JFileChooserJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

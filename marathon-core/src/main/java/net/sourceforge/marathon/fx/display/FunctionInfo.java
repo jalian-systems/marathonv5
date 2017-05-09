@@ -15,12 +15,16 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.control.TreeItem;
 import net.sourceforge.marathon.display.DisplayWindow;
 import net.sourceforge.marathon.editor.IEditorProvider;
 import net.sourceforge.marathon.runtime.api.Module;
 
 public class FunctionInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(FunctionInfo.class.getName());
 
     private String windowName;
     private Module root;

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.checklist;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.scene.Node;
@@ -25,6 +26,8 @@ import javafx.stage.Stage;
 import net.sourceforge.marathon.checklist.CheckListFormNode.Mode;
 
 public class CheckListTest extends Application {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckListTest.class.getName());
 
     @Override public void start(Stage primaryStage) throws Exception {
         primaryStage.setScene(getContent());

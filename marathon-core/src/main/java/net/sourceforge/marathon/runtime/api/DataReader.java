@@ -19,10 +19,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public class DataReader {
+
+    public static final Logger LOGGER = Logger.getLogger(DataReader.class.getName());
 
     private String[] header;
     private CSVReader reader;

@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 public class DockableState {
+
+    public static final Logger LOGGER = Logger.getLogger(DockableState.class.getName());
 
     private Dockable dockable;
     private State state;

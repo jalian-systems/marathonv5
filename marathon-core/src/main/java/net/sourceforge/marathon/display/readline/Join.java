@@ -17,8 +17,12 @@ package net.sourceforge.marathon.display.readline;
 
 import java.util.LinkedList;
 import java.util.concurrent.Executor;
+import java.util.logging.Logger;
 
 public final class Join {
+    
+    public static final Logger LOGGER = Logger.getLogger(Join.class.getName());
+
     public static final Executor TRIVIAL_EXECUTOR = new Executor() {
         @Override public void execute(Runnable command) {
             new Thread(command).start();

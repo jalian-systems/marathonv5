@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -26,6 +27,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RSplitPane extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RSplitPane.class.getName());
 
     private int dividerLocation;
 

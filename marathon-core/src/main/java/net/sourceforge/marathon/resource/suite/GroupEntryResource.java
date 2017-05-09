@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javafx.event.Event;
 import javafx.scene.control.Alert.AlertType;
@@ -41,6 +42,8 @@ import net.sourceforge.marathon.resource.ResourceView.ResourceModificationEvent;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class GroupEntryResource extends Resource {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupEntryResource.class.getName());
 
     private GroupEntry entry;
 

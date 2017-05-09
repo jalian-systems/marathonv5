@@ -17,11 +17,14 @@ package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class DescendentSelector implements Selector {
+
+    public static final Logger LOGGER = Logger.getLogger(DescendentSelector.class.getName());
 
     private Selector parent;
     private SimpleSelector descendent;

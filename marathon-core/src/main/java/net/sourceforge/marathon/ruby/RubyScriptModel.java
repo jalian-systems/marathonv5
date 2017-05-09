@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +59,8 @@ import net.sourceforge.marathon.runtime.api.WindowId;
 import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class RubyScriptModel implements IScriptModel {
+
+    public static final Logger LOGGER = Logger.getLogger(RubyScriptModel.class.getName());
 
     private static final String EOL = System.getProperty("line.separator");
     public static final String MARATHON_START_MARKER = "#{{{ Marathon";

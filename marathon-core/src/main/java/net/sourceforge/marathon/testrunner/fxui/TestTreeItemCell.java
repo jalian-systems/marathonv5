@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import junit.framework.Test;
@@ -24,6 +26,8 @@ import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.testrunner.fxui.TestTreeItem.State;
 
 public class TestTreeItemCell extends TreeCell<Test> {
+
+    public static final Logger LOGGER = Logger.getLogger(TestTreeItemCell.class.getName());
 
     public TestTreeItemCell() {
     }

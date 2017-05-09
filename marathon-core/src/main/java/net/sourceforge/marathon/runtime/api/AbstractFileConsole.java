@@ -18,8 +18,11 @@ package net.sourceforge.marathon.runtime.api;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public abstract class AbstractFileConsole implements IConsole {
+
+    public static final Logger LOGGER = Logger.getLogger(AbstractFileConsole.class.getName());
 
     private static boolean consoleLogNeeded = true;
     private static FileWriter consoleLogWriter;

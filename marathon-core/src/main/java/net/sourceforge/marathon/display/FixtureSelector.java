@@ -18,12 +18,15 @@ package net.sourceforge.marathon.display;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import net.sourceforge.marathon.fx.display.FixtureSelection;
 import net.sourceforge.marathon.fx.display.IFixtureSelectionHandler;
 
 public class FixtureSelector {
+
+    public static final Logger LOGGER = Logger.getLogger(FixtureSelector.class.getName());
 
     public String selectFixture(DisplayWindow parent, String[] fixtures, String fixture) {
         FixtureSelection fixtureSelection = new FixtureSelection(FXCollections.observableArrayList(Arrays.asList(fixtures)),

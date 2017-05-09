@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -13,6 +14,8 @@ import javafx.scene.control.Alert.AlertType;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class ProjectFile {
+
+    public static final Logger LOGGER = Logger.getLogger(ProjectFile.class.getName());
 
     public static void updateProjectProperty(String p, String v) throws FileNotFoundException, IOException {
         Properties props = getProjectProperties();

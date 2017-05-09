@@ -17,6 +17,7 @@ package net.sourceforge.marathon.model;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public abstract class GroupEntry {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupEntry.GroupEntryType.class.getName());
 
     public enum GroupEntryType {
         SUITE(GroupType.SUITE, "tsuite"), FOLDER(null, "fldr_obj"), TEST(null, "test"), FEATURE(GroupType.FEATURE,

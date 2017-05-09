@@ -17,6 +17,7 @@ package net.sourceforge.marathon.component;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.util.logging.Logger;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RComboBox extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RComboBox.class.getName());
 
     private Object prevSelectedItem;
 

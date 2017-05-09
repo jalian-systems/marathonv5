@@ -16,8 +16,11 @@
 package net.sourceforge.marathon.runtime.api;
 
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 public class ValidationUtil {
+
+    public static final Logger LOGGER = Logger.getLogger(ValidationUtil.class.getName());
 
     public static boolean isValidClassName(String className) {
         if (className.contains("..")) {

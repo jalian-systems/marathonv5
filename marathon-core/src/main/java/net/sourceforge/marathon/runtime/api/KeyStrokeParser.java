@@ -21,10 +21,13 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
 public class KeyStrokeParser {
+
+    public static final Logger LOGGER = Logger.getLogger(KeyStrokeParser.class.getName());
 
     private static Map<Object, Object> keyCodes;
 

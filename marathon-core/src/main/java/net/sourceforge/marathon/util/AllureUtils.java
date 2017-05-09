@@ -33,6 +33,8 @@ import ru.yandex.qatools.allure.AllureMain;
 
 public class AllureUtils {
 
+    public static final Logger LOGGER = Logger.getLogger(AllureUtils.class.getName());
+
 	public static void launchAllure(String... args) {
 		launchAllure(true, args);
 	}

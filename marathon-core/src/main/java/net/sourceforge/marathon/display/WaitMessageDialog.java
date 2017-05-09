@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,6 +27,9 @@ import javafx.stage.StageStyle;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class WaitMessageDialog {
+    
+    public static final Logger LOGGER = Logger.getLogger(WaitMessageDialog.class.getName());
+
     private static final String DEFAULT_MESSAGE = "This window closes once Marathon is ready for recording";
     private static MessageDialog _instance = new MessageDialog();
 

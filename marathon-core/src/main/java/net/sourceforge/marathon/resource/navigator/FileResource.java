@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javafx.event.Event;
 import javafx.scene.control.Alert.AlertType;
@@ -42,6 +43,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class FileResource extends Resource {
+
+    public static final Logger LOGGER = Logger.getLogger(FileResource.class.getName());
 
     Path path;
 

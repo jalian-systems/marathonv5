@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import javax.swing.JToggleButton;
 
@@ -24,6 +25,8 @@ import net.sourceforge.marathon.javaagent.JavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JToggleButtonJavaElement extends JavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JToggleButtonJavaElement.class.getName());
 
     public JToggleButtonJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

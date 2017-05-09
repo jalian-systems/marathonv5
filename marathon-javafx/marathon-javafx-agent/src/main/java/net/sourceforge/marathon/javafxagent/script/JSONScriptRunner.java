@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxagent.script;
 
 import java.lang.reflect.Array;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javafxagent.server.ExecuteMode;
 import net.sourceforge.marathon.javafxagent.server.Session;
 
 public class JSONScriptRunner {
+
+    public static final Logger LOGGER = Logger.getLogger(JSONScriptRunner.class.getName());
 
     private String script;
     private Object[] args;

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.runtime;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchType;
@@ -23,6 +24,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 
 public class FXRuntimeLauncherModel extends RuntimeLauncherModel {
+
+    public static final Logger LOGGER = Logger.getLogger(FXRuntimeLauncherModel.class.getName());
 
     @Override public JavaProfile createProfile(Map<String, Object> props, MarathonMode mode) {
         return super.createProfile(props, mode).setLaunchType(LaunchType.FX_APPLICATION);

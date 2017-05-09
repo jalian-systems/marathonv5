@@ -17,6 +17,7 @@ package net.sourceforge.marathon.editor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.display.MarathonFileFilter;
 import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
@@ -26,6 +27,8 @@ import net.sourceforge.marathon.util.INameValidateChecker;
 import net.sourceforge.marathon.util.IResourceHandler;
 
 public abstract class FileBasedEditor extends AbstractEditor {
+
+    public static final Logger LOGGER = Logger.getLogger(FileBasedEditor.class.getName());
 
     protected FileHandler fileHandler;
 

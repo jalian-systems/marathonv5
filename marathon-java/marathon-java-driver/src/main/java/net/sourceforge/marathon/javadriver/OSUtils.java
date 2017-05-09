@@ -19,6 +19,7 @@ import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
@@ -30,6 +31,8 @@ import org.openqa.selenium.WebElement;
 import net.sourceforge.marathon.javaagent.KeysMap;
 
 public class OSUtils {
+
+    public static final Logger LOGGER = Logger.getLogger(OSUtils.class.getName());
 
     public static Keys getMenuKey() {
         int keyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();

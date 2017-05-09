@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 import javafx.scene.Parent;
@@ -37,6 +39,8 @@ import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(PreferencesStage.class.getName());
 
     private MarathonPreferencesInfo preferenceInfo;
     private IPreferenceHandler preferenceHandler;

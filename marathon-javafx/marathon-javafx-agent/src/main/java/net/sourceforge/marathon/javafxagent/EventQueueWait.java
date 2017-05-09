@@ -18,11 +18,14 @@ package net.sourceforge.marathon.javafxagent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
 
 public abstract class EventQueueWait extends Wait {
+
+    public static final Logger LOGGER = Logger.getLogger(EventQueueWait.class.getName());
 
     private static final long FOCUS_WAIT_INTERVAL = 50;
     private static final long FOCUS_WAIT = 1000;

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXCheckBoxElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXCheckBoxElement.class.getName());
 
     public static final String[] states = new String[] { "unchecked", "indeterminate", "checked" };
 

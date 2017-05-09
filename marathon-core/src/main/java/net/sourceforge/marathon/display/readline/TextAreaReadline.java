@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -33,6 +34,8 @@ import javafx.scene.text.FontWeight;
 import jline.History;
 
 public class TextAreaReadline implements EventHandler<KeyEvent> {
+
+    public static final Logger LOGGER = Logger.getLogger(TextAreaReadline.class.getName());
 
     private static final String EMPTY_LINE = "";
     private TextField area;

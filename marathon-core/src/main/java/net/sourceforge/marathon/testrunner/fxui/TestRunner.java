@@ -78,6 +78,8 @@ import net.sourceforge.marathon.util.AllureUtils;
 
 public class TestRunner extends Dockable implements IResourceActionSource {
 
+    public static final Logger LOGGER = Logger.getLogger(TestRunner.class.getName());
+
     private enum Mode {
         NORMAL, RUNNING, RESULTS
     }

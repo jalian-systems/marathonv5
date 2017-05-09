@@ -17,6 +17,7 @@ package net.sourceforge.marathon.runtime.fx.api;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +41,8 @@ import net.sourceforge.marathon.fx.api.UpDownHandler;
 import net.sourceforge.marathon.runtime.api.MPFUtils;
 
 public abstract class ListLayout implements IPropertiesLayout {
+
+    public static final Logger LOGGER = Logger.getLogger(ListLayout.class.getName());
 
     public class ClassPathElement {
 

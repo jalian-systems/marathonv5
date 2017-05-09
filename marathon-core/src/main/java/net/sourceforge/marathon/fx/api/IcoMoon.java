@@ -1,6 +1,10 @@
 package net.sourceforge.marathon.fx.api;
 
+import java.util.logging.Logger;
+
 public class IcoMoon {
+
+    public static final Logger LOGGER = Logger.getLogger(IcoMoon.class.getName());
 
     public static String fontName = "IcoMoon-Free"; //$NON-NLS-1$
 

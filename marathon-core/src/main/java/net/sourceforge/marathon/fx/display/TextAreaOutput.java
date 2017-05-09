@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.geometry.NodeOrientation;
@@ -21,6 +22,8 @@ import net.sourceforge.marathon.fxdocking.DockKey.TabPolicy;
 import net.sourceforge.marathon.fxdocking.Dockable;
 
 public class TextAreaOutput extends Dockable implements IStdOut {
+
+    public static final Logger LOGGER = Logger.getLogger(TextAreaOutput.class.getName());
 
     private ToolBar toolBar = new ToolBar();
     private Button clearButton = FXUIUtils.createButton("clear", "Clear Messages");

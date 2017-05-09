@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.display;
 import java.awt.Desktop;
 import java.io.File;
 import java.net.URI;
+import java.util.logging.Logger;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -42,6 +43,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
 public class AddPropertiesView extends BorderPane implements IResourceActionSource {
+
+    public static final Logger LOGGER = Logger.getLogger(AddPropertiesView.class.getName());
 
     private VBox content = new VBox();
     private FormPane formPane = new FormPane("properites-stage-form", 4);

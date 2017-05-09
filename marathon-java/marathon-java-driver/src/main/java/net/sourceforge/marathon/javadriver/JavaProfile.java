@@ -39,6 +39,8 @@ import org.openqa.selenium.os.CommandLine;
 
 public class JavaProfile {
 
+    public static final Logger LOGGER = Logger.getLogger(JavaProfile.class.getName());
+
     private static final String PROP_HOME = "marathon.home";
     private static final String MARATHON_AGENT = "marathon.agent";
     private static final String MARATHON_RECORDER = "marathon.recorder";

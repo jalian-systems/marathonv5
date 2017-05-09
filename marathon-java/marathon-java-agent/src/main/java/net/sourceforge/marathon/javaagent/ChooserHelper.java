@@ -19,8 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 public class ChooserHelper {
+
+    public static final Logger LOGGER = Logger.getLogger(ChooserHelper.class.getName());
 
     private static final String homeDir;
     private static final String cwd;

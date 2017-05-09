@@ -19,10 +19,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
 public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serializable {
+    
+    public static final Logger LOGGER = Logger.getLogger(JSONObjectPropertyAccessor.class.getName());
+
     private static final long serialVersionUID = 1L;
 
     private transient JSONObject o;

@@ -30,11 +30,14 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import net.sourceforge.marathon.resource.navigator.FolderResource;
 
 public class Watcher {
+
+    public static final Logger LOGGER = Logger.getLogger(Watcher.class.getName());
 
     private WatchService watchService;
     private Map<WatchKey, FolderResource> monitored = new HashMap<>();

@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.api.INamingStrategy;
 import net.sourceforge.marathon.objectmap.ObjectMapNamingStrategy;
 
 public class NamingStrategyFactory {
+
+    public static final Logger LOGGER = Logger.getLogger(NamingStrategyFactory.class.getName());
 
     public static Class<? extends INamingStrategy> nsClass = ObjectMapNamingStrategy.class;
 

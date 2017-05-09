@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.util.logging.Logger;
 
 /**
  * A WriterOutputStream converts java.io.Writer to java.io.OutputStream.
@@ -32,6 +33,8 @@ import java.nio.charset.CodingErrorAction;
  * @author Yoko Harada <yokolet@gmail.com>
  */
 public class WriterOutputStream extends OutputStream {
+
+    public static final Logger LOGGER = Logger.getLogger(WriterOutputStream.class.getName());
 
     private final Writer writer;
     private boolean isOpen = true;

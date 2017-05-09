@@ -17,6 +17,7 @@ package net.sourceforge.marathon.fx.display;
 
 import java.text.DateFormat;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -50,6 +51,8 @@ import net.sourceforge.marathon.fxdocking.Dockable;
 import net.sourceforge.marathon.runtime.api.ILogger;
 
 public class LogView extends Dockable {
+
+    public static final Logger LOGGER = Logger.getLogger(LogView.class.getName());
 
     private DateFormat dateTimeInstance = DateFormat.getDateTimeInstance();
 

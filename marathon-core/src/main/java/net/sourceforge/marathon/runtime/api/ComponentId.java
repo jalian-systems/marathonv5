@@ -20,8 +20,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class ComponentId implements Serializable {
+    
+    public static final Logger LOGGER = Logger.getLogger(ComponentId.class.getName());
+
     private static final String INFO_KEY = ComponentId.class.getName() + ".info";
     private static final String NAME_KEY = ComponentId.class.getName() + ".name";
     private static final long serialVersionUID = 1L;

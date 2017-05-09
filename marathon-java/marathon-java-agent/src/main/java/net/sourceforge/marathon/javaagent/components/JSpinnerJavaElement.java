@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JSpinnerJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JSpinnerJavaElement.class.getName());
 
     public JSpinnerJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

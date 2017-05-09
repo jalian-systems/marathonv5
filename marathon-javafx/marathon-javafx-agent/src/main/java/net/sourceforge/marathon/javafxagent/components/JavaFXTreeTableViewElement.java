@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTreeTableViewElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeTableViewElement.class.getName());
 
     public JavaFXTreeTableViewElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

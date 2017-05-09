@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.SingleSelectionModel;
@@ -25,6 +27,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXTabPane extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXTabPane.class.getName());
 
     private int prevSelection = -1;
 

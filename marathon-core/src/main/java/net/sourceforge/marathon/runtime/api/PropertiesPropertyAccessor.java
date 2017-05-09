@@ -17,8 +17,12 @@ package net.sourceforge.marathon.runtime.api;
 
 import java.io.Serializable;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class PropertiesPropertyAccessor extends DefaultMatcher implements Serializable {
+    
+    public static final Logger LOGGER = Logger.getLogger(PropertiesPropertyAccessor.class.getName());
+
     private static final long serialVersionUID = 1L;
     private Properties attributes;
 

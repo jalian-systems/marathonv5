@@ -30,7 +30,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
  * Processes arguments and provides getters to get at them. Marathon specific.
  */
 public class ArgumentProcessor {
-    private final static Logger logger = Logger.getLogger(ArgumentProcessor.class.getName());
+    public final static Logger LOGGER = Logger.getLogger(ArgumentProcessor.class.getName());
 
     private List<String> tests = new ArrayList<String>();
     private String projectDirName;
@@ -105,11 +105,11 @@ public class ArgumentProcessor {
                 if (!rdir.exists()) {
                     b = rdir.mkdirs();
                 } else if (!rdir.isDirectory()) {
-                    logger.severe("Given report directory is not a directory " + reportDir);
+                    LOGGER.severe("Given report directory is not a directory " + reportDir);
                     System.exit(1);
                 }
                 if (!b) {
-                    logger.severe("Could not create given report directory " + reportDir);
+                    LOGGER.severe("Could not create given report directory " + reportDir);
                     System.exit(1);
                 }
             } else if (args[i].startsWith("-")) {
@@ -132,11 +132,11 @@ public class ArgumentProcessor {
             if (!rdir.exists()) {
                 b = rdir.mkdirs();
             } else if (!rdir.isDirectory()) {
-                logger.severe("Given report directory is not a directory " + reportDir);
+                LOGGER.severe("Given report directory is not a directory " + reportDir);
                 System.exit(1);
             }
             if (!b) {
-                logger.severe("Could not create given report directory " + reportDir);
+                LOGGER.severe("Could not create given report directory " + reportDir);
                 System.exit(1);
             }
         }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -49,6 +50,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public class ProjectSelection extends ModalDialog<ProjectInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(ProjectSelection.class.getName());
 
     private TableView<ProjectInfo> projectInfotable = new TableView<ProjectInfo>();
     private ContextMenu contextMenu = new ContextMenu();

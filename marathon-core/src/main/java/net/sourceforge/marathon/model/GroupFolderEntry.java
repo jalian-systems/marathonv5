@@ -17,12 +17,15 @@ package net.sourceforge.marathon.model;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 import junit.framework.Test;
 import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class GroupFolderEntry extends GroupEntry {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupFolderEntry.class.getName());
 
     private Path path;
 

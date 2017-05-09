@@ -32,7 +32,7 @@ import net.sourceforge.marathon.javaagent.server.JavaServer;
 
 public class JavaAgentHook {
 
-    private static final Logger logger = Logger.getLogger(JavaAgentHook.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaAgentHook.class.getName());
     @SuppressWarnings("unused") private static EventLogger eventLogger;
 
     protected static String windowTitle;
@@ -56,10 +56,10 @@ public class JavaAgentHook {
                 if (done) {
                     return;
                 }
-                logger.info("Checking for window: " + Thread.currentThread());
+                LOGGER.info("Checking for window: " + Thread.currentThread());
                 if (!"".equals(windowTitle)) {
                     if (!isValidWindow()) {
-                        logger.info("Not a valid window");
+                        LOGGER.info("Not a valid window");
                         return;
                     }
                 }
@@ -67,11 +67,11 @@ public class JavaAgentHook {
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
                     @Override public Object run() {
                         try {
-                            logger.info("JavaVersion: " + System.getProperty("java.version"));
-                            logger.info("JavaHome: " + System.getProperty("java.home"));
+                            LOGGER.info("JavaVersion: " + System.getProperty("java.version"));
+                            LOGGER.info("JavaHome: " + System.getProperty("java.home"));
                             Charset utf8 = Charset.forName("utf-8");
                             if (!Charset.defaultCharset().equals(utf8)) {
-                                logger.warning(
+                                LOGGER.warning(
                                         "Application is using a non-utf8 charset. Marathon might cause issues while playing");
                             }
                             JavaServer server = new JavaServer(port, true);

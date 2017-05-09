@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javafx.scene.control.CheckMenuItem;
@@ -40,6 +41,8 @@ import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.util.Blurb;
 
 public class MarathonActionProvider implements IActionProvider {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonActionProvider.class.getName());
 
     private Preferences prefs = Preferences.userNodeForPackage(Constants.class);
 

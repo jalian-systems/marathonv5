@@ -16,11 +16,14 @@
 package net.sourceforge.marathon;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+    public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
         launch(args);

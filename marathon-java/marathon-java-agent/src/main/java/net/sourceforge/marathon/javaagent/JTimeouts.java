@@ -16,8 +16,11 @@
 package net.sourceforge.marathon.javaagent;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class JTimeouts {
+
+    public static final Logger LOGGER = Logger.getLogger(JTimeouts.class.getName());
 
     private IJavaAgent agent;
 

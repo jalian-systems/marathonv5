@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 
 public class Status extends Label {
+
+    public static final Logger LOGGER = Logger.getLogger(Status.class.getName());
 
     public Status() {
         super("Ready");

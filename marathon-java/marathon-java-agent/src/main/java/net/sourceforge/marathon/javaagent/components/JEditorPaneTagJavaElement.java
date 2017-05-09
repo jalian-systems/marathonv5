@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JEditorPane;
 import javax.swing.text.AttributeSet;
@@ -40,6 +41,8 @@ import net.sourceforge.marathon.javaagent.InvalidElementStateException;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JEditorPaneTagJavaElement.class.getName());
 
     private int index;
     private Tag tag;

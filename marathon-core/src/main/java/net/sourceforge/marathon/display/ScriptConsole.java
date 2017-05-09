@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -48,6 +49,8 @@ import net.sourceforge.marathon.fx.display.TextAreaLimited;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ScriptConsole extends Stage implements IStdOut {
+
+    public static final Logger LOGGER = Logger.getLogger(ScriptConsole.class.getName());
 
     private TextField textField;
     private BorderPane root = new BorderPane();

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -40,6 +41,8 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JTableJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTableJavaElement.class.getName());
 
     private static final class PropertyPredicate implements Predicate {
         private final Properties p;

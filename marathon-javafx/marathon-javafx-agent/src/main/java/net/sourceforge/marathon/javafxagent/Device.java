@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 
 public abstract class Device {
 
+    public static final Logger LOGGER = Logger.getLogger(Device.class.getName());
+
     public enum Type {
         EVENT_QUEUE, ROBOT
     }

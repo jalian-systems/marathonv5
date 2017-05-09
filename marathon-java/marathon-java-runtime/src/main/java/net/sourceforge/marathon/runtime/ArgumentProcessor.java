@@ -17,8 +17,11 @@ package net.sourceforge.marathon.runtime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ArgumentProcessor {
+
+    public static final Logger LOGGER = Logger.getLogger(ArgumentProcessor.class.getName());
 
     private String fArgs;
     private int fIndex = 0;

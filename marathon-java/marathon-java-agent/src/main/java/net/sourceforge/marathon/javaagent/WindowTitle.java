@@ -20,10 +20,13 @@ import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 
 public class WindowTitle {
+
+    public static final Logger LOGGER = Logger.getLogger(WindowTitle.class.getName());
 
     private Window window;
 

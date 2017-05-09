@@ -94,6 +94,8 @@ import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
+    public static final Logger LOGGER = Logger.getLogger(JavaFXElementPropertyAccessor.class.getName());
+
     protected Node node;
 
     public JavaFXElementPropertyAccessor(Node component) {

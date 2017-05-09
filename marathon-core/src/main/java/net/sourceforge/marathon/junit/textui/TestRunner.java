@@ -18,6 +18,7 @@ package net.sourceforge.marathon.junit.textui;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.junit.internal.TextListener;
 import org.junit.runner.Result;
@@ -33,6 +34,9 @@ import net.sourceforge.marathon.testrunner.fxui.AllureMarathonRunListener;
 import net.sourceforge.marathon.util.AllureUtils;
 
 public class TestRunner {
+    
+    public static final Logger LOGGER = Logger.getLogger(TestRunner.class.getName());
+
     ArgumentProcessor argProcessor;
     private Test currentTest;
     private TestCreator creator;

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.fx.projectselection;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
@@ -35,6 +36,8 @@ import net.sourceforge.marathon.runtime.TestApplication;
 import net.sourceforge.marathon.runtime.fx.api.IPropertiesLayout;
 
 public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(MPFConfigurationStage.class.getName());
 
     private TabPane tabPane;
     private Button saveButton;

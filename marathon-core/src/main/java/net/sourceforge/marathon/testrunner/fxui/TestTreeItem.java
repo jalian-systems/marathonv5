@@ -17,6 +17,7 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
@@ -26,6 +27,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 public class TestTreeItem extends TreeItem<Test> {
+
+    public static final Logger LOGGER = Logger.getLogger(TestTreeItem.class.getName());
 
     enum State {
         NORMAL, RUNNING, SUCCESS, ERROR, FAILURE

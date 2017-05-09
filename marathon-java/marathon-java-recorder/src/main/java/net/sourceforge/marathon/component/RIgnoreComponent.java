@@ -19,11 +19,14 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RIgnoreComponent extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RIgnoreComponent.class.getName());
 
     public RIgnoreComponent(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);

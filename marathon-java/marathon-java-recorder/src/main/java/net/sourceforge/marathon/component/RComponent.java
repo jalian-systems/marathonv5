@@ -35,6 +35,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
@@ -47,6 +48,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public abstract class RComponent extends JavaElementPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(RComponent.class.getName());
 
     protected IJSONRecorder recorder;
     protected JSONOMapConfig omapConfig;

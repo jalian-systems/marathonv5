@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -59,6 +60,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.util.UIUtils;
 
 public class DefaultContextMenu extends AbstractContextMenu implements IContextMenu {
+
+    public static final Logger LOGGER = Logger.getLogger(DefaultContextMenu.PlaceHolderTextField.class.getName());
 
     @SuppressWarnings("serial") public static class PlaceHolderTextField extends JTextField {
 

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,6 +37,9 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class Session {
+    
+    public static final Logger LOGGER = Logger.getLogger(Session.class.getName());
+
     private String id;
     private IJavaAgent agent;
 

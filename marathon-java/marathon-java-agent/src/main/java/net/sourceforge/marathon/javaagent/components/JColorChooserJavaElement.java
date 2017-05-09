@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.util.logging.Logger;
 
 import javax.swing.JColorChooser;
 
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JColorChooserJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JColorChooserJavaElement.class.getName());
 
     public JColorChooserJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

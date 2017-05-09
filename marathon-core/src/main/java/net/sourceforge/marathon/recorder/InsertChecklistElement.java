@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.recorder;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.runtime.api.ComponentId;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
@@ -22,6 +24,9 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class InsertChecklistElement implements IScriptElement {
+    
+    public static final Logger LOGGER = Logger.getLogger(InsertChecklistElement.class.getName());
+
     private static final long serialVersionUID = 1L;
     private String fileName;
     private final WindowId windowId;

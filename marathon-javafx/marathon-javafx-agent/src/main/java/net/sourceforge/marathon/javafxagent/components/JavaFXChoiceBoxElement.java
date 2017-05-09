@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import org.json.JSONArray;
 
 import javafx.scene.Node;
@@ -24,6 +26,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXChoiceBoxElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXChoiceBoxElement.class.getName());
 
     public JavaFXChoiceBoxElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

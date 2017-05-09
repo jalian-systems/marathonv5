@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.control.Menu;
 import javafx.scene.control.ToggleGroup;
 import net.sourceforge.marathon.editor.IEditorProvider;
 
 public abstract class MarathonAction implements IMarathonAction {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonAction.class.getName());
 
     private String name;
     private String description;

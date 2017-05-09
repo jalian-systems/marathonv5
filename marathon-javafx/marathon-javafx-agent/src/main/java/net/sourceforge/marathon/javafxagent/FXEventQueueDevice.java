@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -35,6 +36,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.PickResult;
 
 public class FXEventQueueDevice implements IDevice {
+
+    public static final Logger LOGGER = Logger.getLogger(FXEventQueueDevice.class.getName());
 
     public static class DeviceState {
         private boolean shiftPressed = false;

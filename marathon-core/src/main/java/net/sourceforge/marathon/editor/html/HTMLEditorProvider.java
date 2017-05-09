@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.editor.html;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.editor.IEditorProvider;
 
 public class HTMLEditorProvider implements IEditorProvider {
+
+    public static final Logger LOGGER = Logger.getLogger(HTMLEditorProvider.class.getName());
 
     @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         return new HTMLView();

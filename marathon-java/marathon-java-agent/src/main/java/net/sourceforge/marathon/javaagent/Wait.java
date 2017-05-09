@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
+import java.util.logging.Logger;
+
 /**
  * A utility class, designed to help the user automatically wait until a
  * condition turns true.
@@ -34,6 +36,9 @@ package net.sourceforge.marathon.javaagent;
  *
  */
 public abstract class Wait {
+    
+    public static final Logger LOGGER = Logger.getLogger(Wait.class.getName());
+
     public Wait() {
     }
 

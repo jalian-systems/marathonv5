@@ -17,8 +17,11 @@ package net.sourceforge.marathon.editor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MultiEditorProvider implements IEditorProvider {
+
+    public static final Logger LOGGER = Logger.getLogger(MultiEditorProvider.class.getName());
 
     private List<IEditorProvider> providers = new ArrayList<IEditorProvider>();
     private IEditorProvider defaultProvider;

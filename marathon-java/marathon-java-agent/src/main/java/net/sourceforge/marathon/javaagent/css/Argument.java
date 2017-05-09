@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent.css;
 
+import java.util.logging.Logger;
+
 public class Argument {
+
+    public static final Logger LOGGER = Logger.getLogger(Argument.class.getName());
 
     private Boolean b;
     private Integer i;

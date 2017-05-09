@@ -18,10 +18,13 @@ package net.sourceforge.marathon.runtime;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.runtime.api.ITestLauncher;
 
 public class TestLauncher implements ITestLauncher {
+
+    public static final Logger LOGGER = Logger.getLogger(TestLauncher.class.getName());
 
     private IWebDriverRuntimeLauncherModel launcherModel;
     private Map<String, Object> ps;

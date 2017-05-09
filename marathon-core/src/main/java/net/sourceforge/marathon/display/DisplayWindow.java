@@ -199,6 +199,8 @@ import net.sourceforge.marathon.util.LauncherModelHelper;
  */
 public class DisplayWindow extends Stage implements INameValidateChecker, IResourceActionSource {
 
+    public static final Logger LOGGER = Logger.getLogger(DisplayWindow.class.getName());
+
     private static final String EOL = System.getProperty("line.separator");
 
     private static final Logger logger = Logger.getLogger(DisplayWindow.class.getCanonicalName());

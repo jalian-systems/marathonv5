@@ -62,6 +62,8 @@ import net.sourceforge.marathon.javafxrecorder.ws.WSRecorder;
 
 public class JavaFxRecorderHook implements EventHandler<Event> {
 
+    public static final Logger LOGGER = Logger.getLogger(JavaFxRecorderHook.class.getName());
+
     private static final Logger logger = Logger.getLogger(JavaFxRecorderHook.class.getName());
 
     public static String DRIVER = "Java";

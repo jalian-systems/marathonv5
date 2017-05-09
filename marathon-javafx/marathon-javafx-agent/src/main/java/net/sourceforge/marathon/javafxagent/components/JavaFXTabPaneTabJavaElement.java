@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TabPane;
@@ -22,6 +24,8 @@ import javafx.scene.layout.StackPane;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 
 public class JavaFXTabPaneTabJavaElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTabPaneTabJavaElement.class.getName());
 
     private JavaFXElement parent;
     private int tabIndex;

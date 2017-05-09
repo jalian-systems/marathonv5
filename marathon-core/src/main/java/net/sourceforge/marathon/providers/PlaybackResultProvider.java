@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.providers;
 
+import java.util.logging.Logger;
+
 import com.google.inject.Provider;
 
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
 
 public class PlaybackResultProvider implements Provider<PlaybackResult> {
+
+    public static final Logger LOGGER = Logger.getLogger(PlaybackResultProvider.class.getName());
 
     @Override public PlaybackResult get() {
         return new PlaybackResult();

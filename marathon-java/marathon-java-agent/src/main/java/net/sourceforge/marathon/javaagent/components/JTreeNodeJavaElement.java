@@ -45,7 +45,7 @@ import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudoElement {
 
-    private final static Logger logger = Logger.getLogger(JTreeNodeJavaElement.class.getName());
+    public final static Logger LOGGER = Logger.getLogger(JTreeNodeJavaElement.class.getName());
 
     private JTreeJavaElement parent;
     private int viewRow;
@@ -96,7 +96,7 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
                         return (Component) cField.get(ui);
                     } catch (Throwable t) {
                         // TODO Auto-generated catch block
-                        logger.warning("Unable to find editingComponent for " + ui.getClass());
+                        LOGGER.warning("Unable to find editingComponent for " + ui.getClass());
                         t.printStackTrace();
                     } finally {
                         if (cField != null) {

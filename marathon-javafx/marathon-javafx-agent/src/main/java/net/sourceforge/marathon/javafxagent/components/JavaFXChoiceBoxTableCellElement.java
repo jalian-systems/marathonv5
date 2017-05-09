@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.util.StringConverter;
@@ -23,6 +25,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXChoiceBoxTableCellElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXChoiceBoxTableCellElement.class.getName());
 
     public JavaFXChoiceBoxTableCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
@@ -41,6 +42,8 @@ import net.sourceforge.marathon.resource.RootResource;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class ProjectGroupResource extends Resource implements RootResource {
+
+    public static final Logger LOGGER = Logger.getLogger(ProjectGroupResource.class.getName());
 
     private boolean loaded = false;
     private GroupType type;

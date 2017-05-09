@@ -18,8 +18,12 @@ package net.sourceforge.marathon.runtime.api;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class RecordableList {
+
+    public static final Logger LOGGER = Logger.getLogger(RecordableList.class.getName());
+
     private List<IScriptElement> impl = new ArrayList<IScriptElement>();
 
     public int size() {

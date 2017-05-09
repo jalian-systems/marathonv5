@@ -37,7 +37,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ObjectMapConfiguration {
 
-    private static Logger logger = Logger.getLogger(ObjectMapConfiguration.class.getName());
+    public static Logger LOGGER = Logger.getLogger(ObjectMapConfiguration.class.getName());
 
     public static class PropertyList implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -157,7 +157,7 @@ public class ObjectMapConfiguration {
     }
 
     public void createDefault() {
-        logger.info("Creating a default object map configuration. Loading from stream...");
+        LOGGER.info("Creating a default object map configuration. Loading from stream...");
         Reader reader = new InputStreamReader(Constants.getOMapConfigurationStream());
         load(reader);
         try {

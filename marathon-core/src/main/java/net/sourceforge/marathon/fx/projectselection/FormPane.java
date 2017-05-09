@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.projectselection;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -31,6 +33,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class FormPane extends GridPane {
+
+    public static final Logger LOGGER = Logger.getLogger(FormPane.class.getName());
 
     private int columns;
 
