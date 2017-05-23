@@ -37,11 +37,6 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
 
     @Override public boolean marathon_select(String value) {
         CheckBox cb = (CheckBox) node;
-        Boolean isCellEditor = (Boolean) cb.getProperties().get("marathon.celleditor");
-        if (isCellEditor != null && isCellEditor) {
-            String[] split = value.split(":");
-            value = split[1];
-        }
         if (!isValidState(value)) {
             throw new JavaAgentException(value + " is not a valid state for CheckBox.", null);
         }

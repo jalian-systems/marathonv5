@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -712,7 +713,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings("rawtypes") public ListCell<?> getVisibleCellAt(ListView listView, Integer index) {
-        Set<Node> lookupAll = listView.lookupAll(".list-cell");
+        Set<Node> lookupAll = getListCells(listView);
         ListCell<?> cell = null;
         for (Node node : lookupAll) {
             if (((ListCell<?>) node).getIndex() == index) {
@@ -724,6 +725,16 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             return cell;
         }
         return null;
+    }
+
+    private Set<Node> getListCells(ListView<?> listView) {
+        Set<Node> l = listView.lookupAll("*");
+        Set<Node> r = new HashSet<>();
+        for (Node node : l) {
+            if (node instanceof ListCell<?>)
+                r.add(node);
+        }
+        return r;
     }
 
     public TreeCell<?> getCellAt(TreeView<?> treeView, int index) {
@@ -857,7 +868,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     private String getListItemText(ListView<?> listView, Integer index) {
-        return listView.getItems().get(index).toString();
+        if (index != -1)
+            return listView.getItems().get(index).toString();
+        return "";
     }
 
     public int getListItemIndex(ListView<?> listView, String string) {
@@ -876,7 +889,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             return listView.getSelectionModel().getSelectedIndex();
         }
         point = listView.localToScene(point);
-        Set<Node> lookupAll = listView.lookupAll(".list-cell");
+        Set<Node> lookupAll = getListCells(listView);
         ListCell<?> selected = null;
         for (Node cellNode : lookupAll) {
             Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);

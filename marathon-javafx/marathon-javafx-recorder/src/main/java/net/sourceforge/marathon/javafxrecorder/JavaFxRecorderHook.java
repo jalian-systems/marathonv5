@@ -43,6 +43,7 @@ import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -299,13 +300,17 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             KeyEvent.KEY_PRESSED, KeyEvent.KEY_RELEASED, KeyEvent.KEY_TYPED };
 
     private void removeEventFilter(Stage stage) {
-        stage.getScene().getRoot().removeEventFilter(Event.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().removeEventFilter(InputEvent.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().removeEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().removeEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
     }
 
     private void addEventFilter(Stage stage) {
         stage.getScene().getRoot().getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
         stage.getScene().getRoot().getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
-        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().addEventFilter(InputEvent.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().addEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().addEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
             @Override public void handle(WindowEvent event) {
                 recorder.recordWindowClosing(new WindowTitle(stage).getTitle());
@@ -332,7 +337,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             }
         });
         stage.getScene().getRoot().getProperties().put("marathon.menu.handler", menuEvent);
-        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
     }
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {

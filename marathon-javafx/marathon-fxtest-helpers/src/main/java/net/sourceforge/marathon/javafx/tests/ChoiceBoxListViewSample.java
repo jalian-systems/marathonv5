@@ -3,6 +3,7 @@ package net.sourceforge.marathon.javafx.tests;
 import ensemble.Sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.ChoiceBoxListCell;
 
@@ -16,6 +17,6 @@ public class ChoiceBoxListViewSample extends Sample {
         listView.getItems().addAll(items);
         listView.setEditable(true);
         listView.setCellFactory(ChoiceBoxListCell.forListView(items));
-        getChildren().add(listView);
+        getChildren().addAll(listView, new Button("Click me"));
     }
 }

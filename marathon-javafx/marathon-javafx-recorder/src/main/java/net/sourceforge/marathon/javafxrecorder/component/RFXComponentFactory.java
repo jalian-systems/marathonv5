@@ -28,6 +28,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
@@ -57,6 +58,7 @@ import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.HTMLEditor;
@@ -64,7 +66,7 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXComponentFactory {
-    
+
     public static final Logger LOGGER = Logger.getLogger(RFXComponentFactory.class.getName());
 
     private JSONOMapConfig omapConfig;
@@ -376,7 +378,7 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ListCell<?>) {
-                        return true;
+                        return ((Labeled) parent).getText() != null || hasEntry(parent);
                     }
                     parent = parent.getParent();
                 }
@@ -460,6 +462,7 @@ public class RFXComponentFactory {
                 return false;
             }
         });
+        add(TextFieldListCell.class, RFXTextFieldListCell.class, null);
         add(ChoiceBoxListCell.class, RFXChoiceBoxListCell.class, null);
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
@@ -507,6 +510,41 @@ public class RFXComponentFactory {
             }
         }
         return null;
+    }
+
+    public RFXComponent findRCellComponent(Node source, Point2D point, IJSONRecorder recorder) {
+        if (source == null)
+            return null;
+        for (IRFXComponentFinder entry : entries) {
+            Class<? extends RFXComponent> k = entry.get(source);
+            if (k == null) {
+                continue;
+            }
+            try {
+                Constructor<? extends RFXComponent> cons = k.getConstructor(Node.class, JSONOMapConfig.class, Point2D.class,
+                        IJSONRecorder.class);
+                if (point != null) {
+                    point = source.sceneToLocal(point);
+                }
+                RFXComponent newInstance = cons.newInstance(source, omapConfig, point, recorder);
+                if (newInstance instanceof RFXUnknownComponent || newInstance instanceof RFXIgnoreComponent)
+                    return null;
+                return newInstance;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private static boolean hasEntry(Node source) {
+        for (IRFXComponentFinder entry : entries) {
+            Class<? extends RFXComponent> k = entry.get(source);
+            if (k != null && !k.equals(RFXUnknownComponent.class) && !k.equals(RFXIgnoreComponent.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Node getComponent(Node component, Point2D point) {

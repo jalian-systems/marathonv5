@@ -159,7 +159,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
     }
 
     private JSONObject addWindowParents(JSONObject r, JSONObject current) {
-        Stage stage = getStage(node.getScene().getWindow());
+        Stage stage = (Stage) node.getScene().getWindow();
         while (stage != null) {
             JSONObject pWindow = getContextJSONObject(stage);
             if (r == null) {

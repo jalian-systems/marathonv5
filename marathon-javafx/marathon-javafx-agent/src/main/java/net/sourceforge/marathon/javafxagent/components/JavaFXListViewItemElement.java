@@ -109,7 +109,7 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         JavaFXElement graphicElement = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);
         if (graphic != null && graphicElement != null) {
             if (graphic instanceof CheckBox) {
-                return cell.getText() + ":" + graphicElement._getValue();
+                return cell.getText();
             } else {
                 return graphicElement._getValue();
             }
