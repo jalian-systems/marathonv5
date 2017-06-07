@@ -35,19 +35,16 @@ public class RFXListView extends RFXComponent {
     private String cellValue;
     private String cellInfo;
 
-    private Point2D point;
-
     public RFXListView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
-        this.point = point;
         index = getIndexAt((ListView<?>) node, point);
-        cellInfo = getCellAt((ListView<?>) node, index).getText();
+        cellInfo = getListSelectionText((ListView<?>) node, index);
     }
 
     @Override public void focusGained(RFXComponent prev) {
         listSelectionText = getListSelectionText((ListView<?>) node);
         cellValue = getListCellValue((ListView<?>) node, index);
-        cellInfo = getCellAt((ListView<?>) node, index).getText();
+        cellInfo = getListSelectionText((ListView<?>) node, index);
     }
 
     private String getListCellValue(ListView<?> listView, int index) {
@@ -61,7 +58,7 @@ public class RFXListView extends RFXComponent {
 
     @Override public void focusLost(RFXComponent next) {
         ListView<?> listView = (ListView<?>) node;
-        String currentCellValue = getListCellValue(listView, getIndexAt(listView, point));
+        String currentCellValue = getListCellValue(listView, index);
         if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
             recorder.recordSelect2(this, currentCellValue, true);
         }
@@ -133,7 +130,7 @@ public class RFXListView extends RFXComponent {
         int nItems = listView.getItems().size();
         String[][] content = new String[1][nItems];
         for (int i = 0; i < nItems; i++) {
-            content[0][i] = getListCellValue(listView, i);
+            content[0][i] = getListSelectionText(listView, i);
         }
         return content;
     }

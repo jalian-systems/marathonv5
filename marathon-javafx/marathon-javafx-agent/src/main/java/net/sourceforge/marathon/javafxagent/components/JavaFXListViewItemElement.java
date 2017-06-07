@@ -89,6 +89,11 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor")) {
+            ListView<?> listView = (ListView<?>) getComponent();
+            if (getVisibleCellAt(listView, itemIndex) == null) {
+                listView.scrollTo(itemIndex);
+                return Arrays.asList();
+            }
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
         }
         return super.getByPseudoElement(selector, params);

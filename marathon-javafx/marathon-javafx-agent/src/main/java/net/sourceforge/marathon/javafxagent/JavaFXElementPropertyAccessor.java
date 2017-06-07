@@ -731,8 +731,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> l = listView.lookupAll("*");
         Set<Node> r = new HashSet<>();
         for (Node node : l) {
-            if (node instanceof ListCell<?>)
+            if (node instanceof ListCell<?> && listView.equals((ListCell<?>) node).getListView()) {
                 r.add(node);
+            }
         }
         return r;
     }
