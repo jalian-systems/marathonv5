@@ -46,13 +46,7 @@ public class RFXCheckBoxTableCell extends RFXComponent {
             Node cb = cell.getGraphic();
             RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
             cbText = comp._getValue();
-
         }
-        String cellText = cell.getText();
-        if (cellText == null) {
-            cellText = "";
-        }
-        String text = cellText + ":" + cbText;
-        return text;
+        return cbText;
     }
 }

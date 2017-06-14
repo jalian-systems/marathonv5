@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.PickResult;
 
 public interface IJavaFXElement {
 
@@ -86,7 +87,7 @@ public interface IJavaFXElement {
 
     public abstract Point2D getMidpoint();
 
-    public abstract void click(int button, int clickCount, double x, double y);
+    public abstract void click(int button, Node target, PickResult pickResult, int clickCount, double x, double y);
 
     public abstract void buttonDown(int button, double xoffset, double yoffset);
 

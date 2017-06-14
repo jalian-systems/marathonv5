@@ -342,7 +342,7 @@ public class JavaServer extends NanoHTTPD {
             } catch (IOException e) {
             }
         }
-        if(n <= 0)
+        if (n <= 0)
             r.put("data", new String(baos.toByteArray()) + "...");
         else
             r.put("data", new String(baos.toByteArray()));
@@ -862,10 +862,10 @@ public class JavaServer extends NanoHTTPD {
 
     public void clickElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         if (lastComponenet.element != null && lastComponenet.element.equals(element)) {
-            element.click(0, 1, lastComponenet.x, lastComponenet.y);
+            element.click(0, null, null, 1, lastComponenet.x, lastComponenet.y);
         } else {
             Point2D p = element.getMidpoint();
-            element.click(0, 1, p.getX(), p.getY());
+            element.click(0, null, null, 1, p.getX(), p.getY());
             lastComponenet.element = element;
             lastComponenet.x = p.getX();
             lastComponenet.y = p.getY();
@@ -962,7 +962,7 @@ public class JavaServer extends NanoHTTPD {
             xoffset = p.getX();
             yoffset = p.getY();
         }
-        element.click(button, clickCount, xoffset, yoffset);
+        element.click(button, null, null, clickCount, xoffset, yoffset);
     }
 
     public Object execute(JSONObject query, JSONObject uriParams, Session session) {

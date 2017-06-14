@@ -62,7 +62,10 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         List<IJavaFXElement> r = new ArrayList<>();
         if (o.has("select")) {
             if (getPath((TreeView<?>) getComponent(), o.getString("select")) != null) {
-                r.add(new JavaFXTreeViewNodeElement(this, o.getString("select")));
+                JavaFXTreeViewNodeElement e = new JavaFXTreeViewNodeElement(this, o.getString("select"));
+                if(!((boolean) e._makeVisible()))
+                    return Arrays.asList();
+                r.add(e);
             }
         }
         return r;

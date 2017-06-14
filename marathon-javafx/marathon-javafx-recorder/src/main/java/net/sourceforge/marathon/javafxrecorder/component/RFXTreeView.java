@@ -22,6 +22,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -29,27 +30,22 @@ public class RFXTreeView extends RFXComponent {
 
     public static final Logger LOGGER = Logger.getLogger(RFXTreeView.class.getName());
 
-    private Point2D point;
     private int row = -1;
-    private String cellValue;
-    private String cellText;
     private String treeText;
+    private String cellValue;
+    private String cellInfo;
 
     public RFXTreeView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
-        this.point = point;
+        row = getRowAt((TreeView<?>) node, point);
+        cellInfo = getTextForNode((TreeView<?>) node, ((TreeView<?>) node).getTreeItem(row));
     }
 
     @Override public void focusGained(RFXComponent prev) {
         TreeView<?> treeView = (TreeView<?>) node;
-        cellText = getCellText(treeView, point);
         treeText = getSelectedTreeNodeText(treeView, treeView.getSelectionModel().getSelectedItems());
-    }
-
-    private String getCellText(TreeView<?> treeView, Point2D point2) {
-        row = getRowAt(treeView, point);
         cellValue = getTreeCellValue(treeView, row);
-        return getTextForNode(treeView, treeView.getTreeItem(row));
+        cellInfo = getTextForNode((TreeView<?>) node, ((TreeView<?>) node).getTreeItem(row));
     }
 
     private String getTreeCellValue(TreeView<?> treeView, int index) {
@@ -57,9 +53,8 @@ public class RFXTreeView extends RFXComponent {
             return null;
         }
         TreeCell<?> treeCell = getCellAt(treeView, index);
-        RFXComponent cellComponent = getFinder().findRawRComponent(treeCell, null, recorder);
-        String ctext = cellComponent.getValue();
-        return ctext;
+        RFXComponent cellComponent = getFinder().findRCellComponent(treeCell, null, recorder);
+        return cellComponent == null ? null : cellComponent.getValue();
     }
 
     @Override public void focusLost(RFXComponent next) {
@@ -69,7 +64,7 @@ public class RFXTreeView extends RFXComponent {
         if (currentCellText != null && !currentCellText.equals(cellValue)) {
             recorder.recordSelect2(this, currentCellText, true);
         }
-        if (next == null || getComponent() != next.getComponent()) {
+        if ((next == null || getComponent() != next.getComponent()) && treeView.getSelectionModel().getSelectedItems().size() > 1) {
             String currListText = getSelectedTreeNodeText(treeView, selectedItems);
             if (!currListText.equals(treeText)) {
                 recorder.recordSelect(this, currListText);
@@ -78,9 +73,7 @@ public class RFXTreeView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
-        TreeView<?> treeView = (TreeView<?>) node;
-        cellText = getCellText(treeView, point);
-        return cellText;
+        return cellInfo;
     }
 
     @Override public int hashCode() {
@@ -108,9 +101,8 @@ public class RFXTreeView extends RFXComponent {
     }
 
     @Override public String _getText() {
-        row = getRowAt((TreeView<?>) node, point);
         if (row != -1)
-            return cellValue = getTreeCellValue((TreeView<?>) node, row);
+            return getTextForNode((TreeView<?>) node, ((TreeView<?>) node).getTreeItem(row));
         return getSelectedTreeNodeText((TreeView<?>) node, ((TreeView<?>) node).getSelectionModel().getSelectedItems());
     }
 
@@ -126,8 +118,17 @@ public class RFXTreeView extends RFXComponent {
         int rowCount = treeView.getExpandedItemCount();
         String[][] content = new String[1][rowCount];
         for (int i = 0; i < rowCount; i++) {
-            content[0][i] = getTreeCellValue(treeView, i);
+            content[0][i] = getTextForNode((TreeView<?>) node, ((TreeView<?>) node).getTreeItem(i));
         }
         return content;
+    }
+
+    @Override protected void mousePressed(MouseEvent me) {
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
+            return;
+        recorder.recordClick2(this, me, true);
     }
 }

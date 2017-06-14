@@ -23,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTablePosition;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -33,7 +34,7 @@ public class RFXTreeTableView extends RFXComponent {
     private int column = -1;
     private int row = -1;
     private String cellValue;
-    private String cellText;
+    private String cellInfo;
     private String treeTableText;
 
     public RFXTreeTableView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
@@ -59,6 +60,7 @@ public class RFXTreeTableView extends RFXComponent {
                 }
             }
         }
+        cellInfo = getTreeTableCellText(treeTableView, row, column);
         if (row == -1 || column == -1) {
             row = column = -1;
         }
@@ -68,7 +70,7 @@ public class RFXTreeTableView extends RFXComponent {
         TreeTableView<?> treeTableView = (TreeTableView<?>) node;
         if (row != -1 && column != -1) {
             cellValue = getTreeTableCellValueAt(treeTableView, row, column);
-            cellText = getTreeTableCellText(treeTableView, row, column);
+            cellInfo = getTreeTableCellText(treeTableView, row, column);
             treeTableText = getTreeTableSelection(treeTableView);
         }
     }
@@ -78,9 +80,8 @@ public class RFXTreeTableView extends RFXComponent {
             return null;
         }
         TreeTableCell<?, ?> tableCell = getCellAt(treeTableView, row, column);
-        RFXComponent cellComponent = getFinder().findRawRComponent(tableCell, null, recorder);
-        String ctext = cellComponent.getValue();
-        return ctext;
+        RFXComponent cellComponent = getFinder().findRCellComponent(tableCell, null, recorder);
+        return cellComponent == null ? null : cellComponent.getValue();
     }
 
     @Override public void focusLost(RFXComponent next) {
@@ -89,7 +90,8 @@ public class RFXTreeTableView extends RFXComponent {
         if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
             recorder.recordSelect2(this, currentCellValue, true);
         }
-        if (next == null || next.getComponent() != getComponent()) {
+        if ((next == null || next.getComponent() != getComponent())
+                && treeTableView.getSelectionModel().getSelectedItems().size() > 1) {
             String currentTreeTableText = getTreeTableSelection(treeTableView);
             if (!currentTreeTableText.equals(treeTableText)) {
                 recorder.recordSelect(this, getTreeTableSelection(treeTableView));
@@ -126,12 +128,7 @@ public class RFXTreeTableView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
-        TreeTableView<?> treeTableView = (TreeTableView<?>) node;
-        if (row != -1 && column != -1) {
-            cellValue = getTreeTableCellValueAt(treeTableView, row, column);
-            cellText = getTreeTableCellText(treeTableView, row, column);
-        }
-        return cellText;
+        return cellInfo;
     }
 
     @Override public String _getText() {
@@ -163,5 +160,14 @@ public class RFXTreeTableView extends RFXComponent {
             }
         }
         return content;
+    }
+
+    @Override protected void mousePressed(MouseEvent me) {
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
+            return;
+        recorder.recordClick2(this, me, true);
     }
 }

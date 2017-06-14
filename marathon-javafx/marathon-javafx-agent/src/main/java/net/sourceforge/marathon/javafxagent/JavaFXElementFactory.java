@@ -35,7 +35,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
@@ -81,7 +80,6 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXTableViewCellElemen
 import net.sourceforge.marathon.javafxagent.components.JavaFXTableViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTextInputControlElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXToggleButtonElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXTreeCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
@@ -154,7 +152,6 @@ public class JavaFXElementFactory {
         add(CheckBoxListCell.class, JavaFXCheckBoxListCellElement.class);
         add(ChoiceBoxListCell.class, JavaFXChoiceBoxListCellElement.class);
         add(ComboBoxListCell.class, JavaFXComboBoxListCellElemnt.class);
-        add(TreeCell.class, JavaFXTreeCellElement.class);
         add(CheckBoxTreeCell.class, JavaFXCheckBoxTreeCellElement.class);
         add(ChoiceBoxTreeCell.class, JavaFXChoiceBoxTreeCellElement.class);
         add(ComboBoxTreeCell.class, JavaFXComboBoxTreeCellElement.class);

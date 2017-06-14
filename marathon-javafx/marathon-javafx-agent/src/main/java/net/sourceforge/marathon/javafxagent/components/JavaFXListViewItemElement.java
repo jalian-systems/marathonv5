@@ -28,6 +28,9 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.PickResult;
+import javafx.scene.text.Text;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
@@ -83,7 +86,7 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
 
     @Override public Node getPseudoComponent() {
         ListView<?> listView = (ListView<?>) getComponent();
-        listView.scrollTo(itemIndex);
+        EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
         return getCellAt(listView, itemIndex);
     }
 
@@ -91,7 +94,7 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         if (selector.equals("editor")) {
             ListView<?> listView = (ListView<?>) getComponent();
             if (getVisibleCellAt(listView, itemIndex) == null) {
-                listView.scrollTo(itemIndex);
+                EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
                 return Arrays.asList();
             }
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
@@ -121,5 +124,21 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         }
         JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
         return cellElement._getValue();
+    }
+
+    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+        Node cell = getPseudoComponent();
+        target = getTextObj((ListCell<?>) cell);
+        Point2D targetXY = node.localToScene(xoffset, yoffset);
+        super.click(button, target, new PickResult(target, targetXY.getX(), targetXY.getY()), clickCount, xoffset, yoffset);
+    }
+
+    private Node getTextObj(ListCell<?> cell) {
+        for (Node child : cell.getChildrenUnmodifiable()) {
+            if (child instanceof Text) {
+                return child;
+            }
+        }
+        return cell;
     }
 }
