@@ -724,3 +724,7 @@ end
 def execute_script(args)
   driver.execute_script("return ProcessLauncher.launch(new String[] { " + args.map{|s| "\"#{s}\""}.join(', ') + " });")
 end
+
+def refresh_if_stale(o)
+  return o
+end
