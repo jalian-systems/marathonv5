@@ -417,7 +417,13 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                     event);
             return;
         }
-        RFXComponent c = finder.findRComponent((Node) event.getTarget(), point, recorder);
+        Node target;
+        if (event instanceof MouseEvent && ((MouseEvent) event).getPickResult() != null) {
+            target = ((MouseEvent) event).getPickResult().getIntersectedNode();
+        } else {
+            target = (Node) event.getTarget();
+        }
+        RFXComponent c = finder.findRComponent(target, point, recorder);
         if (!c.equals(current) && isFocusChangeEvent(event)) {
             if (current != null && isShowing(current)) {
                 current.focusLost(c);

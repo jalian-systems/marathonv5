@@ -4,21 +4,21 @@ import java.util.logging.Logger;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
-public class RFXTextFieldListCell extends RFXComponent {
+public class RFXTextFieldTreeCell extends RFXComponent {
 
-    public static final Logger LOGGER = Logger.getLogger(RFXTextFieldListCell.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(RFXTextFieldTreeCell.class.getName());
 
-    public RFXTextFieldListCell(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
+    public RFXTextFieldTreeCell(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
     }
 
     @SuppressWarnings("unchecked") @Override public String _getValue() {
-        TextFieldListCell<?> cell = (TextFieldListCell<?>) node;
+        TextFieldTreeCell<?> cell = (TextFieldTreeCell<?>) node;
         @SuppressWarnings("rawtypes")
         StringConverter converter = cell.getConverter();
         if (converter != null) {

@@ -37,7 +37,15 @@ public class RFXCheckBoxListCell extends RFXComponent {
         @SuppressWarnings("rawtypes")
         CheckBoxListCell cell = (CheckBoxListCell) node;
         ObservableValue<Boolean> call = (ObservableValue<Boolean>) cell.getSelectedStateCallback().call(cell.getItem());
-        int selection = call.getValue() ? 2 : 0;
-        return JavaFXCheckBoxElement.states[selection];
+        String cbText;
+        if (call != null) {
+            int selection = call.getValue() ? 2 : 0;
+            cbText = JavaFXCheckBoxElement.states[selection];
+        } else {
+            Node cb = cell.getGraphic();
+            RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
+            cbText = comp._getValue();
+        }
+        return cbText;
     }
 }

@@ -48,11 +48,6 @@ public class RFXCheckBoxTreeTableCell extends RFXComponent {
             cbText = comp._getValue();
 
         }
-        String cellText = cell.getText();
-        if (cellText == null) {
-            cellText = "";
-        }
-        String text = cellText + ":" + cbText;
-        return text;
+        return cbText;
     }
 }

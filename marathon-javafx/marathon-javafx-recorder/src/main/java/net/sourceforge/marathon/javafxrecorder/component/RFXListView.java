@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
@@ -78,16 +77,6 @@ public class RFXListView extends RFXComponent {
         if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
             return;
         recorder.recordClick2(this, me, true);
-    }
-
-    private boolean onCheckBox(Node target) {
-        Node parent = target;
-        while (parent != null) {
-            if (parent instanceof CheckBox)
-                return true;
-            parent = parent.getParent();
-        }
-        return false;
     }
 
     @Override public String getCellInfo() {

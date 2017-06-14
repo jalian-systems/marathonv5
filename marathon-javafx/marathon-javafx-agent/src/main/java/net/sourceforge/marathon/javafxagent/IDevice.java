@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.PickResult;
 
 public interface IDevice {
 
@@ -69,6 +70,6 @@ public interface IDevice {
 
     void moveto(Node component, double xoffset, double yoffset);
 
-    void click(Node component, Buttons button, int clickCount, double xoffset, double yoffset);
+    void click(Node component, Node target, PickResult pickResult, Buttons button, int clickCount, double xoffset, double yoffset);
 
 }

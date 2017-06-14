@@ -28,7 +28,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
     public void testClick() {
         buttonClicked = false;
         EventQueueWait.requestFocus(button);
-        driver.click(button, Buttons.LEFT, 1, 0, 0);
+        driver.click(button, null, null, Buttons.LEFT, 1, 0, 0);
         new WaitWithoutException() {
             @Override public boolean until() {
                 return buttonClicked;
@@ -41,7 +41,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
         mouseText.setLength(0);
         EventQueueWait.requestFocus(button);
         driver.pressKey(button, JavaAgentKeys.ALT);
-        driver.click(button, Buttons.LEFT, 1, 0, 0);
+        driver.click(button, null, null, Buttons.LEFT, 1, 0, 0);
         driver.releaseKey(button, JavaAgentKeys.ALT);
         final String expected = "Alt+Button1+entered Alt+Button1+pressed Alt+Button1+released Alt+Button1+clicked(1)";
         new WaitWithoutException() {
@@ -57,7 +57,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
         EventQueueWait.requestFocus(button);
         driver.pressKey(button, JavaAgentKeys.ALT);
         driver.pressKey(button, JavaAgentKeys.CONTROL);
-        driver.click(button, Buttons.LEFT, 1, 0, 0);
+        driver.click(button, null, null, Buttons.LEFT, 1, 0, 0);
         driver.releaseKey(button, JavaAgentKeys.CONTROL);
         driver.releaseKey(button, JavaAgentKeys.ALT);
         final String expected = "Ctrl+Alt+Button1+entered Ctrl+Alt+Button1+pressed Ctrl+Alt+Button1+released Ctrl+Alt+Button1+clicked(1)";
@@ -73,7 +73,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
         mouseText.setLength(0);
         buttonClicked = false;
         EventQueueWait.requestFocus(button);
-        driver.click(button, Buttons.LEFT, 2, 0, 0);
+        driver.click(button, null, null, Buttons.LEFT, 2, 0, 0);
         final String expected = "Button1+entered Button1+pressed Button1+released Button1+clicked(1) Button1+pressed Button1+released Button1+clicked(2)";
         new WaitWithoutException() {
             @Override public boolean until() {
@@ -102,7 +102,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
         mouseText.setLength(0);
         buttonClicked = false;
         EventQueueWait.requestFocus(button);
-        driver.click(button, Buttons.RIGHT, 1, 0, 0);
+        driver.click(button, null, null, Buttons.RIGHT, 1, 0, 0);
         final String expected = "Button3+entered Button3+pressed Button3+released Button3+contextClicked(1)";
         new WaitWithoutException() {
             @Override public boolean until() {
@@ -117,7 +117,7 @@ import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
         buttonClicked = false;
         EventQueueWait.requestFocus(button);
         driver.pressKey(button, JavaAgentKeys.ALT);
-        driver.click(button, Buttons.RIGHT, 1, 0, 0);
+        driver.click(button, null, null, Buttons.RIGHT, 1, 0, 0);
         driver.releaseKey(button, JavaAgentKeys.ALT);
         final String expected = "Alt+Button3+entered Alt+Button3+pressed Alt+Button3+released Alt+Button3+contextClicked(1)";
         new WaitWithoutException() {

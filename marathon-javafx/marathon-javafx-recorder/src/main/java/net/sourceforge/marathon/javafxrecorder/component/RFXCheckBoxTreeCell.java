@@ -38,12 +38,15 @@ public class RFXCheckBoxTreeCell extends RFXComponent {
         CheckBoxTreeCell cell = (CheckBoxTreeCell) node;
         @SuppressWarnings("unchecked")
         ObservableValue<Boolean> call = (ObservableValue<Boolean>) cell.getSelectedStateCallback().call(cell.getTreeItem());
-        int selection = call.getValue() ? 2 : 0;
-        String cellText = cell.getText();
-        if (cellText == null) {
-            cellText = "";
+        String cbText;
+        if (call != null) {
+            int selection = call.getValue() ? 2 : 0;
+            cbText = JavaFXCheckBoxElement.states[selection];
+        } else {
+            Node cb = cell.getGraphic();
+            RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
+            cbText = comp._getValue();
         }
-        String text = cellText + ":" + JavaFXCheckBoxElement.states[selection];
-        return text;
+        return cbText;
     }
 }
