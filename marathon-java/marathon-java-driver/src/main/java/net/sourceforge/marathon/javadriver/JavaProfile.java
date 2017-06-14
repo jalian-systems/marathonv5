@@ -284,6 +284,10 @@ public class JavaProfile {
             java_tool_options
                     .append("-Djava.util.logging.config.file=\"" + System.getProperty("java.util.logging.config.file") + "\" ");
         }
+        if (System.getProperty("marathon.project.dir") != null) {
+            java_tool_options
+                    .append("-Dmarathon.project.dir=\"" + System.getProperty("marathon.project.dir") + "\" ");
+        }
         java_tool_options.setLength(java_tool_options.length() - 1);
         return java_tool_options.toString();
     }
