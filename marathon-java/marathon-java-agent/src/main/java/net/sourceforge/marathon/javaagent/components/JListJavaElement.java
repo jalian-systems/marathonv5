@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -165,5 +166,11 @@ public class JListJavaElement extends AbstractJavaElement {
             pa.add(p);
         }
         return PropertyHelper.toString(pa.toArray(new Properties[pa.size()]), new String[] { "listText" });
+    }
+
+    public static int getIndexAt(JList list, Point point) {
+        if (point == null)
+            return list.getSelectedIndex();
+        return list.locationToIndex(point);
     }
 }

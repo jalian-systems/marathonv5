@@ -96,7 +96,8 @@ public class RTable extends RComponent {
                 }
             }
         }
-        if (next == null || next.getComponent() != getComponent()) {
+        if ((next == null || next.getComponent() != getComponent())
+                && (((JTable) component).getSelectedRowCount() > 1 || ((JTable) component).getSelectedColumnCount() > 1)) {
             // Focus lost on the table
             recorder.recordSelect(this, getSelection());
         }
@@ -211,5 +212,12 @@ public class RTable extends RComponent {
             focusLost(null);
         }
         super.mousePressed(me);
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me) || ((JTable)component).isEditing()) {
+            return;
+        }
+        recorder.recordClick2(this, me, true);
     }
 }
