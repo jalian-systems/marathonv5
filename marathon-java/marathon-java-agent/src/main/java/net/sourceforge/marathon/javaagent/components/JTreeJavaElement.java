@@ -200,7 +200,6 @@ public class JTreeJavaElement extends AbstractJavaElement {
                 return null;
             }
         }
-        tree.expandPath(treePath);
         return treePath;
     }
 
