@@ -47,7 +47,6 @@ import net.sourceforge.marathon.javaagent.components.JEditorPaneJavaElement;
 import net.sourceforge.marathon.javaagent.components.JFileChooserJavaElement;
 import net.sourceforge.marathon.javaagent.components.JListJavaElement;
 import net.sourceforge.marathon.javaagent.components.JMenuItemJavaElement;
-import net.sourceforge.marathon.javaagent.components.JProgressBarAndSliderJavaElement;
 import net.sourceforge.marathon.javaagent.components.JSliderJavaElement;
 import net.sourceforge.marathon.javaagent.components.JSpinnerJavaElement;
 import net.sourceforge.marathon.javaagent.components.JSplitPaneJavaElement;
@@ -125,8 +124,7 @@ public class JavaElementFactory {
         add(JTree.class, JTreeJavaElement.class);
         add(JToggleButton.class, JToggleButtonJavaElement.class);
         add(JSpinner.class, JSpinnerJavaElement.class);
-        add(JProgressBar.class, JProgressBarAndSliderJavaElement.class);
-        add(JSlider.class, JProgressBarAndSliderJavaElement.class);
+        add(JProgressBar.class, JProgressBarJavaElement.class);
         add(JSplitPane.class, JSplitPaneJavaElement.class);
         add(JTextComponent.class, JTextComponentJavaElement.class);
         add(EditorContainer.class, JTreeEditingContainerJavaElement.class);

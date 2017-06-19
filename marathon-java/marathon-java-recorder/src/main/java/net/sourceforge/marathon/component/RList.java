@@ -52,14 +52,16 @@ public class RList extends RComponent {
             if (selectedValues == null || selectedValues.length == 0) {
                 recorder.recordSelect(this, "[]");
             } else if (selectedValues.length > 1) {
-                String currentListSelectionText = getText();
+                String currentListSelectionText = JListJavaElement.getSelectionText((JList) component);
                 recorder.recordSelect(this, currentListSelectionText);
             }
         }
     }
 
     @Override public String getText() {
-        return JListJavaElement.getSelectionText((JList) component);
+        if (index == -1)
+            return JListJavaElement.getSelectionText((JList) component);
+        return JListItemJavaElement.getText((JList) component, index);
     }
 
     @Override public String[][] getContent() {

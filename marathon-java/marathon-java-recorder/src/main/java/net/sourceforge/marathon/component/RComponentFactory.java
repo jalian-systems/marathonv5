@@ -113,6 +113,7 @@ public class RComponentFactory {
         add(JTabbedPane.class, RTabbedPane.class);
         add(JMenuItem.class, RMenuItem.class);
         add(JSlider.class, RSlider.class);
+        add(JProgressBar.class, RProgressBar.class);
         add(JSpinner.class, RSpinner.class);
         add(DefaultEditor.class, RDefaultEditor.class);
         add(JColorChooser.class, RColorChooser.class);

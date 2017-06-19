@@ -62,6 +62,10 @@ public class RSpinner extends RComponent {
         return null;
     }
 
+    @Override public String getText() {
+        return getSpinnerText();
+    }
+
     @Override protected void mousePressed(MouseEvent me) {
     }
 
