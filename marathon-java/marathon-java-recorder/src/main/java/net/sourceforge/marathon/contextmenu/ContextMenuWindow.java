@@ -132,16 +132,16 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
             IContextMenu menu = iterator.next();
             menu.setComponent(component, point, isTriggered);
         }
-        RComponent RComponent = finder.findRComponent(component, point, recorder);
-        if (RComponent == null) {
+        RComponent rComponent = finder.findRComponent(component, point, recorder);
+        if (rComponent == null) {
             return;
         }
         if (isTriggered) {
-            overlayFrame = new TransparentFrame(RComponent);
+            overlayFrame = new TransparentFrame(rComponent);
             overlayFrame.setVisible(true);
         }
-        String info = RComponent.getCellInfo();
-        titleLabel.setText("   " + RComponent.getRComponentName() + (info == null ? "" : " (" + info + ")"));
+        String info = rComponent.getCellInfo();
+        titleLabel.setText("   " + rComponent.getRComponentName() + (info == null ? "" : " (" + info + ")"));
         pack();
     }
 
