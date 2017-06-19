@@ -494,7 +494,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     
     public boolean isVisible() {
         Component c = component ;
-        while(c != null) {
+        while(c != null && !c.getClass().getSimpleName().equals("SharedOwnerFrame")) {
             if(!c.isVisible())
                 return false;
             c = c.getParent();
