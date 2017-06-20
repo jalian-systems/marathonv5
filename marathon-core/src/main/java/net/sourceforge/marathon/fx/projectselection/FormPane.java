@@ -90,7 +90,7 @@ public class FormPane extends GridPane {
         } else if (field instanceof VBox) {
             _setFormConstraints((VBox) field);
         } else {
-            System.out.println("FormPane.setFormConstraints(): unknown field type: " + field.getClass().getName());
+            LOGGER.warning("FormPane.setFormConstraints(): unknown field type: " + field.getClass().getName());
         }
     }
 

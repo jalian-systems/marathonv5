@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+
+import com.sun.javafx.application.PlatformImpl;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -29,6 +33,7 @@ public abstract class EventQueueWait extends Wait {
 
     private static final long FOCUS_WAIT_INTERVAL = 50;
     private static final long FOCUS_WAIT = 1000;
+
     private boolean setupDone = false;
 
     @Override public boolean until() {
@@ -268,6 +273,31 @@ public abstract class EventQueueWait extends Wait {
         } catch (NoSuchMethodException e) {
         }
         return null;
+    }
+
+    private static AtomicInteger pendingRunnables;
+
+    static {
+        try {
+            Field pendingRunnablesField = PlatformImpl.class.getDeclaredField("pendingRunnables");
+            pendingRunnablesField.setAccessible(true);
+            pendingRunnables = (AtomicInteger) pendingRunnablesField.get(null);
+            pendingRunnablesField.setAccessible(false);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void waitTillAllEventsProcessed() {
+        if (pendingRunnables != null) {
+            int count;
+            while ((count = pendingRunnables.get()) > 0) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
     }
 
 }

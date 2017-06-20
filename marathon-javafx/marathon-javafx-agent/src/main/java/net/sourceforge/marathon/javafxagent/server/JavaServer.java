@@ -42,6 +42,7 @@ import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import javafx.geometry.Point2D;
 import net.sourceforge.marathon.javafxagent.Device;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.Device.Type;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.InvalidElementStateException;
@@ -322,6 +323,7 @@ public class JavaServer extends NanoHTTPD {
             if (Boolean.getBoolean("keepLog"))
                 latestSession.log(Level.INFO, logmsg.toString());
         }
+        EventQueueWait.waitTillAllEventsProcessed();
         return response;
     }
 
