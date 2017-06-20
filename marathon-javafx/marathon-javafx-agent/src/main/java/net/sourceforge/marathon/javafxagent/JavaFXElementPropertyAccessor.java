@@ -45,7 +45,6 @@ import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -88,7 +87,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
-import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
@@ -736,17 +734,17 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell)) {
+        if (cell != null) {
             return cell;
         }
         return null;
     }
 
-    private Set<Node> getListCells(ListView<?> listView) {
+    protected Set<Node> getListCells(ListView<?> listView) {
         Set<Node> l = listView.lookupAll("*");
         Set<Node> r = new HashSet<>();
         for (Node node : l) {
-            if (node instanceof ListCell<?> && listView.equals(((ListCell<?>) node).getListView())) {
+            if (node instanceof ListCell<?>) {
                 r.add(node);
             }
         }
@@ -868,7 +866,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell)) {
+        if (cell != null) {
             return cell;
         }
         return null;
@@ -1186,22 +1184,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell)) {
+        if (cell != null) {
             return cell;
         }
         return null;
-    }
-
-    public boolean isShowing(Node cell) {
-        boolean isShowing = false;
-        Bounds boundsInLocal = cell.getBoundsInLocal();
-        Bounds localToScreen = cell.localToScreen(boundsInLocal);
-        Window w = cell.getScene().getWindow();
-        BoundingBox screenBounds = new BoundingBox(w.getX(), w.getY(), w.getWidth(), w.getHeight());
-        if (screenBounds.contains(localToScreen)) {
-            isShowing = true;
-        }
-        return isShowing;
     }
 
     public Point2D getPoint(TableView<?> tableView, int columnIndex, int rowIndex) {

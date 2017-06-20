@@ -59,7 +59,10 @@ public class JavaFXListViewElement extends JavaFXElement {
         List<IJavaFXElement> r = new ArrayList<>();
         if (o.has("select")) {
             if (o.getString("select") != null) {
-                r.add(new JavaFXListViewItemElement(this, o.getString("select")));
+                JavaFXListViewItemElement e = new JavaFXListViewItemElement(this, o.getString("select"));
+                if (!((boolean) e._makeVisible()))
+                    return Arrays.asList();
+                r.add(e);
             }
         }
         return r;

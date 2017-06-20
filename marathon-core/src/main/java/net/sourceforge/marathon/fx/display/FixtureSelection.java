@@ -65,6 +65,10 @@ public class FixtureSelection extends ModalDialog<String> {
         VBox.setVgrow(fixtureList, Priority.ALWAYS);
         fixtureList.setId("fixture-list-view");
         fixtureList.setItems(fixtuers);
+        fixtureList.setOnMouseClicked((e) -> {
+            if(e.getClickCount() == 2)
+                onSelect(fixtureList.getSelectionModel().getSelectedItem());
+        });
         fixtureList.getSelectionModel().select(selectedFixture);
         fixtureList.getSelectionModel().selectedIndexProperty().addListener((listener) -> {
             updateButtonState();

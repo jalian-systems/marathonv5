@@ -77,7 +77,7 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public Point2D _getMidpoint() {
-        Node cell = getCellAt((ListView<?>) getComponent(), itemIndex);
+        Node cell = getPseudoComponent();
         Bounds boundsInParent = cell.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;
         double y = boundsInParent.getHeight() / 2;
@@ -91,12 +91,12 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+        ListView<?> listView = (ListView<?>) getComponent();
+        if (getVisibleCellAt(listView, itemIndex) == null) {
+            EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
+            return Arrays.asList();
+        }
         if (selector.equals("editor")) {
-            ListView<?> listView = (ListView<?>) getComponent();
-            if (getVisibleCellAt(listView, itemIndex) == null) {
-                EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
-                return Arrays.asList();
-            }
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
         }
         return super.getByPseudoElement(selector, params);
@@ -140,5 +140,15 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
             }
         }
         return cell;
+    }
+
+    @Override public Object _makeVisible() {
+        ListView<?> listView = (ListView<?>) getComponent();
+        Node cell = getVisibleCellAt(listView, itemIndex);
+        if (cell == null) {
+            EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
+            return false;
+        }
+        return true;
     }
 }
