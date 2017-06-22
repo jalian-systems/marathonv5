@@ -65,7 +65,11 @@ public class JavaFXTableViewElement extends JavaFXElement {
         if (o.has("select")) {
             JSONObject jo = new JSONObject((String) o.get("select"));
             JSONArray cell = (JSONArray) jo.get("cell");
-            r.add(new JavaFXTableCellElement(this, cell.getInt(0), getColumnIndex(cell.getString(1))));
+            JavaFXTableCellElement e = new JavaFXTableCellElement(this, cell.getInt(0), getColumnIndex(cell.getString(1)));
+            if (!(boolean)e._makeVisible()) {
+                return Arrays.asList();
+            }
+            r.add(e);
         }
         return r;
     }

@@ -1160,7 +1160,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
         TableColumn tableColumn = tableView.getColumns().get(column);
         cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
-        Object value = tableColumn.getCellObservableValue(row).getValue();
+        ObservableValue cellObservableValue = tableColumn.getCellObservableValue(row);
+        if (cellObservableValue == null)
+            return null;
+        Object value = cellObservableValue.getValue();
         Method updateItem;
         try {
             updateItem = cell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
