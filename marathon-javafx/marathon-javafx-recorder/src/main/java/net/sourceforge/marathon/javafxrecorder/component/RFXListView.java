@@ -107,23 +107,6 @@ public class RFXListView extends RFXComponent {
         return true;
     }
 
-    @Override public String[][] getContent() {
-        return getContent((ListView<?>) node);
-    }
-
-    /*
-     * NOTE: Same code exits in JavaFXListViewElement class. So in case if you
-     * want to modify. Modify both.
-     */
-    private String[][] getContent(ListView<?> listView) {
-        int nItems = listView.getItems().size();
-        String[][] content = new String[1][nItems];
-        for (int i = 0; i < nItems; i++) {
-            content[0][i] = getListSelectionText(listView, i);
-        }
-        return content;
-    }
-
     @Override public String _getText() {
         if (index != -1) {
             return getListSelectionText((ListView<?>) node, index);

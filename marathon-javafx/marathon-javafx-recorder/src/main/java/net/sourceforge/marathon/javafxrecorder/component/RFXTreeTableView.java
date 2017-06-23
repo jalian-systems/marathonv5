@@ -79,8 +79,8 @@ public class RFXTreeTableView extends RFXComponent {
         if (row == -1 || column == -1) {
             return null;
         }
-        TreeTableCell<?, ?> tableCell = getCellAt(treeTableView, row, column);
-        RFXComponent cellComponent = getFinder().findRCellComponent(tableCell, null, recorder);
+        TreeTableCell<?, ?> treeTableCell = getCellAt(treeTableView, row, column);
+        RFXComponent cellComponent = getFinder().findRCellComponent(treeTableCell, null, recorder);
         return cellComponent == null ? null : cellComponent.getValue();
     }
 
@@ -133,33 +133,12 @@ public class RFXTreeTableView extends RFXComponent {
 
     @Override public String _getText() {
         if (row != -1 && column != -1) {
-            return getTreeTableCellValueAt((TreeTableView<?>) node, row, column);
-        }
-        return getTreeTableSelection((TreeTableView<?>) node);
-    }
-
-    @Override public String[][] getContent() {
-        return getContent((TreeTableView<?>) getComponent());
-    }
-
-    /*
-     * NOTE: Same code exits in JavaFXTreeTableViewElement class. So in case if
-     * you want to modify. Modify both.
-     */
-    private String[][] getContent(TreeTableView<?> treeTableView) {
-        int rows = treeTableView.getExpandedItemCount();
-        int cols = treeTableView.getColumns().size();
-        String[][] content = new String[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                String valueAt = getTreeTableCellValueAt(treeTableView, i, j);
-                if (valueAt == null) {
-                    valueAt = "";
-                }
-                content[i][j] = valueAt;
+            TreeTableCell<?, ?> treeTableCell = getCellAt((TreeTableView<?>) node, row, column);
+            if (treeTableCell != null) {
+                return treeTableCell.getText();
             }
         }
-        return content;
+        return getTreeTableSelection((TreeTableView<?>) node);
     }
 
     @Override protected void mousePressed(MouseEvent me) {

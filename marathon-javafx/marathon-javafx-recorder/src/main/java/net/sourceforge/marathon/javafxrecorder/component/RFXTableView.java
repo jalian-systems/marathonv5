@@ -141,33 +141,12 @@ public class RFXTableView extends RFXComponent {
     @Override public String _getText() {
         TableView<?> tableView = (TableView<?>) node;
         if (row != -1 && column != -1) {
-            return getTableCellValueAt(tableView, row, column);
-        }
-        return getSelection((TableView<?>) getComponent());
-    }
-
-    @Override public String[][] getContent() {
-        return getContent((TableView<?>) node);
-    }
-
-    /*
-     * NOTE: Same code exits in JavaFXTableViewElement class. So in case if you
-     * want to modify. Modify both.
-     */
-    protected String[][] getContent(TableView<?> tableView) {
-        int rows = tableView.getItems().size();
-        int cols = tableView.getColumns().size();
-        String[][] content = new String[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                String valueAt = getTableCellValueAt(tableView, i, j);
-                if (valueAt == null) {
-                    valueAt = "";
-                }
-                content[i][j] = valueAt;
+            TableCell<?, ?> tableCell = getCellAt(tableView, row, column);
+            if (tableCell != null) {
+                return tableCell.getText();
             }
         }
-        return content;
+        return getSelection((TableView<?>) getComponent());
     }
 
     @Override protected void mousePressed(MouseEvent me) {

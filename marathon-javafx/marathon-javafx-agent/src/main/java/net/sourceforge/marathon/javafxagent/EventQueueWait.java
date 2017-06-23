@@ -290,8 +290,7 @@ public abstract class EventQueueWait extends Wait {
 
     public static void waitTillAllEventsProcessed() {
         if (pendingRunnables != null) {
-            int count;
-            while ((count = pendingRunnables.get()) > 0) {
+            while (pendingRunnables.get() > 0) {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {

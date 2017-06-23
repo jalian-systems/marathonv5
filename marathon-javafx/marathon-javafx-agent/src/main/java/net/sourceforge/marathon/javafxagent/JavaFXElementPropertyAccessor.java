@@ -1423,22 +1423,37 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return r;
     }
 
-    @SuppressWarnings("unchecked") public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView,
-            TreeItem<?> lastPathComponent) {
+    public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView, TreeItem<?> lastPathComponent) {
         if (lastPathComponent == null || lastPathComponent.getValue() == null) {
             return "";
         }
+        return getTreeTableItemText(treeTableView, lastPathComponent);
+    }
+
+    @SuppressWarnings("unchecked") private String getTreeTableItemText(TreeTableView<?> treeTableView,
+            TreeItem<?> lastPathComponent) {
         @SuppressWarnings("rawtypes")
         TreeTableColumn treeTableColumn = treeTableView.getTreeColumn();
         if (treeTableColumn == null) {
             treeTableColumn = treeTableView.getColumns().get(0);
         }
         ObservableValue<?> cellObservableValue = treeTableColumn.getCellObservableValue(lastPathComponent);
-        String text = cellObservableValue.getValue().toString();
-        if (text != null) {
-            return text;
+        String original = cellObservableValue.getValue().toString();
+        String itemText = original;
+        int suffixIndex = 0;
+        TreeItem<?> parent = lastPathComponent.getParent();
+        if (parent == null)
+            return itemText;
+        ObservableList<?> children = parent.getChildren();
+        for (int i = 0; i < children.indexOf(lastPathComponent); i++) {
+            TreeItem<?> child = (TreeItem<?>) children.get(i);
+            cellObservableValue = treeTableColumn.getCellObservableValue(child);
+            String current = cellObservableValue.getValue().toString();
+            if (current.equals(original)) {
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
         }
-        return lastPathComponent.getValue().toString();
+        return itemText;
     }
 
     public String getTextForTreeTableNode(TreeTableView<?> treeTableView, TreeItem<?> selectedItem) {

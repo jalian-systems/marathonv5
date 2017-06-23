@@ -18,8 +18,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -202,50 +200,6 @@ public class RFXListViewTest extends RFXComponentTest {
         recording = recordings.get(1);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("[\"Row 9(2)\"]", recording.getParameters()[0]);
-    }
-
-    @Test public void assertContent() {
-        ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
-        final Object[] content = new Object[] { null };
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                RFXListView rfxListView = new RFXListView(listView, null, null, new LoggingRecorder());
-                content[0] = rfxListView.getContent();
-            }
-        });
-        new Wait("Waiting for contents.") {
-
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        Assert.assertEquals(
-                "[[\"Row 1\",\"Row 2\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]",
-                a.toString());
-    }
-
-    @Test public void assertContentDuplicates() {
-        @SuppressWarnings("unchecked")
-        ListView<String> listView = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
-        final Object[] content = new Object[] { null };
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                listView.getItems().add(9, "Row 9");
-                RFXListView rfxListView = new RFXListView(listView, null, null, new LoggingRecorder());
-                content[0] = rfxListView.getContent();
-            }
-        });
-        new Wait("Waiting for contents.") {
-
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        Assert.assertEquals(
-                "[[\"Row 1\",\"Row 2\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 9\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]",
-                a.toString());
     }
 
     @Override protected Pane getMainPane() {

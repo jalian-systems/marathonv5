@@ -17,8 +17,6 @@ package net.sourceforge.marathon.fxcontextmenu;
 
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -159,14 +157,10 @@ public class AssertionPanel extends GridPane {
         sb.setLength(sb.length() - 1);
         String property = sb.toString();
         Object value = null;
-        if (property.equals("content")) {
-            value = new JSONArray(current.getContent());
+        if (property.equals("text")) {
+            value = current.getText();
         } else {
-            if (property.equals("text")) {
-                value = current.getText();
-            } else {
-                value = current.getAttribute(property);
-            }
+            value = current.getAttribute(property);
         }
         recorder.recordAction(current, action, sb.toString(), value);
     }

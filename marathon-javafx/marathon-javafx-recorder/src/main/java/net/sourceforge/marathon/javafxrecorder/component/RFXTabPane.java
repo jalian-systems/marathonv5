@@ -84,10 +84,6 @@ public class RFXTabPane extends RFXComponent {
         prevSelection = selectionModel.getSelectedIndex();
     }
 
-    @Override public String[][] getContent() {
-        return getContent((TabPane) node);
-    }
-
     @Override public String _getText() {
         return getTextForTab((TabPane) node, ((TabPane) node).getSelectionModel().getSelectedItem());
     }

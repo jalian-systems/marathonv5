@@ -106,23 +106,6 @@ public class RFXTreeView extends RFXComponent {
         return getSelectedTreeNodeText((TreeView<?>) node, ((TreeView<?>) node).getSelectionModel().getSelectedItems());
     }
 
-    @Override public String[][] getContent() {
-        return getContent((TreeView<?>) node);
-    }
-
-    /*
-     * NOTE: Same code exits in JavaFXTreeViewElement class. So in case if you
-     * want to modify. Modify both.
-     */
-    public String[][] getContent(TreeView<?> treeView) {
-        int rowCount = treeView.getExpandedItemCount();
-        String[][] content = new String[1][rowCount];
-        for (int i = 0; i < rowCount; i++) {
-            content[0][i] = getTextForNode((TreeView<?>) node, ((TreeView<?>) node).getTreeItem(i));
-        }
-        return content;
-    }
-
     @Override protected void mousePressed(MouseEvent me) {
     }
 

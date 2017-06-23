@@ -246,9 +246,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         if (getText() != null) {
             addMethod(l, "getText");
         }
-        if (getContent() != null) {
-            addMethod(l, "getContent");
-        }
         if (getLabeledBy() != null) {
             addMethod(l, "getLabeledBy");
         }
@@ -289,10 +286,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
-    }
-
-    public String[][] getContent() {
-        return null;
     }
 
     public static Object unboxPremitiveArray(Object r) {

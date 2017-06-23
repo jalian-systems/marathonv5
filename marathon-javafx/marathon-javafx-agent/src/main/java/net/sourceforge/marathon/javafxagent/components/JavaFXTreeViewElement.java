@@ -63,7 +63,7 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         if (o.has("select")) {
             if (getPath((TreeView<?>) getComponent(), o.getString("select")) != null) {
                 JavaFXTreeViewNodeElement e = new JavaFXTreeViewNodeElement(this, o.getString("select"));
-                if(!((boolean) e._makeVisible()))
+                if (!((boolean) e._makeVisible()))
                     return Arrays.asList();
                 r.add(e);
             }
@@ -96,22 +96,5 @@ public class JavaFXTreeViewElement extends JavaFXElement {
     @Override public String _getText() {
         return getSelectedTreeNodeText((TreeView<?>) getComponent(),
                 ((TreeView<?>) getComponent()).getSelectionModel().getSelectedItems());
-    }
-
-    public String getContent() {
-        return new JSONArray(getContent((TreeView<?>) getComponent())).toString();
-    }
-
-    /*
-     * NOTE: Same code exits in RFXTreeView class. So in case if you want to
-     * modify. Modify both.
-     */
-    public String[][] getContent(TreeView<?> treeView) {
-        int rowCount = treeView.getExpandedItemCount();
-        String[][] content = new String[1][rowCount];
-        for (int i = 0; i < rowCount; i++) {
-            content[0][i] = new JavaFXTreeViewNodeElement(this, i)._getText();
-        }
-        return content;
     }
 }

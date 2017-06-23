@@ -53,7 +53,4 @@ public class RFXChoiceBox extends RFXComponent {
         return getChoiceBoxText((ChoiceBox<?>) node, ((ChoiceBox<?>) node).getSelectionModel().getSelectedIndex());
     }
 
-    @Override public String[][] getContent() {
-        return getContent((ChoiceBox<?>) node);
-    }
 }

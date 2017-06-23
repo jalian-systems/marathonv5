@@ -161,4 +161,15 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         }
         return cell;
     }
+
+    @Override public Object _makeVisible() {
+        TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
+        TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) getPseudoComponent();
+        if (cell == null) {
+            treeTableView.scrollToColumnIndex(viewColumn);
+            treeTableView.scrollTo(getTreeTableNodeIndex(treeTableView, path));
+            return false;
+        }
+        return true;
+    }
 }
