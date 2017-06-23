@@ -41,7 +41,7 @@ public class RFXTabPane extends RFXComponent {
     @Override protected void mousePressed(MouseEvent me) {
         Node target = (Node) me.getTarget();
         if (onCloseButton(target)) {
-            recorder.recordSelect(this, getTextForTab((TabPane) node, getTab(target)) + "_close");
+            recorder.recordSelect(this, getTextForTab((TabPane) node, getTab(target)) + "::close");
         }
     }
 

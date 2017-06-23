@@ -40,7 +40,7 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 public class JavaFXTabPaneElement extends JavaFXElement {
 
     public static final Logger LOGGER = Logger.getLogger(JavaFXTabPaneElement.class.getName());
-    private static final Pattern CLOSE_PATTERN = Pattern.compile("(.*)_close$");
+    private static final Pattern CLOSE_PATTERN = Pattern.compile("(.*)::close$");
 
     public JavaFXTabPaneElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
