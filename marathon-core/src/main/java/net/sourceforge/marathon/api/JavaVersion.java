@@ -54,5 +54,4 @@ public class JavaVersion {
         }
         return r;
     }
-
 }

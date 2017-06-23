@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.scene.control.Alert.AlertType;
+import net.sourceforge.marathon.api.JavaVersion;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.runtime.api.AbstractFileConsole;
 import net.sourceforge.marathon.runtime.api.ClassPathHelper;
@@ -75,6 +76,9 @@ public class ArgumentProcessor {
      *            , the arguments given on the command line.
      */
     public void process(String[] args) {
+        if(!JavaVersion.atLeast("1.8.0_112")) {
+            help("You need to use Java version >= 1.8.0_112");
+        }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-help") || args[i].equals("-?") || args[i].equals("-h")) {
                 help("");
