@@ -75,7 +75,6 @@ ACEEditor.prototype.setContent = function(json) {
 	this.fireChangeEvent = false
 	this.ace.setValue(content, line);
 	this.fireChangeEvent = true
-	this.ace.getSession().setUndoManager(new ace.UndoManager());
 	this.ace.gotoLine(0, 0);
 	return {};
 }
