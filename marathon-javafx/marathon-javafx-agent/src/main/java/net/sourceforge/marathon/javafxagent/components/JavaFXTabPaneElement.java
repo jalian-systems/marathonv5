@@ -20,10 +20,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 
+import com.sun.javafx.scene.control.skin.TabPaneSkin;
+
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
@@ -34,6 +40,7 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 public class JavaFXTabPaneElement extends JavaFXElement {
 
     public static final Logger LOGGER = Logger.getLogger(JavaFXTabPaneElement.class.getName());
+    private static final Pattern CLOSE_PATTERN = Pattern.compile("(.*)::close$");
 
     public JavaFXTabPaneElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
@@ -68,11 +75,18 @@ public class JavaFXTabPaneElement extends JavaFXElement {
     }
 
     @Override public boolean marathon_select(String tab) {
+        Matcher matcher = CLOSE_PATTERN.matcher(tab);
+        boolean isCloseTab = matcher.matches();
+        tab = isCloseTab ? matcher.group(1) : tab;
         TabPane tp = (TabPane) node;
-        int tabCount = tp.getTabs().size();
-        for (int index = 0; index < tabCount; index++) {
-            String current = getTextForTab(tp, tp.getTabs().get(index));
+        ObservableList<Tab> tabs = tp.getTabs();
+        for (int index = 0; index < tabs.size(); index++) {
+            String current = getTextForTab(tp, tabs.get(index));
             if (tab.equals(current)) {
+                if (isCloseTab) {
+                    ((TabPaneSkin) tp.getSkin()).getBehavior().closeTab(tabs.get(index));
+                    return true;
+                }
                 tp.getSelectionModel().select(index);
                 return true;
             }

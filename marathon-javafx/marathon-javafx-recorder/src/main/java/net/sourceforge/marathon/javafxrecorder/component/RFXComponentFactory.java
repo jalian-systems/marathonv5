@@ -290,7 +290,7 @@ public class RFXComponentFactory {
                 Node parent = component;
                 if (hasTabContainer(component)) {
                     while (parent != null) {
-                        if (parent instanceof Label && parent.getStyleClass().contains("tab-label")) {
+                        if (parent.getStyleClass().contains("tab-close-button") || parent instanceof Label && parent.getStyleClass().contains("tab-label")) {
                             return true;
                         }
                         parent = parent.getParent();

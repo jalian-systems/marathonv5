@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 import javafx.geometry.Point2D;
@@ -34,6 +36,42 @@ public class RFXTabPane extends RFXComponent {
 
     public RFXTabPane(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
+    }
+
+    @Override protected void mousePressed(MouseEvent me) {
+        Node target = (Node) me.getTarget();
+        if (onCloseButton(target)) {
+            recorder.recordSelect(this, getTextForTab((TabPane) node, getTab(target)) + "::close");
+        }
+    }
+
+    private Tab getTab(Node target) {
+        while (target != null) {
+            if (target.getClass().getName().equals("com.sun.javafx.scene.control.skin.TabPaneSkin$TabHeaderSkin")) {
+                try {
+                    Class<? extends Node> tabHeaderSkinClass = target.getClass();
+                    Method m = tabHeaderSkinClass.getDeclaredMethod("getTab");
+                    m.setAccessible(true);
+                    return (Tab) m.invoke(target);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+            target = target.getParent();
+        }
+        return null;
+    }
+
+    private boolean onCloseButton(Node target) {
+        return target.getStyleClass().contains("tab-close-button");
     }
 
     @Override protected void mouseClicked(MouseEvent me) {
