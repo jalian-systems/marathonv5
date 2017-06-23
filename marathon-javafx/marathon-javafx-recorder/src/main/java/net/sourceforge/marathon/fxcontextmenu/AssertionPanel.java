@@ -51,6 +51,9 @@ public class AssertionPanel extends GridPane {
     private IJSONRecorder recorder;
     private RFXComponent current;
 
+    private Button assertButton;
+    private Button insertWaitButton;
+
     class Delta {
         double x, y;
     }
@@ -109,18 +112,26 @@ public class AssertionPanel extends GridPane {
             @Override public void changed(ObservableValue<? extends TreeItem<PropertyWrapper>> observable,
                     TreeItem<PropertyWrapper> oldValue, TreeItem<PropertyWrapper> newValue) {
                 if (newValue != null) {
+                    assertButton.setDisable(false);
+                    insertWaitButton.setDisable(false);
                     textArea.setText(newValue.getValue().displayValue.toString());
+                } else {
+                    assertButton.setDisable(true);
+                    insertWaitButton.setDisable(true);
+                    textArea.setText("");
                 }
             }
         });
         ButtonBar bar = new ButtonBar();
-        Button assertButton = new Button("Add Assertion");
+        assertButton = new Button("Add Assertion");
+        assertButton.setDisable(true);
         assertButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 recordAction(event, "assert");
             }
         });
-        Button insertWaitButton = new Button("Insert Wait");
+        insertWaitButton = new Button("Insert Wait");
+        insertWaitButton.setDisable(true);
         insertWaitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 recordAction(event, "wait");

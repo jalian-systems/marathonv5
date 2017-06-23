@@ -385,6 +385,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     private void handle_internal(Event event) {
         if (contextMenuTriggerCheck.isContextMenuEvent(event) || contextMenuHandler.isShowing()) {
             event.consume();
+            if (current != null && !contextMenuHandler.isShowing()) {
+                current.focusLost(null);
+            }
             contextMenuHandler.showPopup(event);
             return;
         }
