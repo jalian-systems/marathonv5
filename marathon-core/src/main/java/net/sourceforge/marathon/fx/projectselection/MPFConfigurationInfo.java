@@ -61,7 +61,6 @@ public class MPFConfigurationInfo {
 
     public IPropertiesLayout[] getProperties(ModalDialog<?> parent) {
         applicationLayout = new ApplicationLayout(parent);
-        FXUIUtils.showMessageDialog(null, "Do not select `No Launcher` for Launch Type in Application Tab.", "Warning", AlertType.WARNING);
         return new IPropertiesLayout[] { new ProjectLayout(parent), applicationLayout, new ScriptLayout(parent) };
     }
 
