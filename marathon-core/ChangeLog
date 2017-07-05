@@ -1,3 +1,33 @@
+Marathon Version 5.1.0.0 (5th July 2017)
+1.  fix: You can select 'No Launcher' when creating a project.
+2.  fix: FX/DatePicker recording values which has not changed on focuslost.
+3.  fix: Added Java version check. Marathon checks for the minimal required version now.
+4.  fix: AceEditor - not resetting the undo manager, so that undo is active always.
+5.  fix: When assertion window is opened (FX) - record the last select as focus is lost.
+6.  fix: When no items are selected, disable the insert buttons in Assertion window.
+7.  fix: Scroll view for treetableview
+8.  fix: Added support for FX Tab Close opeartion
+9.  fix: TableView waiting till cells been populated.
+10. fix: Scrolling to list cell before getting the pseudo element.
+11. feat: Select fixture on doubleclick from Fixture selection dialog.
+12. fix: Added waitTillEventsProcessed - waits for all runnables to Platform.runLater are processed
+13. fix: Unneeded tree.expandPath removed in JTreeJavaElement. This was causing a select() to expand the tree also.
+14. fix: getText() for progressbar and slider
+15. fix: getList() getText() returns items text for assertion
+16. fix: isVisible() on JavaElement ignore the window while traversing the hierarchy.
+17. feat: Support to record click on JList, JTree and JTable, before recording a select.
+18. feat: Support for TableView and TreeTableView record.
+19. fix: Overridding #click  to pass #target and #pickresult
+20. feat: Modified IDevice and IJavaFXElement #click method to pass #eventtarget and #pickresult
+21. fix: Added missing stubs for refresh_if_stale
+22. fix: Setting marathon.project.dir for java agents.
+23. fix: RFXListView#getCellAt() retrieving all cells belonging to other views also. Has an issue with ComboBoxListCell.
+24. fix: Scrolling in application thread waits for the getPseudoComponent to return. Returning empty array to retry.
+25. fix: Fixed support for ListView to support Ensemble8
+26. fix: Using toggle button for raw recording
+27. fix: NPE in WSRecordingServer window_state
+28. fix: ClassCastException loading assertions @ RubyScript
+
 Marathon Version 5.0.9.0 (20th April 2017)
 1. fix: OOM when the output console overflows.
 2. feat: Added default logging.properties
