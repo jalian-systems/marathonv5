@@ -19,10 +19,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MPFUtils {
+    
+    public static final Logger LOGGER = Logger.getLogger(MPFUtils.class.getName());
+
     /**
      * Replaces java properties in the properties of the form %&lt;java
      * property&gt; with the java property value.

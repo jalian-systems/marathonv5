@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
@@ -33,6 +34,8 @@ import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JListItemJavaElement extends AbstractJavaElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JListItemJavaElement.class.getName());
 
     private int item;
     private JListJavaElement parent;

@@ -17,8 +17,12 @@ package net.sourceforge.marathon.runtime.api;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Function implements Serializable {
+    
+    public static final Logger LOGGER = Logger.getLogger(Function.class.getName());
+
     private static final long serialVersionUID = 1L;
     private String name;
     private List<Argument> arguments;

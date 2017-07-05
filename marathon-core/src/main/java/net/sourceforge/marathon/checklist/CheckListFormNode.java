@@ -18,6 +18,7 @@ package net.sourceforge.marathon.checklist;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -38,6 +39,8 @@ import net.sourceforge.marathon.checklist.CheckList.Header;
 import net.sourceforge.marathon.editor.IContentChangeListener;
 
 public class CheckListFormNode extends VBox {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckListFormNode.class.getName());
 
     private CheckList checkList;
     private final Mode mode;

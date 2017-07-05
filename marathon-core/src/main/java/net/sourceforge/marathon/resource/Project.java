@@ -23,12 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 
 public class Project {
+
+    public static final Logger LOGGER = Logger.getLogger(Project.class.getName());
 
     private Watcher watcher;
     private static String suffix = ScriptModel.getModel().getSuffix();

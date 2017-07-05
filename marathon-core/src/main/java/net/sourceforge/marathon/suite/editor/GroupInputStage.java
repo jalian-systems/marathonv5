@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.suite.editor;
 
+import java.util.logging.Logger;
+
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -31,6 +33,8 @@ import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.runtime.api.OSUtils;
 
 public class GroupInputStage extends ModalDialog<GroupInputInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupInputStage.class.getName());
 
     private TextField name = new TextField();;
     private Button okButton;

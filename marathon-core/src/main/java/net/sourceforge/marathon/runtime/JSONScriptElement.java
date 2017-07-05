@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.runtime;
 
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -25,6 +26,9 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class JSONScriptElement implements IScriptElement {
+    
+    public static final Logger LOGGER = Logger.getLogger(JSONScriptElement.class.getName());
+
     private final WindowId windowId;
     private final JSONObject event;
     private final String name;

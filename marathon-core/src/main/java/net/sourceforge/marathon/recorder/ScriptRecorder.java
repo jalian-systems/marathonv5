@@ -17,6 +17,7 @@ package net.sourceforge.marathon.recorder;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import net.sourceforge.marathon.runtime.api.IRecorder;
@@ -25,6 +26,9 @@ import net.sourceforge.marathon.runtime.api.TagInserter;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class ScriptRecorder implements IRecorder {
+    
+    public static final Logger LOGGER = Logger.getLogger(ScriptRecorder.class.getName());
+
     private IScriptListener scriptListener;
     private TagInserter tagInserter = new TagInserter();
 

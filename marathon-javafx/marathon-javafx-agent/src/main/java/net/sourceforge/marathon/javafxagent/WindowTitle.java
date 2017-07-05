@@ -15,12 +15,16 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
+import java.util.logging.Logger;
+
 import com.sun.javafx.stage.StageHelper;
 
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
 public class WindowTitle {
+
+    public static final Logger LOGGER = Logger.getLogger(WindowTitle.class.getName());
 
     private Stage window;
 

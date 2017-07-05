@@ -19,6 +19,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -32,6 +33,9 @@ import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
 
 public class HTMLView extends FileBasedEditor implements IEditor {
+    
+    public static final Logger LOGGER = Logger.getLogger(HTMLView.class.getName());
+
     private HashMap<String, Object> dataMap = new HashMap<String, Object>();
     private WebView webView;
     private ToolBarContainer viewport;

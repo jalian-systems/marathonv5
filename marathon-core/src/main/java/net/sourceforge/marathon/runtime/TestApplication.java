@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.output.WriterOutputStream;
 
@@ -42,6 +43,8 @@ import net.sourceforge.marathon.runtime.api.MPFUtils;
 import net.sourceforge.marathon.util.LauncherModelHelper;
 
 public class TestApplication extends Stage implements ITestApplication {
+
+    public static final Logger LOGGER = Logger.getLogger(TestApplication.TextAreaWriter.class.getName());
 
     private final static class TextAreaWriter extends Writer {
         private TextArea textArea;

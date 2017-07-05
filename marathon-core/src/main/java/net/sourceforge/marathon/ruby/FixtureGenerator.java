@@ -23,11 +23,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Indent;
 
 public class FixtureGenerator {
+    
+    public static final Logger LOGGER = Logger.getLogger(FixtureGenerator.class.getName());
+
     // @formatter:off
     private static final String comment_fixture_properties =
         "Launcher uses the properties specified here to launch the application";

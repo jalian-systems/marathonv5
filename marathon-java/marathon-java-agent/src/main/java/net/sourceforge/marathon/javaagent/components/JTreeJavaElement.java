@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -41,6 +42,8 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JTreeJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTreeJavaElement.Predicate.class.getName());
 
     private static interface Predicate {
         public boolean isValid(JTreeNodeJavaElement e);
@@ -197,7 +200,6 @@ public class JTreeJavaElement extends AbstractJavaElement {
                 return null;
             }
         }
-        tree.expandPath(treePath);
         return treePath;
     }
 

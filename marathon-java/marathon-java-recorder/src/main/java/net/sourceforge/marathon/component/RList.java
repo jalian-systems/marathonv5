@@ -18,32 +18,50 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JList;
 
+import net.sourceforge.marathon.javaagent.components.JListItemJavaElement;
 import net.sourceforge.marathon.javaagent.components.JListJavaElement;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RList extends RComponent {
 
+    public static final Logger LOGGER = Logger.getLogger(RList.class.getName());
+
+    private String cellInfo;
+    private int index;
+
     public RList(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
+        JList list = (JList) source;
+        index = JListJavaElement.getIndexAt(list, point);
+        cellInfo = index != -1 ? JListItemJavaElement.getText(list, index) : null;
+    }
+
+    @Override public void focusGained(RComponent prev) {
+        cellInfo = index != -1 ? JListItemJavaElement.getText((JList) component, index) : null;
     }
 
     @Override public void focusLost(RComponent next) {
         JList list = (JList) component;
         Object[] selectedValues = list.getSelectedValues();
-        if (selectedValues == null || selectedValues.length == 0) {
-            recorder.recordSelect(this, "[]");
-            return;
+        if (next == null || getComponent() != next.getComponent()) {
+            if (selectedValues == null || selectedValues.length == 0) {
+                recorder.recordSelect(this, "[]");
+            } else if (selectedValues.length > 1) {
+                String currentListSelectionText = JListJavaElement.getSelectionText((JList) component);
+                recorder.recordSelect(this, currentListSelectionText);
+            }
         }
-        String text = getText();
-        recorder.recordSelect(this, text);
     }
 
     @Override public String getText() {
-        return JListJavaElement.getSelectionText((JList) component);
+        if (index == -1)
+            return JListJavaElement.getSelectionText((JList) component);
+        return JListItemJavaElement.getText((JList) component, index);
     }
 
     @Override public String[][] getContent() {
@@ -59,5 +77,36 @@ public class RList extends RComponent {
             focusLost(null);
         }
         super.mousePressed(me);
+    }
+
+    @Override public String getCellInfo() {
+        return cellInfo;
+    }
+
+    @Override public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + index;
+        return result;
+    }
+
+    @Override public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RList other = (RList) obj;
+        if (index != other.index)
+            return false;
+        return true;
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me)) {
+            return;
+        }
+        recorder.recordClick2(this, me, true);
     }
 }

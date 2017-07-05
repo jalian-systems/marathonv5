@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display.readline;
 
+import java.util.logging.Logger;
+
 import jline.Completor;
 import jline.History;
 
 public class Readline {
+
+    public static final Logger LOGGER = Logger.getLogger(Readline.class.getName());
 
     private History history;
 

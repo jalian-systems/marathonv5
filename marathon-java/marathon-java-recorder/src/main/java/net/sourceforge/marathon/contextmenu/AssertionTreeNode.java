@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 
 public class AssertionTreeNode extends DefaultMutableTreeNode {
+
+    public static final Logger LOGGER = Logger.getLogger(AssertionTreeNode.class.getName());
 
     private static final long serialVersionUID = 1L;
     private final Object object;

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -60,6 +61,8 @@ import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class FolderResource extends Resource {
+
+    public static final Logger LOGGER = Logger.getLogger(FolderResource.class.getName());
 
     Path path;
     private boolean loaded;

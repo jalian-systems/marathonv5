@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
+import java.util.logging.Logger;
+
 public class InvalidElementStateException extends RuntimeException {
+    
+    public static final Logger LOGGER = Logger.getLogger(InvalidElementStateException.class.getName());
+
     private static final long serialVersionUID = 1L;
 
     public InvalidElementStateException(String message, Throwable cause) {

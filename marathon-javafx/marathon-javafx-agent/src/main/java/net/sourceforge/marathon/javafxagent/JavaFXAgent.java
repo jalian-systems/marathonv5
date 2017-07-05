@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -42,6 +43,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
 public class JavaFXAgent implements IJavaFXAgent {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXAgent.class.getName());
 
     private static final String VERSION = "1.0";
 

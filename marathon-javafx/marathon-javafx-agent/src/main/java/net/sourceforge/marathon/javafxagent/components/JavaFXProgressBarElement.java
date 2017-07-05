@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXProgressBarElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXProgressBarElement.class.getName());
 
     public JavaFXProgressBarElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

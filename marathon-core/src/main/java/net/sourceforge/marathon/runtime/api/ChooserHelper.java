@@ -17,10 +17,13 @@ package net.sourceforge.marathon.runtime.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 
 public class ChooserHelper {
+
+    public static final Logger LOGGER = Logger.getLogger(ChooserHelper.class.getName());
 
     private static final String homeDir;
     private static final String cwd;

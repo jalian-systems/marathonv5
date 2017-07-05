@@ -20,8 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class TestAttributes {
+    
+    public static final Logger LOGGER = Logger.getLogger(TestAttributes.class.getName());
 
     private static ThreadLocal<Map<String, Object>> localStorage = new ThreadLocal<Map<String, Object>>() {
         @Override protected java.util.Map<String, Object> initialValue() {

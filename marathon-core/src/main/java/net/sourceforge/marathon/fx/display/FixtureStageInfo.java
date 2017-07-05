@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.display;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.ApplicationLayout;
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public class FixtureStageInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(FixtureStageInfo.class.getName());
 
     private ApplicationLayout applicationLayout;
     private List<String> fixtures;

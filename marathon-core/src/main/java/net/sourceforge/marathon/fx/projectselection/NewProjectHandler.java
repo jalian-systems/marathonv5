@@ -18,11 +18,14 @@ package net.sourceforge.marathon.fx.projectselection;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.stage.Stage;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class NewProjectHandler implements INewProjectHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(NewProjectHandler.class.getName());
 
     private Stage parent;
 

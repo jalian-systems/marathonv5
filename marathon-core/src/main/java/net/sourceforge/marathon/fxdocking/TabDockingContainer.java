@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fxdocking;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
@@ -40,6 +41,8 @@ import net.sourceforge.marathon.fxdocking.DockableState.State;
 import net.sourceforge.marathon.fxdocking.DockingConstants.Split;
 
 public class TabDockingContainer extends TabPane implements IDockingContainer, TabbedDockableContainer {
+
+    public static final Logger LOGGER = Logger.getLogger(TabDockingContainer.class.getName());
 
     private Set<Dockable> dockables = new HashSet<>();
     private DockingDesktop desktop;

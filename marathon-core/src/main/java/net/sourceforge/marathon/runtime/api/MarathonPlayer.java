@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.junit.IHasFullname;
 
@@ -23,6 +25,9 @@ import net.sourceforge.marathon.junit.IHasFullname;
  * (interrupt) handling
  */
 public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListener {
+    
+    public static final Logger LOGGER = Logger.getLogger(MarathonPlayer.class.getName());
+
     private IPlaybackListener listener;
     private Thread playbackThread;
     private boolean paused = true;

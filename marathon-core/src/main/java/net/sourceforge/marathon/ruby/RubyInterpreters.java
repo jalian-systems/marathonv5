@@ -24,6 +24,8 @@ import org.jruby.Ruby;
 
 public class RubyInterpreters {
 
+    public static final Logger LOGGER = Logger.getLogger(RubyInterpreters.class.getName());
+
     public static class RubySlot {
         private boolean used = false;
         private Ruby ruby;

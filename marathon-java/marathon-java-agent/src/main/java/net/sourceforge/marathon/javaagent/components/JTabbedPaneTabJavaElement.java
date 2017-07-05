@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -45,6 +46,8 @@ import net.sourceforge.marathon.javaagent.NoSuchElementException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTabbedPaneTabJavaElement.class.getName());
 
     private int tabIndex;
     private JTabbedPaneJavaElement parent;

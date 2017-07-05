@@ -18,12 +18,15 @@ package net.sourceforge.marathon.editor;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import net.sourceforge.marathon.util.AbstractSimpleAction;
 
 public abstract class AbstractEditor implements IEditor {
+
+    public static final Logger LOGGER = Logger.getLogger(AbstractEditor.class.getName());
 
     @Override public void setStatusBar(IStatusBar statusBar) {
     }

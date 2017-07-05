@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.fxdocking;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -26,6 +27,8 @@ import javafx.scene.layout.VBox;
 import net.sourceforge.marathon.fxdocking.DockingConstants.Split;
 
 public class SplitDockingContainer extends SplitPane implements IDockingContainer {
+
+    public static final Logger LOGGER = Logger.getLogger(SplitDockingContainer.class.getName());
 
     public SplitDockingContainer(DockingDesktop desktop, IDockingContainer parent, Dockable base, Dockable dockable, Split position,
             double proportion) {

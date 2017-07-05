@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,6 +29,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXMenuItem extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXMenuItem.class.getName());
 
     private IJSONRecorder recorder;
     private MenuBar menuBar;

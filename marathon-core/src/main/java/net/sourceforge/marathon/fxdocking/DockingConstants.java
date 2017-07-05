@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Orientation;
 
 public class DockingConstants {
+
+    public static final Logger LOGGER = Logger.getLogger(DockingConstants.class.getName());
 
     public enum Split {
         LEFT(Orientation.HORIZONTAL), RIGHT(Orientation.HORIZONTAL), TOP(Orientation.VERTICAL), BOTTOM(Orientation.VERTICAL);

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.cell.CheckBoxListCell;
@@ -23,6 +25,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXCheckBoxListCellElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXCheckBoxListCellElement.class.getName());
 
     public JavaFXCheckBoxListCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

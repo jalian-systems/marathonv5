@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
@@ -32,6 +33,8 @@ import net.sourceforge.marathon.resource.ResourceView.Operation;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public abstract class Resource extends TreeItem<Resource> {
+
+    public static final Logger LOGGER = Logger.getLogger(Resource.class.getName());
 
     public Resource() {
         setValue(this);

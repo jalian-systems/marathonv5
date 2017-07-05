@@ -49,6 +49,8 @@ import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 
 public class OMapContainer implements IObjectMapTreeItem {
 
+    public static final Logger LOGGER = Logger.getLogger(OMapContainer.class.getName());
+
     private List<String> containerTitles;
     private List<OMapProperty> containerGeneralProperties;
     private List<OMapComponent> components;

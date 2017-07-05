@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.editor.ace;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -37,6 +38,8 @@ import net.sourceforge.marathon.fx.projectselection.FormPane;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesInfo> implements ICancelHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(AceEditorPreferencesStage.class.getName());
 
     private AceEditorPreferencesInfo preferenceInfo;
     private IAceEditorPreferenceHandler preferenceHandler;

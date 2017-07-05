@@ -15,32 +15,35 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXListView extends RFXComponent {
 
+    public static final Logger LOGGER = Logger.getLogger(RFXListView.class.getName());
+
     private int index = -1;
-    private Point2D point;
+    private String listSelectionText;
     private String cellValue;
-    private String listText;
-    private String cellText;
+    private String cellInfo;
 
     public RFXListView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
-        this.point = point;
         index = getIndexAt((ListView<?>) node, point);
+        cellInfo = getListSelectionText((ListView<?>) node, index);
     }
 
     @Override public void focusGained(RFXComponent prev) {
-        ListView<?> listView = (ListView<?>) node;
-        cellValue = getListCellValue(listView, index);
-        cellText = getListSelectionText(listView, index);
-        listText = getListSelectionText(listView);
+        listSelectionText = getListSelectionText((ListView<?>) node);
+        cellValue = getListCellValue((ListView<?>) node, index);
+        cellInfo = getListSelectionText((ListView<?>) node, index);
     }
 
     private String getListCellValue(ListView<?> listView, int index) {
@@ -48,55 +51,36 @@ public class RFXListView extends RFXComponent {
             return null;
         }
         ListCell<?> listCell = getCellAt(listView, index);
-        RFXComponent cellComponent = getFinder().findRawRComponent(listCell, null, recorder);
-        String ctext = cellComponent.getValue();
-        return ctext;
+        RFXComponent cellComponent = getFinder().findRCellComponent(listCell, null, recorder);
+        return cellComponent == null ? null : cellComponent.getValue();
     }
 
     @Override public void focusLost(RFXComponent next) {
         ListView<?> listView = (ListView<?>) node;
-        String currCellText = getListCellValue(listView, index);
-        if (currCellText != null && !currCellText.equals(cellValue)) {
-            recorder.recordSelect2(this, currCellText, true);
+        String currentCellValue = getListCellValue(listView, index);
+        if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
+            recorder.recordSelect2(this, currentCellValue, true);
         }
-        if (next == null || getComponent() != next.getComponent()) {
+        if ((next == null || getComponent() != next.getComponent())
+                && listView.getSelectionModel().getSelectedIndices().size() > 1) {
             String currListText = getListSelectionText(listView);
-            if (!currListText.equals(listText)) {
+            if (!currListText.equals(listSelectionText)) {
                 recorder.recordSelect(this, currListText);
             }
         }
     }
 
+    @Override protected void mousePressed(MouseEvent me) {
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
+            return;
+        recorder.recordClick2(this, me, true);
+    }
+
     @Override public String getCellInfo() {
-        ListView<?> listView = (ListView<?>) node;
-        index = getIndexAt(listView, point);
-        cellValue = getListCellValue(listView, index);
-        cellText = getListSelectionText(listView, index);
-        return cellText;
-    }
-
-    @Override public String[][] getContent() {
-        return getContent((ListView<?>) node);
-    }
-
-    /*
-     * NOTE: Same code exits in JavaFXListViewElement class. So in case if you
-     * want to modify. Modify both.
-     */
-    private String[][] getContent(ListView<?> listView) {
-        int nItems = listView.getItems().size();
-        String[][] content = new String[1][nItems];
-        for (int i = 0; i < nItems; i++) {
-            content[0][i] = getListCellValue(listView, i);
-        }
-        return content;
-    }
-
-    @Override public String _getText() {
-        if (index != -1) {
-            return getListSelectionText((ListView<?>) node, index);
-        }
-        return getListSelectionText((ListView<?>) node);
+        return cellInfo;
     }
 
     @Override public int hashCode() {
@@ -123,8 +107,11 @@ public class RFXListView extends RFXComponent {
         return true;
     }
 
-    @Override public String toString() {
-        return "RFXListView [index=" + index + ", cellText=" + cellText + ", listText=" + listText + "]";
+    @Override public String _getText() {
+        if (index != -1) {
+            return getListSelectionText((ListView<?>) node, index);
+        }
+        return getListSelectionText((ListView<?>) node);
     }
 
 }

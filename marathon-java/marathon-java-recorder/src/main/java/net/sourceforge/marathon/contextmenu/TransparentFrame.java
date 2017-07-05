@@ -33,6 +33,8 @@ import net.sourceforge.marathon.component.RComponent;
 
 public class TransparentFrame implements AWTEventListener {
 
+    public static final Logger LOGGER = Logger.getLogger(TransparentFrame.class.getName());
+
     private static final Logger logger = Logger.getLogger(TransparentFrame.class.getName());
 
     private RComponent component;

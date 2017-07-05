@@ -21,12 +21,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.stage.Stage;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public class EditProjectHandler implements IEditProjectHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(EditProjectHandler.class.getName());
 
     private Stage parent;
 

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.display;
 
 import java.util.Date;
+import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -24,6 +25,9 @@ import net.sourceforge.marathon.fx.display.LogView;
 import net.sourceforge.marathon.runtime.api.ILogger;
 
 public class LogViewLogger implements ILogger {
+    
+    public static final Logger LOGGER = Logger.getLogger(LogViewLogger.class.getName());
+
     private LogView logView;
     private int level;
 

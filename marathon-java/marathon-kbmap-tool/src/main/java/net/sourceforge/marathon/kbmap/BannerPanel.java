@@ -17,6 +17,7 @@ package net.sourceforge.marathon.kbmap;
 
 import java.awt.CardLayout;
 import java.awt.Font;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -28,6 +29,9 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class BannerPanel extends JPanel {
+    
+    public static final Logger LOGGER = Logger.getLogger(BannerPanel.class.getName());
+
     private static final long serialVersionUID = 1L;
     private CardLayout cardlayout = new CardLayout();
 

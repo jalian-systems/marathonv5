@@ -133,7 +133,7 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
     }
 
     @Test public void marathon_click_test() throws Throwable {
-        treeView.click(0, 1, 56, 10);
+        treeView.click(0, null, null, 1, 56, 10);
     }
 
     @Test public void assertContent() {

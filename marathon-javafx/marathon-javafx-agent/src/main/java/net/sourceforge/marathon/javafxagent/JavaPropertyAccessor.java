@@ -23,10 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class JavaPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaPropertyAccessor.class.getName());
 
     private Object object;
     private static final Pattern arrayPattren = Pattern.compile("(.*)\\[([^\\]]*)\\]$");

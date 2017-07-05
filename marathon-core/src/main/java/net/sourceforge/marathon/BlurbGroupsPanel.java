@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -29,6 +31,8 @@ import net.sourceforge.marathon.resource.IResourceChangeListener;
 import net.sourceforge.marathon.resource.Resource;
 
 public class BlurbGroupsPanel extends AbstractGroupsPanel {
+
+    public static final Logger LOGGER = Logger.getLogger(BlurbGroupsPanel.class.getName());
 
     private DockKey DOCK_KEY;
     private Node node;

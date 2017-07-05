@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent;
 import java.awt.Component;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
@@ -46,7 +47,6 @@ import net.sourceforge.marathon.javaagent.components.JEditorPaneJavaElement;
 import net.sourceforge.marathon.javaagent.components.JFileChooserJavaElement;
 import net.sourceforge.marathon.javaagent.components.JListJavaElement;
 import net.sourceforge.marathon.javaagent.components.JMenuItemJavaElement;
-import net.sourceforge.marathon.javaagent.components.JProgressBarAndSliderJavaElement;
 import net.sourceforge.marathon.javaagent.components.JSliderJavaElement;
 import net.sourceforge.marathon.javaagent.components.JSpinnerJavaElement;
 import net.sourceforge.marathon.javaagent.components.JSplitPaneJavaElement;
@@ -59,6 +59,8 @@ import net.sourceforge.marathon.javaagent.components.JTreeEditingContainerJavaEl
 import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
 
 public class JavaElementFactory {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaElementFactory.class.getName());
 
     public static IJavaElement createElement(Component component, IJavaAgent driver, JWindow window) {
         if (component == null) {
@@ -122,8 +124,7 @@ public class JavaElementFactory {
         add(JTree.class, JTreeJavaElement.class);
         add(JToggleButton.class, JToggleButtonJavaElement.class);
         add(JSpinner.class, JSpinnerJavaElement.class);
-        add(JProgressBar.class, JProgressBarAndSliderJavaElement.class);
-        add(JSlider.class, JProgressBarAndSliderJavaElement.class);
+        add(JProgressBar.class, JProgressBarJavaElement.class);
         add(JSplitPane.class, JSplitPaneJavaElement.class);
         add(JTextComponent.class, JTextComponentJavaElement.class);
         add(EditorContainer.class, JTreeEditingContainerJavaElement.class);

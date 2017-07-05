@@ -31,6 +31,9 @@ import net.sourceforge.marathon.javaagent.JavaAgentException;
 import net.sourceforge.marathon.javaagent.server.ExecuteMode;
 
 public class ScriptExecutor {
+    
+    public static final Logger LOGGER = Logger.getLogger(ScriptExecutor.class.getName());
+
     private ExecuteMode mode;
     private Object result;
     private boolean callback = false;

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXComboBox extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXComboBox.class.getName());
 
     private Object prevSelectedItem;
 
@@ -53,10 +57,6 @@ public class RFXComboBox extends RFXComponent {
                 recorder.recordSelect(this, editorText);
             }
         }
-    }
-
-    @Override public String[][] getContent() {
-        return getContent((ComboBox<?>) node);
     }
 
     @Override public String _getText() {

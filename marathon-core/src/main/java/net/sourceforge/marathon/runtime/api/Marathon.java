@@ -46,6 +46,9 @@ import net.sourceforge.marathon.objectmap.ObjectMapException;
 import net.sourceforge.marathon.runtime.NamingStrategyFactory;
 
 public class Marathon {
+    
+    public static final Logger LOGGER = Logger.getLogger(Marathon.class.getName());
+
     public interface ICloseHandler extends Runnable {
 
         @Override public abstract void run();

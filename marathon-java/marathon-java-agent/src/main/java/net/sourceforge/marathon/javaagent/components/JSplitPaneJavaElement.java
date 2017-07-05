@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JSplitPane;
 
@@ -28,6 +29,8 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JSplitPaneJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JSplitPaneJavaElement.class.getName());
 
     public JSplitPaneJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

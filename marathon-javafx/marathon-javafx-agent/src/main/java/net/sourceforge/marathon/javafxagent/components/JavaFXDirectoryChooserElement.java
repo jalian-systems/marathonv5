@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXDirectoryChooserElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXDirectoryChooserElement.DirctoryChooserNode.class.getName());
 
     public static class DirctoryChooserNode extends Node {
 

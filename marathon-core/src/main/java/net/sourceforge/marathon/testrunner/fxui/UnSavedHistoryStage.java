@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,6 +28,8 @@ import net.sourceforge.marathon.fx.display.MarathonInputStage;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class UnSavedHistoryStage extends RunHistoryStage {
+
+    public static final Logger LOGGER = Logger.getLogger(UnSavedHistoryStage.class.getName());
 
     private Button favouriteButton = FXUIUtils.createButton("favourite", "Mark as favourite", false, "Move to favourites...");
     private Button manageFavouritesButton = FXUIUtils.createButton("", "Manage favourites", true, "Manage favourites...");

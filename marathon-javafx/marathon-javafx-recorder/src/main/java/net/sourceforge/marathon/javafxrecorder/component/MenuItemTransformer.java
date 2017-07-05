@@ -18,12 +18,15 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
+import java.util.logging.Logger;
 
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 
 public class MenuItemTransformer implements ClassFileTransformer {
+
+    public static final Logger LOGGER = Logger.getLogger(MenuItemTransformer.class.getName());
 
     @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {

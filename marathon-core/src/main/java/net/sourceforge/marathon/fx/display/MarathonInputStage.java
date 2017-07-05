@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -29,6 +31,8 @@ import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public abstract class MarathonInputStage extends ModalDialog<String> {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonInputStage.class.getName());
 
     private IInputHanler inputHandler;
     private TextField inputField = new TextField();

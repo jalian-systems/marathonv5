@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.table.JTableHeader;
 
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RTableHeader extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RTableHeader.class.getName());
 
     private int index;
 

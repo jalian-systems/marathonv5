@@ -20,6 +20,7 @@ import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -29,6 +30,8 @@ import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 
 public class ContextMenuHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(ContextMenuHandler.class.getName());
 
     private ContextMenuWindow contextMenu;
     private IJSONRecorder recorder;

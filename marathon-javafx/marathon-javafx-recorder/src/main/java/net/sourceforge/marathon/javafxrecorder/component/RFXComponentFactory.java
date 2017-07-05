@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -27,6 +28,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
@@ -56,6 +58,10 @@ import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.HTMLEditor;
@@ -63,6 +69,9 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXComponentFactory {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXComponentFactory.class.getName());
+
     private JSONOMapConfig omapConfig;
 
     private static class InstanceCheckFinder implements IRFXComponentFinder {
@@ -281,7 +290,7 @@ public class RFXComponentFactory {
                 Node parent = component;
                 if (hasTabContainer(component)) {
                     while (parent != null) {
-                        if (parent instanceof Label && parent.getStyleClass().contains("tab-label")) {
+                        if (parent.getStyleClass().contains("tab-close-button") || parent instanceof Label && parent.getStyleClass().contains("tab-label")) {
                             return true;
                         }
                         parent = parent.getParent();
@@ -372,7 +381,7 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ListCell<?>) {
-                        return true;
+                        return ((Labeled) parent).getText() != null || hasEntry(parent);
                     }
                     parent = parent.getParent();
                 }
@@ -397,7 +406,7 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof TreeCell<?>) {
-                        return true;
+                        return ((Labeled) parent).getText() != null || hasEntry(parent);
                     }
                     parent = parent.getParent();
                 }
@@ -423,7 +432,7 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof TableCell<?, ?>) {
-                        return true;
+                        return ((TableCell<?, ?>) parent).getText() != null || hasEntry(parent);
                     }
                     parent = parent.getParent();
                 }
@@ -449,25 +458,26 @@ public class RFXComponentFactory {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof TreeTableCell<?, ?>) {
-                        return true;
+                        return ((TreeTableCell<?, ?>) parent).getText() != null || hasEntry(parent);
                     }
                     parent = parent.getParent();
                 }
                 return false;
             }
         });
+        add(TextFieldListCell.class, RFXTextFieldListCell.class, null);
         add(ChoiceBoxListCell.class, RFXChoiceBoxListCell.class, null);
         add(CheckBoxListCell.class, RFXCheckBoxListCell.class, null);
         add(ComboBoxListCell.class, RFXComboBoxListCell.class, null);
+        add(TextFieldTreeCell.class, RFXTextFieldTreeCell.class, null);
         add(ChoiceBoxTreeCell.class, RFXChoiceBoxTreeCell.class, null);
-        add(TreeCell.class, RFXTreeCell.class, null);
         add(CheckBoxTreeCell.class, RFXCheckBoxTreeCell.class, null);
         add(ComboBoxTreeCell.class, RFXComboBoxTreeCell.class, null);
-        add(TableCell.class, RFXTableCell.class, null);
+        add(TextFieldTableCell.class, RFXTextFieldTableCell.class, null);
         add(CheckBoxTableCell.class, RFXCheckBoxTableCell.class, null);
         add(ComboBoxTableCell.class, RFXComboBoxTableCell.class, null);
         add(ChoiceBoxTableCell.class, RFXChoiceBoxTableCell.class, null);
-        add(TreeTableCell.class, RFXTreeTableCell.class, null);
+        add(TextFieldTreeTableCell.class, RFXTextFieldTreeTableCell.class, null);
         add(CheckBoxTreeTableCell.class, RFXCheckBoxTreeTableCell.class, null);
         add(ComboBoxTreeTableCell.class, RFXComboBoxTreeTableCell.class, null);
         add(ChoiceBoxTreeTableCell.class, RFXChoiceBoxTreeTableCell.class, null);
@@ -503,6 +513,41 @@ public class RFXComponentFactory {
             }
         }
         return null;
+    }
+
+    public RFXComponent findRCellComponent(Node source, Point2D point, IJSONRecorder recorder) {
+        if (source == null)
+            return null;
+        for (IRFXComponentFinder entry : entries) {
+            Class<? extends RFXComponent> k = entry.get(source);
+            if (k == null) {
+                continue;
+            }
+            try {
+                Constructor<? extends RFXComponent> cons = k.getConstructor(Node.class, JSONOMapConfig.class, Point2D.class,
+                        IJSONRecorder.class);
+                if (point != null) {
+                    point = source.sceneToLocal(point);
+                }
+                RFXComponent newInstance = cons.newInstance(source, omapConfig, point, recorder);
+                if (newInstance instanceof RFXUnknownComponent || newInstance instanceof RFXIgnoreComponent)
+                    return null;
+                return newInstance;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private static boolean hasEntry(Node source) {
+        for (IRFXComponentFinder entry : entries) {
+            Class<? extends RFXComponent> k = entry.get(source);
+            if (k != null && !k.equals(RFXUnknownComponent.class) && !k.equals(RFXIgnoreComponent.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Node getComponent(Node component, Point2D point) {

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 
@@ -33,11 +34,14 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.PickResult;
 import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
 
 public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXElement.class.getName());
 
     protected IJavaFXAgent driver;
     protected JFXWindow window;
@@ -61,7 +65,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
 
         EventQueueWait.requestFocus(node);
         Point2D p = getMidpoint();
-        click(0, 1, (int) p.getX(), (int) p.getY());
+        click(0, null, null, 1, (int) p.getX(), (int) p.getY());
     }
 
     @Override public void sendKeys(CharSequence... keysToSend) {
@@ -212,12 +216,12 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         driver.getDevices().moveto(node, xoffset, yoffset);
     }
 
-    @Override public void click(int button, int clickCount, double xoffset, double yoffset) {
+    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
         IDevice mouse = driver.getDevices();
-        mouse.click(node, Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
+        mouse.click(node, target, pickResult, Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
     }
 
     @Override public void buttonDown(int button, double xoffset, double yoffset) {

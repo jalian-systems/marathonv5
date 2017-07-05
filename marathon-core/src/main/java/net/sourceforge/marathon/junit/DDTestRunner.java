@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class DDTestRunner {
+    
+    public static final Logger LOGGER = Logger.getLogger(DDTestRunner.class.getName());
 
     Pattern pattern = Pattern.compile(".*use_data_file\\s*\\(\\s*\"([^\"]*)\".*$|.*use_data_file\\s*\\(\\s*'([^\']*)'.*$");
 

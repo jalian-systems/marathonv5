@@ -15,12 +15,16 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
+import java.util.logging.Logger;
+
 import org.openqa.selenium.remote.service.DriverService;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 
 public class JavaWebDriverProxy implements IWebdriverProxy {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaWebDriverProxy.class.getName());
 
     private JavaProfile profile;
     private JavaDriver driver;

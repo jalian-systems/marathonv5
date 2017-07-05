@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -28,6 +30,9 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class AboutStage extends ModalDialog<VersionInfo> {
+    
+    public static final Logger LOGGER = Logger.getLogger(AboutStage.class.getName());
+
     private VBox infoBox = new VBox();
     private ButtonBar buttonBar = new ButtonBar();
     private Button creditsButton = FXUIUtils.createButton("credits", "Credits", true, "Credits");

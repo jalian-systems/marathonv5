@@ -17,8 +17,12 @@ package net.sourceforge.marathon.runtime;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Logger;
 
 public abstract class ConsoleWriter extends Writer {
+    
+    public static final Logger LOGGER = Logger.getLogger(ConsoleWriter.class.getName());
+
     private char[] cb;
     private int nChars = 1024, nextChar = 0;
     private Writer writer;

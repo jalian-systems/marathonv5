@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -27,6 +29,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class MessageStage extends ModalDialog<MessageInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(MessageStage.class.getName());
 
     private MessageInfo resultInfo;
     private ButtonBar buttonBar = new ButtonBar();

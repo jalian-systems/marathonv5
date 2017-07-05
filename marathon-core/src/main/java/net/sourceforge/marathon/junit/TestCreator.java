@@ -38,6 +38,9 @@ import net.sourceforge.marathon.testrunner.fxui.TestRunnerHistory;
 import net.sourceforge.marathon.util.FilePatternMatcher;
 
 public class TestCreator {
+    
+    public static final Logger LOGGER = Logger.getLogger(TestCreator.class.getName());
+
     private static String hideFilePattern = "";
     private static FilePatternMatcher hiddenFPM;
 

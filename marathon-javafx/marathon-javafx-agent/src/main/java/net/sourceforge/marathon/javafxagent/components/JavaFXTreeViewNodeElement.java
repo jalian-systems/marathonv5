@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,12 +28,17 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.PickResult;
+import javafx.scene.text.Text;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 
 public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeViewNodeElement.class.getName());
 
     private JavaFXTreeViewElement parent;
     private String path;
@@ -66,11 +72,20 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         if (item == null) {
             return null;
         }
-        treeView.scrollTo(treeView.getRow(item));
+        EventQueueWait.exec(() -> treeView.scrollTo(treeView.getRow(item)));
         return getCellAt(treeView, item);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @SuppressWarnings("unchecked") @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+        TreeView<?> treeView = (TreeView<?>) getComponent();
+        @SuppressWarnings("rawtypes")
+        TreeItem item = getPath(treeView, path);
+        if (item == null)
+            return Arrays.asList();
+        if (getVisibleCellAt(treeView, item) == null) {
+            EventQueueWait.exec(() -> treeView.scrollTo(treeView.getRow(item)));
+            return Arrays.asList();
+        }
         if (selector.equals("editor")) {
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
         }
@@ -99,16 +114,24 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public Point2D _getMidpoint() {
-        Node cell = getPseudoComponent();
+        TreeView<?> treeView = (TreeView<?>) getComponent();
+        Node cell = getCellAt(treeView, getPath(treeView, path));
         Bounds boundsInParent = cell.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;
         double y = boundsInParent.getHeight() / 2;
         return cell.localToParent(x, y);
     }
 
-    @Override public Object _makeVisible() {
-        getPseudoComponent();
-        return null;
+    @SuppressWarnings("unchecked") @Override public Object _makeVisible() {
+        TreeView<?> treeView = (TreeView<?>) getComponent();
+        @SuppressWarnings("rawtypes")
+        TreeItem item = getPath(treeView, path);
+        Node cell = getVisibleCellAt(treeView, item);
+        if (cell == null) {
+            treeView.scrollTo(treeView.getRow(item));
+            return false;
+        }
+        return true;
     }
 
     public String getPath() {
@@ -116,8 +139,23 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
     }
 
     @Override public String _getText() {
-        TreeCell<?> cell = (TreeCell<?>) getPseudoComponent();
-        JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
-        return cellElement._getValue();
+        TreeView<?> treeView = (TreeView<?>) getComponent();
+        return getTextForNode(treeView, getPath(treeView, path));
+    }
+
+    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+        Node cell = getPseudoComponent();
+        target = getTextObj((TreeCell<?>) cell);
+        Point2D targetXY = node.localToScene(xoffset, yoffset);
+        super.click(button, target, new PickResult(target, targetXY.getX(), targetXY.getY()), clickCount, xoffset, yoffset);
+    }
+
+    private Node getTextObj(TreeCell<?> cell) {
+        for (Node child : cell.getChildrenUnmodifiable()) {
+            if (child instanceof Text) {
+                return child;
+            }
+        }
+        return cell;
     }
 }

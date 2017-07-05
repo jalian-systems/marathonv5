@@ -17,12 +17,15 @@ package net.sourceforge.marathon.javafxrecorder.ws;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Logger;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
 public class WSClient extends WebSocketClient {
+
+    public static final Logger LOGGER = Logger.getLogger(WSClient.class.getName());
 
     private WSRecorder recorder;
 

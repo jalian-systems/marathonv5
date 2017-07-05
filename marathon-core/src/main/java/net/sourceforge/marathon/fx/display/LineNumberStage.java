@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class LineNumberStage extends MarathonInputStage {
+
+    public static final Logger LOGGER = Logger.getLogger(LineNumberStage.class.getName());
 
     private int maxLine;
 

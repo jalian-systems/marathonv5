@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -38,6 +39,9 @@ import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.Wait;
 
 public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDriverRuntimeLauncherModel, IRuntimeLauncherModel {
+    
+    public static final Logger LOGGER = Logger.getLogger(AbstractJavaDriverRuntimeLauncherModel.class.getName());
+
     @Override public ITestLauncher createLauncher(Properties props) {
         Map<String, Object> ps = new HashMap<String, Object>();
         Enumeration<Object> ks = props.keys();

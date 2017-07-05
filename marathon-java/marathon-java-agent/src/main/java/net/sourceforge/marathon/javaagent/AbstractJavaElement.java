@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
@@ -37,6 +38,8 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.css.FindByCssSelector;
 
 public abstract class AbstractJavaElement extends JavaElementPropertyAccessor implements IJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(AbstractJavaElement.class.getName());
 
     protected IJavaAgent driver;
     protected JWindow window;
@@ -492,6 +495,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
     public boolean isVisible() {
         Component c = component ;
         while(c != null) {
+            if(c instanceof Window)
+                return true;
             if(!c.isVisible())
                 return false;
             c = c.getParent();

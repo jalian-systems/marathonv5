@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.contextmenu;
 
+import java.util.logging.Logger;
+
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 public class FilterableTreeModel<T> implements TreeModel {
+
+    public static final Logger LOGGER = Logger.getLogger(FilterableTreeModel.Predicate.class.getName());
 
     public static interface Predicate<T> {
         public boolean apply(T o);

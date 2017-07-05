@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 public class DockGroup {
+
+    public static final Logger LOGGER = Logger.getLogger(DockGroup.class.getName());
 
     @SuppressWarnings("unused") private String name;
 

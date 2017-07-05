@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTreeViewElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeViewElement.class.getName());
 
     public JavaFXTreeViewElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
@@ -59,7 +62,10 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         List<IJavaFXElement> r = new ArrayList<>();
         if (o.has("select")) {
             if (getPath((TreeView<?>) getComponent(), o.getString("select")) != null) {
-                r.add(new JavaFXTreeViewNodeElement(this, o.getString("select")));
+                JavaFXTreeViewNodeElement e = new JavaFXTreeViewNodeElement(this, o.getString("select"));
+                if (!((boolean) e._makeVisible()))
+                    return Arrays.asList();
+                r.add(e);
             }
         }
         return r;
@@ -90,22 +96,5 @@ public class JavaFXTreeViewElement extends JavaFXElement {
     @Override public String _getText() {
         return getSelectedTreeNodeText((TreeView<?>) getComponent(),
                 ((TreeView<?>) getComponent()).getSelectionModel().getSelectedItems());
-    }
-
-    public String getContent() {
-        return new JSONArray(getContent((TreeView<?>) getComponent())).toString();
-    }
-
-    /*
-     * NOTE: Same code exits in RFXTreeView class. So in case if you want to
-     * modify. Modify both.
-     */
-    public String[][] getContent(TreeView<?> treeView) {
-        int rowCount = treeView.getExpandedItemCount();
-        String[][] content = new String[1][rowCount];
-        for (int i = 0; i < rowCount; i++) {
-            content[0][i] = new JavaFXTreeViewNodeElement(this, i)._getText();
-        }
-        return content;
     }
 }

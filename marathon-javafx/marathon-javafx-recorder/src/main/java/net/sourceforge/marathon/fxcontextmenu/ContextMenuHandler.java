@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxcontextmenu;
 
+import java.util.logging.Logger;
+
 import javafx.event.Event;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -26,6 +28,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 
 public class ContextMenuHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(ContextMenuHandler.class.getName());
 
     private AssertionPanel root;
     private PopupWindow popup;

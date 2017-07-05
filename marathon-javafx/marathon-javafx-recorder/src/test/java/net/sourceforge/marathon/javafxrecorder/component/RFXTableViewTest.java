@@ -18,7 +18,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -210,24 +209,6 @@ public class RFXTableViewTest extends RFXComponentTest {
             }
         };
         AssertJUnit.assertEquals("{\"cells\":[[\"1\",\"Last\"]]}", text.get(0));
-    }
-
-    @Test public void getContent() {
-        TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
-        final Object[] content = new Object[] { null };
-        Platform.runLater(() -> {
-            Point2D point = getPoint(tableView, 1, 1);
-            RFXTableView rfxTableView = new RFXTableView(tableView, null, point, null);
-            content[0] = rfxTableView.getContent();
-        });
-        new Wait("Wating for contents") {
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        String expected = "[[\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
-        AssertJUnit.assertEquals(expected, a.toString());
     }
 
     @SuppressWarnings("rawtypes") private TableColumn getTableColumnAt(TableView<?> tableView, int i) {

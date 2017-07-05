@@ -22,11 +22,14 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JSONOMapConfig {
+
+    public static final Logger LOGGER = Logger.getLogger(JSONOMapConfig.class.getName());
 
     private JSONObject config;
     private Collection<String> allProperties;

@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class MarathonPreferencesInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonPreferencesInfo.class.getName());
 
     private boolean hideBlurb;
     private Preferences preferences = Preferences.instance();

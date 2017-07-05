@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.junit;
 
+import java.util.logging.Logger;
+
 import org.junit.internal.runners.JUnit38ClassRunner;
 import org.junit.runner.Computer;
 import org.junit.runner.Request;
@@ -39,6 +41,9 @@ import junit.runner.Version;
  * @since 4.0
  */
 public class MarathonTestRunner {
+    
+    public static final Logger LOGGER = Logger.getLogger(MarathonTestRunner.class.getName());
+
     private final RunNotifier notifier = new RunNotifier();
 
     /**

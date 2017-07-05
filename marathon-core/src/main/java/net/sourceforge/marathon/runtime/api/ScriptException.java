@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public class ScriptException extends RuntimeException {
+
+    public static final Logger LOGGER = Logger.getLogger(ScriptException.class.getName());
+
     private static final long serialVersionUID = 1L;
 
     public ScriptException(String message, Throwable cause) {

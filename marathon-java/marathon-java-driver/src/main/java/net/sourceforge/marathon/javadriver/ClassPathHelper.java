@@ -43,10 +43,13 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.Platform;
 
 public class ClassPathHelper {
+
+    public static final Logger LOGGER = Logger.getLogger(ClassPathHelper.class.getName());
 
     public static String getClassPath(Class<?> klass) {
         String packageName = klass.getPackage().getName();

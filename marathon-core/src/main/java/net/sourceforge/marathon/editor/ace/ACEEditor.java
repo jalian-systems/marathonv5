@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -67,6 +68,8 @@ import net.sourceforge.marathon.util.IResourceHandler;
 import netscape.javascript.JSObject;
 
 public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListener, IEditor, ClipboardListener {
+
+    public static final Logger LOGGER = Logger.getLogger(ACEEditor.class.getName());
 
     private WebEngine engine;
     private Map<String, Object> data = new HashMap<>();

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -33,6 +34,8 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JComboBoxJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JComboBoxJavaElement.class.getName());
 
     public JComboBoxJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

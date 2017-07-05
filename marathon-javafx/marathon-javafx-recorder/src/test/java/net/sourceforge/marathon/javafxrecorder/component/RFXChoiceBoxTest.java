@@ -18,7 +18,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -130,44 +129,6 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         recording = recordings.get(1);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("Cat(2)", recording.getParameters()[0]);
-    }
-
-    @Test public void assertContent() {
-        ChoiceBox<?> choiceBox = (ChoiceBox<?>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
-        LoggingRecorder lr = new LoggingRecorder();
-        final Object[] content = new Object[] { null };
-        Platform.runLater(() -> {
-            RFXChoiceBox rfxChoiceBox = new RFXChoiceBox(choiceBox, null, null, lr);
-            content[0] = rfxChoiceBox.getContent();
-        });
-        new Wait("Waiting for content") {
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        String expected = "[[\"Dog\",\"Cat\",\"Horse\"]]";
-        AssertJUnit.assertEquals(expected, a.toString());
-    }
-
-    @Test public void assertContentDuplicate() {
-        @SuppressWarnings("unchecked")
-        ChoiceBox<String> choiceBox = (ChoiceBox<String>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
-        LoggingRecorder lr = new LoggingRecorder();
-        final Object[] content = new Object[] { null };
-        Platform.runLater(() -> {
-            RFXChoiceBox rfxChoiceBox = new RFXChoiceBox(choiceBox, null, null, lr);
-            choiceBox.getItems().add("Cat");
-            content[0] = rfxChoiceBox.getContent();
-        });
-        new Wait("Waiting for content") {
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        String expected = "[[\"Dog\",\"Cat\",\"Horse\",\"Cat(1)\"]]";
-        AssertJUnit.assertEquals(expected, a.toString());
     }
 
     @Test public void getText() {

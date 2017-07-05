@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -25,6 +27,8 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXCheckBoxListCell extends RFXComponent {
 
+    public static final Logger LOGGER = Logger.getLogger(RFXCheckBoxListCell.class.getName());
+
     public RFXCheckBoxListCell(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
     }
@@ -33,8 +37,15 @@ public class RFXCheckBoxListCell extends RFXComponent {
         @SuppressWarnings("rawtypes")
         CheckBoxListCell cell = (CheckBoxListCell) node;
         ObservableValue<Boolean> call = (ObservableValue<Boolean>) cell.getSelectedStateCallback().call(cell.getItem());
-        int selection = call.getValue() ? 2 : 0;
-        String text = cell.getText() + ":" + JavaFXCheckBoxElement.states[selection];
-        return text;
+        String cbText;
+        if (call != null) {
+            int selection = call.getValue() ? 2 : 0;
+            cbText = JavaFXCheckBoxElement.states[selection];
+        } else {
+            Node cb = cell.getGraphic();
+            RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
+            cbText = comp._getValue();
+        }
+        return cbText;
     }
 }

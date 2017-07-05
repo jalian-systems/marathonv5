@@ -18,7 +18,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -187,24 +186,6 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
             }
         };
         AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\"]}", text.get(0));
-    }
-
-    @Test public void getContent() {
-        TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
-        final Object[] content = new Object[] { null };
-        Platform.runLater(() -> {
-            Point2D point = getPoint(treeTableView, 1, 1);
-            RFXTreeTableView rfxTreeTableView = new RFXTreeTableView(treeTableView, null, point, null);
-            content[0] = rfxTreeTableView.getContent();
-        });
-        new Wait("Wating for contents") {
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        String expected = "[[\"Sales Department\",\"\"],[\"Ethan Williams\",\"ethan.williams@example.com\"],[\"Emma Jones\",\"emma.jones@example.com\"],[\"Michael Brown\",\"michael.brown@example.com\"],[\"Anna Black\",\"anna.black@example.com\"],[\"Rodger York\",\"roger.york@example.com\"],[\"Susan Collins\",\"susan.collins@example.com\"]]";
-        AssertJUnit.assertEquals(expected, a.toString());
     }
 
     @SuppressWarnings("rawtypes") private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {

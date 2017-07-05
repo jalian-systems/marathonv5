@@ -15,12 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -30,10 +33,12 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
  */
 public class RFXTableView extends RFXComponent {
 
+    public static final Logger LOGGER = Logger.getLogger(RFXTableView.class.getName());
+
     private int column = -1;
     private int row = -1;
     private String cellValue;
-    private String cellText;
+    private String cellInfo;
     private String tableText;
 
     public RFXTableView(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
@@ -59,6 +64,7 @@ public class RFXTableView extends RFXComponent {
                 }
             }
         }
+        cellInfo = getTableCellText((TableView<?>) node, row, column);
         if (row == -1 || column == -1) {
             row = column = -1;
         }
@@ -68,7 +74,7 @@ public class RFXTableView extends RFXComponent {
         TableView<?> tableView = (TableView<?>) node;
         if (row != -1 && column != -1) {
             cellValue = getTableCellValueAt(tableView, row, column);
-            cellText = getTableCellText(tableView, row, column);
+            cellInfo = getTableCellText(tableView, row, column);
             tableText = getSelection(tableView);
         }
     }
@@ -81,12 +87,8 @@ public class RFXTableView extends RFXComponent {
         if (tableCell == null) {
             throw new RuntimeException("Got a null tableCell for " + new Point2D(row, column));
         }
-        RFXComponent cellComponent = getFinder().findRawRComponent(tableCell, null, recorder);
-        if (cellComponent == null) {
-            throw new RuntimeException("Got a null RFXComponent for " + tableCell.getClass().getName());
-        }
-        String ctext = cellComponent.getValue();
-        return ctext;
+        RFXComponent cellComponent = getFinder().findRCellComponent(tableCell, null, recorder);
+        return cellComponent == null ? null : cellComponent.getValue();
     }
 
     @Override public void focusLost(RFXComponent next) {
@@ -95,7 +97,8 @@ public class RFXTableView extends RFXComponent {
         if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
             recorder.recordSelect2(this, currentCellValue, true);
         }
-        if (next == null || next.getComponent() != getComponent()) {
+        if ((next == null || next.getComponent() != getComponent())
+                && (tableView.getSelectionModel().getSelectedItems().size() > 1)) {
             String currentTableText = getSelection(tableView);
             if (!currentTableText.equals(tableText)) {
                 recorder.recordSelect(this, getSelection(tableView));
@@ -132,44 +135,27 @@ public class RFXTableView extends RFXComponent {
     }
 
     @Override public String getCellInfo() {
-        TableView<?> tableView = (TableView<?>) node;
-        if (row != -1 && column != -1) {
-            cellValue = getTableCellValueAt(tableView, row, column);
-            cellText = getTableCellText(tableView, row, column);
-        }
-        return cellText;
+        return cellInfo;
     }
 
     @Override public String _getText() {
         TableView<?> tableView = (TableView<?>) node;
         if (row != -1 && column != -1) {
-            return getTableCellValueAt(tableView, row, column);
+            TableCell<?, ?> tableCell = getCellAt(tableView, row, column);
+            if (tableCell != null) {
+                return tableCell.getText();
+            }
         }
         return getSelection((TableView<?>) getComponent());
     }
 
-    @Override public String[][] getContent() {
-        return getContent((TableView<?>) node);
+    @Override protected void mousePressed(MouseEvent me) {
     }
 
-    /*
-     * NOTE: Same code exits in JavaFXTableViewElement class. So in case if you
-     * want to modify. Modify both.
-     */
-    protected String[][] getContent(TableView<?> tableView) {
-        int rows = tableView.getItems().size();
-        int cols = tableView.getColumns().size();
-        String[][] content = new String[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                String valueAt = getTableCellValueAt(tableView, i, j);
-                if (valueAt == null) {
-                    valueAt = "";
-                }
-                content[i][j] = valueAt;
-            }
-        }
-        return content;
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
+            return;
+        recorder.recordClick2(this, me, true);
     }
 
 }

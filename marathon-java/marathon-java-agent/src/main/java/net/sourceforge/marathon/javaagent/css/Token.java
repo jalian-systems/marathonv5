@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent.css;
 
+import java.util.logging.Logger;
+
 public class Token {
+    
+    public static final Logger LOGGER = Logger.getLogger(Token.class.getName());
+
     private final TokenType type;
     private final String value;
 

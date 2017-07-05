@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -27,6 +29,8 @@ import net.sourceforge.marathon.runtime.api.Failure;
 import net.sourceforge.marathon.runtime.api.SourceLine;
 
 public class FailureDetailView extends BorderPane {
+
+    public static final Logger LOGGER = Logger.getLogger(FailureDetailView.class.getName());
 
     private ListView<Object> stackTrace;
     private ObservableList<Object> traces;

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXToggleButtonElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXToggleButtonElement.class.getName());
 
     public JavaFXToggleButtonElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

@@ -31,6 +31,8 @@ import java.util.zip.ZipFile;
  */
 public class FindResources {
 
+    public static final Logger LOGGER = Logger.getLogger(FindResources.class.getName());
+
     /**
      * for all elements of java.class.path get a Collection of resources Pattern
      * pattern = Pattern.compile(".*"); gets all resources

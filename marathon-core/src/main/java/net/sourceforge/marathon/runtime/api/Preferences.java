@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,8 @@ import org.json.JSONObject;
 import com.google.common.io.Files;
 
 public class Preferences {
+
+    public static final Logger LOGGER = Logger.getLogger(Preferences.class.getName());
 
     private static Preferences _instance;
     private JSONObject prefs;

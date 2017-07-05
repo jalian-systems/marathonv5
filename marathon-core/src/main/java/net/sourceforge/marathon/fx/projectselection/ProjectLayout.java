@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.projectselection;
 import java.io.File;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -33,6 +34,8 @@ import net.sourceforge.marathon.runtime.fx.api.IFileSelectedAction;
 import net.sourceforge.marathon.runtime.fx.api.IPropertiesLayout;
 
 public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
+
+    public static final Logger LOGGER = Logger.getLogger(ProjectLayout.class.getName());
 
     private TextField projectNameField = new TextField();
     private TextField issuesTrackerPattern = new TextField();

@@ -18,10 +18,13 @@ package net.sourceforge.marathon.javafxagent.css;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class PseudoClassFilter implements SelectorFilter {
+
+    public static final Logger LOGGER = Logger.getLogger(PseudoClassFilter.class.getName());
 
     private String function;
     private Argument[] args;

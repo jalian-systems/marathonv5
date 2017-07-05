@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.api;
 
+import java.util.logging.Logger;
+
 public class ApplicationLaunchException extends RuntimeException {
+
+    public static final Logger LOGGER = Logger.getLogger(ApplicationLaunchException.class.getName());
 
     private static final long serialVersionUID = 1L;
 

@@ -17,6 +17,7 @@ package net.sourceforge.marathon.junit;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -25,6 +26,9 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class MarathonDDTestSuite extends TestSuite implements Test {
+    
+    public static final Logger LOGGER = Logger.getLogger(MarathonDDTestSuite.class.getName());
+
     protected DDTestRunner ddt;
     private String name;
     private File file;

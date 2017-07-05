@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
+import java.util.logging.Logger;
+
 public class JOptions {
+
+    public static final Logger LOGGER = Logger.getLogger(JOptions.class.getName());
 
     private JTimeouts timeouts;
     private IJavaAgent agent;

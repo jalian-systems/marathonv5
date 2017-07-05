@@ -42,6 +42,7 @@ import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import javafx.geometry.Point2D;
 import net.sourceforge.marathon.javafxagent.Device;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.Device.Type;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.InvalidElementStateException;
@@ -59,7 +60,7 @@ import net.sourceforge.marathon.javafxagent.script.JSONScriptRunner;
 
 public class JavaServer extends NanoHTTPD {
 
-    private static final Logger logger = Logger.getLogger(JavaServer.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaServer.class.getName());
 
     public static final String MIME_JSON = "application/json;charset=UTF-8";
 
@@ -301,12 +302,12 @@ public class JavaServer extends NanoHTTPD {
             Map<String, String> files) {
         JSONObject jsonQuery = null;
         String query = files.get("postData");
-        logger.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
+        LOGGER.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
         if (query != null) {
             try {
                 jsonQuery = new JSONObject(query);
             } catch (JSONException e) {
-                logger.info("JavaServer.serve(): " + query);
+                LOGGER.info("JavaServer.serve(): " + query);
                 return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
             }
         }
@@ -322,6 +323,7 @@ public class JavaServer extends NanoHTTPD {
             if (Boolean.getBoolean("keepLog"))
                 latestSession.log(Level.INFO, logmsg.toString());
         }
+        EventQueueWait.waitTillAllEventsProcessed();
         return response;
     }
 
@@ -342,7 +344,7 @@ public class JavaServer extends NanoHTTPD {
             } catch (IOException e) {
             }
         }
-        if(n <= 0)
+        if (n <= 0)
             r.put("data", new String(baos.toByteArray()) + "...");
         else
             r.put("data", new String(baos.toByteArray()));
@@ -366,7 +368,7 @@ public class JavaServer extends NanoHTTPD {
                 return newFixedLengthResponse(Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Not Implemented: route = " + route);
             }
         } catch (Throwable e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
         }
         return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
@@ -433,7 +435,7 @@ public class JavaServer extends NanoHTTPD {
             r.put("value", new JSONObject().put("message", e.getMessage()).put("stackTrace", getStackTrace(e)));
             return newFixedLengthResponse(Status.OK, MIME_JSON, r.toString());
         } catch (Exception e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
             r.put("status", ErrorCodes.UNHANDLED_ERROR);
             r.put("value", new JSONObject().put("message", e.getClass().getName() + ":" + e.getMessage()).put("stackTrace",
                     getStackTrace(e)));
@@ -862,10 +864,10 @@ public class JavaServer extends NanoHTTPD {
 
     public void clickElement(JSONObject query, JSONObject uriParams, Session session, IJavaFXElement element) {
         if (lastComponenet.element != null && lastComponenet.element.equals(element)) {
-            element.click(0, 1, lastComponenet.x, lastComponenet.y);
+            element.click(0, null, null, 1, lastComponenet.x, lastComponenet.y);
         } else {
             Point2D p = element.getMidpoint();
-            element.click(0, 1, p.getX(), p.getY());
+            element.click(0, null, null, 1, p.getX(), p.getY());
             lastComponenet.element = element;
             lastComponenet.x = p.getX();
             lastComponenet.y = p.getY();
@@ -962,7 +964,7 @@ public class JavaServer extends NanoHTTPD {
             xoffset = p.getX();
             yoffset = p.getY();
         }
-        element.click(button, clickCount, xoffset, yoffset);
+        element.click(button, null, null, clickCount, xoffset, yoffset);
     }
 
     public Object execute(JSONObject query, JSONObject uriParams, Session session) {

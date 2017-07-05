@@ -18,10 +18,13 @@ package net.sourceforge.marathon.javaagent.css;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javaagent.IJavaElement;
 
 public class IdFilter implements SelectorFilter {
+
+    public static final Logger LOGGER = Logger.getLogger(IdFilter.class.getName());
 
     private String id;
 

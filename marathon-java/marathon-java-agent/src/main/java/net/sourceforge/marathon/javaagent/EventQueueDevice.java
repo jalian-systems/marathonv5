@@ -37,7 +37,7 @@ import javax.swing.SwingUtilities;
 
 public class EventQueueDevice extends Device {
 
-    private static final Logger LOGGER = Logger.getLogger(EventQueueDevice.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(EventQueueDevice.class.getName());
 
     public class DeviceState {
         private boolean button1Pressed = false;

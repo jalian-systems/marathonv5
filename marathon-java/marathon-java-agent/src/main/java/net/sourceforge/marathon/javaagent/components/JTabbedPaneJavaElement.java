@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
 
@@ -34,6 +35,8 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JTabbedPaneJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTabbedPaneJavaElement.class.getName());
 
     public JTabbedPaneJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

@@ -15,12 +15,16 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 
 public class VLToolBar extends ToolBar {
+
+    public static final Logger LOGGER = Logger.getLogger(VLToolBar.class.getName());
 
     @SuppressWarnings("unused") private boolean collapse;
 

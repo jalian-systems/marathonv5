@@ -15,9 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.editor.ace;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 public class AceEditorTheme {
+    
+    public static final Logger LOGGER = Logger.getLogger(AceEditorTheme.class.getName());
+
     private boolean dark;
     private String name;
     private String caption;

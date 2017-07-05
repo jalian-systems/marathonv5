@@ -17,8 +17,12 @@ package net.sourceforge.marathon.runtime.api;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class Failure implements Serializable {
+    
+    public static final Logger LOGGER = Logger.getLogger(Failure.class.getName());
+
     private static final long serialVersionUID = 1L;
     private String message;
     private SourceLine[] traceback;

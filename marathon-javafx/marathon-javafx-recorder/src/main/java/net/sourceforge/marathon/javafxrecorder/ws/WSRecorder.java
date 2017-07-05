@@ -44,6 +44,8 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 
 public class WSRecorder implements IJSONRecorder {
 
+    public static final Logger LOGGER = Logger.getLogger(WSRecorder.class.getName());
+
     private Timer clickTimer;
     private static Integer timerinterval;
     private Timer windowStateTimer;

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
@@ -43,6 +44,8 @@ import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 
 public class MarathonGuiceModule extends AbstractModule {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonGuiceModule.class.getName());
 
     protected MultiEditorProvider editorProvider;
 

@@ -15,10 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
 public class ToolBarContainer extends BorderPane {
+
+    public static final Logger LOGGER = Logger.getLogger(ToolBarContainer.class.getName());
+
     public enum Orientation {
         LEFT, RIGHT
     }

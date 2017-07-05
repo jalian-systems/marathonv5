@@ -39,6 +39,8 @@ import org.openqa.selenium.os.CommandLine;
 
 public class JavaProfile {
 
+    public static final Logger LOGGER = Logger.getLogger(JavaProfile.class.getName());
+
     private static final String PROP_HOME = "marathon.home";
     private static final String MARATHON_AGENT = "marathon.agent";
     private static final String MARATHON_RECORDER = "marathon.recorder";
@@ -281,6 +283,10 @@ public class JavaProfile {
         if (System.getProperty("java.util.logging.config.file") != null) {
             java_tool_options
                     .append("-Djava.util.logging.config.file=\"" + System.getProperty("java.util.logging.config.file") + "\" ");
+        }
+        if (System.getProperty("marathon.project.dir") != null) {
+            java_tool_options
+                    .append("-Dmarathon.project.dir=\"" + System.getProperty("marathon.project.dir") + "\" ");
         }
         java_tool_options.setLength(java_tool_options.length() - 1);
         return java_tool_options.toString();

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 import javafx.collections.ObservableList;
@@ -24,6 +26,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 
 public class HistoryUpDownHandler implements EventHandler<ActionEvent> {
+
+    public static final Logger LOGGER = Logger.getLogger(HistoryUpDownHandler.class.getName());
 
     private ListView<JSONObject> historyView;
     private boolean shouldMoveUp;

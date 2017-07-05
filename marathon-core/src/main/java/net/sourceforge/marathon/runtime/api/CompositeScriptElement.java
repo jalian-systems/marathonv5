@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public abstract class CompositeScriptElement implements IScriptElement {
+    
+    public static final Logger LOGGER = Logger.getLogger(CompositeScriptElement.class.getName());
+
     private static final long serialVersionUID = 5400907759785664633L;
     private RecordableList list = new RecordableList();
 

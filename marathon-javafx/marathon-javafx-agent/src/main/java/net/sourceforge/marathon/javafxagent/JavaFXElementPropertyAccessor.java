@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,7 +45,6 @@ import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -87,12 +87,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
-import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXElementPropertyAccessor.class.getName());
 
     protected Node node;
 
@@ -497,13 +498,13 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Object[] treePath = buildTreePath(selectedItem);
         int start = treeView.isShowRoot() ? 0 : 1;
         for (int i = start; i < treePath.length; i++) {
-            String pathString = escapeSpecialCharacters(getTextForNodeObject(treeView, (TreeItem<?>) treePath[i]));
+            String pathString = escapeSpecialCharacters(getTextForNodeObject((TreeItem<?>) treePath[i]));
             sb.append("/").append(pathString);
         }
         return sb.toString();
     }
 
-    private String getTextForNodeObject(TreeView<?> treeView, TreeItem<?> lastPathComponent) {
+    private String getTextForNodeObject(TreeItem<?> lastPathComponent) {
         // We should be getting the *text* from the tree cell. We need to figure
         // out how to construct
         // a tree cell for a item that is not visible
@@ -517,10 +518,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         // return cellComponent.getText();
         // }
         // }
-        if (lastPathComponent == null || lastPathComponent.getValue() == null) {
-            return "";
-        }
-        return lastPathComponent.getValue().toString();
+        return getTreeItemText(lastPathComponent);
     }
 
     protected String escapeSpecialCharacters(String name) {
@@ -594,10 +592,28 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         // }
         // }
         TreeItem<?> lastPathComponent = treePath.get(treePath.size() - 1);
+        return getTreeItemText(lastPathComponent);
+    }
+
+    private String getTreeItemText(TreeItem<?> lastPathComponent) {
         if (lastPathComponent == null || lastPathComponent.getValue() == null) {
             return "";
         }
-        return lastPathComponent.getValue().toString();
+        String original = lastPathComponent.getValue().toString();
+        String itemText = original;
+        int suffixIndex = 0;
+        TreeItem<?> parent = lastPathComponent.getParent();
+        if (parent == null)
+            return itemText;
+        ObservableList<?> children = parent.getChildren();
+        for (int i = 0; i < children.indexOf(lastPathComponent); i++) {
+            TreeItem<?> child = (TreeItem<?>) children.get(i);
+            String current = child.getValue().toString();
+            if (current.equals(original)) {
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
+        }
+        return itemText;
     }
 
     protected String unescapeSpecialCharacters(String name) {
@@ -710,7 +726,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings("rawtypes") public ListCell<?> getVisibleCellAt(ListView listView, Integer index) {
-        Set<Node> lookupAll = listView.lookupAll(".list-cell");
+        Set<Node> lookupAll = getListCells(listView);
         ListCell<?> cell = null;
         for (Node node : lookupAll) {
             if (((ListCell<?>) node).getIndex() == index) {
@@ -718,10 +734,21 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell)) {
+        if (cell != null) {
             return cell;
         }
         return null;
+    }
+
+    protected Set<Node> getListCells(ListView<?> listView) {
+        Set<Node> l = listView.lookupAll("*");
+        Set<Node> r = new HashSet<>();
+        for (Node node : l) {
+            if (node instanceof ListCell<?>) {
+                r.add(node);
+            }
+        }
+        return r;
     }
 
     public TreeCell<?> getCellAt(TreeView<?> treeView, int index) {
@@ -831,7 +858,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings("rawtypes") public TreeCell getVisibleCellAt(TreeView treeView, TreeItem<?> treeItem1) {
-        Set<Node> lookupAll = treeView.lookupAll(".tree-cell");
+        Set<Node> lookupAll = getTreeCells(treeView);
         TreeCell cell = null;
         for (Node treeNode : lookupAll) {
             if (((TreeCell) treeNode).getTreeItem() == treeItem1) {
@@ -839,10 +866,21 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell)) {
+        if (cell != null) {
             return cell;
         }
         return null;
+    }
+
+    private Set<Node> getTreeCells(TreeView<?> treeView) {
+        Set<Node> l = treeView.lookupAll("*");
+        Set<Node> r = new HashSet<>();
+        for (Node node : l) {
+            if (node instanceof TreeCell<?>) {
+                r.add(node);
+            }
+        }
+        return r;
     }
 
     public String rowToPath(int row) {
@@ -855,7 +893,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     private String getListItemText(ListView<?> listView, Integer index) {
-        return listView.getItems().get(index).toString();
+        if (index != -1)
+            return listView.getItems().get(index).toString();
+        return "";
     }
 
     public int getListItemIndex(ListView<?> listView, String string) {
@@ -874,7 +914,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             return listView.getSelectionModel().getSelectedIndex();
         }
         point = listView.localToScene(point);
-        Set<Node> lookupAll = listView.lookupAll(".list-cell");
+        Set<Node> lookupAll = getListCells(listView);
         ListCell<?> selected = null;
         for (Node cellNode : lookupAll) {
             Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
@@ -890,6 +930,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public int getRowAt(TreeView<?> treeView, Point2D point) {
+        if (point == null) {
+            return treeView.getSelectionModel().getSelectedIndex();
+        }
         point = treeView.localToScene(point);
         int itemCount = treeView.getExpandedItemCount();
         @SuppressWarnings("rawtypes")
@@ -1070,7 +1113,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     private TableCell<?, ?> getTableCellAt(TableView<?> tableView, Point2D point) {
         point = tableView.localToScene(point);
-        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
+        Set<Node> lookupAll = getTableCells(tableView);
         TableCell<?, ?> selected = null;
         for (Node cellNode : lookupAll) {
             Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
@@ -1080,6 +1123,17 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             }
         }
         return selected;
+    }
+
+    private Set<Node> getTableCells(TableView<?> tableView) {
+        Set<Node> l = tableView.lookupAll("*");
+        Set<Node> r = new HashSet<>();
+        for (Node node : l) {
+            if (node instanceof TableCell<?, ?>) {
+                r.add(node);
+            }
+        }
+        return r;
     }
 
     public String getColumnName(TableView<?> tableView, int i) {
@@ -1106,7 +1160,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
         TableColumn tableColumn = tableView.getColumns().get(column);
         cell = (TableCell) tableColumn.getCellFactory().call(tableColumn);
-        Object value = tableColumn.getCellObservableValue(row).getValue();
+        ObservableValue cellObservableValue = tableColumn.getCellObservableValue(row);
+        if (cellObservableValue == null)
+            return null;
+        Object value = cellObservableValue.getValue();
         Method updateItem;
         try {
             updateItem = cell.getClass().getDeclaredMethod("updateItem", new Class[] { Object.class, Boolean.TYPE });
@@ -1119,7 +1176,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public TableCell<?, ?> getVisibleCellAt(TableView<?> tableView, int row, int column) {
-        Set<Node> lookupAll = tableView.lookupAll(".table-cell");
+        Set<Node> lookupAll = getTableCells(tableView);
         TableCell<?, ?> cell = null;
         for (Node node : lookupAll) {
             TableCell<?, ?> cell1 = (TableCell<?, ?>) node;
@@ -1130,22 +1187,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                 break;
             }
         }
-        if (cell != null && isShowing(cell)) {
+        if (cell != null) {
             return cell;
         }
         return null;
-    }
-
-    public boolean isShowing(Node cell) {
-        boolean isShowing = false;
-        Bounds boundsInLocal = cell.getBoundsInLocal();
-        Bounds localToScreen = cell.localToScreen(boundsInLocal);
-        Window w = cell.getScene().getWindow();
-        BoundingBox screenBounds = new BoundingBox(w.getX(), w.getY(), w.getWidth(), w.getHeight());
-        if (screenBounds.contains(localToScreen)) {
-            isShowing = true;
-        }
-        return isShowing;
     }
 
     public Point2D getPoint(TableView<?> tableView, int columnIndex, int rowIndex) {
@@ -1304,7 +1349,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public TreeTableCell<?, ?> getTreeTableCellAt(TreeTableView<?> treeTableView, Point2D point) {
         point = treeTableView.localToScene(point);
-        Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
+        Set<Node> lookupAll = getTreeTableCells(treeTableView);
         TreeTableCell<?, ?> selected = null;
         for (Node cellNode : lookupAll) {
             Bounds boundsInScene = cellNode.localToScene(cellNode.getBoundsInLocal(), true);
@@ -1353,7 +1398,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     @SuppressWarnings("rawtypes") public TreeTableCell getVisibleCellAt(TreeTableView<?> treeTableView, int row, int column) {
-        Set<Node> lookupAll = treeTableView.lookupAll(".tree-table-cell");
+        Set<Node> lookupAll = getTreeTableCells(treeTableView);
         TreeTableCell cell = null;
         for (Node node : lookupAll) {
             TreeTableCell<?, ?> cell1 = (TreeTableCell<?, ?>) node;
@@ -1367,22 +1412,48 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return cell;
     }
 
-    @SuppressWarnings("unchecked") public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView,
-            TreeItem<?> lastPathComponent) {
+    private Set<Node> getTreeTableCells(TreeTableView<?> treeTableView) {
+        Set<Node> l = treeTableView.lookupAll("*");
+        Set<Node> r = new HashSet<>();
+        for (Node node : l) {
+            if (node instanceof TreeTableCell<?, ?>) {
+                r.add(node);
+            }
+        }
+        return r;
+    }
+
+    public String getTextForTreeTableNodeObject(TreeTableView<?> treeTableView, TreeItem<?> lastPathComponent) {
         if (lastPathComponent == null || lastPathComponent.getValue() == null) {
             return "";
         }
+        return getTreeTableItemText(treeTableView, lastPathComponent);
+    }
+
+    @SuppressWarnings("unchecked") private String getTreeTableItemText(TreeTableView<?> treeTableView,
+            TreeItem<?> lastPathComponent) {
         @SuppressWarnings("rawtypes")
         TreeTableColumn treeTableColumn = treeTableView.getTreeColumn();
         if (treeTableColumn == null) {
             treeTableColumn = treeTableView.getColumns().get(0);
         }
         ObservableValue<?> cellObservableValue = treeTableColumn.getCellObservableValue(lastPathComponent);
-        String text = cellObservableValue.getValue().toString();
-        if (text != null) {
-            return text;
+        String original = cellObservableValue.getValue().toString();
+        String itemText = original;
+        int suffixIndex = 0;
+        TreeItem<?> parent = lastPathComponent.getParent();
+        if (parent == null)
+            return itemText;
+        ObservableList<?> children = parent.getChildren();
+        for (int i = 0; i < children.indexOf(lastPathComponent); i++) {
+            TreeItem<?> child = (TreeItem<?>) children.get(i);
+            cellObservableValue = treeTableColumn.getCellObservableValue(child);
+            String current = cellObservableValue.getValue().toString();
+            if (current.equals(original)) {
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
         }
-        return lastPathComponent.getValue().toString();
+        return itemText;
     }
 
     public String getTextForTreeTableNode(TreeTableView<?> treeTableView, TreeItem<?> selectedItem) {
@@ -1699,5 +1770,15 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             }
         }
         return null;
+    }
+
+    protected boolean onCheckBox(Node target) {
+        Node parent = target;
+        while (parent != null) {
+            if (parent instanceof CheckBox)
+                return true;
+            parent = parent.getParent();
+        }
+        return false;
     }
 }

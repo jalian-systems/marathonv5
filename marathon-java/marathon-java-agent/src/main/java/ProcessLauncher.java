@@ -18,10 +18,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javaagent.Platform;
 
 public class ProcessLauncher {
+
+    public static final Logger LOGGER = Logger.getLogger(ProcessLauncher.class.getName());
 
     private static class LaunchConfig {
 

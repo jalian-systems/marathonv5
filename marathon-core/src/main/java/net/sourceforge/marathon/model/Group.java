@@ -44,6 +44,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 
 public class Group {
 
+    public static final Logger LOGGER = Logger.getLogger(Group.SuitesPanel.class.getName());
+
     @BindingAnnotation @Retention(RUNTIME) public @interface SuitesPanel {
     }
 

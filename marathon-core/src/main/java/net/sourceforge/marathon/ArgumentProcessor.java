@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.scene.control.Alert.AlertType;
+import net.sourceforge.marathon.api.JavaVersion;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.runtime.api.AbstractFileConsole;
 import net.sourceforge.marathon.runtime.api.ClassPathHelper;
@@ -30,7 +31,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
  * Processes arguments and provides getters to get at them. Marathon specific.
  */
 public class ArgumentProcessor {
-    private final static Logger logger = Logger.getLogger(ArgumentProcessor.class.getName());
+    public final static Logger LOGGER = Logger.getLogger(ArgumentProcessor.class.getName());
 
     private List<String> tests = new ArrayList<String>();
     private String projectDirName;
@@ -75,6 +76,9 @@ public class ArgumentProcessor {
      *            , the arguments given on the command line.
      */
     public void process(String[] args) {
+        if(!JavaVersion.atLeast("1.8.0_112")) {
+            help("You need to use Java version >= 1.8.0_112");
+        }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-help") || args[i].equals("-?") || args[i].equals("-h")) {
                 help("");
@@ -105,11 +109,11 @@ public class ArgumentProcessor {
                 if (!rdir.exists()) {
                     b = rdir.mkdirs();
                 } else if (!rdir.isDirectory()) {
-                    logger.severe("Given report directory is not a directory " + reportDir);
+                    LOGGER.severe("Given report directory is not a directory " + reportDir);
                     System.exit(1);
                 }
                 if (!b) {
-                    logger.severe("Could not create given report directory " + reportDir);
+                    LOGGER.severe("Could not create given report directory " + reportDir);
                     System.exit(1);
                 }
             } else if (args[i].startsWith("-")) {
@@ -132,11 +136,11 @@ public class ArgumentProcessor {
             if (!rdir.exists()) {
                 b = rdir.mkdirs();
             } else if (!rdir.isDirectory()) {
-                logger.severe("Given report directory is not a directory " + reportDir);
+                LOGGER.severe("Given report directory is not a directory " + reportDir);
                 System.exit(1);
             }
             if (!b) {
-                logger.severe("Could not create given report directory " + reportDir);
+                LOGGER.severe("Could not create given report directory " + reportDir);
                 System.exit(1);
             }
         }

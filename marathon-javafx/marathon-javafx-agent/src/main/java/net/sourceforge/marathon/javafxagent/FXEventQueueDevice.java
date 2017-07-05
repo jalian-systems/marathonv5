@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -35,6 +36,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.PickResult;
 
 public class FXEventQueueDevice implements IDevice {
+
+    public static final Logger LOGGER = Logger.getLogger(FXEventQueueDevice.class.getName());
 
     public static class DeviceState {
         private boolean shiftPressed = false;
@@ -314,18 +317,18 @@ public class FXEventQueueDevice implements IDevice {
 
     @Override public void buttonDown(Node node, Buttons button, double xoffset, double yoffset) {
         MouseButton mb = button.getMouseButton();
-        dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, xoffset, yoffset, 0, 0, mb, 1, deviceState.shiftPressed,
-                deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, true, false, false, false, false, false,
-                node));
+        dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, null, null, xoffset, yoffset, 0, 0, mb, 1,
+                deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, true, false,
+                false, false, false, false, node));
         deviceState.storeMouseDown(mb);
         deviceState.setDragSource(node);
     }
 
     @Override public void buttonUp(Node node, Buttons button, double xoffset, double yoffset) {
         MouseButton mb = button.getMouseButton();
-        dispatchEvent(createMouseEvent(MouseEvent.MOUSE_RELEASED, xoffset, yoffset, 0, 0, mb, 1, deviceState.shiftPressed,
-                deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, true, false, false, false, false, false,
-                node));
+        dispatchEvent(createMouseEvent(MouseEvent.MOUSE_RELEASED, null, null, xoffset, yoffset, 0, 0, mb, 1,
+                deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, true, false,
+                false, false, false, false, node));
         deviceState.storeMouseUp(mb);
         deviceState.setDragSource(null);
     }
@@ -340,14 +343,15 @@ public class FXEventQueueDevice implements IDevice {
         MouseButton buttons = deviceState.getButtons();
         if (node != deviceState.getNode()) {
             if (deviceState.getNode() != null) {
-                dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, xoffset, yoffset, 0, 0, buttons, 0,
+                dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, null, null, xoffset, yoffset, 0, 0, buttons, 0,
                         deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
                         buttons == MouseButton.PRIMARY, buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false,
                         false, false, node));
             }
-            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_ENTERED, xoffset, yoffset, 0, 0, buttons, 0, deviceState.shiftPressed,
-                    deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, buttons == MouseButton.PRIMARY,
-                    buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false, false, false, node));
+            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_ENTERED, null, null, xoffset, yoffset, 0, 0, buttons, 0,
+                    deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
+                    buttons == MouseButton.PRIMARY, buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false, false,
+                    false, node));
         }
         Node source = node;
         EventType<MouseEvent> id = MouseEvent.MOUSE_MOVED;
@@ -356,43 +360,45 @@ public class FXEventQueueDevice implements IDevice {
             source = deviceState.getDragSource();
         }
         MouseButton modifierEx = deviceState.getButtonMask();
-        dispatchEvent(createMouseEvent(id, xoffset, yoffset, 0, 0, buttons, 0, deviceState.shiftPressed, deviceState.ctrlPressed,
-                deviceState.altPressed, deviceState.metaPressed, modifierEx == MouseButton.PRIMARY,
+        dispatchEvent(createMouseEvent(id, null, null, xoffset, yoffset, 0, 0, buttons, 0, deviceState.shiftPressed,
+                deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, modifierEx == MouseButton.PRIMARY,
                 modifierEx == MouseButton.MIDDLE, modifierEx == MouseButton.SECONDARY, false, false, false, source));
         deviceState.setNode(node);
         deviceState.setMousePosition(xoffset, yoffset);
     }
 
-    @Override public void click(Node node, Buttons button, int clickCount, double xoffset, double yoffset) {
+    @Override public void click(Node node, Node target, PickResult pickResult, Buttons button, int clickCount, double xoffset,
+            double yoffset) {
         MouseButton b = button.getMouseButton();
-        dispatchMouseEvent(node, button == Buttons.RIGHT, clickCount, b, xoffset, yoffset);
+        dispatchMouseEvent(node, target, pickResult, button == Buttons.RIGHT, clickCount, b, xoffset, yoffset);
         deviceState.setNode(node);
     }
 
-    private void dispatchMouseEvent(Node node, boolean popupTrigger, int clickCount, MouseButton buttons, double x, double y) {
+    private void dispatchMouseEvent(Node node, Node target, PickResult pickResult, boolean popupTrigger, int clickCount,
+            MouseButton buttons, double x, double y) {
         ensureVisible(node);
         Point2D screenXY = node.localToScreen(new Point2D(x, y));
         if (node != deviceState.getNode()) {
             if (deviceState.getNode() != null) {
-                dispatchEvent(createMouseEvent(MouseEvent.MOUSE_EXITED, x, y, screenXY.getX(), screenXY.getY(), buttons, clickCount,
-                        deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, false,
-                        false, false, false, popupTrigger, false, node));
+                dispatchEvent(createMouseEvent(MouseEvent.MOUSE_EXITED, target, pickResult, x, y, screenXY.getX(), screenXY.getY(),
+                        buttons, clickCount, deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed,
+                        deviceState.metaPressed, false, false, false, false, popupTrigger, false, node));
             }
-            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_ENTERED, x, y, screenXY.getX(), screenXY.getY(), buttons, clickCount,
-                    deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, false,
-                    false, false, false, popupTrigger, false, node));
+            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_ENTERED, target, pickResult, x, y, screenXY.getX(), screenXY.getY(),
+                    buttons, clickCount, deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed,
+                    deviceState.metaPressed, false, false, false, false, popupTrigger, false, node));
         }
         for (int n = 1; n <= clickCount; n++) {
-            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, x, y, screenXY.getX(), screenXY.getY(), buttons, n,
-                    deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
+            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, target, pickResult, x, y, screenXY.getX(), screenXY.getY(),
+                    buttons, n, deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
                     buttons == MouseButton.PRIMARY, buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false,
                     popupTrigger, false, node));
-            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_RELEASED, x, y, screenXY.getX(), screenXY.getY(), buttons, n,
-                    deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
+            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_RELEASED, target, pickResult, x, y, screenXY.getX(), screenXY.getY(),
+                    buttons, n, deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
                     buttons == MouseButton.PRIMARY, buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false,
                     popupTrigger, false, node));
-            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_CLICKED, x, y, screenXY.getX(), screenXY.getY(), buttons, n,
-                    deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
+            dispatchEvent(createMouseEvent(MouseEvent.MOUSE_CLICKED, target, pickResult, x, y, screenXY.getX(), screenXY.getY(),
+                    buttons, n, deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed,
                     buttons == MouseButton.PRIMARY, buttons == MouseButton.MIDDLE, buttons == MouseButton.SECONDARY, false,
                     popupTrigger, false, node));
         }
@@ -454,13 +460,17 @@ public class FXEventQueueDevice implements IDevice {
         }
     }
 
-    private MouseEvent createMouseEvent(EventType<? extends MouseEvent> eventType, double x, double y, double screenX,
-            double screenY, MouseButton button, int clickCount, boolean shiftDown, boolean controlDown, boolean altDown,
-            boolean metaDown, boolean primaryButtonDown, boolean middleButtonDown, boolean secondaryButtonDown, boolean synthesized,
-            boolean popupTrigger, boolean stillSincePress, Node source) {
-        Node target = getTarget(source, x, y);
+    private MouseEvent createMouseEvent(EventType<? extends MouseEvent> eventType, Node target, PickResult pickResult, double x,
+            double y, double screenX, double screenY, MouseButton button, int clickCount, boolean shiftDown, boolean controlDown,
+            boolean altDown, boolean metaDown, boolean primaryButtonDown, boolean middleButtonDown, boolean secondaryButtonDown,
+            boolean synthesized, boolean popupTrigger, boolean stillSincePress, Node source) {
+        if (target == null) {
+            target = getTarget(source, x, y);
+        }
         Point2D sceneXY = source.localToScene(new Point2D(x, y));
-        PickResult pickResult = new PickResult(target, sceneXY.getX(), sceneXY.getY());
+        if (pickResult == null) {
+            pickResult = new PickResult(target, sceneXY.getX(), sceneXY.getY());
+        }
         return new MouseEvent(source, target, eventType, x, y, screenX, screenY, button, clickCount, shiftDown, controlDown,
                 altDown, metaDown, primaryButtonDown, middleButtonDown, secondaryButtonDown, synthesized, popupTrigger,
                 stillSincePress, pickResult);

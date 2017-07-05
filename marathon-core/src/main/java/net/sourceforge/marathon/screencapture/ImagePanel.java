@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +79,8 @@ import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
 
 public class ImagePanel extends SplitPane {
+
+    public static final Logger LOGGER = Logger.getLogger(ImagePanel.class.getName());
 
     private static final Color ANNOTATION_COLOR = new Color(1.0f, 1.0f, 0.0f, 0.5f);
     private static final Color SELECTED_ANNOTATION_COLOR = new Color(0.8f, 0.8f, 0.0f, 0.8f);

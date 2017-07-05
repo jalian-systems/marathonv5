@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxrecorder.component;
 
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -25,18 +26,34 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXDatePicker extends RFXComponent {
 
+    public static final Logger LOGGER = Logger.getLogger(RFXDatePicker.class.getName());
+    private String prevDate;
+
     public RFXDatePicker(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
+    }
+
+    @Override public void focusGained(RFXComponent prev) {
+        DatePicker datePicker = (DatePicker) node;
+        LocalDate value = datePicker.getValue();
+        if (value == null && datePicker.isEditable()) {
+            prevDate = datePicker.getEditor().getText();
+        } else {
+            prevDate = getDatePickerText(datePicker, value);
+        }
     }
 
     @Override public void focusLost(RFXComponent next) {
         DatePicker datePicker = (DatePicker) node;
         LocalDate value = datePicker.getValue();
+        String currentDate;
         if (value == null && datePicker.isEditable()) {
-            recorder.recordSelect(this, datePicker.getEditor().getText());
+            currentDate = datePicker.getEditor().getText();
         } else {
-            recorder.recordSelect(this, getDatePickerText(datePicker, value));
+            currentDate = getDatePickerText(datePicker, value);
         }
+        if (!currentDate.equals(prevDate))
+            recorder.recordSelect(this, currentDate);
     }
 
     @Override public String _getText() {

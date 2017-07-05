@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXTextInputControl extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXTextInputControl.class.getName());
 
     private String prevText = null;
 

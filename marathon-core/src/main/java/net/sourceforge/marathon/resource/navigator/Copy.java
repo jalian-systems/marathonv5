@@ -34,6 +34,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,8 @@ import net.sourceforge.marathon.resource.ResourceView.Operation;
  */
 
 public class Copy {
+
+    public static final Logger LOGGER = Logger.getLogger(Copy.class.getName());
 
     /**
      * Copy source file to target location.

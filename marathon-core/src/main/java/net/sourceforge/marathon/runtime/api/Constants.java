@@ -22,10 +22,13 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.util.LauncherModelHelper;
 
 public class Constants {
+
+    public static final Logger LOGGER = Logger.getLogger(Constants.class.getName());
 
     public static enum MarathonMode {
         RECORDING, PLAYING;

@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTreeTableViewElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeTableViewElement.class.getName());
 
     public JavaFXTreeTableViewElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
@@ -64,8 +67,12 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
         if (o.has("select")) {
             JSONObject jo = new JSONObject((String) o.get("select"));
             JSONArray cell = (JSONArray) jo.get("cell");
-            r.add(new JavaFXTreeTableViewCellElement(this, cell.getString(0),
-                    getTreeTableColumnIndex((TreeTableView<?>) getComponent(), cell.getString(1))));
+            JavaFXTreeTableViewCellElement e = new JavaFXTreeTableViewCellElement(this, cell.getString(0),
+                    getTreeTableColumnIndex((TreeTableView<?>) getComponent(), cell.getString(1)));
+            if (!(boolean) e._makeVisible()) {
+                return Arrays.asList();
+            }
+            r.add(e);
         }
         return r;
     }
@@ -110,29 +117,4 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
     @Override public String _getText() {
         return getTreeTableSelection((TreeTableView<?>) getComponent());
     }
-
-    public String getContent() {
-        return new JSONArray(getContent((TreeTableView<?>) getComponent())).toString();
-    }
-
-    /*
-     * NOTE: Same code exits in RFXTreeTableView class. So in case if you want
-     * to modify. Modify both.
-     */
-    private String[][] getContent(TreeTableView<?> tableView) {
-        int rows = tableView.getExpandedItemCount();
-        int cols = tableView.getColumns().size();
-        String[][] content = new String[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                String valueAt = new JavaFXTreeTableViewCellElement(this, i, j)._getText();
-                if (valueAt == null) {
-                    valueAt = "";
-                }
-                content[i][j] = valueAt;
-            }
-        }
-        return content;
-    }
-
 }

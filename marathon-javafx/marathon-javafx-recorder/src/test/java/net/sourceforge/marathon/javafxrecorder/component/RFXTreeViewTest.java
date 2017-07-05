@@ -18,8 +18,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -131,22 +129,4 @@ public class RFXTreeViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[]", select.getParameters()[0]);
     }
 
-    @Test public void assertContent() {
-        @SuppressWarnings("rawtypes")
-        TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
-        final Object[] content = new Object[] { null };
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                RFXTreeView rTreeView = new RFXTreeView(treeView, null, null, null);
-                content[0] = rTreeView.getContent();
-            }
-        });
-        new Wait("Waiting for contents.") {
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        Assert.assertEquals("[[\"Root node\",\"Child Node 1\",\"Child Node 2\",\"Child Node 3\"]]", a.toString());
-    }
 }

@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JToggleButton;
 
@@ -25,6 +26,9 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RToggleButton extends RComponent {
+    
+    public static final Logger LOGGER = Logger.getLogger(RToggleButton.class.getName());
+
     private Boolean prevSelection;
 
     public RToggleButton(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {

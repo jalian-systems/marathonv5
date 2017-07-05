@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.jruby.Ruby;
 import org.jrubyparser.Parser;
@@ -51,6 +52,9 @@ import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.Module;
 
 public class ModuleList {
+    
+    public static final Logger LOGGER = Logger.getLogger(ModuleList.class.getName());
+
     private Module topModule;
     private final String[] moduleDirs;
     private final Ruby interpreter;

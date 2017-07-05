@@ -1,6 +1,10 @@
 package net.sourceforge.marathon.fx.api;
 
+import java.util.logging.Logger;
+
 public class MaterialDesignIcons {
+
+    public static final Logger LOGGER = Logger.getLogger(MaterialDesignIcons.class.getName());
 
     public static String fontName = "Material Design Icons"; //$NON-NLS-1$
 

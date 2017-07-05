@@ -33,7 +33,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jruby.Ruby;
-import org.jruby.RubyArray;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.embed.io.WriterOutputStream;
@@ -56,7 +55,7 @@ import net.sourceforge.marathon.runtime.api.ScriptException;
 
 public class RubyScript implements IScript {
 
-    private static final Logger logger = Logger.getLogger(RubyScript.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(RubyScript.class.getName());
 
     private static final Pattern FUNCTION_PATTERN = Pattern.compile("(.*)/(.*\\(.*)", Pattern.DOTALL | Pattern.MULTILINE);
     public static final String PROP_APPLICATION_RUBYPATH = "marathon.application.rubypath";
@@ -341,7 +340,7 @@ public class RubyScript implements IScript {
 
     private void findAssertionProviderMethods() {
         IRubyObject ro = interpreter.evalScriptlet("Object.private_instance_methods");
-        Object[] methods = ((RubyArray) JavaEmbedUtils.rubyToJava(interpreter, ro, String[].class)).toArray();
+        String[] methods = (String[]) JavaEmbedUtils.rubyToJava(interpreter, ro, String[].class);
         assertionProviderList = new ArrayList<String>();
         for (Object method : methods) {
             if (method.toString().startsWith("marathon_assert_")) {
@@ -410,7 +409,7 @@ public class RubyScript implements IScript {
         try {
             runtime.quit();
         } catch (Throwable t) {
-            logger.warning("Ignoring exception " + t.getClass().getName() + " on quit()");
+            LOGGER.warning("Ignoring exception " + t.getClass().getName() + " on quit()");
         }
     }
 

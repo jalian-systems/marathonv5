@@ -57,6 +57,8 @@ import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
 
 public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
 
+    public static final Logger LOGGER = Logger.getLogger(JavaRecorderHook.class.getName());
+
     private static final Logger logger = Logger.getLogger(JavaRecorderHook.class.getName());
 
     public static String DRIVER = "Java";

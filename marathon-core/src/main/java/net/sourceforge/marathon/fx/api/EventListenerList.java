@@ -17,8 +17,12 @@ package net.sourceforge.marathon.fx.api;
 
 import java.lang.reflect.Array;
 import java.util.EventListener;
+import java.util.logging.Logger;
 
 public class EventListenerList {
+    
+    public static final Logger LOGGER = Logger.getLogger(EventListenerList.class.getName());
+
     /* A null array to be shared by all empty listener lists */
     private final static Object[] NULL_ARRAY = new Object[0];
     /* The list of ListenerType - Listener pairs */

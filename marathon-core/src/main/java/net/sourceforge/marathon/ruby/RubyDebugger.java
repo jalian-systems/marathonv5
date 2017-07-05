@@ -30,7 +30,7 @@ import net.sourceforge.marathon.runtime.api.SourceLine;
 
 public class RubyDebugger extends AbstractDebugger implements IDebugger {
 
-    private static final Logger logger = Logger.getLogger(RubyDebugger.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(RubyDebugger.class.getName());
 
     private final Ruby interpreter;
     private IPlaybackListener listener;
@@ -54,7 +54,7 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
                 return evalScriptlet.inspect().toString();
             }
         } catch (Throwable t) {
-            logger.warning("Script:\n" + script);
+            LOGGER.warning("Script:\n" + script);
             t.printStackTrace();
         }
         return "";

@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.api;
 
+import java.util.logging.Logger;
+
 public class JavaVersion {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaVersion.class.getName());
 
     private static String version = System.getProperty("java.version");
 
@@ -50,5 +54,4 @@ public class JavaVersion {
         }
         return r;
     }
-
 }

@@ -19,8 +19,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -180,22 +178,4 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Tab 2(2)", select.getParameters()[0]);
     }
 
-    @Test public void assertContent() throws Throwable {
-        TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
-        RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, new LoggingRecorder());
-        final Object[] content = new Object[] { null };
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                content[0] = rfxTabPane.getContent();
-            }
-        });
-        new Wait("Waiting for contents.") {
-
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        Assert.assertEquals("[[\"Tab 1\",\"Tab 2\",\"Tab 3\",\"Tab 4\"]]", a.toString());
-    }
 }

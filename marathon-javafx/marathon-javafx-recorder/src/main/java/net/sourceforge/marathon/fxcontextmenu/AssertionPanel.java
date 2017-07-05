@@ -15,7 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxcontextmenu;
 
-import org.json.JSONArray;
+import java.util.logging.Logger;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,10 +44,15 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
 
 public class AssertionPanel extends GridPane {
 
+    public static final Logger LOGGER = Logger.getLogger(AssertionPanel.class.getName());
+
     private AssertionTreeView attributes;
     private RFXComponentFactory finder;
     private IJSONRecorder recorder;
     private RFXComponent current;
+
+    private Button assertButton;
+    private Button insertWaitButton;
 
     class Delta {
         double x, y;
@@ -107,18 +112,26 @@ public class AssertionPanel extends GridPane {
             @Override public void changed(ObservableValue<? extends TreeItem<PropertyWrapper>> observable,
                     TreeItem<PropertyWrapper> oldValue, TreeItem<PropertyWrapper> newValue) {
                 if (newValue != null) {
+                    assertButton.setDisable(false);
+                    insertWaitButton.setDisable(false);
                     textArea.setText(newValue.getValue().displayValue.toString());
+                } else {
+                    assertButton.setDisable(true);
+                    insertWaitButton.setDisable(true);
+                    textArea.setText("");
                 }
             }
         });
         ButtonBar bar = new ButtonBar();
-        Button assertButton = new Button("Add Assertion");
+        assertButton = new Button("Add Assertion");
+        assertButton.setDisable(true);
         assertButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 recordAction(event, "assert");
             }
         });
-        Button insertWaitButton = new Button("Insert Wait");
+        insertWaitButton = new Button("Insert Wait");
+        insertWaitButton.setDisable(true);
         insertWaitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 recordAction(event, "wait");
@@ -155,14 +168,10 @@ public class AssertionPanel extends GridPane {
         sb.setLength(sb.length() - 1);
         String property = sb.toString();
         Object value = null;
-        if (property.equals("content")) {
-            value = new JSONArray(current.getContent());
+        if (property.equals("text")) {
+            value = current.getText();
         } else {
-            if (property.equals("text")) {
-                value = current.getText();
-            } else {
-                value = current.getAttribute(property);
-            }
+            value = current.getAttribute(property);
         }
         recorder.recordAction(current, action, sb.toString(), value);
     }

@@ -73,6 +73,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
@@ -197,6 +198,8 @@ import net.sourceforge.marathon.util.LauncherModelHelper;
  * user selects various options for using Marathon.
  */
 public class DisplayWindow extends Stage implements INameValidateChecker, IResourceActionSource {
+
+    public static final Logger LOGGER = Logger.getLogger(DisplayWindow.class.getName());
 
     private static final String EOL = System.getProperty("line.separator");
 
@@ -748,7 +751,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private File reportDir;
     private File runReportDir;
 
-    Button rawRecordButton;
+    ToggleButton rawRecordButton;
 
     public static final class EditorDockable extends Dockable {
         private DockKey dockKey;
@@ -990,12 +993,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         private void initComponents() {
             toolBar.setId("controller-toolbar");
             toolBar.setOrientation(javafx.geometry.Orientation.VERTICAL);
-            this.displayWindow.rawRecordButton = this.displayWindow.getActionButton(this.displayWindow.rawRecordAction);
+            this.displayWindow.rawRecordButton = this.displayWindow.rawRecordAction.getToggleButton();
             toolBar.getItems().addAll(this.displayWindow.getActionButton(this.displayWindow.pauseAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertScriptAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertChecklistAction),
                     this.displayWindow.getActionButton(this.displayWindow.stopAction),
-                    this.displayWindow.getActionButton(this.displayWindow.rawRecordAction),
+                    this.displayWindow.rawRecordButton,
                     this.displayWindow.getActionButton(this.displayWindow.recorderConsoleAction));
             textArea.setId("textArea");
             textArea.setEditable(false);
@@ -1041,7 +1044,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         public void clear() {
             textArea.setText("");
             this.displayWindow.isRawRecording = false;
-            // this.displayWindow.rawRecordButton.setSelected(false);
+            this.displayWindow.rawRecordButton.setSelected(false);
             msgLabel.setText("   ");
             msgLabel.setGraphic(null);
         }
@@ -2876,8 +2879,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onRawRecord() {
-        isRawRecording = !isRawRecording;
-        // rawRecordButton.setSelected(isRawRecording);
+        isRawRecording = rawRecordButton.isSelected();
         display.setRawRecording(isRawRecording);
     }
 

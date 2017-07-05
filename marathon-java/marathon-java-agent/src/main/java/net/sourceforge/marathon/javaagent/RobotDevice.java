@@ -33,6 +33,8 @@ import java.util.logging.Logger;
 
 public class RobotDevice extends Device {
 
+    public static final Logger LOGGER = Logger.getLogger(RobotDevice.class.getName());
+
     private Robot robot;
 
     public RobotDevice() {

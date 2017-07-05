@@ -17,10 +17,13 @@ package net.sourceforge.marathon.javafxagent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javafx.scene.input.KeyCode;
 
 @SuppressWarnings("deprecation") public class KeyboardMap {
+
+    public static final Logger LOGGER = Logger.getLogger(KeyboardMap.class.getName());
 
     private char c;
 

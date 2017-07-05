@@ -15,11 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import net.sourceforge.marathon.fxdocking.DockableState.State;
 
 public abstract class Dockable {
+
+    public static final Logger LOGGER = Logger.getLogger(Dockable.class.getName());
 
     abstract public DockKey getDockKey();
 

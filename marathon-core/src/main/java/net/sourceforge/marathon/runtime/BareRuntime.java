@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IConsole;
@@ -16,6 +17,9 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class BareRuntime implements IMarathonRuntime {
+    
+    public static final Logger LOGGER = Logger.getLogger(BareRuntime.class.getName());
+
     private IScriptModel scriptModel;
     private IScript script;
     private static boolean mergeOutput = Boolean.getBoolean("marathon.merge.output");

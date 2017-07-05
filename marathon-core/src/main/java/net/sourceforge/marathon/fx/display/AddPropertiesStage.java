@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class AddPropertiesStage extends ModalDialog<TestPropertiesInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(AddPropertiesStage.class.getName());
 
     private Button okButton = FXUIUtils.createButton("ok", "Add issue", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");

@@ -15,12 +15,17 @@
  ******************************************************************************/
 package net.sourceforge.marathon.recorder;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.action.AbstractScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class InsertScriptElement extends AbstractScriptElement {
+    
+    public static final Logger LOGGER = Logger.getLogger(InsertScriptElement.class.getName());
+
     private static final long serialVersionUID = 1L;
     private String function;
     private String pkg = null;

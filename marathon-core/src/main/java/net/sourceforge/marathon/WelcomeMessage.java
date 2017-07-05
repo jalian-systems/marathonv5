@@ -15,12 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon;
 
+import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import net.sourceforge.marathon.util.Blurb;
 
 public class WelcomeMessage {
+
+    public static final Logger LOGGER = Logger.getLogger(WelcomeMessage.class.getName());
 
     public static void showWelcomeMessage() {
         new Blurb("about/welcome", "Welcome") {

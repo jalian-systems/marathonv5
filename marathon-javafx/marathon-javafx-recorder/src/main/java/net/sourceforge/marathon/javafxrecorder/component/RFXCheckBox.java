@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -26,6 +28,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXCheckBox extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXCheckBox.class.getName());
 
     private Integer prevSelection; // 0 - unchecked, 1 - indeterminate, 2 -
                                    // checked

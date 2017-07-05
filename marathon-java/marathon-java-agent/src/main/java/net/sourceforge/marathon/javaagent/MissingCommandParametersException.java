@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent;
 
+import java.util.logging.Logger;
+
 public class MissingCommandParametersException extends RuntimeException {
+    
+    public static final Logger LOGGER = Logger.getLogger(MissingCommandParametersException.class.getName());
+
     private static final long serialVersionUID = 1L;
 
     public MissingCommandParametersException(String message, Throwable cause) {

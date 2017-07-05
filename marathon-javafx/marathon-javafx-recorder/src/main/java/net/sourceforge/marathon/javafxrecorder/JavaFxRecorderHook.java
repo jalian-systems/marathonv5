@@ -43,6 +43,7 @@ import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -61,6 +62,8 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXUnknownComponent;
 import net.sourceforge.marathon.javafxrecorder.ws.WSRecorder;
 
 public class JavaFxRecorderHook implements EventHandler<Event> {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFxRecorderHook.class.getName());
 
     private static final Logger logger = Logger.getLogger(JavaFxRecorderHook.class.getName());
 
@@ -297,13 +300,17 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             KeyEvent.KEY_PRESSED, KeyEvent.KEY_RELEASED, KeyEvent.KEY_TYPED };
 
     private void removeEventFilter(Stage stage) {
-        stage.getScene().getRoot().removeEventFilter(Event.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().removeEventFilter(InputEvent.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().removeEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().removeEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
     }
 
     private void addEventFilter(Stage stage) {
         stage.getScene().getRoot().getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
         stage.getScene().getRoot().getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
-        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().addEventFilter(InputEvent.ANY, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().addEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
+        stage.getScene().getRoot().addEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
             @Override public void handle(WindowEvent event) {
                 recorder.recordWindowClosing(new WindowTitle(stage).getTitle());
@@ -330,7 +337,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             }
         });
         stage.getScene().getRoot().getProperties().put("marathon.menu.handler", menuEvent);
-        stage.getScene().getRoot().addEventFilter(Event.ANY, JavaFxRecorderHook.this);
     }
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
@@ -379,6 +385,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     private void handle_internal(Event event) {
         if (contextMenuTriggerCheck.isContextMenuEvent(event) || contextMenuHandler.isShowing()) {
             event.consume();
+            if (current != null && !contextMenuHandler.isShowing()) {
+                current.focusLost(null);
+            }
             contextMenuHandler.showPopup(event);
             return;
         }
@@ -411,7 +420,13 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                     event);
             return;
         }
-        RFXComponent c = finder.findRComponent((Node) event.getTarget(), point, recorder);
+        Node target;
+        if (event instanceof MouseEvent && ((MouseEvent) event).getPickResult() != null) {
+            target = ((MouseEvent) event).getPickResult().getIntersectedNode();
+        } else {
+            target = (Node) event.getTarget();
+        }
+        RFXComponent c = finder.findRComponent(target, point, recorder);
         if (!c.equals(current) && isFocusChangeEvent(event)) {
             if (current != null && isShowing(current)) {
                 current.focusLost(c);

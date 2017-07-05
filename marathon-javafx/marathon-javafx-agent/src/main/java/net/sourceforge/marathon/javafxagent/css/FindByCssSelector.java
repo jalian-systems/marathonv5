@@ -16,11 +16,14 @@
 package net.sourceforge.marathon.javafxagent.css;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 
 public class FindByCssSelector {
+
+    public static final Logger LOGGER = Logger.getLogger(FindByCssSelector.class.getName());
 
     private IJavaFXElement container;
     private long implicitWait;

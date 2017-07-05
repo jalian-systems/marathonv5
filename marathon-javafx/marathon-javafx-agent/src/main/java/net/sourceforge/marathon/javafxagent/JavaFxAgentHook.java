@@ -37,7 +37,7 @@ import net.sourceforge.marathon.javafxagent.server.JavaServer;
 
 public class JavaFxAgentHook {
 
-    private static final Logger logger = Logger.getLogger(JavaFxAgentHook.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaFxAgentHook.class.getName());
     protected static String windowTitle;
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
@@ -59,18 +59,18 @@ public class JavaFxAgentHook {
                 }
                 c.next();
                 if (c.wasAdded()) {
-                    logger.info("Checking for window: " + Thread.currentThread());
+                    LOGGER.info("Checking for window: " + Thread.currentThread());
                     if (!"".equals(windowTitle)) {
-                        logger.info("Checking for windowTitle is not implemented.. ignoring and continuing...");
+                        LOGGER.info("Checking for windowTitle is not implemented.. ignoring and continuing...");
                     }
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
                         @Override public Object run() {
                             try {
-                                logger.info("JavaVersion: " + System.getProperty("java.version"));
-                                logger.info("JavaHome: " + System.getProperty("java.home"));
+                                LOGGER.info("JavaVersion: " + System.getProperty("java.version"));
+                                LOGGER.info("JavaHome: " + System.getProperty("java.home"));
                                 Charset utf8 = Charset.forName("utf-8");
                                 if (!Charset.defaultCharset().equals(utf8)) {
-                                    logger.warning(
+                                    LOGGER.warning(
                                             "Application is using a non-utf8 charset. Marathon might cause issues while playing");
                                 }
                                 JavaServer server = new JavaServer(port, true);
@@ -87,12 +87,12 @@ public class JavaFxAgentHook {
         });
         EventHandler<MouseEvent> mouseEventLogger = new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent event) {
-                logger.info(event.toString());
+                LOGGER.info(event.toString());
             }
         };
         EventHandler<KeyEvent> keyEventLogger = new EventHandler<KeyEvent>() {
             @Override public void handle(KeyEvent event) {
-                logger.info(event.toString());
+                LOGGER.info(event.toString());
             }
         };
         stages.addListener(new ListChangeListener<Stage>() {

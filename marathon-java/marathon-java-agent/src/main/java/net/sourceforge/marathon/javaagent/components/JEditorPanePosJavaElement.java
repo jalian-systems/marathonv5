@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.logging.Logger;
 
 import javax.swing.JEditorPane;
 import javax.swing.text.BadLocationException;
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.InvalidElementStateException;
 
 public class JEditorPanePosJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JEditorPanePosJavaElement.class.getName());
 
     private int pos;
     private AbstractJavaElement parent;

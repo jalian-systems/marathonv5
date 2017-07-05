@@ -15,8 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
+import java.util.logging.Logger;
+
 public class UnsupportedCommandException extends RuntimeException {
     private static final long serialVersionUID = 1L;
+
+    public static final Logger LOGGER = Logger.getLogger(UnsupportedCommandException.class.getName());
 
     public UnsupportedCommandException(String message, Throwable cause) {
         super(message, cause);

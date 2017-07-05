@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCombination.ModifierValue;
@@ -22,6 +24,9 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class FXContextMenuTriggers {
+    
+    public static final Logger LOGGER = Logger.getLogger(FXContextMenuTriggers.class.getName());
+
     private static String menuModifiers;
     private static String contextMenuKey;
     private static String contextMenuKeyModifiers;

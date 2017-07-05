@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -35,6 +36,8 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class JTableHeaderJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTableHeaderJavaElement.class.getName());
 
     private static final class PropertyPredicate implements Predicate {
         private final Properties p;

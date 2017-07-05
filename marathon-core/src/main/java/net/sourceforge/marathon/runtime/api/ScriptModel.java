@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public abstract class ScriptModel {
+
+    public static final Logger LOGGER = Logger.getLogger(ScriptModel.class.getName());
 
     private static IScriptModel instance;
 

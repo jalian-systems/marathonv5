@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -47,6 +48,8 @@ import net.sourceforge.marathon.screencapture.ImagePanel;
 import net.sourceforge.marathon.screencapture.ImagePanel.Annotation;
 
 public class CheckList {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckList.class.getName());
 
     public static abstract class CheckListItem {
         private transient VBox vbox;

@@ -18,6 +18,7 @@ package net.sourceforge.marathon.model;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -26,6 +27,8 @@ import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class GroupGroupEntry extends GroupEntry {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupGroupEntry.class.getName());
 
     private Group group;
 

@@ -18,6 +18,7 @@ package net.sourceforge.marathon.ruby;
 import java.io.File;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -34,6 +35,8 @@ import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 import net.sourceforge.marathon.runtime.fx.api.ListLayout;
 
 public class RubyPathLayout extends ListLayout implements ISubPropertiesLayout {
+
+    public static final Logger LOGGER = Logger.getLogger(RubyPathLayout.class.getName());
 
     public static final String PROP_APPLICATION_RUBYPATH = "marathon.application.rubypath";
     public static final String PROP_APPLICATION_RUBYHOME = "marathon.application.rubyhome";

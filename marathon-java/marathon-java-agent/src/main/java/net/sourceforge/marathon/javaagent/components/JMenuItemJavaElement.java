@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
@@ -33,6 +34,8 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JMenuItemJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JMenuItemJavaElement.class.getName());
 
     public JMenuItemJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);

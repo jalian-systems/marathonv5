@@ -15,12 +15,16 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.fxdocking.Dockable;
 import net.sourceforge.marathon.resource.IResourceActionHandler;
 import net.sourceforge.marathon.resource.IResourceActionSource;
 import net.sourceforge.marathon.resource.IResourceChangeListener;
 
 public abstract class AbstractGroupsPanel extends Dockable implements IResourceActionSource, IResourceChangeListener {
+
+    public static final Logger LOGGER = Logger.getLogger(AbstractGroupsPanel.class.getName());
 
     public abstract void initialize(IResourceActionHandler handler, IResourceChangeListener listener);
 

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.testrunner.fxui;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 import javafx.collections.FXCollections;
@@ -41,6 +43,8 @@ import net.sourceforge.marathon.fx.projectselection.FormPane;
 import net.sourceforge.marathon.testrunner.fxui.TestTreeItem.State;
 
 public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(RunHistoryStage.class.getName());
 
     protected RunHistoryInfo runHistoryInfo;
     private HBox historyPane = new HBox(5);

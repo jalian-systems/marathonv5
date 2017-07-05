@@ -22,11 +22,15 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.logging.Logger;
 
 import junit.framework.AssertionFailedError;
 import net.sourceforge.marathon.runtime.api.Failure;
 
 public class MarathonAssertion extends AssertionFailedError {
+    
+    public static final Logger LOGGER = Logger.getLogger(MarathonAssertion.class.getName());
+
     private static final long serialVersionUID = 1L;
     private Failure[] failures;
 

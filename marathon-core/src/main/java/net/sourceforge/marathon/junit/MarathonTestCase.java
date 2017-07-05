@@ -62,7 +62,7 @@ import net.sourceforge.marathon.util.LauncherModelHelper;
 
 public class MarathonTestCase extends TestCase implements IPlaybackListener, Test, IHasFullname {
 
-    private static final Logger logger = Logger.getLogger(MarathonTestCase.class.getCanonicalName());
+    public static final Logger LOGGER = Logger.getLogger(MarathonTestCase.class.getCanonicalName());
 
     private @Inject IRuntimeFactory runtimeFactory;
 
@@ -138,7 +138,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
             if (runtime != null)
                 runtime.releaseInterpreters();
             if (runtime != null && (!reuseFixture || ignoreReuse)) {
-                logger.info("Destroying VM");
+                LOGGER.info("Destroying VM");
                 runtime.destroy();
                 runtime = null;
             }

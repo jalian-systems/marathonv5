@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -25,6 +27,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXCheckBoxTableCell extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXCheckBoxTableCell.class.getName());
 
     public RFXCheckBoxTableCell(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
@@ -42,13 +46,7 @@ public class RFXCheckBoxTableCell extends RFXComponent {
             Node cb = cell.getGraphic();
             RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
             cbText = comp._getValue();
-
         }
-        String cellText = cell.getText();
-        if (cellText == null) {
-            cellText = "";
-        }
-        String text = cellText + ":" + cbText;
-        return text;
+        return cbText;
     }
 }

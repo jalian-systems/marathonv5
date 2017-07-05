@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RTable extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RTable.class.getName());
 
     private int column;
     private int row;
@@ -93,7 +96,8 @@ public class RTable extends RComponent {
                 }
             }
         }
-        if (next == null || next.getComponent() != getComponent()) {
+        if ((next == null || next.getComponent() != getComponent())
+                && (((JTable) component).getSelectedRowCount() > 1 || ((JTable) component).getSelectedColumnCount() > 1)) {
             // Focus lost on the table
             recorder.recordSelect(this, getSelection());
         }
@@ -208,5 +212,12 @@ public class RTable extends RComponent {
             focusLost(null);
         }
         super.mousePressed(me);
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me) || ((JTable)component).isEditing()) {
+            return;
+        }
+        recorder.recordClick2(this, me, true);
     }
 }

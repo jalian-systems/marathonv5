@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -35,6 +36,9 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class FileHandler implements IResourceHandler {
+    
+    public static final Logger LOGGER = Logger.getLogger(FileHandler.class.getName());
+
     private static final String NL = System.getProperty("line.separator");
     private File currentFile;
     private IMarathonFileFilter filter;

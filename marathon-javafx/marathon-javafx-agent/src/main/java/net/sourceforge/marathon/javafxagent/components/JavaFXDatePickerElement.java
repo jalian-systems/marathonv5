@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -25,6 +26,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXDatePickerElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXDatePickerElement.class.getName());
 
     public JavaFXDatePickerElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

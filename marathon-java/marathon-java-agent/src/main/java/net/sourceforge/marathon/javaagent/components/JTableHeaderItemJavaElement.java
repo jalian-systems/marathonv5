@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -34,6 +35,8 @@ import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JTableHeaderItemJavaElement extends AbstractJavaElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTableHeaderItemJavaElement.class.getName());
 
     private JTableHeaderJavaElement parent;
     private int item;

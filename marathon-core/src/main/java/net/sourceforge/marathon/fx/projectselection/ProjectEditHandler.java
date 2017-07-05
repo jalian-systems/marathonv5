@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.projectselection;
 
+import java.util.logging.Logger;
+
 public class ProjectEditHandler implements IEditProjectHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(ProjectEditHandler.class.getName());
 
     @Override public boolean editProject(ProjectInfo selected) {
         return false;

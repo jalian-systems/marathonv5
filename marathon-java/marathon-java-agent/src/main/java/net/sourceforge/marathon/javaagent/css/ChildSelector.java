@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONException;
 
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class ChildSelector implements Selector {
+
+    public static final Logger LOGGER = Logger.getLogger(ChildSelector.class.getName());
 
     private Selector parent;
     private SimpleSelector child;

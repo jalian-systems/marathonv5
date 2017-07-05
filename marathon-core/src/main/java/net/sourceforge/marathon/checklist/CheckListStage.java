@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.checklist;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -24,6 +26,8 @@ import javafx.stage.Stage;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class CheckListStage extends ModalDialog<CheckListFormNode> {
+
+    public static final Logger LOGGER = Logger.getLogger(CheckListStage.class.getName());
 
     private CheckListFormNode checkListFormNode;
     private Button[] actionButtons;

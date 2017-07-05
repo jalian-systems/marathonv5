@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -195,46 +194,6 @@ public class RFXComboBoxTest extends RFXComponentTest {
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
         AssertJUnit.assertEquals("", recording.getParameters()[0]);
-    }
-
-    @Test public void assertContent() {
-        ComboBox<?> comboBox = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
-        LoggingRecorder lr = new LoggingRecorder();
-        final Object[] content = new Object[] { null };
-        Platform.runLater(() -> {
-            RFXComboBox rfxComboBoxBase = new RFXComboBox(comboBox, null, null, lr);
-            content[0] = rfxComboBoxBase.getContent();
-        });
-        new Wait("Waiting for content") {
-
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        String expected = "[[\"Option 1\",\"Option 2\",\"Option 3\",\"Option 4\",\"Option 5\",\"Option 6\",\"Longer ComboBox item\",\"Option 7\"]]";
-        AssertJUnit.assertEquals(expected, a.toString());
-    }
-
-    @Test public void assertContentDuplicate() {
-        @SuppressWarnings("unchecked")
-        ComboBox<String> comboBox = (ComboBox<String>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
-        LoggingRecorder lr = new LoggingRecorder();
-        final Object[] content = new Object[] { null };
-        Platform.runLater(() -> {
-            RFXComboBox rfxComboBoxBase = new RFXComboBox(comboBox, null, null, lr);
-            comboBox.getItems().add("Option 5");
-            content[0] = rfxComboBoxBase.getContent();
-        });
-        new Wait("Waiting for content") {
-
-            @Override public boolean until() {
-                return content[0] != null;
-            }
-        };
-        JSONArray a = new JSONArray(content[0]);
-        String expected = "[[\"Option 1\",\"Option 2\",\"Option 3\",\"Option 4\",\"Option 5\",\"Option 6\",\"Longer ComboBox item\",\"Option 7\",\"Option 5(1)\"]]";
-        AssertJUnit.assertEquals(expected, a.toString());
     }
 
     @Test public void getText() {

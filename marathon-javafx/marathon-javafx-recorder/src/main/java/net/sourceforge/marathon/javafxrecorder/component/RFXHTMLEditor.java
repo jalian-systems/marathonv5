@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.web.HTMLEditor;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXHTMLEditor extends RFXComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXHTMLEditor.class.getName());
 
     private String prevText;
 

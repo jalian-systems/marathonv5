@@ -16,10 +16,13 @@
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 
 public class ContextManager {
+
+    public static final Logger LOGGER = Logger.getLogger(ContextManager.class.getName());
 
     private static class InstanceCheck implements IContextChecker {
 

@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +45,8 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXFileChooserElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXMenuBarElement;
 
 public class JavaFXTargetLocator {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTargetLocator.class.getName());
 
     public static class ElementMap {
         private Map<String, IJavaFXElement> elements = new HashMap<String, IJavaFXElement>();

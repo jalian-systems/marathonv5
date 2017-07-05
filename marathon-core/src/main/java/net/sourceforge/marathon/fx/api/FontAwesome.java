@@ -1,6 +1,10 @@
 package net.sourceforge.marathon.fx.api;
 
+import java.util.logging.Logger;
+
 public class FontAwesome {
+
+    public static final Logger LOGGER = Logger.getLogger(FontAwesome.class.getName());
 
     public static String fontName = "FontAwesome"; //$NON-NLS-1$
 

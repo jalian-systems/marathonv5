@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public class NullLogger implements ILogger {
+
+    public static final Logger LOGGER = Logger.getLogger(NullLogger.class.getName());
 
     @Override public void info(String module, String message) {
     }

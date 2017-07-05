@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.checklist;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -26,6 +28,9 @@ import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class NewChekListInputStage extends ModalDialog<String> {
+    
+    public static final Logger LOGGER = Logger.getLogger(NewChekListInputStage.class.getName());
+
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private TextField nameField = new TextField();

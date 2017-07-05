@@ -16,8 +16,11 @@
 package net.sourceforge.marathon.suite.editor;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 public class GroupInputInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(GroupInputInfo.class.getName());
 
     private File file;
     private String name;

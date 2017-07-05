@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.fxdocking;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -25,6 +26,8 @@ import javafx.scene.layout.VBox;
 import net.sourceforge.marathon.fxdocking.DockingConstants.Split;
 
 public class VBoxDockingContainer extends VBox implements IDockingContainer {
+
+    public static final Logger LOGGER = Logger.getLogger(VBoxDockingContainer.class.getName());
 
     private DockingDesktop desktop;
 

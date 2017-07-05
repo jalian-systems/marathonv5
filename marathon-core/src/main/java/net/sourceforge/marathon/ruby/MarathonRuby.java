@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
+import java.util.logging.Logger;
+
 import org.jruby.Ruby;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -24,6 +26,8 @@ import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.Marathon;
 
 public class MarathonRuby extends Marathon {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonRuby.class.getName());
 
     public static class ContextAccessor extends DefaultMatcher {
         private IRubyObject o;

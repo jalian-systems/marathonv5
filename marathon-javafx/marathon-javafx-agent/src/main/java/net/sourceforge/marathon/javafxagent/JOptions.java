@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
+import java.util.logging.Logger;
+
 public class JOptions {
+
+    public static final Logger LOGGER = Logger.getLogger(JOptions.class.getName());
 
     private JTimeouts timeouts;
     private IJavaFXAgent agent;

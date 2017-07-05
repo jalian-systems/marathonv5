@@ -16,12 +16,15 @@
 package net.sourceforge.marathon.javadriver;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import fi.iki.elonen.NanoHTTPD;
 import net.sourceforge.marathon.javaagent.server.JavaServer;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchType;
 
 public class EmbeddedServer {
+
+    public static final Logger LOGGER = Logger.getLogger(EmbeddedServer.class.getName());
 
     private NanoHTTPD javaServer;
     private JavaProfile profile;

@@ -21,12 +21,15 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
 public class PropertyHelper {
+
+    public static final Logger LOGGER = Logger.getLogger(PropertyHelper.class.getName());
 
     public static String toString(Properties p, String[] propOrder) {
         StringBuffer sb = new StringBuffer();

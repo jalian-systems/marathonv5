@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RMenuItem extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RMenuItem.class.getName());
 
     private Component mainMenu;
 

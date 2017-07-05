@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
 import net.sourceforge.marathon.runtime.api.IRuntimeFactory;
 
 public class WebDriverRuntimeFactory implements IRuntimeFactory {
+
+    public static final Logger LOGGER = Logger.getLogger(WebDriverRuntimeFactory.class.getName());
 
     private IWebDriverRuntimeLauncherModel launcherModel;
 

@@ -15,9 +15,13 @@
  ******************************************************************************/
 package net.sourceforge.marathon.api;
 
+import java.util.logging.Logger;
+
 import com.google.inject.Injector;
 
 public class GuiceInjector {
+
+    public static final Logger LOGGER = Logger.getLogger(GuiceInjector.class.getName());
 
     private static Injector injector;
 

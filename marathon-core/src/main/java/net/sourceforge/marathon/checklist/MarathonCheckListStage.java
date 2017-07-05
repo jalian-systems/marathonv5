@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.checklist;
 
+import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -37,6 +39,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class MarathonCheckListStage extends ModalDialog<CheckListForm> {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonCheckListStage.class.getName());
 
     private CheckListForm checkListInfo;
     private ListView<CheckListElement> checkListView;

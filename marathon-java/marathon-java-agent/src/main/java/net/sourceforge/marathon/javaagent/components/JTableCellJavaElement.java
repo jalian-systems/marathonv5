@@ -21,6 +21,7 @@ import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -39,6 +40,8 @@ import net.sourceforge.marathon.javaagent.NoSuchElementException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class JTableCellJavaElement extends AbstractJavaElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JTableCellJavaElement.class.getName());
 
     private JTableJavaElement parent;
     private int viewRow;

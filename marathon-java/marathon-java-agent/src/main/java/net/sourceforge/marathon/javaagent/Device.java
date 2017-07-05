@@ -27,6 +27,8 @@ import javax.swing.SwingUtilities;
 
 public abstract class Device implements IDevice {
 
+    public static final Logger LOGGER = Logger.getLogger(Device.class.getName());
+
     public enum Type {
         EVENT_QUEUE, ROBOT
     }

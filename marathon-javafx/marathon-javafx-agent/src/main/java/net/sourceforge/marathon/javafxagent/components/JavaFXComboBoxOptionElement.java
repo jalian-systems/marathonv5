@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +27,8 @@ import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 
 public class JavaFXComboBoxOptionElement extends JavaFXElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXComboBoxOptionElement.class.getName());
 
     private JavaFXElement parent;
     private int option;

@@ -78,7 +78,7 @@ import net.sourceforge.marathon.javaagent.components.ContextManager;
 
 public class JavaElementPropertyAccessor {
 
-    private static Logger logger = Logger.getLogger(JavaElementPropertyAccessor.class.getName());
+    public static Logger LOGGER = Logger.getLogger(JavaElementPropertyAccessor.class.getName());
     
     protected Component component;
     private static final Pattern arrayPattern = Pattern.compile("(.*)\\[([^\\]]*)\\]$");
@@ -168,13 +168,13 @@ public class JavaElementPropertyAccessor {
                 if (o != null) {
                     if (o instanceof Map<?, ?>) {
                         o = ((Map<?, ?>)o).get(matcher.group(2));
-                        logger.info("Accessing map with " + matcher.group(2) + " = " + o);
+                        LOGGER.info("Accessing map with " + matcher.group(2) + " = " + o);
                     }
                     else
                         o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
                 }
             } catch (NoSuchMethodException e) {
-                logger.info("Method get not found for " + o.getClass());
+                LOGGER.info("Method get not found for " + o.getClass());
             }
         }
         try {

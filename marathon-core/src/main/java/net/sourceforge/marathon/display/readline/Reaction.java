@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display.readline;
 
+import java.util.logging.Logger;
+
 public abstract class Reaction {
+    
+    public static final Logger LOGGER = Logger.getLogger(Reaction.class.getName());
+
     final int[] indices;
     final long mask;
     final long asyncMask;

@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -35,6 +36,8 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RTree extends RComponent {
+
+    public static final Logger LOGGER = Logger.getLogger(RTree.class.getName());
 
     private int row = -1;
     private String text = null;
@@ -60,7 +63,7 @@ public class RTree extends RComponent {
         if (currentText != null && !currentText.equals(text)) {
             recorder.recordSelect2(this, currentText, true);
         }
-        if (next == null || next.getComponent() != component) {
+        if ((next == null || next.getComponent() != component) && tree.getSelectionCount() > 1) {
             int[] selectionRows = tree.getSelectionRows();
             if (selectionRows == null) {
                 selectionRows = new int[0];
@@ -77,6 +80,7 @@ public class RTree extends RComponent {
 
     @Override public void focusGained(RComponent prev) {
         text = getText();
+        cellInfo = getTextForNode((JTree) component, row);
     }
 
     @Override public String getText() {
@@ -188,5 +192,12 @@ public class RTree extends RComponent {
 
     @Override public String[][] getContent() {
         return JTreeJavaElement.getContent((JTree) component);
+    }
+
+    @Override protected void mouseClicked(MouseEvent me) {
+        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me) || ((JTree) component).isEditing()) {
+            return;
+        }
+        recorder.recordClick2(this, me, true);
     }
 }

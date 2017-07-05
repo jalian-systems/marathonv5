@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.api;
 
 public interface IVersion {
+    
     public String id();
 
     public String product();

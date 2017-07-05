@@ -43,6 +43,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ObjectMapItem implements IObjectMapTreeItem {
 
+    public static final Logger LOGGER = Logger.getLogger(ObjectMapItem.class.getName());
+
     protected List<OMapContainer> data;
     private List<OMapContainer> deletedContainers = new ArrayList<>();
     private boolean dirty = false;

@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.display;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -59,6 +60,8 @@ import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.Module;
 
 public class FunctionStage extends ModalDialog<FunctionInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(FunctionStage.class.getName());
 
     public IFunctionArgumentHandler functionArgumentHandler;
     private FunctionInfo functionInfo;

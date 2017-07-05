@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -26,6 +27,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXCheckBoxElement extends JavaFXElement {
 
+    public static final Logger LOGGER = Logger.getLogger(JavaFXCheckBoxElement.class.getName());
+
     public static final String[] states = new String[] { "unchecked", "indeterminate", "checked" };
 
     public JavaFXCheckBoxElement(Node component, IJavaFXAgent driver, JFXWindow window) {
@@ -34,11 +37,6 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
 
     @Override public boolean marathon_select(String value) {
         CheckBox cb = (CheckBox) node;
-        Boolean isCellEditor = (Boolean) cb.getProperties().get("marathon.celleditor");
-        if (isCellEditor != null && isCellEditor) {
-            String[] split = value.split(":");
-            value = split[1];
-        }
         if (!isValidState(value)) {
             throw new JavaAgentException(value + " is not a valid state for CheckBox.", null);
         }

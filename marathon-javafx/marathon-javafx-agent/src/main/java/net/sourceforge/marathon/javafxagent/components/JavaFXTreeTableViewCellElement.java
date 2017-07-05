@@ -17,20 +17,27 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.input.PickResult;
+import javafx.scene.text.Text;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 
 public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPseudoElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeTableViewCellElement.class.getName());
 
     private String path;
     private int viewColumn;
@@ -79,6 +86,12 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
     }
 
     @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+        TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
+        int rowIndex = getTreeTableNodeIndex(treeTableView, path);
+        if (getVisibleCellAt(treeTableView, rowIndex, viewColumn) == null) {
+            treeTableView.scrollToColumnIndex(viewColumn);
+            treeTableView.scrollTo(rowIndex);
+        }
         if (selector.equals("editor")) {
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
         }
@@ -122,5 +135,41 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) getPseudoComponent();
         JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
         return cellElement._getValue();
+    }
+
+    @Override public Point2D _getMidpoint() {
+        Node cell = getPseudoComponent();
+        Bounds boundsInParent = cell.getBoundsInParent();
+        double x = boundsInParent.getWidth() / 2;
+        double y = boundsInParent.getHeight() / 2;
+        return cell.getParent().localToParent(cell.localToParent(x, y));
+    }
+
+    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+        Node cell = getPseudoComponent();
+        target = getTextObj((TreeTableCell<?, ?>) cell);
+        Point2D targetXY = target.localToParent(xoffset, yoffset);
+        targetXY = node.localToScene(targetXY);
+        super.click(button, target, new PickResult(target, targetXY.getX(), targetXY.getY()), clickCount, xoffset, yoffset);
+    }
+
+    private Node getTextObj(TreeTableCell<?, ?> cell) {
+        for (Node child : cell.getChildrenUnmodifiable()) {
+            if (child instanceof Text) {
+                return child;
+            }
+        }
+        return cell;
+    }
+
+    @Override public Object _makeVisible() {
+        TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
+        TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) getPseudoComponent();
+        if (cell == null) {
+            treeTableView.scrollToColumnIndex(viewColumn);
+            treeTableView.scrollTo(getTreeTableNodeIndex(treeTableView, path));
+            return false;
+        }
+        return true;
     }
 }

@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -48,6 +49,8 @@ import net.sourceforge.marathon.javaagent.components.FileDialogElement;
 import sun.awt.AppContext;
 
 public class JavaTargetLocator {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaTargetLocator.class.getName());
 
     public static class ElementMap {
         private Map<String, IJavaElement> elements = new HashMap<String, IJavaElement>();

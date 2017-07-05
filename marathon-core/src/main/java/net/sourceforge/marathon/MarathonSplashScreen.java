@@ -16,6 +16,7 @@
 package net.sourceforge.marathon;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -33,6 +34,8 @@ import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.display.VersionInfo;
 
 public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonSplashScreen.class.getName());
 
     private VersionInfo versionInfo;
     private static final Duration SPLASH_DISPLAY_TIME = new Duration(2000);

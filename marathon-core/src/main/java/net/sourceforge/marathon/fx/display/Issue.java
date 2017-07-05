@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,8 @@ import com.google.common.io.Files;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class Issue {
+
+    public static final Logger LOGGER = Logger.getLogger(Issue.class.getName());
 
     private JSONArray issues;
 

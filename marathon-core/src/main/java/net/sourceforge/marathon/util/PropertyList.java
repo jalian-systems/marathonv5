@@ -17,12 +17,16 @@ package net.sourceforge.marathon.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class PropertyList {
+    
+    public static final Logger LOGGER = Logger.getLogger(PropertyList.Property.class.getName());
+
     public static class Property {
         private String key;
         private SimpleStringProperty propertyName;

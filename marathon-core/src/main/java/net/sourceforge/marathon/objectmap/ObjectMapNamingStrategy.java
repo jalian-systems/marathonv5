@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
@@ -44,6 +45,8 @@ import net.sourceforge.marathon.runtime.api.PropertyHelper;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 
 public class ObjectMapNamingStrategy implements INamingStrategy {
+
+    public static final Logger LOGGER = Logger.getLogger(ObjectMapNamingStrategy.class.getName());
 
     private static final String MODULE = "Object Map";
     protected ILogger runtimeLogger;

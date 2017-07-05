@@ -18,12 +18,16 @@ package net.sourceforge.marathon.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
  * Matches filenames to given pattern
  */
 public class FilePatternMatcher {
+    
+    public static final Logger LOGGER = Logger.getLogger(FilePatternMatcher.class.getName());
+
     private ArrayList<Pattern> hiddenFiles = new ArrayList<Pattern>();
 
     /**

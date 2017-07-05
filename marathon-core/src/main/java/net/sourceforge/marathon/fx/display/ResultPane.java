@@ -17,6 +17,7 @@ package net.sourceforge.marathon.fx.display;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -47,6 +48,8 @@ import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.SourceLine;
 
 public class ResultPane extends Dockable {
+
+    public static final Logger LOGGER = Logger.getLogger(ResultPane.class.getName());
 
     private BorderPane resultPaneLayout = new BorderPane();
 

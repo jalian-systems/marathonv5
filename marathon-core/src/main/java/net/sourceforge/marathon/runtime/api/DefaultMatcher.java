@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public abstract class DefaultMatcher implements IPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(DefaultMatcher.class.getName());
 
     @Override public boolean isMatched(String method, String name, String value) {
         String actual = getProperty(name);

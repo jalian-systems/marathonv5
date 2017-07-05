@@ -18,6 +18,7 @@ package net.sourceforge.marathon.testrunner.fxui;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class TestRunnerHistory {
+
+    public static final Logger LOGGER = Logger.getLogger(TestRunnerHistory.class.getName());
 
     private static TestRunnerHistory _instance = new TestRunnerHistory();
     private JSONObject history;

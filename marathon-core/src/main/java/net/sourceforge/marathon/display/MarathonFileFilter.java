@@ -17,12 +17,16 @@ package net.sourceforge.marathon.display;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.editor.IMarathonFileFilter;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 
 public class MarathonFileFilter implements IMarathonFileFilter, FileFilter {
+    
+    public static final Logger LOGGER = Logger.getLogger(MarathonFileFilter.class.getName());
+
     private final IScriptModel scriptModel;
 
     public MarathonFileFilter() {

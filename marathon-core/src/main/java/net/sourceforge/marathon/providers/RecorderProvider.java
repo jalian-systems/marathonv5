@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.providers;
 
+import java.util.logging.Logger;
+
 import com.google.inject.Provider;
 
 import net.sourceforge.marathon.recorder.IScriptListener;
@@ -22,6 +24,8 @@ import net.sourceforge.marathon.recorder.ScriptRecorder;
 import net.sourceforge.marathon.runtime.api.IRecorder;
 
 public class RecorderProvider implements Provider<IRecorder> {
+
+    public static final Logger LOGGER = Logger.getLogger(RecorderProvider.class.getName());
 
     private IScriptListener scriptListener;
 

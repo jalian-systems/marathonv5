@@ -16,11 +16,14 @@
 package net.sourceforge.marathon.objectmap;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class PropertyInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(PropertyInfo.class.getName());
 
     private ObservableList<OMapComboBoxProperty> oMapProperties = FXCollections.observableArrayList();
     private String propertyName;

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javaagent.components;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JList;
 
@@ -36,6 +38,8 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JListJavaElement extends AbstractJavaElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JListJavaElement.class.getName());
 
     private interface Predicate {
         public boolean isValid(JListItemJavaElement e);
@@ -162,5 +166,11 @@ public class JListJavaElement extends AbstractJavaElement {
             pa.add(p);
         }
         return PropertyHelper.toString(pa.toArray(new Properties[pa.size()]), new String[] { "listText" });
+    }
+
+    public static int getIndexAt(JList list, Point point) {
+        if (point == null)
+            return list.getSelectedIndex();
+        return list.locationToIndex(point);
     }
 }

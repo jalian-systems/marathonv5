@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
@@ -23,6 +25,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXTreeCellElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXTreeCellElement.class.getName());
 
     public JavaFXTreeCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);

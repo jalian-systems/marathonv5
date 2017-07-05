@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javafx.collections.FXCollections;
@@ -35,6 +36,8 @@ import net.sourceforge.marathon.fx.display.ModuleInfo.ModuleDirElement;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class MarathonModuleStage extends ModalDialog<ModuleInfo> {
+
+    public static final Logger LOGGER = Logger.getLogger(MarathonModuleStage.class.getName());
 
     private ComboBox<ModuleDirElement> moduleDirComboBox = new ComboBox<>();
     private ComboBox<ModuleInfo.ModuleFileElement> moduleFileComboBox = new ComboBox<>();

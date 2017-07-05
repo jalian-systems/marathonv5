@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fxdocking;
 
+import java.util.logging.Logger;
+
 public class DockableSelectionEvent {
+
+    public static final Logger LOGGER = Logger.getLogger(DockableSelectionEvent.class.getName());
 
     private Dockable selected;
     private Dockable previous;

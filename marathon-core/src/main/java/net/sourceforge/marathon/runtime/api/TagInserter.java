@@ -15,7 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.logging.Logger;
+
 public class TagInserter {
+    
+    public static final Logger LOGGER = Logger.getLogger(TagInserter.class.getName());
+
     private CompositeScriptElement rootTag = new TestRootElement(null);
     private CompositeScriptElement currentContainer = null;
 

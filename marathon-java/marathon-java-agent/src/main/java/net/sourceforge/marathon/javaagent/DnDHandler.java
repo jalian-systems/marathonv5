@@ -28,11 +28,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 public class DnDHandler {
+
+    public static final Logger LOGGER = Logger.getLogger(DnDHandler.class.getName());
 
     private Component source;
     private Component dest;

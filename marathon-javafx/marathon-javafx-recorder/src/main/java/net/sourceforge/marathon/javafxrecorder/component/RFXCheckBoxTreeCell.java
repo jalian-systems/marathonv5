@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.component;
 
+import java.util.logging.Logger;
+
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -25,6 +27,8 @@ import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public class RFXCheckBoxTreeCell extends RFXComponent {
 
+    public static final Logger LOGGER = Logger.getLogger(RFXCheckBoxTreeCell.class.getName());
+
     public RFXCheckBoxTreeCell(Node source, JSONOMapConfig omapConfig, Point2D point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
     }
@@ -34,12 +38,15 @@ public class RFXCheckBoxTreeCell extends RFXComponent {
         CheckBoxTreeCell cell = (CheckBoxTreeCell) node;
         @SuppressWarnings("unchecked")
         ObservableValue<Boolean> call = (ObservableValue<Boolean>) cell.getSelectedStateCallback().call(cell.getTreeItem());
-        int selection = call.getValue() ? 2 : 0;
-        String cellText = cell.getText();
-        if (cellText == null) {
-            cellText = "";
+        String cbText;
+        if (call != null) {
+            int selection = call.getValue() ? 2 : 0;
+            cbText = JavaFXCheckBoxElement.states[selection];
+        } else {
+            Node cb = cell.getGraphic();
+            RFXComponent comp = getFinder().findRawRComponent(cb, null, null);
+            cbText = comp._getValue();
         }
-        String text = cellText + ":" + JavaFXCheckBoxElement.states[selection];
-        return text;
+        return cbText;
     }
 }

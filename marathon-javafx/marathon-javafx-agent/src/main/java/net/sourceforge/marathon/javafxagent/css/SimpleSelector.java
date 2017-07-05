@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent.css;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONException;
 
@@ -29,6 +30,8 @@ import net.sourceforge.marathon.javafxagent.NoSuchWindowException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 
 public class SimpleSelector implements Selector {
+
+    public static final Logger LOGGER = Logger.getLogger(SimpleSelector.class.getName());
 
     private String tag;
 

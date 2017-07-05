@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.event.ChangeEvent;
 
@@ -47,6 +48,8 @@ import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
 public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
+
+    public static final Logger LOGGER = Logger.getLogger(RFXComponent.class.getName());
 
     protected IJSONRecorder recorder;
     protected JSONOMapConfig omapConfig;
@@ -156,7 +159,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
     }
 
     private JSONObject addWindowParents(JSONObject r, JSONObject current) {
-        Stage stage = getStage(node.getScene().getWindow());
+        Stage stage = (Stage) node.getScene().getWindow();
         while (stage != null) {
             JSONObject pWindow = getContextJSONObject(stage);
             if (r == null) {
@@ -243,9 +246,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         if (getText() != null) {
             addMethod(l, "getText");
         }
-        if (getContent() != null) {
-            addMethod(l, "getContent");
-        }
         if (getLabeledBy() != null) {
             addMethod(l, "getLabeledBy");
         }
@@ -286,10 +286,6 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
-    }
-
-    public String[][] getContent() {
-        return null;
     }
 
     public static Object unboxPremitiveArray(Object r) {

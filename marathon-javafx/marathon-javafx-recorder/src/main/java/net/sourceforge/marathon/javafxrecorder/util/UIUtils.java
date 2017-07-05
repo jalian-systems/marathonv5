@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxrecorder.util;
 
+import java.util.logging.Logger;
+
 import javax.swing.Action;
 import javax.swing.JButton;
 
 public class UIUtils {
+
+    public static final Logger LOGGER = Logger.getLogger(UIUtils.class.getName());
 
     public static JButton createActionButton(Action action) {
         return new JButton(action);

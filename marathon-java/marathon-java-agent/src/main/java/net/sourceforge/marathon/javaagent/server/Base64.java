@@ -1,6 +1,7 @@
 package net.sourceforge.marathon.javaagent.server;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * A very fast and memory efficient class to encode and decode to and from
@@ -82,6 +83,9 @@ import java.util.Arrays;
  */
 
 public class Base64 {
+    
+    public static final Logger LOGGER = Logger.getLogger(Base64.class.getName());
+
     private static final char[] CA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
     private static final int[] IA = new int[256];
 

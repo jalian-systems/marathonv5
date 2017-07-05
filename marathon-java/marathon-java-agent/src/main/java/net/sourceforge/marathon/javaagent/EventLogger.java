@@ -21,7 +21,7 @@ import java.awt.event.AWTEventListener;
 import java.util.logging.Logger;
 
 public class EventLogger {
-    private static final Logger logger = Logger.getLogger(EventLogger.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(EventLogger.class.getName());
 
     public EventLogger(String eventsToLog) {
         long events = parse(eventsToLog);
@@ -43,15 +43,15 @@ public class EventLogger {
             try {
                 long events_v = ((Long) AWTEvent.class.getField(awtEventName).get(null)).longValue();
                 events |= events_v;
-                logger.info("Enabled event logging for " + awtEventName);
+                LOGGER.info("Enabled event logging for " + awtEventName);
             } catch (Throwable t) {
-                logger.warning("Event mask not found for " + awtEventName);
+                LOGGER.warning("Event mask not found for " + awtEventName);
             }
         }
         return events;
     }
 
     public void log(final AWTEvent e) {
-        logger.info(e.toString());
+        LOGGER.info(e.toString());
     }
 }

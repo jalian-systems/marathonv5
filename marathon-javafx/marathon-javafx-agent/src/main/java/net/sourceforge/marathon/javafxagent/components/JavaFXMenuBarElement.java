@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckMenuItem;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXMenuBarElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXMenuBarElement.class.getName());
 
     public JavaFXMenuBarElement(MenuBar node, IJavaFXAgent driver, JFXWindow window) {
         super(node, driver, window);

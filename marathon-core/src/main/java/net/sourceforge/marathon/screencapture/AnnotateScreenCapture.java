@@ -18,6 +18,7 @@ package net.sourceforge.marathon.screencapture;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -27,6 +28,8 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class AnnotateScreenCapture extends ModalDialog<String> {
+
+    public static final Logger LOGGER = Logger.getLogger(AnnotateScreenCapture.class.getName());
 
     private ButtonBar buttonBar = new ButtonBar();
     private Button doneButton = FXUIUtils.createButton("ok", "Done", true, "Done");

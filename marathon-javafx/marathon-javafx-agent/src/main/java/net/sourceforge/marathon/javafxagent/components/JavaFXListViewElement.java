@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +31,8 @@ import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
 public class JavaFXListViewElement extends JavaFXElement {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaFXListViewElement.class.getName());
 
     public JavaFXListViewElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
@@ -56,7 +59,10 @@ public class JavaFXListViewElement extends JavaFXElement {
         List<IJavaFXElement> r = new ArrayList<>();
         if (o.has("select")) {
             if (o.getString("select") != null) {
-                r.add(new JavaFXListViewItemElement(this, o.getString("select")));
+                JavaFXListViewItemElement e = new JavaFXListViewItemElement(this, o.getString("select"));
+                if (!((boolean) e._makeVisible()))
+                    return Arrays.asList();
+                r.add(e);
             }
         }
         return r;
@@ -87,22 +93,5 @@ public class JavaFXListViewElement extends JavaFXElement {
 
     @Override public String _getText() {
         return getListSelectionText((ListView<?>) getComponent());
-    }
-
-    public String getContent() {
-        return new JSONArray(getContent((ListView<?>) getComponent())).toString();
-    }
-
-    /*
-     * NOTE: Same code exits in RXFXListView class. So in case if you want to
-     * modify. Modify both.
-     */
-    private String[][] getContent(ListView<?> listView) {
-        int nItems = listView.getItems().size();
-        String[][] content = new String[1][nItems];
-        for (int i = 0; i < nItems; i++) {
-            content[0][i] = new JavaFXListViewItemElement(this, i)._getText();
-        }
-        return content;
     }
 }

@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -42,6 +43,8 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.css.FindByCssSelector;
 
 public class JavaAgent implements IJavaAgent {
+
+    public static final Logger LOGGER = Logger.getLogger(JavaAgent.class.getName());
 
     private static final String VERSION = "1.0";
 

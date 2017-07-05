@@ -15,7 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.fx.display;
 
+import java.util.logging.Logger;
+
 public class VersionInfo {
+
+    public static final Logger LOGGER = Logger.getLogger(VersionInfo.class.getName());
 
     private String version;
     private String blurbTitle;

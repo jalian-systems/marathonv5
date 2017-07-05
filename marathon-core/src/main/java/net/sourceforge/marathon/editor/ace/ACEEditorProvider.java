@@ -15,10 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.editor.ace;
 
+import java.util.logging.Logger;
+
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.editor.IEditorProvider;
 
 public class ACEEditorProvider implements IEditorProvider {
+
+    public static final Logger LOGGER = Logger.getLogger(ACEEditorProvider.class.getName());
 
     @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         return new ACEEditor(linenumbers, startLineNumber, withToolbar);

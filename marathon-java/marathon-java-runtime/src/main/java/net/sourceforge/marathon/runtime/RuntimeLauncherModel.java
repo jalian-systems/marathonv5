@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.javadriver.JavaProfile;
@@ -31,6 +32,8 @@ import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class RuntimeLauncherModel extends AbstractJavaDriverRuntimeLauncherModel
         implements IRuntimeLauncherModel, IJavaDriverRuntimeLauncherModel {
+
+    public static final Logger LOGGER = Logger.getLogger(RuntimeLauncherModel.class.getName());
 
     @Override public List<String> getPropertyKeys() {
         return Arrays.asList(Constants.PROP_APPLICATION_MAINCLASS, Constants.PROP_APPLICATION_ARGUMENTS,
