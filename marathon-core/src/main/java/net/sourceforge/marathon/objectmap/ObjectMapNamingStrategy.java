@@ -190,6 +190,14 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         if (omapComponents.size() == 1) {
             return omapComponents.get(0);
         }
+        if (omapComponents.size() == 2) {
+            if (omapComponents.get(0).withLastResortProperties()) {
+                return omapComponents.get(1);
+            }
+            if (omapComponents.get(1).withLastResortProperties()) {
+                return omapComponents.get(0);
+            }
+        }
         if (omapComponents.size() > 1) {
             String message = "More than one component matched for " + component;
             StringBuilder msg = new StringBuilder(message);
