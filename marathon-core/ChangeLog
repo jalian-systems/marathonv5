@@ -1,4 +1,4 @@
-Marathon Version 5.1.0.0 (5th July 2017)
+Marathon Version 5.1.0.1 (5th July 2017)
 1.  fix: You can select 'No Launcher' when creating a project.
 2.  fix: FX/DatePicker recording values which has not changed on focuslost.
 3.  fix: Added Java version check. Marathon checks for the minimal required version now.

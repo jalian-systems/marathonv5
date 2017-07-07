@@ -9,5 +9,5 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.sourceforge.marathon.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="marathon"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms128m -Xmx512m -Dmarathon.agent.file=${resource_loc:/marathon-java-agent/marathon-java-agent-5.1.0.0.jar} -Dmarathon.recorder.file=${resource_loc:/marathon-java-recorder/marathon-java-recorder-5.1.0.0.jar}"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms128m -Xmx512m -Dmarathon.agent.file=${resource_loc:/marathon-java-agent/marathon-java-agent-5.1.0.1.jar} -Dmarathon.recorder.file=${resource_loc:/marathon-java-recorder/marathon-java-recorder-5.1.0.1.jar}"/>
 </launchConfiguration>
