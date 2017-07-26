@@ -20,10 +20,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
@@ -73,10 +76,18 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(imagePanel);
         borderPane.setBottom(buttonBar);
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        borderPane.setPrefSize(visualBounds.getWidth() * 0.75, visualBounds.getHeight() * 0.75);
         return borderPane;
 
     }
 
+    @Override protected void initialize(Stage stage) {
+        super.initialize(stage);
+        stage.setX(5.0);
+        stage.setY(5.0);
+    }
+    
     @Override protected void setDefaultButton() {
     }
 
