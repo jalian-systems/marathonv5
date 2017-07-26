@@ -220,8 +220,7 @@ public class ObjectMap extends ObjectMapItem {
         if (omapComponent != null) {
             setDirty(true);
         }
-        // Check this out
-        // omapComponent.markEntryNeeded(true);
+        omapComponent.markEntryNeeded(true);
         return omapComponent;
     }
 
