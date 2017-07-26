@@ -142,13 +142,8 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     }
 
     private void onDefault() {
-        mouseTriggerField.setText(FXContextMenuTriggers.getContextMenuModifiers());
-        keyTriggerField
-                .setText(FXContextMenuTriggers.getContextMenuKeyModifiers() + "+" + FXContextMenuTriggers.getContextMenuKeyCode());
-        System.setProperty(Constants.PROP_RECORDER_KEYTRIGGER, keyTriggerField.getText());
-        System.setProperty(Constants.PROP_RECORDER_MOUSETRIGGER, mouseTriggerField.getText());
-        FXContextMenuTriggers.setContextMenuKey();
-        FXContextMenuTriggers.setContextMenuModifiers();
+        mouseTriggerField.setText(OSFXUtils.MOUSE_MENU_MASK + "+Button3");
+        keyTriggerField.setText(OSFXUtils.MOUSE_MENU_MASK + "+F8");
         TestCreator.setHideFilePattern(null);
         doNotHideMarathonITEBlurbs.setSelected(false);
     }
