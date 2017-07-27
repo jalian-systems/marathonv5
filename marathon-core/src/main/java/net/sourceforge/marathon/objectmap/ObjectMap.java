@@ -17,6 +17,7 @@ package net.sourceforge.marathon.objectmap;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -82,6 +83,7 @@ public class ObjectMap extends ObjectMapItem {
         container.setContainerRecognitionProperties(toplevelContainer);
         List<OMapProperty> generalProperties = getGeneralProperties(pa, gproperties, rproperties);
         container.setContainerGeneralProperties(generalProperties);
+        container.setCreated(Calendar.getInstance().getTime().getTime());
         logger.info(MODULE, "Created a new container: " + container);
         return container;
     }
@@ -269,6 +271,7 @@ public class ObjectMap extends ObjectMapItem {
         container.setContainerRecognitionProperties(toplevelContainer);
         List<OMapProperty> generalProperties = getGeneralProperties(attributes);
         container.setContainerGeneralProperties(generalProperties);
+        container.setCreated(Calendar.getInstance().getTime().getTime());
         logger.info(MODULE, "Created a new container: " + container);
         return container;
     }
