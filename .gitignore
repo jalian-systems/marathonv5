@@ -13,7 +13,7 @@ marathon-java/marathon-java-agent/.settings/
 marathon-java/marathon-java-agent/build/
 marathon-java/marathon-java-agent/marathon-java-agent.xml
 marathon-java/marathon-java-agent/.gitignore
-marathon-java/marathon-java-agent/marathon-java-agent-5.1.0.1.jar
+marathon-java/marathon-java-agent/marathon-java-agent-5.1.1.0.jar
 marathon-java/marathon-java-driver/.classpath
 marathon-java/marathon-java-driver/.project
 marathon-java/marathon-java-driver/.settings/
@@ -24,7 +24,7 @@ marathon-java/marathon-java-recorder/.settings/
 marathon-java/marathon-java-recorder/build/
 marathon-java/marathon-java-recorder/marathon-java-recorder.xml
 marathon-java/marathon-java-recorder/.gitignore
-marathon-java/marathon-java-recorder/marathon-java-recorder-5.1.0.1.jar
+marathon-java/marathon-java-recorder/marathon-java-recorder-5.1.1.0.jar
 marathon-java/marathon-java-runtime/.classpath
 marathon-java/marathon-java-runtime/.project
 marathon-java/marathon-java-runtime/.settings/
@@ -71,14 +71,14 @@ marathon-javafx/marathon-javafx-agent/.settings/
 marathon-javafx/marathon-javafx-agent/build/
 marathon-javafx/marathon-javafx-agent/marathon-javafx-agent.xml
 marathon-javafx/marathon-javafx-agent/.gitignore
-marathon-javafx/marathon-javafx-agent/marathon-javafx-agent-5.1.0.1.jar
+marathon-javafx/marathon-javafx-agent/marathon-javafx-agent-5.1.1.0.jar
 marathon-javafx/marathon-javafx-recorder/.classpath
 marathon-javafx/marathon-javafx-recorder/.project
 marathon-javafx/marathon-javafx-recorder/.settings/
 marathon-javafx/marathon-javafx-recorder/build/
 marathon-javafx/marathon-javafx-recorder/marathon-javafx-recorder.xml
 marathon-javafx/marathon-javafx-recorder/.gitignore
-marathon-javafx/marathon-javafx-recorder/marathon-javafx-recorder-5.1.0.1.jar
+marathon-javafx/marathon-javafx-recorder/marathon-javafx-recorder-5.1.1.0.jar
 marathon-javafx/marathon-javafx-agent/.externalToolBuilders/
 marathon-javafx/marathon-javafx-recorder/.externalToolBuilders/
 marathon-javafx/marathon-javafx-agent/test-output/
