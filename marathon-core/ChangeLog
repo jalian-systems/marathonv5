@@ -1,4 +1,4 @@
-Marathon Version 5.1.1.0 (31st July 2017)
+Marathon Version 5.1.1.1 (31st July 2017)
 1. fix: Added ruby helper commands
 2. chore: Added create and modifed time for OMapComponent and OMapContainer.
 3. fix: A regression of parsing a profile URL
