@@ -1,0 +1,17 @@
+PROG=`which "\$0"`
+DIST=`dirname \$PROG`
+
+if [ "\$DIST" = "." ]
+then
+  DIST=`pwd`
+else
+  SAVED="`pwd`"
+  cd "\$DIST"
+  DIST="`pwd`"
+  cd "\$SAVED"
+fi
+
+MARATHONHOME=\$DIST
+export GEM_PATH=\$MARATHONHOME/support/ruby-selenium-webdriver-${version}.jar
+
+java -Dfile.encoding=utf8 -jar "\$MARATHONHOME/support/$rubyJar" -S irb \$*

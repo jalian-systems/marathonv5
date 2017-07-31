@@ -65,6 +65,27 @@ task startScripts(type: Copy) {
     from('script-templates/marathon.bat') {
       expand( [ 'marathonJar' : jar.archiveName, ])
     }
+    from('script-templates/mruby') {
+      expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
+      fileMode(0755)
+    }
+    from('script-templates/mruby.bat') {
+      expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
+    }
+    from('script-templates/mirb') {
+      expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
+      fileMode(0755)
+    }
+    from('script-templates/mirb.bat') {
+      expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
+    }
+    from('script-templates/mgem') {
+      expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
+      fileMode(0755)
+    }
+    from('script-templates/mgem.bat') {
+      expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
+    }
 }
 
 distributions {
