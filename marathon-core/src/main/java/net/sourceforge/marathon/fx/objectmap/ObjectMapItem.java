@@ -22,6 +22,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -180,6 +181,9 @@ public class ObjectMapItem implements IObjectMapTreeItem {
                     return properties;
                 }
             };
+            for (OMapContainer container : data) {
+                container.setModified(Calendar.getInstance().getTime().getTime());
+            }
             FileWriter writer = null;
             try{
             writer = new FileWriter(getOMapFile());

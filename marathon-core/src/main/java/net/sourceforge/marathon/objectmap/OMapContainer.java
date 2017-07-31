@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,6 +57,8 @@ public class OMapContainer implements IObjectMapTreeItem {
     private List<OMapComponent> components;
     private List<OMapRecognitionProperty> containerRecognitionProperties;
     private Map<String, OMapComponent> nameComponentMap;
+    private long created;
+    private long modified;
     private String fileName;
     private boolean loaded;
 
@@ -190,6 +193,7 @@ public class OMapContainer implements IObjectMapTreeItem {
             List<List<String>> rproperties, List<List<String>> nproperties, List<String> gproperties) {
         OMapComponent omapComponent = new OMapComponent(this);
         omapComponent.setName(name);
+        omapComponent.setCreated(Calendar.getInstance().getTime().getTime());
         List<OMapRecognitionProperty> omapRProps = new ArrayList<OMapRecognitionProperty>();
         for (String rprop : rprops) {
             OMapRecognitionProperty rproperty = new OMapRecognitionProperty();
@@ -468,6 +472,7 @@ public class OMapContainer implements IObjectMapTreeItem {
     public OMapComponent insertNameForComponent(String name, Properties urp, Properties properties) {
         OMapComponent omapComponent = new OMapComponent(this);
         omapComponent.setName(name);
+        omapComponent.setCreated(Calendar.getInstance().getTime().getTime());
         List<OMapRecognitionProperty> omapRProps = new ArrayList<OMapRecognitionProperty>();
         for (Object rprop : urp.keySet()) {
             OMapRecognitionProperty rproperty = new OMapRecognitionProperty();
@@ -548,6 +553,22 @@ public class OMapContainer implements IObjectMapTreeItem {
             rprops.add(p.getName());
         }
         return rprops;
+    }
+
+    public void setCreated(long time) {
+        created = time;
+    }
+    
+    public long getCreated() {
+        return created;
+    }
+    
+    public void setModified(long modified) {
+        this.modified = modified;
+    }
+    
+    public long getModified() {
+        return modified;
     }
 
 }

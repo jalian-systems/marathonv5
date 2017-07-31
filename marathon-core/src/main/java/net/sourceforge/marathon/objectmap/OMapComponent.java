@@ -32,6 +32,8 @@ public class OMapComponent implements IObjectMapTreeItem, Serializable {
     private List<OMapProperty> generalProperties;
     private List<OMapRecognitionProperty> componentRecognitionProperties;
     private transient OMapContainer parent;
+    private long created;
+    private long modified;
     private boolean entryNeeded = false;
     private boolean used = true;
 
@@ -145,5 +147,21 @@ public class OMapComponent implements IObjectMapTreeItem, Serializable {
 
     public void setUsed(boolean used) {
         this.used = used;
+    }
+    
+    public void setCreated(long created) {
+        this.created = created;
+    }
+    
+    public long getCreated() {
+        return created;
+    }
+    
+    public void setModified(long modified) {
+        this.modified = modified;
+    }
+    
+    public long getModified() {
+        return modified;
     }
 }

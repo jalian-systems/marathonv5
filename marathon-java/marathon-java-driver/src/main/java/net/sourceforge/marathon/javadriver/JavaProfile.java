@@ -655,7 +655,7 @@ public class JavaProfile {
             nativeEvents = true;
         }
         if (hasValueFor(values, "keepLog")) {
-            keepLog = Boolean.parseBoolean(findValueOf(values, "vmcommand"));
+            keepLog = Boolean.parseBoolean(findValueOf(values, "keepLog"));
         }
     }
 

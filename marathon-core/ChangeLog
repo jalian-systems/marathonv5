@@ -1,3 +1,11 @@
+Marathon Version 5.1.1.0 (31st July 2017)
+1. fix: Added ruby helper commands
+2. chore: Added create and modifed time for OMapComponent and OMapContainer.
+3. fix: A regression of parsing a profile URL
+4. fix: AnnotateScreenCapture stage made to take less space.
+5. fix: components #markEntryNeeded not set to true when recording using RemoteObjectMap server.
+6. fix: While recording more than one component matched in omap even if one of them uses last resort properties.
+
 Marathon Version 5.1.0.0 (5th July 2017)
 1.  fix: You can select 'No Launcher' when creating a project.
 2.  fix: FX/DatePicker recording values which has not changed on focuslost.
