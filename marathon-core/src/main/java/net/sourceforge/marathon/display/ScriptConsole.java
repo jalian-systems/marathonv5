@@ -65,6 +65,7 @@ public class ScriptConsole extends Stage implements IStdOut {
         setTitle("Script Console");
         initModality(Modality.APPLICATION_MODAL);
         textField = new TextField();
+        textArea.setFocusTraversable(false);
         root.setCenter(textArea);
         HBox.setHgrow(textField, Priority.ALWAYS);
 
@@ -223,6 +224,11 @@ public class ScriptConsole extends Stage implements IStdOut {
         System.setErr(new PrintStream(new OutputStream() {
             @Override public void write(int b) throws IOException {
                 append((byte) b, IStdOut.STD_ERR);
+            }
+        }));
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override public void write(int b) throws IOException {
+                append((byte) b, IStdOut.STD_OUT);
             }
         }));
     }
