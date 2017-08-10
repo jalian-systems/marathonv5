@@ -420,7 +420,12 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
         switch (code) {
         case ENTER:
             positionToLastLine();
-            if (event.isShiftDown()) {
+            boolean collect = false;
+            if (area.getText().toString().endsWith(";")) {
+                collect = true;
+                area.setText(area.getText().substring(0, area.getText().length() - 1));
+            }
+            if (collect || event.isShiftDown()) {
                 collectAction();
             } else {
                 if (functionText.length() > 0) {
