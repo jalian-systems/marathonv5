@@ -398,13 +398,10 @@ public class JavaServer extends NanoHTTPD {
             }
             Object result;
             result = invoke(route, query, uriParams, session, window, element);
-            if (result == null) {
-                return newFixedLengthResponse(Status.NO_CONTENT, MIME_HTML, null);
-            }
             if (result instanceof Response) {
                 return (Response) result;
             }
-            if (result == NULL_OBJECT) {
+            if (result == null || result == NULL_OBJECT) {
                 r.put("value", (Object) null);
             } else {
                 r.put("value", result);
