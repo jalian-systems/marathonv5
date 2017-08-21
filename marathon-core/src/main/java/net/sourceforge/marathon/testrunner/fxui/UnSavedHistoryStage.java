@@ -43,8 +43,9 @@ public class UnSavedHistoryStage extends RunHistoryStage {
 
     private void initComponents() {
         historyView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newVlaue) -> {
-            removeButton.setDisable(historyView.getSelectionModel().getSelectedItems().size() == 0);
-            favouriteButton.setDisable(historyView.getSelectionModel().getSelectedItems().size() == 0);
+            int selectedIndex = historyView.getSelectionModel().getSelectedIndex();
+            removeButton.setDisable(selectedIndex == -1);
+            favouriteButton.setDisable(selectedIndex == -1);
         });
 
         favouriteButton.setOnAction((e) -> onSave());
@@ -67,7 +68,8 @@ public class UnSavedHistoryStage extends RunHistoryStage {
     }
 
     private void onSave() {
-        MarathonInputStage testNameStage = new MarathonInputStage("Test name", "Save the current test run", FXUIUtils.getIcon("testrunner")) {
+        MarathonInputStage testNameStage = new MarathonInputStage("Test name", "Save the current test run",
+                FXUIUtils.getIcon("testrunner")) {
 
             @Override protected String validateInput(String name) {
                 String errorMessage = null;
@@ -88,7 +90,7 @@ public class UnSavedHistoryStage extends RunHistoryStage {
         TestNameHandler testNameHandler = new TestNameHandler();
         testNameStage.setInputHandler(testNameHandler);
         testNameStage.getStage().showAndWait();
-        if(testNameHandler.getTestName() == null)
+        if (testNameHandler.getTestName() == null)
             return;
         JSONObject jsonObject = removeAndGetTest("unsaved");
         if (jsonObject != null) {
