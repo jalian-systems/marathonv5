@@ -159,3 +159,6 @@
 .icon-button {
 	-fx-color: -fx-hover-base;
 }
+.marathon-input #ErrorMessageLabel{
+	-fx-padding: 0 0 0 5;
+}

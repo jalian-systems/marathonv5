@@ -63,6 +63,7 @@ public abstract class MarathonInputStage extends ModalDialog<String> {
                 errorMsgLabel.setVisible(false);
             }
         });
+        inputField.setPrefColumnCount(18);
 
         errorMsgLabel.setId("ErrorMessageLabel");
         errorMsgLabel.setGraphic(FXUIUtils.getIcon("error"));
