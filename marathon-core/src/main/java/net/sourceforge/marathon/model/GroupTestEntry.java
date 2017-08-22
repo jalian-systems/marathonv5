@@ -41,15 +41,21 @@ public class GroupTestEntry extends GroupEntry {
     }
 
     @Override public String getName() {
-        if (getTest() instanceof MarathonDDTestSuite)
-            return ((MarathonDDTestSuite) getTest()).getName();
-        return ((TestCase) getTest()).getName();
+        Test test = getTest();
+        if (test == null)
+            return null;
+        if (test instanceof MarathonDDTestSuite)
+            return ((MarathonDDTestSuite) test).getName();
+        return ((TestCase) test).getName();
     }
 
     @Override public Path getFilePath() {
-        if (getTest() instanceof MarathonDDTestSuite)
-            return ((MarathonDDTestSuite) getTest()).getFile().toPath();
-        return ((MarathonTestCase) getTest()).getFile().toPath();
+        Test test = getTest();
+        if (test == null)
+            return null;
+        if (test instanceof MarathonDDTestSuite)
+            return ((MarathonDDTestSuite) test).getFile().toPath();
+        return ((MarathonTestCase) test).getFile().toPath();
     }
 
     @Override public void setName(String name) {
