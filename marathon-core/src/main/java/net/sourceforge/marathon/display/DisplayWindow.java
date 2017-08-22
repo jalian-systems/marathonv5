@@ -109,7 +109,6 @@ import net.sourceforge.marathon.fx.display.FixtureStage;
 import net.sourceforge.marathon.fx.display.FixtureStageInfo;
 import net.sourceforge.marathon.fx.display.FunctionInfo;
 import net.sourceforge.marathon.fx.display.FunctionStage;
-import net.sourceforge.marathon.fx.display.TextAreaOutput;
 import net.sourceforge.marathon.fx.display.IFixtureStageInfoHandler;
 import net.sourceforge.marathon.fx.display.IFunctionArgumentHandler;
 import net.sourceforge.marathon.fx.display.IInputHanler;
@@ -126,6 +125,7 @@ import net.sourceforge.marathon.fx.display.ResultPane;
 import net.sourceforge.marathon.fx.display.ResultPane.IResultPaneSelectionListener;
 import net.sourceforge.marathon.fx.display.StatusBar;
 import net.sourceforge.marathon.fx.display.TestPropertiesInfo;
+import net.sourceforge.marathon.fx.display.TextAreaOutput;
 import net.sourceforge.marathon.fx.projectselection.MPFConfigurationInfo;
 import net.sourceforge.marathon.fx.projectselection.MPFConfigurationStage;
 import net.sourceforge.marathon.fxdocking.DockGroup;
@@ -997,8 +997,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             toolBar.getItems().addAll(this.displayWindow.getActionButton(this.displayWindow.pauseAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertScriptAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertChecklistAction),
-                    this.displayWindow.getActionButton(this.displayWindow.stopAction),
-                    this.displayWindow.rawRecordButton,
+                    this.displayWindow.getActionButton(this.displayWindow.stopAction), this.displayWindow.rawRecordButton,
                     this.displayWindow.getActionButton(this.displayWindow.recorderConsoleAction));
             textArea.setId("textArea");
             textArea.setEditable(false);
@@ -1715,9 +1714,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 setTheme();
                 ObservableList<MenuItem> items = menu.getItems();
                 for (MenuItem menuItem : items) {
-                    String theme = preferences.getString("name");
-                    if (menuItem.getText().equals(theme))
-                        ((RadioMenuItem) menuItem).setSelected(true);
+                    if (preferences.has("name")) {
+                        String theme = preferences.getString("name");
+                        if (menuItem.getText().equals(theme))
+                            ((RadioMenuItem) menuItem).setSelected(true);
+                    }
                 }
             }
         });
@@ -2603,7 +2604,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             FXUIUtils.showMessageDialog(this, "Unable to save file: " + e1.getMessage(), "Error in Saving", AlertType.ERROR);
         }
         if (file != null) {
-            navigatorPanel.updated(DisplayWindow.this, new FileResource(file));
             suitesPanel.updated(DisplayWindow.this, new FileResource(file));
             featuresPanel.updated(DisplayWindow.this, new FileResource(file));
             storiesPanel.updated(DisplayWindow.this, new FileResource(file));
@@ -2612,6 +2612,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 OSUtils.setLogConfiguration(Constants.getMarathonProjectDirectory().getAbsolutePath());
             if (file.getName().equals("project.json"))
                 Preferences.resetInstance();
+            navigatorPanel.updated(DisplayWindow.this, new FileResource(file));
             e.refreshResource();
             e.refresh();
             e.runWhenContentLoaded(() -> e.setCaretPosition(caretLine));
@@ -2961,13 +2962,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         projectEdited.add(true);
                         dispose();
                         Preferences.resetInstance();
-                        navigatorPanel.updated(DisplayWindow.this,
-                                new FileResource(new File(projectDir, ProjectFile.PROJECT_FILE)));
                     }
                 }
             };
             mpfConfigurationStage.getStage().showAndWait();
             RuntimeLogger.setRuntimeLogger(logViewLogger);
+            navigatorPanel.updated(DisplayWindow.this, new FileResource(new File(projectDir, ProjectFile.PROJECT_FILE)));
         });
     }
 
