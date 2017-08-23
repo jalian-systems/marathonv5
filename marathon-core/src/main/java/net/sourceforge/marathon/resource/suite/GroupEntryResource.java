@@ -77,7 +77,8 @@ public class GroupEntryResource extends Resource {
     }
 
     @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
-        if (getFilePath().equals(resource.getFilePath())) {
+        Path filePath = getFilePath();
+        if (filePath != null && filePath.equals(resource.getFilePath())) {
             found.add(this);
         }
         return found;
