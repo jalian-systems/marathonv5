@@ -139,6 +139,9 @@
 	-fx-font-weight: bold;
 	-fx-font-size: 1.5em;
 }
+.ace-editor-preferences-stage #ButtonBar{
+	-fx-padding: 2.5 5 2.5 5;
+} 
 
 .test-runner .green-bar {
 	-fx-accent: limegreen;
