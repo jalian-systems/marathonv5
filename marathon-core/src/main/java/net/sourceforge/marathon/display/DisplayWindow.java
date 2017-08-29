@@ -3293,6 +3293,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public void updateScript(String script) {
         currentEditor.setText(script);
+        if(!currentEditor.isDirty()) {
+            currentEditor.setDirty(true);
+            updateDockName(currentEditor);
+            updateView();
+        }
     }
 
     public void insertScript(String function) {
