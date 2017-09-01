@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.jruby.Ruby;
@@ -127,4 +128,7 @@ public class MarathonRuby extends Marathon {
         return true;
     }
 
+    public List<List<String>> getContainerNamingProperties(String className) {
+        return namingStrategy.getContainerNamingProperties(className);
+    }
 }
