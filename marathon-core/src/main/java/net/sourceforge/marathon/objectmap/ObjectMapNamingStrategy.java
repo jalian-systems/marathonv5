@@ -19,9 +19,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -384,6 +387,17 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return r;
     }
 
+    @Override public Map<String, List<List<String>>> getContainerNamingProperties() {
+        Map<String, List<List<String>>> containerNamingProperties = new HashMap<>();
+        List<ObjectIdentity> namingProperties = omapService.getContainerNamingProperties();
+        for (ObjectIdentity objectIdentity : namingProperties) {
+            String className = objectIdentity.getClassName();
+            if (!containerNamingProperties.containsKey(className))
+                containerNamingProperties.put(className, getContainerNamingProperties(className));
+        }
+        return containerNamingProperties;
+    }
+
     @Override public OMapComponent getOMapComponent(ComponentId id) throws ObjectMapException {
         if (id.getName() != null) {
             OMapComponent findComponentByName = omapService.findComponentByName(id.getName(), topContainerAccessor);
@@ -393,5 +407,9 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
             return findComponentByName;
         }
         return null;
+    }
+    
+    @Override public Collection<String> getAllProperties(){
+        return omapService.findProperties();
     }
 }

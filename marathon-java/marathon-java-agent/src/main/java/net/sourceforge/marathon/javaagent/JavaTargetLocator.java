@@ -52,6 +52,8 @@ public class JavaTargetLocator {
 
     public static final Logger LOGGER = Logger.getLogger(JavaTargetLocator.class.getName());
 
+    public static JSONArray allProperties;
+
     public static class ElementMap {
         private Map<String, IJavaElement> elements = new HashMap<String, IJavaElement>();
 
@@ -71,6 +73,7 @@ public class JavaTargetLocator {
 
         private ElementMap elements = new ElementMap();
         private Map<Component, IJavaElement> components = new HashMap<Component, IJavaElement>();
+        private List<List<String>> containerNP;
 
         private JWindow(Window window) {
             currentWindow = window;
@@ -88,9 +91,15 @@ public class JavaTargetLocator {
         public String getTitle() {
             return EventQueueWait.exec(new Callable<String>() {
                 @Override public String call() throws Exception {
-                    return new WindowTitle(currentWindow).getTitle();
+                    WindowTitle windowTitle = new WindowTitle(currentWindow);
+                    windowTitle.setContainerNamingProperties(containerNP);
+                    return windowTitle.getTitle();
                 }
             });
+        }
+
+        public void setContainerNamingProperties(List<List<String>> containerNP) {
+            this.containerNP = containerNP;
         }
 
         public void deleteWindow() {
@@ -189,6 +198,13 @@ public class JavaTargetLocator {
             JSONObject object = new JSONObject();
             object.put("title", title).put("component.class.name", componentClassName).put("oMapClassName", omapClassName)
                     .put("tagName", "window");
+            JavaElementPropertyAccessor pa = new JavaElementPropertyAccessor(currentWindow);
+            for (int i = 0; i < allProperties.length(); i++) {
+                String property = allProperties.getString(i);
+                String attribute = pa.getAttribute(property);
+                if (attribute != null)
+                    object.put(property, attribute);
+            }
             return object;
         }
 
@@ -237,12 +253,12 @@ public class JavaTargetLocator {
         this.driver = driver;
     }
 
-    public IJavaAgent window(final String nameOrHandleOrTitle) {
+    public IJavaAgent window(final String windowDetails) {
         if (driver.getImplicitWait() != 0) {
             new EventQueueWait() {
                 @Override public boolean till() {
                     try {
-                        return window_internal(nameOrHandleOrTitle) != null;
+                        return window_internal(windowDetails) != null;
                     } catch (NoSuchWindowException e) {
                         return false;
                     }
@@ -254,7 +270,7 @@ public class JavaTargetLocator {
         try {
             return EventQueueWait.exec(new Callable<IJavaAgent>() {
                 @Override public IJavaAgent call() {
-                    return window_internal(nameOrHandleOrTitle);
+                    return window_internal(windowDetails);
                 }
             });
         } catch (Exception e) {
@@ -262,16 +278,15 @@ public class JavaTargetLocator {
         }
     }
 
-    private IJavaAgent window_internal(String nameOrHandleOrTitle) {
+    private IJavaAgent window_internal(String windowDetails) {
         Window[] windows = getValidWindows();
-        for (Window window : windows) {
-            if (window.getName().equals(nameOrHandleOrTitle)) {
-                setCurrentWindow(window);
-                return driver;
-            }
-        }
+        String nameOrHandleOrTitle = null;
         for (Window window : windows) {
             JWindow jw = new JWindow(window);
+            JSONObject winDetailsJsonObject = new JSONObject(windowDetails);
+            nameOrHandleOrTitle = winDetailsJsonObject.getString("title");
+            jw.setContainerNamingProperties(getContainerNP(window, winDetailsJsonObject.getJSONObject("containerNP")));
+            allProperties = winDetailsJsonObject.getJSONArray("allProperties");
             String title = jw.getTitle();
             if (nameOrHandleOrTitle.startsWith("/") && !nameOrHandleOrTitle.startsWith("//")) {
                 if (title != null && title.matches(nameOrHandleOrTitle.substring(1))) {
@@ -300,6 +315,34 @@ public class JavaTargetLocator {
             }
         }
         throw new NoSuchWindowException("Cannot find window: " + nameOrHandleOrTitle, null);
+    }
+
+    private List<List<String>> getContainerNP(Window window, JSONObject map) {
+        String wClassName = getWindowClassName(map, window);
+        if (wClassName != null) {
+            JSONArray npArray = map.getJSONArray(wClassName);
+            List<List<String>> containerNP = new ArrayList<List<String>>();
+            for (int i = 0; i < npArray.length(); i++) {
+                List<String> pList = new ArrayList<String>();
+                JSONArray pArray = (JSONArray) npArray.get(i);
+                for (int j = 0; j < pArray.length(); j++) {
+                    pList.add(pArray.getString(j));
+                }
+                containerNP.add(pList);
+            }
+            return containerNP;
+        }
+        return null;
+    }
+
+    private String getWindowClassName(JSONObject containerNP, Window window) {
+        Class<?> klass = window.getClass();
+        while (klass.getName() != null && !klass.getName().equals("java.lang.Object")) {
+            if (containerNP.has(klass.getName()))
+                return klass.getName();
+            klass = klass.getSuperclass();
+        }
+        return null;
     }
 
     public void deleteWindow() {

@@ -83,7 +83,7 @@ class RubyMarathon < MarathonRuby
     end
 
     def windowClosed(title)
-        @webdriver.switch_to.window(title)
+        switch_to_window(title)
         @webdriver.close
     end
 
@@ -103,6 +103,10 @@ class RubyMarathon < MarathonRuby
         @collector.addfailure(e, result) unless e.isAbortTestCase
         raise e.getMessage if e.isAbortTestCase
     end
+            
+    def switch_to_window(title)
+      @webdriver.switch_to.window(getWinDetails(title))
+    end
 
     # Methods overridden from MarathonJava
     def quit()
@@ -119,7 +123,7 @@ class RubyMarathon < MarathonRuby
     end
 
     def switchToWindow(title)
-        @webdriver.switch_to.window(title)
+        switch_to_window(title)
         @current_search_context = @webdriver
     end
 

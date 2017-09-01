@@ -15,7 +15,9 @@
  ******************************************************************************/
 package net.sourceforge.marathon.api;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,4 +46,8 @@ public interface INamingStrategy {
     List<List<String>> getContainerNamingProperties(String string);
 
     OMapComponent getOMapComponent(ComponentId componentId) throws ObjectMapException;
+
+    Map<String, List<List<String>>> getContainerNamingProperties();
+
+    Collection<String> getAllProperties();
 }
