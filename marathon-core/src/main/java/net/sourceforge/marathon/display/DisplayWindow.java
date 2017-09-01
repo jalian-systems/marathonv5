@@ -340,6 +340,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             State oldState = state;
             state = newState;
             playAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
+            stopPlayAction.setEnabled(state.isPlaying());
             debugAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
             slowPlayAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
             recordAction.setEnabled(state.isStopped() && isProjectFile() && newState != State.RECORDING_ABOUT_TO_START);
@@ -1511,6 +1512,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menuBar.getMenus().add(menu);
         menu = new Menu("Marathon");
         menu.getItems().add(playAction.getMenuItem());
+        menu.getItems().add(stopPlayAction.getMenuItem());
         menu.getItems().add(slowPlayAction.getMenuItem());
         menu.getItems().add(debugAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
@@ -1764,6 +1766,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         toolBar.add(getActionButton(playAction));
+        toolBar.add(getActionButton(stopPlayAction));
         toolBar.add(getActionButton(slowPlayAction));
         toolBar.add(getActionButton(debugAction));
         toolBar.add(getActionButton(toggleBreakpointAction));
@@ -2689,6 +2692,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     @ISimpleAction(mneumonic = "Shortcut+P", description = "Play the testcase") AbstractSimpleAction playAction;
 
+    @ISimpleAction(description = "Stop the playing testcase") AbstractSimpleAction stopPlayAction;
+
     @ISimpleAction(description = "Show report for last test run") AbstractSimpleAction showReportAction;
 
     @ISimpleAction(mneumonic = "Shortcut+Alt+P", description = "Debug the testcase") AbstractSimpleAction debugAction;
@@ -2801,6 +2806,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         display.play(taConsole, debugging);
     }
 
+    public void onStopPlay() {
+        display.stop();
+    }
+    
     public void onDebug() {
         resultPane.clear();
         outputPane.clear();

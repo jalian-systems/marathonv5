@@ -127,6 +127,7 @@ public class FXUIUtils {
         fontIcons.put("insertScript", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.FUNCTION));
         fontIcons.put("insertChecklist", new FontInfo(materialIcons, MaterialIcons.ICON.PLAYLIST_ADD_CHECK));
         fontIcons.put("stop", new FontInfo(fontAwesome, FontAwesome.ICON.STOP, Color.RED));
+        fontIcons.put("stopPlay", new FontInfo(fontAwesome, FontAwesome.ICON.STOP, Color.RED));
         fontIcons.put("recorderConsole", new FontInfo(fontAwesome, FontAwesome.ICON.TERMINAL));
         fontIcons.put("openApplication", new FontInfo(materialIcons, MaterialIcons.ICON.OPEN_IN_NEW));
         fontIcons.put("closeApplication", new FontInfo(fontAwesome, FontAwesome.ICON.REMOVE, Color.RED));
