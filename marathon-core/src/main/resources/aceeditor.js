@@ -83,6 +83,8 @@ ACEEditor.prototype.setOptions = function(json) {
 	for(var key in json) {
 		if(key === 'showLineNumbers') {
 			this.ace.renderer.setOption('showLineNumbers', json.showLineNumbers);
+		} else if(key === 'showInvisibles') {
+			this.ace.setShowInvisibles(json.showInvisibles);
 		} else if(key === 'firstLineNumber') {
 			this.ace.setOption('firstLineNumber', json.firstLineNumber);
 		} else if(key === 'tabSize') {
@@ -106,6 +108,7 @@ ACEEditor.prototype.setOptions = function(json) {
 ACEEditor.prototype.getOptions = function(json) {
 	return {
 		showLineNumbers: this.ace.renderer.getOption('showLineNumbers'),
+		showInvisibles: this.ace.getShowInvisibles(),
 		tabSize: this.ace.getSession().getTabSize(),
 		tabConversion: this.ace.getSession().getUseSoftTabs(),
 		overwrite: this.ace.getSession().getOverwrite(),

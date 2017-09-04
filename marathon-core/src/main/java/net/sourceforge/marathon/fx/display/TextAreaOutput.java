@@ -32,6 +32,8 @@ public class TextAreaOutput extends Dockable implements IStdOut {
     private TextArea textArea = new TextAreaLimited();
     private BorderPane content = new BorderPane();
 
+    private StringBuilder taText = new StringBuilder();
+
     private static final DockKey DOCK_KEY = new DockKey("Output", "Output", "Output from the scripts",
             FXUIUtils.getIcon("console_view"), TabPolicy.NotClosable, Side.BOTTOM);
 
@@ -58,10 +60,19 @@ public class TextAreaOutput extends Dockable implements IStdOut {
     }
 
     @Override public synchronized void append(String text, int type) {
+        taText.append(text);
+        if (text.contains("\n"))
+            flush();
+    }
+
+    private void flush() {
         Platform.runLater(() -> {
-            clearButton.setDisable(false);
-            exportButton.setDisable(false);
-            textArea.appendText(text);
+            if (clearButton.isDisabled()) {
+                clearButton.setDisable(false);
+                exportButton.setDisable(false);
+            }
+            textArea.appendText(taText.toString());
+            taText.setLength(0);
         });
     }
 

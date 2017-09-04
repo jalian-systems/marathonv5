@@ -60,6 +60,8 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private CheckBox tabConversionCheckBox;
     private CheckBox showLineNumbersCheckBox;
     private boolean previousShowLineNumbers;
+    private CheckBox showInvisiblesCheckBox;
+    private boolean previousShowInvisibles;
     private String previousFontSize;
 
     public AceEditorPreferencesStage(AceEditorPreferencesInfo preferenceInfo) {
@@ -70,6 +72,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         previousTabSize = preferenceInfo.getTabSize();
         previousTabConversion = preferenceInfo.getTabConversion();
         previousShowLineNumbers = preferenceInfo.getShowLineNumbers();
+        previousShowInvisibles = preferenceInfo.getShowInvisibles();
         previousFontSize = preferenceInfo.getFontSize();
         setCancelHandler(this);
         initComponents();
@@ -114,13 +117,18 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         showLineNumbersCheckBox.setSelected(previousShowLineNumbers);
         showLineNumbersCheckBox.selectedProperty().addListener((event, o, n) -> preferenceHandler.changeShowLineNumbers(n));
 
+        showInvisiblesCheckBox = new CheckBox("Show Whitespace");
+        showInvisiblesCheckBox.setSelected(previousShowInvisibles);
+        showInvisiblesCheckBox.selectedProperty().addListener((event, o, n) -> preferenceHandler.changeShowInvisibles(n));
+
         // @formatter:off
         formPane.addFormField("Theme", themesCombo)
                 .addFormField("Keyboard", kbHandlerCombo)
                 .addFormField("Font Size", fontSizeSpinner)
                 .addFormField("Tab Size", tabSizeSpinner)
                 .addFormField("", tabConversionCheckBox)
-                .addFormField("", showLineNumbersCheckBox);
+                .addFormField("", showLineNumbersCheckBox)
+                .addFormField("", showInvisiblesCheckBox);
         // @formatter:on
 
         root.setCenter(formPane);
@@ -149,6 +157,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         preferenceHandler.changeFontSize(previousFontSize);
         preferenceHandler.changeTabConversion(previousTabConversion);
         preferenceHandler.changeShowLineNumbers(previousShowLineNumbers);
+        preferenceHandler.changeShowInvisibles(previousShowInvisibles);
         dispose();
     }
 
@@ -160,6 +169,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         editorPreferences.put("tabSize", tabSizeSpinner.getValue());
         editorPreferences.put("tabConversion", tabConversionCheckBox.isSelected());
         editorPreferences.put("showLineNumbers", showLineNumbersCheckBox.isSelected());
+        editorPreferences.put("showInvisibles", showInvisiblesCheckBox.isSelected());
         editorPreferences.put("fontSize", fontSizeSpinner.getValue());
         preferences.save("ace-editor");
         dispose();
