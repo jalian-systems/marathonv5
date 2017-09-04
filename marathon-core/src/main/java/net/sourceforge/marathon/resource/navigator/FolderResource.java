@@ -221,7 +221,13 @@ public class FolderResource extends Resource {
         if (option.isPresent() && (option.get() == ButtonType.YES || option.get() == FXUIUtils.YES_ALL)) {
             if (Files.exists(path)) {
                 try {
+                    File file = path.toFile();
+                    File[] listFiles = file.listFiles();
                     option = Copy.delete(path, option);
+                    if (listFiles.length > 0)
+                        for (File f : listFiles)
+                            Event.fireEvent(this,
+                                    new ResourceModificationEvent(ResourceModificationEvent.DELETE, new FileResource(f)));
                     getParent().getChildren().remove(this);
                 } catch (IOException e) {
                     String message = String.format("Unable to delete: %s: %s%n", path, e);

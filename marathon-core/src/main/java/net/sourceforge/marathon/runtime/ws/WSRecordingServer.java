@@ -362,18 +362,13 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         if (!"window".equals(container.getString("container_type"))) {
             return ns.getContainerName(container);
         }
-        JSONObject urp = container.getJSONObject("urp");
+        JSONObject urp = container.getJSONObject("attributes");
         if (urp.has("title")) {
             return urp.getString("title");
         }
-        if (urp.has("name"))
-            return urp.getString("name");
-        urp = container.getJSONObject("containerURP");
-        if (urp.has("title")) {
-            return urp.getString("title");
-        }
-        urp = container.getJSONObject("attributes");
-        return urp.getString("title");
+        urp = container.getJSONObject("urp");
+        LOGGER.warning("Window attributes doesn't contain title. Using URP as title");
+        return urp.toString();
     }
 
     @Override public void pauseRecording() {

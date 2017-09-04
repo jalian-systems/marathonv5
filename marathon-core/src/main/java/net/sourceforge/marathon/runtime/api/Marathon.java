@@ -46,7 +46,7 @@ import net.sourceforge.marathon.objectmap.ObjectMapException;
 import net.sourceforge.marathon.runtime.NamingStrategyFactory;
 
 public class Marathon {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Marathon.class.getName());
 
     public interface ICloseHandler extends Runnable {
@@ -164,8 +164,8 @@ public class Marathon {
     }
 
     public void sleepForSlowPlay() {
-        if(Boolean.getBoolean("marathon.demo.pause")) {
-            while(!Boolean.getBoolean("marathon.demo.resume")) {
+        if (Boolean.getBoolean("marathon.demo.pause")) {
+            while (!Boolean.getBoolean("marathon.demo.resume")) {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -571,7 +571,7 @@ public class Marathon {
 
     public void saveScreenShotOnError() {
     }
-    
+
     public boolean windowMatchingTitle(String title) {
         IPropertyAccessor propertyAccessor = getDriverAsAccessor();
         List<List<String>> namingProperties = namingStrategy.getContainerNamingProperties("window");
@@ -608,5 +608,11 @@ public class Marathon {
         }
         sb.setLength(sb.length() - 1);
         return sb.toString();
+    }
+
+    public String getWinDetails(String title) {
+        return new JSONObject().put("title", title)
+                .put("containerNP", new JSONObject(namingStrategy.getContainerNamingProperties()))
+                .put("allProperties", namingStrategy.getAllProperties()).toString();
     }
 }

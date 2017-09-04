@@ -109,7 +109,6 @@ import net.sourceforge.marathon.fx.display.FixtureStage;
 import net.sourceforge.marathon.fx.display.FixtureStageInfo;
 import net.sourceforge.marathon.fx.display.FunctionInfo;
 import net.sourceforge.marathon.fx.display.FunctionStage;
-import net.sourceforge.marathon.fx.display.TextAreaOutput;
 import net.sourceforge.marathon.fx.display.IFixtureStageInfoHandler;
 import net.sourceforge.marathon.fx.display.IFunctionArgumentHandler;
 import net.sourceforge.marathon.fx.display.IInputHanler;
@@ -126,6 +125,7 @@ import net.sourceforge.marathon.fx.display.ResultPane;
 import net.sourceforge.marathon.fx.display.ResultPane.IResultPaneSelectionListener;
 import net.sourceforge.marathon.fx.display.StatusBar;
 import net.sourceforge.marathon.fx.display.TestPropertiesInfo;
+import net.sourceforge.marathon.fx.display.TextAreaOutput;
 import net.sourceforge.marathon.fx.projectselection.MPFConfigurationInfo;
 import net.sourceforge.marathon.fx.projectselection.MPFConfigurationStage;
 import net.sourceforge.marathon.fxdocking.DockGroup;
@@ -340,6 +340,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             State oldState = state;
             state = newState;
             playAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
+            stopPlayAction.setEnabled(state.isPlaying());
             debugAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
             slowPlayAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
             recordAction.setEnabled(state.isStopped() && isProjectFile() && newState != State.RECORDING_ABOUT_TO_START);
@@ -997,8 +998,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             toolBar.getItems().addAll(this.displayWindow.getActionButton(this.displayWindow.pauseAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertScriptAction),
                     this.displayWindow.getActionButton(this.displayWindow.insertChecklistAction),
-                    this.displayWindow.getActionButton(this.displayWindow.stopAction),
-                    this.displayWindow.rawRecordButton,
+                    this.displayWindow.getActionButton(this.displayWindow.stopAction), this.displayWindow.rawRecordButton,
                     this.displayWindow.getActionButton(this.displayWindow.recorderConsoleAction));
             textArea.setId("textArea");
             textArea.setEditable(false);
@@ -1512,6 +1512,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menuBar.getMenus().add(menu);
         menu = new Menu("Marathon");
         menu.getItems().add(playAction.getMenuItem());
+        menu.getItems().add(stopPlayAction.getMenuItem());
         menu.getItems().add(slowPlayAction.getMenuItem());
         menu.getItems().add(debugAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
@@ -1715,9 +1716,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 setTheme();
                 ObservableList<MenuItem> items = menu.getItems();
                 for (MenuItem menuItem : items) {
-                    String theme = preferences.getString("name");
-                    if (menuItem.getText().equals(theme))
-                        ((RadioMenuItem) menuItem).setSelected(true);
+                    if (preferences.has("name")) {
+                        String theme = preferences.getString("name");
+                        if (menuItem.getText().equals(theme))
+                            ((RadioMenuItem) menuItem).setSelected(true);
+                    }
                 }
             }
         });
@@ -1763,6 +1766,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         toolBar.add(getActionButton(playAction));
+        toolBar.add(getActionButton(stopPlayAction));
         toolBar.add(getActionButton(slowPlayAction));
         toolBar.add(getActionButton(debugAction));
         toolBar.add(getActionButton(toggleBreakpointAction));
@@ -2603,7 +2607,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             FXUIUtils.showMessageDialog(this, "Unable to save file: " + e1.getMessage(), "Error in Saving", AlertType.ERROR);
         }
         if (file != null) {
-            navigatorPanel.updated(DisplayWindow.this, new FileResource(file));
             suitesPanel.updated(DisplayWindow.this, new FileResource(file));
             featuresPanel.updated(DisplayWindow.this, new FileResource(file));
             storiesPanel.updated(DisplayWindow.this, new FileResource(file));
@@ -2612,6 +2615,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 OSUtils.setLogConfiguration(Constants.getMarathonProjectDirectory().getAbsolutePath());
             if (file.getName().equals("project.json"))
                 Preferences.resetInstance();
+            navigatorPanel.updated(DisplayWindow.this, new FileResource(file));
             e.refreshResource();
             e.refresh();
             e.runWhenContentLoaded(() -> e.setCaretPosition(caretLine));
@@ -2687,6 +2691,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      */
 
     @ISimpleAction(mneumonic = "Shortcut+P", description = "Play the testcase") AbstractSimpleAction playAction;
+
+    @ISimpleAction(description = "Stop the playing testcase") AbstractSimpleAction stopPlayAction;
 
     @ISimpleAction(description = "Show report for last test run") AbstractSimpleAction showReportAction;
 
@@ -2800,6 +2806,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         display.play(taConsole, debugging);
     }
 
+    public void onStopPlay() {
+        display.stop();
+    }
+    
     public void onDebug() {
         resultPane.clear();
         outputPane.clear();
@@ -2961,13 +2971,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         projectEdited.add(true);
                         dispose();
                         Preferences.resetInstance();
-                        navigatorPanel.updated(DisplayWindow.this,
-                                new FileResource(new File(projectDir, ProjectFile.PROJECT_FILE)));
                     }
                 }
             };
             mpfConfigurationStage.getStage().showAndWait();
             RuntimeLogger.setRuntimeLogger(logViewLogger);
+            navigatorPanel.updated(DisplayWindow.this, new FileResource(new File(projectDir, ProjectFile.PROJECT_FILE)));
         });
     }
 

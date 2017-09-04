@@ -327,7 +327,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
             if (runtime != null)
                 runtime.releaseInterpreters();
         }
-        if (shouldClose) {
+        if (shouldClose || playbackStopped) {
             closeApplication(closeApplicationNeeded);
         }
     }

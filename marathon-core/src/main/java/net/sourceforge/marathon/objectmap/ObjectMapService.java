@@ -17,11 +17,17 @@ package net.sourceforge.marathon.objectmap;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.ObjectIdentity;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.PropertyList;
@@ -33,6 +39,8 @@ public class ObjectMapService implements IObjectMapService {
 
     protected ObjectMapConfiguration configuration;
     protected ObjectMap objectMap;
+
+    private Collection<String> allProperties;
 
     @SuppressWarnings("unused") private static final Logger logger = Logger.getLogger(ObjectMapService.class.getName());
 
@@ -207,6 +215,40 @@ public class ObjectMapService implements IObjectMapService {
         OMapContainer oMapContainer = container.getOMapContainer(objectMap);
         synchronized (oMapContainer) {
             return objectMap.findComponentNames(oMapContainer);
+        }
+    }
+
+    @Override public Collection<String> findProperties() {
+        if (allProperties == null) {
+            allProperties = collectProperties();
+        }
+        return allProperties;
+    }
+
+    private Set<String> collectProperties() {
+        Set<String> allProps = new HashSet<String>();
+        allProps.addAll(getGeneralProperties());
+        collectProperties(allProps, new JSONArray(configuration.getRecognitionProperties()));
+        collectProperties(allProps, new JSONArray(getNamingProperties()));
+        collectProperties(allProps, new JSONArray(getContainerNamingProperties()));
+        collectProperties(allProps, new JSONArray(getContainerRecognitionProperties()));
+        allProps.add("type");
+        allProps.add("tagName");
+        allProps.add("indexOfType");
+        return allProps;
+    }
+
+    private void collectProperties(Set<String> allProps, JSONArray rps) {
+        for (int i = 0; i < rps.length(); i++) {
+            JSONObject rp = rps.getJSONObject(i);
+            JSONArray pls = rp.getJSONArray("propertyLists");
+            for (int j = 0; j < pls.length(); j++) {
+                JSONObject pl = pls.getJSONObject(j);
+                JSONArray ps = pl.getJSONArray("properties");
+                for (int k = 0; k < ps.length(); k++) {
+                    allProps.add(ps.getString(k));
+                }
+            }
         }
     }
 

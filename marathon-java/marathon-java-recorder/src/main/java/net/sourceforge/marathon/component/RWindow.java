@@ -40,6 +40,9 @@ public class RWindow extends RComponent {
     }
 
     public String getTitle() {
-        return new WindowTitle((Window) component).getTitle();
+        WindowTitle windowTitle = new WindowTitle((Window) component);
+        windowTitle.setContainerNamingProperties(omapConfig.findContainerNP(component.getClass()));
+        return windowTitle.getTitle();
     }
+
 }

@@ -83,7 +83,7 @@ class RubyMarathon < MarathonRuby
     end
 
     def windowClosed(title)
-        @webdriver.switch_to.window(title)
+        switch_to_window(title)
         @webdriver.close
     end
 
@@ -103,6 +103,10 @@ class RubyMarathon < MarathonRuby
         @collector.addfailure(e, result) unless e.isAbortTestCase
         raise e.getMessage if e.isAbortTestCase
     end
+            
+    def switch_to_window(title)
+      @webdriver.switch_to.window(getWinDetails(title))
+    end
 
     # Methods overridden from MarathonJava
     def quit()
@@ -111,7 +115,31 @@ class RubyMarathon < MarathonRuby
     end
 
     def switchToContext(title)
+      begin
         @current_search_context = get_leaf_component(ComponentId.new(title, nil))
+      rescue java.util.NoSuchElementException => e
+        nps = $marathon.getContainerNamingProperties('javax.swing.JInternalFrame')
+        frames = driver.find_elements(:css, 'internal-frame')
+        f = frames.find { |frame| create_name(frame, nps) == title }
+        @current_search_context = f if f
+        raise e if !f
+      end
+    end
+    
+    def create_name(frame, nps)
+      for np in nps
+        name_parts = []
+        for n in np
+           attr = frame.attribute(n)
+           if !attr
+             name_parts = nil
+             break
+           end
+           name_parts << attr
+        end
+        return name_parts.join(':') if name_parts
+      end
+      return nil
     end
 
     def setContext(context)
@@ -119,7 +147,7 @@ class RubyMarathon < MarathonRuby
     end
 
     def switchToWindow(title)
-        @webdriver.switch_to.window(title)
+        switch_to_window(title)
         @current_search_context = @webdriver
     end
 

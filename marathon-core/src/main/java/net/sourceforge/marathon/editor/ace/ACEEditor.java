@@ -283,6 +283,10 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
                 setShowLineNumbers(showLineNumbers);
             }
 
+            @Override public void changeShowInvisibles(Boolean showInvisibles) {
+                setShowInvisibles(showInvisibles);
+            }
+
             @Override public void changeFontSize(String fontSize) {
                 setFontSize(fontSize);
             }
@@ -606,6 +610,11 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         } else {
             setShowLineNumbers(true);
         }
+        if (preferences.has("showInvisibles")) {
+            setShowInvisibles(preferences.getBoolean("showInvisibles"));
+        } else {
+            setShowInvisibles(false);
+        }
         if (preferences.has("fontSize")) {
             setFontSize(preferences.getString("fontSize"));
         } else {
@@ -652,6 +661,10 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
 
     public void setShowLineNumbers(Boolean showLineNumbers) {
         setOptions(new JSONObject().put("showLineNumbers", showLineNumbers));
+    }
+
+    public void setShowInvisibles(Boolean showInvisibles) {
+        setOptions(new JSONObject().put("showInvisibles", showInvisibles));
     }
 
     public void onCommand(String key) {
