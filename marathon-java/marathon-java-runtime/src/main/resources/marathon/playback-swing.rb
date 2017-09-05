@@ -120,7 +120,7 @@ class RubyMarathon < MarathonRuby
       rescue java.util.NoSuchElementException => e
         nps = $marathon.getContainerNamingProperties('javax.swing.JInternalFrame')
         frames = driver.find_elements(:css, 'internal-frame')
-        f = frames.find { |frame| create_name(frame, nps) == title }
+        f = frames.find { |frame| n = create_name(frame, nps); n == title }
         @current_search_context = f if f
         raise e if !f
       end
@@ -135,7 +135,7 @@ class RubyMarathon < MarathonRuby
              name_parts = nil
              break
            end
-           name_parts << attr
+           name_parts << attr.strip
         end
         return name_parts.join(':') if name_parts
       end
@@ -560,11 +560,21 @@ end
 
 # Gets the available frames
 def get_frames
-  return driver.find_elements(:css, 'internal-frame')
+  nps = $marathon.getContainerNamingProperties('javax.swing.JInternalFrame')
+
+  frame_names = driver.find_elements(:css, 'internal-frame').map { |f|
+    $marathon.create_name(f, nps)
+  }
 end
 
 def get_frame_objects
-  return driver.find_elements(:css, 'internal-frame')
+  r = {}
+  nps = $marathon.getContainerNamingProperties('javax.swing.JInternalFrame')
+  frame_names = driver.find_elements(:css, 'internal-frame').map { |f|
+    n = $marathon.create_name(f, nps)
+    r[n] = f if n
+  }
+  r
 end
 
 # Recording sequence for a drag and drop operation. Marathon uses a Clipboard copy and paste
