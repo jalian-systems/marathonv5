@@ -140,10 +140,13 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         okButton.setOnAction((e) -> onOk());
         cancelButton.setOnAction((e) -> onCancel());
         defaultsButton.setOnAction((e) -> onDefault());
-
+        buttonBar = new ButtonBar() {
+            @Override protected double computePrefWidth(double height) {
+                return super.computePrefWidth(height) + 200;
+            }
+        };
         buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.getButtons().addAll(okButton, cancelButton, defaultsButton);
-        buttonBar.setMinWidth(Region.USE_COMPUTED_SIZE);
     }
 
     private void onOk() {
