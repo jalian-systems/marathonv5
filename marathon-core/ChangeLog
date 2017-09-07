@@ -1,3 +1,8 @@
+Marathon Version 5.1.3.0 (7th September 2017)
+1. fix: Down/Up/Left/Right keys causing issues due to KP_ bindings.
+2. fix: v3compatibility where column names are recorded as 'A', 'B' etc.
+3. fix: get_frames and get_frameobjects methods modified.
+
 Marathon Version 5.1.2.0 (4th September 2017)
 1.  fix: TextAreaOutputPane - add text only at EOL
 2.  fix: Added showInvisibles option to ace editor
