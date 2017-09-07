@@ -97,7 +97,7 @@ public class KeyStrokeParser {
         Field[] fields = KeyEvent.class.getDeclaredFields();
         for (Field field : fields) {
             String fieldName = field.getName();
-            if (fieldName.startsWith("VK")) {
+            if (fieldName.startsWith("VK_") && !fieldName.startsWith("VK_KP")) {
                 int keyCode = 0;
                 try {
                     keyCode = field.getInt(null);
@@ -107,26 +107,10 @@ public class KeyStrokeParser {
                     throw new Error("could not read key codes from VM!");
                 }
                 keyCodes.put(OSUtils.keyEventGetKeyText(keyCode), Integer.valueOf(keyCode));
+                keyCodes.put(Integer.valueOf(keyCode), OSUtils.keyEventGetKeyText(keyCode));
                 keyCodes.put(fieldName, Integer.valueOf(keyCode));
             }
         }
-        keyCodes.put("Ctrl", Integer.valueOf(KeyEvent.VK_CONTROL));
-        keyCodes.put("Shift", Integer.valueOf(KeyEvent.VK_SHIFT));
-        keyCodes.put("Enter", Integer.valueOf(KeyEvent.VK_ENTER));
-        keyCodes.put("Alt", Integer.valueOf(KeyEvent.VK_ALT));
-        keyCodes.put("Enter", Integer.valueOf(KeyEvent.VK_ENTER));
-        keyCodes.put("Meta", Integer.valueOf(KeyEvent.VK_META));
-        keyCodes.put("Space", Integer.valueOf(KeyEvent.VK_SPACE));
-        keyCodes.put("Escape", Integer.valueOf(KeyEvent.VK_ESCAPE));
-
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_CONTROL), "Ctrl");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_SHIFT), "Shift");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_ENTER), "Enter");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_ALT), "Alt");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_ENTER), "Enter");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_META), "Meta");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_SPACE), "Space");
-        keyCodes.put(Integer.valueOf(KeyEvent.VK_ESCAPE), "Escape");
     }
 
     public KeyStroke getKeyStroke() {
