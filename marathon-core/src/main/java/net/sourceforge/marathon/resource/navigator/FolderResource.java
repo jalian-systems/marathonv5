@@ -225,9 +225,11 @@ public class FolderResource extends Resource {
                     File[] listFiles = file.listFiles();
                     option = Copy.delete(path, option);
                     if (listFiles.length > 0)
-                        for (File f : listFiles)
+                        for (File f : listFiles) {
                             Event.fireEvent(this,
                                     new ResourceModificationEvent(ResourceModificationEvent.DELETE, new FileResource(f)));
+                        }
+                    Event.fireEvent(this, new ResourceModificationEvent(ResourceModificationEvent.DELETE, this));
                     getParent().getChildren().remove(this);
                 } catch (IOException e) {
                     String message = String.format("Unable to delete: %s: %s%n", path, e);

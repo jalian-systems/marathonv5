@@ -826,13 +826,14 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * Removes the given directory name from the module directories in the
      * project file.
      * 
-     * @param removeDir
+     * 
      */
-    public void removeModDirFromProjFile(String removeDir) {
+    public void removeModDirFromProjFile() {
         String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
         StringBuilder sbr = new StringBuilder();
         for (String moduleDir : moduleDirs) {
-            if (moduleDir.equals(removeDir)) {
+            File f = new File(moduleDir);
+            if (!f.exists()) {
                 continue;
             }
             sbr.append(getProjectRelativeName(moduleDir) + ";");
@@ -3455,6 +3456,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     public class ResourceChangeListener implements IResourceChangeListener {
 
         @Override public void deleted(IResourceActionSource source, Resource resource) {
+            String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
+            for (String moduleDir : moduleDirs) {
+                if (moduleDir.equals(resource.getFilePath().toString())) {
+                    removeModDirFromProjFile();
+                }
+            }
             if (resource.getFilePath() != null) {
                 File file = resource.getFilePath().toFile();
                 EditorDockable dockable = findEditorDockable(file);

@@ -64,7 +64,7 @@ import net.sourceforge.marathon.resource.navigator.FileResource;
 import net.sourceforge.marathon.resource.navigator.FolderResource;
 
 public class ResourceView extends TreeView<Resource> implements IResourceChangeListener {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ResourceView.class.getName());
 
     private IResourceActionHandler handler;
@@ -239,7 +239,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
                         if (renamed != null) {
                             commitEdit(renamed);
                             Resource parent = (Resource) value.getParent();
-                            if(parent != null) {
+                            if (parent != null) {
                                 int index = parent.getChildren().indexOf(value);
                                 parent.getChildren().remove(index);
                                 parent.getChildren().add(index, renamed);
