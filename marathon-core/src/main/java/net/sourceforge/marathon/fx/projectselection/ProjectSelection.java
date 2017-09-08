@@ -31,7 +31,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -44,6 +43,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.Constants;
@@ -61,7 +61,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
     private Button deleteButton = FXUIUtils.createButton("delete", "Delete project", false, "Delete");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private Button selectButton = FXUIUtils.createButton("ok", "Select project", true, "Select");;
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
 
     private ObservableList<ProjectInfo> projects;
     private INewProjectHandler newProjectHandler;
@@ -166,12 +166,6 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         cancelButton.setOnAction((e) -> onCancel());
         selectButton.setOnAction((e) -> onSelect(projectInfotable.getSelectionModel().getSelectedItem()));
 
-        buttonBar = new ButtonBar() {
-            @Override protected double computePrefWidth(double height) {
-                // TODO Auto-generated method stub
-                return super.computePrefWidth(height) + 100;
-            }
-        };
         buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.setId("ProjectSelectionButtonbar");
         buttonBar.getButtons().addAll(newButton, browseButton, deleteButton, editButton, cancelButton, selectButton);

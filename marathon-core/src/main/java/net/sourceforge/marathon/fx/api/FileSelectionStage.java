@@ -24,7 +24,6 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -98,8 +97,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         }
     }
 
-    private ButtonBar createButtonBar() {
-        ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX createButtonBar() {
+        ButtonBarX buttonBar = new ButtonBarX();
         buttonBar.setId("FileSelectionButtonBar");
         okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
         okButton.setDisable(true);

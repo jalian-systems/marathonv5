@@ -21,11 +21,11 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
@@ -64,7 +64,7 @@ public class GroupInputStage extends ModalDialog<GroupInputInfo> {
     }
 
     private Node createButtonBar() {
-        ButtonBar buttonBar = new ButtonBar();
+        ButtonBarX buttonBar = new ButtonBarX();
         okButton = FXUIUtils.createButton("ok", "Create " + type.fileType().toLowerCase() + " file", false, "OK");
         okButton.setOnAction(e -> onOK());
         okButton.disableProperty().bind(Bindings.isEmpty(name.textProperty()));

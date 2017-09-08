@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Jalian Systems Pvt. Ltd.
+ *  Copyright 2016 Jalian Systems Pvt. Ltd.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,13 @@ public abstract class ModalDialog<T> {
 
     public static final Logger LOGGER = Logger.getLogger(ModalDialog.class.getName());
 
-	private static final Image LOGO16 = FXUIUtils.getImageURL("logo16");
-	private static final Image LOGO32 = FXUIUtils.getImageURL("logo32");
-	private static final Image LOGO64 = FXUIUtils.getImageURL("logo64");
-	private static final Image LOGO128 = FXUIUtils.getImageURL("logo128");
-	private static final Image LOGO256 = FXUIUtils.getImageURL("logo256");
+    private static final Image LOGO16 = FXUIUtils.getImageURL("logo16");
+    private static final Image LOGO32 = FXUIUtils.getImageURL("logo32");
+    private static final Image LOGO64 = FXUIUtils.getImageURL("logo64");
+    private static final Image LOGO128 = FXUIUtils.getImageURL("logo128");
+    private static final Image LOGO256 = FXUIUtils.getImageURL("logo256");
 
-	private Stage stage;
+    private Stage stage;
     private T returnValue;
     private String title;
     private double sceneWidth;
@@ -149,13 +149,13 @@ public abstract class ModalDialog<T> {
         return stage;
     }
 
-	private void addIcons() {
-		stage.getIcons().add(LOGO16);
-		stage.getIcons().add(LOGO32);
-		stage.getIcons().add(LOGO64);
-		stage.getIcons().add(LOGO128);
-		stage.getIcons().add(LOGO256);
-	}
+    private void addIcons() {
+        stage.getIcons().add(LOGO16);
+        stage.getIcons().add(LOGO32);
+        stage.getIcons().add(LOGO64);
+        stage.getIcons().add(LOGO128);
+        stage.getIcons().add(LOGO256);
+    }
 
     public void addToolTips(Node node) {
         ObservableList<Node> children = getChildren(node);

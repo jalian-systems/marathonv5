@@ -22,14 +22,15 @@ import java.util.logging.Logger;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.api.ITestApplication;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.ApplicationLayout;
@@ -46,7 +47,7 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private Button testButton = FXUIUtils.createButton("test", "Test Settings...", true, "Test");
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private FixtureStageInfo fixtureStageInfo;
     private IFixtureStageInfoHandler fixtureStageInfoHandler;
     private ApplicationLayout applicationLayout;
@@ -85,6 +86,7 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
         okButton.setOnAction((e) -> onOK());
         cancelButton.setOnAction((e) -> dispose());
         testButton.setOnAction((e) -> onTest());
+        buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.getButtons().addAll(okButton, cancelButton, testButton);
     }
 

@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -30,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.api.ITestApplication;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.TestApplication;
@@ -83,8 +83,8 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
         return tabPane;
     }
 
-    private ButtonBar createButtonBar() {
-        ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX createButtonBar() {
+        ButtonBarX buttonBar = new ButtonBarX();
         buttonBar.setId("ConfigurationButtonBar");
         saveButton = FXUIUtils.createButton("save", "Save", true, "Save");
         saveButton.setOnAction((e) -> {

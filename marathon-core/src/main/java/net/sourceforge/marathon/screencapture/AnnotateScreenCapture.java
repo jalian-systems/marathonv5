@@ -23,10 +23,10 @@ import java.util.logging.Logger;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
@@ -34,7 +34,7 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
 
     public static final Logger LOGGER = Logger.getLogger(AnnotateScreenCapture.class.getName());
 
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button doneButton = FXUIUtils.createButton("ok", "Done", true, "Done");
     private Button saveButton = FXUIUtils.createButton("save", "Save the Screen Capture", true, "Save");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
@@ -87,7 +87,7 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
         stage.setX(5.0);
         stage.setY(5.0);
     }
-    
+
     @Override protected void setDefaultButton() {
     }
 

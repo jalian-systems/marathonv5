@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
@@ -31,6 +30,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ICancelHandler;
 import net.sourceforge.marathon.fx.api.ModalDialog;
@@ -48,7 +48,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private Button defaultsButton = FXUIUtils.createButton("Save as Default", "Save these settings for all editors", true,
             "Save as Default");
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private ComboBox<AceEditorTheme> themesCombo;
     private ComboBox<String> kbHandlerCombo;
     private AceEditorTheme previousTheme;
@@ -140,11 +140,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         okButton.setOnAction((e) -> onOk());
         cancelButton.setOnAction((e) -> onCancel());
         defaultsButton.setOnAction((e) -> onDefault());
-        buttonBar = new ButtonBar() {
-            @Override protected double computePrefWidth(double height) {
-                return super.computePrefWidth(height) + 200;
-            }
-        };
+
         buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.getButtons().addAll(okButton, cancelButton, defaultsButton);
     }
