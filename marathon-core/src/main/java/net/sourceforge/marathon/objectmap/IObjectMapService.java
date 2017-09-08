@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.objectmap;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,5 +47,7 @@ public interface IObjectMapService {
     public abstract String[] findComponentNames(IPropertyAccessor topContainerAccessor) throws ObjectMapException;
 
     public abstract List<ObjectIdentity> getContainerNamingProperties();
+
+    public Collection<String> findProperties();
 
 }

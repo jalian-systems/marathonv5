@@ -26,7 +26,7 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class JSONScriptElement implements IScriptElement {
-    
+
     public static final Logger LOGGER = Logger.getLogger(JSONScriptElement.class.getName());
 
     private final WindowId windowId;
@@ -64,7 +64,7 @@ public class JSONScriptElement implements IScriptElement {
     }
 
     private String enscriptWindowClosed() {
-        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("window_closed", name);
+        return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction("window_closed", windowId.getTitle());
     }
 
     private String enscriptWindowState() {
@@ -89,14 +89,13 @@ public class JSONScriptElement implements IScriptElement {
             }
         }
         Object value = event.get("value");
-        if(value == null || value == JSONObject.NULL)
+        if (value == null || value == JSONObject.NULL)
             value = "";
         if (method.equals("assert_content")) {
             return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, value);
         }
         if (cellinfo == null || "".equals(cellinfo)) {
-            return Indent.getIndent()
-                    + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, value);
+            return Indent.getIndent() + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, value);
         } else {
             return Indent.getIndent()
                     + ScriptModel.getModel().getScriptCodeForGenericAction(method, name, property, value, cellinfo);

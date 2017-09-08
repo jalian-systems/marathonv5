@@ -70,6 +70,10 @@ public class AceEditorPreferencesInfo {
         return options.getBoolean("showLineNumbers");
     }
 
+    public boolean getShowInvisibles() {
+        return options.getBoolean("showInvisibles");
+    }
+
     public String getFontSize() {
         return options.getString("fontSize");
     }

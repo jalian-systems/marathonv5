@@ -16,13 +16,11 @@
 package net.sourceforge.marathon.javaagent;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
+import java.util.List;
 import java.util.logging.Logger;
-
-import javax.swing.JLabel;
 
 public class WindowTitle {
 
@@ -30,12 +28,14 @@ public class WindowTitle {
 
     private Window window;
 
+    private List<List<String>> containerNP;
+
     public WindowTitle(Window window) {
         this.window = window;
     }
 
     public String getTitle() {
-        String title = getTitle(window);
+        String title = getTitleFromNP(window);
         Window[] windows = Window.getWindows();
         String original = title;
         int index = 1;
@@ -46,12 +46,39 @@ public class WindowTitle {
             if (!w.isVisible()) {
                 continue;
             }
-            String wTitle = getTitle(w);
+            String wTitle = getTitleFromNP(w);
             if (original.equals(wTitle)) {
                 title = original + "(" + index++ + ")";
             }
         }
         return title;
+    }
+
+    private String getTitleFromNP(Window w1) {
+        String title = null;
+        if (containerNP != null) {
+            for (List<String> list : containerNP) {
+                title = getWindowName(new JavaElementPropertyAccessor(w1), list);
+                if (title != null)
+                    break;
+            }
+        }
+        if (title == null) {
+            title = getTitle(w1);
+        }
+        return title;
+    }
+
+    private String getWindowName(JavaElementPropertyAccessor w, List<String> properties) {
+        StringBuilder sb = new StringBuilder();
+        for (String property : properties) {
+            String v = w.getAttribute(property);
+            if (v == null)
+                return null;
+            sb.append(v).append(':');
+        }
+        sb.setLength(sb.length() - 1);
+        return sb.toString().trim();
     }
 
     private String getTitle(Component component) {
@@ -61,44 +88,11 @@ public class WindowTitle {
         } else if (component instanceof Frame) {
             title = ((Frame) component).getTitle();
         }
-
-        if (title == null || "".equals(title)) {
-            title = titleFromFirstLabel(component);
-        }
-        if (title == null || "".equals(title)) {
-            title = component.getName();
-        }
-        if (title == null || "".equals(title)) {
-            title = component.getClass().getName();
-        }
-        return title;
+        return title == null ? "<NoTitle>" : title;
     }
 
-    private String titleFromFirstLabel(Component component) {
-        if (component instanceof Container) {
-            return titleFromFirstLabelOfContainer((Container) component);
-        }
-        return null;
-    }
-
-    private String titleFromFirstLabelOfContainer(Container component) {
-        Component[] components = component.getComponents();
-        for (Component c : components) {
-            String title = null;
-            if (c instanceof JLabel) {
-                title = ((JLabel) c).getText();
-            }
-            if (title != null && !"".equals(title)) {
-                return title;
-            }
-            if (c instanceof Container) {
-                title = titleFromFirstLabelOfContainer((Container) c);
-            }
-            if (title != null && !"".equals(title)) {
-                return title;
-            }
-        }
-        return null;
+    public void setContainerNamingProperties(List<List<String>> containerNP) {
+        this.containerNP = containerNP;
     }
 
 }

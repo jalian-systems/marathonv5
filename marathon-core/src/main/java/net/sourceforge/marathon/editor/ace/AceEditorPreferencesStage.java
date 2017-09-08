@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
@@ -31,6 +30,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ICancelHandler;
 import net.sourceforge.marathon.fx.api.ModalDialog;
@@ -48,7 +48,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private Button defaultsButton = FXUIUtils.createButton("Save as Default", "Save these settings for all editors", true,
             "Save as Default");
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private ComboBox<AceEditorTheme> themesCombo;
     private ComboBox<String> kbHandlerCombo;
     private AceEditorTheme previousTheme;
@@ -60,6 +60,8 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private CheckBox tabConversionCheckBox;
     private CheckBox showLineNumbersCheckBox;
     private boolean previousShowLineNumbers;
+    private CheckBox showInvisiblesCheckBox;
+    private boolean previousShowInvisibles;
     private String previousFontSize;
 
     public AceEditorPreferencesStage(AceEditorPreferencesInfo preferenceInfo) {
@@ -70,6 +72,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         previousTabSize = preferenceInfo.getTabSize();
         previousTabConversion = preferenceInfo.getTabConversion();
         previousShowLineNumbers = preferenceInfo.getShowLineNumbers();
+        previousShowInvisibles = preferenceInfo.getShowInvisibles();
         previousFontSize = preferenceInfo.getFontSize();
         setCancelHandler(this);
         initComponents();
@@ -114,13 +117,18 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         showLineNumbersCheckBox.setSelected(previousShowLineNumbers);
         showLineNumbersCheckBox.selectedProperty().addListener((event, o, n) -> preferenceHandler.changeShowLineNumbers(n));
 
+        showInvisiblesCheckBox = new CheckBox("Show Whitespace");
+        showInvisiblesCheckBox.setSelected(previousShowInvisibles);
+        showInvisiblesCheckBox.selectedProperty().addListener((event, o, n) -> preferenceHandler.changeShowInvisibles(n));
+
         // @formatter:off
         formPane.addFormField("Theme", themesCombo)
                 .addFormField("Keyboard", kbHandlerCombo)
                 .addFormField("Font Size", fontSizeSpinner)
                 .addFormField("Tab Size", tabSizeSpinner)
                 .addFormField("", tabConversionCheckBox)
-                .addFormField("", showLineNumbersCheckBox);
+                .addFormField("", showLineNumbersCheckBox)
+                .addFormField("", showInvisiblesCheckBox);
         // @formatter:on
 
         root.setCenter(formPane);
@@ -135,7 +143,6 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
 
         buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.getButtons().addAll(okButton, cancelButton, defaultsButton);
-        buttonBar.setMinWidth(Region.USE_COMPUTED_SIZE);
     }
 
     private void onOk() {
@@ -149,6 +156,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         preferenceHandler.changeFontSize(previousFontSize);
         preferenceHandler.changeTabConversion(previousTabConversion);
         preferenceHandler.changeShowLineNumbers(previousShowLineNumbers);
+        preferenceHandler.changeShowInvisibles(previousShowInvisibles);
         dispose();
     }
 
@@ -160,6 +168,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         editorPreferences.put("tabSize", tabSizeSpinner.getValue());
         editorPreferences.put("tabConversion", tabConversionCheckBox.isSelected());
         editorPreferences.put("showLineNumbers", showLineNumbersCheckBox.isSelected());
+        editorPreferences.put("showInvisibles", showInvisiblesCheckBox.isSelected());
         editorPreferences.put("fontSize", fontSizeSpinner.getValue());
         preferences.save("ace-editor");
         dispose();

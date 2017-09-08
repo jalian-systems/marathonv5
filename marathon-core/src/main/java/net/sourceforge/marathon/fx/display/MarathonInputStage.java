@@ -20,12 +20,12 @@ import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
@@ -39,7 +39,7 @@ public abstract class MarathonInputStage extends ModalDialog<String> {
     private Label errorMsgLabel = new Label("");
     protected Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
 
     public MarathonInputStage(String title, String subTitle, Node icon) {
         super(title, subTitle, icon);

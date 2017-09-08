@@ -63,6 +63,32 @@ public class JTableJavaElement extends AbstractJavaElement {
         }
     }
 
+    private static class RowColPropertyPredicate implements Predicate {
+
+        private String row;
+        private String column;
+
+        public RowColPropertyPredicate(String row, String column) {
+            this.row = row;
+            this.column = column;
+        }
+
+        @Override public boolean isValid(JTableCellJavaElement e) {
+            String eRow = e.getAttribute("row");
+            String eColumn = e.getAttribute("column");
+            if(row.equals(eRow)) {
+                if(column.equals(eColumn))
+                    return true;
+                if(column.length() == 1 && column.charAt(0) >= 'A' && column.charAt(0) <= 'Z') {
+                    int colId = column.charAt(0) - 'A' ;
+                    if((e.getViewColumn() - 1) == colId)
+                        return true;
+                }
+            }
+            return false;
+        }
+        
+    }
     private static interface Predicate {
         public boolean isValid(JTableCellJavaElement e);
     }
@@ -113,10 +139,11 @@ public class JTableJavaElement extends AbstractJavaElement {
         final Properties p;
         if (o.has("select")) {
             p = PropertyHelper.fromString(o.getString("select"), new String[][] { { "row", "column" } });
+            return collectCells(r, new RowColPropertyPredicate(p.getProperty("row"), p.getProperty("column")));
         } else {
             p = PropertyHelper.asProperties(o);
+            return collectCells(r, new PropertyPredicate(p));
         }
-        return collectCells(r, new PropertyPredicate(p));
     }
 
     public Component getEditor(final int viewRow, final int viewCol) {
@@ -267,6 +294,8 @@ public class JTableJavaElement extends AbstractJavaElement {
                 return i;
             }
         }
+        if(columnName.length() == 1 && columnName.charAt(0) >= 'A' && columnName.charAt(0) <= 'Z')
+            return columnName.charAt(0) - 'A' ;
         throw new RuntimeException("Could not find column " + columnName + " in table");
     }
 

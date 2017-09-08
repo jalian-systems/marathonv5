@@ -29,4 +29,6 @@ public interface IAceEditorPreferenceHandler {
 
     void changeFontSize(String fontSize);
 
+    void changeShowInvisibles(Boolean showInvisibles);
+
 }

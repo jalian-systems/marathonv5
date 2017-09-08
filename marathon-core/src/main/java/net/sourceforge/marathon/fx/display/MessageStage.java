@@ -19,12 +19,13 @@ import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
@@ -33,7 +34,7 @@ public class MessageStage extends ModalDialog<MessageInfo> {
     public static final Logger LOGGER = Logger.getLogger(MessageStage.class.getName());
 
     private MessageInfo resultInfo;
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private TextInputControl textArea;
     private Button closeButton = FXUIUtils.createButton("cancel", "Close", true, "Close");
 
@@ -55,6 +56,7 @@ public class MessageStage extends ModalDialog<MessageInfo> {
         textArea.setEditable(false);
 
         closeButton.setOnAction((e) -> dispose());
+        buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.getButtons().add(closeButton);
     }
 

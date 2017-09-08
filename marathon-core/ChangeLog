@@ -1,4 +1,29 @@
-Marathon Version 5.1.1.1 (31st July 2017)
+Marathon Version 5.1.3.0 (7th September 2017)
+1. fix: Down/Up/Left/Right keys causing issues due to KP_ bindings.
+2. fix: v3compatibility where column names are recorded as 'A', 'B' etc.
+3. fix: get_frames and get_frameobjects methods modified.
+
+Marathon Version 5.1.2.0 (4th September 2017)
+1.  fix: TextAreaOutputPane - add text only at EOL
+2.  fix: Added showInvisibles option to ace editor
+3.  fix: Added stopPlay button to UI
+4.  fix: Backward compatibility for internal frame
+5.  fix: with_window recording/playing is made compatible with V3
+6.  fix: Button bar alignment in AceEditorPreferencesStage.
+7.  fix: Created a new class ButtonBarX to fix the button bar alignment in ProjectSelection stage.
+8.  fix: Editors not closed when folder containing editor file is deleted.
+9.  fix: NPE when group editor is refreshed(test case deleted).
+10. fix : Padding for error label and set prefferd column count for text field in MarathonInputStage.
+11. fix: Navigator root name update after updating in Project Settings at DisplayWindow.
+12. fix: 'Welcome to marathon' link redirecting to top in #index.html
+13. fix: remove button enable and disable based on selection index in #UnSavedHistoryStage
+14. feat: tooltip for done button.
+15. fix: SocketError exceptions from JavaServer cleared (FX/Swing)
+16. feat: ScriptConsole a last ';' acts as if we pressed Shift+Enter
+17. fix: ScriptConsole focus on textfield
+18. fix: ScriptConsole change System.out to point to text area
+
+Marathon Version 5.1.1.0 (31st July 2017)
 1. fix: Added ruby helper commands
 2. chore: Added create and modifed time for OMapComponent and OMapContainer.
 3. fix: A regression of parsing a profile URL
