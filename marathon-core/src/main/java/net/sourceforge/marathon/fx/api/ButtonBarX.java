@@ -20,14 +20,16 @@ public class ButtonBarX extends ButtonBar {
         // determine the widest button
         double widest = buttonMinWidth;
         for (Node button : buttons) {
-            if (ButtonBar.isButtonUniformSize(button)) 
-                widest = Math.max(button.prefWidth(-1), widest);            
+            if (ButtonBar.isButtonUniformSize(button)) {
+                widest = Math.max(button.prefWidth(-1), widest);
+            }
         }
 
         // set the width of all buttons
         for (Node button : buttons) {
-            if (ButtonBar.isButtonUniformSize(button)) 
-                sizeButton(button, widest);            
+            if (ButtonBar.isButtonUniformSize(button)) {
+                sizeButton(button, widest);
+            }
         }
     }
 
