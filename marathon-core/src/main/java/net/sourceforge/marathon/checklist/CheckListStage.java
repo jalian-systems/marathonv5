@@ -19,10 +19,11 @@ import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class CheckListStage extends ModalDialog<CheckListFormNode> {
@@ -50,9 +51,10 @@ public class CheckListStage extends ModalDialog<CheckListFormNode> {
         return root;
     }
 
-    private ButtonBar createButtonBar() {
-        ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX createButtonBar() {
+        ButtonBarX buttonBar = new ButtonBarX();
         buttonBar.getButtons().addAll(getActionButtons());
+        buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         return buttonBar;
     }
 

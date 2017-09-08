@@ -23,7 +23,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
@@ -35,6 +34,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.checklist.CheckListForm.CheckListElement;
 import net.sourceforge.marathon.checklist.CheckListFormNode.Mode;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
@@ -50,7 +50,7 @@ public class MarathonCheckListStage extends ModalDialog<CheckListForm> {
     private SplitPane splitPane = new SplitPane();
     private BorderPane leftPane = new BorderPane();
     private BorderPane rightPane = new BorderPane();
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button doneButton;
 
     public MarathonCheckListStage(CheckListForm checkListInfo) {

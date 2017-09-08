@@ -19,24 +19,24 @@ import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class NewChekListInputStage extends ModalDialog<String> {
-    
+
     public static final Logger LOGGER = Logger.getLogger(NewChekListInputStage.class.getName());
 
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private TextField nameField = new TextField();
     private TextArea descriptionField = new TextArea();
-    private ButtonBar buttonBar = new ButtonBar();
-    private boolean ok = false ;
+    private ButtonBarX buttonBar = new ButtonBarX();
+    private boolean ok = false;
 
     public NewChekListInputStage() {
         super("New CheckList", "Create a new check list", FXUIUtils.getIcon("newCheckList"));

@@ -32,7 +32,6 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -53,6 +52,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.editor.IEditorProvider;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.Argument;
@@ -68,7 +68,7 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
     private IEditor documentArea;
 
     private SplitPane mainSplitPane = new SplitPane();
-    private ButtonBar topButtonBar = new ButtonBar();
+    private ButtonBarX topButtonBar = new ButtonBarX();
     private Button expandAllBtn = FXUIUtils.createButton("expandall", "Expand All");
     private Button collapseAllBtn = FXUIUtils.createButton("collapseall", "Collapse All");
     private Button refreshButton = FXUIUtils.createButton("refresh", "Refresh", true);
@@ -77,7 +77,7 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
     private VBox argumentPane;
     private CheckBox filterByName = new CheckBox("Filter by window name");
     private SplitPane functionSplitPane = new SplitPane();
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
 

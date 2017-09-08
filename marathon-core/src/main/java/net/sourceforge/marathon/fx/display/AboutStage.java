@@ -20,21 +20,21 @@ import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public class AboutStage extends ModalDialog<VersionInfo> {
-    
+
     public static final Logger LOGGER = Logger.getLogger(AboutStage.class.getName());
 
     private VBox infoBox = new VBox();
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button creditsButton = FXUIUtils.createButton("credits", "Credits", true, "Credits");
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
 
