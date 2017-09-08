@@ -19,13 +19,13 @@ import java.util.logging.Logger;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
@@ -35,7 +35,7 @@ public class CreditsStage extends ModalDialog<String> {
 
     private WebView webView = new WebView();
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
 
     public CreditsStage() {
         super("Credits", "Without the following projects, Marathon would not have been possible", FXUIUtils.getIcon("credits"));
@@ -109,17 +109,17 @@ public class CreditsStage extends ModalDialog<String> {
         content.append(getCredit("Guice",
                 "Guice (pronounced 'juice') is a lightweight dependency injection framework for Java 6 and above, which allows us to use the same code base for both Marathon and MarathonITE",
                 "https://github.com/google/guice"));
-        content.append(getCredit("Ace",
-                "The high performance code editor for the web, used in Marathon for displaying text content.",
-                "https://ace.c9.io/#nav=about"));
+        content.append(
+                getCredit("Ace", "The high performance code editor for the web, used in Marathon for displaying text content.",
+                        "https://ace.c9.io/#nav=about"));
 
         content.append(suffix);
         return content.toString();
     }
 
     private String getCredit(String name, String blurb, String website) {
-        String string = "<tr>" + "<td width=\"280px\" valign=\"center\" style=\"font-size:15px\" nowrap><a href=\"" + website + "\">" + name
-                + "</a>" + "<td style=\"font-size:15px\" valign=\"center\" >" + blurb + "</td>" + "</tr>";
+        String string = "<tr>" + "<td width=\"280px\" valign=\"center\" style=\"font-size:15px\" nowrap><a href=\"" + website
+                + "\">" + name + "</a>" + "<td style=\"font-size:15px\" valign=\"center\" >" + blurb + "</td>" + "</tr>";
         return string;
     }
 

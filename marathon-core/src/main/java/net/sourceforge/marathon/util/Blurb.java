@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -30,11 +29,12 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
 public abstract class Blurb {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Blurb.class.getName());
 
     private URL url;
@@ -84,7 +84,7 @@ public abstract class Blurb {
         private WebView webView = new WebView();
         private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
         private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
-        private ButtonBar buttonBar = new ButtonBar();
+        private ButtonBarX buttonBar = new ButtonBarX();
 
         public BlurbStage(BlurbInfo blurbInfo) {
             super(blurbInfo.getTitle(), null, null);
