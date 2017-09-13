@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -324,11 +325,11 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             }
         });
         setContextMenu(contextMenu);
-        setContextMenu((Resource) null);
+        setContextMenuItems();
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        getSelectionModel().selectedItemProperty().addListener((event, o, n) -> {
-            if (n != null && n.getValue() != null) {
-                setContextMenu(n != null ? n.getValue() : null);
+        getSelectionModel().getSelectedItems().addListener(new ListChangeListener<TreeItem<Resource>>() {
+            @Override public void onChanged(Change<? extends TreeItem<Resource>> c) {
+                setContextMenuItems();
             }
         });
         Callback<TreeView<Resource>, TreeCell<Resource>> value = new Callback<TreeView<Resource>, TreeCell<Resource>>() {
@@ -357,10 +358,11 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         }
     }
 
-    public void setContextMenu(Resource item) {
+    public void setContextMenuItems() {
         contextMenu.getItems().clear();
         MenuItem m;
         ObservableList<TreeItem<Resource>> selectedItems = getSelectionModel().getSelectedItems();
+        Resource item = (Resource) (selectedItems.size() != 0 ? selectedItems.get(0) : null);
         if (item != null && selectedItems.size() == 1 && (item instanceof FolderResource || item instanceof FileResource)) {
             m = new Menu("New");
             m.setDisable(item == null || selectedItems.size() != 1);
