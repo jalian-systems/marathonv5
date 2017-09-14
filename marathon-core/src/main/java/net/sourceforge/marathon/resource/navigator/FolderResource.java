@@ -167,8 +167,8 @@ public class FolderResource extends Resource {
     }
 
     @Override public void paste(Clipboard clipboard, Operation operation) {
-        if (getParent() != null) {
-            getParent().getValue().pasteInto(clipboard, operation);
+        if (getValue() != null) {
+            getValue().pasteInto(clipboard, operation);
         }
     }
 
