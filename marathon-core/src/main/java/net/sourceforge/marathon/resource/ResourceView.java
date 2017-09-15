@@ -236,6 +236,12 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
                 @Override public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
                         Resource value = getTreeItem().getValue();
+                        File file = new File(((FolderResource) value.getParent()).getFilePath().toFile(), textField.getText());
+                        if (file.exists()) {
+                            FXUIUtils.showMessageDialog(null, "File " + file.getName() + " already exists", null, AlertType.ERROR);
+                            cancelEdit();
+                            return;
+                        }
                         Resource renamed = value.rename(textField.getText());
                         if (renamed != null) {
                             commitEdit(renamed);
@@ -362,7 +368,16 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         contextMenu.getItems().clear();
         MenuItem m;
         ObservableList<TreeItem<Resource>> selectedItems = getSelectionModel().getSelectedItems();
-        Resource item = (Resource) (selectedItems.size() != 0 ? selectedItems.get(0) : null);
+        if (selectedItems.size() == 0) {
+            return;
+        }
+
+        // Bug : selected items in the list are not properly indexed when the
+        // selected items are unselected from top to bottom.
+        @SuppressWarnings("unused")
+        Resource i = (Resource) selectedItems.get(0);
+
+        Resource item = (Resource) selectedItems.get(0);
         if (item != null && selectedItems.size() == 1 && (item instanceof FolderResource || item instanceof FileResource)) {
             m = new Menu("New");
             m.setDisable(item == null || selectedItems.size() != 1);
@@ -380,6 +395,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         m.setOnAction((event) -> handler.open(source, item));
         contextMenu.getItems().add(m);
         Menu mm = new Menu("Open With");
+        mm.setDisable(item == null || !item.canOpen() || selectedItems.size() != 1);
         m = FXUIUtils.createMenuItem("defaultEditor", "Default Editor", "");
         m.setDisable(item == null || !item.canOpen() || selectedItems.size() != 1);
         m.setOnAction((event) -> handler.open(source, item));
@@ -490,6 +506,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         } else {
             newFile.mkdir();
         }
+        refreshView();
     }
 
     private void newFile(Resource resource) {
@@ -518,6 +535,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
                 FXUIUtils.showExceptionMessage("Couldn't create file.", e);
             }
         }
+        refreshView();
     }
 
     private void hide(ObservableList<TreeItem<Resource>> selectedItems) {
