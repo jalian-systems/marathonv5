@@ -841,6 +841,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
         try {
             updateProjectFile(Constants.PROP_MODULE_DIRS, sbr.toString());
+            resetModuleFunctions();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2810,7 +2811,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     public void onStopPlay() {
         display.stop();
     }
-    
+
     public void onDebug() {
         resultPane.clear();
         outputPane.clear();
@@ -3315,7 +3316,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public Module refreshModuleFunctions() {
-        moduleFunctions = null;
+        resetModuleFunctions();
         return getModuleFunctions();
     }
 
@@ -3469,6 +3470,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             for (String moduleDir : moduleDirs) {
                 if (moduleDir.equals(resource.getFilePath().toString())) {
                     removeModDirFromProjFile();
+                } else if (resource.getFilePath() != null) {
+                    File f = resource.getFilePath().toFile();
+                    if (f.getParentFile().getPath().contains(new File(moduleDir).getAbsolutePath())) {
+                        resetModuleFunctions();
+                    }
                 }
             }
             if (resource.getFilePath() != null) {
