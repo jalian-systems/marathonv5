@@ -114,7 +114,7 @@ public class JavaProfile {
     private String command;
     private String appletURL;
     private static String dirOfMarathonJavaDriverJar;
-    private boolean keepLog = false ;
+    private boolean keepLog = false;
 
     static {
         dirOfMarathonJavaDriverJar = ClassPathHelper.getClassPath(JavaProfile.class.getName());
@@ -285,8 +285,7 @@ public class JavaProfile {
                     .append("-Djava.util.logging.config.file=\"" + System.getProperty("java.util.logging.config.file") + "\" ");
         }
         if (System.getProperty("marathon.project.dir") != null) {
-            java_tool_options
-                    .append("-Dmarathon.project.dir=\"" + System.getProperty("marathon.project.dir") + "\" ");
+            java_tool_options.append("-Dmarathon.project.dir=\"" + System.getProperty("marathon.project.dir") + "\" ");
         }
         java_tool_options.setLength(java_tool_options.length() - 1);
         return java_tool_options.toString();
@@ -591,6 +590,9 @@ public class JavaProfile {
         if (executableJar != null) {
             builder.addParameter("executablejar", executableJar);
         }
+        if (launchType != null) {
+            builder.addParameter("launchtype", launchType.name());
+        }
         builder.addParameter("keepLog", Boolean.toString(keepLog));
         return builder.build().toURL();
     }
@@ -653,6 +655,9 @@ public class JavaProfile {
         }
         if (hasValueFor(values, "nativeevents")) {
             nativeEvents = true;
+        }
+        if (hasValueFor(values, "launchtype")) {
+            launchType = LaunchType.valueOf(findValueOf(values, "launchtype"));
         }
         if (hasValueFor(values, "keepLog")) {
             keepLog = Boolean.parseBoolean(findValueOf(values, "keepLog"));
@@ -884,7 +889,7 @@ public class JavaProfile {
     public LaunchType getLaunchType() {
         return launchType;
     }
-    
+
     public void setKeepLog(boolean keepLog) {
         this.keepLog = keepLog;
     }

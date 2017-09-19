@@ -2800,6 +2800,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private HashSet<String> importStatements;
 
     public void onPlay() {
+        if (editingObjectMap())
+            return;
         resultPane.clear();
         outputPane.clear();
         debugging = false;
@@ -2813,6 +2815,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onDebug() {
+        if (editingObjectMap())
+            return;
         resultPane.clear();
         outputPane.clear();
         breakStackDepth = -1;
@@ -2823,6 +2827,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onSlowPlay() {
+        if (editingObjectMap())
+            return;
         String delay = System.getProperty(Constants.PROP_RUNTIME_DEFAULT_DELAY, "1000");
         if (delay.equals("")) {
             delay = "1000";
@@ -3294,6 +3300,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public void updateScript(String script) {
         currentEditor.setText(script);
+        if(!currentEditor.isDirty()) {
+            currentEditor.setDirty(true);
+            updateDockName(currentEditor);
+            updateView();
+        }
     }
 
     public void insertScript(String function) {
@@ -3407,6 +3418,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
 
         @Override public void play(IResourceActionSource source, List<Resource> resources) {
+            if (editingObjectMap())
+                return;
             Test test = null;
             if (resources.size() == 1 && resources.get(0).canPlaySingle()) {
                 open(source, resources.get(0));
