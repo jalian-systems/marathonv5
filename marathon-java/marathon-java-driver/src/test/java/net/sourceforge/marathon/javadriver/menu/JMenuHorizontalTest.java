@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.menu;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -30,8 +31,6 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import com.google.common.base.Predicate;
 
 import components.MenuLayoutDemo;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
@@ -100,8 +99,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertEquals(menuText, menu.getText());
         new Actions(driver).moveToElement(menu).click().perform();
 
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 3;
             }
         });
@@ -179,8 +178,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertEquals(3, menuItems.size());
 
         subMenu.click();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 5;
             }
         });
@@ -210,8 +209,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertEquals(3, menuItems.size());
 
         subMenu.click();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 5;
             }
         });
@@ -251,8 +250,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         List<WebElement> menuItems;
         menu.click();
         subMenu.click();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == initialMenuItemsSize + 2;
             }
         });

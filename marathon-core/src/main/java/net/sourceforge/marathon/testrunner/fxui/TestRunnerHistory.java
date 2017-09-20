@@ -66,7 +66,7 @@ public class TestRunnerHistory {
         File historyFile = new File(Constants.getMarathonProjectDirectory(), "runner.json");
         if (historyFile.exists()) {
             try {
-                return new JSONObject(Files.toString(historyFile, Charset.forName("utf-8")));
+                return new JSONObject(Files.asCharSource(historyFile, Charset.forName("utf-8")).read());
             } catch (JSONException e) {
             } catch (IOException e) {
             }

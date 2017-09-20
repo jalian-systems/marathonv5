@@ -85,7 +85,7 @@ public class Preferences {
         File preferenceFile = new File(mpd, "project.json");
         if (preferenceFile.exists()) {
             try {
-                return new JSONObject(Files.toString(preferenceFile, Charset.forName("utf-8")));
+                return new JSONObject(Files.asCharSource(preferenceFile, Charset.forName("utf-8")).read());
             } catch (JSONException e) {
             } catch (IOException e) {
             }

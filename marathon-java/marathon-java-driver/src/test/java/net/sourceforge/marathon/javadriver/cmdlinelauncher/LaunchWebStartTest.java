@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.cmdlinelauncher;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchWindowException;
@@ -28,7 +29,7 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
+import com.sun.jna.Platform;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
@@ -54,8 +55,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
     public void getDriverWithProfile() throws Throwable {
         createDriver("SwingSet3");
-        new WebDriverWait(driver, 60).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 60).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 try {
                     driver.switchTo().window("SwingSet3");
                 } catch (NoSuchWindowException e) {
@@ -75,8 +76,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
     public void getDriverWithProfileUsingRegexForTitle() throws Throwable {
         createDriver("/S.*3");
-        new WebDriverWait(driver, 60).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 60).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 try {
                     driver.switchTo().window("SwingSet3");
                 } catch (NoSuchWindowException e) {
@@ -121,9 +122,35 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         profile.setStartWindowTitle("SwingSet3");
         profile.addVMArgument("-Dhello=world");
         CommandLine commandLine = profile.getCommandLine();
-        @SuppressWarnings("deprecation")
-        String exec = CommandLine.find("java");
+        String exec = findExecutableOnPath("java");
         AssertJUnit.assertTrue(commandLine.toString(), commandLine.toString().contains(exec));
+    }
+
+    public static String findExecutableOnPath(String name) {
+        if (!Platform.isWindows() || name.endsWith(".exe") || name.endsWith(".bat")) {
+            return getPathTo(name);
+        }
+        String path;
+        path = getPathTo(name + ".exe");
+        if (path != null)
+            return path;
+        path = getPathTo(name + ".cmd");
+        if (path != null)
+            return path;
+        return getPathTo(name + ".bat");
+    }
+
+    public static String getPathTo(String name) throws AssertionError {
+        String path = System.getenv("Path");
+        if (path == null)
+            path = System.getenv("PATH");
+        for (String dirname : path.split(File.pathSeparator)) {
+            File file = new File(dirname, name);
+            if (file.isFile() && file.canExecute()) {
+                return file.getAbsolutePath();
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) throws InterruptedException {

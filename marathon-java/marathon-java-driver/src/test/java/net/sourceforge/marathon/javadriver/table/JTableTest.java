@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.table;
 
 import java.awt.BorderLayout;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
@@ -34,8 +35,6 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import com.google.common.base.Predicate;
 
 import components.TableFilterDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
@@ -237,8 +236,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         final WebElement firstItem = header.findElement(By.cssSelector(".::nth-item(1)"));
         AssertJUnit.assertNull(firstItem.getAttribute("icon"));
         firstItem.click();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver input) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver input) {
                 return firstItem.getAttribute("icon") != null;
             }
         });
@@ -261,16 +260,16 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         Keys menuKey = getMenuKey(table);
         WebElement cell_3_3 = driver.findElement(By.cssSelector("table::mnth-cell(" + 3 + ", " + 3 + ")"));
         cell_3_3.click();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver input) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver input) {
                 return "2".equals(table.getAttribute("selectedRow"));
             }
         });
         AssertJUnit.assertEquals(2 + "", table.getAttribute("selectedRow"));
         WebElement cell_5_1 = driver.findElement(By.cssSelector("table::mnth-cell(" + 5 + ", " + 1 + ")"));
         new Actions(driver).moveToElement(cell_5_1).sendKeys(menuKey).click().sendKeys(Keys.NULL).perform();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver input) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver input) {
                 return "[2, 4]".equals(table.getAttribute("selectedRows"));
             }
         });

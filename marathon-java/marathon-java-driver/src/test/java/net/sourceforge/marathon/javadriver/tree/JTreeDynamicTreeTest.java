@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.tree;
 
 import java.awt.BorderLayout;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -33,8 +34,6 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import com.google.common.base.Predicate;
 
 import components.DynamicTreeDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
@@ -120,8 +119,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         editor.clear();
         editor.sendKeys("Hello World", Keys.ENTER);
         root.submit();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver input) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver input) {
                 return root.getText().equals("Hello World");
             }
         });
@@ -179,9 +178,9 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertEquals("Child 2", node6.getText());
     }
 
-    private Predicate<WebDriver> hasAttributeValue(final WebElement element, final String attribute, final String value) {
-        return new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver input) {
+    private Function<WebDriver, Boolean> hasAttributeValue(final WebElement element, final String attribute, final String value) {
+        return new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver input) {
                 return value.equals(element.getAttribute(attribute));
             }
 

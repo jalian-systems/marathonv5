@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.editorpane;
 
 import java.awt.BorderLayout;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -30,7 +31,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
 import com.sun.swingset3.demos.editorpane.EditorPaneDemo;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
@@ -108,8 +108,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         WebElement title = editor.findElement(By.cssSelector(".::tag('a')[text='Title Page']"));
         AssertJUnit.assertEquals("Title Page", title.getText());
         title.click();
-        new WebDriverWait(driver, 3).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 WebElement editor = driver.findElement(By.cssSelector("editor-pane"));
                 List<WebElement> links = editor.findElements(By.cssSelector(".::tag('a')"));
                 return links.size() == 2;

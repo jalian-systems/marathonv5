@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -598,7 +599,7 @@ public class JavaProfile {
     }
 
     private void parse(URL url) throws URISyntaxException {
-        List<NameValuePair> values = URLEncodedUtils.parse(url.toURI(), "utf-8");
+        List<NameValuePair> values = URLEncodedUtils.parse(url.toURI(), StandardCharsets.UTF_8);
         String launchModeStr = findValueOf(values, "launchmode");
         launchMode = LaunchMode.valueOf(launchModeStr);
         for (int i = 1;; i++) {

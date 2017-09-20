@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.recorder;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchWindowException;
@@ -27,7 +28,6 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
 import com.sun.swingset3.SwingSet3;
 
 import net.sourceforge.marathon.javadriver.ClassPathHelper;
@@ -59,8 +59,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 
     public void checkBasicRecording() throws Throwable {
         createDriver("SwingSet3");
-        new WebDriverWait(driver, 60).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 60).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 try {
                     driver.switchTo().window("SwingSet3");
                 } catch (NoSuchWindowException e) {
