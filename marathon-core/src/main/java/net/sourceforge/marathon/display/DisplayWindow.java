@@ -2787,7 +2787,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 currentEditor.refresh();
             }
         }
-    };;
+    };
 
     private DockGroup editorDockGroup;
 
@@ -3300,7 +3300,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public void updateScript(String script) {
         currentEditor.setText(script);
-        if(!currentEditor.isDirty()) {
+        if (!currentEditor.isDirty()) {
             currentEditor.setDirty(true);
             updateDockName(currentEditor);
             updateView();

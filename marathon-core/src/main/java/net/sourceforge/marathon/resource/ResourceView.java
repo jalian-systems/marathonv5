@@ -454,7 +454,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         m.setOnAction((event) -> collapseAll());
         contextMenu.getItems().add(m);
         contextMenu.getItems().add(new SeparatorMenuItem());
-        m = FXUIUtils.createMenuItem("refresh", "Refresh", "F5");
+        m = FXUIUtils.createMenuItem("refresh", "Refresh", "Shortcut+F5");
         m.setOnAction((x) -> refreshView());
         contextMenu.getItems().add(m);
         if (item != null && item.canHide()) {
