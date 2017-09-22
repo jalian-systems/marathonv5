@@ -988,6 +988,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             });
             sizeToScene();
             setResizable(false);
+            setOnCloseRequest(e -> displayWindow.onStop());
         }
 
         private void initComponents() {
