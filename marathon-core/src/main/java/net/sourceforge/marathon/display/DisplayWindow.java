@@ -3405,7 +3405,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 try {
                     Desktop.getDesktop().open(filePath.toFile());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    FXUIUtils._showMessageDialog(DisplayWindow.this, e.getMessage(), "Can't open file with system editor",
+                            AlertType.ERROR);
                 }
             }
         }
