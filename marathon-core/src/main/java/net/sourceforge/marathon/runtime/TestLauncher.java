@@ -39,7 +39,7 @@ public class TestLauncher implements ITestLauncher {
 
     @Override public void destroy() {
         if (proxy != null) {
-            proxy.quit();
+            proxy.quit(true);
         }
     }
 

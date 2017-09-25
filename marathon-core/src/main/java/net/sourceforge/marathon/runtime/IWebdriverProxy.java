@@ -15,19 +15,10 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
-import java.util.Map;
-
-import org.openqa.selenium.remote.service.DriverService;
-
 public interface IWebdriverProxy {
 
     String getURL();
 
-    void quit();
+    void quit(boolean force);
 
-    DriverService createService(int port);
-
-    Object getTab(String name);
-    
-    Map<String, ?> getCapabilities();
 }

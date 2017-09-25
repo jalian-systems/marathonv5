@@ -15,33 +15,15 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
-import java.util.logging.Logger;
+import java.util.Map;
 
-import net.sourceforge.marathon.javadriver.JavaDriver;
-import net.sourceforge.marathon.javadriver.JavaProfile;
+import org.openqa.selenium.remote.service.DriverService;
 
-public class JavaWebDriverProxy implements IWebdriverProxy {
+public interface IWebBrowserProxy {
 
-    public static final Logger LOGGER = Logger.getLogger(JavaWebDriverProxy.class.getName());
+    DriverService createService(int port);
 
-    private JavaProfile profile;
-    private JavaDriver driver;
-
-    public JavaWebDriverProxy(JavaProfile profile, JavaDriver driver) {
-        this.profile = profile;
-        this.driver = driver;
-    }
-
-    @Override public String getURL() {
-        return profile.getURL();
-    }
-
-    @Override public void quit(boolean force) {
-        driver.quit();
-    }
-
-    @Override public String toString() {
-        return driver.toString();
-    }
-
+    Object getTab(String name);
+    
+    Map<String, ?> getCapabilities();
 }
