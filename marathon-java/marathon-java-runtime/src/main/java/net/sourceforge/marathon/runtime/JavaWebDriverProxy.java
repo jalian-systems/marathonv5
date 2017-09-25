@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.remote.service.DriverService;
@@ -48,6 +49,15 @@ public class JavaWebDriverProxy implements IWebdriverProxy {
 
     @Override public DriverService createService(int port) {
         // Do nothing.
+        return null;
+    }
+
+    @Override public Object getTab(String name) {
+        return null;
+    }
+
+    @Override public Map<String, ?> getCapabilities() {
+        // TODO Auto-generated method stub
         return null;
     }
 }

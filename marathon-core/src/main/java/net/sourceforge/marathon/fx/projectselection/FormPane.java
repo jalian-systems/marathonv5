@@ -69,6 +69,21 @@ public class FormPane extends GridPane {
         return this;
     }
 
+    public FormPane addFormField(String text, Node field, int colSpan, int rowSpan) {
+        Label label = new Label(text);
+        String labelId = idText(text);
+        label.setId(labelId);
+        GridPane.setValignment(label, VPos.TOP);
+        add(label, currentColumn++, currentRow, 1, 1);
+        field.setId(labelId + "-field-1");
+        setFormConstraints(field);
+        GridPane.setValignment(field, VPos.TOP);
+        add(field, currentColumn++, currentRow, colSpan, rowSpan);
+        currentRow += rowSpan;
+        currentColumn = 0;
+        return this;
+    }
+
     private String idText(String text) {
         String id = text.trim().replace(' ', '_').replaceAll("[^_a-zA-Z]", "").toLowerCase();
         return id;
@@ -89,9 +104,14 @@ public class FormPane extends GridPane {
             _setFormConstraints((Spinner<?>) field);
         } else if (field instanceof VBox) {
             _setFormConstraints((VBox) field);
+        } else if (field instanceof Label) {
+            _setFormConstraints((Label) field);
         } else {
             LOGGER.warning("FormPane.setFormConstraints(): unknown field type: " + field.getClass().getName());
         }
+    }
+
+    private void _setFormConstraints(Label field) {
     }
 
     private void _setFormConstraints(VBox field) {

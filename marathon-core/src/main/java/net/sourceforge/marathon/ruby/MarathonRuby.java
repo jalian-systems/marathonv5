@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.jruby.Ruby;
+import org.jruby.RubyHash;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -130,5 +131,9 @@ public class MarathonRuby extends Marathon {
 
     public List<List<String>> getContainerNamingProperties(String className) {
         return namingStrategy.getContainerNamingProperties(className);
+    }
+    
+    public static RubyHash update_capabilities(RubyHash caps, String browserName) {
+        return caps;
     }
 }
