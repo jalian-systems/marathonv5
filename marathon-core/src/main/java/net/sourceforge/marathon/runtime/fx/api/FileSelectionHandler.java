@@ -77,4 +77,8 @@ public class FileSelectionHandler implements EventHandler<ActionEvent> {
         }
     }
 
+    public void setFilter(ExtensionFilter filter) {
+        this.filter = filter;
+    }
+
 }
