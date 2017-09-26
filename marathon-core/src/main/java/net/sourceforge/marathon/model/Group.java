@@ -65,7 +65,7 @@ public class Group {
                     return false;
                 }
                 for (File file : files) {
-                    if (!Constants.isTestFile(file) && !Constants.isSuiteFile(file) && !Constants.isFeatureFile(file)
+                    if (!Constants.isTestFile(file) && Constants.isSuiteFile(file) && !Constants.isFeatureFile(file)
                             && !Constants.isStoryFile(file) && !Constants.isIssueFile(file)) {
                         return false;
                     }
