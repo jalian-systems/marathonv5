@@ -15,13 +15,10 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime;
 
-import org.openqa.selenium.remote.service.DriverService;
-
 public interface IWebdriverProxy {
 
     String getURL();
 
-    void quit();
+    void quit(boolean force);
 
-    DriverService createService(int port);
 }

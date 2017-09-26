@@ -238,7 +238,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
             script.quit();
         }
         if (webDriverProxy != null) {
-            webDriverProxy.quit();
+            webDriverProxy.quit(false);
         }
     }
 
