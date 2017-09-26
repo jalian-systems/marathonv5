@@ -814,10 +814,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private SplitMenuButton createNewButton() {
-        SplitMenuButton newButton = new SplitMenuButton(newTestcaseAction.getMenuItem(), etAction.getMenuItem(),
-                newModuleAction.getMenuItem(), newFixtureAction.getMenuItem(), newModuleDirAction.getMenuItem(),
-                newSuiteFileAction.getMenuItem(), newFeatureFileAction.getMenuItem(), newStoryFileAction.getMenuItem(),
-                newIssueFileAction.getMenuItem());
+        SplitMenuButton newButton = new SplitMenuButton(newTestcaseAction.getMenuItem(), etAction.getMenuItem());
         newButton.setGraphic(newTestcaseAction.getButton().getGraphic());
         newButton.setOnAction(newTestcaseAction.getButton().getOnAction());
         return newButton;
