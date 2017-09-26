@@ -16,13 +16,19 @@
 package net.sourceforge.marathon.ruby;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.jruby.Ruby;
+import org.jruby.RubyArray;
 import org.jruby.RubyHash;
+import org.jruby.RubyString;
+import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
+import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.runtime.api.DefaultMatcher;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.Marathon;
@@ -132,8 +138,45 @@ public class MarathonRuby extends Marathon {
     public List<List<String>> getContainerNamingProperties(String className) {
         return namingStrategy.getContainerNamingProperties(className);
     }
-    
-    public static RubyHash update_capabilities(RubyHash caps, String browserName) {
-        return caps;
+
+    public static RubyHash get_browser_caps(RubyHash caps) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> ourCaps = (Map<String, Object>) TestAttributes.get("capabilities");
+        if (ourCaps == null)
+            return new RubyHash(caps.getRuntime());
+        return map2hash(caps.getRuntime(), ourCaps);
     }
+
+    @SuppressWarnings("unchecked") private static RubyHash map2hash(Ruby ruby, Map<String, Object> ourCaps) {
+        RubyHash hash = new RubyHash(ruby);
+        Set<String> keySet = ourCaps.keySet();
+        for (String key : keySet) {
+            RubySymbol keySym = RubySymbol.newSymbol(ruby, key);
+            Object v = ourCaps.get(key);
+            if (v instanceof String) {
+                hash.put(keySym, RubyString.newString(ruby, (String) v));
+            } else if (v instanceof List) {
+                hash.put(keySym, map2list(ruby, (List<?>) v));
+            } else {
+                hash.put(keySym, map2hash(ruby, (Map<String, Object>) v));
+            }
+        }
+        return hash;
+    }
+
+    @SuppressWarnings("unchecked") private static RubyArray map2list(Ruby ruby, List<?> list) {
+        RubyArray array = new RubyArray(ruby, list.size());
+        int index = 0;
+        for (Object v : list) {
+            if (v instanceof String) {
+                array.set(index++, RubyString.newString(ruby, (String) v));
+            } else if (v instanceof List) {
+                array.set(index++, map2list(ruby, (List<?>) v));
+            } else {
+                array.set(index++, map2hash(ruby, (Map<String, Object>) v));
+            }
+        }
+        return array;
+    }
+
 }
