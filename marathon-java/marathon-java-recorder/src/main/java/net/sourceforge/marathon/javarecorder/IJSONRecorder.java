@@ -60,4 +60,6 @@ public interface IJSONRecorder {
 
     public abstract void recordFileDialog(String string);
 
+    public abstract boolean isPaused();
+
 }

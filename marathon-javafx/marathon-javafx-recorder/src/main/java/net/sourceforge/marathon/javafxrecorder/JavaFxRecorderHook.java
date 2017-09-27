@@ -375,6 +375,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     @Override public void handle(Event event) {
+        if (recorder.isPaused()) {
+            return;
+        }
         try {
             handle_internal(event);
         } catch (Throwable t) {
