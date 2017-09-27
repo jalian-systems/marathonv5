@@ -54,6 +54,8 @@ public class WSRecorder implements IJSONRecorder {
     private boolean rawRecording;
     private JSONObject contextMenuTriggers;
 
+    private boolean paused;
+
     static {
         timerinterval = Integer.valueOf(300);
     }
@@ -363,6 +365,14 @@ public class WSRecorder implements IJSONRecorder {
 
     public void setRawRecording(JSONObject o) {
         rawRecording = o.getBoolean("value");
+    }
+
+    public void setRecordingPause(JSONObject o) {
+        paused = o.getBoolean("value");
+    }
+
+    @Override public boolean isPaused() {
+        return paused;
     }
 
     @Override public void recordMenuItem(RFXComponent r) {
