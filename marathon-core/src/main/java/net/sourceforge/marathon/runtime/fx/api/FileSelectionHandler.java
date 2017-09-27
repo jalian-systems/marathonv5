@@ -58,18 +58,21 @@ public class FileSelectionHandler implements EventHandler<ActionEvent> {
     }
 
     public void setPreviousDir(File previousDir) {
-        this.previousDir = previousDir;
+        if (previousDir.exists())
+            this.previousDir = previousDir;
     }
 
     @Override public void handle(ActionEvent event) {
         if (mode == FILE_CHOOSER) {
-            List<File> selectedFiles = FXUIUtils.showOpenMultipleFileChooser(title, previousDir, parent != null ? parent.getStage() : null, filter);
+            List<File> selectedFiles = FXUIUtils.showOpenMultipleFileChooser(title, previousDir,
+                    parent != null ? parent.getStage() : null, filter);
             if (selectedFiles != null && selectedFiles.size() > 0) {
                 this.previousDir = selectedFiles.get(0).getParentFile();
                 fsl.filesSelected(selectedFiles, cookie);
             }
         } else if (mode == FILE_SAVE_CHOOSER) {
-            File selectedFile = FXUIUtils.showSaveFileChooser(title, previousDir, parent != null ? parent.getStage() : null, filter);
+            File selectedFile = FXUIUtils.showSaveFileChooser(title, previousDir, parent != null ? parent.getStage() : null,
+                    filter);
             if (selectedFile != null) {
                 this.previousDir = selectedFile.getParentFile();
                 fsl.filesSelected(Arrays.asList(selectedFile), cookie);
