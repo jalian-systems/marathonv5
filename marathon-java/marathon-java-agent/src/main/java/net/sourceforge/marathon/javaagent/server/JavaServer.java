@@ -520,7 +520,6 @@ public class JavaServer extends NanoHTTPD {
 
     public Response createSession(JSONObject query, JSONObject uriParams) {
         if (liveSession == null) {
-            LOGGER.warning("Query: " + query);
             JSONObject required = null;
             JSONObject desired = null;
             if (query.has("requiredCapabilities")) {
