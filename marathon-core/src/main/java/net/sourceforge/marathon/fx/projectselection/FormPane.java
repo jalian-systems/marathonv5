@@ -34,12 +34,15 @@ import javafx.scene.layout.VBox;
 
 public class FormPane extends GridPane {
 
+    public static interface ISetConstraints {
+        public void setFormConstraints(FormPane form);
+    }
+
     public static final Logger LOGGER = Logger.getLogger(FormPane.class.getName());
 
     private int columns;
 
     private int currentRow = 0;
-    private int currentColumn = 0;
 
     public FormPane(String styleClass, int columns) {
         this.columns = columns;
@@ -54,18 +57,19 @@ public class FormPane extends GridPane {
         String labelId = idText(text);
         label.setId(labelId);
         GridPane.setValignment(label, VPos.TOP);
-        add(label, currentColumn++, currentRow, 1, 1);
+        int column = 0;
+        add(label, column++, currentRow, 1, 1);
         int colspan = columns - fields.length;
         int fieldIndex = 1;
         for (Node field : fields) {
             field.setId(labelId + "-field-" + fieldIndex);
             setFormConstraints(field);
             GridPane.setValignment(field, VPos.TOP);
-            add(field, currentColumn++, currentRow, colspan, 1);
+            add(field, column++, currentRow, colspan, 1);
             fieldIndex++;
         }
         currentRow++;
-        currentColumn = 0;
+        column = 0;
         return this;
     }
 
@@ -74,13 +78,14 @@ public class FormPane extends GridPane {
         String labelId = idText(text);
         label.setId(labelId);
         GridPane.setValignment(label, VPos.TOP);
-        add(label, currentColumn++, currentRow, 1, 1);
+        int column = 0;
+        add(label, column++, currentRow, 1, 1);
         field.setId(labelId + "-field-1");
         setFormConstraints(field);
         GridPane.setValignment(field, VPos.TOP);
-        add(field, currentColumn++, currentRow, colSpan, rowSpan);
+        add(field, column++, currentRow, colSpan, rowSpan);
         currentRow += rowSpan;
-        currentColumn = 0;
+        column = 0;
         return this;
     }
 
@@ -90,7 +95,9 @@ public class FormPane extends GridPane {
     }
 
     private void setFormConstraints(Node field) {
-        if (field instanceof Button) {
+        if (field instanceof ISetConstraints) {
+            ((ISetConstraints) field).setFormConstraints(this);
+        } else if (field instanceof Button) {
             _setFormConstraints((Button) field);
         } else if (field instanceof TextField) {
             _setFormConstraints((TextField) field);
@@ -107,7 +114,7 @@ public class FormPane extends GridPane {
         } else if (field instanceof Label) {
             _setFormConstraints((Label) field);
         } else {
-            LOGGER.warning("FormPane.setFormConstraints(): unknown field type: " + field.getClass().getName());
+            LOGGER.info("FormPane.setFormConstraints(): unknown field type: " + field.getClass().getName());
         }
     }
 
