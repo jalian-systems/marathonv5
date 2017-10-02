@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
+import org.jruby.RubyBoolean;
 import org.jruby.RubyHash;
 import org.jruby.RubyString;
 import org.jruby.RubySymbol;
@@ -155,6 +156,8 @@ public class MarathonRuby extends Marathon {
             Object v = ourCaps.get(key);
             if (v instanceof String) {
                 hash.put(keySym, RubyString.newString(ruby, (String) v));
+            } else if(v instanceof Boolean) {
+                hash.put(keySym, RubyBoolean.newBoolean(ruby, (boolean) v));
             } else if (v instanceof List) {
                 hash.put(keySym, map2list(ruby, (List<?>) v));
             } else {
@@ -170,6 +173,8 @@ public class MarathonRuby extends Marathon {
         for (Object v : list) {
             if (v instanceof String) {
                 array.set(index++, RubyString.newString(ruby, (String) v));
+            } else if(v instanceof Boolean) {
+                array.set(index++, RubyBoolean.newBoolean(ruby, (boolean) v));
             } else if (v instanceof List) {
                 array.set(index++, map2list(ruby, (List<?>) v));
             } else {

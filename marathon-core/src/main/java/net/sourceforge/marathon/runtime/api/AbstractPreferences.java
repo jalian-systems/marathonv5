@@ -86,12 +86,17 @@ public abstract class AbstractPreferences {
     }
 
     private void firePreferenceChange(String section) {
+        fire(section);
+        fire("all");
+    }
+
+    public void fire(String section) {
         Set<IPreferenceChangeListener> sectionListeners = listeners.get(section);
         if (sectionListeners == null) {
             return;
         }
         for (IPreferenceChangeListener l : sectionListeners) {
-            l.preferencesChanged(section, getSection(section));
+            l.preferencesChanged(section, section.equals("all") ? null : getSection(section));
         }
     }
 

@@ -21,6 +21,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -105,6 +106,8 @@ public class FormPane extends GridPane {
             _setFormConstraints((TextArea) field);
         } else if (field instanceof ComboBox<?>) {
             _setFormConstraints((ComboBox<?>) field);
+        } else if (field instanceof ChoiceBox<?>) {
+            _setFormConstraints((ChoiceBox<?>) field);
         } else if (field instanceof CheckBox) {
             _setFormConstraints((CheckBox) field);
         } else if (field instanceof Spinner<?>) {
@@ -116,6 +119,11 @@ public class FormPane extends GridPane {
         } else {
             LOGGER.info("FormPane.setFormConstraints(): unknown field type: " + field.getClass().getName());
         }
+    }
+
+    private void _setFormConstraints(ChoiceBox<?> field) {
+        field.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(field, Priority.ALWAYS);
     }
 
     private void _setFormConstraints(Label field) {
