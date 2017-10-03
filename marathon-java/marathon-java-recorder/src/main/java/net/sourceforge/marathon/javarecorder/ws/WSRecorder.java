@@ -322,6 +322,8 @@ public class WSRecorder implements IJSONRecorder {
 
     private final Object contextMenuTriggersLock = new Object();
 
+    private boolean paused;
+
     @Override public JSONObject getContextMenuTriggers() {
         if (contextMenuTriggers == null) {
             synchronized (contextMenuTriggersLock) {
@@ -350,6 +352,14 @@ public class WSRecorder implements IJSONRecorder {
 
     public void setRawRecording(JSONObject o) {
         rawRecording = o.getBoolean("value");
+    }
+
+    public void setRecordingPause(JSONObject o) {
+        paused = o.getBoolean("value");
+    }
+
+    @Override public boolean isPaused() {
+        return paused;
     }
 
     @Override public void recordMenuItem(RComponent r) {
