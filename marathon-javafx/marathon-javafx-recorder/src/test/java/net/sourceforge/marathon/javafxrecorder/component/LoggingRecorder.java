@@ -135,4 +135,9 @@ public final class LoggingRecorder implements IJSONRecorder {
 
     @Override public void recordWindowState(String title, int x, int y, int width, int height) {
     }
+
+    @Override public boolean isPaused() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

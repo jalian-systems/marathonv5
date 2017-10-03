@@ -65,4 +65,6 @@ public interface IJSONRecorder {
     public abstract void recordWindowState(String title, int x, int y, int width, int height);
 
     public abstract void recordSelectMenu(RFXComponent r, String menuType, String menuPath);
+
+    public abstract boolean isPaused();
 }

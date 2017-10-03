@@ -246,7 +246,6 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     INamingStrategy ns = NamingStrategyFactory.get();
     private String java_version;
     private boolean javaVersionRecorded = false;
-    private boolean paused;
     private WindowId focusedWindowId;
 
     public WSRecordingServer(int port) {
@@ -279,6 +278,15 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         }
     }
 
+    private void setRecordingPause(boolean paused) {
+        JSONObject o = new JSONObject();
+        o.put("value", Boolean.toString(paused));
+        Collection<WebSocket> cs = connections();
+        for (WebSocket webSocket : cs) {
+            post(webSocket, "setRecordingPause", o.toString());
+        }
+    }
+
     public JSONObject getObjectMapConfiguration() {
         ObjectMapConfiguration omc = new ObjectMapConfiguration();
         try {
@@ -300,7 +308,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
 
     public JSONObject record(WebSocket conn, JSONObject query) throws IOException {
         LOGGER.info("WSRecordingServer.record(" + query.toString(2) + ")");
-        if (paused || recorder == null) {
+        if (recorder == null) {
             return new JSONObject();
         }
         try {
@@ -372,15 +380,11 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     }
 
     @Override public void pauseRecording() {
-        paused = true;
+        setRecordingPause(true);
     }
 
     @Override public void resumeRecording() {
-        paused = false;
-    }
-
-    public boolean isPaused() {
-        return paused;
+        setRecordingPause(false);
     }
 
     @Override public WindowId getFocusedWindowId() {
