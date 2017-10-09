@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
@@ -35,12 +34,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.editor.IContentChangeListener;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 
 public class CheckListView extends BorderPane implements IContentChangeListener {
-    
+
     public static final Logger LOGGER = Logger.getLogger(CheckListView.class.getName());
 
     private CheckListFormNode checkListFormNode;
@@ -179,7 +179,7 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
         private TextField inputTextField = new TextField();
         private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
         private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
-        private ButtonBar buttonBar = new ButtonBar();
+        private ButtonBarX buttonBar = new ButtonBarX();
 
         public InputStage(String title, String labelText) {
             super(title, null, FXUIUtils.getIcon("newCheckList"));

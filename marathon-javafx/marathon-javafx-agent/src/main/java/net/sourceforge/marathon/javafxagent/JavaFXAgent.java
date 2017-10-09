@@ -15,11 +15,16 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
+import java.awt.AWTException;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -31,12 +36,7 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Device.Type;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
@@ -359,25 +359,16 @@ public class JavaFXAgent implements IJavaFXAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getScreenShot()
      */
     @Override public byte[] getScreenShot() throws IOException {
-        List<byte[]> bytes = new ArrayList<>();
-        Platform.runLater(() -> {
-            Stage window = targetLocator.getFocusedWindow().getWindow();
-            Parent root = window.getScene().getRoot();
-            WritableImage image = root.snapshot(new SnapshotParameters(), null);
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", baos);
-                bytes.add(baos.toByteArray());
-            } catch (IOException e) {
-                bytes.add(new byte[0]);
-            }
-        });
-        new Wait("Waiting for screen shot") {
-            @Override public boolean until() {
-                return bytes.size() > 0;
-            }
-        };
-        return bytes.get(0);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            BufferedImage bufferedImage;
+            Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+            bufferedImage = new Robot().createScreenCapture(new Rectangle(0, 0, windowSize.width, windowSize.height));
+            ImageIO.write(bufferedImage, "png", baos);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
     }
 
     /*

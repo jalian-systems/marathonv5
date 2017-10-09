@@ -145,4 +145,9 @@ public final class LoggingRecorder implements IJSONRecorder {
         
     }
 
+    @Override public boolean isPaused() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

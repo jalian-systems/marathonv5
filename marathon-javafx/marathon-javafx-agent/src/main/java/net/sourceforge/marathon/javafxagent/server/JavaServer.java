@@ -42,8 +42,8 @@ import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import javafx.geometry.Point2D;
 import net.sourceforge.marathon.javafxagent.Device;
-import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.Device.Type;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.InvalidElementStateException;
 import net.sourceforge.marathon.javafxagent.JavaAgentException;
@@ -64,7 +64,7 @@ public class JavaServer extends NanoHTTPD {
 
     public static final String MIME_JSON = "application/json;charset=UTF-8";
 
-    private Map<String, Session> liveSessions = new HashMap<String, Session>();
+    private Session liveSession;
 
     private static List<RouteMap> routes;
     private int port;
@@ -382,8 +382,9 @@ public class JavaServer extends NanoHTTPD {
             JSONObject uriParams = route.getParams();
             Session session = null;
             if (uriParams.has("sessionId")) {
-                session = liveSessions.get(uriParams.get("sessionId"));
-                latestSession = session;
+                if (liveSession != null && liveSession.getID().equals(uriParams.get("sessionId"))) {
+                    session = liveSession;
+                }
             }
             if (session != null) {
                 r.put("sessionId", session.getID());
@@ -513,25 +514,33 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public Response createSession(JSONObject query, JSONObject uriParams) {
-        if (query.has("requiredCapabilities")) {
-            JSONObject required = (JSONObject) query.get("requiredCapabilities");
-            String okCaps = hasCapabilities(required);
+        if (liveSession == null) {
+            JSONObject required = null;
+            JSONObject desired = null;
+            if (query.has("requiredCapabilities")) {
+                required = (JSONObject) query.get("requiredCapabilities");
+            }
+            if (query.has("desiredCapabilities")) {
+                desired = (JSONObject) query.get("desiredCapabilities");
+            }
+            String okCaps = hasCapabilities(required, desired);
+
             if (okCaps != null) {
                 throw new SessionNotCreatedException(okCaps, null);
             }
+            Type t = Device.Type.EVENT_QUEUE;
+            if (capabilities.getBoolean("nativeEvents")) {
+                t = Device.Type.ROBOT;
+            }
+            Logger.getLogger(JavaServer.class.getName()).info("Creating device with type: " + t);
+            Session session = new Session(t);
+            liveSession = session;
+            session.setLogLevel(getLogLevel(query));
+            session.log(Level.INFO, "A new session created. sessionID = " + session.getID());
         }
-        Type t = Device.Type.EVENT_QUEUE;
-        if (capabilities.getBoolean("nativeEvents")) {
-            t = Device.Type.ROBOT;
-        }
-        Logger.getLogger(JavaServer.class.getName()).info("Creating device with type: " + t);
-        Session session = new Session(t);
-        liveSessions.put(session.getID(), session);
-        session.setLogLevel(getLogLevel(query));
-        session.log(Level.INFO, "A new session created. sessionID = " + session.getID());
         try {
             Response r = newFixedLengthResponse(Status.REDIRECT, MIME_HTML, null);
-            r.addHeader("Location", new URL("http", "localhost", port, "/session/" + session.getID()).toString());
+            r.addHeader("Location", new URL("http", "localhost", port, "/session/" + liveSession.getID()).toString());
             return r;
         } catch (MalformedURLException e) {
             throw new JavaAgentException(e.getMessage(), e);
@@ -540,13 +549,10 @@ public class JavaServer extends NanoHTTPD {
 
     public JSONArray getSessions(JSONObject query, JSONObject uriParams) {
         JSONArray r = new JSONArray();
-        Set<Entry<String, Session>> x = liveSessions.entrySet();
-        for (Entry<String, Session> entry : x) {
-            JSONObject o = new JSONObject();
-            o.put("id", entry.getKey());
-            o.put("capabilities", hasCapabilities);
-            r.put(o);
-        }
+        JSONObject o = new JSONObject();
+        o.put("id", liveSession.getID());
+        o.put("capabilities", hasCapabilities);
+        r.put(o);
         return r;
     }
 
@@ -565,15 +571,27 @@ public class JavaServer extends NanoHTTPD {
         return Level.ALL;
     }
 
-    private String hasCapabilities(JSONObject required) {
+    private String hasCapabilities(JSONObject required, JSONObject desired) {
+        if (required != null) {
+            String error = updateCapabilities(required);
+            if (error != null)
+                return error;
+        }
+        String error = updateCapabilities(desired);
+        if (error != null)
+            LOGGER.warning("Desired Capabilities did not match: " + error);
+        return null;
+    }
+
+    public String updateCapabilities(JSONObject caps) {
         @SuppressWarnings("rawtypes")
-        Iterator keys = required.keys();
+        Iterator keys = caps.keys();
         while (keys.hasNext()) {
             String key = (String) keys.next();
             if (!hasCapabilities.has(key)) {
                 return "Do not have the capability by name " + key;
             }
-            Object rvalue = required.get(key);
+            Object rvalue = caps.get(key);
             capabilities.put(key, rvalue);
             if (rvalue instanceof Boolean && !((Boolean) rvalue).booleanValue()) {
                 continue;
@@ -698,7 +716,7 @@ public class JavaServer extends NanoHTTPD {
         if (exitOnQuit) {
             session.quit();
         }
-        liveSessions.remove(session.getID());
+        liveSession = null;
     }
 
     public String getWindowHandle(JSONObject query, JSONObject uriParams, Session session) {

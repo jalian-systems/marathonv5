@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.fx.display;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ModuleInfo {
 
     public static class ModuleDirElement {
         private File file;
-        @SuppressWarnings("unused") private String prefix;
+        private String prefix;
 
         public ModuleDirElement(File file, String prefix) {
             this.file = file;
@@ -49,7 +50,7 @@ public class ModuleInfo {
         }
 
         @Override public String toString() {
-            return file.getName();
+            return prefix + file.getName();
         }
 
         public File getFile() {
@@ -84,8 +85,23 @@ public class ModuleInfo {
 
     private void createModuleDir() {
         for (String dir : moduleDirs) {
-            moduleDirElements.add(new ModuleDirElement(new File(dir), ""));
+            File moduleDir = new File(dir);
+            addSubDir(moduleDir, "");
         }
+    }
+
+    private void addSubDir(File moduleDir, String prefix) {
+        // TODO Auto-generated method stub
+        if (moduleDir.isDirectory()) {
+            moduleDirElements.add(new ModuleDirElement(moduleDir, prefix));
+            File[] subDirs = moduleDir.listFiles((FileFilter) path -> path.isDirectory());
+            if (subDirs != null) {
+                for (File directory : subDirs) {
+                    addSubDir(directory, prefix + "  ");
+                }
+            }
+        }
+
     }
 
     public String getTitle() {
@@ -141,6 +157,7 @@ public class ModuleInfo {
     }
 
     public void populateFiles(ModuleDirElement selectedItem) {
+        moduleFileElements.clear();
         File file = selectedItem.getFile();
         file.list(new FilenameFilter() {
             @Override public boolean accept(File dir, String name) {

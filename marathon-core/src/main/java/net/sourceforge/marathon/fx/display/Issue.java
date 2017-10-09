@@ -52,7 +52,7 @@ public class Issue {
         File historyFile = new File(Constants.getMarathonProjectDirectory(), "issues.json");
         if (historyFile.exists()) {
             try {
-                return new JSONArray(Files.toString(historyFile, Charset.forName("utf-8")));
+                return new JSONArray(Files.asCharSource(historyFile, Charset.forName("utf-8")).read());
             } catch (JSONException e) {
             } catch (IOException e) {
             }

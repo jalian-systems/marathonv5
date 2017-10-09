@@ -17,6 +17,7 @@ package net.sourceforge.marathon.runtime.fx.api;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -33,6 +34,7 @@ public class FileSelectionHandler implements EventHandler<ActionEvent> {
 
     public static final int FILE_CHOOSER = 0;
     public static final int DIRECTORY_CHOOSER = 1;
+    public static final int FILE_SAVE_CHOOSER = 2;
     private int mode = FILE_CHOOSER;
     private ModalDialog<?> parent;
     private IFileSelectedAction fsl;
@@ -56,18 +58,27 @@ public class FileSelectionHandler implements EventHandler<ActionEvent> {
     }
 
     public void setPreviousDir(File previousDir) {
-        this.previousDir = previousDir;
+        if (previousDir.exists())
+            this.previousDir = previousDir;
     }
 
     @Override public void handle(ActionEvent event) {
         if (mode == FILE_CHOOSER) {
-            List<File> selectedFiles = FXUIUtils.showOpenMultipleFileChooser(title, previousDir, parent.getStage(), filter);
+            List<File> selectedFiles = FXUIUtils.showOpenMultipleFileChooser(title, previousDir,
+                    parent != null ? parent.getStage() : null, filter);
             if (selectedFiles != null && selectedFiles.size() > 0) {
                 this.previousDir = selectedFiles.get(0).getParentFile();
                 fsl.filesSelected(selectedFiles, cookie);
             }
+        } else if (mode == FILE_SAVE_CHOOSER) {
+            File selectedFile = FXUIUtils.showSaveFileChooser(title, previousDir, parent != null ? parent.getStage() : null,
+                    filter);
+            if (selectedFile != null) {
+                this.previousDir = selectedFile.getParentFile();
+                fsl.filesSelected(Arrays.asList(selectedFile), cookie);
+            }
         } else if (mode == DIRECTORY_CHOOSER) {
-            File selectedDirectory = FXUIUtils.showDirectoryChooser(title, previousDir, parent.getStage());
+            File selectedDirectory = FXUIUtils.showDirectoryChooser(title, previousDir, parent != null ? parent.getStage() : null);
             List<File> selectedDirs = new ArrayList<>();
             if (selectedDirectory != null) {
                 selectedDirs.add(selectedDirectory);
@@ -75,6 +86,10 @@ public class FileSelectionHandler implements EventHandler<ActionEvent> {
             }
             fsl.filesSelected(selectedDirs, cookie);
         }
+    }
+
+    public void setFilter(ExtensionFilter filter) {
+        this.filter = filter;
     }
 
 }

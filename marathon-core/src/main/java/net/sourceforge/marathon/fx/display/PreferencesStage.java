@@ -22,7 +22,6 @@ import org.json.JSONObject;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -32,6 +31,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
@@ -52,7 +52,7 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     private Button okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private Button defaultsButton = FXUIUtils.createButton("loaddefaults", "Load Defaults", true, "Load Defaults");
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private JSONObject prefs;
 
     public PreferencesStage(MarathonPreferencesInfo preferenceInfo) {
@@ -142,13 +142,8 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     }
 
     private void onDefault() {
-        mouseTriggerField.setText(FXContextMenuTriggers.getContextMenuModifiers());
-        keyTriggerField
-                .setText(FXContextMenuTriggers.getContextMenuKeyModifiers() + "+" + FXContextMenuTriggers.getContextMenuKeyCode());
-        System.setProperty(Constants.PROP_RECORDER_KEYTRIGGER, keyTriggerField.getText());
-        System.setProperty(Constants.PROP_RECORDER_MOUSETRIGGER, mouseTriggerField.getText());
-        FXContextMenuTriggers.setContextMenuKey();
-        FXContextMenuTriggers.setContextMenuModifiers();
+        mouseTriggerField.setText(OSFXUtils.MOUSE_MENU_MASK + "+Button3");
+        keyTriggerField.setText(OSFXUtils.MOUSE_MENU_MASK + "+F8");
         TestCreator.setHideFilePattern(null);
         doNotHideMarathonITEBlurbs.setSelected(false);
     }

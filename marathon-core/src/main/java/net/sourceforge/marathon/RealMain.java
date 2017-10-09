@@ -114,6 +114,10 @@ public class RealMain {
             argProcessor.help("No project directory");
             return;
         }
+        if (!ProjectFile.isValidProjectDirectory(new File(projectDir))) {
+            argProcessor.help("`" + projectDir + "` is an invalid project folder. Please provide a valid Marathon project folder.");
+            return;
+        }
         if (projectDir.endsWith(".mpf") && new File(projectDir).isFile()) {
             argProcessor.help("A marathon project file is given.\nUse project directory instead");
             return;

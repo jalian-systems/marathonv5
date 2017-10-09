@@ -62,8 +62,7 @@ public class JavaDriver extends RemoteWebDriver {
     }
 
     public JavaDriver(JavaProfile profile, Capabilities desiredCapabilities, Capabilities requiredCapabilities) {
-        super(new JavaDriverCommandExecutor(profile), dropCapabilities(desiredCapabilities, CapabilityType.VERSION),
-                dropCapabilities(requiredCapabilities, CapabilityType.VERSION));
+        super(new JavaDriverCommandExecutor(profile), dropCapabilities(desiredCapabilities, CapabilityType.VERSION));
     }
 
     private static Capabilities dropCapabilities(Capabilities capabilities, String... keysToRemove) {

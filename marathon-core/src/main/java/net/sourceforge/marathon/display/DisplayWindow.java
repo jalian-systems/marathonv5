@@ -814,10 +814,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private SplitMenuButton createNewButton() {
-        SplitMenuButton newButton = new SplitMenuButton(newTestcaseAction.getMenuItem(), etAction.getMenuItem(),
-                newModuleAction.getMenuItem(), newFixtureAction.getMenuItem(), newModuleDirAction.getMenuItem(),
-                newSuiteFileAction.getMenuItem(), newFeatureFileAction.getMenuItem(), newStoryFileAction.getMenuItem(),
-                newIssueFileAction.getMenuItem());
+        SplitMenuButton newButton = new SplitMenuButton(newTestcaseAction.getMenuItem(), etAction.getMenuItem());
         newButton.setGraphic(newTestcaseAction.getButton().getGraphic());
         newButton.setOnAction(newTestcaseAction.getButton().getOnAction());
         return newButton;
@@ -827,19 +824,21 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * Removes the given directory name from the module directories in the
      * project file.
      * 
-     * @param removeDir
+     * 
      */
-    public void removeModDirFromProjFile(String removeDir) {
+    public void removeModDirFromProjFile() {
         String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
         StringBuilder sbr = new StringBuilder();
         for (String moduleDir : moduleDirs) {
-            if (moduleDir.equals(removeDir)) {
+            File f = new File(moduleDir);
+            if (!f.exists()) {
                 continue;
             }
             sbr.append(getProjectRelativeName(moduleDir) + ";");
         }
         try {
             updateProjectFile(Constants.PROP_MODULE_DIRS, sbr.toString());
+            resetModuleFunctions();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -989,6 +988,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             });
             sizeToScene();
             setResizable(false);
+            setOnCloseRequest(e -> displayWindow.onStop());
         }
 
         private void initComponents() {
@@ -2785,7 +2785,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 currentEditor.refresh();
             }
         }
-    };;
+    };
 
     private DockGroup editorDockGroup;
 
@@ -2798,6 +2798,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private HashSet<String> importStatements;
 
     public void onPlay() {
+        if (editingObjectMap())
+            return;
         resultPane.clear();
         outputPane.clear();
         debugging = false;
@@ -2809,8 +2811,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     public void onStopPlay() {
         display.stop();
     }
-    
+
     public void onDebug() {
+        if (editingObjectMap())
+            return;
         resultPane.clear();
         outputPane.clear();
         breakStackDepth = -1;
@@ -2821,6 +2825,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public void onSlowPlay() {
+        if (editingObjectMap())
+            return;
         String delay = System.getProperty(Constants.PROP_RUNTIME_DEFAULT_DELAY, "1000");
         if (delay.equals("")) {
             delay = "1000";
@@ -3292,6 +3298,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public void updateScript(String script) {
         currentEditor.setText(script);
+        if (!currentEditor.isDirty()) {
+            currentEditor.setDirty(true);
+            updateDockName(currentEditor);
+            updateView();
+        }
     }
 
     public void insertScript(String function) {
@@ -3314,7 +3325,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     public Module refreshModuleFunctions() {
-        moduleFunctions = null;
+        resetModuleFunctions();
         return getModuleFunctions();
     }
 
@@ -3392,7 +3403,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 try {
                     Desktop.getDesktop().open(filePath.toFile());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    FXUIUtils._showMessageDialog(DisplayWindow.this, e.getMessage(), "Can't open file with system editor",
+                            AlertType.ERROR);
                 }
             }
         }
@@ -3405,6 +3417,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
 
         @Override public void play(IResourceActionSource source, List<Resource> resources) {
+            if (editingObjectMap())
+                return;
             Test test = null;
             if (resources.size() == 1 && resources.get(0).canPlaySingle()) {
                 open(source, resources.get(0));
@@ -3464,6 +3478,17 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     public class ResourceChangeListener implements IResourceChangeListener {
 
         @Override public void deleted(IResourceActionSource source, Resource resource) {
+            String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
+            for (String moduleDir : moduleDirs) {
+                if (moduleDir.equals(resource.getFilePath().toString())) {
+                    removeModDirFromProjFile();
+                } else if (resource.getFilePath() != null) {
+                    File f = resource.getFilePath().toFile();
+                    if (f.getParentFile().getPath().contains(new File(moduleDir).getAbsolutePath())) {
+                        resetModuleFunctions();
+                    }
+                }
+            }
             if (resource.getFilePath() != null) {
                 File file = resource.getFilePath().toFile();
                 EditorDockable dockable = findEditorDockable(file);

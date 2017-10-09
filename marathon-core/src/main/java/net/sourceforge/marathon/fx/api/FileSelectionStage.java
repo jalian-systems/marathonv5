@@ -24,7 +24,6 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -34,6 +33,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.projectselection.ProjectLayout;
+import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.fx.api.FileSelectionHandler;
 import net.sourceforge.marathon.runtime.fx.api.IFileSelectedAction;
 
@@ -81,6 +82,7 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
             browserListener = new FileSelectionHandler(this, null, this, null, fileSelectionInfo.getTitle());
             browserListener.setMode(FileSelectionHandler.DIRECTORY_CHOOSER);
         }
+        browserListener.setPreviousDir(new File(System.getProperty(Constants.PROP_PROJECT_DIR, ProjectLayout.projectDir)));
         browseButton.setOnAction(browserListener);
         Label label = createLabel("Name: ");
         label.setMinWidth(Region.USE_PREF_SIZE);
@@ -98,8 +100,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         }
     }
 
-    private ButtonBar createButtonBar() {
-        ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX createButtonBar() {
+        ButtonBarX buttonBar = new ButtonBarX();
         buttonBar.setId("FileSelectionButtonBar");
         okButton = FXUIUtils.createButton("ok", "OK", true, "OK");
         okButton.setDisable(true);

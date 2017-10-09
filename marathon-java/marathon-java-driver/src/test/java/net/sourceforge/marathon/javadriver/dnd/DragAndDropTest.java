@@ -17,6 +17,8 @@ package net.sourceforge.marathon.javadriver.dnd;
 
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.function.Function;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -32,7 +34,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
 import com.sun.jna.Platform;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
@@ -114,8 +115,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     private void waitTillDropCompletes(final String string, final WebElement list) {
         try {
-            new WebDriverWait(driver, 5, 500).until(new Predicate<WebDriver>() {
-                @Override public boolean apply(WebDriver driver) {
+            new WebDriverWait(driver, 5, 500).until(new Function<WebDriver, Boolean>() {
+                @Override public Boolean apply(WebDriver driver) {
                     return string.equals(list.getAttribute("content"));
                 }
             });

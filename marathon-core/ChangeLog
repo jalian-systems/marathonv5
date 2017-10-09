@@ -1,3 +1,47 @@
+Marathon Version 5.1.4.0 (9th October 2017)
+
+01. fix: Java/FX Agent - Stage#showAndWait hanging in EventQueue.waitTillAllEventsAreComplete
+02. fix: load default values in Marathon preferences stage.
+03. fix: webdriver#quit being called from both webdriver runtime and script.
+04. fix: when a module which has raw recoding clicks is inserted, the recorder is not paused.
+05. fix: stop recording if the controller window is closed.
+06. feat: Add preferencechangelistener for `all` sections. Required for browser reset when browser configuration is modified.
+07. fix: JavaServer creates only a single session and returns the same for all createSession() calls (Java/FX).
+08. fix: FormPane - warning message changed to info
+09. fix: stop recording if the controller window is closed.
+10. fix: JavaServer creates only a single session and returns the same for all createSession() calls (Java/Swing).
+11. fix: setting previous directory for browse handler for Java command line launcher panel.
+12. feat: MarathonRuby - added a method to get capabilities set by user as a RubyHash
+13. fix: Added IWebBrowserProxy to handle browser specific settings
+14. refactor: IWebDriverProxy
+15. fix: Added force option to IWebDriverProxy#quit
+16. fix: JavaFX Full Screenshot
+17. fix: Preferences refactoring to use with Browsers
+18. fix: Not allowing testsuite editor to add or drop testsuites
+19. fix: Refactored toolbar's splitmenu button to remove unwanted items.
+20. fix: Insert checklist on untitled test file, removed stack trace printing for FileNotFoundException.
+21. fix: Adding filters for command browser's file chooser of launchers.
+22. fix: File open with system editor fixed.
+23. fix: Error messages while showing readme/index.html.
+24. fix: EditorReresh(menu item) mnemonic change to Shortcut+F5.
+25. fix: Invalid error message, for invalid project folder in batch mode.
+26. fix: Invalid links in welcome message fixed.
+27. feat: Updated Selenium version
+28. feat: Updated ruby webdriver version
+29. fix: Module dir delete and update.
+30. fix: While playing test case, not checking for object map dirty(play,slow play and debug).
+31. fix: editor not set to dirty when extracted.
+32. fix: in navigator panel -paste context menu is disbled if the clipbord has no files to paste.
+33. fix: in navigator panel, when clipboard item is pasted, it is pasted to selected item's parent folder, if selected item is a folder.
+34. fix: context menu is disabled if no tree item is selected
+35. fix: 'Open with' context menu for the folders in navigator panel is disabled.
+36. fix: rename of file in navigator panel is not giving warning if file name already exists.
+37. fix: when copy or cut menu item is clicked, context menu is not refreshed.
+38. fix: grid for JAVA/FX.
+39. fix: play context menuitem enable and disable for multiple item selection #NavigatorPanel.
+40. fix: Module directory delete update.
+41. fix: All button bars to ButtonBarX for providing ButtonBar complete visibility in all panels.
+
 Marathon Version 5.1.3.0 (7th September 2017)
 1. fix: Down/Up/Left/Right keys causing issues due to KP_ bindings.
 2. fix: v3compatibility where column names are recorded as 'A', 'B' etc.

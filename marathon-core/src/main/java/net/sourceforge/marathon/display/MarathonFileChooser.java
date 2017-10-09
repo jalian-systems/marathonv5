@@ -23,7 +23,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
@@ -44,6 +43,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.display.AddPropertiesView;
@@ -65,7 +65,7 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     private VBox centerPane = new VBox();
     private AddPropertiesView propertiesView;
     private TextField fileNameBox = new TextField();
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button saveButton = FXUIUtils.createButton("save", "Save", false, "Save");
     private Button createButton = FXUIUtils.createButton("create", "Create File", false, "Create");
     private Button cancelButton = FXUIUtils.createButton("cancel", "cancel", true, "Cancel");
@@ -165,7 +165,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     }
 
     private void onNewFolder() {
-        MarathonInputStage testNameStage = new MarathonInputStage("Folder name", "Create a new folder", FXUIUtils.getIcon("fldr_closed")) {
+        MarathonInputStage testNameStage = new MarathonInputStage("Folder name", "Create a new folder",
+                FXUIUtils.getIcon("fldr_closed")) {
 
             @Override protected String validateInput(String name) {
                 String errorMessage = null;

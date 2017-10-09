@@ -20,12 +20,13 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 
@@ -35,7 +36,7 @@ public class FixtureSelection extends ModalDialog<String> {
 
     private ObservableList<String> fixtuers;
     private ListView<String> fixtureList = new ListView<>();
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button selectButton = FXUIUtils.createButton("ok", "Select fixture", true, "Select");
     private Button cancelButton = FXUIUtils.createButton("cancel", "Cancel", true, "Cancel");
     private IFixtureSelectionHandler fixtureSelectionHandler;
@@ -66,7 +67,7 @@ public class FixtureSelection extends ModalDialog<String> {
         fixtureList.setId("fixture-list-view");
         fixtureList.setItems(fixtuers);
         fixtureList.setOnMouseClicked((e) -> {
-            if(e.getClickCount() == 2)
+            if (e.getClickCount() == 2)
                 onSelect(fixtureList.getSelectionModel().getSelectedItem());
         });
         fixtureList.getSelectionModel().select(selectedFixture);
@@ -77,6 +78,7 @@ public class FixtureSelection extends ModalDialog<String> {
         selectButton.setOnAction((e) -> onSelect(fixtureList.getSelectionModel().getSelectedItem()));
         cancelButton.setOnAction((e) -> onCancel());
         buttonBar.getButtons().addAll(selectButton, cancelButton);
+        buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         updateButtonState();
     }
 

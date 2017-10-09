@@ -39,9 +39,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.Constants;
@@ -164,6 +166,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         cancelButton.setOnAction((e) -> onCancel());
         selectButton.setOnAction((e) -> onSelect(projectInfotable.getSelectionModel().getSelectedItem()));
 
+        buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);
         buttonBar.setId("ProjectSelectionButtonbar");
         buttonBar.getButtons().addAll(newButton, browseButton, deleteButton, editButton, cancelButton, selectButton);
         updateButtonState();

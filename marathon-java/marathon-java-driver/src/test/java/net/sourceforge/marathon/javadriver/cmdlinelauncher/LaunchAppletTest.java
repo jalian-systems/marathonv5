@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javadriver.cmdlinelauncher;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Function;
 
 import org.apache.commons.exec.OS;
 import org.openqa.selenium.By;
@@ -27,8 +28,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-
-import com.google.common.base.Predicate;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
@@ -70,8 +69,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public void getDriverWithProfile() throws Throwable {
         createDriver("Applet Viewer: SwingSet3Init.class");
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
-        new WebDriverWait(driver, 10).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }
@@ -90,8 +89,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public void getDriverWithProfileNoWindowTitle() throws Throwable {
         createDriver(null);
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
-        new WebDriverWait(driver, 10).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }
@@ -110,8 +109,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public void getDriverWithProfileUsingRegexForTitle() throws Throwable {
         createDriver("/.*SwingSet3Init.class");
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
-        new WebDriverWait(driver, 10).until(new Predicate<WebDriver>() {
-            @Override public boolean apply(WebDriver driver) {
+        new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
+            @Override public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }

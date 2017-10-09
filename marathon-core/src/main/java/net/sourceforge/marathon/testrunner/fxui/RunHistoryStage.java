@@ -23,7 +23,6 @@ import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -36,6 +35,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.display.IInputHanler;
@@ -52,7 +52,7 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
     private FormPane form = new FormPane("run-count-form", 2);
     protected TextField countField = new TextField();
     protected VBox verticalButtonBar = new VBox();
-    private ButtonBar buttonBar = new ButtonBar();
+    private ButtonBarX buttonBar = new ButtonBarX();
     private Button doneButton = FXUIUtils.createButton("ok", "Done", true, "Done");
     private boolean countNeeded;
 

@@ -75,8 +75,6 @@ public class Project {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Project.getTestName( " + e.getMessage() + " )");
-            e.printStackTrace();
         }
         if (name == null) {
             name = file.getName();

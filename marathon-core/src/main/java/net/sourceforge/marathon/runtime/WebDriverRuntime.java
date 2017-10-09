@@ -236,9 +236,8 @@ public class WebDriverRuntime implements IMarathonRuntime {
     @Override public void destroy() {
         if (script != null) {
             script.quit();
-        }
-        if (webDriverProxy != null) {
-            webDriverProxy.quit();
+        } else if (webDriverProxy != null) {
+            webDriverProxy.quit(false);
         }
     }
 
