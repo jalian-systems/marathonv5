@@ -76,7 +76,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     private boolean acceptChecklist;
     private IConsole console;
     private Properties dataVariables;
-    @SuppressWarnings("unused") private String nameSuffix = "";
+    private String nameSuffix = "";
 
     private String fullName;
 
@@ -108,7 +108,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     }
 
     @Override public String getName() {
-        return Project.getTestName(file);
+        return Project.getTestName(file) + nameSuffix;
     }
 
     @Override public void setName(String name) {
