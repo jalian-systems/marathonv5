@@ -257,6 +257,7 @@ public class Constants {
     public static final String AUT_WEBAPP_BROWSER_OVERRIDE = "marathon.webapp.browser.override";
     public static final String OUTPUT_MAX_CHARS = "marathon.output.max_chars";
     public static final String OUTPUT_STYLE = "marathon.output.style";
+    public static final String NTHREADS = "marathon.grid.nthreads";
 
 
 }

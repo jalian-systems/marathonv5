@@ -17,6 +17,8 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
 import org.junit.runners.model.RunnerScheduler;
 
+import net.sourceforge.marathon.runtime.api.Constants;
+
 public class ParallelComputer extends Computer {
     
     public static final Logger LOGGER = Logger.getLogger(ParallelComputer.class.getName());
@@ -39,9 +41,11 @@ public class ParallelComputer extends Computer {
     }
 
     private static Runner parallelize(Runner runner) {
+        int nThreads = Integer.getInteger(Constants.NTHREADS, Runtime.getRuntime().availableProcessors());
+        LOGGER.info("Using " + nThreads + " threads.");
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
-                private final ExecutorService fService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+                private final ExecutorService fService = Executors.newFixedThreadPool(nThreads);
 
                 @Override public void schedule(Runnable childStatement) {
                     fService.submit(childStatement);
