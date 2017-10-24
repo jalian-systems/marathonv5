@@ -116,7 +116,6 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     }
 
     @Override public void run(TestResult result) {
-        TestAttributes.put("test_object", this);
         super.run(result);
     }
 

@@ -17,7 +17,6 @@ package net.sourceforge.marathon.junit;
 
 import java.util.logging.Logger;
 
-import org.junit.internal.runners.JUnit38ClassRunner;
 import org.junit.runner.Computer;
 import org.junit.runner.Request;
 import org.junit.runner.Result;
@@ -133,7 +132,22 @@ public class MarathonTestRunner {
      *         failed tests.
      */
     public Result run(junit.framework.Test test) {
-        return run(new JUnit38ClassRunner(test));
+        MarathonTestProvider.setSuite(test);
+        return run(MarathonTestProvider.class);
+    }
+
+    /**
+     * Run all the tests contained in JUnit 3.8.x <code>test</code> parallel. Here for
+     * backward compatibility.
+     *
+     * @param test
+     *            the old-style test
+     * @return a {@link Result} describing the details of the test run and the
+     *         failed tests.
+     */
+    public Result runParallel(junit.framework.Test test) {
+        MarathonTestProvider.setSuite(test);
+        return run(new ParallelComputer(false, true),MarathonTestProvider.class);
     }
 
     /**

@@ -13,10 +13,8 @@ import java.util.Enumeration;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.io.Files;
@@ -63,6 +61,12 @@ import ru.yandex.qatools.allure.annotations.Attachment;
         }
     }
 
+    public MarathonTestProvider(Test test, String name) {
+        fTest = test;
+        fName = name;
+        TestAttributes.put("test_object", test);
+    }
+
     public void captureScreens() {
         String captureDir = System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR);
         if (captureDir == null) {
@@ -90,13 +94,9 @@ import ru.yandex.qatools.allure.annotations.Attachment;
         return bs;
     }
 
-    @Parameter(0) public Test fTest;
-    @Parameter(1) public String fName;
+    private Test fTest;
+    private String fName;
 
-    @Before public void setTestObject() throws Throwable {
-        TestAttributes.put("test_object", fTest);
-    }
-    
     @org.junit.Test public void test() throws Throwable {
         try {
             ((MarathonTestCase) fTest).initialize();

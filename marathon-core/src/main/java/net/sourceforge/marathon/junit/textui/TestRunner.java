@@ -56,12 +56,16 @@ public class TestRunner {
             runner.addListener(new AllureMarathonRunListener());
         }
         runner.addListener(new TextListener(System.out));
-        Result result = runner.run(suite);
+        Result result = runSuite(suite, runner);
         MarathonTestCase.reset();
         if (runReportDir != null) {
             AllureUtils.launchAllure(false, resultsDir, new File(runReportDir, "reports").getAbsolutePath());
         }
         return result;
+    }
+
+    public Result runSuite(Test suite, MarathonTestRunner runner) {
+        return runner.run(suite);
     }
 
     public Result runTests(ArgumentProcessor argProcessor) throws Exception {
