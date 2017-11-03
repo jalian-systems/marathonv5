@@ -68,7 +68,7 @@ public class JavaProfile {
         // @formatter:off
         EMBEDDED("unittesting", "Unit Testing"),
         JAVA_COMMAND_LINE("javacommand", "Java Command Line", "vmargument", "classpath", "mainclass", "appargument"),
-        JAVA_WEBSTART("webstart", "WebStart Application", "vmargument", "wsargument", "jnlpfile", "startwindowtitle"),
+        JAVA_WEBSTART("webstart", "WebStart Application", "vmargument", "wsargument", "jnlpfile", "jnlpurl", "startwindowtitle"),
         COMMAND_LINE("commandline", "Command Line", "command", "appargument", "startwindowtitle", "vmargument"),
         JAVA_APPLET("applet", "Applet Application",  "vmargument", "appleturl", "startwindowtitle"),
         EXECUTABLE_JAR("executablejar", "Executable JAR", "executablejar", "appargument", "startwindowtitle", "vmargument"),
@@ -108,6 +108,7 @@ public class JavaProfile {
     private LaunchType launchType = LaunchType.SWING_APPLICATION;
     private String mainClass;
     private File jnlpFile;
+    private String jnlpUrl;
     private int port;
     private String startWindowTitle;
     private String workingDirectory;
@@ -191,6 +192,10 @@ public class JavaProfile {
             args.addAll(wsArguments);
             if (jnlpFile != null) {
                 args.add(jnlpFile.getAbsolutePath());
+            } else if(jnlpUrl != null) {
+                args.add(jnlpUrl);
+            } else {
+                throw new WebDriverException("You must set either of JNLP File or URL");
             }
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
@@ -468,6 +473,9 @@ public class JavaProfile {
 
     public JavaProfile setJNLPFile(File f) {
         checkValidProperty("jnlpfile");
+        if(jnlpUrl != null) {
+            throw new WebDriverException("You can not set both JNLP File and URL at the same time");
+        }
         this.jnlpFile = f;
         return this;
     }
@@ -582,6 +590,9 @@ public class JavaProfile {
         if (jnlpFile != null) {
             builder.addParameter("jnlp", jnlpFile.getPath());
         }
+        if (jnlpUrl != null) {
+            builder.addParameter("jnlpUrl", jnlpUrl);
+        }
         if (appletURL != null) {
             builder.addParameter("appleturl", appletURL);
         }
@@ -651,6 +662,9 @@ public class JavaProfile {
         if (hasValueFor(values, "jnlp")) {
             jnlpFile = new File(findValueOf(values, "jnlp"));
         }
+        if (hasValueFor(values, "jnlpUrl")) {
+            jnlpUrl = findValueOf(values, "jnlp");
+        }
         if (hasValueFor(values, "appleturl")) {
             appletURL = findValueOf(values, "appleturl");
         }
@@ -718,7 +732,7 @@ public class JavaProfile {
     @Override public String toString() {
         return "JavaProfile [classPathEntries=" + classPathEntries + ", vmArguments=" + vmArguments + ", wsArguments=" + wsArguments
                 + ", appArguments=" + appArguments + ", launchMode=" + launchMode + ", mainClass=" + mainClass + ", jnlpFile="
-                + jnlpFile + ", port=" + port + ", startWindowTitle=" + startWindowTitle + ", workingDirectory=" + workingDirectory
+                + jnlpFile + ", jnlpUrl = " + jnlpUrl + ", port=" + port + ", startWindowTitle=" + startWindowTitle + ", workingDirectory=" + workingDirectory
                 + ", vmCommand=" + vmCommand + ", command=" + command + ", appletURL=" + appletURL + ", recordingPort="
                 + recordingPort + ", javaHome=" + javaHome + ", nativeEvents=" + nativeEvents + "]";
     }
@@ -732,6 +746,7 @@ public class JavaProfile {
         result = prime * result + (command == null ? 0 : command.hashCode());
         result = prime * result + (javaHome == null ? 0 : javaHome.hashCode());
         result = prime * result + (jnlpFile == null ? 0 : jnlpFile.hashCode());
+        result = prime * result + (jnlpUrl == null ? 0 : jnlpUrl.hashCode());
         result = prime * result + (launchMode == null ? 0 : launchMode.hashCode());
         result = prime * result + (mainClass == null ? 0 : mainClass.hashCode());
         result = prime * result + (nativeEvents ? 1231 : 1237);
@@ -794,6 +809,13 @@ public class JavaProfile {
                 return false;
             }
         } else if (!jnlpFile.equals(other.jnlpFile)) {
+            return false;
+        }
+        if (jnlpUrl == null) {
+            if (other.jnlpUrl != null) {
+                return false;
+            }
+        } else if (!jnlpUrl.equals(other.jnlpUrl)) {
             return false;
         }
         if (launchMode != other.launchMode) {
@@ -893,5 +915,14 @@ public class JavaProfile {
 
     public void setKeepLog(boolean keepLog) {
         this.keepLog = keepLog;
+    }
+
+    public JavaProfile setJNLPUrl(String url) {
+        checkValidProperty("jnlpurl");
+        if(this.jnlpFile != null) {
+            throw new WebDriverException("You can not set both JNLP File and URL at the same time");
+        }
+        this.jnlpUrl = url;
+        return this;
     }
 }
