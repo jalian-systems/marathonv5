@@ -20,8 +20,7 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
+import javafx.application.Platform;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -49,8 +48,10 @@ public class ScriptExecutor {
     public Object executeScript(String methodBody, final Object[] args) throws CannotCompileException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException, InstantiationException, InterruptedException {
         ClassPool cp = ClassPool.getDefault();
-        cp.importPackage("javax.swing");
+        cp.importPackage("javafx.scene");
+        cp.importPackage("javafx.collections");
         cp.importPackage("java.lang.reflect.Array");
+        cp.importPackage("java.util");
         CtClass helloClass = cp.makeClass(getClassName());
         CtMethod make = CtNewMethod.make(getMethodBody(args), helloClass);
         make.insertAfter(methodBody);
@@ -69,7 +70,7 @@ public class ScriptExecutor {
                     }
                 }
             };
-            SwingUtilities.invokeLater(new Runnable() {
+            Platform.runLater(new Runnable() {
                 @Override public void run() {
                     new Runnable() {
                         @Override public void run() {
@@ -94,13 +95,11 @@ public class ScriptExecutor {
             }
             return result;
         }
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
-                try {
-                    result = declaredMethod.invoke(helloClazz.newInstance(), args);
-                } catch (Exception e) {
-                    result = e;
-                }
+        Platform.runLater(() -> {
+            try {
+                result = declaredMethod.invoke(helloClazz.newInstance(), args);
+            } catch (Exception e) {
+                result = e;
             }
         });
         return result;
