@@ -29,6 +29,8 @@ public class JavaVersion {
         for (int i = 0; i < 4; i++) {
             if (expected[i] > current[i]) {
                 return false;
+            } else if (expected[i] < current[i]) {
+                return true;
             }
         }
         return true;
