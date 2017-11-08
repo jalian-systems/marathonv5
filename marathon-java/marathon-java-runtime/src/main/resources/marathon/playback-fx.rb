@@ -352,7 +352,16 @@ end
 # Wait for a window to appear. The default timeout is 30seconds
 
 def with_window(windowTitle, timeout = 0)
-    $marathon.window(windowTitle, timeout)
+    endTime = System.currentTimeMillis + (timeout * 1000)
+    begin
+      window(windowTitle, timeout)
+    rescue Exception => e
+      if System.currentTimeMillis < endTime
+        retry
+      else
+        raise e
+      end
+    end
     yield
     $marathon.close
     return true

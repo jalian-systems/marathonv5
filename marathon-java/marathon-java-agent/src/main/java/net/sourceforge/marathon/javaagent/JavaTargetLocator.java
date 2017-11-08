@@ -41,6 +41,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -314,7 +315,7 @@ public class JavaTargetLocator {
                 return driver;
             }
         }
-        throw new NoSuchWindowException("Cannot find window: " + nameOrHandleOrTitle, null);
+        throw new NoSuchWindowException("Cannot find window: " + windowDetails, null);
     }
 
     private List<List<String>> getContainerNP(Window window, JSONObject map) {
@@ -431,7 +432,22 @@ public class JavaTargetLocator {
     }
 
     private Window findFocusWindow() {
-        return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+        Window w = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+        if (w != null)
+            return w;
+        w = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+        if (w != null)
+            return w;
+
+        Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+        if (focusOwner != null)
+            w = SwingUtilities.getWindowAncestor(focusOwner);
+        if(w != null)
+            return w ;
+        Window[] validWindows = getValidWindows();
+        if(validWindows.length > 0)
+            return validWindows[validWindows.length - 1];
+        return null;
     }
 
     public String getWindowHandle() {
@@ -459,17 +475,6 @@ public class JavaTargetLocator {
             }
         }.wait("No top level window available", 60000, 500);
         return _getTopContainer();
-    }
-
-    public JWindow getFocusedWindow() {
-        Window[] windows = getValidWindows();
-        for (Window window : windows) {
-            if (window.isFocused())
-                return new JWindow(window);
-        }
-        if (windows.length > 0)
-            return new JWindow(windows[0]);
-        return null;
     }
 
     private JWindow _getTopContainer() {
