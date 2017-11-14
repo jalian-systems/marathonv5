@@ -156,6 +156,8 @@ class RubyMarathon < MarathonRuby
     end
 
     def get_leaf_component(id, editor=false, visibility = true)
+        return id.getWebElement if id.getWebElement
+
         css = getCSS(id, visibility).to_a
         e = @current_search_context.find_element(:css => css[0])
         e = e.find_element(:css => ".::" + css[1]) if css[1] != nil && !editor

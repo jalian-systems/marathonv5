@@ -22,6 +22,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.jruby.runtime.builtin.IRubyObject;
+
 public class ComponentId implements Serializable {
     
     public static final Logger LOGGER = Logger.getLogger(ComponentId.class.getName());
@@ -32,6 +34,8 @@ public class ComponentId implements Serializable {
     private final Properties nameProps = new Properties();
     private final Properties componentInfoProps = new Properties();
 
+    private IRubyObject webElement = null ;
+    
     public ComponentId(String name) {
         this(name, null);
     }
@@ -45,6 +49,10 @@ public class ComponentId implements Serializable {
             for (Entry<Object, Object> entry : values) {
                 nameProps.put(entry.getKey().toString(), entry.getValue().toString());
             }
+        } else if(name instanceof IRubyObject) {
+            if (componentInfo != null)
+                throw new RuntimeException("Invalid component id");
+            webElement = (IRubyObject) name ;
         } else {
             throw new RuntimeException("Invalid component id");
         }
@@ -75,29 +83,39 @@ public class ComponentId implements Serializable {
         return "('" + nameProps + "'" + (componentInfoProps != null ? ", '" + componentInfoProps + "'" : "") + ")";
     }
 
-    @Override public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ComponentId)) {
-            return false;
-        }
-        final ComponentId componentId = (ComponentId) o;
-        if (componentInfoProps != null ? !componentInfoProps.equals(componentId.componentInfoProps)
-                : componentId.componentInfoProps != null) {
-            return false;
-        }
-        if (!nameProps.equals(componentId.nameProps)) {
-            return false;
-        }
-        return true;
+    @Override public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((componentInfoProps == null) ? 0 : componentInfoProps.hashCode());
+        result = prime * result + ((nameProps == null) ? 0 : nameProps.hashCode());
+        result = prime * result + ((webElement == null) ? 0 : webElement.hashCode());
+        return result;
     }
 
-    @Override public int hashCode() {
-        int result;
-        result = nameProps.hashCode();
-        result = 29 * result + (componentInfoProps != null ? componentInfoProps.hashCode() : 0);
-        return result;
+    @Override public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ComponentId other = (ComponentId) obj;
+        if (componentInfoProps == null) {
+            if (other.componentInfoProps != null)
+                return false;
+        } else if (!componentInfoProps.equals(other.componentInfoProps))
+            return false;
+        if (nameProps == null) {
+            if (other.nameProps != null)
+                return false;
+        } else if (!nameProps.equals(other.nameProps))
+            return false;
+        if (webElement == null) {
+            if (other.webElement != null)
+                return false;
+        } else if (!webElement.equals(other.webElement))
+            return false;
+        return true;
     }
 
     public Properties getComponentInfoProps() {
@@ -115,5 +133,9 @@ public class ComponentId implements Serializable {
             return nameProps;
         }
         return nameProps.get(NAME_KEY) == null ? nameProps : null;
+    }
+    
+    public IRubyObject getWebElement() {
+        return webElement;
     }
 }
