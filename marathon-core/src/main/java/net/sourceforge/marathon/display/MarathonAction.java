@@ -20,8 +20,24 @@ import java.util.logging.Logger;
 import javafx.scene.control.Menu;
 import javafx.scene.control.ToggleGroup;
 import net.sourceforge.marathon.editor.IEditorProvider;
+import net.sourceforge.marathon.runtime.api.IScriptModel;
 
 public abstract class MarathonAction implements IMarathonAction {
+
+    public static class SeparatorAction extends MarathonAction {
+        public SeparatorAction(String menuName, boolean toolbar, boolean menu) {
+            super(menuName, null, "", null, toolbar, menu);
+        }
+    
+        @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                int endCaretPosition, int startLine) throws Exception {
+        }
+    
+        @Override public boolean isSeperator() {
+            return true;
+        }
+    
+    }
 
     public static final Logger LOGGER = Logger.getLogger(MarathonAction.class.getName());
 
