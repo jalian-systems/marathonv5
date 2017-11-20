@@ -58,12 +58,14 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -80,7 +82,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import junit.framework.Test;
@@ -206,6 +211,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private static final Logger logger = Logger.getLogger(DisplayWindow.class.getCanonicalName());
 
     private static DisplayWindow _instance;
+
+    private static String _message = null;
+    private static String _message_fg = "white";
+    private static String _message_bg = "#f01010";
 
     private class DockingListener
             implements DockableSelectionListener, DockableStateWillChangeListener, DockableStateChangeListener {
@@ -1079,6 +1088,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     private Project project;
 
+    private boolean _showMessage;
+
     /**
      * Constructs a DisplayWindow object.
      */
@@ -1495,7 +1506,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * 
      * @return menubar
      */
-    private MenuBar createMenuBar() {
+    private Node createMenuBar() {
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("File");
         menu.getItems().add(createNewMenu());
@@ -1607,7 +1618,37 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menu.getItems().add(0, releaseNotes.getMenuItem());
         menu.getItems().add(1, changeLog.getMenuItem());
         menu.getItems().add(2, visitWebsite.getMenuItem());
-        return menuBar;
+        JSONObject preferences = Preferences.instance().getSection("display");
+        _showMessage = !preferences.optBoolean("_doNotShowMessage");
+        if (_message == null || !_showMessage)
+            return menuBar;
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(getMessageBar(vbox), menuBar);
+        return vbox;
+    }
+
+    private Node getMessageBar(VBox vbox) {
+        HBox hb = new HBox(10);
+        hb.setPrefHeight(32);
+        hb.setStyle("-fx-padding: 0 5px 0 5px; -fx-background-color: " + _message_bg + ";");
+        CheckBox cb = new CheckBox("Do Not Show Again");
+        cb.setStyle("-fx-text-fill: " + _message_fg + ";-fx-fill: " + _message_fg + ";");
+        Text b = FXUIUtils.getIconAsText("close");
+        b.setOnMouseClicked((e) -> {
+            JSONObject preferences = Preferences.instance().getSection("display");
+            preferences.put("_doNotShowMessage", cb.isSelected());
+            Preferences.instance().save("display");
+            vbox.getChildren().remove(0);   
+        });
+        Text t = new Text(_message);
+        hb.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(t, Priority.ALWAYS);
+        t.setStyle("-fx-fill: " + _message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold; -fx-font-family: Tahoma;");
+        b.setStyle("-fx-fill: " + _message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold;");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        hb.getChildren().addAll(t, spacer, cb, b);
+        return hb;
     }
 
     private void addViews(Menu windowMenu) {
@@ -3642,5 +3683,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public void setCurrentEditor(IEditor currentEditor) {
         this.currentEditor = currentEditor;
+    }
+
+    public static void setMessage(String message, String fg, String bg) {
+        _message = message;
+        _message_fg = fg ;
+        _message_bg = bg ;
     }
 }

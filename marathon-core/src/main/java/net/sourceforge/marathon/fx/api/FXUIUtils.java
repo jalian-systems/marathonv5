@@ -47,6 +47,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -88,6 +89,12 @@ public class FXUIUtils {
                 label.setTextFill(color);
             label.setText(namedChar.getChar() + "");
             return label;
+        }
+
+        public Text createText() {
+            Text t = new Text(namedChar.getChar() + "");
+            t.setFont(font);
+            return t;
         }
     }
 
@@ -271,6 +278,7 @@ public class FXUIUtils {
         fontIcons.put("rotate", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.SCREEN_ROTATION));
         fontIcons.put("Safari", new FontInfo(fontAwesome, FontAwesome.ICON.SAFARI));
         fontIcons.put("wordWrap", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.WRAP));
+        fontIcons.put("close", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CLOSE_CIRCLE));
     }
     
     public static Button createButton(String name, String toolTip) {
@@ -366,6 +374,13 @@ public class FXUIUtils {
 
     static List<String> noFontIcon = new ArrayList<>();
 
+    public static Text getIconAsText(String name) {
+        FontInfo fontInfo = fontIcons.get(name);
+        if(fontInfo == null)
+            return null;
+        return fontInfo.createText();
+    }
+    
     public static Node getImageFromX(String name, String from, FromOptions options) {
         FontInfo fontInfo = fontIcons.get(name);
         if (fontInfo != null) {
