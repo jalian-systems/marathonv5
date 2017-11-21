@@ -79,8 +79,6 @@ public class AllureMarathonRunListener extends RunListener {
 
     private final Map<String, String> suites = new HashMap<>();
 
-    private Properties testProperties = null;
-
     private List<Group> issues;
     private List<Group> features;
     private List<Group> stories;
@@ -149,6 +147,7 @@ public class AllureMarathonRunListener extends RunListener {
         TestCaseStartedEvent event = new TestCaseStartedEvent(getSuiteUid(description), getTestName());
 
         SeverityLevel severityLevel = SeverityLevel.NORMAL;
+        Properties testProperties = getTestProperties();
         String severity = testProperties.getProperty("severity");
         if (severity != null) {
             severityLevel = SeverityLevel.fromValue(severity);
@@ -243,7 +242,6 @@ public class AllureMarathonRunListener extends RunListener {
             }
         }
         getLifecycle().fire(new TestCaseFinishedEvent());
-        testProperties = null;
     }
 
     public void testSuiteFinished(String uid) {
@@ -295,18 +293,22 @@ public class AllureMarathonRunListener extends RunListener {
     }
 
     private String getTestName() {
-        if (testProperties == null) {
-            Test test = (Test) TestAttributes.get("test_object");
-            if (test != null && test instanceof MarathonTestCase) {
-                File file = ((MarathonTestCase) test).getFile();
-                testProperties = Project.getTestProperties(file);
-                testProperties.put("path", file.toPath().toAbsolutePath().toString());
-            } else {
-                testProperties = new Properties();
-                testProperties.put("name", "<UNKNOWN TEST - SHOULD NOT HAPPEN>");
-            }
-        }
+        Properties testProperties = getTestProperties();
         return testProperties.getProperty("name");
+    }
+
+    public Properties getTestProperties() {
+        Properties testProperties = new Properties();
+        Test test = (Test) TestAttributes.get("test_object");
+        if (test != null && test instanceof MarathonTestCase) {
+            File file = ((MarathonTestCase) test).getFile();
+            testProperties = Project.getTestProperties(file);
+            testProperties.put("path", file.toPath().toAbsolutePath().toString());
+        } else {
+            testProperties = new Properties();
+            testProperties.put("name", "<UNKNOWN TEST - SHOULD NOT HAPPEN>");
+        }
+        return testProperties;
     }
 
     public void finishFakeTestCase() {
