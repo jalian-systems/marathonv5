@@ -477,7 +477,7 @@ end
 # Select a given component and set the state corresponding to the given text.
 
 def select(componentName, text, componentInfo=nil)
-    $marathon.select(ComponentId.new(componentName, componentInfo), text)
+    $marathon.select(ComponentId.new(componentName, componentInfo), text.to_s)
 end
 
 # Get the Java component represented by the given name that is visible and showing
@@ -566,11 +566,11 @@ end
 # of the component currently in the application.
 
 def assert_p(component, property, value, componentInfo=nil)
-    $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value)
+    $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value.to_s)
 end
 
 def wait_p(component, property, value, componentInfo=nil)
-    $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value)
+    $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value.to_s)
 end
 
 def assert_content(componentName, content, componentInfo=nil)

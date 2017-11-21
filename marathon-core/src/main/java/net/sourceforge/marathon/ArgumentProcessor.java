@@ -41,6 +41,8 @@ public class ArgumentProcessor {
     private String reportDir = null;
     private boolean capture = false;
 
+    private boolean skipreports;
+
     /**
      * @return the name of Marathon Project File given on the command line.
      */
@@ -87,6 +89,8 @@ public class ArgumentProcessor {
                 batchMode = true;
             } else if (args[i].equals("-i") || args[i].equals("-ignore")) {
                 // Just ignore the argument (used in batch file)
+            } else if (args[i].equals("-skipreports")) {
+                skipreports = true;
             } else if (args[i].equals("-nosplash")) {
                 showSplash = false;
             } else if (args[i].equals("-acceptchecklists")) {
@@ -226,5 +230,9 @@ public class ArgumentProcessor {
 
     public String getReportDir() {
         return reportDir;
+    }
+    
+    public boolean isSkipreports() {
+        return skipreports;
     }
 }

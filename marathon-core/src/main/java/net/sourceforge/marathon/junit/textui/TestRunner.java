@@ -58,7 +58,7 @@ public class TestRunner {
         runner.addListener(new TextListener(System.out));
         Result result = runSuite(suite, runner);
         MarathonTestCase.reset();
-        if (runReportDir != null) {
+        if (runReportDir != null && !argProcessor.isSkipreports()) {
             AllureUtils.launchAllure(false, resultsDir, new File(runReportDir, "reports").getAbsolutePath());
         }
         return result;
