@@ -280,7 +280,7 @@ public class FXUIUtils {
         fontIcons.put("wordWrap", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.WRAP));
         fontIcons.put("close", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CLOSE_CIRCLE));
     }
-    
+
     public static Button createButton(String name, String toolTip) {
         return createButton(name, toolTip, true);
     }
@@ -376,11 +376,11 @@ public class FXUIUtils {
 
     public static Text getIconAsText(String name) {
         FontInfo fontInfo = fontIcons.get(name);
-        if(fontInfo == null)
+        if (fontInfo == null)
             return null;
         return fontInfo.createText();
     }
-    
+
     public static Node getImageFromX(String name, String from, FromOptions options) {
         FontInfo fontInfo = fontIcons.get(name);
         if (fontInfo != null) {
@@ -421,13 +421,17 @@ public class FXUIUtils {
     }
 
     public static void showMessageDialog(Window parent, String message, String title, AlertType type) {
+        showMessageDialog(parent, message, title, type, false);
+    }
+
+    public static void showMessageDialog(Window parent, String message, String title, AlertType type, boolean monospace) {
         if (Platform.isFxApplicationThread()) {
-            _showMessageDialog(parent, message, title, type);
+            _showMessageDialog(parent, message, title, type, monospace);
         } else {
             Object lock = new Object();
             synchronized (lock) {
                 Platform.runLater(() -> {
-                    _showMessageDialog(parent, message, title, type);
+                    _showMessageDialog(parent, message, title, type, monospace);
                     lock.notifyAll();
                 });
             }
@@ -442,11 +446,23 @@ public class FXUIUtils {
     }
 
     public static void _showMessageDialog(Window parent, String message, String title, AlertType type) {
+        _showMessageDialog(parent, message, title, type, false);
+    }
+
+    public static void _showMessageDialog(Window parent, String message, String title, AlertType type, boolean monospace) {
         Alert alert = new Alert(type);
         alert.initOwner(parent);
         alert.setTitle(title);
+        alert.setHeaderText(title);
         alert.setContentText(message);
         alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setResizable(true);
+        if (monospace) {
+            Text text = new Text(message);
+            alert.getDialogPane().setStyle("-fx-padding: 0 10px 0 10px;");
+            text.setStyle(" -fx-font-family: monospace;");
+            alert.getDialogPane().contentProperty().set(text);
+        }
         alert.showAndWait();
     }
 

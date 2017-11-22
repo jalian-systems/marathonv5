@@ -192,9 +192,9 @@ public class ArgumentProcessor {
     public void help(String errorMessage) {
         if (!isBatchMode()) {
             if (errorMessage.equals("")) {
-                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Usage", AlertType.INFORMATION);
+                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Usage", AlertType.INFORMATION, true);
             } else {
-                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Error", AlertType.INFORMATION);
+                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Error", AlertType.INFORMATION, true);
             }
         } else {
             String message = createHelpMessage(errorMessage);
@@ -208,19 +208,23 @@ public class ArgumentProcessor {
         if (!errorMessage.equals("")) {
             message.append("Error: " + errorMessage + "\n\n");
         }
-        message.append("Usage:\n");
-        message.append("marathon [-nosplash] [<Project Directory>]\n");
-        message.append("or\n");
-        // @formatter:off
-        message.append("marathon -batch ")
-            .append("[-reportdir <report-directory> (default: marathon-reports)] ")
-            .append("[-acceptchecklists] ")
-            .append("[-capture] ")
-            .append("[-delay <slowPlayDelayInMS>]")
-            .append("<Project Directory> ")
-            .append("[(<TestCase>|+<TestSuite>|@<Feature>|#<Story>|!<Issue>|~<SavedRun>) ...]")
-            .append("\n");
+        // @formatter: off
+        String help = ""
+                + "marathon [options...] [project-directory [test...]]\n"
+                + "\n"
+                + "-help | -? | -h                    Print usage\n"
+                + "-b | -batch                        Run marathonite in batch mode\n"
+                + "-skipreports                       Do not generate allure reports\n"
+                + "-nosplash                          Do not show marathon splash screen\n"
+                + "-acceptchecklists                  Accept checklists while running tests (used with -batch)\n"
+                + "-noconsolelog                      Do not create console.log files\n"
+                + "-capture                           Capture failure screenshots\n"
+                + "-delay delayInSeconds              Delay used in slow play\n"
+                + "-reportdir dir                     Marathon report directory (default: marathon-reports)\n"
+                + "\n"
+                + "";
         // @formatter: on
+        message.append(help);
         return message.toString();
     }
 

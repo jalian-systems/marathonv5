@@ -1088,8 +1088,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     private Project project;
 
-    private boolean _showMessage;
-
     /**
      * Constructs a DisplayWindow object.
      */
@@ -1618,9 +1616,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menu.getItems().add(0, releaseNotes.getMenuItem());
         menu.getItems().add(1, changeLog.getMenuItem());
         menu.getItems().add(2, visitWebsite.getMenuItem());
-        JSONObject preferences = Preferences.instance().getSection("display");
-        _showMessage = !preferences.optBoolean("_doNotShowMessage");
-        if (_message == null || !_showMessage)
+        if (_message == null)
             return menuBar;
         VBox vbox = new VBox();
         vbox.getChildren().addAll(getMessageBar(vbox), menuBar);
@@ -1647,7 +1643,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         b.setStyle("-fx-fill: " + _message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold;");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        hb.getChildren().addAll(t, spacer, cb, b);
+        hb.getChildren().addAll(t, spacer, b);
         return hb;
     }
 
