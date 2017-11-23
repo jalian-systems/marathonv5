@@ -34,7 +34,12 @@ public class SimpleWebServer extends Application {
         public MyServer(String host, int port, File wwwroot, boolean quiet) {
             super(host, port, wwwroot, quiet);
         }
-        
+
+        @Override public Response serve(IHTTPSession session) {
+            System.out.println(session.getMethod() + ": " + session.getUri());
+            return super.serve(session);
+        }
+
         public void setRoot(File root) {
             rootDirs.clear();
             rootDirs.add(root);
@@ -82,7 +87,7 @@ public class SimpleWebServer extends Application {
         changeRoot.setOnAction((event) -> {
             DirectoryChooser chooser = new DirectoryChooser();
             File showDialog = chooser.showDialog(primaryStage);
-            if(showDialog != null)
+            if (showDialog != null)
                 server.setRoot(showDialog);
         });
         bar.getItems().add(openInBrowser);
@@ -97,7 +102,7 @@ public class SimpleWebServer extends Application {
     }
 
     private void startServer(List<String> argsList) {
-        boolean quiet = false;
+        boolean quiet = true;
         File rootDir = new File(".");
         int port = -1;
         String host = "localhost";
@@ -108,8 +113,8 @@ public class SimpleWebServer extends Application {
                 host = args[i + 1];
             } else if ("-p".equalsIgnoreCase(args[i]) || "--port".equalsIgnoreCase(args[i])) {
                 port = Integer.parseInt(args[i + 1]);
-            } else if ("-q".equalsIgnoreCase(args[i]) || "--quiet".equalsIgnoreCase(args[i])) {
-                quiet = true;
+            } else if ("-v".equalsIgnoreCase(args[i]) || "--verbose".equalsIgnoreCase(args[i])) {
+                quiet = false;
             }
         }
         try {

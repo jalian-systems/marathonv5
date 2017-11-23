@@ -16,17 +16,22 @@
 package net.sourceforge.marathon.javadriver;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +50,9 @@ public class JavaProfile {
     private static final String PROP_HOME = "marathon.home";
     private static final String MARATHON_AGENT = "marathon.agent";
     private static final String MARATHON_RECORDER = "marathon.recorder";
+
+    private static Map<String, File> jnlpFiles = new HashMap<String, File>();
+    private static final File NULLFILE = new File("");
 
     public enum LaunchType {
         // @formatter:off
@@ -68,7 +76,7 @@ public class JavaProfile {
         // @formatter:off
         EMBEDDED("unittesting", "Unit Testing"),
         JAVA_COMMAND_LINE("javacommand", "Java Command Line", "vmargument", "classpath", "mainclass", "appargument"),
-        JAVA_WEBSTART("webstart", "WebStart Application", "vmargument", "wsargument", "jnlpfile", "jnlpurl", "startwindowtitle"),
+        JAVA_WEBSTART("webstart", "WebStart Application", "vmargument", "wsargument", "jnlppath", "jnlpnolocalcopy", "startwindowtitle"),
         COMMAND_LINE("commandline", "Command Line", "command", "appargument", "startwindowtitle", "vmargument"),
         JAVA_APPLET("applet", "Applet Application",  "vmargument", "appleturl", "startwindowtitle"),
         EXECUTABLE_JAR("executablejar", "Executable JAR", "executablejar", "appargument", "startwindowtitle", "vmargument"),
@@ -107,8 +115,7 @@ public class JavaProfile {
     private LaunchMode launchMode;
     private LaunchType launchType = LaunchType.SWING_APPLICATION;
     private String mainClass;
-    private File jnlpFile;
-    private String jnlpUrl;
+    private String jnlpPath;
     private int port;
     private String startWindowTitle;
     private String workingDirectory;
@@ -190,12 +197,10 @@ public class JavaProfile {
             List<String> args = new ArrayList<String>();
             args.add(findJavaWSBinary());
             args.addAll(wsArguments);
-            if (jnlpFile != null) {
-                args.add(jnlpFile.getAbsolutePath());
-            } else if(jnlpUrl != null) {
-                args.add(jnlpUrl);
+            if (jnlpPath != null) {
+                args.add(getLocalCopy(jnlpPath));
             } else {
-                throw new WebDriverException("You must set either of JNLP File or URL");
+                throw new WebDriverException("You must set either JNLP URL or File");
             }
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
             commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
@@ -471,12 +476,9 @@ public class JavaProfile {
         return this;
     }
 
-    public JavaProfile setJNLPFile(File f) {
-        checkValidProperty("jnlpfile");
-        if(jnlpUrl != null) {
-            throw new WebDriverException("You can not set both JNLP File and URL at the same time");
-        }
-        this.jnlpFile = f;
+    public JavaProfile setJNLPPath(String url) {
+        checkValidProperty("jnlppath");
+        this.jnlpPath = url;
         return this;
     }
 
@@ -509,6 +511,7 @@ public class JavaProfile {
     private String javaHome;
     private boolean nativeEvents;
     private String executableJar;
+    private boolean jnlpNoLocalCopy;
 
     public String getRecorderJar() {
         if (System.getenv(MARATHON_RECORDER + ".file") != null) {
@@ -587,12 +590,10 @@ public class JavaProfile {
         for (int i = 1; i <= wsArguments.size(); i++) {
             builder.addParameter("wsarg" + i, wsArguments.get(i - 1));
         }
-        if (jnlpFile != null) {
-            builder.addParameter("jnlp", jnlpFile.getPath());
+        if (jnlpPath != null) {
+            builder.addParameter("jnlp", jnlpPath);
         }
-        if (jnlpUrl != null) {
-            builder.addParameter("jnlpUrl", jnlpUrl);
-        }
+        builder.addParameter("jnlpNoLocalCopy", Boolean.toString(jnlpNoLocalCopy));
         if (appletURL != null) {
             builder.addParameter("appleturl", appletURL);
         }
@@ -660,10 +661,11 @@ public class JavaProfile {
             }
         }
         if (hasValueFor(values, "jnlp")) {
-            jnlpFile = new File(findValueOf(values, "jnlp"));
+            jnlpPath = findValueOf(values, "jnlp");
         }
-        if (hasValueFor(values, "jnlpUrl")) {
-            jnlpUrl = findValueOf(values, "jnlp");
+        jnlpNoLocalCopy = false;
+        if (hasValueFor(values, "jnlpNoLocalCopy")) {
+            jnlpNoLocalCopy = Boolean.parseBoolean(findValueOf(values, "jnlpNoLocalCopy"));
         }
         if (hasValueFor(values, "appleturl")) {
             appletURL = findValueOf(values, "appleturl");
@@ -731,10 +733,11 @@ public class JavaProfile {
 
     @Override public String toString() {
         return "JavaProfile [classPathEntries=" + classPathEntries + ", vmArguments=" + vmArguments + ", wsArguments=" + wsArguments
-                + ", appArguments=" + appArguments + ", launchMode=" + launchMode + ", mainClass=" + mainClass + ", jnlpFile="
-                + jnlpFile + ", jnlpUrl = " + jnlpUrl + ", port=" + port + ", startWindowTitle=" + startWindowTitle + ", workingDirectory=" + workingDirectory
-                + ", vmCommand=" + vmCommand + ", command=" + command + ", appletURL=" + appletURL + ", recordingPort="
-                + recordingPort + ", javaHome=" + javaHome + ", nativeEvents=" + nativeEvents + "]";
+                + ", appArguments=" + appArguments + ", launchMode=" + launchMode + ", mainClass=" + mainClass + ", jnlpPath="
+                + jnlpPath + ", jnlpNoLocalCopy = " + jnlpNoLocalCopy + ", port=" + port + ", startWindowTitle=" + startWindowTitle
+                + ", workingDirectory=" + workingDirectory + ", vmCommand=" + vmCommand + ", command=" + command + ", appletURL="
+                + appletURL + ", recordingPort=" + recordingPort + ", javaHome=" + javaHome + ", nativeEvents=" + nativeEvents
+                + "]";
     }
 
     @Override public int hashCode() {
@@ -745,8 +748,8 @@ public class JavaProfile {
         result = prime * result + (classPathEntries == null ? 0 : classPathEntries.hashCode());
         result = prime * result + (command == null ? 0 : command.hashCode());
         result = prime * result + (javaHome == null ? 0 : javaHome.hashCode());
-        result = prime * result + (jnlpFile == null ? 0 : jnlpFile.hashCode());
-        result = prime * result + (jnlpUrl == null ? 0 : jnlpUrl.hashCode());
+        result = prime * result + (jnlpPath == null ? 0 : jnlpPath.hashCode());
+        result = prime * result + (jnlpNoLocalCopy ? 0 : 1);
         result = prime * result + (launchMode == null ? 0 : launchMode.hashCode());
         result = prime * result + (mainClass == null ? 0 : mainClass.hashCode());
         result = prime * result + (nativeEvents ? 1231 : 1237);
@@ -804,20 +807,15 @@ public class JavaProfile {
         } else if (!javaHome.equals(other.javaHome)) {
             return false;
         }
-        if (jnlpFile == null) {
-            if (other.jnlpFile != null) {
+        if (jnlpPath == null) {
+            if (other.jnlpPath != null) {
                 return false;
             }
-        } else if (!jnlpFile.equals(other.jnlpFile)) {
+        } else if (!jnlpPath.equals(other.jnlpPath)) {
             return false;
         }
-        if (jnlpUrl == null) {
-            if (other.jnlpUrl != null) {
-                return false;
-            }
-        } else if (!jnlpUrl.equals(other.jnlpUrl)) {
+        if (jnlpNoLocalCopy != other.jnlpNoLocalCopy)
             return false;
-        }
         if (launchMode != other.launchMode) {
             return false;
         }
@@ -917,12 +915,74 @@ public class JavaProfile {
         this.keepLog = keepLog;
     }
 
-    public JavaProfile setJNLPUrl(String url) {
-        checkValidProperty("jnlpurl");
-        if(this.jnlpFile != null) {
-            throw new WebDriverException("You can not set both JNLP File and URL at the same time");
-        }
-        this.jnlpUrl = url;
+    public JavaProfile setJNLPNoLocalCopy(boolean jnlpNoLocalCopy) {
+        checkValidProperty("jnlpnolocalcopy");
+        this.jnlpNoLocalCopy = jnlpNoLocalCopy;
         return this;
     }
+
+    private String getLocalCopy(String url) {
+        if (jnlpNoLocalCopy || !validURL(url))
+            return url;
+        File file = jnlpFiles.get(url);
+        if (file == null) {
+            file = createJNLPCopy(url);
+            if (file != NULLFILE) {
+                LOGGER.info("WebStart: Copied remote URL " + url + " to " + file.getAbsolutePath());
+            } else {
+                LOGGER.info("WebStart: Considering " + url + " as local");
+            }
+            jnlpFiles.put(url, file);
+        }
+        if (file == NULLFILE) {
+            return url;
+        }
+        return file.getAbsolutePath();
+    }
+
+    private File createJNLPCopy(String urlSpec) {
+        File jnlpFile = NULLFILE;
+        OutputStream os = null;
+        InputStream is = null;
+        try {
+            URL url = new URL(urlSpec);
+            URLConnection openConnection = url.openConnection();
+            Object content = openConnection.getContent();
+            File tempFile = File.createTempFile("marathon", ".jnlp");
+            tempFile.deleteOnExit();
+            os = new FileOutputStream(tempFile);
+            if (content instanceof InputStream) {
+                is = (InputStream) content;
+                byte[] b = new byte[1024];
+                int n;
+                while ((n = is.read(b)) != -1) {
+                    os.write(b, 0, n);
+                }
+            }
+            jnlpFile = tempFile;
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+        return jnlpFile;
+    }
+
+    private boolean validURL(String urlPath) {
+        try {
+            URL url = new URL(urlPath);
+            String protocol = url.getProtocol();
+            return protocol.equalsIgnoreCase("http") || protocol.equalsIgnoreCase("https");
+        } catch (MalformedURLException e) {
+        }
+        return false;
+    }
+
 }
