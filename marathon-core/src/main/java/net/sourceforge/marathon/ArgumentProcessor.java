@@ -77,8 +77,9 @@ public class ArgumentProcessor {
      *            , the arguments given on the command line.
      */
     public void process(String[] args) {
-        if(!JavaVersion.atLeast("1.8.0_112")) {
-            help("You need to use Java version >= 1.8.0_112");
+        String msg ;
+        if((msg = JavaVersion.atLeast("1.8.0_112")) != null) {
+            help("You need to use Java version >= 1.8.0_112 (" + msg + ")");
         }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-help") || args[i].equals("-?") || args[i].equals("-h")) {

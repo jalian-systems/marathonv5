@@ -27,11 +27,11 @@ import javafx.stage.StageStyle;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class WaitMessageDialog {
-    
+
     public static final Logger LOGGER = Logger.getLogger(WaitMessageDialog.class.getName());
 
     private static final String DEFAULT_MESSAGE = "This window closes once Marathon is ready for recording";
-    private static MessageDialog _instance = new MessageDialog();
+    private static MessageDialog _instance;
 
     private static class MessageDialog extends Stage {
         private String message = DEFAULT_MESSAGE;
@@ -63,7 +63,15 @@ public class WaitMessageDialog {
     }
 
     public static void setVisible(boolean b, String message) {
+        if (DisplayWindow.instance() == null) {
+            if (b)
+                System.out.println(message);
+            return;
+        }
         Runnable r = () -> {
+            if (_instance == null) {
+                _instance = new MessageDialog();
+            }
             if (_instance.isShowing() != b) {
                 if (b) {
                     _instance.show();

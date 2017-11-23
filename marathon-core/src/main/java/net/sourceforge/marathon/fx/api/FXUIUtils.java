@@ -205,7 +205,10 @@ public class FXUIUtils {
         fontIcons.put("Firefox", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
         fontIcons.put("Firefox (Marionette)", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
         fontIcons.put("Opera", new FontInfo(fontAwesome, FontAwesome.ICON.OPERA));
+        fontIcons.put("Firefox", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
         fontIcons.put("Chrome", new FontInfo(fontAwesome, FontAwesome.ICON.CHROME));
+        fontIcons.put("Firefox (Record)", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
+        fontIcons.put("Chrome (Record)", new FontInfo(fontAwesome, FontAwesome.ICON.CHROME));
         fontIcons.put("Internet Explorer", new FontInfo(fontAwesome, FontAwesome.ICON.INTERNET_EXPLORER));
         fontIcons.put("resetWorkspace", new FontInfo(SPACE));
         fontIcons.put("releaseNotes", new FontInfo(SPACE));
@@ -277,6 +280,7 @@ public class FXUIUtils {
         fontIcons.put("help", new FontInfo(materialIcons, MaterialIcons.ICON.HELP_OUTLINE));
         fontIcons.put("rotate", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.SCREEN_ROTATION));
         fontIcons.put("Safari", new FontInfo(fontAwesome, FontAwesome.ICON.SAFARI));
+        fontIcons.put("PhantomJS", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.GHOST));
         fontIcons.put("wordWrap", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.WRAP));
         fontIcons.put("close", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CLOSE_CIRCLE));
     }

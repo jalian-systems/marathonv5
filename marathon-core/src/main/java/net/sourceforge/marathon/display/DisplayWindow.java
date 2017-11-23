@@ -1644,7 +1644,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             JSONObject preferences = Preferences.instance().getSection("display");
             preferences.put("_doNotShowMessage", cb.isSelected());
             Preferences.instance().save("display");
-            vbox.getChildren().remove(0);   
+            vbox.getChildren().remove(0);
         });
         Text t = new Text(_message);
         hb.setAlignment(Pos.CENTER_LEFT);
@@ -1881,6 +1881,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 }
             }
 
+            @Override public Node getIcon() {
+                Node icon = action.getIcon();
+                if(icon != null)
+                    return icon;
+                return super.getIcon();
+            }
         };
     }
 
@@ -3693,7 +3699,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public static void setMessage(String message, String fg, String bg) {
         _message = message;
-        _message_fg = fg ;
-        _message_bg = bg ;
+        _message_fg = fg;
+        _message_bg = bg;
     }
 }

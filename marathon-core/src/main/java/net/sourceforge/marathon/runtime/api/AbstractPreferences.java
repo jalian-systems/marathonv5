@@ -36,7 +36,7 @@ public abstract class AbstractPreferences {
     private JSONObject prefs;
 
     private Map<String, Set<IPreferenceChangeListener>> listeners = new HashMap<>();
-    private File mpd;
+    protected File mpd;
 
     private String fileName;
 

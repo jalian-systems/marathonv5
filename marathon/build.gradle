@@ -108,7 +108,9 @@ distributions {
       from(project(':marathon-core').file('src/main/dist'))
       from(project(':marathon-java:marathon-java-runtime').file('src/main/dist'))
       from(project(':marathon-javafx:marathon-javafx-runtime').file('src/main/dist'))
-      from(startScripts)
+      from(startScripts) {
+        fileMode = 0755
+      }
       from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
         exclude('**/marathon*jar')
         into('support')

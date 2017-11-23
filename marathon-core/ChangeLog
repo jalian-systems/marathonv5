@@ -1,3 +1,32 @@
+Marathon Version 5.1.5.0 (27th November 2017)
+
+01. feat: Added nolocalcopy option for WebStartLaunch mode
+02. feat: Added httpd server to open reports from HTMLView editor
+03. feat: Added simple-web-server command to view Allure reports in all browsers.
+04. fix: Main split into GUIMain and Main for handling -batch mode properly
+05. fix: Help message
+06. feat: Added skipreports to skip allure report generation
+07. fix: Added to_s to value param of select, wait_p and assert_p
+08. fix: Removed unused Guice Injector in MarathonTestCase
+09. fix: Use Event.CTRL and Event.META directly for menu mask
+10. fix: AllureMarathonRunListener - Use TestAttributes always to get test properties
+11. fix: Added getIconAsText() to FXUIUtils
+12. fix: Added MessageBar to DisplayWindow
+13. fix: Exception CNF on SeparatorAction in WebApp testing.
+14. fix: Accepting WebElement as parameter to select/click etc.
+15. fix: When a String is passed to switchTo().window() instead of JSON Object handle it.
+16. fix: GetFocusedWindow - put more efforts to give back correct one.
+17. fix: timeout usage in with_window
+18. fix: JavaVersion check not checking properly.
+19. fix: Script execution on FX application thread.
+20. feat: Added setJNLPUrl for JavaProfile.
+21. feat: Blurb - accepts html string as StringBuilder
+22. fix: JRuby upgraded to latest version.
+23. feat: Added nThreads - used by marathonite-grid
+24. fix: Using MarathonTestProvider
+25. fix: MarathonTestProvider moved to marathon.
+26. fix: MarathonTestCase #getName appending name suffix (DDT test cases).
+
 Marathon Version 5.1.4.0 (9th October 2017)
 
 01. fix: Java/FX Agent - Stage#showAndWait hanging in EventQueue.waitTillAllEventsAreComplete
