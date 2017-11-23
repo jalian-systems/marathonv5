@@ -209,6 +209,10 @@ public class Constants {
         return getMarathonProjectDirectory().toPath().toAbsolutePath();
     }
 
+    public static File getReportsDirectory() {
+        return new File(System.getProperty(PROP_PROJECT_DIR), DIR_TESTREPORTS).getAbsoluteFile();
+    }
+
     public static String getRelativePath(String from, File runReportDir) {
         try {
             Path fromDir = getMarathonDirectory(from).toPath();

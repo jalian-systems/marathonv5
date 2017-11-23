@@ -40,7 +40,6 @@ public class ArgumentProcessor {
     private boolean acceptchecklists = false;
     private String reportDir = null;
     private boolean capture = false;
-
     private boolean skipreports;
 
     /**

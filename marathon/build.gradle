@@ -65,6 +65,13 @@ task startScripts(type: Copy) {
     from('script-templates/marathon.bat') {
       expand( [ 'marathonJar' : jar.archiveName, ])
     }
+    from('script-templates/simple-web-server') {
+      expand( [ 'marathonJar' : jar.archiveName, ])
+      fileMode(0755)
+    }
+    from('script-templates/simple-web-server.bat') {
+      expand( [ 'marathonJar' : jar.archiveName, ])
+    }
     from('script-templates/mruby') {
       expand( [ 'rubyJar' : "jruby-complete-${jruby_complete_version}.jar", "version" : "${version}" ])
       fileMode(0755)

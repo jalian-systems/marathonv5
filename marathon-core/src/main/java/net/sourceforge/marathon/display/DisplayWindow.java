@@ -90,6 +90,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.marathon.ProjectHTTPDServer;
 import net.sourceforge.marathon.api.LogRecord;
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
@@ -1107,6 +1108,15 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         resourceActionHandler = new ResourceActionHandler();
         resourceChangeListener = new ResourceChangeListener();
         GlobalResourceChangeListener.set(resourceChangeListener);
+        startHTTPDServer();
+    }
+
+    private void startHTTPDServer() {
+        try {
+            ProjectHTTPDServer.startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Inject public void setDisplay() {
