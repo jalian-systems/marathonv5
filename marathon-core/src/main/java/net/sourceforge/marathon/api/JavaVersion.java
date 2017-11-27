@@ -23,17 +23,17 @@ public class JavaVersion {
 
     private static String version = System.getProperty("java.version");
 
-    public static boolean atLeast(String target) {
+    public static String atLeast(String target) {
         int[] current = makeParts(version);
         int[] expected = makeParts(target);
         for (int i = 0; i < 4; i++) {
             if (expected[i] > current[i]) {
-                return false;
+                return "Expected: >= " + target + " Actual: " + version;
             } else if (expected[i] < current[i]) {
-                return true;
+                return null;
             }
         }
-        return true;
+        return null;
     }
 
     private static int[] makeParts(String v) {

@@ -122,8 +122,7 @@ public class RealMain {
             argProcessor.help("A marathon project file is given.\nUse project directory instead");
             return;
         }
-        processMPF(projectDir);
-        initializeInjector();
+        processMPF(projectDir, true);
         OSUtils.setLogConfiguration(projectDir);
         RuntimeLogger.setRuntimeLogger(new NullLogger());
         cleanResultFolder();
@@ -173,7 +172,7 @@ public class RealMain {
         if (projectDir == null) {
             System.exit(0);
         }
-        processMPF(projectDir);
+        processMPF(projectDir, false);
         initializeInjector();
         OSUtils.setLogConfiguration(projectDir);
         Injector injector = GuiceInjector.get();
@@ -247,43 +246,54 @@ public class RealMain {
      *            , Marathon project file. a suffix '.mpf' is added if the given
      *            name does not end with it.
      */
-    public static void processMPF(String projectDir) {
+    public static void processMPF(String projectDir, boolean batchMode) {
         try {
             File file = new File(projectDir);
             projectDir = file.getCanonicalPath();
             System.setProperty(Constants.PROP_PROJECT_DIR, projectDir);
             Properties mpfProps = ProjectFile.getProjectProperties();
-            checkForScriptModel(projectDir, mpfProps);
+            checkForScriptModel(projectDir, mpfProps, batchMode);
             MPFUtils.convertPathChar(mpfProps);
             MPFUtils.replaceEnviron(mpfProps);
             Properties props = System.getProperties();
             props.putAll(mpfProps);
             System.setProperties(props);
         } catch (FileNotFoundException e) {
-            FXUIUtils.showMessageDialog(null, "Unable to open Marathon Project File " + e.getMessage(), "Error", AlertType.ERROR);
+            if (batchMode)
+                System.err.println("Unable to open Marathon Project File " + e.getMessage());
+            else
+                FXUIUtils.showMessageDialog(null, "Unable to open Marathon Project File " + e.getMessage(), "Error",
+                        AlertType.ERROR);
             System.exit(1);
         } catch (IOException e) {
-            FXUIUtils.showMessageDialog(null, "Unable to read Marathon Project File " + e.getMessage(), "Error", AlertType.ERROR);
+            if (batchMode)
+                System.err.println("Unable to read Marathon Project File " + e.getMessage());
+            else
+                FXUIUtils.showMessageDialog(null, "Unable to read Marathon Project File " + e.getMessage(), "Error",
+                        AlertType.ERROR);
             System.exit(1);
         }
         String userDir = System.getProperty(Constants.PROP_PROJECT_DIR);
         if (userDir != null && !userDir.equals("") && System.getProperty("user.dir") == null) {
             System.setProperty("user.dir", userDir);
         }
-        checkForProperties();
-        if (!dirExists(Constants.PROP_MODULE_DIRS) || !dirExists(Constants.PROP_TEST_DIR) || !dirExists(Constants.PROP_FIXTURE_DIR)
-                || !dirExists(Constants.PROP_CHECKLIST_DIR)) {
+        checkForProperties(batchMode);
+        if (!dirExists(Constants.PROP_MODULE_DIRS, batchMode) || !dirExists(Constants.PROP_TEST_DIR, batchMode)
+                || !dirExists(Constants.PROP_FIXTURE_DIR, batchMode) || !dirExists(Constants.PROP_CHECKLIST_DIR, batchMode)) {
             System.exit(1);
         }
     }
 
-    private static void checkForScriptModel(String projectDir, Properties mpfProps) {
+    private static void checkForScriptModel(String projectDir, Properties mpfProps, boolean batchMode) {
         String scriptModel = mpfProps.getProperty(Constants.PROP_PROJECT_SCRIPT_MODEL);
         if ("net.sourceforge.marathon.ruby.RubyScriptModel".equals(scriptModel)) {
             return;
         }
         String message = "This project is configured with MarahtonITE.\n" + "You can't use Marathon to open it.";
-        FXUIUtils.showMessageDialog(null, message, "Script Model", AlertType.ERROR);
+        if (batchMode)
+            System.err.println(message);
+        else
+            FXUIUtils.showMessageDialog(null, message, "Script Model", AlertType.ERROR);
         System.exit(1);
     }
 
@@ -319,7 +329,7 @@ public class RealMain {
      *            , a property key
      * @return true, if the directory exists
      */
-    private static boolean dirExists(String dirKey) {
+    private static boolean dirExists(String dirKey, boolean batchMode) {
         String dirName = System.getProperty(dirKey);
         if (dirKey != null) {
             dirName = dirName.replace(';', File.pathSeparatorChar);
@@ -331,8 +341,11 @@ public class RealMain {
         for (String value : values) {
             File dir = new File(value);
             if (!dir.exists() || !dir.isDirectory()) {
-                FXUIUtils.showMessageDialog(null, "Invalid directory specified for " + dirKey + " - " + dirName, "Error",
-                        AlertType.ERROR);
+                if (batchMode)
+                    System.err.println("Invalid directory specified for " + dirKey + " - " + dirName);
+                else
+                    FXUIUtils.showMessageDialog(null, "Invalid directory specified for " + dirKey + " - " + dirName, "Error",
+                            AlertType.ERROR);
                 return false;
             }
         }
@@ -341,8 +354,10 @@ public class RealMain {
 
     /**
      * Check whether the mandatory properties are given.
+     * 
+     * @param batchMode
      */
-    private static void checkForProperties() {
+    private static void checkForProperties(boolean batchMode) {
         List<String> missingProperties = new ArrayList<String>();
         missingProperties.add("The following properties are not given.");
         String[] reqdProperties = { Constants.PROP_FIXTURE_DIR, Constants.PROP_TEST_DIR, Constants.PROP_MODULE_DIRS,
@@ -353,7 +368,10 @@ public class RealMain {
             }
         }
         if (missingProperties.size() > 1) {
-            FXUIUtils.showMessageDialog(null, missingProperties.toString(), "Missing Properties", AlertType.ERROR);
+            if (batchMode)
+                System.err.println(missingProperties.toString());
+            else
+                FXUIUtils.showMessageDialog(null, missingProperties.toString(), "Missing Properties", AlertType.ERROR);
             System.exit(1);
         }
     }

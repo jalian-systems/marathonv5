@@ -17,6 +17,7 @@ package net.sourceforge.marathon.display;
 
 import java.util.logging.Logger;
 
+import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.ToggleGroup;
 import net.sourceforge.marathon.editor.IEditorProvider;
@@ -138,5 +139,9 @@ public abstract class MarathonAction implements IMarathonAction {
 
     @Override public String getCommand() {
         return command;
+    }
+    
+    @Override public Node getIcon() {
+        return null;
     }
 }
