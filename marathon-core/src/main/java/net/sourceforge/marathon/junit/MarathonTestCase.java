@@ -28,9 +28,6 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-
 import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -38,7 +35,6 @@ import javafx.stage.Stage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
-import net.sourceforge.marathon.api.GuiceInjector;
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
 import net.sourceforge.marathon.checklist.CheckListFormNode;
@@ -64,7 +60,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
     public static final Logger LOGGER = Logger.getLogger(MarathonTestCase.class.getCanonicalName());
 
-    private @Inject IRuntimeFactory runtimeFactory;
+    private IRuntimeFactory runtimeFactory;
 
     private File file;
     private static IMarathonRuntime runtime = null;
@@ -76,7 +72,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     private boolean acceptChecklist;
     private IConsole console;
     private Properties dataVariables;
-    @SuppressWarnings("unused") private String nameSuffix = "";
+    private String nameSuffix = "";
 
     private String fullName;
 
@@ -97,8 +93,6 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
             MarathonTestCase.runtime = runtime;
         }
         this.acceptChecklist = false;
-        Injector injector = GuiceInjector.get();
-        injector.injectMembers(this);
     }
 
     public MarathonTestCase(File file, boolean acceptChecklist, IConsole console, Properties dataVariables, String name) {
@@ -108,7 +102,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     }
 
     @Override public String getName() {
-        return Project.getTestName(file);
+        return Project.getTestName(file) + nameSuffix;
     }
 
     @Override public void setName(String name) {
@@ -116,7 +110,6 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     }
 
     @Override public void run(TestResult result) {
-        TestAttributes.put("test_object", this);
         super.run(result);
     }
 

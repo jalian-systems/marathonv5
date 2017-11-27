@@ -42,7 +42,7 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     private void createDriver(String title) {
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART);
         File f = findFile();
-        profile.setJNLPFile(f);
+        profile.setJNLPPath(f.getAbsolutePath());
         profile.setStartWindowTitle(title);
         driver = new JavaDriver(profile);
     }
@@ -106,7 +106,7 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public void checkForArguments() throws Throwable {
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART);
         File f = findFile();
-        profile.setJNLPFile(f);
+        profile.setJNLPPath(f.getAbsolutePath());
         profile.setStartWindowTitle("SwingSet3");
         profile.addVMArgument("-Dhello=world");
         CommandLine commandLine = profile.getCommandLine();
@@ -118,7 +118,7 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART);
         profile.setJavaCommand("java");
         File f = findFile();
-        profile.setJNLPFile(f);
+        profile.setJNLPPath(f.getAbsolutePath());
         profile.setStartWindowTitle("SwingSet3");
         profile.addVMArgument("-Dhello=world");
         CommandLine commandLine = profile.getCommandLine();
@@ -156,7 +156,7 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public static void main(String[] args) throws InterruptedException {
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART);
         File f = findFile();
-        profile.setJNLPFile(f);
+        profile.setJNLPPath(f.getAbsolutePath());
         profile.setStartWindowTitle("SwingSet3");
         CommandLine commandLine = profile.getCommandLine();
         commandLine.copyOutputTo(System.err);

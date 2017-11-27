@@ -44,7 +44,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
         System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, Constants.FRAMEWORK_SWING);
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART);
         File f = findFile();
-        profile.setJNLPFile(f);
+        profile.setJNLPPath(f.getAbsolutePath());
         profile.setStartWindowTitle(title);
         profile.setRecordingPort(startRecordingServer());
         System.err.println("Launching: " + profile.getCommandLine());

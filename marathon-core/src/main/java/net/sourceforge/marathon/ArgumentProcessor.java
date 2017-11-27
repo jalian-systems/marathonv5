@@ -40,6 +40,7 @@ public class ArgumentProcessor {
     private boolean acceptchecklists = false;
     private String reportDir = null;
     private boolean capture = false;
+    private boolean skipreports;
 
     /**
      * @return the name of Marathon Project File given on the command line.
@@ -76,8 +77,9 @@ public class ArgumentProcessor {
      *            , the arguments given on the command line.
      */
     public void process(String[] args) {
-        if(!JavaVersion.atLeast("1.8.0_112")) {
-            help("You need to use Java version >= 1.8.0_112");
+        String msg ;
+        if((msg = JavaVersion.atLeast("1.8.0_112")) != null) {
+            help("You need to use Java version >= 1.8.0_112 (" + msg + ")");
         }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-help") || args[i].equals("-?") || args[i].equals("-h")) {
@@ -87,6 +89,8 @@ public class ArgumentProcessor {
                 batchMode = true;
             } else if (args[i].equals("-i") || args[i].equals("-ignore")) {
                 // Just ignore the argument (used in batch file)
+            } else if (args[i].equals("-skipreports")) {
+                skipreports = true;
             } else if (args[i].equals("-nosplash")) {
                 showSplash = false;
             } else if (args[i].equals("-acceptchecklists")) {
@@ -188,9 +192,9 @@ public class ArgumentProcessor {
     public void help(String errorMessage) {
         if (!isBatchMode()) {
             if (errorMessage.equals("")) {
-                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Usage", AlertType.INFORMATION);
+                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Usage", AlertType.INFORMATION, true);
             } else {
-                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Error", AlertType.INFORMATION);
+                FXUIUtils.showMessageDialog(null, createHelpMessage(errorMessage), "Error", AlertType.INFORMATION, true);
             }
         } else {
             String message = createHelpMessage(errorMessage);
@@ -204,19 +208,23 @@ public class ArgumentProcessor {
         if (!errorMessage.equals("")) {
             message.append("Error: " + errorMessage + "\n\n");
         }
-        message.append("Usage:\n");
-        message.append("marathon [-nosplash] [<Project Directory>]\n");
-        message.append("or\n");
-        // @formatter:off
-        message.append("marathon -batch ")
-            .append("[-reportdir <report-directory> (default: marathon-reports)] ")
-            .append("[-acceptchecklists] ")
-            .append("[-capture] ")
-            .append("[-delay <slowPlayDelayInMS>]")
-            .append("<Project Directory> ")
-            .append("[(<TestCase>|+<TestSuite>|@<Feature>|#<Story>|!<Issue>|~<SavedRun>) ...]")
-            .append("\n");
+        // @formatter: off
+        String help = ""
+                + "marathon [options...] [project-directory [test...]]\n"
+                + "\n"
+                + "-help | -? | -h                    Print usage\n"
+                + "-b | -batch                        Run marathonite in batch mode\n"
+                + "-skipreports                       Do not generate allure reports\n"
+                + "-nosplash                          Do not show marathon splash screen\n"
+                + "-acceptchecklists                  Accept checklists while running tests (used with -batch)\n"
+                + "-noconsolelog                      Do not create console.log files\n"
+                + "-capture                           Capture failure screenshots\n"
+                + "-delay delayInSeconds              Delay used in slow play\n"
+                + "-reportdir dir                     Marathon report directory (default: marathon-reports)\n"
+                + "\n"
+                + "";
         // @formatter: on
+        message.append(help);
         return message.toString();
     }
 
@@ -226,5 +234,9 @@ public class ArgumentProcessor {
 
     public String getReportDir() {
         return reportDir;
+    }
+    
+    public boolean isSkipreports() {
+        return skipreports;
     }
 }

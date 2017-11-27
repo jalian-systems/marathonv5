@@ -128,6 +128,8 @@ class RubyMarathon < MarathonRuby
     end
 
     def get_leaf_component(id, editor=false, visibility = true)
+        return id.getWebElement if id.getWebElement
+      
         css = getCSS(id, visibility).to_a
         e = @current_search_context.find_element(:css => css[0])
         e = e.find_element(:css => ".::" + css[1]) if css[1] != nil && !editor
@@ -352,7 +354,16 @@ end
 # Wait for a window to appear. The default timeout is 30seconds
 
 def with_window(windowTitle, timeout = 0)
-    $marathon.window(windowTitle, timeout)
+    endTime = System.currentTimeMillis + (timeout * 1000)
+    begin
+      window(windowTitle, timeout)
+    rescue Exception => e
+      if System.currentTimeMillis < endTime
+        retry
+      else
+        raise e
+      end
+    end
     yield
     $marathon.close
     return true
@@ -466,7 +477,7 @@ end
 # Select a given component and set the state corresponding to the given text.
 
 def select(componentName, text, componentInfo=nil)
-    $marathon.select(ComponentId.new(componentName, componentInfo), text)
+    $marathon.select(ComponentId.new(componentName, componentInfo), text.to_s)
 end
 
 # Get the Java component represented by the given name that is visible and showing
@@ -555,11 +566,11 @@ end
 # of the component currently in the application.
 
 def assert_p(component, property, value, componentInfo=nil)
-    $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value)
+    $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value.to_s)
 end
 
 def wait_p(component, property, value, componentInfo=nil)
-    $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value)
+    $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value.to_s)
 end
 
 def assert_content(componentName, content, componentInfo=nil)

@@ -47,6 +47,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -88,6 +89,12 @@ public class FXUIUtils {
                 label.setTextFill(color);
             label.setText(namedChar.getChar() + "");
             return label;
+        }
+
+        public Text createText() {
+            Text t = new Text(namedChar.getChar() + "");
+            t.setFont(font);
+            return t;
         }
     }
 
@@ -198,7 +205,10 @@ public class FXUIUtils {
         fontIcons.put("Firefox", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
         fontIcons.put("Firefox (Marionette)", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
         fontIcons.put("Opera", new FontInfo(fontAwesome, FontAwesome.ICON.OPERA));
+        fontIcons.put("Firefox", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
         fontIcons.put("Chrome", new FontInfo(fontAwesome, FontAwesome.ICON.CHROME));
+        fontIcons.put("Firefox (Record)", new FontInfo(fontAwesome, FontAwesome.ICON.FIREFOX));
+        fontIcons.put("Chrome (Record)", new FontInfo(fontAwesome, FontAwesome.ICON.CHROME));
         fontIcons.put("Internet Explorer", new FontInfo(fontAwesome, FontAwesome.ICON.INTERNET_EXPLORER));
         fontIcons.put("resetWorkspace", new FontInfo(SPACE));
         fontIcons.put("releaseNotes", new FontInfo(SPACE));
@@ -270,9 +280,11 @@ public class FXUIUtils {
         fontIcons.put("help", new FontInfo(materialIcons, MaterialIcons.ICON.HELP_OUTLINE));
         fontIcons.put("rotate", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.SCREEN_ROTATION));
         fontIcons.put("Safari", new FontInfo(fontAwesome, FontAwesome.ICON.SAFARI));
+        fontIcons.put("PhantomJS", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.GHOST));
         fontIcons.put("wordWrap", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.WRAP));
+        fontIcons.put("close", new FontInfo(materialDesignIcons, MaterialDesignIcons.ICON.CLOSE_CIRCLE));
     }
-    
+
     public static Button createButton(String name, String toolTip) {
         return createButton(name, toolTip, true);
     }
@@ -366,6 +378,13 @@ public class FXUIUtils {
 
     static List<String> noFontIcon = new ArrayList<>();
 
+    public static Text getIconAsText(String name) {
+        FontInfo fontInfo = fontIcons.get(name);
+        if (fontInfo == null)
+            return null;
+        return fontInfo.createText();
+    }
+
     public static Node getImageFromX(String name, String from, FromOptions options) {
         FontInfo fontInfo = fontIcons.get(name);
         if (fontInfo != null) {
@@ -406,13 +425,17 @@ public class FXUIUtils {
     }
 
     public static void showMessageDialog(Window parent, String message, String title, AlertType type) {
+        showMessageDialog(parent, message, title, type, false);
+    }
+
+    public static void showMessageDialog(Window parent, String message, String title, AlertType type, boolean monospace) {
         if (Platform.isFxApplicationThread()) {
-            _showMessageDialog(parent, message, title, type);
+            _showMessageDialog(parent, message, title, type, monospace);
         } else {
             Object lock = new Object();
             synchronized (lock) {
                 Platform.runLater(() -> {
-                    _showMessageDialog(parent, message, title, type);
+                    _showMessageDialog(parent, message, title, type, monospace);
                     lock.notifyAll();
                 });
             }
@@ -427,11 +450,23 @@ public class FXUIUtils {
     }
 
     public static void _showMessageDialog(Window parent, String message, String title, AlertType type) {
+        _showMessageDialog(parent, message, title, type, false);
+    }
+
+    public static void _showMessageDialog(Window parent, String message, String title, AlertType type, boolean monospace) {
         Alert alert = new Alert(type);
         alert.initOwner(parent);
         alert.setTitle(title);
+        alert.setHeaderText(title);
         alert.setContentText(message);
         alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setResizable(true);
+        if (monospace) {
+            Text text = new Text(message);
+            alert.getDialogPane().setStyle("-fx-padding: 0 10px 0 10px;");
+            text.setStyle(" -fx-font-family: monospace;");
+            alert.getDialogPane().contentProperty().set(text);
+        }
         alert.showAndWait();
     }
 

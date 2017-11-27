@@ -209,6 +209,10 @@ public class Constants {
         return getMarathonProjectDirectory().toPath().toAbsolutePath();
     }
 
+    public static File getReportsDirectory() {
+        return new File(System.getProperty(PROP_PROJECT_DIR), DIR_TESTREPORTS).getAbsoluteFile();
+    }
+
     public static String getRelativePath(String from, File runReportDir) {
         try {
             Path fromDir = getMarathonDirectory(from).toPath();
@@ -257,6 +261,7 @@ public class Constants {
     public static final String AUT_WEBAPP_BROWSER_OVERRIDE = "marathon.webapp.browser.override";
     public static final String OUTPUT_MAX_CHARS = "marathon.output.max_chars";
     public static final String OUTPUT_STYLE = "marathon.output.style";
+    public static final String NTHREADS = "marathon.grid.nthreads";
 
 
 }

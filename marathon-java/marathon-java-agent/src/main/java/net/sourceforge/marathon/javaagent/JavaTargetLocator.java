@@ -41,6 +41,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -279,14 +280,26 @@ public class JavaTargetLocator {
     }
 
     private IJavaAgent window_internal(String windowDetails) {
-        Window[] windows = getValidWindows();
         String nameOrHandleOrTitle = null;
+        JSONObject winDetailsJsonObject = null;
+        try {
+            winDetailsJsonObject = new JSONObject(windowDetails);
+            nameOrHandleOrTitle = winDetailsJsonObject.getString("title");
+        } catch (Exception e) {
+            nameOrHandleOrTitle = windowDetails;
+        }
+        Window[] windows = getValidWindows();
         for (Window window : windows) {
             JWindow jw = new JWindow(window);
-            JSONObject winDetailsJsonObject = new JSONObject(windowDetails);
-            nameOrHandleOrTitle = winDetailsJsonObject.getString("title");
-            jw.setContainerNamingProperties(getContainerNP(window, winDetailsJsonObject.getJSONObject("containerNP")));
-            allProperties = winDetailsJsonObject.getJSONArray("allProperties");
+            try {
+                if (winDetailsJsonObject != null) {
+                    jw.setContainerNamingProperties(getContainerNP(window, winDetailsJsonObject.getJSONObject("containerNP")));
+                    allProperties = winDetailsJsonObject.getJSONArray("allProperties");
+                }
+            } catch (RuntimeException e) {
+                LOGGER.warning(e.getMessage());
+                throw e;
+            }
             String title = jw.getTitle();
             if (nameOrHandleOrTitle.startsWith("/") && !nameOrHandleOrTitle.startsWith("//")) {
                 if (title != null && title.matches(nameOrHandleOrTitle.substring(1))) {
@@ -314,7 +327,7 @@ public class JavaTargetLocator {
                 return driver;
             }
         }
-        throw new NoSuchWindowException("Cannot find window: " + nameOrHandleOrTitle, null);
+        throw new NoSuchWindowException("Cannot find window: " + windowDetails, null);
     }
 
     private List<List<String>> getContainerNP(Window window, JSONObject map) {
@@ -431,7 +444,22 @@ public class JavaTargetLocator {
     }
 
     private Window findFocusWindow() {
-        return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+        Window w = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+        if (w != null)
+            return w;
+        w = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+        if (w != null)
+            return w;
+
+        Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+        if (focusOwner != null)
+            w = SwingUtilities.getWindowAncestor(focusOwner);
+        if (w != null)
+            return w;
+        Window[] validWindows = getValidWindows();
+        if (validWindows.length > 0)
+            return validWindows[validWindows.length - 1];
+        return null;
     }
 
     public String getWindowHandle() {
@@ -459,17 +487,6 @@ public class JavaTargetLocator {
             }
         }.wait("No top level window available", 60000, 500);
         return _getTopContainer();
-    }
-
-    public JWindow getFocusedWindow() {
-        Window[] windows = getValidWindows();
-        for (Window window : windows) {
-            if (window.isFocused())
-                return new JWindow(window);
-        }
-        if (windows.length > 0)
-            return new JWindow(windows[0]);
-        return null;
     }
 
     private JWindow _getTopContainer() {

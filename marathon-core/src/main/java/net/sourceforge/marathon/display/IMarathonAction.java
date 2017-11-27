@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.ToggleGroup;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
@@ -52,4 +53,5 @@ public interface IMarathonAction {
 
     String getCommand();
 
+    Node getIcon();
 }

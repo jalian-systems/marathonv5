@@ -25,9 +25,16 @@ public class BlurbInfo {
     private URL url;
     private String title;
     private boolean cancelNeeded;
+    private String html;
 
     public BlurbInfo(URL url, String title, boolean cancelNeeded) {
         this.url = url;
+        this.title = title;
+        this.cancelNeeded = cancelNeeded;
+    }
+
+    public BlurbInfo(String html, String title, boolean cancelNeeded) {
+        this.html = html;
         this.title = title;
         this.cancelNeeded = cancelNeeded;
     }
@@ -42,5 +49,9 @@ public class BlurbInfo {
 
     public boolean isCancelNeeded() {
         return cancelNeeded;
+    }
+    
+    public String getHtml() {
+        return html;
     }
 }

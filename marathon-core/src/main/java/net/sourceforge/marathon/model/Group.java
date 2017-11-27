@@ -65,12 +65,22 @@ public class Group {
                     return false;
                 }
                 for (File file : files) {
-                    if (!Constants.isTestFile(file) && Constants.isSuiteFile(file) && !Constants.isFeatureFile(file)
+                    if (!Constants.isSuiteFile(file) && !Constants.isTestFile(file) && !Constants.isFeatureFile(file)
                             && !Constants.isStoryFile(file) && !Constants.isIssueFile(file)) {
                         return false;
                     }
                     if (file.toPath().equals(self)) {
                         return false;
+                    }
+                    if (Constants.isSuiteFile(file)) {
+                        try {
+                            Group suite = Group.findByFile(SUITE, file.toPath());
+                            if (suite.containsRecursive(self)) {
+                                return false;
+                            }
+                        } catch (IOException e) {
+                            return false;
+                        }
                     }
                 }
                 return true;
@@ -303,6 +313,19 @@ public class Group {
         this.path = file.getCanonicalFile().toPath();
         String text = new String(Files.readAllBytes(this.path), Charset.defaultCharset());
         init(new JSONObject(text));
+    }
+
+    protected boolean containsRecursive(Path self) throws IOException {
+        for (GroupEntry entry : entries) {
+            if (entry.getFilePath().equals(self))
+                return true;
+            if (entry.getType() == GroupEntryType.SUITE) {
+                Group entrySuite = Group.findByFile(GroupType.SUITE, entry.getFilePath());
+                if (entrySuite.containsRecursive(self))
+                    return true;
+            }
+        }
+        return false;
     }
 
     private Group(String name) {

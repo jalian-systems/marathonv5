@@ -42,6 +42,19 @@ public abstract class Blurb {
     private ButtonType selection;
     private boolean cancel;
 
+    private String html;
+
+    public Blurb(StringBuilder html, String title, boolean cancel) {
+        this.title = title;
+        this.cancel = cancel;
+        this.html = html.toString();
+        selection = showMessage();
+    }
+
+    public Blurb(StringBuilder html, String title) {
+        this(html, title, false);
+    }
+
     public Blurb(String marker, String title, boolean cancel) {
         this.url = getClass().getResource(marker + ".html");
         this.title = title;
@@ -54,7 +67,12 @@ public abstract class Blurb {
     }
 
     protected ButtonType showDialog() {
-        BlurbStage blurbStage = new BlurbStage(new BlurbInfo(url, title, cancel));
+        BlurbInfo blurbInfo;
+        if (url == null)
+            blurbInfo = new BlurbInfo(html, title, cancel);
+        else
+            blurbInfo = new BlurbInfo(url, title, cancel);
+        BlurbStage blurbStage = new BlurbStage(blurbInfo);
         blurbStage.getStage().showAndWait();
         return blurbStage.getSelection();
     }
@@ -107,9 +125,13 @@ public abstract class Blurb {
 
         private void initComponents() {
             webView.setId("webView");
+            webView.getEngine().getLoadWorker().stateProperty().addListener(new HyperlinkRedirectListener(webView));
             VBox.setVgrow(webView, Priority.ALWAYS);
             WebEngine engine = webView.getEngine();
-            engine.load(blurbInfo.getURL().toExternalForm());
+            if (blurbInfo.getURL() != null)
+                engine.load(blurbInfo.getURL().toExternalForm());
+            else
+                engine.loadContent(blurbInfo.getHtml());
 
             buttonBar.setId("buttonBar");
             buttonBar.setButtonMinWidth(Region.USE_PREF_SIZE);

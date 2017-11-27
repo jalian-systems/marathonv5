@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.runtime.api;
 
 import java.awt.Component;
+import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -35,12 +36,13 @@ public class OSUtils {
 
     public static final Logger LOGGER = Logger.getLogger(OSUtils.class.getName());
 
-    public static final int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    public static final int MENU_MASK ;
     public static final int MOUSE_MENU_MASK;
     private static final String JAVA_VERSION = System.getProperty("java.version");
     private static final String OS_NAME = System.getProperty("os.name");
 
     static {
+        MENU_MASK = isMac() ? Event.CTRL_MASK : Event.META_MASK;
         if ((MENU_MASK & InputEvent.META_MASK) != 0) {
             MOUSE_MENU_MASK = InputEvent.META_DOWN_MASK;
         } else if ((MENU_MASK & InputEvent.CTRL_MASK) != 0) {

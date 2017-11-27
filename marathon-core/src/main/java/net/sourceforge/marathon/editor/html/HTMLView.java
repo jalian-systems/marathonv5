@@ -18,6 +18,7 @@ package net.sourceforge.marathon.editor.html;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -25,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
+import net.sourceforge.marathon.ProjectHTTPDServer;
 import net.sourceforge.marathon.editor.FileBasedEditor;
 import net.sourceforge.marathon.editor.IEditor;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -33,7 +35,7 @@ import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
 
 public class HTMLView extends FileBasedEditor implements IEditor {
-    
+
     public static final Logger LOGGER = Logger.getLogger(HTMLView.class.getName());
 
     private HashMap<String, Object> dataMap = new HashMap<String, Object>();
@@ -49,17 +51,21 @@ public class HTMLView extends FileBasedEditor implements IEditor {
         Button prevPage = FXUIUtils.createButton("prev", "Previous Page", false);
         WebHistory history = webView.getEngine().getHistory();
         prevPage.setOnAction((event) -> {
-           history.go(-1); 
+            history.go(-1);
         });
         bar.add(prevPage);
         Button nextPage = FXUIUtils.createButton("next", "Next Page", false);
         nextPage.setOnAction((event) -> {
-           history.go(1); 
+            history.go(1);
         });
         bar.add(nextPage);
         openInBrowser.setOnAction((event) -> {
             try {
-                Desktop.getDesktop().open(fileHandler.getCurrentFile());
+                URI uri = ProjectHTTPDServer.getURI(fileHandler.getCurrentFile().toPath());
+                if (uri != null)
+                    Desktop.getDesktop().browse(uri);
+                else
+                    Desktop.getDesktop().open(fileHandler.getCurrentFile());
             } catch (IOException e) {
                 e.printStackTrace();
             }

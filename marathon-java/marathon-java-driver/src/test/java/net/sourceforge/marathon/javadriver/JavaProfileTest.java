@@ -117,7 +117,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void getWsCommandWithJNLP() throws Throwable {
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART).addWSArgument("-verbose").addVMArgument("-Dx.y.z=hello");
-        profile.setJNLPFile(new File("SwingSet3.jnlp"));
+        profile.setJNLPPath(new File("SwingSet3.jnlp").getAbsolutePath());
         final CommandLine commandLine = profile.getCommandLine();
         AssertJUnit.assertNotNull(commandLine);
         AssertJUnit.assertTrue(commandLine.toString().contains("-javaagent:"));
@@ -145,7 +145,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void convertURIJavaWSCommand() throws Throwable {
         JavaProfile expected = new JavaProfile(LaunchMode.JAVA_WEBSTART).setJavaCommand("/usr/bin/java")
                 .setJavaHome("/usr/bin/javahome").addVMArgument("-Xmx512m", "-Xms512m").setStartWindowTitle("The World Is Huge")
-                .addWSArgument("-silent", "-nologo").setJNLPFile(new File("/etc/hosts"));
+                .addWSArgument("-silent", "-nologo").setJNLPPath(new File("/etc/hosts").getAbsolutePath());
         JavaProfile actual = new JavaProfile(expected.asURL());
         AssertJUnit.assertEquals(expected, actual);
     }

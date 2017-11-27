@@ -47,7 +47,7 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
     @Override public String run(String script) {
         try {
             script = asciize(script);
-            IRubyObject evalScriptlet = interpreter.evalScriptlet(script, interpreter.getCurrentContext().getCurrentScope());
+            IRubyObject evalScriptlet = interpreter.evalScriptlet(script);
             if (evalScriptlet instanceof RubyString) {
                 return RubyScriptModel.inspect(evalScriptlet.toString());
             } else {
