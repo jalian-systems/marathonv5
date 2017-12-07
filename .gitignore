@@ -142,3 +142,6 @@ marathon-java/bin/
 marathon/bin/
 marathon/bin-test/
 marathon/omap-configuration.yaml
+
+marathon-jenkins/work/
+marathon-jenkins/build/
