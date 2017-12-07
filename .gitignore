@@ -144,4 +144,9 @@ marathon/bin-test/
 marathon/omap-configuration.yaml
 
 marathon-jenkins/work/
-marathon-jenkins/build/
+marathon-jenkins/.classpath
+marathon-jenkins/.gitignore
+marathon-jenkins/.project
+marathon-jenkins/.settings/
+marathon-jenkins/build
+marathon-jenkins/bin
