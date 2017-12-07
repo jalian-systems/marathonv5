@@ -23,3 +23,5 @@ jenkinsPlugin {
 	displayName = 'Marathon - Jenkins'
 	url = 'https://marathontesting.com'
 }
+
+build.dependsOn('jpi')
