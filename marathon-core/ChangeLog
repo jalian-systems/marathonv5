@@ -1,4 +1,4 @@
-Marathon Version 5.1.5.0 (27th November 2017)
+Marathon Version 5.1.5.1 (27th November 2017)
 
 01. feat: Added nolocalcopy option for WebStartLaunch mode
 02. feat: Added httpd server to open reports from HTMLView editor
