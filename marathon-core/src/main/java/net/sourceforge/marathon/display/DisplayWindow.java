@@ -1313,10 +1313,18 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         if (!file.exists()) {
                             return null;
                         }
-                        IEditor e;
-                        e = createEditor(file);
-                        Dockable dockable = (Dockable) e.getData("dockable");
-                        return dockable;
+                        try {
+                            IEditor e;
+                            e = createEditor(file);
+                            Dockable dockable = (Dockable) e.getData("dockable");
+                            return dockable;
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                            FXUIUtils.showMessageDialog(DisplayWindow.this,
+                                    "Error Opening Editor for file: " + file.getAbsolutePath() + ":" + t.getMessage(), "Error",
+                                    AlertType.ERROR);
+                            return null;
+                        }
                     }
                 }
 
@@ -1883,7 +1891,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
             @Override public Node getIcon() {
                 Node icon = action.getIcon();
-                if(icon != null)
+                if (icon != null)
                     return icon;
                 return super.getIcon();
             }
