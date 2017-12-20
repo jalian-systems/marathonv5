@@ -40,7 +40,7 @@ import junit.runner.Version;
  * @since 4.0
  */
 public class MarathonTestRunner {
-    
+
     public static final Logger LOGGER = Logger.getLogger(MarathonTestRunner.class.getName());
 
     private final RunNotifier notifier = new RunNotifier();
@@ -137,8 +137,8 @@ public class MarathonTestRunner {
     }
 
     /**
-     * Run all the tests contained in JUnit 3.8.x <code>test</code> parallel. Here for
-     * backward compatibility.
+     * Run all the tests contained in JUnit 3.8.x <code>test</code> parallel.
+     * Here for backward compatibility.
      *
      * @param test
      *            the old-style test
@@ -147,7 +147,7 @@ public class MarathonTestRunner {
      */
     public Result runParallel(junit.framework.Test test) {
         MarathonTestProvider.setSuite(test);
-        return run(new ParallelComputer(false, true),MarathonTestProvider.class);
+        return run(new ParallelComputer(false, true), MarathonTestProvider.class);
     }
 
     /**

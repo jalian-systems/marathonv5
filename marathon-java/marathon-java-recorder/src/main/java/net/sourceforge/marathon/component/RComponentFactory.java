@@ -52,7 +52,7 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RComponentFactory {
-    
+
     public static final Logger LOGGER = Logger.getLogger(RComponentFactory.class.getName());
 
     private JSONOMapConfig omapConfig;
@@ -147,7 +147,7 @@ public class RComponentFactory {
                 Constructor<? extends RComponent> cons = k.getConstructor(Component.class, JSONOMapConfig.class, Point.class,
                         IJSONRecorder.class);
                 Component active = entry.getActiveSource(source);
-                if(active != source) {
+                if (active != source) {
                     point = SwingUtilities.convertPoint(source, point, active);
                 }
                 return cons.newInstance(active, omapConfig, point, recorder);

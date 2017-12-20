@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class ObjectMapException extends Exception {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ObjectMapException.class.getName());
 
     private static final long serialVersionUID = 1L;

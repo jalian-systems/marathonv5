@@ -29,7 +29,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class BannerPanel extends JPanel {
-    
+
     public static final Logger LOGGER = Logger.getLogger(BannerPanel.class.getName());
 
     private static final long serialVersionUID = 1L;

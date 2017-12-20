@@ -18,7 +18,7 @@ package net.sourceforge.marathon.javaagent;
 import java.util.logging.Logger;
 
 public final class JavaAgentException extends RuntimeException {
-    
+
     public static final Logger LOGGER = Logger.getLogger(JavaAgentException.class.getName());
 
     private static final long serialVersionUID = 1L;

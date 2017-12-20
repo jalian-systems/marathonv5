@@ -25,9 +25,7 @@ public class FileDialogTransformer implements ClassFileTransformer {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
             if (cl.getName().equals("java.awt.FileDialog")) {
                 CtMethod showFileChooser = cl.getDeclaredMethod("getFile");
-                String code = "{"
-                        + "dispatchEvent(new java.awt.event.ActionEvent(this, 200, $_));"
-                        + "}";
+                String code = "{" + "dispatchEvent(new java.awt.event.ActionEvent(this, 200, $_));" + "}";
                 showFileChooser.insertAfter(code);
             }
             b = cl.toBytecode();

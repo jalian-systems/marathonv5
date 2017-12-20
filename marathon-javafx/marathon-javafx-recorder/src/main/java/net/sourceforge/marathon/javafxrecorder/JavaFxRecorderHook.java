@@ -424,10 +424,15 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             return;
         }
         Node target;
-        if (event instanceof MouseEvent && ((MouseEvent) event).getPickResult() != null) {
+        if (event instanceof MouseEvent && ((MouseEvent) event).getPickResult() != null
+                && ((MouseEvent) event).getPickResult().getIntersectedNode() != null) {
             target = ((MouseEvent) event).getPickResult().getIntersectedNode();
         } else {
             target = (Node) event.getTarget();
+        }
+        if (target == null) {
+            System.out.println("JavaFxRecorderHook.handle_internal(" + event + "): target = null?");
+            return;
         }
         RFXComponent c = finder.findRComponent(target, point, recorder);
         if (!c.equals(current) && isFocusChangeEvent(event)) {
@@ -482,7 +487,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             if (event.getSource() instanceof Menu) {
                 return;
             }
-            new RFXMenuItem(recorder, objectMapConfiguration).record(event);
+            if (event.getSource() != null)
+                new RFXMenuItem(recorder, objectMapConfiguration).record(event);
         }
     }
 }

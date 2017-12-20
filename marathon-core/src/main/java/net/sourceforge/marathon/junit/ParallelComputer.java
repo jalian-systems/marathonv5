@@ -20,7 +20,7 @@ import org.junit.runners.model.RunnerScheduler;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class ParallelComputer extends Computer {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ParallelComputer.class.getName());
 
     private final boolean fClasses;

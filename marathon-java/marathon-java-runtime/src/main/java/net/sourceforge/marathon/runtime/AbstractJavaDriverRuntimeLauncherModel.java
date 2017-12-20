@@ -39,7 +39,7 @@ import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.Wait;
 
 public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDriverRuntimeLauncherModel, IRuntimeLauncherModel {
-    
+
     public static final Logger LOGGER = Logger.getLogger(AbstractJavaDriverRuntimeLauncherModel.class.getName());
 
     @Override public ITestLauncher createLauncher(Properties props) {

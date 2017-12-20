@@ -36,7 +36,7 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class FileHandler implements IResourceHandler {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FileHandler.class.getName());
 
     private static final String NL = System.getProperty("line.separator");
@@ -196,7 +196,8 @@ public class FileHandler implements IResourceHandler {
 
     private File askForFile(Window parent, String filename) {
         fileChooserInfo = new MarathonFileChooserInfo("Save File", filename, rootDirectory, isTestFile());
-        File selectedFile = FXUIUtils.showMarathonSaveFileChooser(fileChooserInfo, "Saving '" + filename + "'", FXUIUtils.getIcon("saveAs"));
+        File selectedFile = FXUIUtils.showMarathonSaveFileChooser(fileChooserInfo, "Saving '" + filename + "'",
+                FXUIUtils.getIcon("saveAs"));
         if (selectedFile != null) {
             String suffix = filter.getSuffix();
             if (suffix == null) {

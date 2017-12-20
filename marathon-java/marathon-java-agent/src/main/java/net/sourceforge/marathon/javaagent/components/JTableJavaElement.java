@@ -76,19 +76,20 @@ public class JTableJavaElement extends AbstractJavaElement {
         @Override public boolean isValid(JTableCellJavaElement e) {
             String eRow = e.getAttribute("row");
             String eColumn = e.getAttribute("column");
-            if(row.equals(eRow)) {
-                if(column.equals(eColumn))
+            if (row.equals(eRow)) {
+                if (column.equals(eColumn))
                     return true;
-                if(column.length() == 1 && column.charAt(0) >= 'A' && column.charAt(0) <= 'Z') {
-                    int colId = column.charAt(0) - 'A' ;
-                    if((e.getViewColumn() - 1) == colId)
+                if (column.length() == 1 && column.charAt(0) >= 'A' && column.charAt(0) <= 'Z') {
+                    int colId = column.charAt(0) - 'A';
+                    if ((e.getViewColumn() - 1) == colId)
                         return true;
                 }
             }
             return false;
         }
-        
+
     }
+
     private static interface Predicate {
         public boolean isValid(JTableCellJavaElement e);
     }
@@ -294,8 +295,8 @@ public class JTableJavaElement extends AbstractJavaElement {
                 return i;
             }
         }
-        if(columnName.length() == 1 && columnName.charAt(0) >= 'A' && columnName.charAt(0) <= 'Z')
-            return columnName.charAt(0) - 'A' ;
+        if (columnName.length() == 1 && columnName.charAt(0) >= 'A' && columnName.charAt(0) <= 'Z')
+            return columnName.charAt(0) - 'A';
         throw new RuntimeException("Could not find column " + columnName + " in table");
     }
 

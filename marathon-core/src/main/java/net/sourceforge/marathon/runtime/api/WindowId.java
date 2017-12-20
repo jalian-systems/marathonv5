@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 public class WindowId implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(WindowId.class.getName());
 
     private static final long serialVersionUID = 1L;

@@ -491,13 +491,13 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
             }
         }
     }
-    
+
     public boolean isVisible() {
-        Component c = component ;
-        while(c != null) {
-            if(c instanceof Window)
+        Component c = component;
+        while (c != null) {
+            if (c instanceof Window)
                 return true;
-            if(!c.isVisible())
+            if (!c.isVisible())
                 return false;
             c = c.getParent();
         }

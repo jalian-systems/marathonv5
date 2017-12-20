@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * Matches filenames to given pattern
  */
 public class FilePatternMatcher {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FilePatternMatcher.class.getName());
 
     private ArrayList<Pattern> hiddenFiles = new ArrayList<Pattern>();

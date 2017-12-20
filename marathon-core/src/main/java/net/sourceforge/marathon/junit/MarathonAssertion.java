@@ -28,7 +28,7 @@ import junit.framework.AssertionFailedError;
 import net.sourceforge.marathon.runtime.api.Failure;
 
 public class MarathonAssertion extends AssertionFailedError {
-    
+
     public static final Logger LOGGER = Logger.getLogger(MarathonAssertion.class.getName());
 
     private static final long serialVersionUID = 1L;

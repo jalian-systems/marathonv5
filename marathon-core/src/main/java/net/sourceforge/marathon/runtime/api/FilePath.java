@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * FilePath provides makes it easy to work with file paths.
  */
 public class FilePath {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FilePath.class.getName());
 
     ArrayList<String> pathElements = new ArrayList<String>();

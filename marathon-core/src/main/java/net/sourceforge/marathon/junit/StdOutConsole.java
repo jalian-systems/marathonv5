@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import net.sourceforge.marathon.runtime.api.AbstractFileConsole;
 
 public class StdOutConsole extends AbstractFileConsole {
-    
+
     public static final Logger LOGGER = Logger.getLogger(StdOutConsole.class.getName());
 
     public void write(char cbuf[], int off, int len) {

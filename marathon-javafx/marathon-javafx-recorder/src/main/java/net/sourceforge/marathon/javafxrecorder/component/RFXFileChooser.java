@@ -23,7 +23,7 @@ import net.sourceforge.marathon.javafxagent.components.ChooserHelper;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 
 public class RFXFileChooser extends ChooserHelper {
-    
+
     public static final Logger LOGGER = Logger.getLogger(RFXFileChooser.class.getName());
 
     private IJSONRecorder recorder;

@@ -24,7 +24,7 @@ import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 
 public class MarathonFileFilter implements IMarathonFileFilter, FileFilter {
-    
+
     public static final Logger LOGGER = Logger.getLogger(MarathonFileFilter.class.getName());
 
     private final IScriptModel scriptModel;

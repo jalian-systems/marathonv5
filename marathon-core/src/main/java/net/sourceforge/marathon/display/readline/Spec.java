@@ -20,7 +20,7 @@ import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
 public class Spec {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Spec.class.getName());
 
     private ArrayList<ArrayList<Reaction>> reactionsPerChannel = new ArrayList<ArrayList<Reaction>>();

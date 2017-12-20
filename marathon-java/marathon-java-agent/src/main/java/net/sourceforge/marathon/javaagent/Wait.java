@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  *
  */
 public abstract class Wait {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Wait.class.getName());
 
     public Wait() {

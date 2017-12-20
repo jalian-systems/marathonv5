@@ -26,7 +26,7 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RToggleButton extends RComponent {
-    
+
     public static final Logger LOGGER = Logger.getLogger(RToggleButton.class.getName());
 
     private Boolean prevSelection;

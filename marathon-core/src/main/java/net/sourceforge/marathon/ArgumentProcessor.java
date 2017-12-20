@@ -77,8 +77,8 @@ public class ArgumentProcessor {
      *            , the arguments given on the command line.
      */
     public void process(String[] args) {
-        String msg ;
-        if((msg = JavaVersion.atLeast("1.8.0_112")) != null) {
+        String msg;
+        if ((msg = JavaVersion.atLeast("1.8.0_112")) != null) {
             help("You need to use Java version >= 1.8.0_112 (" + msg + ")");
         }
         for (int i = 0; i < args.length; i++) {
@@ -209,9 +209,7 @@ public class ArgumentProcessor {
             message.append("Error: " + errorMessage + "\n\n");
         }
         // @formatter: off
-        String help = ""
-                + "marathon [options...] [project-directory [test...]]\n"
-                + "\n"
+        String help = "" + "marathon [options...] [project-directory [test...]]\n" + "\n"
                 + "-help | -? | -h                    Print usage\n"
                 + "-b | -batch                        Run marathonite in batch mode\n"
                 + "-skipreports                       Do not generate allure reports\n"
@@ -220,9 +218,7 @@ public class ArgumentProcessor {
                 + "-noconsolelog                      Do not create console.log files\n"
                 + "-capture                           Capture failure screenshots\n"
                 + "-delay delayInSeconds              Delay used in slow play\n"
-                + "-reportdir dir                     Marathon report directory (default: marathon-reports)\n"
-                + "\n"
-                + "";
+                + "-reportdir dir                     Marathon report directory (default: marathon-reports)\n" + "\n" + "";
         // @formatter: on
         message.append(help);
         return message.toString();
@@ -235,7 +231,7 @@ public class ArgumentProcessor {
     public String getReportDir() {
         return reportDir;
     }
-    
+
     public boolean isSkipreports() {
         return skipreports;
     }

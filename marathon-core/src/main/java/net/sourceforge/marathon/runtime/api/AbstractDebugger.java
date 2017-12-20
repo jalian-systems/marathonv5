@@ -18,7 +18,7 @@ package net.sourceforge.marathon.runtime.api;
 import java.util.logging.Logger;
 
 public abstract class AbstractDebugger implements IDebugger {
-    
+
     public static final Logger LOGGER = Logger.getLogger(AbstractDebugger.class.getName());
 
     private String commandToExecute;

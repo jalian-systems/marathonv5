@@ -64,7 +64,7 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         }
         if (selector.equals("tab-component")) {
             Component tc = getTabTabComponent(tabIndex);
-            if(tc != null)
+            if (tc != null)
                 return Arrays.asList(JavaElementFactory.createElement(tc, getDriver(), getWindow()));
             else
                 return Arrays.asList();

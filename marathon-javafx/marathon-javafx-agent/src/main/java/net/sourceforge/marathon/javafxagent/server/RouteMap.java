@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import fi.iki.elonen.NanoHTTPD.Method;
 
 public class RouteMap {
-    
+
     public static final Logger LOGGER = Logger.getLogger(RouteMap.class.getName());
 
     private final Method method;

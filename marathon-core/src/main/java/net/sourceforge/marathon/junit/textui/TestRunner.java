@@ -34,7 +34,7 @@ import net.sourceforge.marathon.testrunner.fxui.AllureMarathonRunListener;
 import net.sourceforge.marathon.util.AllureUtils;
 
 public class TestRunner {
-    
+
     public static final Logger LOGGER = Logger.getLogger(TestRunner.class.getName());
 
     ArgumentProcessor argProcessor;

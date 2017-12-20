@@ -36,7 +36,7 @@ public class OSUtils {
 
     public static final Logger LOGGER = Logger.getLogger(OSUtils.class.getName());
 
-    public static final int MENU_MASK ;
+    public static final int MENU_MASK;
     public static final int MOUSE_MENU_MASK;
     private static final String JAVA_VERSION = System.getProperty("java.version");
     private static final String OS_NAME = System.getProperty("os.name");

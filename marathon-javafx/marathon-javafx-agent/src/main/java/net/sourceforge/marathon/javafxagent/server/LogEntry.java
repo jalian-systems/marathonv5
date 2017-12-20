@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LogEntry {
-    
+
     public static final Logger LOGGER = Logger.getLogger(LogEntry.class.getName());
 
     private final Level level;

@@ -24,7 +24,7 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class ShowChecklistElement implements IScriptElement {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ShowChecklistElement.class.getName());
 
     private static final long serialVersionUID = 1L;

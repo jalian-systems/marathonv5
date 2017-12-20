@@ -83,7 +83,7 @@ import java.util.logging.Logger;
  */
 
 public class Base64 {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Base64.class.getName());
 
     private static final char[] CA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();

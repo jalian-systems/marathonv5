@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 public class OMapProperty implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(OMapProperty.class.getName());
 
     private static final long serialVersionUID = 1L;

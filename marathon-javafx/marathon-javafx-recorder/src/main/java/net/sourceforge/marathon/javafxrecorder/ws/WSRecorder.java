@@ -540,4 +540,27 @@ public class WSRecorder implements IJSONRecorder {
         return null;
     }
 
+    @Override public void recordSelect3(RFXComponent r, String state, String cellInfo) {
+        JSONObject event = new JSONObject();
+        event.put("type", "select");
+        event.put("value", state);
+        event.put("cellinfo", cellInfo);
+        recordEvent(r, event);
+    }
+
+    @Override public void recordClick3(RFXComponent r, String info) {
+        final JSONObject event = new JSONObject();
+        event.put("type", "click");
+        event.put("button", java.awt.event.MouseEvent.BUTTON1);
+        event.put("clickCount", 1);
+        event.put("modifiersEx", "");
+        event.put("x", 0);
+        event.put("y", 0);
+        event.put("cellinfo", info);
+        final JSONObject o = new JSONObject();
+        o.put("event", event);
+        fill(r, o);
+        sendRecordMessage(o);
+    }
+
 }

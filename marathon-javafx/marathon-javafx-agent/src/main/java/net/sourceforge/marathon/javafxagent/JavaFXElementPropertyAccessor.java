@@ -1761,6 +1761,10 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public final String getLabeledBy() {
+        return _getLabeledBy();
+    }
+
+    protected String _getLabeledBy() {
         Parent root = node.getScene().getRoot();
         Set<Node> allLabels = root.lookupAll(".label");
         for (Node node2 : allLabels) {

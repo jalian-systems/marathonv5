@@ -35,57 +35,56 @@ public class AllureUtils {
 
     public static final Logger LOGGER = Logger.getLogger(AllureUtils.class.getName());
 
-	public static void launchAllure(String... args) {
-		launchAllure(true, args);
-	}
+    public static void launchAllure(String... args) {
+        launchAllure(true, args);
+    }
 
-	public static void launchAllure(boolean showDialog, String... args) {
-		if (showDialog)
-			WaitMessageDialog.setVisible(true, "Generating reports");
-		List<String> vmArgs = getVMArgs();
-		Iterator<String> iterator = vmArgs.iterator();
-		while (iterator.hasNext()) {
-			String next = iterator.next();
-			if (next.contains("-javaagent") || next.contains("-D")) {
-				if (!next.contains("-Dallure")) {
-					iterator.remove();
-				}
-			}
-		}
-		vmArgs.add("-classpath");
-		vmArgs.add(System.getProperty("java.class.path"));
-		String property = System.getProperty(Constants.PROP_TMS_PATTERN);
-		if (property != null && !"".equals(property)) {
-			vmArgs.add("-D" + Constants.PROP_TMS_PATTERN + "=" + property);
-		}
-		property = System.getProperty(Constants.PROP_ISSUE_PATTERN);
-		if (property != null && !"".equals(property)) {
-			vmArgs.add("-D" + Constants.PROP_ISSUE_PATTERN + "=" + property);
-		}
-		ArrayList<String> newArgs = new ArrayList<String>();
-		newArgs.add(getJavaCommand());
-		newArgs.addAll(vmArgs);
-		newArgs.add(AllureMain.class.getName());
-		newArgs.addAll(new ArrayList<String>(Arrays.asList(args)));
-		CommandLine command = new CommandLine(newArgs.toArray(new String[newArgs.size()]));
-		command.copyOutputTo(System.out);
-		Logger.getLogger(TestRunner.class.getName()).info("Launching: " + command);
-		command.execute();
-		if (showDialog)
-			WaitMessageDialog.setVisible(false);
-	}
+    public static void launchAllure(boolean showDialog, String... args) {
+        if (showDialog)
+            WaitMessageDialog.setVisible(true, "Generating reports");
+        List<String> vmArgs = getVMArgs();
+        Iterator<String> iterator = vmArgs.iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+            if (next.contains("-javaagent") || next.contains("-D")) {
+                if (!next.contains("-Dallure")) {
+                    iterator.remove();
+                }
+            }
+        }
+        vmArgs.add("-classpath");
+        vmArgs.add(System.getProperty("java.class.path"));
+        String property = System.getProperty(Constants.PROP_TMS_PATTERN);
+        if (property != null && !"".equals(property)) {
+            vmArgs.add("-D" + Constants.PROP_TMS_PATTERN + "=" + property);
+        }
+        property = System.getProperty(Constants.PROP_ISSUE_PATTERN);
+        if (property != null && !"".equals(property)) {
+            vmArgs.add("-D" + Constants.PROP_ISSUE_PATTERN + "=" + property);
+        }
+        ArrayList<String> newArgs = new ArrayList<String>();
+        newArgs.add(getJavaCommand());
+        newArgs.addAll(vmArgs);
+        newArgs.add(AllureMain.class.getName());
+        newArgs.addAll(new ArrayList<String>(Arrays.asList(args)));
+        CommandLine command = new CommandLine(newArgs.toArray(new String[newArgs.size()]));
+        command.copyOutputTo(System.out);
+        Logger.getLogger(TestRunner.class.getName()).info("Launching: " + command);
+        command.execute();
+        if (showDialog)
+            WaitMessageDialog.setVisible(false);
+    }
 
-	private static String getJavaCommand() {
-		if (net.sourceforge.marathon.javaagent.Platform.getCurrent()
-				.is(net.sourceforge.marathon.javaagent.Platform.WINDOWS)) {
-			return System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
-		}
-		return System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-	}
+    private static String getJavaCommand() {
+        if (net.sourceforge.marathon.javaagent.Platform.getCurrent().is(net.sourceforge.marathon.javaagent.Platform.WINDOWS)) {
+            return System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
+        }
+        return System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+    }
 
-	private static List<String> getVMArgs() {
-		RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
-		return new ArrayList<String>(runtimeMxBean.getInputArguments());
-	}
+    private static List<String> getVMArgs() {
+        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        return new ArrayList<String>(runtimeMxBean.getInputArguments());
+    }
 
 }

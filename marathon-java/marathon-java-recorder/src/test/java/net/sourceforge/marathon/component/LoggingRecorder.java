@@ -142,7 +142,7 @@ public final class LoggingRecorder implements IJSONRecorder {
 
     @Override public void recordFileDialog(String string) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override public boolean isPaused() {

@@ -30,7 +30,7 @@ import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.server.ExecuteMode;
 
 public class ScriptExecutor {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ScriptExecutor.class.getName());
 
     private ExecuteMode mode;

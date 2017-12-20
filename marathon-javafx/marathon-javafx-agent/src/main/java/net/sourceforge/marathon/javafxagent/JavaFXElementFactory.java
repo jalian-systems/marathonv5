@@ -51,6 +51,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxListCellElement;
@@ -83,6 +84,7 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXToggleButtonElement
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXWebViewElement;
 
 public class JavaFXElementFactory {
 
@@ -163,6 +165,7 @@ public class JavaFXElementFactory {
         add(CheckBoxTreeTableCell.class, JavaFXCheckBoxTreeTableCell.class);
         add(ChoiceBoxTreeTableCell.class, JavaFXChoiceBoxTreeTableCell.class);
         add(ComboBoxTreeTableCell.class, JavaFXComboBoxTreeTableCell.class);
+        add(WebView.class, JavaFXWebViewElement.class);
     }
 
     public static Class<? extends IJavaFXElement> get(Node component) {

@@ -27,7 +27,7 @@ import org.openqa.selenium.remote.HttpCommandExecutor;
 import net.sourceforge.marathon.javaagent.Wait;
 
 public class JavaDriverCommandExecutor extends HttpCommandExecutor {
-    
+
     public static final Logger LOGGER = Logger.getLogger(JavaDriverCommandExecutor.class.getName());
 
     private static final String MARATHON_APPLICATION_DONT_MONITOR = "marathon.application.dont.monitor";

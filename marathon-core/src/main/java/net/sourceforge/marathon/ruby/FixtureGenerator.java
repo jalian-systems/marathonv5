@@ -29,7 +29,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Indent;
 
 public class FixtureGenerator {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FixtureGenerator.class.getName());
 
     // @formatter:off
