@@ -14,7 +14,7 @@ import net.sourceforge.marathon.runtime.api.ITestLauncher;
 import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class WebBareRuntimeLauncherModel implements IRuntimeLauncherModel {
-    
+
     public static final Logger LOGGER = Logger.getLogger(WebBareRuntimeLauncherModel.class.getName());
 
     @Override public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(JSONObjectPropertyAccessor.class.getName());
 
     private static final long serialVersionUID = 1L;

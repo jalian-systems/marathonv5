@@ -26,7 +26,7 @@ import net.sourceforge.marathon.runtime.api.TagInserter;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class ScriptRecorder implements IRecorder {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ScriptRecorder.class.getName());
 
     private IScriptListener scriptListener;

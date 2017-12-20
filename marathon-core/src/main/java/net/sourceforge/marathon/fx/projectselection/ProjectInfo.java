@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 
 public class ProjectInfo {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ProjectInfo.class.getName());
 
     private final SimpleStringProperty name;

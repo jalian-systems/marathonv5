@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import net.sourceforge.marathon.runtime.api.AbstractFileConsole;
 
 public class EditorConsole extends AbstractFileConsole {
-    
+
     public static final Logger LOGGER = Logger.getLogger(EditorConsole.class.getName());
 
     private IDisplayView display;

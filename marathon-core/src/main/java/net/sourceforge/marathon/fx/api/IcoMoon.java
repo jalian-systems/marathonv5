@@ -601,19 +601,19 @@ public class IcoMoon {
         UNIA9('\u00a9');
 
         // @formatter:on
-        
+
         private final char ch;
 
         /**
          * Creates a named Glyph mapped to the given character
+         * 
          * @param ch
          */
-        ICON( char ch ) {
+        ICON(char ch) {
             this.ch = ch;
         }
 
-        @Override
-        public char getChar() {
+        @Override public char getChar() {
             return ch;
         }
     };

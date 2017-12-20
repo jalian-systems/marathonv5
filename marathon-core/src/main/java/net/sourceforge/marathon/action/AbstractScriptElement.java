@@ -20,7 +20,7 @@ import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public abstract class AbstractScriptElement implements IScriptElement {
-    
+
     private static final long serialVersionUID = 4204837019479682968L;
     private ComponentId componentId;
     private WindowId windowId;

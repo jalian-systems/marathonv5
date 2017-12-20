@@ -17,7 +17,7 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class BareRuntime implements IMarathonRuntime {
-    
+
     public static final Logger LOGGER = Logger.getLogger(BareRuntime.class.getName());
 
     private IScriptModel scriptModel;

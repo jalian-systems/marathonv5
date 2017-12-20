@@ -18,7 +18,7 @@ package net.sourceforge.marathon.javafxagent;
 import java.util.logging.Logger;
 
 public class NoSuchWindowException extends RuntimeException {
-    
+
     public static final Logger LOGGER = Logger.getLogger(NoSuchWindowException.class.getName());
 
     private static final long serialVersionUID = 1L;

@@ -66,8 +66,8 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
             }
             return r;
         } else if (selector.equals("selected-tab")) {
-            int tabIndex = ((JTabbedPane)component).getSelectedIndex();
-            if(tabIndex != -1)
+            int tabIndex = ((JTabbedPane) component).getSelectedIndex();
+            if (tabIndex != -1)
                 return Arrays.asList((IJavaElement) new JTabbedPaneTabJavaElement(this, tabIndex));
             else
                 return Arrays.asList();

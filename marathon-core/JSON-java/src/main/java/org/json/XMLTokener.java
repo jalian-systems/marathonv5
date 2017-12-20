@@ -147,8 +147,8 @@ public class XMLTokener extends JSONTokener {
     }
 
     /**
-     * Returns the next XML meta token. This is used for skipping over
-     * <!...> and <?...?> structures.
+     * Returns the next XML meta token. This is used for skipping over <!...>
+     * and <?...?> structures.
      * 
      * @return Syntax characters (<code>< > / = ! ?</code>) are returned as
      *         Character, and strings and names are returned as Boolean. We

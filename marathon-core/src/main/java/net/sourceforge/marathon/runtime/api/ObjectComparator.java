@@ -18,7 +18,7 @@ package net.sourceforge.marathon.runtime.api;
 import java.util.logging.Logger;
 
 public class ObjectComparator {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ObjectComparator.class.getName());
 
     public static int compare(Object o1, Object o2) {

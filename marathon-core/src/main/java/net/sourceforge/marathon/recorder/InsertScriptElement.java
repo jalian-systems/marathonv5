@@ -23,7 +23,7 @@ import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.WindowId;
 
 public class InsertScriptElement extends AbstractScriptElement {
-    
+
     public static final Logger LOGGER = Logger.getLogger(InsertScriptElement.class.getName());
 
     private static final long serialVersionUID = 1L;

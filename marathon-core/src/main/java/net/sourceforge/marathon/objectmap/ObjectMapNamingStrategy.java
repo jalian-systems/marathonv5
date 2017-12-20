@@ -408,8 +408,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         }
         return null;
     }
-    
-    @Override public Collection<String> getAllProperties(){
+
+    @Override public Collection<String> getAllProperties() {
         return omapService.findProperties();
     }
 }

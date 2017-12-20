@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 public class BreakPoint implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(BreakPoint.class.getName());
 
     private static final long serialVersionUID = 1L;

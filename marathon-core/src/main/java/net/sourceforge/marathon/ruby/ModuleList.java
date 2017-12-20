@@ -52,7 +52,7 @@ import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.Module;
 
 public class ModuleList {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ModuleList.class.getName());
 
     private Module topModule;

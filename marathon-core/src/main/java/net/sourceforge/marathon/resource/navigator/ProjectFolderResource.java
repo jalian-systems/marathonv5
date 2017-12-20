@@ -32,7 +32,7 @@ import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.ProjectFile;
 
 public final class ProjectFolderResource extends FolderResource implements RootResource {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ProjectFolderResource.class.getName());
 
     private String name;
@@ -45,7 +45,7 @@ public final class ProjectFolderResource extends FolderResource implements RootR
 
     public void setName() {
         try {
-            name = ProjectFile.getProjectProperty(Constants.PROP_PROJECT_NAME) ;
+            name = ProjectFile.getProjectProperty(Constants.PROP_PROJECT_NAME);
         } catch (IOException e) {
             e.printStackTrace();
         }

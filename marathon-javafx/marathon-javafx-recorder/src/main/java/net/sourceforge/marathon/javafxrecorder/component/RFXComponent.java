@@ -269,11 +269,10 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         return l;
     }
 
-	protected String[] getMethodNames() {
-		return new String[] { "isEnabled", "getRowCount", "getColumnCount", "getItemCount", "getModelSize",
-				"getInstanceOf", "getFieldName", "getFieldNames", "getTooltipText",
-				"getAccessibleName", "getId" };
-	}
+    protected String[] getMethodNames() {
+        return new String[] { "isEnabled", "getRowCount", "getColumnCount", "getItemCount", "getModelSize", "getInstanceOf",
+                "getFieldName", "getFieldNames", "getTooltipText", "getAccessibleName", "getId" };
+    }
 
     protected void addMethod(ArrayList<Method> l, String name) {
         try {

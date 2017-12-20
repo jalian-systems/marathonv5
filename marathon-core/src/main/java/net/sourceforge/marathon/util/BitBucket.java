@@ -20,7 +20,7 @@ import java.io.Writer;
 import java.util.logging.Logger;
 
 public class BitBucket extends Writer {
-    
+
     public static final Logger LOGGER = Logger.getLogger(BitBucket.class.getName());
 
     @Override public void write(char cbuf[], int off, int len) throws IOException {

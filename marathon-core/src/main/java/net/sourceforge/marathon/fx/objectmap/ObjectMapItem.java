@@ -185,11 +185,11 @@ public class ObjectMapItem implements IObjectMapTreeItem {
                 container.setModified(Calendar.getInstance().getTime().getTime());
             }
             FileWriter writer = null;
-            try{
-            writer = new FileWriter(getOMapFile());
-            new Yaml(representer, options).dump(data, writer);
-            }finally{
-                if(writer != null)
+            try {
+                writer = new FileWriter(getOMapFile());
+                new Yaml(representer, options).dump(data, writer);
+            } finally {
+                if (writer != null)
                     writer.close();
             }
             for (OMapContainer container : data) {

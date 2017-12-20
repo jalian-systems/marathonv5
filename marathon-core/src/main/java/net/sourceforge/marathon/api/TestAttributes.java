@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 public class TestAttributes {
-    
+
     public static final Logger LOGGER = Logger.getLogger(TestAttributes.class.getName());
 
     private static ThreadLocal<Map<String, Object>> localStorage = new ThreadLocal<Map<String, Object>>() {

@@ -26,7 +26,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class MarathonDDTestSuite extends TestSuite implements Test {
-    
+
     public static final Logger LOGGER = Logger.getLogger(MarathonDDTestSuite.class.getName());
 
     protected DDTestRunner ddt;

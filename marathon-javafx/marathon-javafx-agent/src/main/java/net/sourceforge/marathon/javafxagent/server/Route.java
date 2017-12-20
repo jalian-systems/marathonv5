@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 public class Route {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Route.class.getName());
 
     private final java.lang.reflect.Method proc;

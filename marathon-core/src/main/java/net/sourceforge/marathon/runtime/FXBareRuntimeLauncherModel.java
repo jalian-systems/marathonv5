@@ -14,7 +14,7 @@ import net.sourceforge.marathon.runtime.api.ITestLauncher;
 import net.sourceforge.marathon.runtime.fx.api.ISubPropertiesLayout;
 
 public class FXBareRuntimeLauncherModel implements IRuntimeLauncherModel {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FXBareRuntimeLauncherModel.class.getName());
 
     @Override public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {

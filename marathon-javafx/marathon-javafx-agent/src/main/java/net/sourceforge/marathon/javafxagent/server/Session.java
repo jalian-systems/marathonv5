@@ -36,7 +36,7 @@ import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 
 public class Session {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Session.class.getName());
 
     private String id;

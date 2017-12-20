@@ -24,7 +24,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class FXContextMenuTriggers {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FXContextMenuTriggers.class.getName());
 
     private static String menuModifiers;

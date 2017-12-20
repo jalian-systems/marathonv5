@@ -7,7 +7,7 @@ import javafx.scene.control.TextFormatter;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public final class TextAreaLimited extends TextArea {
-    
+
     public static final Logger LOGGER = Logger.getLogger(TextAreaLimited.class.getName());
 
     private static final String DEFAULT_STYLE = "-fx-font-family: Monaco, \"Lucida Console\", monospace;-fx-font-size: 14px;-fx-text-fill:blue;";
@@ -22,22 +22,22 @@ public final class TextAreaLimited extends TextArea {
 
     @Override public void appendText(String text) {
         try {
-            internalMod = true ;
+            internalMod = true;
             if (getLength() > MAX_CHARS) {
                 replaceText(0, BSIZ, "");
             }
             super.appendText(text);
         } finally {
-            internalMod = false ;
+            internalMod = false;
         }
     }
-    
+
     @Override public void clear() {
         try {
-            internalMod = true ;
+            internalMod = true;
             super.clear();
         } finally {
-            internalMod = false ;
+            internalMod = false;
         }
     }
 }

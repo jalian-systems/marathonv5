@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MPFUtils {
-    
+
     public static final Logger LOGGER = Logger.getLogger(MPFUtils.class.getName());
 
     /**

@@ -22,7 +22,7 @@ import java.io.Writer;
 import java.util.logging.Logger;
 
 public class StreamPumper implements Runnable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(StreamPumper.class.getName());
 
     private InputStreamReader in;

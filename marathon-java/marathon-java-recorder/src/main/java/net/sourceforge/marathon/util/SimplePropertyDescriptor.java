@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class SimplePropertyDescriptor {
-    
+
     public static final Logger LOGGER = Logger.getLogger(SimplePropertyDescriptor.class.getName());
 
     private String name;

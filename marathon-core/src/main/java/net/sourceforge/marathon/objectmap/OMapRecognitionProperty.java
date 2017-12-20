@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 
 public class OMapRecognitionProperty implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(OMapRecognitionProperty.class.getName());
 
     private static final long serialVersionUID = 1L;

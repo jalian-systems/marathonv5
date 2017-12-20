@@ -33,7 +33,7 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
  * actionPeformed method as well
  */
 public abstract class AbstractSimpleAction extends ActionEvent implements EventHandler<ActionEvent> {
-    
+
     public static final Logger LOGGER = Logger.getLogger(AbstractSimpleAction.class.getName());
 
     private static final long serialVersionUID = 1L;
