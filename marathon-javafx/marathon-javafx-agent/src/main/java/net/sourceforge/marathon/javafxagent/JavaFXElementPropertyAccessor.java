@@ -1761,7 +1761,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public final String getLabeledBy() {
-        Parent root = node.getScene().getRoot();
+        return _getLabeledBy();
+    }
+
+	protected String _getLabeledBy() {
+		Parent root = node.getScene().getRoot();
         Set<Node> allLabels = root.lookupAll(".label");
         for (Node node2 : allLabels) {
             Label label = (Label) node2;
@@ -1770,7 +1774,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             }
         }
         return null;
-    }
+	}
 
     protected boolean onCheckBox(Node target) {
         Node parent = target;

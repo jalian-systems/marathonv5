@@ -259,7 +259,7 @@ public class FolderResource extends Resource {
         Optional<TreeItem<Resource>> found = getChildren().stream().filter((r) -> newEntry.equals(r.getValue().getFilePath()))
                 .findFirst();
         if (found.isPresent()) {
-            getChildren().remove(found);
+            getChildren().remove(found.get());
         }
     }
 

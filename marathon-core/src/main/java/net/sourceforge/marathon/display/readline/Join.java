@@ -176,7 +176,4 @@ public final class Join {
         }
     }
 
-    public void execute(Runnable runnable) {
-        executor.equals(runnable);
-    }
 }

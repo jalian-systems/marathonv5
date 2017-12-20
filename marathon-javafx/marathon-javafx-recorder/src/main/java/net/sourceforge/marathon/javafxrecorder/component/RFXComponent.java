@@ -238,9 +238,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 
     public ArrayList<Method> getMethods() {
         // @formatter:off
-		String[] methods = new String[] { "isEnabled", "getRowCount", "getColumnCount", "getItemCount", "getModelSize",
-				"getInstanceOf", "getFieldName", "getFieldNames", "getTooltipText",
-				"getAccessibleName", "getId" };
+		String[] methods = getMethodNames();
 		// @formatter:on
         ArrayList<Method> l = new ArrayList<Method>();
         if (getText() != null) {
@@ -270,6 +268,12 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         addMethod(l, "getComponent");
         return l;
     }
+
+	protected String[] getMethodNames() {
+		return new String[] { "isEnabled", "getRowCount", "getColumnCount", "getItemCount", "getModelSize",
+				"getInstanceOf", "getFieldName", "getFieldNames", "getTooltipText",
+				"getAccessibleName", "getId" };
+	}
 
     protected void addMethod(ArrayList<Method> l, String name) {
         try {
