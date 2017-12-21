@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import com.sun.glass.ui.CommonDialogs;
 import com.sun.javafx.stage.StageHelper;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -86,6 +87,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     private IJSONRecorder recorder;
     private RFXComponent current;
 
+    public static SimpleObjectProperty<JavaFxRecorderHook> instance = new SimpleObjectProperty<>();
+
     ContextMenuHandler contextMenuHandler;
 
     public JavaFxRecorderHook(int port) {
@@ -125,6 +128,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        instance.set(this);
     }
 
     private static class ContextMenuTriggerCheck {
@@ -391,7 +395,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             if (current != null && !contextMenuHandler.isShowing()) {
                 current.focusLost(null);
             }
-            contextMenuHandler.showPopup(event);
+            showContextMenu(event);
             return;
         }
         if (event.getEventType().getName().equals("filechooser")) {
@@ -447,6 +451,10 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             c = current;
         }
         c.processEvent(event);
+    }
+
+    public void showContextMenu(Event event) {
+        contextMenuHandler.showPopup(event);
     }
 
     private void handleFolderChooser(Event event) {

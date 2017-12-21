@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.jxbrowser;
 
+import java.lang.instrument.Instrumentation;
 import java.util.logging.Logger;
 
 import javafx.scene.Node;
@@ -22,27 +23,23 @@ import net.sourceforge.marathon.javafxagent.IJavaElementFinder;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 
-public class JavaFXMarathonExtension {
+public class JXBrowserMarathonExtension {
 
-    public static final Logger logger = Logger.getLogger(JavaFXMarathonExtension.class.getName());
+    public static final Logger logger = Logger.getLogger(JXBrowserMarathonExtension.class.getName());
 
-    public static void premain(final String args) throws Exception {
-        logger.warning("Loading extension " + JavaFXMarathonExtension.class.getName());
+    public static void premain(final String args, Instrumentation instrumentation) throws Exception {
+        logger.warning("Loading extension " + JXBrowserMarathonExtension.class.getName());
         JavaFXElementFactory.add(new IJavaElementFinder() {
-
             @Override public Class<? extends IJavaFXElement> get(Node component) {
-                while (component != null) {
-                    if (component.getClass().getName().equals("ensemble.HomePage")) {
-                        return JavaFXHomePageElement.class;
-                    }
-                    component = component.getParent();
+                if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
+                    return JavaFXBrowserViewElement.class;
                 }
                 return null;
             }
         });
         if ("recording".equals(System.getProperty("marathon.mode"))) {
+            instrumentation.addTransformer(new BrowserTransformer());
             RecorderInit.init();
         }
     }
-
 }

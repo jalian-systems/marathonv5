@@ -1,4 +1,4 @@
-package net.sourceforge.marathon.javafxagent.components;
+package net.sourceforge.marathon.jxbrowser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,17 +14,19 @@ import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 
-public class JavaFXWebViewItem extends JavaFXElement implements IPseudoElement {
+public class JavaFXBrowserViewItem extends JavaFXElement implements IPseudoElement {
 
-    public static final Logger LOGGER = Logger.getLogger(JavaFXWebViewItem.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaFXBrowserViewItem.class.getName());
 
-    private JavaFXWebViewElement parent;
+    private JavaFXBrowserViewElement parent;
     private String selector;
+    private long frameId;
 
-    public JavaFXWebViewItem(JavaFXWebViewElement parent, String selector) {
+    public JavaFXBrowserViewItem(JavaFXBrowserViewElement parent, String selector, long frameId) {
         super(parent);
         this.parent = parent;
         this.selector = selector;
+        this.frameId = frameId;
     }
 
     @Override public IJavaFXElement getParent() {
@@ -39,12 +41,12 @@ public class JavaFXWebViewItem extends JavaFXElement implements IPseudoElement {
 
     @Override public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters",
-                new JSONArray().put(new JSONObject().put("select", selector).toString()));
+                new JSONArray().put(new JSONObject().put("select", frameId + ":" + selector).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
     @Override public boolean marathon_select(String value) {
-        return parent.select(selector, value);
+        return parent.select(selector, value, frameId);
     }
 
     @Override public Node getPseudoComponent() {
@@ -52,27 +54,27 @@ public class JavaFXWebViewItem extends JavaFXElement implements IPseudoElement {
     }
 
     @Override public void click() {
-        parent.click(selector);
+        parent.click(selector, frameId);
     }
 
     @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
-        parent.click(selector);
+        parent.click(selector, frameId);
     }
 
     @Override public String _getText() {
-        return parent.getText(selector);
+        return JavaFXBrowserViewElement.getText(getComponent(), selector, frameId);
     }
 
     @Override protected String _getLabeledBy() {
-        return parent.getLabeledBy(selector);
+        return JavaFXBrowserViewElement.getLabeledBy(getComponent(), selector, frameId);
     }
 
     @Override public String _getValue() {
-        return parent.getValue(selector);
+        return JavaFXBrowserViewElement.getValue(getComponent(), selector, frameId);
     }
 
     public Map<String, String> getAttributes() {
-        return parent.getAttributes(selector);
+        return JavaFXBrowserViewElement.getAttributes(getComponent(), selector,frameId);
     }
 
 }

@@ -150,3 +150,8 @@ marathon-jenkins/.project
 marathon-jenkins/.settings/
 marathon-jenkins/build
 marathon-jenkins/bin
+
+marathon-jxbrowser/.externalToolBuilders/
+marathon-jxbrowser/.gitignore
+marathon-jxbrowser/marathon-jxbrowser-5.1.5.1.jar
+marathon-jxbrowser/marathon-jxbrowser.xml
