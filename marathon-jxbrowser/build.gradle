@@ -60,6 +60,11 @@ compileTestJava {
 dependencies {
   compile project(':marathon-javafx:marathon-javafx-agent')
   compile project(':marathon-javafx:marathon-javafx-recorder')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-linux64-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-mac-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-win32-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\license.jar')
 }
 
 jar {

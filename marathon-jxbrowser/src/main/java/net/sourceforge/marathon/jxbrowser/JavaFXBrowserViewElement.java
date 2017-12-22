@@ -99,6 +99,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
                 }
 
                 @Override public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
+                    webview.getProperties().remove("player" + arg0.getFrameId());
+                    webview.getProperties().remove("document" + arg0.getFrameId());
                 }
 
                 @Override public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
@@ -156,10 +158,15 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
     }
 
     private boolean documentHasSelector(String selector, long frameId) {
+        System.out.println("JavaFXBrowserViewElement.documentHasSelector(" + selector + "," + frameId + ")");
         return EventQueueWait.exec(new Callable<Boolean>() {
             @Override public Boolean call() throws Exception {
-                return ((BrowserView) getComponent()).getBrowser().getDocument() != null
-                        && getComponent().getProperties().containsKey("player" + frameId) && hasSelector();
+                try {
+                    return ((BrowserView) getComponent()).getBrowser().getDocument() != null
+                            && getComponent().getProperties().containsKey("player" + frameId) && hasSelector();
+                } catch (Throwable t) {
+                    return false;
+                }
             }
 
             private boolean hasSelector() {

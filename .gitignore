@@ -155,3 +155,7 @@ marathon-jxbrowser/.externalToolBuilders/
 marathon-jxbrowser/.gitignore
 marathon-jxbrowser/marathon-jxbrowser-5.1.5.1.jar
 marathon-jxbrowser/marathon-jxbrowser.xml
+marathon-jxbrowser/.classpath
+marathon-jxbrowser/.project
+marathon-jxbrowser/.settings/
+marathon-jxbrowser/build/
