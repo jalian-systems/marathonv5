@@ -9,5 +9,5 @@ include 'marathon', 'marathon-core:JSON-java', 'marathon-core:ruby-selenium-webd
           'marathon-java:marathon-java-recorder', ':marathon-java', 'marathon-java:marathon-kbmap-tool',
           'marathon-javafx:marathon-javafx-agent', 'marathon-javafx:marathon-javafx-recorder',
           ':marathon-javafx', 'marathon-javafx:marathon-fxtest-helpers',
-          ':marathon-javafx:marathon-javafx-runtime', 'marathon-jenkins', 'marathon-jxbrowser'
+          ':marathon-javafx:marathon-javafx-runtime', 'marathon-jenkins', 'marathonext-jxbrowser'
 
