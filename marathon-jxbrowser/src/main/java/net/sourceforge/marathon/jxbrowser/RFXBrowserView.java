@@ -144,7 +144,6 @@ public class RFXBrowserView extends RFXComponent {
         win.asObject().setProperty("browserview_frame_id", frameId);
         int id = System.identityHashCode(webview);
         win.asObject().setProperty("browserview_id", id);
-        recorder.log("ID = " + id);
         webEngine.executeJavaScript(frameId, script);
     }
 
