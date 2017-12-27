@@ -24,6 +24,7 @@ dependencies {
   compile project(":marathon-core")
   runtime project(":marathon")
   runtime project(":marathon-java")
+  runtime project(":marathonext-jxbrowser")
   runtime project(":marathon-java:marathon-java-driver")
   runtime project(":marathon-java:marathon-java-agent")
   runtime project(":marathon-java:marathon-java-recorder")

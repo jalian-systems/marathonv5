@@ -151,11 +151,12 @@ marathon-jenkins/.settings/
 marathon-jenkins/build
 marathon-jenkins/bin
 
-marathon-jxbrowser/.externalToolBuilders/
-marathon-jxbrowser/.gitignore
-marathon-jxbrowser/marathon-jxbrowser-5.1.5.1.jar
-marathon-jxbrowser/marathon-jxbrowser.xml
-marathon-jxbrowser/.classpath
-marathon-jxbrowser/.project
-marathon-jxbrowser/.settings/
-marathon-jxbrowser/build/
+marathonext-jxbrowser/.externalToolBuilders/
+marathonext-jxbrowser/.gitignore
+marathonext-jxbrowser/marathon-jxbrowser-5.1.5.1.jar
+marathonext-jxbrowser/marathon-jxbrowser.xml
+marathonext-jxbrowser/.classpath
+marathonext-jxbrowser/.project
+marathonext-jxbrowser/.settings/
+marathonext-jxbrowser/build/
+marathonext-jxbrowser/marathonext-jxbrowser.xml
