@@ -19,13 +19,14 @@ import com.teamdev.jxbrowser.chromium.events.ProvisionalLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.StartLoadingEvent;
 import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 import net.sourceforge.marathon.javafxrecorder.JavaFxRecorderHook;
@@ -67,12 +68,11 @@ public class RFXBrowserView extends RFXComponent {
         if (webview.getProperties().get("marathon_listener_installed") == null) {
             webview.getProperties().put("marathon_listener_installed", Boolean.TRUE);
             Browser webEngine = webview.getBrowser();
+            loadScript(webview, webEngine, -1);
             if (webEngine.getDocument() != null) {
                 List<Long> framesIds = webEngine.getFramesIds();
-                boolean mainFrame = true;
                 for (Long frameId : framesIds) {
-                    loadScript(webview, webEngine, frameId, mainFrame);
-                    mainFrame = false;
+                    loadScript(webview, webEngine, frameId);
                 }
             }
             webEngine.addLoadListener(new LoadListener() {
@@ -92,7 +92,10 @@ public class RFXBrowserView extends RFXComponent {
                 }
 
                 @Override public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
-                    loadScript(webview, webEngine, arg0.getFrameId(), arg0.isMainFrame());
+                    long frameId = arg0.getFrameId();
+                    if (arg0.isMainFrame())
+                        frameId = -1;
+                    loadScript(webview, webEngine, frameId);
                 }
             });
         }
@@ -102,50 +105,65 @@ public class RFXBrowserView extends RFXComponent {
     @Override public void processEvent(Event event) {
     }
 
-    public void record_select(String info, String value) {
+    public void record_select(String info, String value, int id) {
+        recorder.log("ID = " + id);
+        if(id != System.identityHashCode(this.getComponent()))
+            return;
+        if (info.startsWith("-1:"))
+            info = info.substring(3);
         recorder.recordSelect3(this, value, info);
     }
 
-    public void record_click(String info) {
+    public void record_click(String info, int id) {
+        if(id != System.identityHashCode(this.getComponent()))
+            return;
+        if (info.startsWith("-1:"))
+            info = info.substring(3);
         recorder.recordClick3(this, info);
     }
 
-    public void record_assertion_selector(String selector, long frameId) {
+    public void show_assertion(String selector, long frameId, int id) {
+        if(id != System.identityHashCode(this.getComponent()))
+            return;
         getComponent().getProperties().put("current_selector", selector);
         getComponent().getProperties().put("browserview_frame_id", frameId);
-    }
-
-    public void show_assertion() {
-        String char1 = "X";
-        KeyCode keyCode = KeyCode.UNDEFINED;
-        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, char1 + "", char1 + "", keyCode, false, false, false, false);
-        keyEvent = keyEvent.copyFor(getComponent(), getComponent());
-        JavaFxRecorderHook.instance.get().showContextMenu(keyEvent);
+        Platform.runLater(() -> {
+            MouseEvent contextMenuMouseEvent = JavaFxRecorderHook.instance.get().getContextMenuMouseEvent(this.getComponent());
+            JavaFxRecorderHook.instance.get().handle(contextMenuMouseEvent);
+        });
     }
 
     public void log(String message) {
         System.out.println(message);
     }
 
-    private void loadScript(BrowserView webview, Browser webEngine, long frameId, boolean mainFrame) {
+    private void loadScript(BrowserView webview, Browser webEngine, long frameId) {
         webview.getProperties().put("current_selector", "body");
         JSValue win = webEngine.executeJavaScriptAndReturnValue(frameId, "window");
         win.asObject().setProperty("marathon_recorder", RFXBrowserView.this);
         win.asObject().setProperty("browserview_frame_id", frameId);
+        int id = System.identityHashCode(webview);
+        win.asObject().setProperty("browserview_id", id);
+        recorder.log("ID = " + id);
         webEngine.executeJavaScript(frameId, script);
     }
 
     @Override public String getCellInfo() {
+        if (getFrameId() == -1)
+            return (String) getComponent().getProperties().get("current_selector");
+        return getFrameId() + ":" + (String) getComponent().getProperties().get("current_selector");
+    }
+
+    public String getCellInfo2() {
         return (String) getComponent().getProperties().get("current_selector");
     }
 
     private long getFrameId() {
-        System.out.println("RFXBrowserView.getFrameId(" + getComponent() + ")");
         return (long) getComponent().getProperties().get("browserview_frame_id");
     }
 
     @Override public String _getText() {
-        return JavaFXBrowserViewElement.getText(getComponent(), getCellInfo(), getFrameId());
+        return JavaFXBrowserViewElement.getText(getComponent(), getCellInfo2(), getFrameId());
     }
 
     protected String[] getMethodNames() {
@@ -153,31 +171,28 @@ public class RFXBrowserView extends RFXComponent {
     }
 
     @Override protected String _getLabeledBy() {
-        return JavaFXBrowserViewElement.getLabeledBy(getComponent(), getCellInfo(), getFrameId());
+        return JavaFXBrowserViewElement.getLabeledBy(getComponent(), getCellInfo2(), getFrameId());
     }
 
     public Map<String, String> getAttributes() {
-        return JavaFXBrowserViewElement.getAttributes(getComponent(), getCellInfo(), getFrameId());
+        return JavaFXBrowserViewElement.getAttributes(getComponent(), getCellInfo2(), getFrameId());
     }
 
     @Override public String _getValue() {
-        return JavaFXBrowserViewElement.getValue(getComponent(), getCellInfo(), getFrameId());
+        return JavaFXBrowserViewElement.getValue(getComponent(), getCellInfo2(), getFrameId());
     }
 
-    public static void generateEvent(Node component) {
+    public static void generateEvent(Node n) {
         JavaFxRecorderHook.instance.addListener(new ChangeListener<JavaFxRecorderHook>() {
             @Override public void changed(ObservableValue<? extends JavaFxRecorderHook> observable, JavaFxRecorderHook oldValue,
                     JavaFxRecorderHook newValue) {
-                if (newValue != null) {
-                    String char1 = "X";
-                    KeyCode keyCode = KeyCode.UNDEFINED;
-                    KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, char1 + "", char1 + "", keyCode, false, false, false,
-                            false);
-                    keyEvent = keyEvent.copyFor(component, component);
-                    newValue.handle(keyEvent);
-                }
-
+                Platform.runLater(() -> {
+                    MouseEvent e = new MouseEvent(n, n, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false, false,
+                            false, false, true, false, false, true, false, false, null);
+                    JavaFxRecorderHook.instance.get().handle(e);
+                });
             }
         });
     }
+
 }

@@ -35,7 +35,6 @@ import javafx.stage.Stage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
-import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
 import net.sourceforge.marathon.checklist.CheckListFormNode;
 import net.sourceforge.marathon.checklist.CheckListStage;
@@ -296,7 +295,6 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
             return runtimeFactory;
         }
         reuseFixture = Boolean.valueOf((String) fixtureProperties.get(Constants.FIXTURE_REUSE)).booleanValue();
-        System.out.println("MarathonTestCase.getRuntimeFactory() " + TestAttributes.get("reuseFixture"));
         String launcherModel = (String) fixtureProperties.get(Constants.PROP_PROJECT_LAUNCHER_MODEL);
         IRuntimeLauncherModel lm = LauncherModelHelper.getLauncherModel(launcherModel);
         if (lm == null) {

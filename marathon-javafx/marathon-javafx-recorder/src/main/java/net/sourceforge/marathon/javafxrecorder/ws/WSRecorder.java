@@ -563,4 +563,13 @@ public class WSRecorder implements IJSONRecorder {
         sendRecordMessage(o);
     }
 
+    @Override public void log(String message) {
+        final JSONObject event = new JSONObject();
+        event.put("type", "log");
+        event.put("message", message);
+        final JSONObject o = new JSONObject();
+        o.put("event", event);
+        sendRecordMessage(o);
+    }
+
 }

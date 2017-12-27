@@ -74,7 +74,7 @@ public class JavaFXBrowserViewItem extends JavaFXElement implements IPseudoEleme
     }
 
     public Map<String, String> getAttributes() {
-        return JavaFXBrowserViewElement.getAttributes(getComponent(), selector,frameId);
+        return JavaFXBrowserViewElement.getAttributes(getComponent(), selector, frameId);
     }
 
 }

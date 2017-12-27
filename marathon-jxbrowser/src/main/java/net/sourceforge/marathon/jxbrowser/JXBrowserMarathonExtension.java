@@ -37,8 +37,8 @@ public class JXBrowserMarathonExtension {
                 return null;
             }
         });
+        instrumentation.addTransformer(new BrowserTransformer("recording".equals(System.getProperty("marathon.mode"))));
         if ("recording".equals(System.getProperty("marathon.mode"))) {
-            instrumentation.addTransformer(new BrowserTransformer());
             RecorderInit.init();
         }
     }

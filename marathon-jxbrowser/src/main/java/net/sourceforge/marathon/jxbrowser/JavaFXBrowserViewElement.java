@@ -19,17 +19,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
@@ -86,12 +92,11 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
         if (webview.getProperties().get("marathon_player_installed") == null) {
             webview.getProperties().put("marathon_player_installed", Boolean.TRUE);
             Browser webEngine = webview.getBrowser();
+            loadScript(webview, webEngine, -1);
             if (webEngine.getDocument() != null) {
                 List<Long> framesIds = webEngine.getFramesIds();
-                boolean mainFrame = true;
                 for (Long frameId : framesIds) {
-                    loadScript(webview, webEngine, frameId, mainFrame);
-                    mainFrame = false;
+                    loadScript(webview, webEngine, frameId);
                 }
             }
             webEngine.addLoadListener(new LoadListener() {
@@ -113,20 +118,22 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
                 }
 
                 @Override public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
-                    loadScript(webview, webEngine, arg0.getFrameId(), arg0.isMainFrame());
+                    if (arg0.isMainFrame())
+                        loadScript(webview, webEngine, -1);
+                    else
+                        loadScript(webview, webEngine, arg0.getFrameId());
                 }
             });
         }
     }
 
-    private static void loadScript(BrowserView webview, Browser webEngine, long frameId, boolean mainFrame) {
-        webEngine.executeJavaScript(frameId, script);
-        webview.getProperties().put("player" + frameId, webEngine.executeJavaScriptAndReturnValue(frameId, "$marathon_player"));
-        webview.getProperties().put("document" + frameId, webEngine.executeJavaScriptAndReturnValue(frameId, "document"));
-        if (mainFrame) {
-            frameId = -1;
+    private static void loadScript(BrowserView webview, Browser webEngine, long frameId) {
+        try {
+            webEngine.executeJavaScriptAndReturnValue(frameId, script);
             webview.getProperties().put("player" + frameId, webEngine.executeJavaScriptAndReturnValue(frameId, "$marathon_player"));
             webview.getProperties().put("document" + frameId, webEngine.executeJavaScriptAndReturnValue(frameId, "document"));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -143,14 +150,18 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
         return super.getByPseudoElement(selector, params);
     }
 
+    private static final Pattern SELECTOR_WITH_FRAME_ID = Pattern.compile("^(-?\\d+):(.*)$");
+
     private List<IJavaFXElement> selectByProperties(ArrayList<IJavaFXElement> arrayList, JSONObject o) {
         List<IJavaFXElement> r = new ArrayList<>();
         if (o.has("select")) {
-            String selectorWithFrameId = o.getString("select");
-            int index = selectorWithFrameId.indexOf(':');
-            String[] parts = new String[] { selectorWithFrameId.substring(0, index), selectorWithFrameId.substring(index + 1) };
-            long frameId = Long.parseLong(parts[0]);
-            String selector = parts[1];
+            String selector = o.getString("select");
+            Matcher matcher = SELECTOR_WITH_FRAME_ID.matcher(selector);
+            long frameId = -1;
+            if (matcher.matches()) {
+                frameId = Long.parseLong(matcher.group(1));
+                selector = matcher.group(2);
+            }
             if (documentHasSelector(selector, frameId))
                 r.add(new JavaFXBrowserViewItem(this, selector, frameId));
         }
@@ -158,7 +169,6 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
     }
 
     private boolean documentHasSelector(String selector, long frameId) {
-        System.out.println("JavaFXBrowserViewElement.documentHasSelector(" + selector + "," + frameId + ")");
         return EventQueueWait.exec(new Callable<Boolean>() {
             @Override public Boolean call() throws Exception {
                 try {
@@ -170,9 +180,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
             }
 
             private boolean hasSelector() {
-                JSObject doc = ((JSValue) getComponent().getProperties().get("document" + frameId)).asObject();
-                JSValue invoke = doc.getProperty("querySelector").asFunction().invoke(doc, selector);
-                return !invoke.isNull();
+                JSObject player = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
+                return player.getProperty("exists").asFunction().invoke(player, selector).getBooleanValue();
             }
         });
     }
@@ -181,25 +190,36 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
         EventQueueWait.exec(new Runnable() {
 
             @Override public void run() {
-                JSObject doc = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
-                doc.getProperty("click").asFunction().invoke(doc, selector);
+                JSObject player = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
+                player.getProperty("click").asFunction().invoke(player, selector);
             }
         });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
     }
 
     public boolean select(String selector, String value, long frameId) {
-        return EventQueueWait.exec(new Callable<Boolean>() {
+        Boolean selected = EventQueueWait.exec(new Callable<Boolean>() {
             @Override public Boolean call() throws Exception {
-                JSObject doc = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
-                return doc.getProperty("select").asFunction().invoke(doc, selector, value).getBooleanValue();
+                JSObject player = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
+                return player.getProperty("select").asFunction().invoke(player, selector, value).getBooleanValue();
             }
         });
+        try {
+            if (selected)
+                Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
+        return selected;
     }
 
     public static String getText(Node component, String selector, long frameId) {
         return EventQueueWait.exec(new Callable<String>() {
             @Override public String call() throws Exception {
-                JSObject doc = ((JSValue) component.getProperties().get("player" + frameId)).asObject();
+                Object player = component.getProperties().get("player" + frameId);
+                JSObject doc = ((JSValue) player).asObject();
                 JSValue invoke = doc.getProperty("text").asFunction().invoke(doc, selector);
                 return invoke.isNull() ? null : invoke.getStringValue();
             }
@@ -227,9 +247,9 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
     }
 
     public static Map<String, String> getAttributes(Node component, String selector, long frameId) {
-        JSObject doc = ((JSValue) component.getProperties().get("player" + frameId)).asObject();
-        JSValue invoke = doc.getProperty("attributes").asFunction().invoke(doc, selector);
-        String r = (String) invoke.getStringValue();
+        JSObject player = ((JSValue) component.getProperties().get("player" + frameId)).asObject();
+        JSValue attributes = player.getProperty("attributes").asFunction().invoke(player, selector);
+        String r = (String) attributes.getStringValue();
         JSONObject o = new JSONObject(r);
         String[] names = JSONObject.getNames(o);
         HashMap<String, String> rm = new HashMap<>();
@@ -238,4 +258,52 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
         }
         return rm;
     }
+
+    private static boolean initializedRemoteDebug = false;
+
+    public static void initRemoteDebug() {
+        LOGGER.warning("In initRemoteDebug. initializedRemoteDebug = " + initializedRemoteDebug);
+        if (initializedRemoteDebug)
+            return;
+        initializedRemoteDebug = true;
+        List<String> chromiumSwitches = BrowserPreferences.getChromiumSwitches();
+        Optional<String> findFirst = chromiumSwitches.stream().filter(new Predicate<String>() {
+            @Override public boolean test(String t) {
+                return t.startsWith("--remote-debugging-port=");
+            }
+        }).findFirst();
+        if (findFirst.isPresent()) {
+            int port = Integer.parseInt(findFirst.get().substring("--remote-debugging-port=".length()).trim());
+            System.setProperty("jxbrowser-remote-debugging-port", port + "");
+            System.out.println("jxbrowser-remote-debugging-port(existing)=" + port);
+        } else {
+            int port = findFreePort();
+            chromiumSwitches.add("--remote-debugging-port=" + port);
+            BrowserPreferences.setChromiumSwitches(chromiumSwitches.toArray(new String[chromiumSwitches.size()]));
+            System.setProperty("jxbrowser-remote-debugging-port", port + "");
+            System.out.println("jxbrowser-remote-debugging-port(new)=" + port);
+        }
+    }
+
+    private static int findFreePort() {
+        ServerSocket socket = null;
+        try {
+            socket = new ServerSocket(0);
+            return socket.getLocalPort();
+        } catch (IOException e1) {
+            throw new RuntimeException("Could not allocate a port: " + e1.getMessage());
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        initRemoteDebug();
+    }
+
 }

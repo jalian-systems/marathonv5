@@ -41,7 +41,7 @@ function WebView() {
 		if(_this.paused)
 			return;
 		if(evt.ctrlKey && evt.button == 2) {
-			marathon_recorder.show_assertion();
+			marathon_recorder.show_assertion(evt.target.css(), browserview_frame_id, browserview_id);
 			evt.preventDefault();
 		}
 	}, true);
@@ -49,12 +49,6 @@ function WebView() {
 		if(_this.paused)
 			return;
 		_this.handleKeyPressEvent(evt);
-	}, true);
-
-	document.addEventListener('mousemove', function(evt) {
-		if(_this.paused)
-			return;
-		marathon_recorder.record_assertion_selector(evt.target.css(), browserview_frame_id);
 	}, true);
 }
 
@@ -67,7 +61,7 @@ WebView.prototype.handleChangeEvent = function(evt) {
 	var target = evt.target;
 	var v = this.value(target);
 	if(v != null)
-		marathon_recorder.record_select(String(browserview_frame_id) + ":" + target.css(), v);
+		marathon_recorder.record_select(String(browserview_frame_id) + ":" + target.css(), v, browserview_id);
 }
 
 WebView.prototype.shouldIgnoreClick = function(target) {
@@ -114,7 +108,7 @@ WebView.prototype.handleClickEvent = function(evt) {
 	var target = evt.target;
 	if(this.shouldIgnoreClick(target) === true && this.rawRecording === "false")
 		return;
-	marathon_recorder.record_click(String(browserview_frame_id) + ":" + target.css())
+	marathon_recorder.record_click(String(browserview_frame_id) + ":" + target.css(), browserview_id)
 }
 
 WebView.prototype.value = function(target) {

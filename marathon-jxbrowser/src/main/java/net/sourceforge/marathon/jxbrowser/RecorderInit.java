@@ -20,7 +20,6 @@ import javafx.scene.Node;
 import net.sourceforge.marathon.javafxrecorder.component.IRFXComponentFinder;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponentFactory;
-import net.sourceforge.marathon.javafxrecorder.component.RFXIgnoreComponent;
 
 public class RecorderInit {
 
@@ -28,25 +27,21 @@ public class RecorderInit {
         RFXComponentFactory.add(new IRFXComponentFinder() {
 
             @Override public Node getRecordOn(Node component, Point2D point) {
-                return null;
-            }
-
-            @Override public Class<? extends RFXComponent> get(Node component) {
-                if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
-                    return RFXBrowserView.class;
+                while (component != null) {
+                    if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
+                        return component;
+                    }
+                    component = component.getParent();
                 }
                 return null;
             }
-        });
-        RFXComponentFactory.add(new IRFXComponentFinder() {
-
-            @Override public Node getRecordOn(Node component, Point2D point) {
-                return null;
-            }
 
             @Override public Class<? extends RFXComponent> get(Node component) {
-                if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.internal.LightWeightWidgetView")) {
-                    return RFXIgnoreComponent.class;
+                while (component != null) {
+                    if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
+                        return RFXBrowserView.class;
+                    }
+                    component = component.getParent();
                 }
                 return null;
             }

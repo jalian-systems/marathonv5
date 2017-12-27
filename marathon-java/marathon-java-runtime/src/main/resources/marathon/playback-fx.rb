@@ -744,3 +744,15 @@ end
 def refresh_if_stale(o)
   return o
 end
+
+def with_jxbrowser
+  port = driver.execute_script('return System.getProperty("jxbrowser-remote-debugging-port");')
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_option('debuggerAddress', '127.0.0.1:' + port)
+  chrome = Selenium::WebDriver.for :chrome, :options => options
+  begin
+    yield(chrome)
+  ensure
+    chrome.quit
+  end
+end

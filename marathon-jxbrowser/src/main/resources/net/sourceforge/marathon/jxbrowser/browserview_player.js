@@ -18,7 +18,7 @@ function WebViewPlayer() {
 }
 
 WebViewPlayer.prototype.click = function(selector) {
-	var el = document.querySelector(selector);
+	var el = this.findElement(selector);
 	if(el == null)
 		return ;
 	el.scrollIntoView();
@@ -31,11 +31,42 @@ WebViewPlayer.prototype.click = function(selector) {
     el.dispatchEvent(evt);
 }
 
-WebViewPlayer.prototype.select = function(selector, value) {
-	var target = document.querySelector(selector);
+WebViewPlayer.prototype.findElement = function(selector) {
+	if(selector.indexOf('xpath:') == 0)
+		return document.evaluate(selector.substring(6), document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+	else if(selector.indexOf('id:') == 0)
+		return document.getElementById(selector.substring(3));
+	else if(selector.indexOf('tagname:') == 0) {
+		var els = document.getElementsByTagName(selector.substring(8));
+		if(els.length > 0)
+			return els[0];
+		return null;
+	} else if(selector.indexOf('name:') == 0) {
+		var els = document.getElementsByName(selector.substring(5));
+		if(els.length > 0)
+			return els[0];
+		return null;
+	} else if(selector.indexOf('classname:') == 0) {
+		var els = document.getElementsByClassName(selector.substring(10));
+		if(els.length > 0)
+			return els[0];
+		return null;
+	} else {
+		return document.querySelector(selector);
+	}
+}
+
+WebViewPlayer.prototype.exists = function(selector) {
+	var target = this.findElement(selector);
 	if(target == null)
 		return false;
-	target.scrollIntoView();
+	return true;
+}
+
+WebViewPlayer.prototype.select = function(selector, value) {
+	var target = this.findElement(selector);
+	if(target == null)
+		return false;
 	var values = [ 'input[type="text"]', 'input[type="password"]', 'input[type="color"]',
 	               'input[type="date"]', 'input[type="datetime"]', 'input[type="datetime-local"]',
 	               'input[type="number"]', 'input[type="range"]', 'input[type="search"]',
@@ -45,7 +76,8 @@ WebViewPlayer.prototype.select = function(selector, value) {
 	               function() { return this.matches('input') && this.getAttribute('type') === null ;}];
 		
 	var matched = values.find(function(v) { return typeof v === 'function' ? v.call(target) : target.matches(v); });
-	if(matched) {
+	target.scrollIntoView();
+	if(matched || target.matches('textarea')) {
 		target.value = value ;
 		return true;
 	} else if(target.matches('input[type="checkbox"]') || target.matches('input[type="radio"]')) {
@@ -60,22 +92,21 @@ WebViewPlayer.prototype.select = function(selector, value) {
 	   }
 	   target.value = selected_values;
 	   return true;
-	} else if(target.matches('textarea')) {		
-		target.value = value;	
-	   return true;
 	} else {
 		return true;
 	}
 };
 
 WebViewPlayer.prototype.text = function(selector) {
-	if(document.querySelector(selector).innerText)
-		return document.querySelector(selector).innerText.trim();
+	if(this.value(selector) != null)
+		return this.value(selector);
+	if(this.findElement(selector).innerText)
+		return this.findElement(selector).innerText.trim();
 	return null;
 };
 
 WebViewPlayer.prototype.label = function(selector) {
-		var id = document.querySelector(selector).getAttribute('id');
+		var id = this.findElement(selector).getAttribute('id');
 		if(id) {
 			var labels = document.querySelectorAll('label');
 			for(var i = 0; i < labels.length; i++) {
@@ -88,17 +119,17 @@ WebViewPlayer.prototype.label = function(selector) {
 };
 
 WebViewPlayer.prototype.attributes = function(selector) {
-	var e = document.querySelector(selector);
+	var e = this.findElement(selector);
 	var r = {};
-	e.getAttributeNames().forEach(function(attr) {
-		r[attr] = e.getAttribute(attr);
-	});
+	var attrs = e.attributes;
+	for(var i = 0; i < attrs.length; i++)
+	  r[attrs[i].name] = attrs[i].value;
 	return JSON.stringify(r);
 };
 
 WebViewPlayer.prototype.value = function(selector) {
-	if(document.querySelector(selector).value !== undefined)
-		return String(document.querySelector(selector).value).trim();
+	if(this.findElement(selector).value !== undefined)
+		return String(this.findElement(selector).value).trim();
 	return null;
 };
 

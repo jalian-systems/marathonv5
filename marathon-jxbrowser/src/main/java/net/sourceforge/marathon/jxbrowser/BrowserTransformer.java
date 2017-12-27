@@ -27,32 +27,37 @@ import javassist.CtConstructor;
 public class BrowserTransformer implements ClassFileTransformer {
 
     public static final Logger LOGGER = Logger.getLogger(BrowserTransformer.class.getName());
+    private boolean recording;
+
+    public BrowserTransformer(boolean recording) {
+        this.recording = recording;
+    }
 
     @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformClass(classBeingRedefined, classfileBuffer);
     }
 
-    // @formatter:off
-	// @formatter:on
-
     private byte[] transformClass(Class<?> classBeingRedefined, byte[] b) {
         ClassPool classPool = ClassPool.getDefault();
         CtClass cl = null;
         try {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
-            if (cl.getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
+            if (recording && cl.getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
+                LOGGER.warning("Transforming class BrowserView");
                 CtConstructor[] constructors = cl.getConstructors();
                 for (CtConstructor ctConstructor : constructors) {
-                    if(ctConstructor.getParameterTypes().length == 1) {
-                        String src = "net.sourceforge.marathon.jxbrowser.RFXBrowserView.generateEvent(this);";
-                        ctConstructor.insertAfter(src);
+                    if (ctConstructor.getParameterTypes().length == 1) {
+                        String src2 = "net.sourceforge.marathon.jxbrowser.RFXBrowserView.generateEvent(this);";
+                        ctConstructor.insertAfter(src2);
                     }
                 }
             }
+            if (cl.getName().equals("com.teamdev.jxbrowser.chromium.Browser")) {
+                JavaFXBrowserViewElement.initRemoteDebug();
+            }
             b = cl.toBytecode();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (cl != null) {
                 cl.detach();

@@ -314,6 +314,10 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
         try {
             JSONObject eventObject = query.getJSONObject("event");
             String type = eventObject.getString("type");
+            if (type.equals("log")) {
+                System.out.println(eventObject.get("message"));
+                return new JSONObject();
+            }
             if (type.equals("comment")) {
                 recorder.record(new CommentScriptElement(eventObject.getString("comment")));
                 return new JSONObject();
