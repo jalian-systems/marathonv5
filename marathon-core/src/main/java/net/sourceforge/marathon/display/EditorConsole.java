@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sourceforge.marathon.runtime.api.AbstractFileConsole;
@@ -25,36 +27,45 @@ public class EditorConsole extends AbstractFileConsole {
 
     private IDisplayView display;
 
+    private Map<Integer, StringBuilder> hold = new HashMap<>();
+    
     public EditorConsole(IDisplayView display) {
         this.display = display;
+        hold.put(IStdOut.STD_OUT, new StringBuilder());
+        hold.put(IStdOut.STD_ERR, new StringBuilder());
+        hold.put(IStdOut.SCRIPT_OUT, new StringBuilder());
+        hold.put(IStdOut.SCRIPT_ERR, new StringBuilder());
     }
 
     @Override public void writeScriptOut(char cbuf[], int off, int len) {
-        display.getOutputPane().append(String.valueOf(cbuf, off, len), IStdOut.SCRIPT_OUT);
+        appendToDisplay(cbuf, off, len, IStdOut.SCRIPT_OUT);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
     @Override public void writeScriptErr(char cbuf[], int off, int len) {
-        display.getOutputPane().append(String.valueOf(cbuf, off, len), IStdOut.SCRIPT_ERR);
+        appendToDisplay(cbuf, off, len, IStdOut.SCRIPT_ERR);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
     @Override public void writeStdOut(char cbuf[], int off, int len) {
-        char[] buf = new char[len];
-        for (int i = off; i < off + len; i++) {
-            buf[i - off] = cbuf[i];
-        }
-        display.getOutputPane().append(String.valueOf(cbuf, off, len), IStdOut.STD_OUT);
+        appendToDisplay(cbuf, off, len, IStdOut.STD_OUT);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
     @Override public void writeStdErr(char cbuf[], int off, int len) {
-        char[] buf = new char[len];
-        for (int i = off; i < off + len; i++) {
-            buf[i - off] = cbuf[i];
-        }
-        display.getOutputPane().append(String.valueOf(cbuf, off, len), IStdOut.STD_ERR);
+        appendToDisplay(cbuf, off, len, IStdOut.STD_ERR);
         writeToFile(String.valueOf(cbuf, off, len));
+    }
+
+    private void appendToDisplay(char[] cbuf, int off, int len, int type) {
+        for(int i = off; i < off+len; i++) {
+            StringBuilder sb = hold.get(type);
+            sb.append(cbuf[i]);
+            if(cbuf[i] == '\n') {
+                display.getOutputPane().append(sb.toString(), type);
+                sb.setLength(0);
+            }
+        }
     }
 
     @Override public void clear() {

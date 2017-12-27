@@ -60,7 +60,6 @@ public class FileChooserTransformer implements ClassFileTransformer {
             }
             b = cl.toBytecode();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (cl != null) {
                 cl.detach();

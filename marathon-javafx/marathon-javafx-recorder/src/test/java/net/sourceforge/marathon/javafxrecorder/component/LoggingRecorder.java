@@ -150,4 +150,9 @@ public final class LoggingRecorder implements IJSONRecorder {
         // TODO Auto-generated method stub
 
     }
+
+    @Override public void log(String string) {
+        // TODO Auto-generated method stub
+        
+    }
 }

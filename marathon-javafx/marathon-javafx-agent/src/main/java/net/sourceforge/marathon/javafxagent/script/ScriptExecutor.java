@@ -17,6 +17,7 @@ package net.sourceforge.marathon.javafxagent.script;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.server.ExecuteMode;
 
@@ -95,14 +97,16 @@ public class ScriptExecutor {
             }
             return result;
         }
-        Platform.runLater(() -> {
-            try {
-                result = declaredMethod.invoke(helloClazz.newInstance(), args);
-            } catch (Exception e) {
-                result = e;
+        return EventQueueWait.exec(new Callable<Object>() {
+            @Override public Object call() throws Exception {
+                try {
+                    return declaredMethod.invoke(helloClazz.newInstance(), args);
+                } catch (Exception e) {
+                    return e;
+                }
             }
+            
         });
-        return result;
     }
 
     private static final String CLASS_PREFIX = "MarathonExecScript";
@@ -131,7 +135,6 @@ public class ScriptExecutor {
 
     public String getMethodBody(Object[] args) {
         String r = "public Object execute(" + getMethodArgs(args) + ")";
-        Logger.getLogger(ScriptExecutor.class.getName()).log(Level.INFO, "Function signature: " + r);
         return r + " { return null ;}";
     }
 
@@ -155,5 +158,4 @@ public class ScriptExecutor {
         }
         return sb.toString();
     }
-
 }

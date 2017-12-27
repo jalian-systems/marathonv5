@@ -34,6 +34,7 @@ import javax.swing.JComponent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import net.sourceforge.marathon.api.INamingStrategy;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
@@ -41,6 +42,7 @@ import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.ObjectIdentity;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.PropertyList;
 import net.sourceforge.marathon.runtime.api.ComponentId;
 import net.sourceforge.marathon.runtime.api.ComponentNotFoundException;
+import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.ILogger;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.JSONObjectPropertyAccessor;
@@ -96,7 +98,10 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
             try {
                 return Thread.currentThread().getContextClassLoader().loadClass(cName);
             } catch (ClassNotFoundException e1) {
-                return JComponent.class;
+                if(Constants.FRAMEWORK_SWING.equals(Constants.getFramework()))
+                    return JComponent.class;
+                else
+                    return Node.class;
             }
         }
     }

@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import com.sun.glass.ui.CommonDialogs;
 import com.sun.javafx.stage.StageHelper;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -46,6 +47,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -86,6 +88,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     private IJSONRecorder recorder;
     private RFXComponent current;
 
+    public static SimpleObjectProperty<JavaFxRecorderHook> instance = new SimpleObjectProperty<>();
+
     ContextMenuHandler contextMenuHandler;
 
     public JavaFxRecorderHook(int port) {
@@ -125,6 +129,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        instance.set(this);
     }
 
     private static class ContextMenuTriggerCheck {
@@ -250,6 +255,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
 
         private boolean isContextMenuMouseEvent(MouseEvent event) {
+            if (event.getEventType() != MouseEvent.MOUSE_PRESSED)
+                return false;
             return mouseModifiers.equals(mouseEventGetModifiersExText(event));
         }
 
@@ -282,6 +289,12 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             }
             return text.substring(0, text.length() - 1);
         }
+
+        public MouseEvent getContextMenuMouseEvent(Node source) {
+            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 0, MouseButton.SECONDARY, 1, false,
+                    true, false, false, false, false, true, true, true, false, null);
+            return e;
+        }
     }
 
     private ContextMenuTriggerCheck contextMenuTriggerCheck;
@@ -294,6 +307,10 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         String menuModifiers = jsonObject.getString("menuModifiers");
         contextMenuTriggerCheck = new ContextMenuTriggerCheck(contextMenuKeyModifiers, contextMenuKey, menuModifiers);
 
+    }
+
+    public MouseEvent getContextMenuMouseEvent(Node source) {
+        return contextMenuTriggerCheck.getContextMenuMouseEvent(source);
     }
 
     private static final EventType<?> events[] = { MouseEvent.MOUSE_PRESSED, MouseEvent.MOUSE_RELEASED, MouseEvent.MOUSE_CLICKED,
@@ -391,9 +408,10 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             if (current != null && !contextMenuHandler.isShowing()) {
                 current.focusLost(null);
             }
-            contextMenuHandler.showPopup(event);
+            showContextMenu(event);
             return;
         }
+
         if (event.getEventType().getName().equals("filechooser")) {
             handleFileChooser(event);
             return;
@@ -431,7 +449,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             target = (Node) event.getTarget();
         }
         if (target == null) {
-            System.out.println("JavaFxRecorderHook.handle_internal(" + event + "): target = null?");
             return;
         }
         RFXComponent c = finder.findRComponent(target, point, recorder);
@@ -447,6 +464,10 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             c = current;
         }
         c.processEvent(event);
+    }
+
+    public void showContextMenu(Event event) {
+        contextMenuHandler.showPopup(event);
     }
 
     private void handleFolderChooser(Event event) {

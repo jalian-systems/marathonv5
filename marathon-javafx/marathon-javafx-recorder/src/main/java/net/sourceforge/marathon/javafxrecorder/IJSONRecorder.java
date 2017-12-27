@@ -71,4 +71,6 @@ public interface IJSONRecorder {
     public abstract void recordSelect3(RFXComponent r, String state, String info);
 
     public abstract void recordClick3(RFXComponent r, String info);
+
+    public abstract void log(String string);
 }
