@@ -65,28 +65,28 @@ public class MarathonBuilder extends Builder {
 
     @Symbol("greet") @Extension public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-        public FormValidation doCheckMarathonHome(@QueryParameter String marathonHome, @AncestorInPath AbstractProject project)
+        public FormValidation doCheckMarathonHome(@QueryParameter String marathonHome, @AncestorInPath AbstractProject<?, ?> project)
                 throws IOException, ServletException {
             if (marathonHome.length() == 0)
                 return FormValidation.error("Please set Marathon Home.");
             return FormValidation.ok();
         }
 
-        public FormValidation doCheckMProjectDir(@QueryParameter String mProjectDir, @AncestorInPath AbstractProject project)
+        public FormValidation doCheckMProjectDir(@QueryParameter String mProjectDir, @AncestorInPath AbstractProject<?, ?> project)
                 throws IOException, ServletException {
             if (mProjectDir.length() == 0)
                 return FormValidation.error("Please set Marathon project directory.");
             return FormValidation.ok();
         }
 
-        public FormValidation doCheckTestCases(@QueryParameter String testCases, @AncestorInPath AbstractProject project)
+        public FormValidation doCheckTestCases(@QueryParameter String testCases, @AncestorInPath AbstractProject<?, ?> project)
                 throws IOException, ServletException {
             if (testCases.length() == 0)
                 return FormValidation.warning("Please enter test case to run.");
             return FormValidation.ok();
         }
 
-        @Override public boolean isApplicable(Class<? extends AbstractProject> aClass) {
+        @Override public boolean isApplicable(@SuppressWarnings("rawtypes") Class<? extends AbstractProject> aClass) {
             return true;
         }
 
