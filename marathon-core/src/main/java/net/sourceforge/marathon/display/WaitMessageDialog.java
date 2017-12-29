@@ -17,13 +17,22 @@ package net.sourceforge.marathon.display;
 
 import java.util.logging.Logger;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 
 public class WaitMessageDialog {
@@ -36,6 +45,11 @@ public class WaitMessageDialog {
     private static class MessageDialog extends Stage {
         private String message = DEFAULT_MESSAGE;
         private Label messageLabel;
+        private static final Integer STARTTIME = 0;
+        private Timeline timeline;
+        private Label timerLabel = new Label();
+        private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
+
 
         private MessageDialog() {
             setAlwaysOnTop(true);
@@ -49,7 +63,17 @@ public class WaitMessageDialog {
             messageLabel.setStyle("-fx-background-color:#000000");
             messageLabel.setTextFill(javafx.scene.paint.Color.WHITE);
             messageLabel.setMaxWidth(Double.MAX_VALUE);
-            setScene(new Scene(new VBox(FXUIUtils.getImage("wait"), messageLabel)));
+
+            // Bind the timerLabel text property to the timeSeconds property
+            timerLabel.setStyle("-fx-font-size: 2em");
+            timerLabel.textProperty().bind(timeSeconds.asString());
+            timerLabel.setTextFill(Color.RED);
+
+            VBox vbox = new VBox(FXUIUtils.getImage("wait"), messageLabel);
+            
+            StackPane.setMargin(timerLabel, new Insets(90, 0, 0, 0));
+            StackPane root = new StackPane(vbox, timerLabel);
+            setScene(new Scene(root));
         }
 
         public void setMessage(String message) {
@@ -58,6 +82,22 @@ public class WaitMessageDialog {
             }
             this.message = message;
             Platform.runLater(() -> messageLabel.setText(message));
+        }
+
+        public void _show() {
+            timeSeconds.set(STARTTIME);
+            timeline = new Timeline();
+            KeyValue keyValue = new KeyValue(timeSeconds, Integer.MAX_VALUE);
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(Integer.MAX_VALUE), keyValue));
+            timeline.playFromStart();
+            show();
+        }
+
+        public void _hide() {
+            if (timeline != null) {
+                timeline.stop();
+            }
+            hide();
         }
 
     }
@@ -74,9 +114,9 @@ public class WaitMessageDialog {
             }
             if (_instance.isShowing() != b) {
                 if (b) {
-                    _instance.show();
+                    _instance._show();
                 } else {
-                    _instance.hide();
+                    _instance._hide();
                 }
             }
             _instance.setMessage(message);
@@ -91,4 +131,5 @@ public class WaitMessageDialog {
     public static void setVisible(boolean b) {
         setVisible(b, DEFAULT_MESSAGE);
     }
+    
 }
