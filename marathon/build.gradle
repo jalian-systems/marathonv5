@@ -24,7 +24,6 @@ dependencies {
   compile project(":marathon-core")
   runtime project(":marathon")
   runtime project(":marathon-java")
-  runtime project(":marathonext-jxbrowser")
   runtime project(":marathon-java:marathon-java-driver")
   runtime project(":marathon-java:marathon-java-agent")
   runtime project(":marathon-java:marathon-java-recorder")
@@ -108,6 +107,7 @@ distributions {
       }
       from(project(':marathon-jenkins').file('build/libs'))
       from(project(':marathon-core').file('src/main/dist'))
+      from(project(':marathonext-jxbrowser').jar)
       from(project(':marathonext-jxbrowser').file('src/main/dist'))
       from(project(':marathon-java:marathon-java-runtime').file('src/main/dist'))
       from(project(':marathon-javafx:marathon-javafx-runtime').file('src/main/dist'))
