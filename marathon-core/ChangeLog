@@ -1,4 +1,15 @@
-Marathon Version 5.1.5.1 (27th November 2017)
+Marathon Version 5.1.6.0 (1st January 2018)
+
+01. fix: JavaDriverCommandExecutor - fixed issues with failures
+02. feat: Added a count-up timer to WaitMessageDialog
+03. feat: Added stop recording and play buttons and enabled them during pause
+04. feat: Added support for JxBrowser through an extension
+05. feat: Added support for recording and playback for WebView
+06. fix: scripts changed to use -cp and add UserLibs folder
+07. fixed: Failure to open an editor while starting up should be ignored and DisplayWindow should be shown
+08. feat: Added jenkins plugin
+
+Marathon Version 5.1.5.0 (27th November 2017)
 
 01. feat: Added nolocalcopy option for WebStartLaunch mode
 02. feat: Added httpd server to open reports from HTMLView editor
