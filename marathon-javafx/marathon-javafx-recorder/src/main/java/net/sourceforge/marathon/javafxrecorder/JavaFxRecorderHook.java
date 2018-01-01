@@ -41,6 +41,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
@@ -291,8 +292,13 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         }
 
         public MouseEvent getContextMenuMouseEvent(Node source) {
-            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 0, MouseButton.SECONDARY, 1, false,
-                    true, false, false, false, false, true, true, true, false, null);
+            Bounds boundsInParent = source.getBoundsInParent();
+            double x = boundsInParent.getWidth() / 2;
+            double y = boundsInParent.getHeight() / 2;
+            Point2D screenXY = source.localToScreen(x, y);
+            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, x, y, screenXY.getX(),
+                    screenXY.getY(), MouseButton.SECONDARY, 1, false, true, false, false, false, false, true, true, true,
+                    false, null);
             return e;
         }
     }
