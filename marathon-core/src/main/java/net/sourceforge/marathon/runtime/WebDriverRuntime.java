@@ -221,6 +221,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
     @Override public void stopRecording() {
         System.setProperty("marathon.recording.port", "");
         recordingServer.stopRecording();
+        script.runFixtureTeardown();
     }
 
     @Override public void startApplication() {
