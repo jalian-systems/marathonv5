@@ -65,6 +65,7 @@ import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 
@@ -290,7 +291,8 @@ public class RFXComponentFactory {
                 Node parent = component;
                 if (hasTabContainer(component)) {
                     while (parent != null) {
-                        if (parent.getStyleClass().contains("tab-close-button") || parent instanceof Label && parent.getStyleClass().contains("tab-label")) {
+                        if (parent.getStyleClass().contains("tab-close-button")
+                                || parent instanceof Label && parent.getStyleClass().contains("tab-label")) {
                             return true;
                         }
                         parent = parent.getParent();
@@ -481,6 +483,7 @@ public class RFXComponentFactory {
         add(CheckBoxTreeTableCell.class, RFXCheckBoxTreeTableCell.class, null);
         add(ComboBoxTreeTableCell.class, RFXComboBoxTreeTableCell.class, null);
         add(ChoiceBoxTreeTableCell.class, RFXChoiceBoxTreeTableCell.class, null);
+        add(WebView.class, RFXWebView.class, null);
     }
 
     static {
@@ -512,6 +515,7 @@ public class RFXComponentFactory {
                 e.printStackTrace();
             }
         }
+        System.out.println("RFXComponentFactory.findRawRComponent(" + source + "): Could not find rcomponent");
         return null;
     }
 

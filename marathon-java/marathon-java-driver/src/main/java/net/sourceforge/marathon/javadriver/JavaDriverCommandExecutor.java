@@ -27,7 +27,7 @@ import org.openqa.selenium.remote.HttpCommandExecutor;
 import net.sourceforge.marathon.javaagent.Wait;
 
 public class JavaDriverCommandExecutor extends HttpCommandExecutor {
-    
+
     public static final Logger LOGGER = Logger.getLogger(JavaDriverCommandExecutor.class.getName());
 
     private static final String MARATHON_APPLICATION_DONT_MONITOR = "marathon.application.dont.monitor";
@@ -61,19 +61,39 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
             }
         } else {
             final CommandLine command = profile.getCommandLine();
-            Logger.getLogger(JavaDriverCommandExecutor.class.getName()).info("Executing: " + command);
+            LOGGER.info("Executing: " + command);
             command.copyOutputTo(profile.getOutputStream());
             command.executeAsync();
-            new Wait() {
-                @Override public boolean until() {
-                    return isConnected() || !profile.isJavaWebStart() && !Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR)
-                            && !command.isRunning();
-                }
-            }.wait("Timedout waiting for the server to start", Long.getLong("marathon.application.wait", Wait.DEFAULT_TIMEOUT * 5));
-            if (!isConnected() && !command.isRunning()) {
-                throw new WebDriverException("Unable to launch the application. command = " + command);
+            try {
+                new Wait() {
+                    @Override public boolean until() {
+                        if (isConnected())
+                            return true;
+                        if (!command.isRunning()) {
+                            if (profile.isJavaWebStart() || Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR))
+                                return false;
+                            return true;
+                        }
+                        return false;
+                    }
+                }.wait("Unable to estabilsh connection with the application",
+                        Long.getLong("marathon.application.wait", Wait.DEFAULT_TIMEOUT * 5));
+            } catch (Exception e) {
+                LOGGER.warning("Unable to estabilsh connection with the application: " + command);
+                if (command.isRunning())
+                    command.destroy();
+                throw e;
             }
-
+            if (!isConnected()) {
+                if (command.isRunning()) {
+                    command.destroy();
+                    LOGGER.warning("Unable to estabilsh connection with the application: " + command);
+                    throw new WebDriverException("Unable to estabilsh connection with the application");
+                } else {
+                    LOGGER.warning("The application exited before establishing the connection: " + command);
+                    throw new WebDriverException("The application exited before establishing the connection");
+                }
+            }
         }
     }
 

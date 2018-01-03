@@ -350,7 +350,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             State oldState = state;
             state = newState;
             playAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
-            stopPlayAction.setEnabled(state.isPlaying());
+            stopPlayAction.setEnabled(state.isPlaying() || state.isPlayingPaused());
             debugAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
             slowPlayAction.setEnabled((state.isStoppedWithAppClosed() || state.isStoppedWithAppOpen()) && isTestFile());
             recordAction.setEnabled(state.isStopped() && isProjectFile() && newState != State.RECORDING_ABOUT_TO_START);
@@ -367,7 +367,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             pauseAction.setEnabled(state.isRecording());
             resumeRecordingAction.setEnabled(state.isRecordingPaused());
             resumePlayingAction.setEnabled(state.isPlayingPaused());
-            stopAction.setEnabled(!state.isStopped() && (state.isRecording() || state.isPlaying() || state.isPlayingPaused()));
+            stopAction.setEnabled(state.isRecording() || state.isRecordingPaused());
             saveAction.setEnabled(state.isStopped() && currentEditor != null && currentEditor.isDirty());
             saveAsAction.setEnabled(state.isStopped() && currentEditor != null && !currentEditor.getNode().isDisabled()
                     && currentEditor.canSaveAs());
@@ -1313,10 +1313,18 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         if (!file.exists()) {
                             return null;
                         }
-                        IEditor e;
-                        e = createEditor(file);
-                        Dockable dockable = (Dockable) e.getData("dockable");
-                        return dockable;
+                        try {
+                            IEditor e;
+                            e = createEditor(file);
+                            Dockable dockable = (Dockable) e.getData("dockable");
+                            return dockable;
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                            FXUIUtils.showMessageDialog(DisplayWindow.this,
+                                    "Error Opening Editor for file: " + file.getAbsolutePath() + ":" + t.getMessage(), "Error",
+                                    AlertType.ERROR);
+                            return null;
+                        }
                     }
                 }
 
@@ -1806,6 +1814,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         recordActionButton = getActionButton(recordAction);
         toolBar.add(recordActionButton);
         toolBar.add(getActionButton(resumeRecordingAction));
+        toolBar.add(getActionButton(stopAction));
         toolBarPanel.add(toolBar);
         toolBar = new VLToolBar();
         toolBar.add(getActionButton(openApplicationAction));
@@ -1883,7 +1892,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
             @Override public Node getIcon() {
                 Node icon = action.getIcon();
-                if(icon != null)
+                if (icon != null)
                     return icon;
                 return super.getIcon();
             }

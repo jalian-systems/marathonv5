@@ -558,15 +558,15 @@ public class OMapContainer implements IObjectMapTreeItem {
     public void setCreated(long time) {
         created = time;
     }
-    
+
     public long getCreated() {
         return created;
     }
-    
+
     public void setModified(long modified) {
         this.modified = modified;
     }
-    
+
     public long getModified() {
         return modified;
     }

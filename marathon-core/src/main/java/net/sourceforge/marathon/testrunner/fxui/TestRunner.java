@@ -87,7 +87,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     private class MarathonRunListener extends RunListener {
         @Override public void testStarted(Description description) throws Exception {
             Test t = (Test) TestAttributes.get("test_object");
-            if(t == null)
+            if (t == null)
                 return;
             Platform.runLater(new Runnable() {
                 @Override public void run() {

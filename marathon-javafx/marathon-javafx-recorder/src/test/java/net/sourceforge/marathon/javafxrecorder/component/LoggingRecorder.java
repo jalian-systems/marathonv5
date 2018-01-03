@@ -140,4 +140,19 @@ public final class LoggingRecorder implements IJSONRecorder {
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override public void recordSelect3(RFXComponent r, String state, String info) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override public void recordClick3(RFXComponent r, String info) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override public void log(String string) {
+        // TODO Auto-generated method stub
+        
+    }
 }

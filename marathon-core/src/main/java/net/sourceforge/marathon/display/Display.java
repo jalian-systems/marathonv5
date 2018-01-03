@@ -276,7 +276,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     }
 
     public void stop() {
-        if (state.isRecording()) {
+        if (state.isRecording() || state.isRecordingPaused()) {
             try {
                 runtime.stopRecording();
             } catch (MarathonRuntimeException e) {

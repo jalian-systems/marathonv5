@@ -18,7 +18,7 @@ package net.sourceforge.marathon.javaagent;
 import java.util.logging.Logger;
 
 public class SessionNotCreatedException extends RuntimeException {
-    
+
     public static final Logger LOGGER = Logger.getLogger(SessionNotCreatedException.class.getName());
 
     private static final long serialVersionUID = 1L;

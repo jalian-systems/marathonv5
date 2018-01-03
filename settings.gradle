@@ -1,7 +1,7 @@
 if(null == properties['jdk6home']) {
-  logger.warn("Marathon java-agent and java-recorder needs to be compiled with JDK6. Please set jdk6home property.")
+  logger.warn("X:Marathon java-agent and java-recorder needs to be compiled with JDK6. Please set jdk6home property.")
 } else {
-  logger.info("Using " + properties['jdk6home'] + " for marathon-agent and marathon-recorder");
+  logger.info("X:Using " + properties['jdk6home'] + " for marathon-agent and marathon-recorder");
 }
 include 'marathon', 'marathon-core:JSON-java', 'marathon-core:ruby-selenium-webdriver', ':marathon-core',
           'marathon-java:marathon-java-agent', 'marathon-java:marathon-test-helpers',
@@ -9,5 +9,11 @@ include 'marathon', 'marathon-core:JSON-java', 'marathon-core:ruby-selenium-webd
           'marathon-java:marathon-java-recorder', ':marathon-java', 'marathon-java:marathon-kbmap-tool',
           'marathon-javafx:marathon-javafx-agent', 'marathon-javafx:marathon-javafx-recorder',
           ':marathon-javafx', 'marathon-javafx:marathon-fxtest-helpers',
-          ':marathon-javafx:marathon-javafx-runtime'
+          ':marathon-javafx:marathon-javafx-runtime', 'marathon-jenkins'
 
+if(null != properties['jxbrowser_install_path']) {
+	include 'marathonext-jxbrowser'
+	logger.warn('X:Adding jxbrowser: ')
+} else {
+	logger.warn('Y:Adding jxbrowser: ')
+}

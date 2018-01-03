@@ -45,11 +45,11 @@ public class FileSelectionInfo {
     public Node getIcon() {
         return icon;
     }
-    
+
     public String getSubTitle() {
         return subTitle;
     }
-    
+
     public String getFileType() {
         return fileType;
     }

@@ -31,7 +31,7 @@ import net.sourceforge.marathon.resource.ResourceView.Operation;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class DummyResource extends Resource {
-    
+
     public static final Logger LOGGER = Logger.getLogger(DummyResource.class.getName());
 
     @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {

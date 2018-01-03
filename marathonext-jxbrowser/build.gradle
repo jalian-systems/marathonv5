@@ -1,0 +1,78 @@
+/*
+Copyright 2016 Jalian Systems Pvt. Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+repositories {
+  mavenCentral()
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots'
+  }
+}
+
+import org.gradle.plugins.ide.eclipse.model.SourceFolder 
+import org.gradle.plugins.ide.eclipse.model.BuildCommand
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+configurations {
+  antBuildXML
+}
+
+eclipse {
+  jdt {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    javaRuntimeName = 'JavaSE-1.8'
+
+    file {
+      withProperties { properties ->
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+      }
+    }
+  }
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+	options.fork = true
+}
+
+compileTestJava {
+	options.fork = true
+}
+
+dependencies {
+  compile project(':marathon-javafx:marathon-javafx-agent')
+  compile project(':marathon-javafx:marathon-javafx-recorder')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-linux64-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-mac-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\jxbrowser-win32-6.18.jar')
+	compile files('C:\\Users\\kd\\Projects\\jxbrowser\\lib\\license.jar')
+}
+
+jar {
+  manifest {
+    attributes 'Manifest-Version': '1.0',
+      'Agent-Class': 'net.sourceforge.marathon.jxbrowser.JXBrowserMarathonExtension',
+      'Can-Redefine-Classes': 'false',
+      'Can-Retransform-Classes': 'false',
+      'Premain-Class': 'net.sourceforge.marathon.jxbrowser.JXBrowserMarathonExtension'
+  }
+}

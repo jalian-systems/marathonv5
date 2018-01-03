@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class ComponentId implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ComponentId.class.getName());
 
     private static final String INFO_KEY = ComponentId.class.getName() + ".info";
@@ -34,8 +34,8 @@ public class ComponentId implements Serializable {
     private final Properties nameProps = new Properties();
     private final Properties componentInfoProps = new Properties();
 
-    private IRubyObject webElement = null ;
-    
+    private IRubyObject webElement = null;
+
     public ComponentId(String name) {
         this(name, null);
     }
@@ -49,10 +49,10 @@ public class ComponentId implements Serializable {
             for (Entry<Object, Object> entry : values) {
                 nameProps.put(entry.getKey().toString(), entry.getValue().toString());
             }
-        } else if(name instanceof IRubyObject) {
+        } else if (name instanceof IRubyObject) {
             if (componentInfo != null)
                 throw new RuntimeException("Invalid component id");
-            webElement = (IRubyObject) name ;
+            webElement = (IRubyObject) name;
         } else {
             throw new RuntimeException("Invalid component id");
         }
@@ -134,7 +134,7 @@ public class ComponentId implements Serializable {
         }
         return nameProps.get(NAME_KEY) == null ? nameProps : null;
     }
-    
+
     public IRubyObject getWebElement() {
         return webElement;
     }

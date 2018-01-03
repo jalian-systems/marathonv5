@@ -24,7 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class PropertyList {
-    
+
     public static final Logger LOGGER = Logger.getLogger(PropertyList.Property.class.getName());
 
     public static class Property {

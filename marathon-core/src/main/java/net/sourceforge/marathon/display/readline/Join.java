@@ -20,7 +20,7 @@ import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
 public final class Join {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Join.class.getName());
 
     public static final Executor TRIVIAL_EXECUTOR = new Executor() {
@@ -176,7 +176,4 @@ public final class Join {
         }
     }
 
-    public void execute(Runnable runnable) {
-        executor.equals(runnable);
-    }
 }

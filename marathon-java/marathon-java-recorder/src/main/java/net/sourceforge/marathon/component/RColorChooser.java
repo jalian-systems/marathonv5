@@ -26,7 +26,7 @@ import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
 public class RColorChooser extends RComponent {
-    
+
     public static final Logger LOGGER = Logger.getLogger(RColorChooser.class.getName());
 
     private String color;

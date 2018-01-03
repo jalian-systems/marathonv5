@@ -20,7 +20,7 @@ import java.io.Writer;
 import java.util.logging.Logger;
 
 public abstract class ConsoleWriter extends Writer {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ConsoleWriter.class.getName());
 
     private char[] cb;

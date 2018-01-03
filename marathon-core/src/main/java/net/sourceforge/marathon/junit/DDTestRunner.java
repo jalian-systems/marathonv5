@@ -31,7 +31,7 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.IConsole;
 
 public class DDTestRunner {
-    
+
     public static final Logger LOGGER = Logger.getLogger(DDTestRunner.class.getName());
 
     Pattern pattern = Pattern.compile(".*use_data_file\\s*\\(\\s*\"([^\"]*)\".*$|.*use_data_file\\s*\\(\\s*'([^\']*)'.*$");

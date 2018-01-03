@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import net.sourceforge.marathon.display.readline.Join.Call;
 
 public abstract class SyncReaction extends Reaction {
-    
+
     public static final Logger LOGGER = Logger.getLogger(SyncReaction.class.getName());
 
     public SyncReaction(int[] indices) {

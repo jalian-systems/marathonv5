@@ -148,19 +148,19 @@ public class OMapComponent implements IObjectMapTreeItem, Serializable {
     public void setUsed(boolean used) {
         this.used = used;
     }
-    
+
     public void setCreated(long created) {
         this.created = created;
     }
-    
+
     public long getCreated() {
         return created;
     }
-    
+
     public void setModified(long modified) {
         this.modified = modified;
     }
-    
+
     public long getModified() {
         return modified;
     }

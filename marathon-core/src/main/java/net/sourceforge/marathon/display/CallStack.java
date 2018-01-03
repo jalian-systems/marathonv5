@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import net.sourceforge.marathon.runtime.api.SourceLine;
 
 public class CallStack {
-    
+
     public static final Logger LOGGER = Logger.getLogger(CallStack.class.getName());
 
     private static class StackMethod {

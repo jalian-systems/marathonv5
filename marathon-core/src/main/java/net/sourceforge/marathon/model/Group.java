@@ -87,7 +87,7 @@ public class Group {
             }
 
             @Override public String fileCommentHeader() {
-                // @formatter:off
+        // @formatter:off
                 return  
                     "# You can assign one or more tests to a suite. The suite file\n" +
                     "# is in JSON format.\n" +
@@ -140,7 +140,7 @@ public class Group {
             }
 
             @Override public String fileCommentHeader() {
-                // @formatter:off
+        // @formatter:off
                 return
                     "# You can assign one or more tests to a feature. The feature file\n" +
                     "# is in JSON format.\n" +
@@ -181,7 +181,7 @@ public class Group {
             }
 
             @Override public String fileCommentHeader() {
-                // @formatter:off
+        // @formatter:off
                 return
                     "# You can assign one or more tests to a story. The story file\n" +
                     "# is in JSON format.\n" +
@@ -222,7 +222,7 @@ public class Group {
             }
 
             @Override public String fileCommentHeader() {
-                // @formatter:off
+        // @formatter:off
                 return
                     "# You can assign one or more tests to a issue. The issue file\n" +
                     "# is in JSON format.\n" +

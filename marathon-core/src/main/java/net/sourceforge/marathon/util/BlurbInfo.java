@@ -50,7 +50,7 @@ public class BlurbInfo {
     public boolean isCancelNeeded() {
         return cancelNeeded;
     }
-    
+
     public String getHtml() {
         return html;
     }

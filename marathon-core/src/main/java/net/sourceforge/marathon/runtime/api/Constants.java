@@ -263,5 +263,4 @@ public class Constants {
     public static final String OUTPUT_STYLE = "marathon.output.style";
     public static final String NTHREADS = "marathon.grid.nthreads";
 
-
 }

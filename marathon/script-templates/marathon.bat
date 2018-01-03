@@ -35,12 +35,13 @@ for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-h goto :batch
 for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-help goto :batch
 for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-i goto :batch
 for %%i in (%1 %2 %3 %4 %5 %6 %7 %8 %9) do if %%i==-ignore goto :batch
-start javaw -Xmx512m -Dfile.encoding=utf8 -jar "%MARATHONHOME%/$marathonJar" %1 %2 %3 %4 %5 %6 %7 %8 %9
+
+start javaw -Xmx512m -Dfile.encoding=utf8 -cp "%MARATHONHOME%/UserLibs/*;%MARATHON_EXTRA_JARS%;%MARATHONHOME%/$marathonJar" net.sourceforge.marathon.Main %1 %2 %3 %4 %5 %6 %7 %8 %9
 goto end
 :batch
-ECHO Changing the console code page to utf8
-CHCP 65001
-java -Xmx512m -Dfile.encoding=utf8 -jar "%MARATHONHOME%/$marathonJar" %1 %2 %3 %4 %5 %6 %7 %8 %9
+ECHO changing the console to UTF8
+chcp 65001
+java -Xmx512m -Dfile.encoding=utf8 -cp "%MARATHONHOME%/UserLibs/*;%MARATHON_EXTRA_JARS%;%MARATHONHOME%/$marathonJar" net.sourceforge.marathon.Main %1 %2 %3 %4 %5 %6 %7 %8 %9
 goto :end
 
 :nodist

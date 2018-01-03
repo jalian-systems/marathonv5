@@ -98,7 +98,8 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
     }
 
     private boolean shouldIgnore(String file) {
-        return file.equals("<string>") || file.equals("<script>") || file.contains(RUBYJAVASUPPORT) || file.contains("uri:classloader");
+        return file.equals("<string>") || file.equals("<script>") || file.contains(RUBYJAVASUPPORT)
+                || file.contains("uri:classloader");
     }
 
     private boolean repeat(String event, String file, Integer line) {

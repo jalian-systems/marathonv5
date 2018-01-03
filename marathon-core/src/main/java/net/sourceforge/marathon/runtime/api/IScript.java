@@ -49,4 +49,6 @@ public interface IScript {
 
     public abstract void releaseInterpreters();
 
+    public abstract void runFixtureTeardown();
+
 }

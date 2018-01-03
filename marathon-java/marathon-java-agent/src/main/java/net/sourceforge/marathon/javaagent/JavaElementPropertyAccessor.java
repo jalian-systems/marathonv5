@@ -79,7 +79,7 @@ import net.sourceforge.marathon.javaagent.components.ContextManager;
 public class JavaElementPropertyAccessor {
 
     public static Logger LOGGER = Logger.getLogger(JavaElementPropertyAccessor.class.getName());
-    
+
     protected Component component;
     private static final Pattern arrayPattern = Pattern.compile("(.*)\\[([^\\]]*)\\]$");
 
@@ -167,10 +167,9 @@ public class JavaElementPropertyAccessor {
                 o = getAttributeObject(srcobj, getGetMethod(matcher.group(1)));
                 if (o != null) {
                     if (o instanceof Map<?, ?>) {
-                        o = ((Map<?, ?>)o).get(matcher.group(2));
+                        o = ((Map<?, ?>) o).get(matcher.group(2));
                         LOGGER.info("Accessing map with " + matcher.group(2) + " = " + o);
-                    }
-                    else
+                    } else
                         o = EventQueueWait.call(o, "get", Integer.parseInt(matcher.group(2)));
                 }
             } catch (NoSuchMethodException e) {

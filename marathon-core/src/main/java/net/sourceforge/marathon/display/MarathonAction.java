@@ -29,15 +29,15 @@ public abstract class MarathonAction implements IMarathonAction {
         public SeparatorAction(String menuName, boolean toolbar, boolean menu) {
             super(menuName, null, "", null, toolbar, menu);
         }
-    
+
         @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
                 int endCaretPosition, int startLine) throws Exception {
         }
-    
+
         @Override public boolean isSeperator() {
             return true;
         }
-    
+
     }
 
     public static final Logger LOGGER = Logger.getLogger(MarathonAction.class.getName());
@@ -140,7 +140,7 @@ public abstract class MarathonAction implements IMarathonAction {
     @Override public String getCommand() {
         return command;
     }
-    
+
     @Override public Node getIcon() {
         return null;
     }

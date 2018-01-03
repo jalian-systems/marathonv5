@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 public class PlaybackResult implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(PlaybackResult.class.getName());
 
     private static final long serialVersionUID = 1L;

@@ -402,14 +402,14 @@ public class JavaFXTargetLocator {
     public JFXWindow getFocusedWindow() {
         Stage[] windows = getValidWindows();
         for (Stage stage : windows) {
-            if(stage.isFocused())
+            if (stage.isFocused())
                 return new JFXWindow(stage);
         }
-        if(windows.length > 0)
+        if (windows.length > 0)
             return new JFXWindow(windows[0]);
         return null;
     }
-    
+
     private JFXWindow _getTopContainer() {
         if (currentWindow == null) {
             Stage[] windows = getValidWindows();

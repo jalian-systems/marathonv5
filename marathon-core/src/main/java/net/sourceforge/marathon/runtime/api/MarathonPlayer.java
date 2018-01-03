@@ -25,7 +25,7 @@ import net.sourceforge.marathon.junit.IHasFullname;
  * (interrupt) handling
  */
 public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListener {
-    
+
     public static final Logger LOGGER = Logger.getLogger(MarathonPlayer.class.getName());
 
     private IPlaybackListener listener;

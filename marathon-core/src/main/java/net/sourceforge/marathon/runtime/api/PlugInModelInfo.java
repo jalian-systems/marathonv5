@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * Information of plug ins such as ScriptModel, Launcher.
  */
 public class PlugInModelInfo implements Serializable {
-    
+
     public static final Logger LOGGER = Logger.getLogger(PlugInModelInfo.class.getName());
 
     private static final long serialVersionUID = 1L;

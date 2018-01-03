@@ -1,0 +1,23 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    
+    
+    <f:entry title="${%MarathonHome}" field="marathonHome">
+		<f:textbox />
+    </f:entry>
+	
+	<f:entry title="${%MProjectDir}" field="mProjectDir">
+        <f:textbox />
+    </f:entry>
+    
+    <f:entry title="${%TestCases}" field="testCases">
+        <f:textbox />
+    </f:entry>
+	
+    <f:block>
+    		<div class="warning"><img src="warning.png" height="16" width="1"></img>
+    		Marathon need access to 'Window Server' as it opens application which is under test (AUT).
+    		</div>
+    </f:block>
+    
+</j:jelly>

@@ -47,7 +47,7 @@ public class RFXMenuItem extends RFXComponent {
         MenuItem source = (MenuItem) event.getSource();
         String tagForMenu = getTagForMenu(source);
         String menuPath = getSelectedMenuPath(source);
-        if (!(ownerNode instanceof ChoiceBox<?>)) {
+        if (!(ownerNode instanceof ChoiceBox<?>) && ownerNode != null) {
             recorder.recordSelectMenu(new RFXUnknownComponent(ownerNode, oMapConfig, null, recorder), tagForMenu, menuPath);
         }
     }

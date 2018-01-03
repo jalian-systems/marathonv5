@@ -37,7 +37,7 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class Session {
-    
+
     public static final Logger LOGGER = Logger.getLogger(Session.class.getName());
 
     private String id;

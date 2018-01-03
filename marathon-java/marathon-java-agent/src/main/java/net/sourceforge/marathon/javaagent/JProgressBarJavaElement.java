@@ -8,7 +8,6 @@ import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 
 public class JProgressBarJavaElement extends AbstractJavaElement {
 
-
     public JProgressBarJavaElement(Component component, IJavaAgent driver, JWindow window) {
         super(component, driver, window);
     }

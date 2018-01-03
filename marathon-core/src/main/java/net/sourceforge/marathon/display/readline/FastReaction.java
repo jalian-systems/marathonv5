@@ -18,7 +18,7 @@ package net.sourceforge.marathon.display.readline;
 import java.util.logging.Logger;
 
 public abstract class FastReaction extends Reaction {
-    
+
     public static final Logger LOGGER = Logger.getLogger(FastReaction.class.getName());
 
     public FastReaction(int[] indices) {

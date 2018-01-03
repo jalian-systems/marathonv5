@@ -25,7 +25,7 @@ import net.sourceforge.marathon.fx.display.LogView;
 import net.sourceforge.marathon.runtime.api.ILogger;
 
 public class LogViewLogger implements ILogger {
-    
+
     public static final Logger LOGGER = Logger.getLogger(LogViewLogger.class.getName());
 
     private LogView logView;
