@@ -528,7 +528,7 @@ public class JavaProfile {
             return path;
         }
         throw new WebDriverException("Unable to find marathon-recorder.jar. Set " + MARATHON_RECORDER
-                + " environment variable to point to the jar file");
+                + ".file environment variable to point to the jar file");
     }
 
     public void setRecordingPort(int recordingPort) {
