@@ -159,5 +159,6 @@ marathonext-jxbrowser/.classpath
 marathonext-jxbrowser/.project
 marathonext-jxbrowser/.settings/
 marathonext-jxbrowser/build/
+marathonext-jxbrowser/bin/
 marathonext-jxbrowser/marathonext-jxbrowser.xml
 marathonext-jxbrowser/marathonext-jxbrowser-5.1.7.0.jar
