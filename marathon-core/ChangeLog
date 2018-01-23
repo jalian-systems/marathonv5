@@ -1,4 +1,4 @@
-Marathon Version 5.1.6.0 (1st January 2018)
+Marathon Version 5.1.7.0 (23rd January 2018)
 
 01. fix: JavaDriverCommandExecutor - fixed issues with failures
 02. feat: Added a count-up timer to WaitMessageDialog
@@ -8,6 +8,7 @@ Marathon Version 5.1.6.0 (1st January 2018)
 06. fix: scripts changed to use -cp and add UserLibs folder
 07. fixed: Failure to open an editor while starting up should be ignored and DisplayWindow should be shown
 08. feat: Added jenkins plugin
+09. fixed: Ignore inserting scripts while recording - JxBrowser
 
 Marathon Version 5.1.5.0 (27th November 2017)
 

@@ -106,8 +106,9 @@ public class RFXBrowserView extends RFXComponent {
     }
 
     public void record_select(String info, String value, int id) {
-        recorder.log("ID = " + id);
-        if(id != System.identityHashCode(this.getComponent()))
+        if (recorder.isPaused())
+            return;
+        if (id != System.identityHashCode(this.getComponent()))
             return;
         if (info.startsWith("-1:"))
             info = info.substring(3);
@@ -115,7 +116,9 @@ public class RFXBrowserView extends RFXComponent {
     }
 
     public void record_click(String info, int id) {
-        if(id != System.identityHashCode(this.getComponent()))
+        if (recorder.isPaused())
+            return;
+        if (id != System.identityHashCode(this.getComponent()))
             return;
         if (info.startsWith("-1:"))
             info = info.substring(3);
@@ -123,7 +126,7 @@ public class RFXBrowserView extends RFXComponent {
     }
 
     public void show_assertion(String selector, long frameId, int id) {
-        if(id != System.identityHashCode(this.getComponent()))
+        if (id != System.identityHashCode(this.getComponent()))
             return;
         getComponent().getProperties().put("current_selector", selector);
         getComponent().getProperties().put("browserview_frame_id", frameId);

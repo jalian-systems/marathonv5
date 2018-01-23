@@ -63,6 +63,16 @@ WebViewPlayer.prototype.exists = function(selector) {
 	return true;
 }
 
+WebViewPlayer.prototype.fireChangeEvent = function(element) {
+	if ("createEvent" in document) {
+	    var evt = document.createEvent("HTMLEvents");
+	    evt.initEvent("change", false, true);
+	    element.dispatchEvent(evt);
+	}
+	else
+	    element.fireEvent("onchange");	
+};
+
 WebViewPlayer.prototype.select = function(selector, value) {
 	var target = this.findElement(selector);
 	if(target == null)
@@ -79,9 +89,11 @@ WebViewPlayer.prototype.select = function(selector, value) {
 	target.scrollIntoView();
 	if(matched || target.matches('textarea')) {
 		target.value = value ;
+		this.fireChangeEvent(target);
 		return true;
 	} else if(target.matches('input[type="checkbox"]') || target.matches('input[type="radio"]')) {
 		target.checked = (value === "true");
+		this.fireChangeEvent(target);
 		return true;
 	} else if(target.matches('select')) {
 	   var selected = JSON.parse(value);
@@ -91,6 +103,7 @@ WebViewPlayer.prototype.select = function(selector, value) {
 	   	   selected_values.push(target.options[i].value);
 	   }
 	   target.value = selected_values;
+	   this.fireChangeEvent(target);
 	   return true;
 	} else {
 		return true;
