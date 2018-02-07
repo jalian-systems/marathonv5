@@ -398,7 +398,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     @Override public void handle(Event event) {
-        if (recorder.isPaused()) {
+        if (recorder.isPaused() || recorder.isInsertingScript()) {
             return;
         }
         try {

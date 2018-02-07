@@ -389,8 +389,8 @@ public class RubyScriptModel implements IScriptModel {
         return new RubyScript(out, err, scriptText, filePath, isDebugging, dataVariables, framework);
     }
 
-    @Override public String getScriptCodeForGenericAction(String method, String name, Object... params) {
-        return method + "(" + encode(name) + paramString(params) + ")\n";
+    @Override public String getScriptCodeForGenericAction(String method, String suffix, String name, Object... params) {
+        return method + suffix + "(" + encode(name) + paramString(params) + ")\n";
     }
 
     private String paramString(Object[] params) {

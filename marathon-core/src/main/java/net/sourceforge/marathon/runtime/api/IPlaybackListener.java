@@ -15,6 +15,10 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.List;
+
+import junit.framework.AssertionFailedError;
+
 /**
  * Receive feedback about certain key events which occur while a script is
  * playing
@@ -58,4 +62,8 @@ public interface IPlaybackListener {
     int acceptChecklist(String fileName);
 
     int showChecklist(String filename);
+
+    void addErrorScreenShotEntry(AssertionFailedError error, String fileName);
+
+    void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions);
 }

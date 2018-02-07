@@ -20,6 +20,10 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
+import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
+import net.sourceforge.marathon.runtime.NamingStrategyFactory;
 import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.WindowId;
@@ -32,7 +36,15 @@ public class RecordingTest {
 
     protected int startRecordingServer() {
         int port = findPort();
-        recordingServer = new WSRecordingServer(port);
+        recordingServer = new WSRecordingServer(port, NamingStrategyFactory.get()) {
+
+            public JSONObject getContextMenuTriggers() {
+                return new JSONObject().put("contextMenuKeyModifiers", FXContextMenuTriggers.getContextMenuKeyModifiers())
+                        .put("contextMenuKey", FXContextMenuTriggers.getContextMenuKeyCode())
+                        .put("menuModifiers", FXContextMenuTriggers.getContextMenuModifiers());
+            }
+
+        };
         recordingServer.start();
         recordingServer.startRecording(new IRecorder() {
             @Override public void record(IScriptElement element) {

@@ -251,8 +251,7 @@ class RubyMarathon < MarathonRuby
           bt = @collector.convert($!.backtrace)
         end
         actual = "" if !actual
-        assertEquals("Assertion failed: component = " + id.to_s + "\n     expected = `" + expected + "'\n     actual = `" + actual + "'",
-                        expected, actual, bt)
+        assertEqualsX(id, property.to_java, expected, actual, bt)
     end
 
     def assertTrue(message, b)
@@ -360,6 +359,7 @@ class RubyMarathon < MarathonRuby
     def saveScreenShotOnError
       f = getErrorScreenShotFile
       @webdriver.save_screenshot(f) if f
+      return f
     end
     
     def hover
@@ -627,6 +627,16 @@ end
 # Capture an image of the current screen and save it to the specified file.
 def screen_capture(fileName)
     return $marathon.saveScreenShot(fileName)
+end
+
+# Capture an image of the current screen and add it to the report
+def screen_shot(title)
+  $marathon.clearAssertions
+  begin
+    yield if block_given?
+  ensure
+    $marathon.saveScreenShotToReport(title)
+  end
 end
 
 # Capture an image of the specified window and save it to the specified file.

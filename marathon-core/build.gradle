@@ -37,6 +37,8 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 dependencies {
+  compile project(":marathon-recording-server")
+  compile project(":marathon-core-base")
   compile "org.jruby:jrubyparser:${jrubyparser_version}"
   compile project(":marathon-core:JSON-java")
   compile project(":marathon-java:marathon-java-driver")

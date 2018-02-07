@@ -29,6 +29,7 @@ import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
 import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
+import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
 import net.sourceforge.marathon.runtime.api.IRecorder;
@@ -147,7 +148,7 @@ public class WebDriverRuntime implements IMarathonRuntime {
 
     private int startRecordingServer() {
         recordingServerPort = findPort();
-        recordingServer = new WSRecordingServer(recordingServerPort) {
+        recordingServer = new WSRecordingServer(recordingServerPort, NamingStrategyFactory.get()) {
             @Override public void onClose(WebSocket conn, int code, String reason, boolean remote) {
                 super.onClose(conn, code, reason, remote);
                 scriptReloadScript(recordingServerPort);
@@ -155,6 +156,12 @@ public class WebDriverRuntime implements IMarathonRuntime {
 
             @Override public void reloadScript(WebSocket conn, JSONObject query) {
                 scriptReloadScript(recordingServerPort);
+            }
+
+            public JSONObject getContextMenuTriggers() {
+                return new JSONObject().put("contextMenuKeyModifiers", FXContextMenuTriggers.getContextMenuKeyModifiers())
+                        .put("contextMenuKey", FXContextMenuTriggers.getContextMenuKeyCode())
+                        .put("menuModifiers", FXContextMenuTriggers.getContextMenuModifiers());
             }
 
         };

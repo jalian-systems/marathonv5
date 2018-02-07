@@ -62,4 +62,6 @@ public interface IJSONRecorder {
 
     public abstract boolean isPaused();
 
+    public abstract boolean isInsertingScript();
+
 }

@@ -5,26 +5,18 @@
  ******************************************************************************/
 package net.sourceforge.marathon.junit;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.io.Files;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import net.sourceforge.marathon.api.TestAttributes;
-import net.sourceforge.marathon.runtime.api.Constants;
-import ru.yandex.qatools.allure.annotations.Attachment;
 
 @RunWith(Parameterized.class) public class MarathonTestProvider {
 
@@ -67,43 +59,12 @@ import ru.yandex.qatools.allure.annotations.Attachment;
         TestAttributes.put("test_object", test);
     }
 
-    public void captureScreens() {
-        String captureDir = System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR);
-        if (captureDir == null) {
-            return;
-        }
-        File dir = new File(captureDir);
-        File[] files = dir.listFiles(new FilenameFilter() {
-            @Override public boolean accept(File dir, String name) {
-                return name.matches(Pattern.quote(fName) + "-error[0-9]*.png");
-            }
-        });
-        if (files == null || files.length == 0) {
-            return;
-        }
-        for (File file : files) {
-            try {
-                captureScreen(Files.toByteArray(file));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Attachment(value = "screencap", type = "image/png") public byte[] captureScreen(byte[] bs) {
-        return bs;
-    }
-
     private Test fTest;
-    private String fName;
+    @SuppressWarnings("unused") private String fName;
 
     @org.junit.Test public void test() throws Throwable {
-        try {
-            ((MarathonTestCase) fTest).initialize();
-            ((MarathonTestCase) fTest).runTest();
-        } finally {
-            captureScreens();
-        }
+        ((MarathonTestCase) fTest).initialize();
+        ((MarathonTestCase) fTest).runTest();
     }
 
 }

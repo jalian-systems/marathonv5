@@ -24,7 +24,7 @@ import java.util.Properties;
 
 import net.sourceforge.marathon.runtime.fx.api.ISublayoutProvider;
 
-public interface IScriptModel extends ISublayoutProvider {
+public interface IScriptModel extends ISublayoutProvider, IRecordingScriptModel {
 
     public enum SCRIPT_FILE_TYPE {
         TEST, MODULE, FIXTURE, OTHER
@@ -87,6 +87,6 @@ public interface IScriptModel extends ISublayoutProvider {
     public abstract IScript createScript(Writer scriptOutput, Writer scriptError, String scriptText, String filePath,
             boolean isRecording, boolean isDebugging, Properties dataVariables, String framework);
 
-    public abstract String getScriptCodeForGenericAction(String method, String name, Object... params);
+    public abstract String getScriptCodeForGenericAction(String method, String suffix, String name, Object... params);
 
 }

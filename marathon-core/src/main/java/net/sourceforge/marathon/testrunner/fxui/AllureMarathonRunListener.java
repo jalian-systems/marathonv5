@@ -42,6 +42,7 @@ import org.junit.runner.notification.RunListener;
 import junit.framework.Test;
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
+import net.sourceforge.marathon.junit.ScreenShotEntry;
 import net.sourceforge.marathon.junit.MarathonAssertion;
 import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.model.Group;
@@ -239,6 +240,10 @@ public class AllureMarathonRunListener extends RunListener {
                         new SourceLine[0], null);
                 MarathonAssertion assertion = new MarathonAssertion(failures, ((MarathonTestCase) test).getName());
                 testAssumptionFailure(new Failure(description, assertion));
+            }
+            List<ScreenShotEntry> screenshots = ((MarathonTestCase) test).getScreenshots();
+            for (ScreenShotEntry entry : screenshots) {
+                entry.fire(getLifecycle());
             }
         }
         getLifecycle().fire(new TestCaseFinishedEvent());

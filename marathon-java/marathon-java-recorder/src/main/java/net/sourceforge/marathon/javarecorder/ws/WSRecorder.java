@@ -324,6 +324,8 @@ public class WSRecorder implements IJSONRecorder {
 
     private boolean paused;
 
+    private boolean insertingScript;
+
     @Override public JSONObject getContextMenuTriggers() {
         if (contextMenuTriggers == null) {
             synchronized (contextMenuTriggersLock) {
@@ -358,6 +360,10 @@ public class WSRecorder implements IJSONRecorder {
         paused = o.getBoolean("value");
     }
 
+    public void setInsertingScript(JSONObject o) {
+        insertingScript = o.getBoolean("value");
+    }
+    
     public void abortApplication() {
         System.exit(0);
     }
@@ -473,6 +479,10 @@ public class WSRecorder implements IJSONRecorder {
         o.put("event", event);
         o.put("container", new JSONObject());
         sendRecordMessage(o);
+    }
+
+    @Override public boolean isInsertingScript() {
+        return insertingScript;
     }
 
 }

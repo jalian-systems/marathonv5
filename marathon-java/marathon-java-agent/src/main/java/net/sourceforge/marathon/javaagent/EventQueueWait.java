@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javaagent;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.lang.reflect.InvocationTargetException;
@@ -167,6 +168,12 @@ public abstract class EventQueueWait extends Wait {
      * @param c
      */
     public static void requestFocus(final Component c) {
+        if (EventQueue.isDispatchThread()) {
+            if (!c.requestFocusInWindow()) {
+                generateFocusEvents(c);
+            }
+            return;
+        }
         try {
             new EventQueueWait() {
                 @Override public void setup() {

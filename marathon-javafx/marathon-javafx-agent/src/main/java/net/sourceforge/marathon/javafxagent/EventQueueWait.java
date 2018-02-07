@@ -193,6 +193,10 @@ public abstract class EventQueueWait extends Wait {
      * @param c
      */
     public static void requestFocus(final Node c) {
+        if (Platform.isFxApplicationThread()) {
+            c.requestFocus();
+            return;
+        }
         try {
             new EventQueueWait() {
                 @Override public void setup() {

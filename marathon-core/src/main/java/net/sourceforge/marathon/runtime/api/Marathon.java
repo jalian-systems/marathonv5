@@ -101,6 +101,7 @@ public class Marathon {
     protected INamingStrategy namingStrategy;
     private HashMap<Integer, Keys> keyMapping;
     public PlaybackResult result = null;
+    private List<UsedAssertion> assertions = new ArrayList<>();
 
     protected List<ICloseHandler> closeHandlers = new ArrayList<ICloseHandler>();
 
@@ -355,7 +356,29 @@ public class Marathon {
         }
         AssertionFailedError error = new AssertionFailedError(message);
         result.addFailure(message, bt, error);
-        saveScreenShotOnError();
+        createErrorScreenShotEntry(error, saveScreenShotOnError());
+    }
+
+    public void clearAssertions() {
+        assertions = new ArrayList<>();
+    }
+
+    public void assertEqualsX(ComponentId id, String property, Object expected, Object actual, SourceLine[] bt) {
+        if (expected == null && actual == null) {
+            assertions.add(new UsedAssertion(id, property, "null", "null", true));
+            return;
+        }
+        if (expected != null && expected.equals(actual)) {
+            assertions.add(new UsedAssertion(id, property, expected.toString(), actual.toString(), true));
+            return;
+        }
+        assertions.add(new UsedAssertion(id, property, expected == null ? "null" : expected.toString(),
+                actual == null ? "null" : actual.toString(), false));
+        String message = "Assertion failed for property: " + property + "on component = " + id.toString() + "\n     expected = `"
+                + expected + "'\n     actual = `" + actual + "'";
+        AssertionFailedError error = new AssertionFailedError(message);
+        result.addFailure(message, bt, error);
+        createErrorScreenShotEntry(error, saveScreenShotOnError());
     }
 
     public void assertContains(String message, String expected, String actual, SourceLine[] bt) {
@@ -370,7 +393,14 @@ public class Marathon {
         }
         AssertionFailedError error = new AssertionFailedError(message);
         result.addFailure(message, bt, error);
-        saveScreenShotOnError();
+        createErrorScreenShotEntry(error, saveScreenShotOnError());
+    }
+
+    private void createErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+        if (fileName == null)
+            return;
+        IPlaybackListener listener = (IPlaybackListener) TestAttributes.get("listener");
+        listener.addErrorScreenShotEntry(error, fileName);
     }
 
     public void failTest(String message, SourceLine[] bt) {
@@ -569,7 +599,8 @@ public class Marathon {
         return false;
     }
 
-    public void saveScreenShotOnError() {
+    public String saveScreenShotOnError() {
+        return null;
     }
 
     public boolean windowMatchingTitle(String title) {
@@ -614,5 +645,13 @@ public class Marathon {
         return new JSONObject().put("title", title)
                 .put("containerNP", new JSONObject(namingStrategy.getContainerNamingProperties()))
                 .put("allProperties", namingStrategy.getAllProperties()).toString();
+    }
+
+    public void saveScreenShotToReport(String title) {
+        File file = getScreenCapture();
+        if (file != null) {
+            IPlaybackListener listener = (IPlaybackListener) TestAttributes.get("listener");
+            listener.addScreenShotEntry(title, file.getAbsolutePath(), assertions);
+        }
     }
 }

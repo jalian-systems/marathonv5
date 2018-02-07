@@ -53,7 +53,7 @@ public class JavaTargetLocator {
 
     public static final Logger LOGGER = Logger.getLogger(JavaTargetLocator.class.getName());
 
-    public static JSONArray allProperties;
+    public static JSONArray allProperties = new JSONArray();
 
     public static class ElementMap {
         private Map<String, IJavaElement> elements = new HashMap<String, IJavaElement>();

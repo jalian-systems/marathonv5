@@ -38,4 +38,8 @@ public class LauncherModelHelper {
         return null;
     }
 
+    public static String getLauncherModelFramework(String launcher) {
+        return getLauncherModel(launcher).getFramework();
+    }
+
 }

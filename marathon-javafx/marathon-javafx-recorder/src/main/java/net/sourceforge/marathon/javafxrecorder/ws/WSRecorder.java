@@ -55,6 +55,7 @@ public class WSRecorder implements IJSONRecorder {
     private JSONObject contextMenuTriggers;
 
     private boolean paused;
+    private boolean insertingScript;
 
     static {
         timerinterval = Integer.valueOf(300);
@@ -371,10 +372,14 @@ public class WSRecorder implements IJSONRecorder {
         paused = o.getBoolean("value");
     }
 
+    public void setInsertingScript(JSONObject o) {
+        insertingScript = o.getBoolean("value");
+    }
+
     public void abortApplication() {
         System.exit(0);
     }
-    
+
     @Override public boolean isPaused() {
         return paused;
     }
@@ -577,6 +582,10 @@ public class WSRecorder implements IJSONRecorder {
         final JSONObject o = new JSONObject();
         o.put("event", event);
         sendRecordMessage(o);
+    }
+
+    @Override public boolean isInsertingScript() {
+        return insertingScript;
     }
 
 }

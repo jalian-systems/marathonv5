@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import com.google.inject.Inject;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import junit.framework.AssertionFailedError;
 import net.sourceforge.marathon.api.ApplicationLaunchException;
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
@@ -57,6 +59,7 @@ import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.ScriptException;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
+import net.sourceforge.marathon.runtime.api.UsedAssertion;
 import net.sourceforge.marathon.runtime.api.WindowId;
 import net.sourceforge.marathon.util.LauncherModelHelper;
 
@@ -581,6 +584,14 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
 
     @Override public String getFullName() {
         return "Display";
+    }
+
+    @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+        displayView.addErrorScreenShotEntry(error, fileName);
+    }
+
+    @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+        displayView.addScreenShotEntry(title, filePath, assertions);
     }
 
 }
