@@ -70,7 +70,7 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
                         if (isConnected())
                             return true;
                         if (!command.isRunning()) {
-                            if (profile.isJavaWebStart() || Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR))
+                            if (profile.isJavaWebStart() || profile.isCommandLine() || Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR))
                                 return false;
                             return true;
                         }
