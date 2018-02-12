@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javafx.stage.Stage;
 import net.sourceforge.marathon.runtime.fx.api.ISublayoutProvider;
 
 public interface IScriptModel extends ISublayoutProvider {
@@ -57,7 +56,7 @@ public interface IScriptModel extends ISublayoutProvider {
 
     public abstract String getScriptCodeForShowChecklist(String fileName);
 
-    public abstract void createDefaultFixture(Stage window, Properties props, File fixtureDir, List<String> keys);
+    public abstract void createDefaultFixture(Properties props, File fixtureDir, List<String> keys);
 
     public abstract String getScriptCodeForInsertChecklist(String fileName);
 

@@ -46,7 +46,7 @@ public class ScriptRecorder implements IRecorder {
         }
     }
 
-    private final Runnable processRecordEventsRunnable = new Runnable() {
+    protected final Runnable processRecordEventsRunnable = new Runnable() {
         @Override public void run() {
             RecordEvent evt;
 
@@ -70,9 +70,13 @@ public class ScriptRecorder implements IRecorder {
     @Override public void record(IScriptElement recordable) {
         recordEvents.add(new RecordEvent(recordable));
         if (recordEvents.size() == 1) {
-            Platform.runLater(processRecordEventsRunnable);
+            runProcessRecordEvents();
         }
     }
+
+	protected void runProcessRecordEvents() {
+		Platform.runLater(processRecordEventsRunnable);
+	}
 
     @Override public void updateScript() {
         if (scriptListener != null) {

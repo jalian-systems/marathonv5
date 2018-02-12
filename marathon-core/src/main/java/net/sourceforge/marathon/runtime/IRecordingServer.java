@@ -38,4 +38,5 @@ public interface IRecordingServer {
 
     public abstract boolean isRecording();
 
+    public abstract void abortApplication();
 }

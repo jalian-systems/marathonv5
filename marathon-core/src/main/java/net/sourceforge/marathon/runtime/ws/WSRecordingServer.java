@@ -347,7 +347,7 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
                 name = query.getJSONObject("attributes").getString("suggestedName");
             } catch (JSONException e) {
             }
-            String cName = ns.getName(query, name);
+            String cName = getName(query, name);
             WindowId windowId = createWindowId(query.getJSONObject("container"));
             recorder.record(new JSONScriptElement(windowId, cName, query.getJSONObject("event")));
         } catch (JSONException je) {
@@ -357,6 +357,10 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
             t.printStackTrace();
         }
         return new JSONObject();
+    }
+
+    protected String getName(JSONObject query, String name) throws ObjectMapException {
+        return ns.getName(query, name);
     }
 
     public JSONObject focusedWindow(WebSocket conn, JSONObject query) throws IOException, JSONException, ObjectMapException {
@@ -385,6 +389,13 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
 
     @Override public void pauseRecording() {
         setRecordingPause(true);
+    }
+
+    @Override public void abortApplication() {
+        Collection<WebSocket> cs = connections();
+        for (WebSocket webSocket : cs) {
+            post(webSocket, "abortApplication", null);
+        }
     }
 
     @Override public void resumeRecording() {
@@ -472,7 +483,8 @@ public class WSRecordingServer extends WebSocketServer implements IRecordingServ
     public void post(WebSocket conn, String method, String data) {
         JSONObject o = new JSONObject();
         o.put("method", method);
-        o.put("data", data);
+        if (data != null)
+            o.put("data", data);
         conn.send(o.toString());
     }
 

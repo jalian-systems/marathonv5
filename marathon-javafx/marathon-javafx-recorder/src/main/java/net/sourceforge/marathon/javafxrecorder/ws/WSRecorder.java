@@ -371,6 +371,10 @@ public class WSRecorder implements IJSONRecorder {
         paused = o.getBoolean("value");
     }
 
+    public void abortApplication() {
+        System.exit(0);
+    }
+    
     @Override public boolean isPaused() {
         return paused;
     }
@@ -519,7 +523,10 @@ public class WSRecorder implements IJSONRecorder {
 
     public void invoke(java.lang.reflect.Method method, JSONObject query) {
         try {
-            method.invoke(this, query);
+            if (query != null)
+                method.invoke(this, query);
+            else
+                method.invoke(this);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
             throw new RuntimeException(cause.getMessage(), cause);

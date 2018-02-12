@@ -178,8 +178,8 @@ public class MPFConfigurationInfo {
             if (getLauncherModel() == null) {
                 return;
             }
-            getSelectedScriptModel(props.getProperty(Constants.PROP_PROJECT_SCRIPT_MODEL)).createDefaultFixture(null, props,
-                    fixtureDir, getLauncherModel().getPropertyKeys());
+            getSelectedScriptModel(props.getProperty(Constants.PROP_PROJECT_SCRIPT_MODEL)).createDefaultFixture(props, fixtureDir,
+                    getLauncherModel().getPropertyKeys());
         } catch (ClassNotFoundException e1) {
             e1.printStackTrace();
         } catch (InstantiationException e1) {

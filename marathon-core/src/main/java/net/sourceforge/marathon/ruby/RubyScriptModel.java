@@ -44,7 +44,6 @@ import org.jruby.javasupport.JavaEmbedUtils;
 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.runtime.api.Argument;
@@ -412,7 +411,7 @@ public class RubyScriptModel implements IScriptModel {
         return sb.toString();
     }
 
-    @Override public void createDefaultFixture(Stage window, Properties props, File fixtureDir, List<String> keys) {
+    @Override public void createDefaultFixture(Properties props, File fixtureDir, List<String> keys) {
         FixtureGenerator fixtureGenerator = getFixtureGenerator();
         File fixtureFile = new File(fixtureDir, "default.rb");
         if (fixtureFile.exists()) {
