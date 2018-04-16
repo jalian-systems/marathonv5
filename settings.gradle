@@ -3,6 +3,7 @@ if(null == properties['jdk6home']) {
 } else {
   logger.info("X:Using " + properties['jdk6home'] + " for marathon-agent and marathon-recorder");
 }
+rootProject.name = "marathon-root"
 include 'marathon', 'marathon-core:JSON-java', 'marathon-core:ruby-selenium-webdriver', ':marathon-core',
           'marathon-java:marathon-java-agent', 'marathon-java:marathon-test-helpers',
           'marathon-java:marathon-java-driver', 'marathon-java:marathon-java-runtime',
