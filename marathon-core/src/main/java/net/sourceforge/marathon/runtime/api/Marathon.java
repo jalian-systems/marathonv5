@@ -363,17 +363,11 @@ public class Marathon {
         assertions = new ArrayList<>();
     }
 
-    public void assertEqualsX(ComponentId id, String property, Object expected, Object actual, SourceLine[] bt) {
-        if (expected == null && actual == null) {
-            assertions.add(new UsedAssertion(id, property, "null", "null", true));
-            return;
-        }
-        if (expected != null && expected.equals(actual)) {
-            assertions.add(new UsedAssertion(id, property, expected.toString(), actual.toString(), true));
-            return;
-        }
+    public void assertEqualsX(ComponentId id, String property, Object expected, Object actual, SourceLine[] bt, boolean equal) {
         assertions.add(new UsedAssertion(id, property, expected == null ? "null" : expected.toString(),
-                actual == null ? "null" : actual.toString(), false));
+                actual == null ? "null" : actual.toString(), equal));
+        if(equal)
+            return;
         String message = "Assertion failed for property: " + property + "on component = " + id.toString() + "\n     expected = `"
                 + expected + "'\n     actual = `" + actual + "'";
         AssertionFailedError error = new AssertionFailedError(message);

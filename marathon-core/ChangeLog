@@ -3,8 +3,8 @@ Marathon Version 5.1.9.0 (17th April 2018)
 01. feat: Adding screen_shot() method
 02. fix: Using MARATHON_HOME for finding agent/recorder JARS
 03. fix: requestFocus() checks for EDT. Speeds some tests in some cases.
-04. fix: allProperties use a empty hash when not set.
-05. fix: Added setFramework to Constants to override finding from the launcher Models
+04. feat: wait_p/assert_p accepts a regex for the expected value
+05. fix: Rare cases where the AUT doesn't start while recording with Wait for recording window shown.
 06. fix: JavaFX window_state_with_title
 07. feat: Wait added waitWithoutException method
 08. fix: Made suffix as a parameter to getScriptCodeForGenericAction
@@ -18,15 +18,9 @@ Marathon Version 5.1.9.0 (17th April 2018)
 16. feat: Gradle upgraded to 4.6
 17. fixed: warnings in eclipse with gradle 4.6
 18. feat: Added getObjectMapConfiguration to IObjectMapService
+19. fix: allProperties use a empty hash when not set.
+20. fix: Added setFramework to Constants to override finding from the launcher Models
 
-commit 34963a3aa194687e641ce6235c0fdf05d3982892
-Merge: 32c646cb abb640eb
-Author: Dakshinamurthy Karra <dakshinamurthy.karra@jaliansystems.com>
-Date:   Mon Feb 12 12:37:08 2018 +0530
-
-    Merge tag 'v5.1.8.0' into develop
-    
-    Release 5.1.8.0
 Marathon Version 5.1.8.0 (12th February 2018)
 
 01. feat: The System property marathon.COMPONENT_WAIT_MS is used for socket read timeout.

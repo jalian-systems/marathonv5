@@ -121,6 +121,30 @@ body.custom-background {
               </header>
 
               <section class="post_content">
+                <h4>Version 5.1.9.0</h4>
+                <ol>
+                	<li><b>screen_shot</b><br/>
+                	Added a <code>screen_shot</code> method. When used the method creates a screenshot and adds it to the report.<br/>
+                	<pre><code>
+screen_shot("Title For the ScreenShot")
+                	</code></pre>
+                	</li>
+                	<li><b>screen_shot with assertions</b><br/>
+                	The <code>screen_shot</code> method also accepts a block of code. If a block of code is given, Marathon keeps track
+                	of the <code>assert_p</code> calls in the block and adds a list of assertions to the screen shot.<br/>
+                	<pre><code>
+screen_shot("Oscar Table Contents") {
+  assert_p("oscarTable", "Text", "1928", "{3, Year}")
+  assert_p("oscarTable", "Text", "Best Actress", "{3, Award Category}")
+  assert_p("oscarTable", "Text", "Sunrise", "{3, Movie Title}")
+  assert_p("oscarTable", "Text", "Janet Gaynor", "{3, Nominee(s)}")
+}
+                	</code></pre>
+                	</li>
+                	<li><b>assert_p and wait_p accepts regex for expected values</b><br/>
+                	Now you can pass a ruby regular expression as the expected value for <code>assert_p</code> and <code>wait_p</code> methods.
+                	</li>
+                </ol>
                 <h4>Revamped User Interface</h4>
                 <p>Marathon user interface has been rewritten from the ground up using Java/FX. There were complaints about earlier versions of Marathon that the UI looked dated. We hope you like the new UI.</p>
                 <h4>
