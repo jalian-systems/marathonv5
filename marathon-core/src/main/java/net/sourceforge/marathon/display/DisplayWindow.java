@@ -443,10 +443,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
         @Override public String getScript() {
             List<String> texts = new ArrayList<String>();
-            Object lock = new Object();
             if (Platform.isFxApplicationThread()) {
                 texts.add(currentEditor.getText());
             } else {
+                Object lock = new Object();
                 Platform.runLater(() -> {
                     texts.add(currentEditor.getText());
                     synchronized (lock) {
@@ -454,10 +454,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     }
                 });
                 synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (texts.size() == 0) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -704,12 +706,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
 
         @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
-            if(testCase != null)
+            if (testCase != null)
                 testCase.addErrorScreenShotEntry(error, fileName);
         }
 
         @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
-            if(testCase != null)
+            if (testCase != null)
                 testCase.addScreenShotEntry(title, filePath, assertions);
         }
 

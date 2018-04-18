@@ -251,7 +251,12 @@ class RubyMarathon < MarathonRuby
           bt = @collector.convert($!.backtrace)
         end
         actual = "" if !actual
-        assertEqualsX(id, property.to_java, expected, actual, bt)
+        if expected.is_a? Regexp
+          b = (actual =~ expected) != nil
+        else
+          b = (actual == expected)
+        end
+        assertEqualsX(id, property.to_java, expected, actual, bt, b)
     end
 
     def assertTrue(message, b)
@@ -301,7 +306,11 @@ class RubyMarathon < MarathonRuby
         end
         wait = Selenium::WebDriver::Wait.new(:timeout => @cwms/1000)
         wait.until {
-        	expected == getElementAttribute(e, property)
+          if expected.is_a? Regexp
+            getElementAttribute(e, property) =~ expected
+          else
+            expected == getElementAttribute(e, property)
+          end
         }
     end
 
@@ -601,11 +610,19 @@ end
 # of the component currently in the application.
 
 def assert_p(component, property, value, componentInfo=nil)
+  if(value.is_a? Regexp)
+    $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value)
+  else
     $marathon.assertProperty(ComponentId.new(component, componentInfo), property, value.to_s)
+  end
 end
 
 def wait_p(component, property, value, componentInfo=nil)
+  if(value.is_a? Regexp)
+    $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value)
+  else
     $marathon.waitProperty(ComponentId.new(component, componentInfo), property, value.to_s)
+  end
 end
 
 def assert_content(componentName, content, componentInfo=nil)
