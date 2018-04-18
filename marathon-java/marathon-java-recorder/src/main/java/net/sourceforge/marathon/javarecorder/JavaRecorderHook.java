@@ -294,7 +294,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     @Override public void eventDispatched(final AWTEvent event) {
-        if (recorder.isPaused())
+        if (recorder.isPaused() || recorder.isInsertingScript())
             return;
         try {
             AccessController.doPrivileged(new PrivilegedAction<Object>() {

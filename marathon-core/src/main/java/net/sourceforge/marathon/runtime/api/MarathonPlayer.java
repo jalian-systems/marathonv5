@@ -15,8 +15,10 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.List;
 import java.util.logging.Logger;
 
+import junit.framework.AssertionFailedError;
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.junit.IHasFullname;
 
@@ -64,6 +66,7 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
 
     @Override public void run() {
         TestAttributes.put("marathon.capture.prefix", ((IHasFullname) listener).getFullName()); // YUK!!!
+        TestAttributes.put("listener", this);
         synchronized (this) {
             notify();
             InterruptionError.wait(this);
@@ -125,5 +128,13 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
 
     @Override public void setAcceptCheckList(boolean b) {
         acceptChecklist = b;
+    }
+
+    @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+        listener.addErrorScreenShotEntry(error, fileName);
+    }
+
+    @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+        listener.addScreenShotEntry(title, filePath, assertions);
     }
 }

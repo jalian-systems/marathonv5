@@ -15,8 +15,12 @@
  ******************************************************************************/
 package net.sourceforge.marathon.display;
 
+import java.util.List;
+
+import junit.framework.AssertionFailedError;
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.SourceLine;
+import net.sourceforge.marathon.runtime.api.UsedAssertion;
 
 public interface IDisplayView {
     void setError(Throwable exception, String message);
@@ -60,4 +64,8 @@ public interface IDisplayView {
     void addImport(String ims);
 
     void updateOMapFile();
+
+    void addErrorScreenShotEntry(AssertionFailedError error, String fileName);
+
+    void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions);
 }

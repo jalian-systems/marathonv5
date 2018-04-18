@@ -537,7 +537,7 @@ public class JavaServer extends NanoHTTPD {
             if (capabilities.getBoolean("nativeEvents")) {
                 t = Device.Type.ROBOT;
             }
-            LOGGER.warning("Creating device with type: " + t);
+            LOGGER.info("Creating device with type: " + t);
             Session session = new Session(t);
             liveSession = session;
             session.setLogLevel(getLogLevel(query));

@@ -2,7 +2,11 @@ eclipse.classpath.file {
     withXml { root ->
       root.asNode().depthFirst().findAll { it instanceof Node && it.name().equals('classpathentry')  }.each {
         if(it.attribute("kind").equals("src")) {
-          def xnode = it.appendNode('attributes').appendNode('attribute')
+					def xnode = it.children().find({it.name() == 'attributes'})
+					if(xnode == null) {
+						xnode = it.appendNode('attributes');
+					}
+          xnode = xnode.appendNode('attribute')
           xnode.attributes().put('name', 'ignore_optional_problems')
           xnode.attributes().put('value', 'true')
         }

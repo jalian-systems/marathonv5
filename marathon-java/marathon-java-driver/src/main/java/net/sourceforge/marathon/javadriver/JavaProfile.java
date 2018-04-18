@@ -338,8 +338,8 @@ public class JavaProfile {
             return System.getProperty(MARATHON_AGENT + ".file");
         }
         String path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
-                "../../marathonv4/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
-                dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-agent.*.jar");
+                "../../marathon/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
+                dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") }, "marathon-" + prefix + "-agent.*.jar");
         if (path != null) {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for agent");
             return path;
@@ -351,6 +351,8 @@ public class JavaProfile {
     private static String findFile(String[] likelyPlaces, final String namePattern) {
         String path = null;
         for (String likelyPlace : likelyPlaces) {
+            if(likelyPlace == null)
+                continue;
             File[] f = new File(likelyPlace).listFiles(new FilenameFilter() {
                 @Override public boolean accept(File dir, String name) {
                     return name.matches(namePattern);
@@ -522,7 +524,7 @@ public class JavaProfile {
         }
         String prefix = launchType.getPrefix();
         String path = findFile(new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
-                System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar }, "marathon-" + prefix + "-recorder.*.jar");
+                System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") }, "marathon-" + prefix + "-recorder.*.jar");
         if (path != null) {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for recorder");
             return path;

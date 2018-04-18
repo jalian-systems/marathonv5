@@ -150,4 +150,9 @@ public final class LoggingRecorder implements IJSONRecorder {
         return false;
     }
 
+    @Override public boolean isInsertingScript() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

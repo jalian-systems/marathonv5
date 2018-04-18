@@ -18,20 +18,20 @@ package net.sourceforge.marathon.junit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
@@ -52,6 +52,7 @@ import net.sourceforge.marathon.runtime.api.IScript;
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
+import net.sourceforge.marathon.runtime.api.UsedAssertion;
 import net.sourceforge.marathon.screencapture.AnnotateScreenCapture;
 import net.sourceforge.marathon.util.LauncherModelHelper;
 
@@ -67,7 +68,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     private PlaybackResult result;
     private IScript script;
     private ArrayList<CheckList> checkLists = new ArrayList<CheckList>();
-    private ArrayList<File> screenCaptures = new ArrayList<File>();
+    private List<ScreenShotEntry> screenshots = new ArrayList<>();
+    
     private boolean acceptChecklist;
     private IConsole console;
     private Properties dataVariables;
@@ -138,7 +140,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         }
     }
 
-    private String getScriptContents() throws Exception {
+    protected String getScriptContents() throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         StringWriter sWriter = new StringWriter(8192);
         PrintWriter writer = new PrintWriter(sWriter);
@@ -171,26 +173,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
             return;
         }
         ignoreReuse = true;
-        String dirName = System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR);
-        if (dirName != null) {
-            File dir = new File(dirName);
-            File[] files = dir.listFiles(new FilenameFilter() {
-                @Override public boolean accept(File dir, String name) {
-                    return name.matches(Pattern.quote(getFullName()) + "-error[0-9]*.png");
-                }
-            });
-            if (files != null) {
-                for (File file : files) {
-                    addErrorScreenCapture(file);
-                }
-            }
-        }
         MarathonAssertion e = new MarathonAssertion(result.failures(), this.getName());
         throw e;
-    }
-
-    private void addErrorScreenCapture(File file) {
-        screenCaptures.add(file);
     }
 
     public File getFile() {
@@ -224,14 +208,6 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
     public void addChecklist(CheckList checkList) {
         checkLists.add(checkList);
-    }
-
-    public File[] getScreenCaptures() {
-        return screenCaptures.toArray(new File[screenCaptures.size()]);
-    }
-
-    public void addScreenCapture(File newFile) {
-        screenCaptures.add(newFile);
     }
 
     public CheckList showAndEnterChecklist(File file, final IMarathonRuntime runtime, final Stage instance) {
@@ -289,6 +265,10 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         this.dataVariables = dataVariables;
     }
 
+    public Properties getDataVariables() {
+        return dataVariables;
+    }
+    
     public IRuntimeFactory getRuntimeFactory(String scriptText) {
         Map<String, Object> fixtureProperties = ScriptModel.getModel().getFixtureProperties(scriptText);
         if (fixtureProperties == null || fixtureProperties.size() == 0) {
@@ -321,7 +301,6 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
 
     public void initialize() throws Exception {
         checkLists.clear();
-        screenCaptures.clear();
         String scriptText = getScriptContents();
         IRuntimeFactory rf = getRuntimeFactory(scriptText);
         shouldRunFixture = false;
@@ -340,4 +319,17 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         script = runtime.createScript(MarathonMode.PLAYING, console, scriptText, file.getAbsolutePath(), false, true,
                 dataVariables);
     }
+
+    @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+        screenshots.add(new ScreenShotEntry(error.getMessage(), fileName, null));
+    }
+    
+    public List<ScreenShotEntry> getScreenshots() {
+        return screenshots;
+    }
+
+    @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+        screenshots.add(new ScreenShotEntry(title, filePath, assertions));
+    }
+    
 }

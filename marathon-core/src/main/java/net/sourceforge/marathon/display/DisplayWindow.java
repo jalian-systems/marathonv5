@@ -23,7 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -88,6 +87,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import net.sourceforge.marathon.ProjectHTTPDServer;
@@ -187,6 +187,7 @@ import net.sourceforge.marathon.runtime.api.ProjectFile;
 import net.sourceforge.marathon.runtime.api.RuntimeLogger;
 import net.sourceforge.marathon.runtime.api.ScriptModel;
 import net.sourceforge.marathon.runtime.api.SourceLine;
+import net.sourceforge.marathon.runtime.api.UsedAssertion;
 import net.sourceforge.marathon.screencapture.AnnotateScreenCapture;
 import net.sourceforge.marathon.suite.editor.GroupInputInfo;
 import net.sourceforge.marathon.suite.editor.GroupInputStage;
@@ -442,10 +443,10 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
         @Override public String getScript() {
             List<String> texts = new ArrayList<String>();
-            Object lock = new Object();
             if (Platform.isFxApplicationThread()) {
                 texts.add(currentEditor.getText());
             } else {
+                Object lock = new Object();
                 Platform.runLater(() -> {
                     texts.add(currentEditor.getText());
                     synchronized (lock) {
@@ -453,10 +454,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     }
                 });
                 synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (texts.size() == 0) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -605,25 +608,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
             TestAttributes.put("test_object", testCase);
             runListener.testFinished(Description.createTestDescription(MarathonTestCase.class, getFilePath()));
-            addScreenCaptures();
-        }
-
-        private void addScreenCaptures() {
-            String dirName = System.getProperty(Constants.PROP_IMAGE_CAPTURE_DIR);
-            if (dirName != null) {
-                File dir = new File(dirName);
-                File[] files = dir.listFiles(new FilenameFilter() {
-                    @Override public boolean accept(File dir, String name) {
-                        return name.matches("Display-error[0-9]*.png");
-                    }
-                });
-                if (files == null || files.length == 0) {
-                    return;
-                }
-                for (File file : files) {
-                    testCase.addScreenCapture(file);
-                }
-            }
         }
 
         @Override public void endTestRun() {
@@ -719,6 +703,16 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
         public LogView getLogView() {
             return logView;
+        }
+
+        @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+            if (testCase != null)
+                testCase.addErrorScreenShotEntry(error, fileName);
+        }
+
+        @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+            if (testCase != null)
+                testCase.addScreenShotEntry(title, filePath, assertions);
         }
 
     }

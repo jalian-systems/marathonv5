@@ -37,7 +37,7 @@ public class TestRunner {
 
     public static final Logger LOGGER = Logger.getLogger(TestRunner.class.getName());
 
-    ArgumentProcessor argProcessor;
+    private ArgumentProcessor argProcessor;
     private Test currentTest;
     private TestCreator creator;
     private String runReportDir;
