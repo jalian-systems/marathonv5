@@ -165,7 +165,6 @@ public class ObjectMapConfiguration implements Serializable {
     }
     
     public void createDefault(String framework) {
-        new Exception("Creating Object Map").printStackTrace();
         LOGGER.info("Creating a default object map configuration. Loading from stream...");
         Reader reader = new InputStreamReader(Constants.getOMapConfigurationStream(framework));
         load(reader);
