@@ -35,6 +35,7 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 public class RFXBrowserView extends RFXComponent {
 
     private static final String script;
+	private static final int MAX_TRIES = 5;
 
     static {
         InputStream r = RFXBrowserView.class.getResourceAsStream("browserview_recorder.js");
@@ -141,6 +142,22 @@ public class RFXBrowserView extends RFXComponent {
     }
 
     private void loadScript(BrowserView webview, Browser webEngine, long frameId) {
+    	for(int i = 0; i < MAX_TRIES; i++) {
+    		try {
+    			loadScriptx(webview, webEngine, frameId);
+    			return;
+    		} catch(RuntimeException e) {
+    			if(i == MAX_TRIES -1)
+    				throw e;
+    			try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e1) {
+				}
+    		}
+    	}
+    }
+    
+    private void loadScriptx(BrowserView webview, Browser webEngine, long frameId) {
         webview.getProperties().put("current_selector", "body");
         JSValue win = webEngine.executeJavaScriptAndReturnValue(frameId, "window");
         win.asObject().setProperty("marathon_recorder", RFXBrowserView.this);

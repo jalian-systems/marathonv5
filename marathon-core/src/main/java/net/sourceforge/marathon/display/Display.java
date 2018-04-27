@@ -264,7 +264,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
 
     public void resume() {
         if (state.isRecordingPaused()) {
-            runtime.startRecording(recorder);
+            runtime.resumeRecording();
             setState(State.RECORDING);
         } else {
             script.getDebugger().resume();
@@ -308,7 +308,7 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     public void pauseRecording() {
         if (state.isRecording()) {
             try {
-                runtime.stopRecording();
+                runtime.pauseRecording();
                 setState(State.RECORDINGPAUSED);
             } catch (MarathonRuntimeException e) {
                 setState(State.STOPPED_WITH_APP_CLOSED);

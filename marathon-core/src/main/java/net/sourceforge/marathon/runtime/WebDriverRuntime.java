@@ -282,10 +282,10 @@ public class WebDriverRuntime implements IMarathonRuntime {
 
     @Override public void insertScript(String function) {
         try {
-            recordingServer.pauseRecording();
+            recordingServer.insertingScriptStart();
             script.exec(function);
         } finally {
-            recordingServer.resumeRecording();
+            recordingServer.insertingScriptFinish();
         }
     }
 
@@ -310,5 +310,15 @@ public class WebDriverRuntime implements IMarathonRuntime {
         script.setDriverURL(driverURL);
         return script;
     }
+
+	@Override
+	public void pauseRecording() {
+		recordingServer.pauseRecording();
+	}
+
+	@Override
+	public void resumeRecording() {
+		recordingServer.resumeRecording();
+	}
 
 }
