@@ -60,10 +60,7 @@ compileTestJava {
 dependencies {
   compile project(':marathon-javafx:marathon-javafx-agent')
   compile project(':marathon-javafx:marathon-javafx-recorder')
-  compile files("${jxbrowser_install_path}/lib/jxbrowser-6.19.1.jar")
-  compile files("${jxbrowser_install_path}/lib/jxbrowser-linux64-6.19.1.jar")
-  compile files("${jxbrowser_install_path}/lib/jxbrowser-mac-6.19.1.jar")
-  compile files("${jxbrowser_install_path}/lib/jxbrowser-win32-6.19.1.jar")
+  compile fileTree(dir: "${jxbrowser_install_path}/lib", include: "*.jar")
 }
 
 jar {
