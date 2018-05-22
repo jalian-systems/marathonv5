@@ -299,6 +299,9 @@ public class JavaProfile {
             java_tool_options.append("-Dmarathon.project.dir=\"" + System.getProperty("marathon.project.dir") + "\" ");
         }
         java_tool_options.setLength(java_tool_options.length() - 1);
+        if(java_tool_options.length() > 1023) {
+            throw new RuntimeException("JAVA_TOOL_OPTIONS is more than 1023 bytes. Move marathon installation to a shorter path");
+        }
         return java_tool_options.toString();
     }
 
@@ -351,7 +354,7 @@ public class JavaProfile {
     private static String findFile(String[] likelyPlaces, final String namePattern) {
         String path = null;
         for (String likelyPlace : likelyPlaces) {
-            if(likelyPlace == null)
+            if (likelyPlace == null)
                 continue;
             File[] f = new File(likelyPlace).listFiles(new FilenameFilter() {
                 @Override public boolean accept(File dir, String name) {
@@ -523,8 +526,10 @@ public class JavaProfile {
             return System.getProperty(MARATHON_RECORDER + ".file");
         }
         String prefix = launchType.getPrefix();
-        String path = findFile(new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
-                System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") }, "marathon-" + prefix + "-recorder.*.jar");
+        String path = findFile(
+                new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
+                        System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") },
+                "marathon-" + prefix + "-recorder.*.jar");
         if (path != null) {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for recorder");
             return path;
@@ -986,5 +991,4 @@ public class JavaProfile {
         }
         return false;
     }
-
 }

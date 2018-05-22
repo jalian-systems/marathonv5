@@ -79,7 +79,7 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
                 }.wait("Unable to estabilsh connection with the application",
                         Long.getLong("marathon.application.wait", Wait.DEFAULT_TIMEOUT * 5));
             } catch (Exception e) {
-                LOGGER.warning("Unable to estabilsh connection with the application: " + command);
+                LOGGER.warning("Unable to estabilsh connection with the application(timeout): " + command);
                 if (command.isRunning())
                     command.destroy();
                 throw e;
