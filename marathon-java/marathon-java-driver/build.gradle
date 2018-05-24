@@ -18,6 +18,16 @@ repositories {
   mavenCentral()
 }
 
+task sourceJar(type: Jar, dependsOn: classes) {
+        classifier 'sources'
+        from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+}
+
 dependencies {
   compile project(":marathon-core:JSON-java")
   compile project(":marathon-java:marathon-java-agent")
