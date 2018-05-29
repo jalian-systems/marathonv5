@@ -68,6 +68,8 @@ public class JavaServer extends NanoHTTPD {
     private Session liveSession;
 
     private static List<RouteMap> routes;
+
+    public static boolean handlingRequest;
     private int port;
 
     private static final JSONObject hasCapabilities = new JSONObject();
@@ -356,22 +358,23 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public Response serve_internal(String uri, Method method, JSONObject jsonQuery) {
+        JavaServer.handlingRequest = true ;
         try {
             Route route = findRoute(method, uri);
             if (route != null && route.getProc() != null) {
                 return handleRoute(route, jsonQuery);
-            }
-            if (route == null) {
+            } else if (route == null) {
                 return newFixedLengthResponse(Status.NOT_FOUND, MIME_PLAINTEXT, "Not Implemented: (route is null)");
-            }
-            if (route.getProc() == null) {
+            } else {
                 return newFixedLengthResponse(Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Not Implemented: route = " + route);
             }
         } catch (Throwable e) {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
+            return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
+        } finally {
+            JavaServer.handlingRequest = false ;
         }
-        return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
     }
 
     private Response handleRoute(Route route, JSONObject query) {

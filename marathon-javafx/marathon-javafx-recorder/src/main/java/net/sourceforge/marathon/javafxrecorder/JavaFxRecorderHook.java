@@ -54,6 +54,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sourceforge.marathon.fxcontextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javafxagent.WindowTitle;
+import net.sourceforge.marathon.javafxagent.server.JavaServer;
 import net.sourceforge.marathon.javafxrecorder.component.FileChooserTransformer;
 import net.sourceforge.marathon.javafxrecorder.component.MenuItemTransformer;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
@@ -398,7 +399,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     @Override public void handle(Event event) {
-        if (recorder.isPaused() || recorder.isInsertingScript()) {
+        if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest) {
             return;
         }
         try {

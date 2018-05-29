@@ -53,6 +53,7 @@ import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.component.RFileDialog;
 import net.sourceforge.marathon.component.RUnknownComponent;
 import net.sourceforge.marathon.contextmenu.ContextMenuHandler;
+import net.sourceforge.marathon.javaagent.server.JavaServer;
 import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
 
 public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
@@ -292,7 +293,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     @Override public void eventDispatched(final AWTEvent event) {
-        if (recorder.isPaused() || recorder.isInsertingScript())
+        if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest)
             return;
         try {
             AccessController.doPrivileged(new PrivilegedAction<Object>() {
