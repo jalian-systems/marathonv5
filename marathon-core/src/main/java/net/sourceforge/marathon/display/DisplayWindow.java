@@ -91,6 +91,7 @@ import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import net.sourceforge.marathon.ProjectHTTPDServer;
+import net.sourceforge.marathon.Version;
 import net.sourceforge.marathon.api.LogRecord;
 import net.sourceforge.marathon.api.TestAttributes;
 import net.sourceforge.marathon.checklist.CheckList;
@@ -213,10 +214,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private static final Logger logger = Logger.getLogger(DisplayWindow.class.getCanonicalName());
 
     private static DisplayWindow _instance;
-
-    private static String _message = null;
-    private static String _message_fg = "white";
-    private static String _message_bg = "#f01010";
 
     private class DockingListener
             implements DockableSelectionListener, DockableStateWillChangeListener, DockableStateChangeListener {
@@ -1628,7 +1625,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menu.getItems().add(0, releaseNotes.getMenuItem());
         menu.getItems().add(1, changeLog.getMenuItem());
         menu.getItems().add(2, visitWebsite.getMenuItem());
-        if (_message == null)
+        if (Version._message == null)
             return menuBar;
         VBox vbox = new VBox();
         vbox.getChildren().addAll(getMessageBar(vbox), menuBar);
@@ -1638,9 +1635,9 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private Node getMessageBar(VBox vbox) {
         HBox hb = new HBox(10);
         hb.setPrefHeight(32);
-        hb.setStyle("-fx-padding: 0 5px 0 5px; -fx-background-color: " + _message_bg + ";");
+        hb.setStyle("-fx-padding: 0 5px 0 5px; -fx-background-color: " + Version._message_bg + ";");
         CheckBox cb = new CheckBox("Do Not Show Again");
-        cb.setStyle("-fx-text-fill: " + _message_fg + ";-fx-fill: " + _message_fg + ";");
+        cb.setStyle("-fx-text-fill: " + Version._message_fg + ";-fx-fill: " + Version._message_fg + ";");
         Text b = FXUIUtils.getIconAsText("close");
         b.setOnMouseClicked((e) -> {
             JSONObject preferences = Preferences.instance().getSection("display");
@@ -1648,11 +1645,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             Preferences.instance().save("display");
             vbox.getChildren().remove(0);
         });
-        Text t = new Text(_message);
+        Text t = new Text(Version._message);
         hb.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(t, Priority.ALWAYS);
-        t.setStyle("-fx-fill: " + _message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold; -fx-font-family: Tahoma;");
-        b.setStyle("-fx-fill: " + _message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold;");
+        t.setStyle("-fx-fill: " + Version._message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold; -fx-font-family: Tahoma;");
+        b.setStyle("-fx-fill: " + Version._message_fg + "; -fx-font-size: 14px; -fx-font-weight:bold;");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         hb.getChildren().addAll(t, spacer, b);
@@ -3700,9 +3697,4 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         this.currentEditor = currentEditor;
     }
 
-    public static void setMessage(String message, String fg, String bg) {
-        _message = message;
-        _message_fg = fg;
-        _message_bg = bg;
-    }
 }
