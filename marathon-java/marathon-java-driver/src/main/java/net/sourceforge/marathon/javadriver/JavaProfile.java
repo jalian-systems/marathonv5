@@ -340,7 +340,15 @@ public class JavaProfile {
         if (System.getProperty(MARATHON_AGENT + ".file") != null) {
             return System.getProperty(MARATHON_AGENT + ".file");
         }
-        String path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
+        String shortName = launchType == LaunchType.SWING_APPLICATION ? "mja.jar" : "mfa.jar";
+		String path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
+                "../../marathon/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
+                dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") }, shortName);
+        if (path != null) {
+            Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for agent");
+            return path;
+        }
+        path = findFile(new String[] { ".", "marathon-" + prefix + "-agent", "../marathon-" + prefix + "-agent",
                 "../../marathon/marathon-" + prefix + "/marathon-" + prefix + "-agent", System.getProperty(PROP_HOME, "."),
                 dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") }, "marathon-" + prefix + "-agent.*.jar");
         if (path != null) {
@@ -526,7 +534,16 @@ public class JavaProfile {
             return System.getProperty(MARATHON_RECORDER + ".file");
         }
         String prefix = launchType.getPrefix();
-        String path = findFile(
+        String shortName = launchType == LaunchType.SWING_APPLICATION ? "mjr.jar" : "mfr.jar";
+		String path = findFile(
+                new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
+                        System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") },
+                shortName);
+        if (path != null) {
+            Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for recorder");
+            return path;
+        }
+        path = findFile(
                 new String[] { ".", "marathon-" + prefix + "-recorder", "../marathon-" + prefix + "-recorder",
                         System.getProperty(PROP_HOME, "."), dirOfMarathonJavaDriverJar, System.getenv("MARATHON_HOME") },
                 "marathon-" + prefix + "-recorder.*.jar");
