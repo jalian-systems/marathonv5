@@ -58,6 +58,7 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     }
 
     @AfterMethod public void disposeDriver() throws Throwable {
+        MenuSelectionManager.defaultManager().clearSelectedPath();
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override public void run() {
                 frame.setVisible(false);
@@ -67,7 +68,6 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         if (driver != null) {
             driver.quit();
         }
-        MenuSelectionManager.defaultManager().clearSelectedPath();
     }
 
     public void getTextOnMenu() throws Throwable {
@@ -197,6 +197,7 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         currRadioButton = menuItems.get(i);
         new Actions(driver).moveToElement(menu).click().perform();
         AssertJUnit.assertEquals("true", currRadioButton.getAttribute("selected"));
+        System.out.println("JMenuTest.radioButtonMenuItemClick()");
     }
 
     public void subMenu() throws Throwable {

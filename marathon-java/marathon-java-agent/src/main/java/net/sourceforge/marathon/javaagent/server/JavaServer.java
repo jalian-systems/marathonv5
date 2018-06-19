@@ -523,15 +523,11 @@ public class JavaServer extends NanoHTTPD {
 
     public Response createSession(JSONObject query, JSONObject uriParams) {
         if (liveSession == null) {
-            JSONObject required = null;
             JSONObject desired = null;
-            if (query.has("requiredCapabilities")) {
-                required = (JSONObject) query.get("requiredCapabilities");
-            }
             if (query.has("desiredCapabilities")) {
                 desired = (JSONObject) query.get("desiredCapabilities");
             }
-            String okCaps = hasCapabilities(required, desired);
+            String okCaps = hasCapabilities(desired, desired);
 
             if (okCaps != null) {
                 throw new SessionNotCreatedException(okCaps, null);

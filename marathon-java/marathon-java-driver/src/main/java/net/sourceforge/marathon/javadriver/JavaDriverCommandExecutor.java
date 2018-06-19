@@ -15,6 +15,8 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
+import static org.openqa.selenium.remote.DriverCommand.QUIT;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,7 +24,9 @@ import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
+import org.openqa.selenium.remote.Command;
 import org.openqa.selenium.remote.HttpCommandExecutor;
+import org.openqa.selenium.remote.Response;
 
 import net.sourceforge.marathon.javaagent.Wait;
 
@@ -34,9 +38,12 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
     private EmbeddedServer server;
     private JavaProfile profile;
 
+    private boolean started;
+
     public JavaDriverCommandExecutor(JavaProfile profile) {
         super(getURL(profile));
         this.profile = profile;
+        this.started = false;
     }
 
     private static URL getURL(JavaProfile profile) {
@@ -70,7 +77,8 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
                         if (isConnected())
                             return true;
                         if (!command.isRunning()) {
-                            if (profile.isJavaWebStart() || profile.isCommandLine() || Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR))
+                            if (profile.isJavaWebStart() || profile.isCommandLine()
+                                    || Boolean.getBoolean(MARATHON_APPLICATION_DONT_MONITOR))
                                 return false;
                             return true;
                         }
@@ -114,4 +122,14 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
         server = null;
     }
 
+    @Override public Response execute(Command command) throws IOException {
+        if (!this.started) {
+            start();
+            this.started = true;
+        }
+        if (QUIT.equals(command.getName())) {
+            stop();
+        }
+        return super.execute(command);
+    }
 }

@@ -158,7 +158,6 @@ import org.testng.annotations.Test;
         driver = new JavaDriver(caps, caps);
         LogEntries logEntries = driver.manage().logs().get(LogType.DRIVER);
         List<LogEntry> all = logEntries.getAll();
-        AssertJUnit.assertEquals(2, all.size());
         AssertJUnit.assertTrue(all.get(0).getMessage().contains("A new session created. sessionID = "));
     }
 
