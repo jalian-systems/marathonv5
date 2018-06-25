@@ -59,6 +59,8 @@ public class JSONScriptElement implements IScriptElement {
             return enscriptWindowClosed();
         } else if (event.getString("type").equals("window_state")) {
             return enscriptWindowState();
+        } else if (event.getString("type").equals("hover")) {
+            return enscriptHover();
         }
         return "on '" + name + "' " + event.toString(4);
     }
@@ -129,6 +131,14 @@ public class JSONScriptElement implements IScriptElement {
         return "";
     }
 
+    private String enscriptHover() {
+        String suffix = "";
+        if (event.has("suffix")) {
+            suffix = "_" + event.getString("suffix");
+        }
+        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("hover", suffix, name);
+    }
+    
     private String enscriptRawMouseClick() {
         boolean popupTrigger = event.getInt("button") == MouseEvent.BUTTON3;
         int clickCount = event.getInt("clickCount");
