@@ -579,4 +579,9 @@ public class OMapContainer implements IObjectMapTreeItem {
     public List<OMapComponent> getComponents() {
         return components;
     }
+
+    public ObjectMapItem getParent() {
+        return parent;
+    }
+
 }

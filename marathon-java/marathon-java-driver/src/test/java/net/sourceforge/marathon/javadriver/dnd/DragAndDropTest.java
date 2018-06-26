@@ -24,6 +24,7 @@ import javax.swing.SwingUtilities;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -33,8 +34,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import com.sun.jna.Platform;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
@@ -101,7 +100,7 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         listitem1.click();
         driver.clearlogs(LogType.DRIVER);
         Keys copyKey = Keys.ALT;
-        if (Platform.isWindows()) {
+        if (Platform.getCurrent().is(Platform.WINDOWS)) {
             copyKey = Keys.CONTROL;
         }
         new Actions(driver).keyDown(copyKey).dragAndDrop(listitem1, listitem5).keyUp(copyKey).perform();

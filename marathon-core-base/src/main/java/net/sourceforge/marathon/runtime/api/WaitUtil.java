@@ -17,7 +17,7 @@ package net.sourceforge.marathon.runtime.api;
 
 public class WaitUtil {
 
-    public static boolean TRACE = true;
+    public static boolean TRACE = false;
 
     public static interface Until {
         boolean until();

@@ -21,6 +21,7 @@ import java.util.function.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.os.CommandLine;
@@ -28,8 +29,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-
-import com.sun.jna.Platform;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
@@ -127,7 +126,7 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     }
 
     public static String findExecutableOnPath(String name) {
-        if (!Platform.isWindows() || name.endsWith(".exe") || name.endsWith(".bat")) {
+        if (!Platform.getCurrent().is(Platform.WINDOWS) || name.endsWith(".exe") || name.endsWith(".bat")) {
             return getPathTo(name);
         }
         String path;

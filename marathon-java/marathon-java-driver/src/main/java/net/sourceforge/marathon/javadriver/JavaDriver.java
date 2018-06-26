@@ -96,16 +96,6 @@ public class JavaDriver extends RemoteWebDriver {
                 "Setting the file detector only works on remote webdriver instances obtained " + "via RemoteWebDriver");
     }
 
-    @Override protected void startClient() {
-        JavaDriverCommandExecutor executor = (JavaDriverCommandExecutor) getCommandExecutor();
-        executor.start();
-    }
-
-    @Override protected void stopClient() {
-        JavaDriverCommandExecutor executor = (JavaDriverCommandExecutor) getCommandExecutor();
-        executor.stop();
-    }
-
     @Override public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
         // Get the screenshot as base64.
         String base64 = (String) execute(DriverCommand.SCREENSHOT).getValue();

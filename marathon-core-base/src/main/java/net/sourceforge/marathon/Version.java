@@ -89,4 +89,14 @@ public class Version {
     public static String blurbCredits() {
         return version.blurbCredits();
     }
+
+    public static String _message = null;
+    public static String _message_fg = "white";
+    public static String _message_bg = "#f01010";
+
+    public static void setMessage(String message, String fg, String bg) {
+        _message = message;
+        _message_fg = fg;
+        _message_bg = bg;
+    }
 }

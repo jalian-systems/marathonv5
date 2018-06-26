@@ -53,13 +53,12 @@ import net.sourceforge.marathon.component.RComponentFactory;
 import net.sourceforge.marathon.component.RFileDialog;
 import net.sourceforge.marathon.component.RUnknownComponent;
 import net.sourceforge.marathon.contextmenu.ContextMenuHandler;
+import net.sourceforge.marathon.javaagent.server.JavaServer;
 import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
 
 public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
 
     public static final Logger LOGGER = Logger.getLogger(JavaRecorderHook.class.getName());
-
-    private static final Logger logger = Logger.getLogger(JavaRecorderHook.class.getName());
 
     public static String DRIVER = "Java";
     public static String DRIVER_VERSION = "1.0";
@@ -214,7 +213,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             Method method = c.getClass().getMethod("add" + listener.getSimpleName(), listener);
             method.invoke(c, this);
         } catch (Exception e) {
-            logger.warning("Unable to add a change listener to " + c.getClass());
+            LOGGER.warning("Unable to add a change listener to " + c.getClass());
         }
     }
 
@@ -248,15 +247,15 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                 if (done) {
                     return;
                 }
-                logger.info("Checking for window: " + Thread.currentThread());
+                LOGGER.info("Checking for window: " + Thread.currentThread());
                 if (!"".equals(windowTitle)) {
                     if (!isValidWindow()) {
-                        logger.info("Not a valid window");
+                        LOGGER.info("Not a valid window");
                         return;
                     }
                 }
                 done = true;
-                logger.info("JavaVersion: " + System.getProperty("java.version"));
+                LOGGER.info("JavaVersion: " + System.getProperty("java.version"));
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
                     @Override public Object run() {
                         return new JavaRecorderHook(port);
@@ -294,7 +293,7 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
     }
 
     @Override public void eventDispatched(final AWTEvent event) {
-        if (recorder.isPaused() || recorder.isInsertingScript())
+        if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest)
             return;
         try {
             AccessController.doPrivileged(new PrivilegedAction<Object>() {

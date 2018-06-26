@@ -15,7 +15,6 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javadriver;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -1043,7 +1042,7 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 frame.setVisible(true);
             }
         });
-        List<WebElement> elements = driver.findElements(By.cssSelector("menu[text/='File']"));
+        List<WebElement> elements = driver.findElements(By.cssSelector("menu"));
         AssertJUnit.assertNotNull(elements);
         AssertJUnit.assertEquals(1, elements.size());
         AssertJUnit.assertEquals("File", elements.get(0).getText());
@@ -1330,69 +1329,6 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         WebElement element2 = driver.findElement(By.name("click-me"));
         String id2 = ((RemoteWebElement) element2).getId();
         AssertJUnit.assertEquals(id1, id2);
-    }
-
-    public void nonFrameDialogWindowUsesNameIfExistsAsTitle() throws Throwable {
-        driver = new JavaDriver();
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
-                frame.setVisible(true);
-                window = new java.awt.Window(frame);
-                window.setName("awt-window");
-                JPanel panel = new JPanel(new BorderLayout());
-                panel.add(new JTextField(80));
-                window.setLayout(new BorderLayout());
-                window.add(panel, BorderLayout.CENTER);
-                window.setSize(640, 480);
-                window.setLocationRelativeTo(frame);
-                window.requestFocus();
-                window.setVisible(true);
-            }
-        });
-        try {
-            Thread.sleep(200);
-            AssertJUnit.assertEquals("awt-window", driver.getTitle());
-        } finally {
-            window.dispose();
-        }
-    }
-
-    public void windowWithEmptyTitleUsesFirstAvailableLabel() throws Throwable {
-        driver = new JavaDriver();
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
-                frame.setTitle("");
-                frame.setName(null);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            }
-        });
-        AssertJUnit.assertEquals("Enter The Text", driver.getTitle());
-    }
-
-    public void nonFrameDialogWindowUsesClassNameAsTitleOnLastResort() throws Throwable {
-        driver = new JavaDriver();
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
-                frame.setVisible(true);
-                window = new java.awt.Window(frame);
-                window.setName(null);
-                JPanel panel = new JPanel(new BorderLayout());
-                panel.add(new JTextField(80));
-                window.setLayout(new BorderLayout());
-                window.add(panel, BorderLayout.CENTER);
-                window.setSize(640, 480);
-                window.setLocationRelativeTo(frame);
-                window.requestFocus();
-                window.setVisible(true);
-            }
-        });
-        try {
-            Thread.sleep(200);
-            AssertJUnit.assertEquals("java.awt.Window", driver.getTitle());
-        } finally {
-            window.dispose();
-        }
     }
 
     public void executeScript() throws Throwable {

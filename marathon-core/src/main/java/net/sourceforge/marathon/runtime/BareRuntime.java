@@ -112,4 +112,16 @@ public class BareRuntime implements IMarathonRuntime {
         if (script != null)
             script.releaseInterpreters();
     }
+
+	@Override
+	public void pauseRecording() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resumeRecording() {
+		// TODO Auto-generated method stub
+		
+	}
 }
