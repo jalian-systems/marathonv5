@@ -1,3 +1,11 @@
+Marathon Version 5.2.0.0 (26th June 2018)
+
+01. refact: Upgrade selenium to 3.12
+02. feat: Use short names for agent JARS. This frees up space for JAVA_TOOL_OPTIONS
+03. fix: Ignore recording for events generated while playing a script
+04. fixed: Added a RTE when JAVA_TOOL_OPTIONS > 1023 bytes
+05. JXBrowserView retry loadscript
+
 Marathon Version 5.1.9.0 (17th April 2018)
 
 01. feat: Adding screen_shot() method
