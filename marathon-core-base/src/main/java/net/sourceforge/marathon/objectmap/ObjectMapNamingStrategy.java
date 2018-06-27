@@ -29,18 +29,15 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javafx.scene.Node;
 import net.sourceforge.marathon.api.INamingStrategy;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.ObjectIdentity;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.PropertyList;
 import net.sourceforge.marathon.runtime.api.ComponentId;
 import net.sourceforge.marathon.runtime.api.ComponentNotFoundException;
-import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.ILogger;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;
 import net.sourceforge.marathon.runtime.api.JSONObjectPropertyAccessor;
@@ -85,21 +82,6 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
 
     @Override public void setTopLevelComponent(IPropertyAccessor accessor) {
         topContainerAccessor = accessor;
-    }
-
-    private Class<?> findClass(String cName) {
-        try {
-            return Class.forName(cName);
-        } catch (Throwable e) {
-            try {
-                return Thread.currentThread().getContextClassLoader().loadClass(cName);
-            } catch (ClassNotFoundException e1) {
-                if(Constants.FRAMEWORK_SWING.equals(Constants.getFramework()))
-                    return JComponent.class;
-                else
-                    return Node.class;
-            }
-        }
     }
 
     private String findCSS(ComponentId id, boolean visibility) throws ObjectMapException {
@@ -228,7 +210,7 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         String name = null;
         if (n == null) {
             IPropertyAccessor w = new JSONObjectPropertyAccessor(component.getJSONObject("attributes"));
-            List<List<String>> propertyList = findNamingProperties(w.getProperty("component.class.name"));
+            List<List<String>> propertyList = toList(component.getJSONArray("namingProperties"));
             for (List<String> properties : propertyList) {
                 name = createName(w, properties);
                 if (name == null || name.equals("")) {
@@ -265,34 +247,6 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
 
     private OMapComponent findClosestMatch(JSONObject component, List<OMapComponent> omapComponents, StringBuilder msg) {
         return null;
-    }
-
-    private List<List<String>> findNamingProperties(String cName) {
-        List<List<String>> np = findProperties(findClass(cName), omapService.getNamingProperties());
-        np.add(OMapComponent.LAST_RESORT_NAMING_PROPERTIES);
-        return np;
-    }
-
-    private List<List<String>> findProperties(Class<?> class1, List<ObjectIdentity> list) {
-        List<PropertyList> selection = new ArrayList<PropertyList>();
-        while (class1 != null) {
-            for (ObjectIdentity objectIdentity : list) {
-                if (objectIdentity.getClassName().equals(class1.getName())) {
-                    selection.addAll(objectIdentity.getPropertyLists());
-                }
-            }
-            class1 = class1.getSuperclass();
-        }
-        Collections.sort(selection, new Comparator<PropertyList>() {
-            @Override public int compare(PropertyList o1, PropertyList o2) {
-                return o2.getPriority() - o1.getPriority();
-            }
-        });
-        List<List<String>> sortedList = new ArrayList<List<String>>();
-        for (PropertyList pl : selection) {
-            sortedList.add(new ArrayList<String>(pl.getProperties()));
-        }
-        return sortedList;
     }
 
     @Override public void save() {
@@ -416,5 +370,19 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
 
     @Override public ObjectMapConfiguration getObjectMapConfiguration() {
         return omapService.getObjectMapConfiguration();
+    }
+
+    private List<List<String>> toList(JSONArray a) {
+        List<List<String>> collection = new ArrayList<>();
+        for(int i = 0; i < a.length(); i++) {
+            JSONArray b = a.getJSONArray(i);
+            List<String> c2 = new ArrayList<>();
+            collection.add(c2);
+            for(int j = 0; j < b.length(); j++) {
+                String s = b.getString(j);
+                c2.add(s);
+            }
+        }
+        return collection;
     }
 }

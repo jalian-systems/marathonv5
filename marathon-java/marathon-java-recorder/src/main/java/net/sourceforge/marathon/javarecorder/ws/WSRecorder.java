@@ -32,6 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -250,6 +251,7 @@ public class WSRecorder implements IJSONRecorder {
         o.put("urp", r.findURP());
         o.put("attributes", r.findAttributes());
         o.put("container", r.findContextHeirarchy());
+        o.put("namingProperties", new JSONArray(r.getNamingProperties()));
     }
 
     @Override public boolean isCreatingObjectMap() {
