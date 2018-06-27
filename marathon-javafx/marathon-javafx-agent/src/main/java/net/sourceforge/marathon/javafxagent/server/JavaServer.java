@@ -302,31 +302,36 @@ public class JavaServer extends NanoHTTPD {
 
     @Override public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
             Map<String, String> files) {
-        JSONObject jsonQuery = null;
-        String query = files.get("postData");
-        LOGGER.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
-        if (query != null) {
-            try {
-                jsonQuery = new JSONObject(query);
-            } catch (JSONException e) {
-                LOGGER.info("JavaServer.serve(): " + query);
-                return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
+        try {
+            handlingRequest = true ;
+            JSONObject jsonQuery = null;
+            String query = files.get("postData");
+            LOGGER.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));
+            if (query != null) {
+                try {
+                    jsonQuery = new JSONObject(query);
+                } catch (JSONException e) {
+                    LOGGER.info("JavaServer.serve(): " + query);
+                    return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, e.getMessage());
+                }
             }
+            StringBuilder logmsg = new StringBuilder();
+            logmsg.append(method + "(" + uri);
+            if (jsonQuery != null) {
+                logmsg.append(", " + jsonQuery);
+            }
+            logmsg.append(") = ");
+            Response response = serve_internal(uri, method, jsonQuery == null ? new JSONObject() : jsonQuery);
+            logmsg.append(toString(response));
+            if (latestSession != null && !uri.contains("/log")) {
+                if (Boolean.getBoolean("keepLog"))
+                    latestSession.log(Level.INFO, logmsg.toString());
+            }
+            EventQueueWait.waitTillAllEventsProcessed();
+            return response;
+        } finally {
+            handlingRequest = false;
         }
-        StringBuilder logmsg = new StringBuilder();
-        logmsg.append(method + "(" + uri);
-        if (jsonQuery != null) {
-            logmsg.append(", " + jsonQuery);
-        }
-        logmsg.append(") = ");
-        Response response = serve_internal(uri, method, jsonQuery == null ? new JSONObject() : jsonQuery);
-        logmsg.append(toString(response));
-        if (latestSession != null && !uri.contains("/log")) {
-            if (Boolean.getBoolean("keepLog"))
-                latestSession.log(Level.INFO, logmsg.toString());
-        }
-        EventQueueWait.waitTillAllEventsProcessed();
-        return response;
     }
 
     private String toString(Response response) {
@@ -358,7 +363,6 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public Response serve_internal(String uri, Method method, JSONObject jsonQuery) {
-        JavaServer.handlingRequest = true ;
         try {
             Route route = findRoute(method, uri);
             if (route != null && route.getProc() != null) {
@@ -372,8 +376,6 @@ public class JavaServer extends NanoHTTPD {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
             return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
-        } finally {
-            JavaServer.handlingRequest = false ;
         }
     }
 
