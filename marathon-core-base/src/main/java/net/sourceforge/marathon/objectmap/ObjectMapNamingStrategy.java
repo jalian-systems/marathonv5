@@ -211,6 +211,7 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         if (n == null) {
             IPropertyAccessor w = new JSONObjectPropertyAccessor(component.getJSONObject("attributes"));
             List<List<String>> propertyList = toList(component.getJSONArray("namingProperties"));
+            propertyList.add(OMapComponent.LAST_RESORT_NAMING_PROPERTIES);
             for (List<String> properties : propertyList) {
                 name = createName(w, properties);
                 if (name == null || name.equals("")) {
