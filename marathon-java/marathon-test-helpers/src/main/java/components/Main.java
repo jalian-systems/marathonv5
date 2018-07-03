@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -29,6 +31,11 @@ public class Main extends JFrame {
                 if (klass != null)
                     klasses.add(klass);
             }
+            Collections.sort(klasses, new Comparator<Class> () {
+                @Override public int compare(Class arg0, Class arg1) {
+                    return arg0.getName().compareTo(arg1.getName());
+                }
+            });
         }
 
         private Class checkClass(String resource) {

@@ -213,11 +213,8 @@ public class RTable extends RComponent {
         }
         super.mousePressed(me);
     }
-
-    @Override protected void mouseClicked(MouseEvent me) {
-        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me) || ((JTable) component).isEditing()) {
-            return;
-        }
+    
+    @Override protected void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick2(this, me, true);
     }
 }

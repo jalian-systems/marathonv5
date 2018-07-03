@@ -76,10 +76,10 @@ public class JSONOMapConfig {
     }
 
     public List<List<String>> findRP(Class<?> componentClass) {
-        return findRP(componentClass, "recognitionProperties");
+        return findProperties(componentClass, "recognitionProperties");
     }
 
-    private List<List<String>> findRP(Class<?> componentClass, String key) {
+    private List<List<String>> findProperties(Class<?> componentClass, String key) {
         List<JSONObject> selected = new ArrayList<JSONObject>();
         JSONArray namingProperties = config.getJSONArray(key);
         for (int i = 0; i < namingProperties.length(); i++) {
@@ -127,15 +127,15 @@ public class JSONOMapConfig {
     }
 
     public List<List<String>> findContainerRP(Class<?> containerClass) {
-        return findRP(containerClass, "containerRecognitionProperties");
+        return findProperties(containerClass, "containerRecognitionProperties");
     }
 
     public List<List<String>> findContainerNP(Class<?> containerClass) {
-        return findRP(containerClass, "containerNamingProperties");
+        return findProperties(containerClass, "containerNamingProperties");
     }
 
     public List<List<String>> findNP(Class<?> componentClass) {
-        return findRP(componentClass, "namingProperties");
+        return findProperties(componentClass, "namingProperties");
     }
 
 }

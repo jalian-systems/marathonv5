@@ -143,6 +143,10 @@ public abstract class RComponent extends JavaElementPropertyAccessor {
         return findAttributes(omapConfig.findProperties());
     }
 
+    public List<List<String>> getNamingProperties() {
+        return omapConfig.findNP(component.getClass());
+    }
+    
     public JSONObject findContextHeirarchy() {
         return findContextHeirarchy(component.getParent());
     }

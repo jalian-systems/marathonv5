@@ -135,6 +135,10 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         return findAttributes(omapConfig.findProperties());
     }
 
+    public List<List<String>> getNamingProperties() {
+        return omapConfig.findNP(node.getClass());
+    }
+    
     public JSONObject findContextHeirarchy() {
         return findContextHeirarchy(node.getParent());
     }

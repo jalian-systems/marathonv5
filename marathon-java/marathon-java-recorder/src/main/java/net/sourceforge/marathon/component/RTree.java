@@ -161,10 +161,7 @@ public class RTree extends RComponent {
 
     @Override protected void mousePressed(MouseEvent me) {
         // Ignore double clicks on non-leaf tree nodes
-        if (me.getButton() == MouseEvent.BUTTON1 && me.getModifiersEx() == InputEvent.BUTTON1_DOWN_MASK) {
-            if (me.getClickCount() == 1) {
-                return;
-            }
+        if (me.getButton() == MouseEvent.BUTTON1 && me.getModifiersEx() == InputEvent.BUTTON1_DOWN_MASK && me.getClickCount() > 1) {
             TreePath path = ((JTree) component).getPathForRow(row);
             if (path != null) {
                 Object lastPathComponent = path.getLastPathComponent();
@@ -186,6 +183,10 @@ public class RTree extends RComponent {
         super.mousePressed(me);
     }
 
+    @Override protected void mouseButton1Pressed(MouseEvent me) {
+        recorder.recordClick2(this, me, true);
+    }
+    
     @Override public String getCellInfo() {
         return cellInfo;
     }
@@ -194,10 +195,4 @@ public class RTree extends RComponent {
         return JTreeJavaElement.getContent((JTree) component);
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
-        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me) || ((JTree) component).isEditing()) {
-            return;
-        }
-        recorder.recordClick2(this, me, true);
-    }
 }

@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.javafxagent.script;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.json.JSONArray;
@@ -74,9 +75,13 @@ public class JSONScriptRunner {
     public Object execute() {
         ScriptExecutor se = new ScriptExecutor(mode);
         try {
+            // YUK!!!
+            if (script.equals("return window.name")) {
+                return null;
+            }
             return convertToJson(se.executeScript(script, args));
         } catch (Exception e) {
-            throw new JavaAgentException("Script execution failed with an exception (" + e.getMessage() + ")", e);
+            throw new JavaAgentException("Script execution failed with an exception (" + script + Arrays.asList(args) + ")", e);
         }
     }
 

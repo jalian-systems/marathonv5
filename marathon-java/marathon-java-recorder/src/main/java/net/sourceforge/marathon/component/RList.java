@@ -79,6 +79,10 @@ public class RList extends RComponent {
         super.mousePressed(me);
     }
 
+    @Override protected void mouseButton1Pressed(MouseEvent me) {
+        recorder.recordClick2(this, me, true);
+    }
+    
     @Override public String getCellInfo() {
         return cellInfo;
     }
@@ -103,10 +107,4 @@ public class RList extends RComponent {
         return true;
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
-        if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me)) {
-            return;
-        }
-        recorder.recordClick2(this, me, true);
-    }
 }
