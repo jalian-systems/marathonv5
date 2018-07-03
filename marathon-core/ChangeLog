@@ -1,3 +1,12 @@
+Marathon Version 5.2.1.0 (3rd July 2018)
+
+01. feat: Sorting the test classes in components.Main - test helper
+02. fixed: JTable, JTree and JList recording doubleclick twice
+03. fixed: Error when calling window.name (Who is calling?)
+04. fixed: Using last resort naming properties - regression
+05. fix: findNamingProperties unable to resolve javafx.scene.Node class.
+06. fixed: Calls in @Before methods are being recorded
+
 Marathon Version 5.2.0.0 (26th June 2018)
 
 01. refact: Upgrade selenium to 3.12
