@@ -17,6 +17,7 @@ package net.sourceforge.marathon.checklist;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -33,6 +34,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import net.sourceforge.marathon.checklist.CheckList.CheckListItem;
 import net.sourceforge.marathon.checklist.CheckList.CommentBox;
 import net.sourceforge.marathon.checklist.CheckList.FailureNote;
 import net.sourceforge.marathon.checklist.CheckList.Header;
@@ -105,14 +107,28 @@ public class CheckListFormNode extends VBox {
             children.add(gridPane);
         }
         Iterator<CheckList.CheckListItem> items = checkList.getItems();
-        while (items.hasNext()) {
-            VBox vbox = items.next().getVbox(mode.isSelectable(), mode.isEditable());
+        List<CheckListItemVBoxer> vboxers = new ArrayList<CheckListItemVBoxer>();
+        while(items.hasNext()) {
+            vboxers.add(getVBoxer(items.next()));
+        }
+        vboxers.forEach(vboxer -> {
+            VBox vbox = vboxer.getVbox(mode.isSelectable(), mode.isEditable());
             HBox.setHgrow(vbox, Priority.ALWAYS);
             children.add(vbox);
             if (mode.isSelectable()) {
                 VBox.setMargin(vbox, new Insets(5, 10, 0, 5));
             }
-        }
+        });
+    }
+
+    private CheckListItemVBoxer getVBoxer(CheckListItem item) {
+        if(item instanceof CommentBox)
+            return new CommentBoxVBoxer((CommentBox) item);
+        else if(item instanceof FailureNote)
+            return new FailureNoteVBoxer((FailureNote) item);
+        else if(item instanceof Header)
+            return new HeaderVBoxer((Header) item);
+        throw new RuntimeException("Unknown CheckListItem type: " + item.getClass().getName());
     }
 
     public void addContentChangeListener(IContentChangeListener l) {
@@ -185,7 +201,7 @@ public class CheckListFormNode extends VBox {
 
     public void addHeader(String label) {
         Header header = checkList.createHeader(label);
-        VBox headerBox = header.getVbox(mode.isSelectable(), mode.isEditable());
+        VBox headerBox = getVBoxer(header).getVbox(mode.isSelectable(), mode.isEditable());
         HBox.setHgrow(headerBox, Priority.ALWAYS);
         VBox.setMargin(headerBox, new Insets(5, 10, 0, 5));
         getChildren().add(headerBox);
@@ -193,7 +209,7 @@ public class CheckListFormNode extends VBox {
 
     public void addCheckListItem(String label) {
         FailureNote failureNote = checkList.createFailureNote(label);
-        VBox failureNoteBox = failureNote.getVbox(mode.isSelectable(), mode.isEditable());
+        VBox failureNoteBox = getVBoxer(failureNote).getVbox(mode.isSelectable(), mode.isEditable());
         HBox.setHgrow(failureNoteBox, Priority.ALWAYS);
         VBox.setMargin(failureNoteBox, new Insets(5, 10, 3, 5));
         getChildren().add(failureNoteBox);
@@ -201,24 +217,32 @@ public class CheckListFormNode extends VBox {
 
     public void addTextArea(String label) {
         CommentBox commentBox = checkList.createCommentBox(label);
-        VBox vBox = commentBox.getVbox(mode.isSelectable(), mode.isEditable());
+        VBox vBox = getVBoxer(commentBox).getVbox(mode.isSelectable(), mode.isEditable());
         HBox.setHgrow(vBox, Priority.ALWAYS);
         VBox.setMargin(vBox, new Insets(5, 10, 3, 5));
         getChildren().add(vBox);
     }
 
     public void moveUpSelected() {
-        checkList.moveUpSelected();
+        if (CheckListItemVBoxer.selectedItem != null) {
+            checkList.moveUp(CheckListItemVBoxer.selectedItem.getItem());
+        }
         rebuildBox();
     }
 
     public void moveDownSelected() {
-        checkList.moveDownSelected();
+        if (CheckListItemVBoxer.selectedItem != null) {
+            checkList.moveDown(CheckListItemVBoxer.selectedItem.getItem());
+        }
         rebuildBox();
     }
 
     public void deleteSelected() {
-        checkList.deleteSelected();
+        if (CheckListItemVBoxer.selectedItem != null) {
+            checkList.delete(CheckListItemVBoxer.selectedItem.getItem());
+            CheckListItemVBoxer.selectedItem.deselect();
+            CheckListItemVBoxer.selectedItem = null;
+        }
         rebuildBox();
     }
 
