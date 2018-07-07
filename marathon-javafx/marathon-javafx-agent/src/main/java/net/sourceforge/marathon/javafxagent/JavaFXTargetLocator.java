@@ -29,8 +29,6 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.sun.javafx.stage.StageHelper;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
@@ -39,6 +37,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.javafxagent.components.JavaFXContextMenuElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDirectoryChooserElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXFileChooserElement;
@@ -261,8 +260,7 @@ public class JavaFXTargetLocator {
             List<Window> contextMenus = new ArrayList<>();
             new Wait("Unable to context menu") {
                 @Override public boolean until() {
-                    @SuppressWarnings({ "deprecation" })
-                    Iterator<Window> windows = Window.impl_getWindows();
+                    Iterator<Window> windows = JavaCompatibility.getWindows();
                     while (windows.hasNext()) {
                         Window window = windows.next();
                         if (window instanceof ContextMenu) {
@@ -344,7 +342,7 @@ public class JavaFXTargetLocator {
     }
 
     private Stage[] getValidWindows() {
-        ObservableList<Stage> stages = StageHelper.getStages();
+        ObservableList<Stage> stages = JavaCompatibility.getStages();
         List<Stage> valid = new ArrayList<Stage>();
         for (Stage window : stages) {
             if (window.isShowing()) {

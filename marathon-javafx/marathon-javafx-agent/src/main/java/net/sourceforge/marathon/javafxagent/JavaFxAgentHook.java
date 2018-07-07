@@ -23,8 +23,6 @@ import java.security.PrivilegedAction;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.sun.javafx.stage.StageHelper;
-
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -32,6 +30,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.javafxagent.components.FileChooserTransformer;
 import net.sourceforge.marathon.javafxagent.server.JavaServer;
 
@@ -49,7 +48,7 @@ public class JavaFxAgentHook {
             throw new Exception("Port number not specified");
         }
         windowTitle = System.getProperty("start.window.title", "");
-        ObservableList<Stage> stages = StageHelper.getStages();
+        ObservableList<Stage> stages = JavaCompatibility.getStages();
         stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 

@@ -17,10 +17,9 @@ package net.sourceforge.marathon.javafxagent;
 
 import java.util.logging.Logger;
 
-import com.sun.javafx.stage.StageHelper;
-
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 
 public class WindowTitle {
 
@@ -34,7 +33,7 @@ public class WindowTitle {
 
     public String getTitle() {
         String title = getTitle(window);
-        ObservableList<Stage> windows = StageHelper.getStages();
+        ObservableList<Stage> windows = JavaCompatibility.getStages();
         String original = title;
         int index = 1;
         for (Stage w : windows) {

@@ -29,9 +29,6 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
-import com.sun.glass.ui.CommonDialogs;
-import com.sun.javafx.stage.StageHelper;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,6 +49,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.fxcontextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javafxagent.WindowTitle;
 import net.sourceforge.marathon.javafxagent.server.JavaServer;
@@ -102,7 +100,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             setContextMenuTriggers(recorder.getContextMenuTriggers());
             finder = new RFXComponentFactory(objectMapConfiguration);
             contextMenuHandler = new ContextMenuHandler(recorder, finder);
-            ObservableList<Stage> stages = StageHelper.getStages();
+            ObservableList<Stage> stages = JavaCompatibility.getStages();
             for (Stage stage : stages) {
                 addEventFilter(stage);
             }
@@ -297,9 +295,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             double x = boundsInParent.getWidth() / 2;
             double y = boundsInParent.getHeight() / 2;
             Point2D screenXY = source.localToScreen(x, y);
-            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, x, y, screenXY.getX(),
-                    screenXY.getY(), MouseButton.SECONDARY, 1, false, true, false, false, false, false, true, true, true,
-                    false, null);
+            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, x, y, screenXY.getX(), screenXY.getY(),
+                    MouseButton.SECONDARY, 1, false, true, false, false, false, false, true, true, true, false, null);
             return e;
         }
     }
@@ -374,7 +371,7 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             throw new Exception("Port number not specified");
         }
         windowTitle = System.getProperty("start.window.title", "");
-        ObservableList<Stage> stages = StageHelper.getStages();
+        ObservableList<Stage> stages = JavaCompatibility.getStages();
         stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 
@@ -485,12 +482,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     private void handleFileChooser(Event event) {
         Node source = (Node) event.getSource();
-        CommonDialogs.FileChooserResult files = (CommonDialogs.FileChooserResult) source.getProperties()
-                .get("marathon.selectedFiles");
-        List<File> selectedFiles = null;
-        if (files != null) {
-            selectedFiles = files.getFiles();
-        }
+        @SuppressWarnings("unchecked")
+        List<File> selectedFiles = (List<File>) source.getProperties().get("marathon.selectedFiles");
         new RFXFileChooser(recorder).record(selectedFiles);
     }
 

@@ -89,6 +89,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
@@ -1620,12 +1621,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return titleAt;
     }
 
-    @SuppressWarnings("deprecation") private static String getTabNameFromIcon(TabPane tabPane, int index) {
+    private static String getTabNameFromIcon(TabPane tabPane, int index) {
         Node graphic = tabPane.getTabs().get(index).getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
             return "tabIndex-" + index;
         }
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+        return nameFromImage(JavaCompatibility.getUrl(((ImageView) graphic).getImage()));
     }
 
     private static String nameFromImage(String description) {
@@ -1665,12 +1666,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return text;
     }
 
-    @SuppressWarnings("deprecation") private String getMenuTextFromIcon(Menu menu, int index) {
+    private String getMenuTextFromIcon(Menu menu, int index) {
         Node graphic = menu.getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
             return "menuindex-" + index;
         }
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+        return nameFromImage(JavaCompatibility.getUrl(((ImageView) graphic).getImage()));
     }
 
     public String getTextForMenuItem(MenuItem menuItem, Menu parentMenu) {
@@ -1698,7 +1699,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return text;
     }
 
-    @SuppressWarnings("deprecation") protected String getTextFromIcon(MenuItem menuItem, int index) {
+    protected String getTextFromIcon(MenuItem menuItem, int index) {
         Node graphic = menuItem.getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
             if (index == -1) {
@@ -1706,7 +1707,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             }
             return "MenuItemIndex-" + index;
         }
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+        return nameFromImage(JavaCompatibility.getUrl(((ImageView) graphic).getImage()));
     }
 
     protected String getButtonText(ButtonBase button) {

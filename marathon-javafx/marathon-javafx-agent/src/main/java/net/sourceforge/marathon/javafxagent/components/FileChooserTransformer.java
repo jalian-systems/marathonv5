@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 
 public class FileChooserTransformer implements ClassFileTransformer {
 
@@ -38,25 +39,69 @@ public class FileChooserTransformer implements ClassFileTransformer {
         CtClass cl = null;
         try {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
-            if (cl.getName().equals("com.sun.glass.ui.CommonDialogs")) {
-                CtMethod showFileChooser = cl.getDeclaredMethod("showFileChooser");
-                String code = "{" + "  if(System.getProperty(\"marathon.mode\").equals(\"playing\")) {"
-                        + "    synchronized (javafx.stage.FileChooser.class) {" + "      try {"
-                        + "          javafx.stage.FileChooser.class.wait(5000L);" + "      } catch (InterruptedException e) {"
-                        + "          e.printStackTrace();" + "      }" + "    }"
-                        + "    javafx.scene.Node m$r = ((javafx.stage.Stage)com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene().getRoot();"
-                        + "    com.sun.glass.ui.CommonDialogs.FileChooserResult fileChooserResult = (com.sun.glass.ui.CommonDialogs.FileChooserResult) m$r.getProperties().get(\"marathon.play.selectedFiles\");"
-                        + "    return fileChooserResult;" + "  }" + "}";
-                showFileChooser.insertBefore(code);
-                CtMethod showFolderChooser = cl.getDeclaredMethod("showFolderChooser");
-                code = "{" + "  if(System.getProperty(\"marathon.mode\").equals(\"playing\")) {"
-                        + "    synchronized (javafx.stage.DirectoryChooser.class) {" + "      try {"
-                        + "          javafx.stage.DirectoryChooser.class.wait(5000L);" + "      } catch (InterruptedException e) {"
-                        + "          e.printStackTrace();" + "      }" + "    }"
-                        + "    javafx.scene.Node m$r = ((javafx.stage.Stage)com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene().getRoot();"
-                        + "    java.io.File folder = (java.io.File) m$r.getProperties().get(\"marathon.play.selectedFolder\");"
-                        + "    return folder;" + "  }" + "}";
-                showFolderChooser.insertBefore(code);
+            if (cl.getName().equals("javafx.stage.FileChooser")) {
+                // @formatter:off"
+                String codeSingle =
+                        "    {" +
+                        "        if (\"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
+                        "            synchronized(javafx.stage.FileChooser.class) {" +
+                        "                try {" +
+                        "                    javafx.stage.FileChooser.class.wait(5000L);" +
+                        "                } catch (InterruptedException e) {" +
+                        "                    e.printStackTrace();" +
+                        "                }" +
+                        "            }" +
+                        JavaCompatibility.getRootAccessCode() +
+                        "            java.util.List files = (java.util.List) m$r.getProperties().get(\"marathon.play.selectedFiles\");" +
+                        "            return files.size() > 0 ? (java.io.File) files.get(0) : null;" +
+                        "        }" +
+                        "    }" +
+                        "";
+                // @formatter:on
+                CtMethod showOpenDialog = cl.getDeclaredMethod("showOpenDialog");
+                showOpenDialog.insertBefore(codeSingle);
+                CtMethod showSaveDialog = cl.getDeclaredMethod("showSaveDialog");
+                showSaveDialog.insertBefore(codeSingle);
+                // @formatter:off"
+                String codeMultiple =
+                        "    {" +
+                        "        if (\"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
+                        "            synchronized(javafx.stage.FileChooser.class) {" +
+                        "                try {" +
+                        "                    javafx.stage.FileChooser.class.wait(5000L);" +
+                        "                } catch (InterruptedException e) {" +
+                        "                    e.printStackTrace();" +
+                        "                }" +
+                        "            }" +
+                        JavaCompatibility.getRootAccessCode() +
+                        "            java.util.List files = (java.util.List) m$r.getProperties().get(\"marathon.play.selectedFiles\");" +
+                        "            return files.size() > 0 ? files : null;" +
+                        "        }" +
+                        "    }" +
+                        "";
+                // @formatter:on
+                CtMethod showOpenMultipleDialog = cl.getDeclaredMethod("showOpenMultipleDialog");
+                showOpenMultipleDialog.insertBefore(codeMultiple);
+            } else if (cl.getName().equals("javafx.stage.DirectoryChooser")) {
+                // @formatter:off"
+                String codeSingle =
+                        "    {" +
+                        "        if (\"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
+                        "            synchronized(javafx.stage.DirectoryChooser.class) {" +
+                        "                try {" +
+                        "                    javafx.stage.DirectoryChooser.class.wait(5000L);" +
+                        "                } catch (InterruptedException e) {" +
+                        "                    e.printStackTrace();" +
+                        "                }" +
+                        "            }" +
+                        JavaCompatibility.getRootAccessCode() +
+                        "            return (java.io.File) m$r.getProperties().get(\"marathon.play.selectedFolder\");" +
+                        "        }" +
+                        "    }" +
+                        "";
+                // @formatter:on
+                CtMethod showDialog = cl.getDeclaredMethod("showDialog");
+                showDialog.insertBefore(codeSingle);
             }
             b = cl.toBytecode();
         } catch (Exception e) {
@@ -67,4 +112,24 @@ public class FileChooserTransformer implements ClassFileTransformer {
         }
         return b;
     }
+
+    /*
+    java.io.File f()
+    // @formatter:off
+    {
+        if ("playing".equals(System.getProperty("marathon.mode"))) {
+            synchronized(javafx.stage.FileChooser.class) {
+                try {
+                    javafx.stage.FileChooser.class.wait(5000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            javafx.scene.Node m$r = net.sourceforge.marathon.compat.JavaCompatibility.getStages().get(0).getScene().getRoot();
+            java.util.List files = m$r.getProperties().get("marathon.selected.files");
+            return files.get(0);
+        }
+    }
+    // @formatter:on
+     */
 }

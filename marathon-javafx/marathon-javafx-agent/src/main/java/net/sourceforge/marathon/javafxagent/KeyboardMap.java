@@ -20,8 +20,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javafx.scene.input.KeyCode;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 
-@SuppressWarnings("deprecation") public class KeyboardMap {
+public class KeyboardMap {
 
     public static final Logger LOGGER = Logger.getLogger(KeyboardMap.class.getName());
 
@@ -44,14 +45,14 @@ import javafx.scene.input.KeyCode;
     static {
         keyMap = new HashMap<Character, KeyboardMap.KeyboardMapEntry>();
         for (char c = 'a'; c <= 'z'; c++) {
-            keyMap.put(c, new KeyboardMapEntry(0, c, KeyCode.A.impl_getCode() + c - 'a'));
-            keyMap.put(Character.toUpperCase(c), new KeyboardMapEntry(KeyCode.SHIFT.impl_getCode(), Character.toUpperCase(c),
-                    KeyCode.A.impl_getCode() + c - 'a'));
+            keyMap.put(c, new KeyboardMapEntry(0, c, JavaCompatibility.getCode(KeyCode.A) + c - 'a'));
+            keyMap.put(Character.toUpperCase(c), new KeyboardMapEntry(JavaCompatibility.getCode(KeyCode.SHIFT), Character.toUpperCase(c),
+                    JavaCompatibility.getCode(KeyCode.A) + c - 'a'));
         }
         for (char c = '0'; c < '9'; c++) {
-            keyMap.put(c, new KeyboardMapEntry(0, c, KeyCode.DIGIT0.impl_getCode() + c - '0'));
+            keyMap.put(c, new KeyboardMapEntry(0, c, JavaCompatibility.getCode(KeyCode.DIGIT0) + c - '0'));
         }
-        keyMap.put('\n', new KeyboardMapEntry(0, '\n', KeyCode.ENTER.impl_getCode()));
+        keyMap.put('\n', new KeyboardMapEntry(0, '\n', JavaCompatibility.getCode(KeyCode.ENTER)));
     }
 
     public KeyboardMap(char c) {
@@ -77,7 +78,7 @@ import javafx.scene.input.KeyCode;
     public int getKeyCode() {
         KeyboardMapEntry entry = keyMap.get(c);
         if (entry == null) {
-            return KeyCode.UNDEFINED.impl_getCode();
+            return JavaCompatibility.getCode(KeyCode.UNDEFINED);
         }
         return entry.keyCode;
     }
