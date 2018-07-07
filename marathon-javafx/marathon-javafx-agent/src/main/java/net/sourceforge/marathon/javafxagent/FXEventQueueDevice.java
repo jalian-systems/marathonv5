@@ -34,6 +34,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.PickResult;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 
 public class FXEventQueueDevice implements IDevice {
 
@@ -102,19 +103,19 @@ public class FXEventQueueDevice implements IDevice {
             }
         }
 
-        @SuppressWarnings("deprecation") public int getModifierEx() {
+        public int getModifierEx() {
             int modifiersEx = 0;
             if (shiftPressed) {
-                modifiersEx |= KeyCode.SHIFT.impl_getCode();
+                modifiersEx |= JavaCompatibility.getCode(KeyCode.SHIFT);
             }
             if (ctrlPressed) {
-                modifiersEx |= KeyCode.CONTROL.impl_getCode();
+                modifiersEx |= JavaCompatibility.getCode(KeyCode.CONTROL);
             }
             if (altPressed) {
-                modifiersEx |= KeyCode.ALT.impl_getCode();
+                modifiersEx |= JavaCompatibility.getCode(KeyCode.ALT);
             }
             if (metaPressed) {
-                modifiersEx |= KeyCode.META.impl_getCode();
+                modifiersEx |= JavaCompatibility.getCode(KeyCode.META);
             }
             return modifiersEx;
         }
@@ -251,7 +252,7 @@ public class FXEventQueueDevice implements IDevice {
         }
     }
 
-    @SuppressWarnings("deprecation") private void dispatchKeyEvent(final Node node, JavaAgentKeys keyToPress,
+    private void dispatchKeyEvent(final Node node, JavaAgentKeys keyToPress,
             EventType<KeyEvent> eventType, char c) {
         ensureVisible(node);
         if (keyToPress == null) {
@@ -277,7 +278,7 @@ public class FXEventQueueDevice implements IDevice {
             return;
         }
         deviceState.toggleKeyState(keyToPress);
-        dispatchEvent(new KeyEvent(eventType, KeyCode.UNDEFINED.impl_getChar(), KeyCode.UNDEFINED.impl_getChar(), keysMap.getCode(),
+        dispatchEvent(new KeyEvent(eventType, JavaCompatibility.getChar(KeyCode.UNDEFINED), JavaCompatibility.getChar(KeyCode.UNDEFINED), keysMap.getCode(),
                 deviceState.isShiftPressed(), deviceState.isCtrlPressed(), deviceState.isAltPressed(), deviceState.isMetaPressed()),
                 node);
     }

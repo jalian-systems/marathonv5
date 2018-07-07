@@ -78,7 +78,7 @@ public class ScriptExecutor {
                     new Runnable() {
                         @Override public void run() {
                             try {
-                                declaredMethod.invoke(helloClazz.newInstance(), newArgs);
+                                declaredMethod.invoke(helloClazz.getConstructor().newInstance(), newArgs);
                             } catch (Exception e) {
                                 result = e;
                             }

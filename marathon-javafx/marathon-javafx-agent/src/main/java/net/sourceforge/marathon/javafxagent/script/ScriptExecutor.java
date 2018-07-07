@@ -76,7 +76,7 @@ public class ScriptExecutor {
                     new Runnable() {
                         @Override public void run() {
                             try {
-                                declaredMethod.invoke(helloClazz.newInstance(), newArgs);
+                                declaredMethod.invoke(helloClazz.getConstructor().newInstance(), newArgs);
                             } catch (Exception e) {
                                 result = e;
                             }
@@ -99,7 +99,7 @@ public class ScriptExecutor {
         return EventQueueWait.exec(new Callable<Object>() {
             @Override public Object call() throws Exception {
                 try {
-                    return declaredMethod.invoke(helloClazz.newInstance(), args);
+                    return declaredMethod.invoke(helloClazz.getConstructor().newInstance(), args);
                 } catch (Exception e) {
                     return e;
                 }

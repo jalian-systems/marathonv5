@@ -25,9 +25,8 @@ import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 
-import com.sun.javafx.scene.control.skin.TabPaneSkin;
-
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -84,7 +83,7 @@ public class JavaFXTabPaneElement extends JavaFXElement {
             String current = getTextForTab(tp, tabs.get(index));
             if (tab.equals(current)) {
                 if (isCloseTab) {
-                    ((TabPaneSkin) tp.getSkin()).getBehavior().closeTab(tabs.get(index));
+                    closeTab(tabs.get(index));
                     return true;
                 }
                 tp.getSelectionModel().select(index);
@@ -92,6 +91,13 @@ public class JavaFXTabPaneElement extends JavaFXElement {
             }
         }
         return false;
+    }
+
+    private void closeTab(Tab tab) {
+        if(tab.getOnClosed() != null) {
+            tab.getOnClosed().handle(new Event(Tab.CLOSED_EVENT));
+        }
+        tab.getTabPane().getTabs().remove(tab);
     }
 
     @Override public String _getText() {

@@ -62,7 +62,7 @@ public final class FileChooserSample extends Application {
 
         final FileChooser fileChooser = new FileChooser();
         final DirectoryChooser dirChooser = new DirectoryChooser();
-        
+
         final Button openButton = new Button("Open a File...");
         final Button openMultipleButton = new Button("Open Files...");
         final Button saveButton = new Button("Save a File...");
@@ -70,9 +70,7 @@ public final class FileChooserSample extends Application {
 
         openButton.setOnAction((final ActionEvent e) -> {
             File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-                openFile(Arrays.asList(file));
-            }
+            openFile(file == null ? null : Arrays.asList(file));
         });
 
         openMultipleButton.setOnAction((final ActionEvent e) -> {
@@ -81,18 +79,15 @@ public final class FileChooserSample extends Application {
         });
 
         saveButton.setOnAction((final ActionEvent e) -> {
-            File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-                openFile(Arrays.asList(file));
-            }
+            File file = fileChooser.showSaveDialog(stage);
+            openFile(file == null ? null : Arrays.asList(file));
         });
 
         openFolderButton.setOnAction((final ActionEvent e) -> {
             File file = dirChooser.showDialog(stage);
-            if(file != null)
-                openFile(Arrays.asList(file));
+            openFile(file == null ? null : Arrays.asList(file));
         });
-        
+
         final GridPane inputGridPane = new GridPane();
 
         GridPane.setConstraints(openButton, 0, 1);
@@ -117,8 +112,13 @@ public final class FileChooserSample extends Application {
 
     private void openFile(List<File> list) {
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Selected file/folder");
-        alert.setContentText(list.toString());
+        if (list != null) {
+            alert.setTitle("Selected file/folder");
+            alert.setContentText(list.toString());
+        } else {
+            alert.setTitle("No file/folder selected");
+            alert.setContentText("NO FILES");
+        }
         alert.showAndWait();
     }
 }
