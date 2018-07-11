@@ -32,14 +32,17 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 
-@Test public class JSliderJavaElementTest {
+@Test
+public class JSliderJavaElementTest {
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         JavaElementFactory.add(JSlider.class, JSliderJavaElement.class);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JSliderJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JSliderJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new SliderDemo(), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -66,7 +71,8 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
         AssertJUnit.assertEquals("10", slider.getAttribute("value"));
     }
 
-    @Test(expectedExceptions = NumberFormatException.class) public void illegalArgumentException() {
+    @Test(expectedExceptions = NumberFormatException.class)
+    public void illegalArgumentException() {
         IJavaElement slider = driver.findElementByTagName("slider");
         marathon_select(slider, "ten");
         AssertJUnit.assertEquals("", slider.getAttribute("value"));

@@ -32,7 +32,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXComboBoxTest extends RFXComponentTest {
 
-    @Test public void getDefaultSelection() {
+    @Test
+    public void getDefaultSelection() {
         ComboBox<?> comboBox = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -46,7 +47,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Option 1", recording.getParameters()[0]);
     }
 
-    @Test public void selectOption() {
+    @Test
+    public void selectOption() {
         ComboBox<?> comboBox = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -60,7 +62,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Option 2", recording.getParameters()[0]);
     }
 
-    @Test public void selectOptionWithQuotes() {
+    @Test
+    public void selectOptionWithQuotes() {
         @SuppressWarnings("unchecked")
         ComboBox<String> comboBox = (ComboBox<String>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -76,7 +79,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals(" \"Option 13\" ", recording.getParameters()[0]);
     }
 
-    @Test public void htmlOptionSelect() {
+    @Test
+    public void htmlOptionSelect() {
         @SuppressWarnings("unchecked")
         ComboBox<String> comboBox = (ComboBox<String>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -94,7 +98,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals(text, recording.getParameters()[0]);
     }
 
-    @Test public void selectDuplicateOption() {
+    @Test
+    public void selectDuplicateOption() {
         @SuppressWarnings("unchecked")
         ComboBox<String> comboBox = (ComboBox<String>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -120,7 +125,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Option 2(1)", recording.getParameters()[0]);
     }
 
-    @Test public void selectMultipleDuplicateOption() {
+    @Test
+    public void selectMultipleDuplicateOption() {
         @SuppressWarnings("unchecked")
         ComboBox<String> comboBox = (ComboBox<String>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -147,7 +153,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Option 2(2)", recording.getParameters()[0]);
     }
 
-    @Test public void selectEditorFromOption() {
+    @Test
+    public void selectEditorFromOption() {
         Set<Node> comboBoxNodes = getPrimaryStage().getScene().getRoot().lookupAll(".combo-box");
         List<Node> boxes = new ArrayList<>(comboBoxNodes);
         ComboBox<?> comboBox = (ComboBox<?>) boxes.get(1);
@@ -164,7 +171,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Opt", recording.getParameters()[0]);
     }
 
-    @Test public void selectEditorOption() {
+    @Test
+    public void selectEditorOption() {
         Set<Node> comboBoxNodes = getPrimaryStage().getScene().getRoot().lookupAll(".combo-box");
         List<Node> boxes = new ArrayList<>(comboBoxNodes);
         ComboBox<?> comboBox = (ComboBox<?>) boxes.get(1);
@@ -180,7 +188,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Option 2", recording.getParameters()[0]);
     }
 
-    @Test public void selectEditorEmptyTextOption() {
+    @Test
+    public void selectEditorEmptyTextOption() {
         Set<Node> comboBoxNodes = getPrimaryStage().getScene().getRoot().lookupAll(".combo-box");
         List<Node> boxes = new ArrayList<>(comboBoxNodes);
         ComboBox<?> comboBox = (ComboBox<?>) boxes.get(1);
@@ -196,7 +205,8 @@ public class RFXComboBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         ComboBox<?> comboBox = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -207,14 +217,16 @@ public class RFXComboBoxTest extends RFXComponentTest {
             text.add(rfxComboBoxBase._getText());
         });
         new Wait("Waiting for combo box text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Option 2", text.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ComboBoxSample();
     }
 }

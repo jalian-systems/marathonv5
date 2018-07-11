@@ -46,7 +46,7 @@ import javafx.stage.Stage;
 public class RadioButtonSample extends Application {
 
     final ImageView icon = new ImageView();
-    
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -72,20 +72,14 @@ public class RadioButtonSample extends Application {
         rb3.setToggleGroup(group);
         rb3.setUserData("Contacts");
 
-        group.selectedToggleProperty().addListener(
-            (ObservableValue<? extends Toggle> ov, Toggle old_toggle, 
-            Toggle new_toggle) -> {
-                if (group.getSelectedToggle() != null) {
-                    final Image image = new Image(
-                        getClass().getResourceAsStream(
-                        group.getSelectedToggle().getUserData().toString() +
-                        ".jpg"
-                        )
-                        );
+        group.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) -> {
+            if (group.getSelectedToggle() != null) {
+                final Image image = new Image(
+                        getClass().getResourceAsStream(group.getSelectedToggle().getUserData().toString() + ".jpg"));
                 icon.setImage(image);
             }
         });
-        
+
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
@@ -101,6 +95,6 @@ public class RadioButtonSample extends Application {
 
         ((Group) scene.getRoot()).getChildren().add(hbox);
         stage.setScene(scene);
-        stage.show(); 
+        stage.show();
     }
 }

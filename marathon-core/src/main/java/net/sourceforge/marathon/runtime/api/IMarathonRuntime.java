@@ -100,8 +100,8 @@ public interface IMarathonRuntime {
 
     void releaseInterpreters();
 
-	void pauseRecording();
+    void pauseRecording();
 
-	void resumeRecording();
+    void resumeRecording();
 
 }

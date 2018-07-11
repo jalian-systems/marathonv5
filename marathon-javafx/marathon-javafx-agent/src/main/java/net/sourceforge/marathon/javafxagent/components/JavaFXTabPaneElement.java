@@ -45,7 +45,8 @@ public class JavaFXTabPaneElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("nth-tab")) {
             int tabIndex = ((Integer) params[0]).intValue() - 1;
             return Arrays.asList(new JavaFXTabPaneTabJavaElement(this, tabIndex));
@@ -63,7 +64,8 @@ public class JavaFXTabPaneElement extends JavaFXElement {
     private int getCount() {
         try {
             return EventQueueWait.exec(new Callable<Integer>() {
-                @Override public Integer call() {
+                @Override
+                public Integer call() {
                     TabPane pane = (TabPane) getComponent();
                     return pane.getTabs().size();
                 }
@@ -73,7 +75,8 @@ public class JavaFXTabPaneElement extends JavaFXElement {
         }
     }
 
-    @Override public boolean marathon_select(String tab) {
+    @Override
+    public boolean marathon_select(String tab) {
         Matcher matcher = CLOSE_PATTERN.matcher(tab);
         boolean isCloseTab = matcher.matches();
         tab = isCloseTab ? matcher.group(1) : tab;
@@ -94,13 +97,14 @@ public class JavaFXTabPaneElement extends JavaFXElement {
     }
 
     private void closeTab(Tab tab) {
-        if(tab.getOnClosed() != null) {
+        if (tab.getOnClosed() != null) {
             tab.getOnClosed().handle(new Event(Tab.CLOSED_EVENT));
         }
         tab.getTabPane().getTabs().remove(tab);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getTextForTab((TabPane) getComponent(), ((TabPane) getComponent()).getSelectionModel().getSelectedItem());
     }
 

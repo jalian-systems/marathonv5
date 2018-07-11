@@ -35,14 +35,16 @@ import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 import net.sourceforge.marathon.runtime.api.Constants;
 
-@Test public class LaunchJavaCommandLineTest extends RecordingTest {
+@Test
+public class LaunchJavaCommandLineTest extends RecordingTest {
 
     private JavaDriver driver;
 
     public LaunchJavaCommandLineTest() {
     }
 
-    @BeforeMethod public void createDriver() {
+    @BeforeMethod
+    public void createDriver() {
         System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, Constants.FRAMEWORK_SWING);
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE);
         File f = findFile();
@@ -53,7 +55,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
         driver = new JavaDriver(profile, caps, caps);
     }
 
-    @AfterMethod public void quitDriver() {
+    @AfterMethod
+    public void quitDriver() {
         driver.quit();
     }
 

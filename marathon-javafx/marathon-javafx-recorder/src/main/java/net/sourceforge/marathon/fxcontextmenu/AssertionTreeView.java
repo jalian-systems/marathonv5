@@ -50,7 +50,8 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
         Object value;
         Object displayValue;
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             if (property == null) {
                 return "root" + " (" + displayValue + ")";
             }
@@ -80,7 +81,8 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
             super(object);
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             String property = getValue().property;
             if (property == null) {
                 return "root";
@@ -92,7 +94,8 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
             super(new AssertionTreeView.PropertyWrapper(object, name));
         }
 
-        @Override public boolean isLeaf() {
+        @Override
+        public boolean isLeaf() {
             return isPrimitive(getValue());
         }
 
@@ -104,7 +107,8 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
                     || object.getClass() == Void.class || object.getClass() == String.class;
         }
 
-        @Override public ObservableList<TreeItem<AssertionTreeView.PropertyWrapper>> getChildren() {
+        @Override
+        public ObservableList<TreeItem<AssertionTreeView.PropertyWrapper>> getChildren() {
             if (done) {
                 return super.getChildren();
             }
@@ -224,7 +228,8 @@ final public class AssertionTreeView extends TreeView<AssertionTreeView.Property
 
         private void sort(List<Method> list) {
             Collections.sort(list, new Comparator<Method>() {
-                @Override public int compare(Method o1, Method o2) {
+                @Override
+                public int compare(Method o1, Method o2) {
                     String name1 = o1.getName();
                     String name2 = o2.getName();
                     if (name1.startsWith("is")) {

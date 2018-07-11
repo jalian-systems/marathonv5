@@ -34,31 +34,36 @@ public class JavaFXTableViewElementTest2 extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement tableView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         tableView = driver.findElementByTagName("table-view");
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             tableView.marathon_select("{\"rows\":[1]}");
             text.add(tableView.getAttribute("text"));
         });
         new Wait("Wating for table text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("{\"rows\":[1]}", text.get(0));
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         String expected = "[[\":checked\",\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\":unchecked\",\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\":checked\",\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\":checked\",\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\":unchecked\",\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
         AssertJUnit.assertEquals(expected, tableView.getAttribute("content"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TableCellFactorySample();
     }
 }

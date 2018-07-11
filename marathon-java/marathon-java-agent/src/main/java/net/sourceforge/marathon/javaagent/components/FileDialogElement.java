@@ -25,7 +25,8 @@ public class FileDialogElement extends AbstractJavaElement {
         this.dialog = dialog;
     }
 
-    @Override public void sendKeys(CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(CharSequence... keysToSend) {
         FileDialog fileDialog = (FileDialog) dialog.getWindow();
         String filePath = (String) keysToSend[0];
         String setPath = "";

@@ -78,7 +78,8 @@ public class ScriptConsole extends Stage implements IStdOut {
         root.setBottom(new HBox(textFlow, textField));
         setScene(new Scene(root, 640, 480));
         textAreaReadline = new TextAreaReadline(textField, textArea, "Marathon Script Console \n\n") {
-            @Override public void handle(KeyEvent event) {
+            @Override
+            public void handle(KeyEvent event) {
                 if (event.getEventType() == KeyEvent.KEY_PRESSED && event.getCode() == KeyCode.ESCAPE) {
                     textAreaReadline.shutdown();
                     if (spooler != null) {
@@ -109,7 +110,8 @@ public class ScriptConsole extends Stage implements IStdOut {
         } catch (IOException e1) {
         }
         Thread t2 = new Thread() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 String line = null;
                 while ((line = textAreaReadline.readLine(">> ")) != null) {
                     line = line.trim();
@@ -145,11 +147,13 @@ public class ScriptConsole extends Stage implements IStdOut {
         t2.start();
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return textField.getText();
     }
 
-    @Override public void append(String text, int type) {
+    @Override
+    public void append(String text, int type) {
         addInfo(text, type);
         if (text.contains("\n")) {
             List<TextNodeInfo> writeNow = textNodes;
@@ -196,7 +200,8 @@ public class ScriptConsole extends Stage implements IStdOut {
         return type == IStdOut.SCRIPT_ERR || type == IStdOut.STD_ERR;
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
         textField.setText("");
     }
 
@@ -222,12 +227,14 @@ public class ScriptConsole extends Stage implements IStdOut {
         oldOut.flush();
         oldErr.flush();
         System.setErr(new PrintStream(new OutputStream() {
-            @Override public void write(int b) throws IOException {
+            @Override
+            public void write(int b) throws IOException {
                 append((byte) b, IStdOut.STD_ERR);
             }
         }));
         System.setOut(new PrintStream(new OutputStream() {
-            @Override public void write(int b) throws IOException {
+            @Override
+            public void write(int b) throws IOException {
                 append((byte) b, IStdOut.STD_OUT);
             }
         }));
@@ -273,7 +280,8 @@ public class ScriptConsole extends Stage implements IStdOut {
 
     public static class Main extends Application {
 
-        @Override public void start(Stage primaryStage) throws Exception {
+        @Override
+        public void start(Stage primaryStage) throws Exception {
             ScriptConsole scriptConsole = new ScriptConsole(null, null);
             scriptConsole.show();
         }

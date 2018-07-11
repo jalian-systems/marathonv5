@@ -113,7 +113,8 @@ public class TableViewSample extends Application {
         launch(args);
     }
 
-    @Override public void start(Stage stage) {
+    @Override
+    public void start(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Table View Sample");
         stage.setWidth(450);
@@ -176,7 +177,7 @@ public class TableViewSample extends Application {
             for (int i = 0; i < nrows; i++) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Row(" + i + "): ");
-                for(int j = 0; j < 3; j++) {
+                for (int j = 0; j < 3; j++) {
                     TableCell cell = getTableCell(table, i, j);
                     sb.append(cell.getText()).append(", ");
                 }

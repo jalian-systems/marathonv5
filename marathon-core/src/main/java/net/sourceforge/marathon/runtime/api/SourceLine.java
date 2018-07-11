@@ -33,7 +33,8 @@ public class SourceLine implements Serializable {
         this.lineNumber = lineNumber;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return fileName + ":" + functionName + ":" + lineNumber;
     }
 }

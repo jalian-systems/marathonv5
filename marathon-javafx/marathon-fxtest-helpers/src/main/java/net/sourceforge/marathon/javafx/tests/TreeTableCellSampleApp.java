@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 
 public class TreeTableCellSampleApp extends Application {
 
-    @Override public void start(Stage primaryStage) {
+    @Override
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("TreeTable View Cell Sample");
         primaryStage.setScene(new Scene(new TreeTableSample()));
         primaryStage.sizeToScene();

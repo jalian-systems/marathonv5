@@ -52,7 +52,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         this.fileSelectionInfo = fileSelectionInfo;
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox root = new VBox();
         root.setId("FileSelectionStage");
         root.getStyleClass().add("file-selection");
@@ -60,7 +61,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         return root;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
@@ -132,7 +134,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         return new Label(labelText);
     }
 
-    @Override public void filesSelected(List<File> selectedFiles, Object cookie) {
+    @Override
+    public void filesSelected(List<File> selectedFiles, Object cookie) {
         if (selectedFiles != null && selectedFiles.size() != 0) {
             StringBuffer fileList = new StringBuffer();
             for (int i = 0; i < selectedFiles.size() - 1; i++) {
@@ -149,7 +152,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         this.fileSelectionInfoHandler = fileSelectionInfoHandler;
         if (!Platform.isFxApplicationThread()) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     stage.show();
                 }
             });
@@ -158,7 +162,8 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
         }
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 

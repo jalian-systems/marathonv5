@@ -40,7 +40,8 @@ public abstract class Resource extends TreeItem<Resource> {
         setValue(this);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 

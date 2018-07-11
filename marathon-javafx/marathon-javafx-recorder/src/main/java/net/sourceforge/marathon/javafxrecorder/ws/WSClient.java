@@ -35,18 +35,22 @@ public class WSClient extends WebSocketClient {
         connect();
     }
 
-    @Override public void onOpen(ServerHandshake handshakedata) {
+    @Override
+    public void onOpen(ServerHandshake handshakedata) {
         recorder.onOpen();
     }
 
-    @Override public void onMessage(String message) {
+    @Override
+    public void onMessage(String message) {
         recorder.onMessage(message);
     }
 
-    @Override public void onClose(int code, String reason, boolean remote) {
+    @Override
+    public void onClose(int code, String reason, boolean remote) {
     }
 
-    @Override public void onError(Exception ex) {
+    @Override
+    public void onError(Exception ex) {
     }
 
     public void post(String method, String data) {

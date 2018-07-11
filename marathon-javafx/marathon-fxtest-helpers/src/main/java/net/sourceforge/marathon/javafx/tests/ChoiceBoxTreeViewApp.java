@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class ChoiceBoxTreeViewApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Choice Box TreeView");
         primaryStage.setScene(new Scene(new ChoiceBoxTreeViewSample()));
         primaryStage.sizeToScene();

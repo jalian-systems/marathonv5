@@ -32,15 +32,18 @@ public class RUnknownComponent extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
         handleRawRecording(recorder, me);
     }
 
-    @Override protected void keyPressed(KeyEvent ke) {
+    @Override
+    protected void keyPressed(KeyEvent ke) {
         handleRawRecording(recorder, ke);
     }
 
-    @Override protected void keyTyped(KeyEvent ke) {
+    @Override
+    protected void keyTyped(KeyEvent ke) {
         handleRawRecording(recorder, ke);
     }
 }

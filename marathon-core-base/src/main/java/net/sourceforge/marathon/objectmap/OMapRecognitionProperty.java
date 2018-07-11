@@ -57,7 +57,8 @@ public class OMapRecognitionProperty implements Serializable {
         return pa.isMatched(method, name, value);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "[" + name + ", " + value + ", " + method + "]";
     }
 

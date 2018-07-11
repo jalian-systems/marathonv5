@@ -118,7 +118,8 @@ public class JavaFXElementFactory {
             this.javaElementKlass = javaElementKlass;
         }
 
-        @Override public Class<? extends IJavaFXElement> get(Node component) {
+        @Override
+        public Class<? extends IJavaFXElement> get(Node component) {
             if (componentKlass.isInstance(component)) {
                 return javaElementKlass;
             }

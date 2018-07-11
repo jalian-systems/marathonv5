@@ -93,7 +93,8 @@ public class JavaElementPropertyAccessor {
 
     public String getAttribute(final String name, final boolean skipSelf) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return _getAttribute(name, skipSelf);
             }
         });
@@ -304,7 +305,8 @@ public class JavaElementPropertyAccessor {
      */
     public String getText() {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return _getText();
             }
         });
@@ -494,7 +496,8 @@ public class JavaElementPropertyAccessor {
             }
         }
         Collections.sort(rowLeft, new Comparator<Component>() {
-            @Override public int compare(Component o1, Component o2) {
+            @Override
+            public int compare(Component o1, Component o2) {
                 Point locO1 = o1.getLocationOnScreen();
                 Point locO2 = o2.getLocationOnScreen();
                 return (int) (locO1.getX() - locO2.getX());
@@ -836,14 +839,16 @@ public class JavaElementPropertyAccessor {
         return true;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (component == null ? 0 : component.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -885,7 +890,8 @@ public class JavaElementPropertyAccessor {
 
         public static void init() {
             Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-                @Override public void eventDispatched(AWTEvent event) {
+                @Override
+                public void eventDispatched(AWTEvent event) {
                     if (event.getSource() instanceof JInternalFrame) {
                         if (event.getID() == ComponentEvent.COMPONENT_SHOWN) {
                             InternalFrameMonitor.frames.add((JInternalFrame) event.getSource());

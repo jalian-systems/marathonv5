@@ -35,7 +35,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 import net.sourceforge.marathon.runtime.api.Constants;
 
-@Test public class LaunchAppletTest extends RecordingTest {
+@Test
+public class LaunchAppletTest extends RecordingTest {
 
     private JavaDriver driver;
 
@@ -52,7 +53,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
         driver = new JavaDriver(profile);
     }
 
-    @AfterMethod public void quitDriver() {
+    @AfterMethod
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();
         }
@@ -75,7 +77,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
         createDriver("Applet Viewer: SwingSet3Init.class");
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
         new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }

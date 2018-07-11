@@ -25,7 +25,8 @@ public abstract class AbstractDebugger implements IDebugger {
     private String returnValue = null;
     private Object commandLock = new Object();
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
         while (true) {
             synchronized (this) {
                 try {
@@ -49,13 +50,15 @@ public abstract class AbstractDebugger implements IDebugger {
         }
     }
 
-    @Override public void resume() {
+    @Override
+    public void resume() {
         synchronized (this) {
             this.notifyAll();
         }
     }
 
-    @Override public String evaluateScriptWhenPaused(String script) {
+    @Override
+    public String evaluateScriptWhenPaused(String script) {
         commandToExecute = script;
         returnValue = "";
         synchronized (commandLock) {

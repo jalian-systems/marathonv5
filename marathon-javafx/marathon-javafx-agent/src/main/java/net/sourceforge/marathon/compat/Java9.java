@@ -21,7 +21,9 @@ public class Java9 {
             super(source);
         }
 
-        @SuppressWarnings("unchecked") @Override protected void sourceChanged(Change<? extends F> c) {
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void sourceChanged(Change<? extends F> c) {
             beginChange();
             while (c.next()) {
                 if (c.wasPermutated()) {
@@ -48,7 +50,8 @@ public class Java9 {
             endChange();
         }
 
-        @Override public int getSourceIndex(int index) {
+        @Override
+        public int getSourceIndex(int index) {
             return index;
         }
 
@@ -56,11 +59,14 @@ public class Java9 {
             return index;
         }
 
-        @SuppressWarnings("unchecked") @Override public E get(int index) {
+        @SuppressWarnings("unchecked")
+        @Override
+        public E get(int index) {
             return (E) getSource().get(index);
         }
 
-        @Override public int size() {
+        @Override
+        public int size() {
             return getSource().size();
         }
 
@@ -70,13 +76,14 @@ public class Java9 {
     private static CastedList<Stage, Window> stages;
 
     public static ObservableList<Stage> getStages() {
-        if(stages != null)
+        if (stages != null)
             return stages;
         stages = new CastedList<Stage, Window>(new FilteredList<>(getWindows_internal(), w -> w instanceof Stage));
         return stages;
     }
 
-    @SuppressWarnings("unchecked") private static ObservableList<Window> getWindows_internal() {
+    @SuppressWarnings("unchecked")
+    private static ObservableList<Window> getWindows_internal() {
         if (windows != null)
             return windows;
         try {

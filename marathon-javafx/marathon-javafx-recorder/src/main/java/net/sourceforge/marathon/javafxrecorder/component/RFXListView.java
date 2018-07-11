@@ -40,7 +40,8 @@ public class RFXListView extends RFXComponent {
         cellInfo = getListSelectionText((ListView<?>) node, index);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         listSelectionText = getListSelectionText((ListView<?>) node);
         cellValue = getListCellValue((ListView<?>) node, index);
         cellInfo = getListSelectionText((ListView<?>) node, index);
@@ -55,7 +56,8 @@ public class RFXListView extends RFXComponent {
         return cellComponent == null ? null : cellComponent.getValue();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         ListView<?> listView = (ListView<?>) node;
         String currentCellValue = getListCellValue(listView, index);
         if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
@@ -70,27 +72,32 @@ public class RFXListView extends RFXComponent {
         }
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
             return;
         recorder.recordClick2(this, me, true);
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         return cellInfo;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + index;
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -107,7 +114,8 @@ public class RFXListView extends RFXComponent {
         return true;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         if (index != -1) {
             return getListSelectionText((ListView<?>) node, index);
         }

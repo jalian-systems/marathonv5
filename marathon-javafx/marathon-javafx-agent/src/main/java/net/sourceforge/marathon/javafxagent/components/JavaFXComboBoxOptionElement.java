@@ -39,21 +39,25 @@ public class JavaFXComboBoxOptionElement extends JavaFXElement implements IPseud
         this.option = option;
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "nth-option").put("parameters",
                 new JSONArray().put(new JSONObject().put("select", option + 1).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public Node getPseudoComponent() {
+    @Override
+    public Node getPseudoComponent() {
         return null;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getComboBoxText((ComboBox<?>) getComponent(), option, true);
     }
 }

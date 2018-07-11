@@ -29,47 +29,57 @@ public class JavaFXBrowserViewItem extends JavaFXElement implements IPseudoEleme
         this.frameId = frameId;
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor"))
             return Arrays.asList(this);
         return super.getByPseudoElement(selector, params);
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters",
                 new JSONArray().put(new JSONObject().put("select", frameId + ":" + selector).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         return parent.select(selector, value, frameId);
     }
 
-    @Override public Node getPseudoComponent() {
+    @Override
+    public Node getPseudoComponent() {
         return null;
     }
 
-    @Override public void click() {
+    @Override
+    public void click() {
         parent.click(selector, frameId);
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         parent.click(selector, frameId);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return JavaFXBrowserViewElement.getText(getComponent(), selector, frameId);
     }
 
-    @Override protected String _getLabeledBy() {
+    @Override
+    protected String _getLabeledBy() {
         return JavaFXBrowserViewElement.getLabeledBy(getComponent(), selector, frameId);
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         return JavaFXBrowserViewElement.getValue(getComponent(), selector, frameId);
     }
 

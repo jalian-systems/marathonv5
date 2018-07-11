@@ -87,7 +87,8 @@ public class Argument implements Serializable {
         return defaultList;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (defaultValue == null) {
             return name;
         }

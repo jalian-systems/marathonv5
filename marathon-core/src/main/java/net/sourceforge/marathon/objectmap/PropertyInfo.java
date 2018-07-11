@@ -42,7 +42,8 @@ public class PropertyInfo {
             this.property = property;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return property.getName();
         }
     }

@@ -35,38 +35,44 @@ public class JavaFXProgressBarElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement progressBar;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         progressBar = driver.findElementByTagName("progress-bar");
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         ProgressBar progressBarNode = (ProgressBar) getPrimaryStage().getScene().getRoot().lookup(".progress-bar");
         Platform.runLater(() -> {
             progressBar.marathon_select("0.20");
         });
         new Wait("Wating for progress bar progress to be set.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return progressBarNode.getProgress() == 0.2;
             }
         };
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> value = new ArrayList<>();
         Platform.runLater(() -> {
             progressBar.marathon_select("0.20");
             value.add(progressBar.getAttribute("text"));
         });
         new Wait("Wating for progress bar value") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return value.size() > 0;
             }
         };
         AssertJUnit.assertEquals("0.2", value.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ProgressBarSample();
     }
 

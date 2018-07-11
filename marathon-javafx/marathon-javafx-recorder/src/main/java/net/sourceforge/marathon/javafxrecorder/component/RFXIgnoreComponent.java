@@ -31,6 +31,7 @@ public class RFXIgnoreComponent extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void processEvent(Event event) {
+    @Override
+    public void processEvent(Event event) {
     }
 }

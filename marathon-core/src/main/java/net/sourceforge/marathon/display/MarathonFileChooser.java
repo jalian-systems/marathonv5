@@ -116,7 +116,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
         centerPane.getChildren().addAll(separator, form);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane root = new BorderPane();
 
         root.getStyleClass().add("MarathonFileChooser");
@@ -143,7 +144,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
         return root;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
@@ -168,7 +170,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
         MarathonInputStage testNameStage = new MarathonInputStage("Folder name", "Create a new folder",
                 FXUIUtils.getIcon("fldr_closed")) {
 
-            @Override protected String validateInput(String name) {
+            @Override
+            protected String validateInput(String name) {
                 String errorMessage = null;
                 if (name.length() == 0 || name.trim().isEmpty()) {
                     errorMessage = "Enter a valid name";
@@ -176,11 +179,13 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
                 return errorMessage;
             }
 
-            @Override protected String getInputFiledLabelText() {
+            @Override
+            protected String getInputFiledLabelText() {
                 return "Enter a folder name: ";
             }
 
-            @Override protected void setDefaultButton() {
+            @Override
+            protected void setDefaultButton() {
                 okButton.setDefaultButton(true);
             }
         };
@@ -208,7 +213,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     final class FolderNameHandler implements IInputHanler {
         private String folderName;
 
-        @Override public void handleInput(String name) {
+        @Override
+        public void handleInput(String name) {
             this.folderName = name;
         }
 
@@ -222,7 +228,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
             fillUpChildren(fileChooserInfo.getRoot());
         }
         childrenListView.setCellFactory(new Callback<ListView<File>, ListCell<File>>() {
-            @Override public ListCell<File> call(ListView<File> param) {
+            @Override
+            public ListCell<File> call(ListView<File> param) {
                 return new ChildrenFileCell();
             }
         });
@@ -239,7 +246,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
 
     private void initTreeView() {
         parentTreeView.setCellFactory(new Callback<TreeView<File>, TreeCell<File>>() {
-            @Override public TreeCell<File> call(TreeView<File> param) {
+            @Override
+            public TreeCell<File> call(TreeView<File> param) {
                 return new ParentFileCell();
             }
         });
@@ -296,7 +304,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
         dispose();
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         if (fileChooserInfo.isFileCreation()) {
             createButton.setDefaultButton(true);
         } else {
@@ -325,7 +334,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
             });
         }
 
-        @Override protected void updateItem(File item, boolean empty) {
+        @Override
+        protected void updateItem(File item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && !empty) {
                 setText(item.getName());
@@ -338,7 +348,8 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     }
 
     public class ParentFileCell extends TreeCell<File> {
-        @Override protected void updateItem(File item, boolean empty) {
+        @Override
+        protected void updateItem(File item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && !empty) {
                 setText(item.getName());

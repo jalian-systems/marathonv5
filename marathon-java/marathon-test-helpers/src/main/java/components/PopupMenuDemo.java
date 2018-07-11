@@ -249,7 +249,8 @@ public class PopupMenuDemo implements ActionListener, ItemListener {
             }
         });
         Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override
+            public void eventDispatched(AWTEvent event) {
                 if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED) {
                     MenuSelectionManager msm = MenuSelectionManager.defaultManager();
                     MenuElement[] selectedPath = msm.getSelectedPath();

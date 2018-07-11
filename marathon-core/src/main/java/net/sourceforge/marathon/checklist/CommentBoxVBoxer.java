@@ -19,7 +19,8 @@ public class CommentBoxVBoxer extends CheckListItemVBoxer {
         this.item = item;
     }
 
-    @Override protected VBox createVBox(boolean selectable, boolean editable) {
+    @Override
+    protected VBox createVBox(boolean selectable, boolean editable) {
         VBox textAreaBox = new VBox();
         Label label = new Label(item.getLabel());
         textAreaBox.getChildren().addAll(label, createTextArea(selectable, editable));
@@ -48,7 +49,8 @@ public class CommentBoxVBoxer extends CheckListItemVBoxer {
         return scrollPane;
     }
 
-    @Override public CommentBox getItem() {
+    @Override
+    public CommentBox getItem() {
         return item;
     }
 }

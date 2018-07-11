@@ -68,7 +68,8 @@ public abstract class CompositeLayout implements IPropertiesLayout {
             }
         });
         optionBox.setCellFactory(new Callback<ListView<PlugInModelInfo>, ListCell<PlugInModelInfo>>() {
-            @Override public ListCell<PlugInModelInfo> call(ListView<PlugInModelInfo> param) {
+            @Override
+            public ListCell<PlugInModelInfo> call(ListView<PlugInModelInfo> param) {
                 return new LauncherCell();
             }
         });
@@ -80,7 +81,8 @@ public abstract class CompositeLayout implements IPropertiesLayout {
 
     protected abstract String getResourceName();
 
-    @Override public Node getContent() {
+    @Override
+    public Node getContent() {
         VBox content = new VBox();
         content.setId("CompositeLayout");
         content.getStyleClass().add("composite-layout");
@@ -186,7 +188,8 @@ public abstract class CompositeLayout implements IPropertiesLayout {
 
     protected abstract String getOptionFieldName();
 
-    @Override public boolean isValidInput(boolean showAlert) {
+    @Override
+    public boolean isValidInput(boolean showAlert) {
         if (optionBox.getSelectionModel().getSelectedItem() == null) {
             errorMessage();
             Platform.runLater(() -> optionBox.requestFocus());
@@ -200,7 +203,8 @@ public abstract class CompositeLayout implements IPropertiesLayout {
         return true;
     }
 
-    @Override public void getProperties(Properties props) {
+    @Override
+    public void getProperties(Properties props) {
         props.setProperty(getClassProperty(), getClassName());
         for (ISubPropertiesLayout p : layouts) {
             p.getProperties(props);
@@ -209,7 +213,8 @@ public abstract class CompositeLayout implements IPropertiesLayout {
 
     abstract protected String getClassProperty();
 
-    @Override public void setProperties(Properties props) {
+    @Override
+    public void setProperties(Properties props) {
         setPlugInSelection(optionBox, props, getClassProperty());
         updateTabPane();
         for (IPropertiesLayout p : layouts) {
@@ -258,7 +263,8 @@ public abstract class CompositeLayout implements IPropertiesLayout {
     protected abstract void errorMessage();
 
     public class LauncherCell extends ListCell<PlugInModelInfo> {
-        @Override protected void updateItem(PlugInModelInfo item, boolean empty) {
+        @Override
+        protected void updateItem(PlugInModelInfo item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && !empty) {
                 try {

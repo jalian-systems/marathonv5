@@ -35,17 +35,20 @@ public class RuntimeLauncherModel extends AbstractJavaDriverRuntimeLauncherModel
 
     public static final Logger LOGGER = Logger.getLogger(RuntimeLauncherModel.class.getName());
 
-    @Override public List<String> getPropertyKeys() {
+    @Override
+    public List<String> getPropertyKeys() {
         return Arrays.asList(Constants.PROP_APPLICATION_MAINCLASS, Constants.PROP_APPLICATION_ARGUMENTS,
                 Constants.PROP_APPLICATION_VM_ARGUMENTS, Constants.PROP_APPLICATION_JAVA_HOME,
                 Constants.PROP_APPLICATION_WORKING_DIR, Constants.PROP_APPLICATION_PATH);
     }
 
-    @Override public IRuntimeFactory getRuntimeFactory() {
+    @Override
+    public IRuntimeFactory getRuntimeFactory() {
         return new WebDriverRuntimeFactory(this);
     }
 
-    @Override public JavaProfile createProfile(Map<String, Object> props, MarathonMode mode) {
+    @Override
+    public JavaProfile createProfile(Map<String, Object> props, MarathonMode mode) {
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE);
         String javaHome = (String) props.get(Constants.PROP_APPLICATION_JAVA_HOME);
         if (javaHome != null && !javaHome.equals("")) {
@@ -88,11 +91,13 @@ public class RuntimeLauncherModel extends AbstractJavaDriverRuntimeLauncherModel
         return profile;
     }
 
-    @Override public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
+    @Override
+    public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
         return new ISubPropertiesLayout[] { new MainLayout(parent), new ClassPathLayout(parent) };
     }
 
-    @Override public String getLaunchErrorMessage() {
+    @Override
+    public String getLaunchErrorMessage() {
         // @formatter:off
         return
             "Check the class path, main class name";

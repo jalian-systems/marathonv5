@@ -38,7 +38,8 @@ public class JavaFXMenuBarElement extends JavaFXElement {
         super(node, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         MenuBar menuBar = (MenuBar) node;
         ObservableList<Menu> menus = menuBar.getMenus();
         String[] items = value.split("\\>\\>");

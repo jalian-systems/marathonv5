@@ -109,7 +109,8 @@ public abstract class AbstractPreferences {
         list.add(l);
     }
 
-    @SuppressWarnings("unchecked") public <T> T getValue(String section, String property, T defaultValue) {
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String section, String property, T defaultValue) {
         JSONObject oSection = getSection(section);
         Object value = oSection.opt(property);
         if (value == null) {

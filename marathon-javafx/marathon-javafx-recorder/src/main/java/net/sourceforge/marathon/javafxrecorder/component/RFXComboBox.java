@@ -33,11 +33,13 @@ public class RFXComboBox extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         prevSelectedItem = ((ComboBox<?>) node).getSelectionModel().getSelectedItem();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         ComboBox<?> comboBox = (ComboBox<?>) node;
         Object selectedItem = comboBox.getSelectionModel().getSelectedItem();
         if (comboBox.isEditable() && comboBox.getEditor().getText()
@@ -59,7 +61,8 @@ public class RFXComboBox extends RFXComponent {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getComboBoxText((ComboBox<?>) node, ((ComboBox<?>) node).getSelectionModel().getSelectedIndex(), true);
     }
 

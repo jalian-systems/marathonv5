@@ -32,7 +32,8 @@ public class JavaFXTreeCellElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         TreeCell<?> cell = (TreeCell<?>) getComponent();
         Node graphic = cell.getGraphic();
         JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);

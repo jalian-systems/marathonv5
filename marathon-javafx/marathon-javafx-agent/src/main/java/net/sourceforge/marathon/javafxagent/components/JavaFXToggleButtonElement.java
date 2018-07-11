@@ -31,7 +31,8 @@ public class JavaFXToggleButtonElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         boolean selected = Boolean.parseBoolean(value);
         boolean current = ((ToggleButton) node).isSelected();
         if (selected != current) {
@@ -40,7 +41,8 @@ public class JavaFXToggleButtonElement extends JavaFXElement {
         return true;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getToggleText((ToggleButton) getComponent());
     }
 

@@ -227,7 +227,8 @@ public class TestCreator {
             return createTest(file, name);
         }
         File[] fileList = file.listFiles(new FileFilter() {
-            @Override public boolean accept(File file) {
+            @Override
+            public boolean accept(File file) {
                 if (file.isDirectory()) {
                     return !hiddenFPM.isMatch(file);
                 }
@@ -241,15 +242,18 @@ public class TestCreator {
             return null;
         }
         Arrays.sort(fileList, new Comparator<File>() {
-            @Override public boolean equals(Object obj) {
+            @Override
+            public boolean equals(Object obj) {
                 return false;
             }
 
-            @Override public int hashCode() {
+            @Override
+            public int hashCode() {
                 return super.hashCode();
             }
 
-            @Override public int compare(File f1, File f2) {
+            @Override
+            public int compare(File f1, File f2) {
                 if (f1.isDirectory() == f2.isDirectory()) {
                     return f1.getName().compareTo(f2.getName());
                 }
@@ -334,7 +338,8 @@ public class TestCreator {
 
     public Test getAllTestsForGroups(GroupType type) {
         File[] files = type.dir().listFiles(new FileFilter() {
-            @Override public boolean accept(File pathname) {
+            @Override
+            public boolean accept(File pathname) {
                 return pathname.isFile() && pathname.getName().endsWith(type.ext());
             }
         });

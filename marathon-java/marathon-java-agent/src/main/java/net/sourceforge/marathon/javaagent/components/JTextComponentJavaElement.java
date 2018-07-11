@@ -33,7 +33,8 @@ public class JTextComponentJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         JTextComponent tc = (JTextComponent) component;
         tc.requestFocus();
         Boolean clientProperty = (Boolean) tc.getClientProperty("marathon.celleditor");

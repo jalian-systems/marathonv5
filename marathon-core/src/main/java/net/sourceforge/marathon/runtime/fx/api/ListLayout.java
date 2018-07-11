@@ -56,7 +56,8 @@ public abstract class ListLayout implements IPropertiesLayout {
             return classPath;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             String fileName = classPath.getName();
             if (classPath.getParent() != null) {
                 fileName = fileName + " - " + classPath.getParent();
@@ -73,9 +74,11 @@ public abstract class ListLayout implements IPropertiesLayout {
             fileSelectionStage = new FileSelectionStage(fileSelectionInfo);
         }
 
-        @Override public void handle(ActionEvent event) {
+        @Override
+        public void handle(ActionEvent event) {
             fileSelectionStage.setFileSelectionInfoHandler(new IFileSelectionInfoHandler() {
-                @Override public void handleSelectedfiles(FileSelectionInfo fileSelectionInfo) {
+                @Override
+                public void handleSelectedfiles(FileSelectionInfo fileSelectionInfo) {
                     String fileString = fileSelectionInfo.getSelectedFileName();
                     if (fileString == null) {
                         return;
@@ -113,7 +116,8 @@ public abstract class ListLayout implements IPropertiesLayout {
         this.replaceProjectDir = replaceProjectDir;
     }
 
-    @Override public Node getContent() {
+    @Override
+    public Node getContent() {
         HBox hBox = new HBox();
         hBox.setId("ListLayout");
         hBox.getStyleClass().add("path-list");
@@ -133,7 +137,8 @@ public abstract class ListLayout implements IPropertiesLayout {
         return true;
     }
 
-    @Override public void setProperties(Properties props) {
+    @Override
+    public void setProperties(Properties props) {
         String cp = props.getProperty(getPropertyKey(), "");
         if (cp.length() == 0) {
             return;
@@ -150,7 +155,8 @@ public abstract class ListLayout implements IPropertiesLayout {
 
     public abstract String getPropertyKey();
 
-    @Override public void getProperties(Properties props) {
+    @Override
+    public void getProperties(Properties props) {
         props.setProperty(getPropertyKey(), getClassPath(props));
     }
 
@@ -266,7 +272,8 @@ public abstract class ListLayout implements IPropertiesLayout {
 
     public class ClassPathCell extends ListCell<ClassPathElement> {
 
-        @Override protected void updateItem(ClassPathElement item, boolean empty) {
+        @Override
+        protected void updateItem(ClassPathElement item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && !empty) {
                 File file = item.getClassPath();

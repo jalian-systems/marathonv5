@@ -37,16 +37,19 @@ public class RTableHeader extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         index = ((JTableHeader) component).columnAtPoint(me.getPoint());
         recorder.recordClick2(this, me, true);
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         return JTableHeaderItemJavaElement.getText((JTableHeader) component, index);
     }
 
-    @Override public String[][] getContent() {
+    @Override
+    public String[][] getContent() {
         return JTableHeaderJavaElement.getContent((JTableHeader) component);
     }
 }

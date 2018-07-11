@@ -31,17 +31,20 @@ public class JavaFXHTMLEditor extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         HTMLEditor htmlEditor = (HTMLEditor) getComponent();
         htmlEditor.setHtmlText(value);
         return true;
     }
 
-    @Override public String getTagName() {
+    @Override
+    public String getTagName() {
         return "html-editor";
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getHTMLEditorText((HTMLEditor) getComponent());
     }
 }

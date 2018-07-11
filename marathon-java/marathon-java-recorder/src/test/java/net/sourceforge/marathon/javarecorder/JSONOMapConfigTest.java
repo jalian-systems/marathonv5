@@ -34,7 +34,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-@Test public class JSONOMapConfigTest {
+@Test
+public class JSONOMapConfigTest {
     // @formatter:off
     public static final String JSONOMapConfiguration =
             "{" +
@@ -335,11 +336,13 @@ import org.testng.annotations.Test;
 
     private JSONOMapConfig config;
 
-    @BeforeClass public void beforeClass() {
+    @BeforeClass
+    public void beforeClass() {
         config = new JSONOMapConfig(new JSONObject(JSONOMapConfiguration));
     }
 
-    @AfterClass public void afterClass() {
+    @AfterClass
+    public void afterClass() {
     }
 
     public void collectProperties() {
@@ -388,7 +391,8 @@ import org.testng.annotations.Test;
         os.add(createObj(90, JLabel.class));
 
         Collections.sort(os, new Comparator<JSONObject>() {
-            @Override public int compare(JSONObject o1, JSONObject o2) {
+            @Override
+            public int compare(JSONObject o1, JSONObject o2) {
                 int o2prio = o2.getInt("priority");
                 int o1prio = o1.getInt("priority");
                 if (o1prio == o2prio) {

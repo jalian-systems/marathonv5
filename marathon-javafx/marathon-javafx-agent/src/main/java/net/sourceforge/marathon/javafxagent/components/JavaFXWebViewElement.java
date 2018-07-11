@@ -84,7 +84,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
                 loadScript(webview, webEngine);
             }
             webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-                @Override public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
+                @Override
+                public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
                     if (newState == State.SUCCEEDED) {
                         loadScript(webview, webEngine);
                     }
@@ -99,7 +100,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
         webview.getProperties().put("document", webEngine.executeScript("document"));
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("select-by-properties")) {
             try {
                 JSONObject o = new JSONObject((String) params[0]);
@@ -123,7 +125,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
 
     private boolean documentHasSelector(String selector) {
         return EventQueueWait.exec(new Callable<Boolean>() {
-            @Override public Boolean call() throws Exception {
+            @Override
+            public Boolean call() throws Exception {
                 return ((WebView) getComponent()).getEngine().getLoadWorker().stateProperty().get() == State.SUCCEEDED
                         && getComponent().getProperties().containsKey("player")
                         && ((JSObject) getComponent().getProperties().get("document")).call("querySelector", selector) != null;
@@ -134,7 +137,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
     public void click(String selector) {
         EventQueueWait.exec(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 ((JSObject) getComponent().getProperties().get("player")).call("click", selector);
             }
         });
@@ -142,7 +146,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
 
     public boolean select(String selector, String value) {
         return EventQueueWait.exec(new Callable<Boolean>() {
-            @Override public Boolean call() throws Exception {
+            @Override
+            public Boolean call() throws Exception {
                 return (Boolean) ((JSObject) getComponent().getProperties().get("player")).call("select", selector, value);
             }
         });
@@ -150,7 +155,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
 
     public String getText(String selector) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return (String) ((JSObject) getComponent().getProperties().get("player")).call("text", selector);
             }
         });
@@ -158,7 +164,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
 
     public String getLabeledBy(String selector) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return (String) ((JSObject) getComponent().getProperties().get("player")).call("label", selector);
             }
         });
@@ -166,7 +173,8 @@ public class JavaFXWebViewElement extends JavaFXElement {
 
     public String getValue(String selector) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return (String) ((JSObject) getComponent().getProperties().get("player")).call("value", selector);
             }
         });

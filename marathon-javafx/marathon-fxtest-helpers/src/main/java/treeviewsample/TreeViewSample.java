@@ -56,24 +56,15 @@ import javafx.scene.layout.VBox;
 
 public class TreeViewSample extends Application {
 
-    private final Node rootIcon = 
-        new ImageView(new Image(getClass().getResourceAsStream("root.png")));
-    private final Image depIcon = 
-        new Image(getClass().getResourceAsStream("department.png"));
-    List<Employee> employees = Arrays.<Employee>asList(
-            new Employee("Jacob Smith", "Accounts Department"),
-            new Employee("Isabella Johnson", "Accounts Department"),
-            new Employee("Ethan Williams", "Sales Department"),
-            new Employee("Emma Jones", "Sales Department"),
-            new Employee("Michael Brown", "Sales Department"),
-            new Employee("Anna Black", "Sales Department"),
-            new Employee("Rodger York", "Sales Department"),
-            new Employee("Susan Collins", "Sales Department"),
-            new Employee("Mike Graham", "IT Support"),
-            new Employee("Judy Mayer", "IT Support"),
-            new Employee("Gregory Smith", "IT Support"));            
-    TreeItem<String> rootNode = 
-        new TreeItem<>("MyCompany Human Resources", rootIcon);
+    private final Node rootIcon = new ImageView(new Image(getClass().getResourceAsStream("root.png")));
+    private final Image depIcon = new Image(getClass().getResourceAsStream("department.png"));
+    List<Employee> employees = Arrays.<Employee> asList(new Employee("Jacob Smith", "Accounts Department"),
+            new Employee("Isabella Johnson", "Accounts Department"), new Employee("Ethan Williams", "Sales Department"),
+            new Employee("Emma Jones", "Sales Department"), new Employee("Michael Brown", "Sales Department"),
+            new Employee("Anna Black", "Sales Department"), new Employee("Rodger York", "Sales Department"),
+            new Employee("Susan Collins", "Sales Department"), new Employee("Mike Graham", "IT Support"),
+            new Employee("Judy Mayer", "IT Support"), new Employee("Gregory Smith", "IT Support"));
+    TreeItem<String> rootNode = new TreeItem<>("MyCompany Human Resources", rootIcon);
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -86,16 +77,14 @@ public class TreeViewSample extends Application {
             TreeItem<String> empLeaf = new TreeItem<>(employee.getName());
             boolean found = false;
             for (TreeItem<String> depNode : rootNode.getChildren()) {
-                if (depNode.getValue().contentEquals(employee.getDepartment())){
+                if (depNode.getValue().contentEquals(employee.getDepartment())) {
                     depNode.getChildren().add(empLeaf);
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                TreeItem depNode = new TreeItem(employee.getDepartment(), 
-                    new ImageView(depIcon)
-                );
+                TreeItem depNode = new TreeItem(employee.getDepartment(), new ImageView(depIcon));
                 rootNode.getChildren().add(depNode);
                 depNode.getChildren().add(empLeaf);
             }
@@ -109,8 +98,7 @@ public class TreeViewSample extends Application {
         TreeView<String> treeView = new TreeView<>(rootNode);
         treeView.setShowRoot(true);
         treeView.setEditable(true);
-        treeView.setCellFactory((TreeView<String> p) -> 
-            new TextFieldTreeCellImpl());
+        treeView.setCellFactory((TreeView<String> p) -> new TextFieldTreeCellImpl());
 
         box.getChildren().add(treeView);
         stage.setScene(scene);
@@ -126,8 +114,7 @@ public class TreeViewSample extends Application {
             MenuItem addMenuItem = new MenuItem("Add Employee");
             addMenu.getItems().add(addMenuItem);
             addMenuItem.setOnAction((ActionEvent t) -> {
-                TreeItem newEmployee = 
-                        new TreeItem<>("New Employee");
+                TreeItem newEmployee = new TreeItem<>("New Employee");
                 getTreeItem().getChildren().add(newEmployee);
             });
         }
@@ -169,13 +156,13 @@ public class TreeViewSample extends Application {
                 } else {
                     setText(getString());
                     setGraphic(getTreeItem().getGraphic());
-                    if (!getTreeItem().isLeaf()&&getTreeItem().getParent()!= null){                        
+                    if (!getTreeItem().isLeaf() && getTreeItem().getParent() != null) {
                         setContextMenu(addMenu);
                     }
                 }
             }
         }
-        
+
         private void createTextField() {
             textField = new TextField(getString());
             textField.setOnKeyReleased((KeyEvent t) -> {
@@ -184,8 +171,8 @@ public class TreeViewSample extends Application {
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 }
-            });  
-            
+            });
+
         }
 
         private String getString() {

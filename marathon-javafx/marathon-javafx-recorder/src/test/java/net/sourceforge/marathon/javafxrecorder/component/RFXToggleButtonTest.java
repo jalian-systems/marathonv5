@@ -30,15 +30,18 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXToggleButtonTest extends RFXComponentTest {
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new RadioButtons();
     }
 
-    @Test public void selectRadioButtonNotSelected() {
+    @Test
+    public void selectRadioButtonNotSelected() {
         RadioButton radioButton = (RadioButton) getPrimaryStage().getScene().getRoot().lookup(".radio-button");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXToggleButton rfxToggleButton = new RFXToggleButton(radioButton, null, null, lr);
                 radioButton.setSelected(false);
                 rfxToggleButton.mouseEntered(null);
@@ -52,11 +55,13 @@ public class RFXToggleButtonTest extends RFXComponentTest {
         AssertJUnit.assertEquals("true", select.getParameters()[0]);
     }
 
-    @Test public void selectRadioButtonSelected() {
+    @Test
+    public void selectRadioButtonSelected() {
         RadioButton radioButton = (RadioButton) getPrimaryStage().getScene().getRoot().lookup(".radio-button");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXToggleButton rfxToggleButton = new RFXToggleButton(radioButton, null, null, lr);
                 radioButton.setSelected(true);
                 rfxToggleButton.mouseClicked(null);
@@ -68,12 +73,14 @@ public class RFXToggleButtonTest extends RFXComponentTest {
         AssertJUnit.assertEquals("true", select.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         RadioButton radioButton = (RadioButton) getPrimaryStage().getScene().getRoot().lookup(".radio-button");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXToggleButton rfxToggleButton = new RFXToggleButton(radioButton, null, null, lr);
                 radioButton.setSelected(false);
                 rfxToggleButton.mouseEntered(null);
@@ -83,7 +90,8 @@ public class RFXToggleButtonTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for toggle button text") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };

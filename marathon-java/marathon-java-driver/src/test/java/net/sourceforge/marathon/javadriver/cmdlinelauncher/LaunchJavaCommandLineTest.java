@@ -34,14 +34,16 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
-@Test public class LaunchJavaCommandLineTest {
+@Test
+public class LaunchJavaCommandLineTest {
 
     private JavaDriver driver;
 
     public LaunchJavaCommandLineTest() {
     }
 
-    @BeforeClass public void createDriver() {
+    @BeforeClass
+    public void createDriver() {
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE);
         File f = findFile();
         profile.addClassPath(f);
@@ -50,7 +52,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         driver = new JavaDriver(profile, caps, caps);
     }
 
-    @AfterClass public void quitDriver() {
+    @AfterClass
+    public void quitDriver() {
         driver.quit();
     }
 

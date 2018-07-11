@@ -67,12 +67,8 @@ public class SeparatorSample extends Application {
         scene.setRoot(grid);
         scene.getStylesheets().add("separatorsample/controlStyle.css");
 
-        Image cloudImage = new Image(
-            getClass().getResourceAsStream("cloud.jpg")
-        );
-        Image sunImage = new Image(
-            getClass().getResourceAsStream("sun.jpg")
-        );
+        Image cloudImage = new Image(getClass().getResourceAsStream("cloud.jpg"));
+        Image sunImage = new Image(getClass().getResourceAsStream("sun.jpg"));
 
         caption.setFont(Font.font("Verdana", 20));
 
@@ -146,6 +142,7 @@ public class SeparatorSample extends Application {
 
         stage.show();
     }
+
     public static void main(String[] args) {
         launch(args);
     }

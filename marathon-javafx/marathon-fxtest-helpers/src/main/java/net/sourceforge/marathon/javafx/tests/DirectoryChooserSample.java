@@ -53,7 +53,8 @@ public final class DirectoryChooserSample extends Application {
 
     private final Desktop desktop = Desktop.getDesktop();
 
-    @Override public void start(final Stage stage) {
+    @Override
+    public void start(final Stage stage) {
         stage.setTitle("Directory Chooser Sample");
 
         final DirectoryChooser directoryChooser = new DirectoryChooser();

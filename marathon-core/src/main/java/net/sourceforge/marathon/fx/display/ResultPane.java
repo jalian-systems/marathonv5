@@ -79,7 +79,8 @@ public class ResultPane extends Dockable {
         initResultTable();
     }
 
-    @SuppressWarnings("unchecked") private void initResultTable() {
+    @SuppressWarnings("unchecked")
+    private void initResultTable() {
         resultTable.setId("resultTable");
         setLabel();
         TableColumn<Failure, String> messageColumn = new TableColumn<>("Message");
@@ -95,7 +96,8 @@ public class ResultPane extends Dockable {
         locationColumn.prefWidthProperty().bind(resultTable.widthProperty().multiply(0.249));
 
         failuresList.addListener(new ListChangeListener<Failure>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Failure> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Failure> c) {
                 if (failuresList.size() == 0) {
                     clearButton.setDisable(true);
                 } else {
@@ -208,11 +210,13 @@ public class ResultPane extends Dockable {
     private static final DockKey DOCK_KEY = new DockKey("Results", "Results", "Test results", FXUIUtils.getIcon("showreport"),
             TabPolicy.NotClosable, Side.BOTTOM);
 
-    @Override public DockKey getDockKey() {
+    @Override
+    public DockKey getDockKey() {
         return DOCK_KEY;
     }
 
-    @Override public Node getComponent() {
+    @Override
+    public Node getComponent() {
         return resultPaneLayout;
     }
 }

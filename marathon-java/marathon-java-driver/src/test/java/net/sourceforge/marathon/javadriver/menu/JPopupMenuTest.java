@@ -34,14 +34,17 @@ import components.PopupMenuDemo;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JPopupMenuTest {
+@Test
+public class JPopupMenuTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JPopupMenuTest.class.getSimpleName());
                 frame.setName("frame-" + JPopupMenuTest.class.getSimpleName());
                 PopupMenuDemo demo = new PopupMenuDemo();
@@ -59,9 +62,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         MenuSelectionManager.defaultManager().clearSelectedPath();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

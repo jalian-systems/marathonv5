@@ -49,18 +49,21 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         this.viewColumn = column;
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject pa = new JSONObject().put("cell", new JSONArray().put(viewRow).put(getViewColumnName()));
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters",
                 new JSONArray().put(new JSONObject().put("select", pa.toString()).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public Node getPseudoComponent() {
+    @Override
+    public Node getPseudoComponent() {
         TableView<?> tableView = (TableView<?>) parent.getComponent();
         TableCell<?, ?> cell = getCellAt(tableView, viewRow, viewColumn);
         if (cell != null) {
@@ -70,7 +73,8 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         return cell;
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         TableView<?> tableView = (TableView<?>) getComponent();
         if (getVisibleCellAt(tableView, viewRow, viewColumn) == null) {
             tableView.scrollTo(viewRow);
@@ -83,7 +87,8 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         return super.getByPseudoElement(selector, params);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) private Node getEditor() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Node getEditor() {
         TableCell cell = (TableCell) getPseudoComponent();
         cell.getTableView().edit(viewRow, cell.getTableColumn());
         Node cellComponent = cell.getGraphic();
@@ -124,13 +129,15 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         return viewColumn;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         TableCell<?, ?> cell = (TableCell<?, ?>) getPseudoComponent();
         JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
         return cellElement._getValue();
     }
 
-    @Override public Point2D _getMidpoint() {
+    @Override
+    public Point2D _getMidpoint() {
         Node cell = getPseudoComponent();
         Bounds boundsInParent = cell.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;
@@ -138,7 +145,8 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         return cell.getParent().localToParent(cell.localToParent(x, y));
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         Node cell = getPseudoComponent();
         target = getTextObj((TableCell<?, ?>) cell);
         Point2D targetXY = target.localToParent(xoffset, yoffset);
@@ -155,7 +163,8 @@ public class JavaFXTableCellElement extends JavaFXElement implements IPseudoElem
         return cell;
     }
 
-    @Override public Object _makeVisible() {
+    @Override
+    public Object _makeVisible() {
         TableView<?> tableView = (TableView<?>) parent.getComponent();
         Node cell = getPseudoComponent();
         if (cell == null || tableView.getItems() == null) {

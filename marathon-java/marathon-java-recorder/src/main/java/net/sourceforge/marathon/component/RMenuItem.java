@@ -41,7 +41,8 @@ public class RMenuItem extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         if (isAMenuWithoutChildren()) {
             recorder.recordSelectMenu(this, ((JMenu) component).getText());
             return;

@@ -34,14 +34,17 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 
-@Test public class JToggleButtonJavaElementTest extends JavaElementTest {
+@Test
+public class JToggleButtonJavaElementTest extends JavaElementTest {
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         JavaElementFactory.add(JToggleButton.class, JToggleButtonJavaElement.class);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JToggleButtonJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JToggleButtonJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new CheckBoxDemo(), BorderLayout.CENTER);
@@ -54,9 +57,11 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

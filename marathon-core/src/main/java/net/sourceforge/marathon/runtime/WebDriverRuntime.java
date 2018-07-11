@@ -50,17 +50,20 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private static class ScriptOutput extends ConsoleWriter {
         public ScriptOutput(final IConsole console) {
             super(new Writer() {
-                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                @Override
+                public void write(char cbuf[], int off, int len) throws IOException {
                     if (mergeOutput) {
                         System.out.print(new String(cbuf, off, len));
                     }
                     console.writeScriptOut(cbuf, off, len);
                 }
 
-                @Override public void flush() throws IOException {
+                @Override
+                public void flush() throws IOException {
                 }
 
-                @Override public void close() throws IOException {
+                @Override
+                public void close() throws IOException {
                 }
             });
         }
@@ -69,17 +72,20 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private static class ScriptError extends ConsoleWriter {
         public ScriptError(final IConsole console) {
             super(new Writer() {
-                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                @Override
+                public void write(char cbuf[], int off, int len) throws IOException {
                     if (mergeOutput) {
                         System.err.print(new String(cbuf, off, len));
                     }
                     console.writeScriptErr(cbuf, off, len);
                 }
 
-                @Override public void flush() throws IOException {
+                @Override
+                public void flush() throws IOException {
                 }
 
-                @Override public void close() throws IOException {
+                @Override
+                public void close() throws IOException {
                 }
             });
         }
@@ -88,37 +94,44 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private static class CommandOutput extends ConsoleWriter {
         public CommandOutput(final IConsole console) {
             super(new Writer() {
-                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                @Override
+                public void write(char cbuf[], int off, int len) throws IOException {
                     if (mergeOutput) {
                         System.out.print(new String(cbuf, off, len));
                     }
                     console.writeStdOut(cbuf, off, len);
                 }
 
-                @Override public void flush() throws IOException {
+                @Override
+                public void flush() throws IOException {
                 }
 
-                @Override public void close() throws IOException {
+                @Override
+                public void close() throws IOException {
                 }
             });
         }
 
     }
 
-    @SuppressWarnings("unused") private static class CommandError extends ConsoleWriter {
+    @SuppressWarnings("unused")
+    private static class CommandError extends ConsoleWriter {
         public CommandError(final IConsole console) {
             super(new Writer() {
-                @Override public void write(char cbuf[], int off, int len) throws IOException {
+                @Override
+                public void write(char cbuf[], int off, int len) throws IOException {
                     if (mergeOutput) {
                         System.err.print(new String(cbuf, off, len));
                     }
                     console.writeStdErr(cbuf, off, len);
                 }
 
-                @Override public void flush() throws IOException {
+                @Override
+                public void flush() throws IOException {
                 }
 
-                @Override public void close() throws IOException {
+                @Override
+                public void close() throws IOException {
                 }
             });
         }
@@ -149,12 +162,14 @@ public class WebDriverRuntime implements IMarathonRuntime {
     private int startRecordingServer() {
         recordingServerPort = findPort();
         recordingServer = new WSRecordingServer(recordingServerPort, NamingStrategyFactory.get()) {
-            @Override public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+            @Override
+            public void onClose(WebSocket conn, int code, String reason, boolean remote) {
                 super.onClose(conn, code, reason, remote);
                 scriptReloadScript(recordingServerPort);
             }
 
-            @Override public void reloadScript(WebSocket conn, JSONObject query) {
+            @Override
+            public void reloadScript(WebSocket conn, JSONObject query) {
                 scriptReloadScript(recordingServerPort);
             }
 
@@ -178,7 +193,8 @@ public class WebDriverRuntime implements IMarathonRuntime {
         if (recordingServer.isRecording()) {
             WebDriverRuntime.this.reloadPosition = new Exception("Reload going on from here...");
             Thread thread = new Thread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     synchronized (WebDriverRuntime.this) {
                         Logger.getLogger(WebDriverRuntime.class.getName()).info("About to reload script...");
                         WebDriverRuntime.this.reloadingScript = true;
@@ -221,27 +237,32 @@ public class WebDriverRuntime implements IMarathonRuntime {
         }
     }
 
-    @Override public void startRecording(IRecorder recorder) {
+    @Override
+    public void startRecording(IRecorder recorder) {
         recordingServer.startRecording(recorder);
     }
 
-    @Override public void stopRecording() {
+    @Override
+    public void stopRecording() {
         System.setProperty("marathon.recording.port", "");
         recordingServer.stopRecording();
         script.runFixtureTeardown();
     }
 
-    @Override public void startApplication() {
+    @Override
+    public void startApplication() {
         script.runFixtureSetup();
     }
 
-    @Override public void stopApplication() {
+    @Override
+    public void stopApplication() {
         if (recordingServer != null) {
             recordingServer.stopRecording();
         }
     }
 
-    @Override public void destroy() {
+    @Override
+    public void destroy() {
         if (script != null) {
             script.quit();
         } else if (webDriverProxy != null) {
@@ -249,16 +270,19 @@ public class WebDriverRuntime implements IMarathonRuntime {
         }
     }
 
-    @Override public void releaseInterpreters() {
+    @Override
+    public void releaseInterpreters() {
         if (script != null)
             script.releaseInterpreters();
     }
 
-    @Override public Module getModuleFunctions() {
+    @Override
+    public Module getModuleFunctions() {
         return script.getModuleFunctions();
     }
 
-    @Override public void setRawRecording(boolean selected) {
+    @Override
+    public void setRawRecording(boolean selected) {
         if (recordingServer != null) {
             try {
                 recordingServer.setRawRecording(selected);
@@ -268,19 +292,23 @@ public class WebDriverRuntime implements IMarathonRuntime {
         }
     }
 
-    @Override public String evaluate(String code) {
+    @Override
+    public String evaluate(String code) {
         return script.evaluate(code);
     }
 
-    @Override public WindowId getTopWindowId() {
+    @Override
+    public WindowId getTopWindowId() {
         return recordingServer.getFocusedWindowId();
     }
 
-    @Override public File getScreenCapture() {
+    @Override
+    public File getScreenCapture() {
         return script.getScreenCapture();
     }
 
-    @Override public void insertScript(String function) {
+    @Override
+    public void insertScript(String function) {
         try {
             recordingServer.insertingScriptStart();
             script.exec(function);
@@ -289,8 +317,9 @@ public class WebDriverRuntime implements IMarathonRuntime {
         }
     }
 
-    @Override public IScript createScript(MarathonMode mode, IConsole console, String scriptText, String filePath,
-            boolean isRecording, boolean isDebugging, Properties dataVariables) {
+    @Override
+    public IScript createScript(MarathonMode mode, IConsole console, String scriptText, String filePath, boolean isRecording,
+            boolean isDebugging, Properties dataVariables) {
         if (mode == MarathonMode.RECORDING) {
             recordingPort = startRecordingServer();
             System.setProperty("marathon.recording.port", "" + recordingPort);
@@ -311,14 +340,14 @@ public class WebDriverRuntime implements IMarathonRuntime {
         return script;
     }
 
-	@Override
-	public void pauseRecording() {
-		recordingServer.pauseRecording();
-	}
+    @Override
+    public void pauseRecording() {
+        recordingServer.pauseRecording();
+    }
 
-	@Override
-	public void resumeRecording() {
-		recordingServer.resumeRecording();
-	}
+    @Override
+    public void resumeRecording() {
+        recordingServer.resumeRecording();
+    }
 
 }

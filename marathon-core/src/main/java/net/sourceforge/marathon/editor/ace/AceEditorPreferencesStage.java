@@ -78,12 +78,14 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("ace-editor-preferences-stage");
         root.setId("PreferencesStage");
@@ -178,11 +180,13 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
         this.preferenceHandler = preferenceHandler;
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 
-    @Override public void handleCancel() {
+    @Override
+    public void handleCancel() {
         onCancel();
     }
 }

@@ -20,7 +20,8 @@ public final class TextAreaLimited extends TextArea {
         setTextFormatter(new TextFormatter<String>(change -> !change.isContentChange() || internalMod ? change : null));
     }
 
-    @Override public void appendText(String text) {
+    @Override
+    public void appendText(String text) {
         try {
             internalMod = true;
             if (getLength() > MAX_CHARS) {
@@ -32,7 +33,8 @@ public final class TextAreaLimited extends TextArea {
         }
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
         try {
             internalMod = true;
             super.clear();

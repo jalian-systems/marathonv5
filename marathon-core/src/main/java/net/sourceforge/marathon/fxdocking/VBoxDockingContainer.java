@@ -43,23 +43,27 @@ public class VBoxDockingContainer extends VBox implements IDockingContainer {
         getChildren().add(new TabDockingContainer(desktop, this, dockable));
     }
 
-    @Override public void remove(Dockable dockable) {
+    @Override
+    public void remove(Dockable dockable) {
         remove(dockable.getComponent());
     }
 
-    @Override public void split(Dockable base, Dockable dockable, Split position, double proportion) {
+    @Override
+    public void split(Dockable base, Dockable dockable, Split position, double proportion) {
         replaceBaseWith(base, () -> {
             return new SplitDockingContainer(desktop, this, base, dockable, position, proportion);
         });
     }
 
-    @Override public void tab(Dockable base, Dockable dockable, int order, boolean select) {
+    @Override
+    public void tab(Dockable base, Dockable dockable, int order, boolean select) {
         replaceBaseWith(base, () -> {
             return new TabDockingContainer(desktop, this, base, dockable, order, select);
         });
     }
 
-    @Override public void remove(Node container) {
+    @Override
+    public void remove(Node container) {
         container.getProperties().remove(DockingDesktop.DOCKING_CONTAINER);
         getChildren().remove(container);
     }
@@ -71,21 +75,24 @@ public class VBoxDockingContainer extends VBox implements IDockingContainer {
         children.add(baseIndex, dc.get());
     }
 
-    @Override public void replace(Node base, INewDockingContainer indc) {
+    @Override
+    public void replace(Node base, INewDockingContainer indc) {
         ObservableList<Node> children = getChildren();
         int baseIndex = children.indexOf(base);
         children.remove(base);
         children.add(baseIndex, indc.get());
     }
 
-    @Override public void getDockables(List<DockableState> dockables) {
+    @Override
+    public void getDockables(List<DockableState> dockables) {
         ObservableList<Node> children = getChildren();
         for (Node node : children) {
             ((IDockingContainer) node).getDockables(dockables);
         }
     }
 
-    @Override public void debugPrint(String indent) {
+    @Override
+    public void debugPrint(String indent) {
         System.out.println(indent + "vbox(" + getProperties().get(DockingDesktop.DOCKING_CONTAINER) + ")");
         ObservableList<Node> children = getChildren();
         for (Node node : children) {

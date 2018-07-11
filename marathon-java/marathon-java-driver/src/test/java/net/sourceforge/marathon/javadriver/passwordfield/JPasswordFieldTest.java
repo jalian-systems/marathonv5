@@ -33,14 +33,17 @@ import components.PasswordDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.OSUtils;
 
-@Test public class JPasswordFieldTest {
+@Test
+public class JPasswordFieldTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JPasswordFieldTest.class.getSimpleName());
                 frame.setName("frame-" + JPasswordFieldTest.class.getSimpleName());
                 frame.getContentPane().add(new PasswordDemo(frame), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javadriver.OSUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class SliderApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Slider Sample");
         primaryStage.setScene(new Scene(new SliderSample()));
         primaryStage.sizeToScene();

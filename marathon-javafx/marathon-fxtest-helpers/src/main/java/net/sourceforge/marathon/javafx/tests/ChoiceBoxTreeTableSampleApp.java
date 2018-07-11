@@ -8,7 +8,8 @@ import javafx.stage.Stage;
 
 public class ChoiceBoxTreeTableSampleApp extends Application {
 
-    @Override public void start(Stage primaryStage) {
+    @Override
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("TreeTable View Sample");
         primaryStage.setScene(new Scene(new ChoiceBoxTreeTableSample()));
         primaryStage.sizeToScene();

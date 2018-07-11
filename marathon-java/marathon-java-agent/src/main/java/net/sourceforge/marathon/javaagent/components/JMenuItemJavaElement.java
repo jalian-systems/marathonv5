@@ -41,7 +41,8 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         if (value != null && !"".equals(value)) {
             return setSelectedPath(value.split("\\>\\>"));
         }
@@ -119,7 +120,8 @@ public class JMenuItemJavaElement extends AbstractJavaElement {
         return itemText;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         JMenuItem current = (JMenuItem) component;
         return getItemText(current);
     }

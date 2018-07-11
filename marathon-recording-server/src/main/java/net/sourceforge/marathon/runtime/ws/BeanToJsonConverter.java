@@ -119,7 +119,8 @@ public class BeanToJsonConverter {
         return toReturn;
     }
 
-    @SuppressWarnings("unchecked") private Object convertObject(Object toConvert, int maxDepth) throws Exception {
+    @SuppressWarnings("unchecked")
+    private Object convertObject(Object toConvert, int maxDepth) throws Exception {
         if (toConvert == null) {
             return JSONObject.NULL;
         }

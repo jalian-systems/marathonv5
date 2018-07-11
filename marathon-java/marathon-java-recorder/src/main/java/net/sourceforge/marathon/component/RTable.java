@@ -55,7 +55,8 @@ public class RTable extends RComponent {
         }
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + column;
@@ -63,7 +64,8 @@ public class RTable extends RComponent {
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -83,7 +85,8 @@ public class RTable extends RComponent {
         return true;
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         if (row != -1 && column != -1) {
             Component renderer = getRenderer();
             if (renderer == null) {
@@ -151,7 +154,8 @@ public class RTable extends RComponent {
         return columnName.replaceAll("#", "##").replaceAll(",", "#;");
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         if (row != -1 && column != -1) {
             Component renderer = getRenderer();
             if (renderer == null) {
@@ -176,7 +180,8 @@ public class RTable extends RComponent {
         return value;
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         if (column == -1 || row == -1) {
             return null;
         }
@@ -187,11 +192,13 @@ public class RTable extends RComponent {
         return "{" + row + ", " + scolumn + "}";
     }
 
-    @Override public String[][] getContent() {
+    @Override
+    public String[][] getContent() {
         return JTableJavaElement.getContent((JTable) component);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         if (row != -1 && column != -1) {
             Component renderer = getRenderer();
             if (renderer != null) {
@@ -203,7 +210,8 @@ public class RTable extends RComponent {
         return null;
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
         // Ignore Ctrl+Clicks used to select the nodes
         if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me)) {
             return;
@@ -213,8 +221,9 @@ public class RTable extends RComponent {
         }
         super.mousePressed(me);
     }
-    
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick2(this, me, true);
     }
 }

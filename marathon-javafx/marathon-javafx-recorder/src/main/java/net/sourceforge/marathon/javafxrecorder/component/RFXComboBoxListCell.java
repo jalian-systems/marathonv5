@@ -31,7 +31,9 @@ public class RFXComboBoxListCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         ComboBoxListCell cell = (ComboBoxListCell) node;
         return cell.getConverter().toString(cell.getItem());

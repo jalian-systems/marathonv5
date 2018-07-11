@@ -45,7 +45,8 @@ public class Function implements Serializable {
         return arguments;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return name;
     }
 

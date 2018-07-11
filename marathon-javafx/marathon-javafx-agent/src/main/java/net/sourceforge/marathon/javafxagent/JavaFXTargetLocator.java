@@ -82,7 +82,8 @@ public class JavaFXTargetLocator {
 
         public String getTitle() {
             return EventQueueWait.exec(new Callable<String>() {
-                @Override public String call() throws Exception {
+                @Override
+                public String call() throws Exception {
                     return new WindowTitle(currentWindow).getTitle();
                 }
             });
@@ -94,7 +95,8 @@ public class JavaFXTargetLocator {
 
         public Dimension2D getSize() {
             return EventQueueWait.exec(new Callable<Dimension2D>() {
-                @Override public Dimension2D call() throws Exception {
+                @Override
+                public Dimension2D call() throws Exception {
                     return new Dimension2D(currentWindow.getWidth(), currentWindow.getHeight());
                 }
             });
@@ -102,7 +104,8 @@ public class JavaFXTargetLocator {
 
         public Point2D getLocation() {
             return EventQueueWait.exec(new Callable<Point2D>() {
-                @Override public Point2D call() throws Exception {
+                @Override
+                public Point2D call() throws Exception {
                     return new Point2D(currentWindow.getX(), currentWindow.getY());
                 }
             });
@@ -110,7 +113,8 @@ public class JavaFXTargetLocator {
 
         public void setSize(int width, int height) {
             javafx.application.Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     currentWindow.setWidth(width);
                     currentWindow.setHeight(height);
                 }
@@ -119,7 +123,8 @@ public class JavaFXTargetLocator {
 
         public void setLocation(int x, int y) {
             javafx.application.Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     currentWindow.setX(x);
                     currentWindow.setY(y);
                 }
@@ -238,7 +243,8 @@ public class JavaFXTargetLocator {
         private List<Node> getMenuBar() {
             List<Node> nodes = new ArrayList<>();
             new Wait("Unable to find menu bar component") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     Node menubar = currentWindow.getScene().getRoot().lookup(".menu-bar");
                     if (menubar != null) {
                         nodes.add(menubar);
@@ -259,7 +265,8 @@ public class JavaFXTargetLocator {
         private List<Window> getContextMenu() {
             List<Window> contextMenus = new ArrayList<>();
             new Wait("Unable to context menu") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     Iterator<Window> windows = JavaCompatibility.getWindows();
                     while (windows.hasNext()) {
                         Window window = windows.next();
@@ -287,7 +294,8 @@ public class JavaFXTargetLocator {
     public IJavaFXAgent window(final String nameOrHandleOrTitle) {
         if (driver.getImplicitWait() != 0) {
             new EventQueueWait() {
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     try {
                         return window_internal(nameOrHandleOrTitle) != null;
                     } catch (NoSuchWindowException e) {
@@ -300,7 +308,8 @@ public class JavaFXTargetLocator {
         // an exception on error
         try {
             return EventQueueWait.exec(new Callable<IJavaFXAgent>() {
-                @Override public IJavaFXAgent call() {
+                @Override
+                public IJavaFXAgent call() {
                     return window_internal(nameOrHandleOrTitle);
                 }
             });
@@ -385,7 +394,8 @@ public class JavaFXTargetLocator {
 
     public JFXWindow getTopContainer() {
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     _getTopContainer();
                     return true;

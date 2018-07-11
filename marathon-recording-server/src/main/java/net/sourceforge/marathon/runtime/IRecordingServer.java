@@ -39,9 +39,9 @@ public interface IRecordingServer {
     public abstract boolean isRecording();
 
     public abstract void abortApplication();
-    
+
     public abstract void postAll(String method, String data);
-    
+
     public abstract void insertingScriptStart();
 
     public abstract void insertingScriptFinish();

@@ -33,7 +33,9 @@ public class JavaFXTextInputControlElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) @Override public boolean marathon_select(String value) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public boolean marathon_select(String value) {
         TextInputControl tc = (TextInputControl) getComponent();
         Boolean isCellEditor = (Boolean) tc.getProperties().get("marathon.celleditor");
         tc.setText("");
@@ -47,7 +49,8 @@ public class JavaFXTextInputControlElement extends JavaFXElement {
         return true;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return ((TextInputControl) getComponent()).getText();
     }
 }

@@ -47,7 +47,8 @@ public class ScriptRecorder implements IRecorder {
     }
 
     protected final Runnable processRecordEventsRunnable = new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
             RecordEvent evt;
 
             while ((evt = recordEvents.poll()) != null) {
@@ -67,18 +68,20 @@ public class ScriptRecorder implements IRecorder {
         this.scriptListener = scriptListener;
     }
 
-    @Override public void record(IScriptElement recordable) {
+    @Override
+    public void record(IScriptElement recordable) {
         recordEvents.add(new RecordEvent(recordable));
         if (recordEvents.size() == 1) {
             runProcessRecordEvents();
         }
     }
 
-	protected void runProcessRecordEvents() {
-		Platform.runLater(processRecordEventsRunnable);
-	}
+    protected void runProcessRecordEvents() {
+        Platform.runLater(processRecordEventsRunnable);
+    }
 
-    @Override public void updateScript() {
+    @Override
+    public void updateScript() {
         if (scriptListener != null) {
             synchronized (scriptListener) {
                 scriptListener.setScript(toScriptCode());
@@ -90,15 +93,18 @@ public class ScriptRecorder implements IRecorder {
         return tagInserter.getRootTag().toScriptCode();
     }
 
-    @Override public void abortRecording() {
+    @Override
+    public void abortRecording() {
         scriptListener.abortRecording();
     }
 
-    @Override public void insertChecklist(String name) {
+    @Override
+    public void insertChecklist(String name) {
         scriptListener.insertChecklistAction(name);
     }
 
-    @Override public String recordInsertScriptElement(WindowId windowId, String function) {
+    @Override
+    public String recordInsertScriptElement(WindowId windowId, String function) {
         InsertScriptElement recordable = new InsertScriptElement(windowId, function);
         record(recordable);
         String ims = recordable.getImportStatement();
@@ -108,15 +114,18 @@ public class ScriptRecorder implements IRecorder {
         return ims;
     }
 
-    @Override public void recordInsertChecklistElement(WindowId topWindowId, String fileName) {
+    @Override
+    public void recordInsertChecklistElement(WindowId topWindowId, String fileName) {
         record(new InsertChecklistElement(topWindowId, fileName));
     }
 
-    @Override public void recordShowChecklistElement(WindowId windowId, String fileName) {
+    @Override
+    public void recordShowChecklistElement(WindowId windowId, String fileName) {
         record(new ShowChecklistElement(windowId, fileName));
     }
 
-    @Override public boolean isCreatingObjectMap() {
+    @Override
+    public boolean isCreatingObjectMap() {
         return false;
     }
 }

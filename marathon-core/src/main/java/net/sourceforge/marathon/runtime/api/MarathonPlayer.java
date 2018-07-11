@@ -50,7 +50,8 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         }
     }
 
-    @Override public void halt() {
+    @Override
+    public void halt() {
         try {
             playbackThread.interrupt();
         } catch (Throwable e) {
@@ -58,13 +59,15 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         }
     }
 
-    @Override public synchronized void play(boolean shouldRunFixture) {
+    @Override
+    public synchronized void play(boolean shouldRunFixture) {
         paused = false;
         this.shouldRunFixture = shouldRunFixture;
         notify();
     }
 
-    @Override public void run() {
+    @Override
+    public void run() {
         TestAttributes.put("marathon.capture.prefix", ((IHasFullname) listener).getFullName()); // YUK!!!
         TestAttributes.put("listener", this);
         synchronized (this) {
@@ -80,11 +83,13 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         }
     }
 
-    @Override public void playbackFinished(PlaybackResult result, boolean shutdown) {
+    @Override
+    public void playbackFinished(PlaybackResult result, boolean shutdown) {
         listener.playbackFinished(result, shutdown);
     }
 
-    @Override public synchronized int lineReached(SourceLine line) {
+    @Override
+    public synchronized int lineReached(SourceLine line) {
         while (paused) {
             InterruptionError.wait(this);
         }
@@ -94,7 +99,8 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         return listener.lineReached(line);
     }
 
-    @Override public int methodReturned(SourceLine line) {
+    @Override
+    public int methodReturned(SourceLine line) {
         while (paused) {
             InterruptionError.wait(this);
         }
@@ -104,7 +110,8 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         return listener.methodReturned(line);
     }
 
-    @Override public int methodCalled(SourceLine line) {
+    @Override
+    public int methodCalled(SourceLine line) {
         while (paused) {
             InterruptionError.wait(this);
         }
@@ -114,7 +121,8 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         return listener.methodCalled(line);
     }
 
-    @Override public int acceptChecklist(String fileName) {
+    @Override
+    public int acceptChecklist(String fileName) {
         if (acceptChecklist) {
             listener.acceptChecklist(fileName);
             return PAUSE;
@@ -122,19 +130,23 @@ public final class MarathonPlayer implements IPlayer, Runnable, IPlaybackListene
         return CONTINUE;
     }
 
-    @Override public int showChecklist(String fileName) {
+    @Override
+    public int showChecklist(String fileName) {
         return listener.showChecklist(fileName);
     }
 
-    @Override public void setAcceptCheckList(boolean b) {
+    @Override
+    public void setAcceptCheckList(boolean b) {
         acceptChecklist = b;
     }
 
-    @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+    @Override
+    public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
         listener.addErrorScreenShotEntry(error, fileName);
     }
 
-    @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+    @Override
+    public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
         listener.addScreenShotEntry(title, filePath, assertions);
     }
 }

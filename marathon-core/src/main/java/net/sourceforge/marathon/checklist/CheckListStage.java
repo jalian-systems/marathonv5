@@ -39,12 +39,14 @@ public class CheckListStage extends ModalDialog<CheckListFormNode> {
         this.checkListFormNode = checkListFormNode;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.setCenter(new CheckListView(checkListFormNode));
         root.setBottom(createButtonBar());
@@ -70,7 +72,8 @@ public class CheckListStage extends ModalDialog<CheckListFormNode> {
         return dirty || checkListFormNode.isDirty();
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         actionButtons[0].setDefaultButton(true);
     }
 }

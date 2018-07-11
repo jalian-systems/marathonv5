@@ -131,7 +131,8 @@ public class TumbleItem extends JApplet implements ActionListener {
 
     // Background task for loading images.
     SwingWorker worker = new SwingWorker<ImageIcon[], Void>() {
-        @Override public ImageIcon[] doInBackground() {
+        @Override
+        public ImageIcon[] doInBackground() {
             final ImageIcon[] innerImgs = new ImageIcon[nimgs];
             for (int i = 0; i < nimgs; i++) {
                 innerImgs[i] = loadImage(i + 1);
@@ -139,7 +140,8 @@ public class TumbleItem extends JApplet implements ActionListener {
             return innerImgs;
         }
 
-        @Override public void done() {
+        @Override
+        public void done() {
             // Remove the "Loading images" label.
             animator.removeAll();
             loopslot = -1;

@@ -35,7 +35,8 @@ public class SimpleWebServer extends Application {
             super(host, port, wwwroot, quiet);
         }
 
-        @Override public Response serve(IHTTPSession session) {
+        @Override
+        public Response serve(IHTTPSession session) {
             System.out.println(session.getMethod() + ": " + session.getUri());
             return super.serve(session);
         }
@@ -69,7 +70,8 @@ public class SimpleWebServer extends Application {
     private String webRoot;
     private MyServer server;
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Simple Web Server");
         BorderPane root = new BorderPane();
         TextArea area = new TextArea();

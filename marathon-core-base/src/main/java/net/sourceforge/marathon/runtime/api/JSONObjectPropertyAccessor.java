@@ -38,7 +38,8 @@ public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serial
         this.o = o;
     }
 
-    @Override public String getProperty(String name) {
+    @Override
+    public String getProperty(String name) {
         if (o.has(name) && o.get(name) instanceof String) {
             return o.getString(name);
         }
@@ -55,7 +56,8 @@ public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serial
         o = new JSONObject((String) s.readObject());
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return o.toString();
     }
 }

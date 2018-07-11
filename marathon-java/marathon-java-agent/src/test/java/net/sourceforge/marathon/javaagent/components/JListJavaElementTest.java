@@ -33,14 +33,17 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class JListJavaElementTest extends JavaElementTest {
+@Test
+public class JListJavaElementTest extends JavaElementTest {
 
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JListJavaElementTest.class.getName());
                 frame.setName("dialog-1");
                 DefaultListModel model = new DefaultListModel();
@@ -58,9 +61,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -122,7 +127,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("List Item - 1", listItem.getText());
 
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JList jlist = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) jlist.getModel();
                 model.set(2, "List Item - 1");
@@ -147,7 +153,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("List Item - 1", listItem.getText());
 
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JList jlist = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) jlist.getModel();
                 model.set(2, "List Item - 1");
@@ -175,7 +182,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContentWithDuplicates() {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JList jlist = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) jlist.getModel();
                 model.set(2, "List Item - 1");
@@ -188,7 +196,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContentWithMultipleDuplicates() {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JList jlist = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) jlist.getModel();
                 model.set(2, "List Item - 1");

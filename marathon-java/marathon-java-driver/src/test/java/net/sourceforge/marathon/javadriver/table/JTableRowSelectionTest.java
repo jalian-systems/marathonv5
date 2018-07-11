@@ -37,14 +37,17 @@ import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.OSUtils;
 
-@Test public class JTableRowSelectionTest {
+@Test
+public class JTableRowSelectionTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws InterruptedException, InvocationTargetException, NoSuchWindowException {
+    @BeforeMethod
+    public void showDialog() throws InterruptedException, InvocationTargetException, NoSuchWindowException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTableRowSelectionTest.class.getSimpleName());
                 frame.setName("frame-" + JTableRowSelectionTest.class.getSimpleName());
                 frame.getContentPane().add(new TableSelectionDemo(), BorderLayout.CENTER);
@@ -55,9 +58,11 @@ import net.sourceforge.marathon.javadriver.OSUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws InterruptedException, InvocationTargetException {
+    @AfterMethod
+    public void disposeDriver() throws InterruptedException, InvocationTargetException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

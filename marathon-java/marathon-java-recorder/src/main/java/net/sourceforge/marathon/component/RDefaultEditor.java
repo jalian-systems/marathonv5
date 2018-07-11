@@ -32,7 +32,8 @@ public class RDefaultEditor extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         if (component instanceof JSpinner.DefaultEditor) {
             String text = ((JSpinner.DefaultEditor) component).getTextField().getText();
             return text;

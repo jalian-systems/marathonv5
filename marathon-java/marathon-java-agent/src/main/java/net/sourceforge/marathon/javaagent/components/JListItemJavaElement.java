@@ -53,16 +53,19 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         }
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "nth-item").put("parameters", new JSONArray().put(item + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public JListJavaElement getParent() {
+    @Override
+    public JListJavaElement getParent() {
         return parent;
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         validateItem();
         Rectangle bounds = getCellBounds();
         getDriver().getDevices().moveto(parent.getComponent(), bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
@@ -72,14 +75,17 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         return ((JList) parent.getComponent()).getCellBounds(item, item);
     }
 
-    @Override public boolean _isDisplayed() {
+    @Override
+    public boolean _isDisplayed() {
         JList list = (JList) parent.getComponent();
         return item <= list.getLastVisibleIndex() && item >= list.getFirstVisibleIndex();
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 validateItem();
                 JList list = (JList) parent.getComponent();
                 return getRendererComponent(list, item);
@@ -101,13 +107,15 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         return item;
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         validateItem();
         Rectangle bounds = getCellBounds();
         return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getText((JList) component, item);
     }
 

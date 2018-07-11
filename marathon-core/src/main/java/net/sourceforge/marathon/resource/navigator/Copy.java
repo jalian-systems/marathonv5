@@ -108,7 +108,8 @@ public class Copy {
             this.operation = operation;
         }
 
-        @Override public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
             // before visiting entries in a directory we copy the directory
             // (okay if directory already exists).
             CopyOption[] options = new CopyOption[] { COPY_ATTRIBUTES };
@@ -125,7 +126,8 @@ public class Copy {
             return CONTINUE;
         }
 
-        @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (copyFile(file, target.resolve(source.relativize(file)))) {
                 if (operation == Operation.CUT) {
                     try {
@@ -138,7 +140,8 @@ public class Copy {
             return CONTINUE;
         }
 
-        @Override public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
             // fix up modification time of directory when done
             if (exc == null) {
                 Path newdir = target.resolve(source.relativize(dir));
@@ -159,7 +162,8 @@ public class Copy {
             return CONTINUE;
         }
 
-        @Override public FileVisitResult visitFileFailed(Path file, IOException exc) {
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
             if (exc instanceof FileSystemLoopException) {
                 System.err.println("cycle detected: " + file);
             } else {
@@ -177,20 +181,24 @@ public class Copy {
             this.option = option;
         }
 
-        @Override public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
             return FileVisitResult.CONTINUE;
         }
 
-        @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             Files.delete(file);
             return FileVisitResult.CONTINUE;
         }
 
-        @Override public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
             return FileVisitResult.CONTINUE;
         }
 
-        @Override public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
             Files.delete(dir);
             return FileVisitResult.CONTINUE;
         }

@@ -31,13 +31,16 @@ import components.DynamicTreeDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RAbstractButtonTest extends RComponentTest {
+@Test
+public class RAbstractButtonTest extends RComponentTest {
 
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RAbstractButtonTest.class.getSimpleName());
                 frame.setName("frame-" + RAbstractButtonTest.class.getSimpleName());
                 frame.getContentPane().add(new DynamicTreeDemo(), BorderLayout.CENTER);
@@ -47,9 +50,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -60,7 +65,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JButton button = (JButton) ComponentUtils.findComponent(JButton.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RAbstractButton rButton = new RAbstractButton(button, null, null, lr);
                 MouseEvent me = new MouseEvent(button, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), 0, 5, 5, 1, false,
                         MouseEvent.BUTTON1);

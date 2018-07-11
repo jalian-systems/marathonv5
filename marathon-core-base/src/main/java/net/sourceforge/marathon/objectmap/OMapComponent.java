@@ -55,7 +55,8 @@ public class OMapComponent implements IObjectMapTreeItem, Serializable {
         this(null);
     }
 
-    @Override public void setRootNode(IObjectMapTreeItem rootNode) {
+    @Override
+    public void setRootNode(IObjectMapTreeItem rootNode) {
         this.parent = (OMapContainer) rootNode;
     }
 
@@ -67,7 +68,8 @@ public class OMapComponent implements IObjectMapTreeItem, Serializable {
         return name;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 

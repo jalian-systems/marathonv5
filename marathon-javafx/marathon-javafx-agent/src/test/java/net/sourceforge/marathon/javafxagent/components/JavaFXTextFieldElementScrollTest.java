@@ -35,7 +35,8 @@ public class JavaFXTextFieldElementScrollTest extends JavaFXElementTest {
     private IJavaFXElement textField;
     private IJavaFXElement button;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         List<IJavaFXElement> textFields = driver.findElementsByTagName("text-field");
         textField = textFields.get(18);
@@ -43,29 +44,34 @@ public class JavaFXTextFieldElementScrollTest extends JavaFXElementTest {
         button = buttons.get(18);
     }
 
-    @Test public void marathon_select() {
+    @Test
+    public void marathon_select() {
         getPrimaryStage().setWidth(250);
         getPrimaryStage().setHeight(150);
         new Wait("Setting width failed") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return getPrimaryStage().getHeight() == 150;
             }
         };
         Platform.runLater(() -> textField.marathon_select("Hello World"));
     }
 
-    @Test public void click() {
+    @Test
+    public void click() {
         getPrimaryStage().setWidth(250);
         getPrimaryStage().setHeight(150);
         new Wait("Setting width failed") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return getPrimaryStage().getHeight() == 150;
             }
         };
         button.click();
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         VBox vBox = new VBox();
         vBox.getChildren().add(new ScrollPane(new TextFiledScrollSample()));
         return vBox;

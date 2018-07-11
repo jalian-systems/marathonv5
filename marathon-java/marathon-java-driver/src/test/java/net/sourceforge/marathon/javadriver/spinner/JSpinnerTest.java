@@ -34,7 +34,8 @@ import org.testng.annotations.Test;
 import components.SpinnerDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JSpinnerTest {
+@Test
+public class JSpinnerTest {
 
     static {
         UIManager.put("SpinnerUI", BasicSpinnerUI.class.getName());
@@ -54,9 +55,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private WebElement spinnerMonthField;
     private WebElement spinnerYearField;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JSpinnerTest.class.getSimpleName());
                 frame.setName("frame-" + JSpinnerTest.class.getSimpleName());
                 frame.getContentPane().add(new SpinnerDemo(false), BorderLayout.CENTER);
@@ -87,9 +90,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

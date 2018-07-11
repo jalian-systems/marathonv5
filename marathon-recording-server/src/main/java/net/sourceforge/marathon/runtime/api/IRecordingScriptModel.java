@@ -17,20 +17,20 @@ package net.sourceforge.marathon.runtime.api;
 
 public interface IRecordingScriptModel {
 
-	public String getScriptCodeForWindow(WindowId windowId);
+    public String getScriptCodeForWindow(WindowId windowId);
 
-	public String getScriptCodeForWindowClose(WindowId windowId);
+    public String getScriptCodeForWindowClose(WindowId windowId);
 
-	public String getScriptCodeForShowChecklist(String fileName);
+    public String getScriptCodeForShowChecklist(String fileName);
 
-	public String getScriptCodeForInsertChecklist(String fileName);
+    public String getScriptCodeForInsertChecklist(String fileName);
 
-	public String getScriptCodeForImportAction(String pkg, String function);
+    public String getScriptCodeForImportAction(String pkg, String function);
 
-	public String getFunctionFromInsertDialog(String function);
+    public String getFunctionFromInsertDialog(String function);
 
-	public String getPackageFromInsertDialog(String function);
+    public String getPackageFromInsertDialog(String function);
 
-	public String getScriptCodeForGenericAction(String method, String suffix, String name, Object... params);
+    public String getScriptCodeForGenericAction(String method, String suffix, String name, Object... params);
 
 }

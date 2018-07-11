@@ -19,10 +19,10 @@ public class UsedAssertion {
     public void makeTableEntry(StringBuffer sb) {
         String name = id.getName();
         String info = id.getComponentInfo();
-        if(name == null) {
+        if (name == null) {
             name = id.getNameProps().toString();
         }
-        if(info == null) {
+        if (info == null) {
             info = id.getComponentInfoProps() == null ? null : id.getComponentInfoProps().toString();
         }
         sb.append("<tr>\n");

@@ -73,7 +73,8 @@ public class Module implements Serializable {
         return children;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
         // return name + " (children: " + children.toString() + ") (functions: "
         // + functionList.toString() + ")";

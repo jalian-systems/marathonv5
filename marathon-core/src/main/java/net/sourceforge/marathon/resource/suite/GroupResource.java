@@ -70,7 +70,8 @@ public class GroupResource extends Resource {
         setGraphic(type.dockIcon());
     }
 
-    @Override public ObservableList<TreeItem<Resource>> getChildren() {
+    @Override
+    public ObservableList<TreeItem<Resource>> getChildren() {
         ObservableList<TreeItem<Resource>> original = super.getChildren();
         if (loaded) {
             return original;
@@ -79,26 +80,31 @@ public class GroupResource extends Resource {
         return original;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         if (group == null) {
             return "XXX";
         }
         return group.getName();
     }
 
-    @Override public boolean isLeaf() {
+    @Override
+    public boolean isLeaf() {
         return false;
     }
 
-    @Override public boolean canOpen() {
+    @Override
+    public boolean canOpen() {
         return true;
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return group.getPath();
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) {
         TestCreator tc;
         try {
             tc = new TestCreator(acceptChecklist, console);
@@ -110,15 +116,18 @@ public class GroupResource extends Resource {
         return null;
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return true;
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return true;
     }
 
-    @Override public Optional<ButtonType> delete(Optional<ButtonType> option) {
+    @Override
+    public Optional<ButtonType> delete(Optional<ButtonType> option) {
         if (!option.isPresent() || option.get() != FXUIUtils.YES_ALL) {
             option = FXUIUtils.showConfirmDialog(null, "Do you want to delete `" + group.getName() + "`?", "Confirm",
                     AlertType.CONFIRMATION, ButtonType.YES, ButtonType.NO, FXUIUtils.YES_ALL, ButtonType.CANCEL);
@@ -137,7 +146,8 @@ public class GroupResource extends Resource {
         return option;
     }
 
-    @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
+    @Override
+    public List<Resource> findNodes(Resource resource, List<Resource> found) {
         if (getFilePath().equals(resource.getFilePath())) {
             found.add(this);
         } else {
@@ -146,13 +156,15 @@ public class GroupResource extends Resource {
         return found;
     }
 
-    @Override public void deleted() {
+    @Override
+    public void deleted() {
         if (getParent() != null) {
             getParent().getChildren().remove(this);
         }
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         group.setName(text);
         try {
             Group.updateFile(group);
@@ -163,7 +175,8 @@ public class GroupResource extends Resource {
         return this;
     }
 
-    @Override public void updated(Resource resource) {
+    @Override
+    public void updated(Resource resource) {
         try {
             group = Group.findByFile(type, group.getPath());
             loadEntries();
@@ -180,14 +193,17 @@ public class GroupResource extends Resource {
         super.getChildren().setAll(entries);
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return true;
     }
 
-    @Override public boolean copy(Map<DataFormat, Object> content) {
+    @Override
+    public boolean copy(Map<DataFormat, Object> content) {
         @SuppressWarnings("unchecked")
         List<File> files = (List<File>) content.get(DataFormat.FILES);
         if (files == null) {
@@ -198,11 +214,13 @@ public class GroupResource extends Resource {
         return true;
     }
 
-    @Override public void paste(Clipboard clipboard, Operation operation) {
+    @Override
+    public void paste(Clipboard clipboard, Operation operation) {
         paste(0, clipboard, operation);
     }
 
-    @Override public boolean droppable(Dragboard dragboard) {
+    @Override
+    public boolean droppable(Dragboard dragboard) {
         if (dragboard.hasFiles()) {
             return type.droppable(dragboard.getFiles(), getFilePath());
         }
@@ -264,26 +282,31 @@ public class GroupResource extends Resource {
         }
     }
 
-    @Override public void pasteInto(Clipboard clipboard, Operation operation) {
+    @Override
+    public void pasteInto(Clipboard clipboard, Operation operation) {
         paste(0, clipboard, operation);
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public MenuItem[] getUnhideMenuItem() {
+    @Override
+    public MenuItem[] getUnhideMenuItem() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -297,7 +320,8 @@ public class GroupResource extends Resource {
         return group;
     }
 
-    @Override public String getDescription() {
+    @Override
+    public String getDescription() {
         return group.getProperty("description", null);
     }
 }

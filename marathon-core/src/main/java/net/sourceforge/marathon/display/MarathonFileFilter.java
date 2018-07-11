@@ -33,18 +33,21 @@ public class MarathonFileFilter implements IMarathonFileFilter, FileFilter {
         this.scriptModel = ScriptModel.getModel();
     }
 
-    @Override public boolean accept(File f) {
+    @Override
+    public boolean accept(File f) {
         if (f.isDirectory() && !f.getName().startsWith(".")) {
             return true;
         }
         return !f.isDirectory() && scriptModel.isSourceFile(f);
     }
 
-    @Override public FileFilter getChooserFilter() {
+    @Override
+    public FileFilter getChooserFilter() {
         return this;
     }
 
-    @Override public String getSuffix() {
+    @Override
+    public String getSuffix() {
         return scriptModel.getSuffix();
     }
 }

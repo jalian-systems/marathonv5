@@ -69,7 +69,8 @@ public class ObjectMapItem implements IObjectMapTreeItem {
         load(oMapFile);
     }
 
-    @SuppressWarnings("unchecked") private void load(File oMapFile) {
+    @SuppressWarnings("unchecked")
+    private void load(File oMapFile) {
         try {
             data = (List<OMapContainer>) loadYaml(oMapFile);
             for (OMapContainer container : data) {
@@ -130,11 +131,13 @@ public class ObjectMapItem implements IObjectMapTreeItem {
         return new Enumeration<IObjectMapTreeItem>() {
             int index = 0;
 
-            @Override public boolean hasMoreElements() {
+            @Override
+            public boolean hasMoreElements() {
                 return index < data.size();
             }
 
-            @Override public IObjectMapTreeItem nextElement() {
+            @Override
+            public IObjectMapTreeItem nextElement() {
                 return data.get(index++);
             }
         };
@@ -151,7 +154,8 @@ public class ObjectMapItem implements IObjectMapTreeItem {
         return data.size();
     }
 
-    @Override public void setRootNode(IObjectMapTreeItem parentNode) {
+    @Override
+    public void setRootNode(IObjectMapTreeItem parentNode) {
     }
 
     public void removeComponent(OMapComponent omapComponent) {
@@ -202,7 +206,8 @@ public class ObjectMapItem implements IObjectMapTreeItem {
             options.setDefaultFlowStyle(FlowStyle.AUTO);
 
             Representer representer = new Representer() {
-                @Override protected Set<Property> getProperties(Class<? extends Object> type) throws IntrospectionException {
+                @Override
+                protected Set<Property> getProperties(Class<? extends Object> type) throws IntrospectionException {
                     Set<Property> properties = super.getProperties(type);
                     Property parentProperty = null;
                     for (Property property : properties) {

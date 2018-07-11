@@ -158,7 +158,8 @@ public class IconDemoApp extends JFrame {
         /**
          * Creates full size and thumbnail versions of the target image files.
          */
-        @Override protected Void doInBackground() throws Exception {
+        @Override
+        protected Void doInBackground() throws Exception {
             for (int i = 0; i < imageCaptions.length; i++) {
                 ImageIcon icon;
                 icon = createImageIcon(imagedir + imageFileNames[i], imageCaptions[i]);
@@ -185,7 +186,8 @@ public class IconDemoApp extends JFrame {
         /**
          * Process all loaded images.
          */
-        @Override protected void process(List<ThumbnailAction> chunks) {
+        @Override
+        protected void process(List<ThumbnailAction> chunks) {
             for (ThumbnailAction thumbAction : chunks) {
                 JButton thumbButton = new JButton(thumbAction);
                 // add the new button BEFORE the last glue

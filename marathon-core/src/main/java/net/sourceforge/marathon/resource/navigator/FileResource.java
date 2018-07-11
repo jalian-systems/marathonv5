@@ -65,15 +65,18 @@ public class FileResource extends Resource {
         setGraphic(FXUIUtils.getIcon(graphic));
     }
 
-    @Override public boolean isLeaf() {
+    @Override
+    public boolean isLeaf() {
         return true;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return path.toFile().getName();
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         try {
             File sourceFile = path.toFile();
             File destinationFile = path.resolveSibling(text).toFile();
@@ -93,31 +96,38 @@ public class FileResource extends Resource {
         }
     }
 
-    @Override public boolean isTestFile() {
+    @Override
+    public boolean isTestFile() {
         return Constants.isTestFile(path.toFile());
     }
 
-    @Override public boolean hasProperties() {
+    @Override
+    public boolean hasProperties() {
         return isTestFile();
     }
 
-    @Override public boolean isSuiteFile() {
+    @Override
+    public boolean isSuiteFile() {
         return Constants.isSuiteFile(path.toFile());
     }
 
-    @Override public boolean isFeatureFile() {
+    @Override
+    public boolean isFeatureFile() {
         return Constants.isFeatureFile(path.toFile());
     }
 
-    @Override public boolean isStoryFile() {
+    @Override
+    public boolean isStoryFile() {
         return Constants.isStoryFile(path.toFile());
     }
 
-    @Override public boolean isIssueFile() {
+    @Override
+    public boolean isIssueFile() {
         return Constants.isIssueFile(path.toFile());
     }
 
-    @Override public boolean copy(Map<DataFormat, Object> content) {
+    @Override
+    public boolean copy(Map<DataFormat, Object> content) {
         @SuppressWarnings("unchecked")
         List<File> files = (List<File>) content.get(DataFormat.FILES);
         if (files == null) {
@@ -128,15 +138,18 @@ public class FileResource extends Resource {
         return true;
     }
 
-    @Override public void paste(Clipboard clipboard, Operation operation) {
+    @Override
+    public void paste(Clipboard clipboard, Operation operation) {
         getParent().getValue().pasteInto(clipboard, operation);
     }
 
-    @Override public void pasteInto(Clipboard clipboard, Operation operation) {
+    @Override
+    public void pasteInto(Clipboard clipboard, Operation operation) {
         getParent().getValue().pasteInto(clipboard, operation);
     }
 
-    @Override public Optional<ButtonType> delete(Optional<ButtonType> option) {
+    @Override
+    public Optional<ButtonType> delete(Optional<ButtonType> option) {
         if (!option.isPresent() || option.get() != FXUIUtils.YES_ALL) {
             option = FXUIUtils.showConfirmDialog(null, "Do you want to delete `" + path + "`?", "Confirm", AlertType.CONFIRMATION,
                     ButtonType.YES, ButtonType.NO, FXUIUtils.YES_ALL, ButtonType.CANCEL);
@@ -156,11 +169,13 @@ public class FileResource extends Resource {
         return option;
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return path;
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         TestCreator testCreator = new TestCreator(acceptChecklist, console);
         if (isSuiteFile()) {
             return testCreator.getTest(Group.findByFile(GroupType.SUITE, path));
@@ -177,59 +192,71 @@ public class FileResource extends Resource {
         return testCreator.getTest(path.toFile(), null);
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
         FolderResource folderResource = (FolderResource) getParent();
         if (folderResource != null) {
             folderResource.hideChild(this);
         }
     }
 
-    @Override public MenuItem[] getUnhideMenuItem() {
+    @Override
+    public MenuItem[] getUnhideMenuItem() {
         return ((FolderResource) getParent()).getUnhideMenuItem();
     }
 
-    @Override public void deleted() {
+    @Override
+    public void deleted() {
         if (getParent() != null) {
             getParent().getChildren().remove(this);
         }
     }
 
-    @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
+    @Override
+    public List<Resource> findNodes(Resource resource, List<Resource> found) {
         if (path.equals(resource.getFilePath())) {
             found.add(this);
         }
         return found;
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         // Nothing to do
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return true;
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return isTestFile() || isSuiteFile() || isFeatureFile() || isStoryFile() || isIssueFile();
     }
 
-    @Override public boolean canOpen() {
+    @Override
+    public boolean canOpen() {
         return true;
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return true;
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         return true;
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return isTestFile();
     }
 
-    @Override public void moved() {
+    @Override
+    public void moved() {
         if (getParent() != null) {
             getParent().getChildren().remove(this);
         }

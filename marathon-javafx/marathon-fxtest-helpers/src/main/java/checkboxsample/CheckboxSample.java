@@ -51,7 +51,7 @@ import javafx.stage.Stage;
 public class CheckboxSample extends Application {
 
     Rectangle rect = new Rectangle(90, 30);
-    final String[] names = new String[]{"Security", "Project", "Chart"};
+    final String[] names = new String[] { "Security", "Project", "Chart" };
     final Image[] images = new Image[names.length];
     final ImageView[] icons = new ImageView[names.length];
     final CheckBox[] cbs = new CheckBox[names.length];
@@ -72,17 +72,14 @@ public class CheckboxSample extends Application {
         rect.setFill(Color.rgb(41, 41, 41));
 
         for (int i = 0; i < names.length; i++) {
-            final Image image = images[i] =
-                new Image(getClass().getResourceAsStream(names[i] + ".png"));
+            final Image image = images[i] = new Image(getClass().getResourceAsStream(names[i] + ".png"));
             final ImageView icon = icons[i] = new ImageView();
             final CheckBox cb = cbs[i] = new CheckBox(names[i]);
-            cb.selectedProperty().addListener(
-                    (ObservableValue<? extends Boolean> ov,
-                    Boolean old_val, Boolean new_val) -> {
-                        icon.setImage(new_val ? image : null);                
+            cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                icon.setImage(new_val ? image : null);
             });
         }
-        
+
         VBox vbox = new VBox();
         vbox.getChildren().addAll(cbs);
         vbox.setSpacing(5);
@@ -95,7 +92,7 @@ public class CheckboxSample extends Application {
 
         stack.getChildren().add(rect);
         stack.getChildren().add(hbox);
-        StackPane.setAlignment(rect, Pos.TOP_CENTER);                
+        StackPane.setAlignment(rect, Pos.TOP_CENTER);
 
         HBox root = new HBox();
         root.getChildren().add(vbox);

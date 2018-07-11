@@ -20,7 +20,8 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class SelectorParserTest {
+@Test
+public class SelectorParserTest {
 
     public void parseTag() throws Throwable {
         SelectorParser parser = new SelectorParser("menu");

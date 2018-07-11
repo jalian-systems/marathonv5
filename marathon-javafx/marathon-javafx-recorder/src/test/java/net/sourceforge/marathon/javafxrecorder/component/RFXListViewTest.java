@@ -32,11 +32,13 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXListViewTest extends RFXComponentTest {
 
-    @Test public void selectNoSelection() {
+    @Test
+    public void selectNoSelection() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
                 rfxListView.focusLost(new RFXListView(null, null, null, lr));
             }
@@ -47,11 +49,13 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[]", recording.getParameters()[0]);
     }
 
-    @Test public void selectSingleItemSelection() {
+    @Test
+    public void selectSingleItemSelection() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getSelectionModel().select(2);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
                 rfxListView.focusLost(new RFXListView(null, null, null, lr));
@@ -63,12 +67,14 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"Long Row 3\"]", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getSelectionModel().select(2);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
                 rfxListView.focusLost(new RFXListView(null, null, null, lr));
@@ -76,19 +82,22 @@ public class RFXListViewTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for list text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[\"Long Row 3\"]", text.get(0));
     }
 
-    @Test public void getTextForMultipleSelection() {
+    @Test
+    public void getTextForMultipleSelection() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 MultipleSelectionModel<?> selectionModel = listView.getSelectionModel();
                 selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
                 selectionModel.selectIndices(2, 8);
@@ -98,18 +107,21 @@ public class RFXListViewTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for list text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[\"Long Row 3\",\"Row 9\"]", text.get(0));
     }
 
-    @Test public void selectMultipleItemSelection() {
+    @Test
+    public void selectMultipleItemSelection() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 MultipleSelectionModel<?> selectionModel = listView.getSelectionModel();
                 selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
                 selectionModel.selectIndices(2, 6);
@@ -123,12 +135,14 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"Long Row 3\",\"Row 7\"]", recording.getParameters()[0]);
     }
 
-    @Test public void selectSpecialItemSelection() {
+    @Test
+    public void selectSpecialItemSelection() {
         @SuppressWarnings("unchecked")
         ListView<String> listView = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getItems().add(7, " Special Characters ([],)");
                 listView.getSelectionModel().select(7);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
@@ -141,12 +155,14 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\" Special Characters ([],)\"]", recording.getParameters()[0]);
     }
 
-    @Test public void selectDuplicate() {
+    @Test
+    public void selectDuplicate() {
         @SuppressWarnings("unchecked")
         ListView<String> listView = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getSelectionModel().select(8);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
                 rfxListView.focusLost(new RFXListView(null, null, null, lr));
@@ -158,7 +174,8 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"Row 9\"]", recording.getParameters()[0]);
 
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getItems().add(9, "Row 9");
                 listView.getSelectionModel().clearAndSelect(9);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
@@ -171,12 +188,14 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"Row 9(1)\"]", recording.getParameters()[0]);
     }
 
-    @Test public void listMultipleDuplicates() {
+    @Test
+    public void listMultipleDuplicates() {
         @SuppressWarnings("unchecked")
         ListView<String> listView = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getSelectionModel().select(8);
                 RFXListView rfxListView = new RFXListView(listView, null, null, lr);
                 rfxListView.focusLost(new RFXListView(null, null, null, lr));
@@ -188,7 +207,8 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"Row 9\"]", recording.getParameters()[0]);
 
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 listView.getItems().add(9, "Row 9");
                 listView.getItems().add(10, "Row 9");
                 listView.getSelectionModel().clearAndSelect(10);
@@ -202,7 +222,8 @@ public class RFXListViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"Row 9(2)\"]", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new SimpleListViewSample();
     }
 }

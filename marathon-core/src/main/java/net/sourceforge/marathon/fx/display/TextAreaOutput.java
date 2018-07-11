@@ -55,11 +55,13 @@ public class TextAreaOutput extends Dockable implements IStdOut {
         content.setCenter(textArea);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return textArea.getText();
     }
 
-    @Override public synchronized void append(String text, int type) {
+    @Override
+    public synchronized void append(String text, int type) {
         taText.append(text);
         if (text.contains("\n"))
             flush();
@@ -76,7 +78,8 @@ public class TextAreaOutput extends Dockable implements IStdOut {
         });
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
         clearButton.setDisable(true);
         exportButton.setDisable(true);
         textArea.clear();
@@ -95,11 +98,13 @@ public class TextAreaOutput extends Dockable implements IStdOut {
         }
     }
 
-    @Override public DockKey getDockKey() {
+    @Override
+    public DockKey getDockKey() {
         return DOCK_KEY;
     }
 
-    @Override public Node getComponent() {
+    @Override
+    public Node getComponent() {
         return content;
     }
 

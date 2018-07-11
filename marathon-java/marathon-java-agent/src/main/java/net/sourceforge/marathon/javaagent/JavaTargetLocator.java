@@ -91,7 +91,8 @@ public class JavaTargetLocator {
 
         public String getTitle() {
             return EventQueueWait.exec(new Callable<String>() {
-                @Override public String call() throws Exception {
+                @Override
+                public String call() throws Exception {
                     WindowTitle windowTitle = new WindowTitle(currentWindow);
                     windowTitle.setContainerNamingProperties(containerNP);
                     return windowTitle.getTitle();
@@ -257,7 +258,8 @@ public class JavaTargetLocator {
     public IJavaAgent window(final String windowDetails) {
         if (driver.getImplicitWait() != 0) {
             new EventQueueWait() {
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     try {
                         return window_internal(windowDetails) != null;
                     } catch (NoSuchWindowException e) {
@@ -270,7 +272,8 @@ public class JavaTargetLocator {
         // an exception on error
         try {
             return EventQueueWait.exec(new Callable<IJavaAgent>() {
-                @Override public IJavaAgent call() {
+                @Override
+                public IJavaAgent call() {
                     return window_internal(windowDetails);
                 }
             });
@@ -431,7 +434,8 @@ public class JavaTargetLocator {
 
     private String getFocusedWindowTitle() {
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return findFocusWindow() != null;
             }
 
@@ -477,7 +481,8 @@ public class JavaTargetLocator {
 
     public JWindow getTopContainer() {
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     _getTopContainer();
                     return true;

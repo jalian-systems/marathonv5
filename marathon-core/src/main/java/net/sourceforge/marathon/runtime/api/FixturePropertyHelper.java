@@ -93,7 +93,8 @@ public class FixturePropertyHelper {
         return false;
     }
 
-    @SuppressWarnings("unchecked") public Map<String, Object> findFixtureProperties(String fixture) {
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> findFixtureProperties(String fixture) {
         HashMap<String, Object> emptyMap = new HashMap<String, Object>();
         String fixtureProperties = getFixturePropertiesPart(fixture);
         if (fixtureProperties == null) {

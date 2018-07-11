@@ -49,18 +49,14 @@ public class TreeViewSample1 extends Sample {
         treeRoot.getChildren().addAll(Arrays.asList(new TreeItem<String>("Child Node 1"), new TreeItem<String>("Child Node 2"),
                 new TreeItem<String>("Child Node 3")));
 
-        treeRoot.getChildren().get(2).getChildren()
-                .addAll(Arrays.asList(new TreeItem<String>("Child Node 4"), new TreeItem<String>("Child Node 5"),
-                        new TreeItem<String>("Child Node 6"), new TreeItem<String>("Child Node 7"), new TreeItem<String>(
-                                "Child Node 8"),
-                        new TreeItem<String>("Child Node 9"), new TreeItem<String>("Child Node 10"),
-                        new TreeItem<String>("Child Node 11"), new TreeItem<String>("Child Node 12"),
-                        new TreeItem<String>("Child Node 13"), new TreeItem<String>("Child Node 14"),
-                        new TreeItem<String>("Child Node 15"), new TreeItem<String>("Child Node 16"),
-                        new TreeItem<String>("Child Node 17"), new TreeItem<String>("Child Node 18"),
-                        new TreeItem<String>("Child Node 19"), new TreeItem<String>("Child Node 20"),
-                        new TreeItem<String>("Child Node 21"), new TreeItem<String>("Child Node 22"),
-                        new TreeItem<String>("Child Node 23"), new TreeItem<String>("Child Node 24")));
+        treeRoot.getChildren().get(2).getChildren().addAll(Arrays.asList(new TreeItem<String>("Child Node 4"),
+                new TreeItem<String>("Child Node 5"), new TreeItem<String>("Child Node 6"), new TreeItem<String>("Child Node 7"),
+                new TreeItem<String>("Child Node 8"), new TreeItem<String>("Child Node 9"), new TreeItem<String>("Child Node 10"),
+                new TreeItem<String>("Child Node 11"), new TreeItem<String>("Child Node 12"), new TreeItem<String>("Child Node 13"),
+                new TreeItem<String>("Child Node 14"), new TreeItem<String>("Child Node 15"), new TreeItem<String>("Child Node 16"),
+                new TreeItem<String>("Child Node 17"), new TreeItem<String>("Child Node 18"), new TreeItem<String>("Child Node 19"),
+                new TreeItem<String>("Child Node 20"), new TreeItem<String>("Child Node 21"), new TreeItem<String>("Child Node 22"),
+                new TreeItem<String>("Child Node 23"), new TreeItem<String>("Child Node 24")));
 
         final TreeView treeView = new TreeView();
         treeView.setShowRoot(true);

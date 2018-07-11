@@ -48,7 +48,8 @@ public class MarathonRuby extends Marathon {
             marathon = runtime.evalScriptlet("$marathon");
         }
 
-        @Override public String getProperty(String name) {
+        @Override
+        public String getProperty(String name) {
             Ruby runtime = o.getRuntime();
             o = marathon.callMethod(runtime.getCurrentContext(), "refresh_if_stale", o);
             marathon.callMethod(runtime.getCurrentContext(), "setContext", o);
@@ -58,7 +59,8 @@ public class MarathonRuby extends Marathon {
             return o.callMethod(runtime.getCurrentContext(), "attribute", JavaEmbedUtils.javaToRuby(runtime, name)).toString();
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "ContextAccessor [o=" + o + "]";
         }
 
@@ -79,7 +81,8 @@ public class MarathonRuby extends Marathon {
          * 
          * @see net.sourceforge.marathon.player.ICloseHandler#run()
          */
-        @Override public void run() {
+        @Override
+        public void run() {
             if (!runNeeded) {
                 return;
             }
@@ -99,11 +102,13 @@ public class MarathonRuby extends Marathon {
          * 
          * @see net.sourceforge.marathon.player.ICloseHandler#setRunNeeded()
          */
-        @Override public void setRunNeeded() {
+        @Override
+        public void setRunNeeded() {
             this.runNeeded = true;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "Context: " + title + "(" + runNeeded + ")";
         }
     }
@@ -148,7 +153,8 @@ public class MarathonRuby extends Marathon {
         return map2hash(caps.getRuntime(), ourCaps);
     }
 
-    @SuppressWarnings("unchecked") private static RubyHash map2hash(Ruby ruby, Map<String, Object> ourCaps) {
+    @SuppressWarnings("unchecked")
+    private static RubyHash map2hash(Ruby ruby, Map<String, Object> ourCaps) {
         RubyHash hash = new RubyHash(ruby);
         Set<String> keySet = ourCaps.keySet();
         for (String key : keySet) {
@@ -167,7 +173,8 @@ public class MarathonRuby extends Marathon {
         return hash;
     }
 
-    @SuppressWarnings("unchecked") private static RubyArray map2list(Ruby ruby, List<?> list) {
+    @SuppressWarnings("unchecked")
+    private static RubyArray map2list(Ruby ruby, List<?> list) {
         RubyArray array = new RubyArray(ruby, list.size());
         int index = 0;
         for (Object v : list) {

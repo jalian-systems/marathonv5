@@ -29,8 +29,9 @@ public class FileChooserTransformer implements ClassFileTransformer {
 
     public static final Logger LOGGER = Logger.getLogger(FileChooserTransformer.class.getName());
 
-    @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+    @Override
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
+            byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformClass(classBeingRedefined, classfileBuffer);
     }
 

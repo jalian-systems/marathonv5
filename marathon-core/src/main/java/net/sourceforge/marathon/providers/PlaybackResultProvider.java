@@ -25,7 +25,8 @@ public class PlaybackResultProvider implements Provider<PlaybackResult> {
 
     public static final Logger LOGGER = Logger.getLogger(PlaybackResultProvider.class.getName());
 
-    @Override public PlaybackResult get() {
+    @Override
+    public PlaybackResult get() {
         return new PlaybackResult();
     }
 

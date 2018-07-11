@@ -204,7 +204,8 @@ public class FXEventQueueDevice implements IDevice {
             return isAltPressed();
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "DeviceState [shiftPressed=" + shiftPressed + ", ctrlPressed=" + ctrlPressed + ", altPressed=" + altPressed
                     + ", metaPressed=" + metaPressed + ", button1Pressed=" + button1Pressed + ", button2Pressed=" + button2Pressed
                     + ", button3Pressed=" + button3Pressed + ", y=" + y + ", x=" + x + "]";
@@ -220,7 +221,8 @@ public class FXEventQueueDevice implements IDevice {
         FXEventQueueDevice.instance = this;
     }
 
-    @Override public void sendKeys(Node node, CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(Node node, CharSequence... keysToSend) {
         for (CharSequence seq : keysToSend) {
             for (int i = 0; i < seq.length(); i++) {
                 sendKey(node, seq.charAt(i));
@@ -252,8 +254,7 @@ public class FXEventQueueDevice implements IDevice {
         }
     }
 
-    private void dispatchKeyEvent(final Node node, JavaAgentKeys keyToPress,
-            EventType<KeyEvent> eventType, char c) {
+    private void dispatchKeyEvent(final Node node, JavaAgentKeys keyToPress, EventType<KeyEvent> eventType, char c) {
         ensureVisible(node);
         if (keyToPress == null) {
             KeyboardMap kbMap = new KeyboardMap(c);
@@ -278,14 +279,15 @@ public class FXEventQueueDevice implements IDevice {
             return;
         }
         deviceState.toggleKeyState(keyToPress);
-        dispatchEvent(new KeyEvent(eventType, JavaCompatibility.getChar(KeyCode.UNDEFINED), JavaCompatibility.getChar(KeyCode.UNDEFINED), keysMap.getCode(),
-                deviceState.isShiftPressed(), deviceState.isCtrlPressed(), deviceState.isAltPressed(), deviceState.isMetaPressed()),
-                node);
+        dispatchEvent(new KeyEvent(eventType, JavaCompatibility.getChar(KeyCode.UNDEFINED),
+                JavaCompatibility.getChar(KeyCode.UNDEFINED), keysMap.getCode(), deviceState.isShiftPressed(),
+                deviceState.isCtrlPressed(), deviceState.isAltPressed(), deviceState.isMetaPressed()), node);
     }
 
     private void dispatchEvent(final Event event, final Node node) {
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Event.fireEvent(node, event);
             }
         });
@@ -293,7 +295,8 @@ public class FXEventQueueDevice implements IDevice {
 
     private void dispatchEvent(MouseEvent mouseEvent) {
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Event.fireEvent(mouseEvent.getTarget(), mouseEvent);
             }
         });
@@ -303,7 +306,8 @@ public class FXEventQueueDevice implements IDevice {
         return node;
     }
 
-    @Override public void pressKey(Node node, JavaAgentKeys keyToPress) {
+    @Override
+    public void pressKey(Node node, JavaAgentKeys keyToPress) {
         if (keyToPress == JavaAgentKeys.NULL) {
             resetModifierState(node);
         } else {
@@ -312,11 +316,13 @@ public class FXEventQueueDevice implements IDevice {
 
     }
 
-    @Override public void releaseKey(Node node, JavaAgentKeys keyToRelease) {
+    @Override
+    public void releaseKey(Node node, JavaAgentKeys keyToRelease) {
         dispatchKeyEvent(node, keyToRelease, KeyEvent.KEY_RELEASED, KeyEvent.CHAR_UNDEFINED.charAt(0));
     }
 
-    @Override public void buttonDown(Node node, Buttons button, double xoffset, double yoffset) {
+    @Override
+    public void buttonDown(Node node, Buttons button, double xoffset, double yoffset) {
         MouseButton mb = button.getMouseButton();
         dispatchEvent(createMouseEvent(MouseEvent.MOUSE_PRESSED, null, null, xoffset, yoffset, 0, 0, mb, 1,
                 deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, true, false,
@@ -325,7 +331,8 @@ public class FXEventQueueDevice implements IDevice {
         deviceState.setDragSource(node);
     }
 
-    @Override public void buttonUp(Node node, Buttons button, double xoffset, double yoffset) {
+    @Override
+    public void buttonUp(Node node, Buttons button, double xoffset, double yoffset) {
         MouseButton mb = button.getMouseButton();
         dispatchEvent(createMouseEvent(MouseEvent.MOUSE_RELEASED, null, null, xoffset, yoffset, 0, 0, mb, 1,
                 deviceState.shiftPressed, deviceState.ctrlPressed, deviceState.altPressed, deviceState.metaPressed, true, false,
@@ -334,13 +341,15 @@ public class FXEventQueueDevice implements IDevice {
         deviceState.setDragSource(null);
     }
 
-    @Override public void moveto(Node node) {
+    @Override
+    public void moveto(Node node) {
         if (node instanceof Control) {
             moveto(node, ((Control) node).getWidth() / 2, ((Control) node).getHeight() / 2);
         }
     }
 
-    @Override public void moveto(Node node, double xoffset, double yoffset) {
+    @Override
+    public void moveto(Node node, double xoffset, double yoffset) {
         MouseButton buttons = deviceState.getButtons();
         if (node != deviceState.getNode()) {
             if (deviceState.getNode() != null) {
@@ -368,7 +377,8 @@ public class FXEventQueueDevice implements IDevice {
         deviceState.setMousePosition(xoffset, yoffset);
     }
 
-    @Override public void click(Node node, Node target, PickResult pickResult, Buttons button, int clickCount, double xoffset,
+    @Override
+    public void click(Node node, Node target, PickResult pickResult, Buttons button, int clickCount, double xoffset,
             double yoffset) {
         MouseButton b = button.getMouseButton();
         dispatchMouseEvent(node, target, pickResult, button == Buttons.RIGHT, clickCount, b, xoffset, yoffset);

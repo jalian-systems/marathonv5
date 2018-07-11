@@ -26,7 +26,8 @@ public class CheckBoxListViewSample extends Sample {
         }
 
         listView.setCellFactory(CheckBoxListCell.forListView(new Callback<Item, ObservableValue<Boolean>>() {
-            @Override public ObservableValue<Boolean> call(Item item) {
+            @Override
+            public ObservableValue<Boolean> call(Item item) {
                 return item.onProperty();
             }
         }));
@@ -67,7 +68,8 @@ public class CheckBoxListViewSample extends Sample {
             this.onProperty().set(on);
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return getName();
         }
 

@@ -32,13 +32,16 @@ import com.sun.swingset3.demos.combobox.ComboBoxDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RComboBoxTest extends RComponentTest {
+@Test
+public class RComboBoxTest extends RComponentTest {
     protected JFrame frame;
     private JComboBox comboBox;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RComboBoxTest.class.getSimpleName());
                 frame.setName("frame-" + RComboBoxTest.class.getSimpleName());
                 frame.getContentPane().add(new ComboBoxDemo(), BorderLayout.CENTER);
@@ -48,9 +51,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -61,7 +66,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void getDefaultSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 comboBox = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(comboBox, null, null, lr);
                 comboBox.setSelectedIndex(0);
@@ -76,7 +82,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectOption() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 comboBox = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(comboBox, null, null, lr);
                 comboBox.setSelectedIndex(2);
@@ -91,7 +98,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectOptionWithQuotes() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 comboBox = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(comboBox, null, null, lr);
                 comboBox.addItem("James, \"Lisa\", Brent");
@@ -109,7 +117,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         String text = "This is a test text";
         final String htmlText = "<html><font color=\"RED\"><h1><This is also content>" + text + "</h1></html>";
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 comboBox = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(comboBox, null, null, lr);
                 comboBox.addItem(htmlText);
@@ -124,14 +133,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContent() {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 comboBox = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
             }
         });
         final RComboBox rCombo = new RComboBox(comboBox, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rCombo.getContent();
             }
         });

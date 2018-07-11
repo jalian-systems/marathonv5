@@ -37,21 +37,25 @@ public class TestLauncher implements ITestLauncher {
         this.ps = ps;
     }
 
-    @Override public void destroy() {
+    @Override
+    public void destroy() {
         if (proxy != null) {
             proxy.quit(true);
         }
     }
 
-    @Override public void copyOutputTo(OutputStream writerOutputStream) {
+    @Override
+    public void copyOutputTo(OutputStream writerOutputStream) {
         this.writerOutputStream = new PrintStream(writerOutputStream);
     }
 
-    @Override public void setMessageArea(OutputStream writerOutputStream) {
+    @Override
+    public void setMessageArea(OutputStream writerOutputStream) {
         messagePS = new PrintStream(writerOutputStream);
     }
 
-    @Override public int start() {
+    @Override
+    public int start() {
         int selection = OK_OPTION;
         if (!launcherModel.confirmConfiguration()) {
             return CANCEL_OPTION;
@@ -69,7 +73,8 @@ public class TestLauncher implements ITestLauncher {
         return selection;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (proxy != null) {
             return proxy.toString();
         }

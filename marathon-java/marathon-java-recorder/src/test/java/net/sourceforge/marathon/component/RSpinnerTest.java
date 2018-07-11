@@ -37,12 +37,15 @@ import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class RSpinnerTest extends RComponentTest {
+@Test
+public class RSpinnerTest extends RComponentTest {
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RSpinnerTest.class.getSimpleName());
                 frame.setName("frame-" + RSpinnerTest.class.getSimpleName());
                 frame.getContentPane().add(new SpinnerDemo2(), BorderLayout.CENTER);
@@ -52,9 +55,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -64,7 +69,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void listSpinner() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
                 JSpinner listSpinner = (JSpinner) spinnerComponents.get(0);
                 RSpinner rSpinner = new RSpinner(listSpinner, null, null, lr);
@@ -82,7 +88,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         final LoggingRecorder lr = new LoggingRecorder();
         final Exception[] exc = new Exception[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
                 JSpinner listSpinner = (JSpinner) spinnerComponents.get(0);
                 RSpinner rSpinner = new RSpinner(listSpinner, null, null, lr);
@@ -106,7 +113,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void numberSpinner() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
                 JSpinner numberSpinner = (JSpinner) spinnerComponents.get(1);
                 RSpinner rSpinner = new RSpinner(numberSpinner, null, null, lr);
@@ -123,7 +131,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void dateSpinner() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> spinnerComponents = ComponentUtils.findComponents(JSpinner.class, frame);
                 JSpinner dateSpinner = (JSpinner) spinnerComponents.get(2);
                 RSpinner rSpinner = new RSpinner(dateSpinner, null, null, lr);

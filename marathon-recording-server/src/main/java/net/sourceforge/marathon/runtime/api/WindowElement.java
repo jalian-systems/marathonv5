@@ -28,7 +28,8 @@ public class WindowElement extends CompositeScriptElement {
         this.windowId = windowId;
     }
 
-    @Override public WindowId getWindowId() {
+    @Override
+    public WindowId getWindowId() {
         return windowId;
     }
 
@@ -36,14 +37,16 @@ public class WindowElement extends CompositeScriptElement {
         return windowId.getTitle();
     }
 
-    @Override public boolean owns(CompositeScriptElement child) {
+    @Override
+    public boolean owns(CompositeScriptElement child) {
         if (!(child instanceof WindowElement) || getTitle().equals(((WindowElement) child).windowId.getParentTitle())) {
             return true;
         }
         return false;
     }
 
-    @Override public String toScriptCode() {
+    @Override
+    public String toScriptCode() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForWindow(windowId));
         Indent.incIndent();
@@ -53,7 +56,8 @@ public class WindowElement extends CompositeScriptElement {
         return buffer.toString();
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (obj instanceof WindowElement) {
             WindowElement that = (WindowElement) obj;
             new ObjectComparator();
@@ -62,15 +66,18 @@ public class WindowElement extends CompositeScriptElement {
         return false;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return windowId.hashCode();
     }
 
-    @Override public boolean isUndo() {
+    @Override
+    public boolean isUndo() {
         return false;
     }
 
-    @Override public IScriptElement getUndoElement() {
+    @Override
+    public IScriptElement getUndoElement() {
         return null;
     }
 }

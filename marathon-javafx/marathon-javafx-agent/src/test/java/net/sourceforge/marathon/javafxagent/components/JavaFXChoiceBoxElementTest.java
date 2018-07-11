@@ -35,44 +35,51 @@ public class JavaFXChoiceBoxElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement choiceBox;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         choiceBox = driver.findElementByTagName("choice-box");
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         ChoiceBox<?> choiceBoxNode = (ChoiceBox<?>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         Platform.runLater(() -> {
             choiceBox.marathon_select("Cat");
         });
         new Wait("Waiting for choice box option to be set.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return choiceBoxNode.getSelectionModel().getSelectedIndex() == 1;
             }
         };
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             choiceBox.marathon_select("Horse");
             text.add(choiceBox.getAttribute("text"));
         });
         new Wait("Waiting for choice box text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Horse", text.get(0));
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         List<String> contents = new ArrayList<>();
         Platform.runLater(() -> {
             contents.add(choiceBox.getAttribute("content"));
         });
         new Wait("Waiting for choice box content.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return contents.size() > 0;
             }
         };
@@ -80,7 +87,8 @@ public class JavaFXChoiceBoxElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals(expected, contents.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ChoiceBoxSample();
     }
 

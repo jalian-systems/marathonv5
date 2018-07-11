@@ -34,14 +34,17 @@ import components.TextFieldDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.OSUtils;
 
-@Test public class JTextFieldTest {
+@Test
+public class JTextFieldTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new TextFieldDemo();
                 frame.setName("frame-" + JTextFieldTest.class.getSimpleName());
                 frame.pack();
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javadriver.OSUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

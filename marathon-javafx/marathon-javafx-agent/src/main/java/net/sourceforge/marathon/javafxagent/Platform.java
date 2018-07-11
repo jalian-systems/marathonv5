@@ -33,7 +33,8 @@ public enum Platform {
      * version of Windows.
      */
     WINDOWS("") {
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return compareWith == WINDOWS || compareWith == XP || compareWith == VISTA || compareWith == WIN8;
         }
     },
@@ -44,7 +45,8 @@ public enum Platform {
      * settings\\username"
      */
     XP("Windows Server 2003", "xp", "windows", "winnt") {
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return compareWith == WINDOWS || compareWith == XP;
         }
     },
@@ -53,7 +55,8 @@ public enum Platform {
      * For versions of Windows that "feel like" Windows Vista.
      */
     VISTA("windows vista", "Windows Server 2008", "windows 7", "win7") {
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return compareWith == WINDOWS || compareWith == VISTA;
         }
     },
@@ -62,7 +65,8 @@ public enum Platform {
      * For versions of Windows that "feel like" Windows 8.
      */
     WIN8("Windows Server 2012", "windows 8", "win8") {
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return compareWith == WINDOWS || compareWith == WIN8;
         }
     },
@@ -77,14 +81,16 @@ public enum Platform {
     },
 
     LINUX("linux") {
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return compareWith == UNIX || compareWith == LINUX;
         }
     },
 
     ANDROID("android", "dalvik") {
 
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return compareWith == LINUX || compareWith == ANDROID;
         }
     },
@@ -94,7 +100,8 @@ public enum Platform {
      * operating system.
      */
     ANY("") {
-        @Override public boolean is(Platform compareWith) {
+        @Override
+        public boolean is(Platform compareWith) {
             return true;
         }
     };

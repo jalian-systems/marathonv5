@@ -52,23 +52,28 @@ public class GroupEntryResource extends Resource {
         setGraphic(entry.getIcon());
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return entry.getName();
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return true;
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return entry.canPlaySingle();
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         return entry.getTest(acceptChecklist, console);
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return entry.getFilePath();
     }
 
@@ -76,7 +81,8 @@ public class GroupEntryResource extends Resource {
         return entry;
     }
 
-    @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
+    @Override
+    public List<Resource> findNodes(Resource resource, List<Resource> found) {
         Path filePath = getFilePath();
         if (filePath != null && filePath.equals(resource.getFilePath())) {
             found.add(this);
@@ -84,25 +90,30 @@ public class GroupEntryResource extends Resource {
         return found;
     }
 
-    @Override public void updated(Resource resource) {
+    @Override
+    public void updated(Resource resource) {
         Event.fireEvent(this, new TreeModificationEvent<Resource>(valueChangedEvent(), this, this));
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         entry.rename(text);
         Event.fireEvent(this, new ResourceModificationEvent(ResourceModificationEvent.UPDATE, this));
         return this;
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return entry.getType() != GroupEntryType.FOLDER;
     }
 
-    @Override public boolean canOpen() {
+    @Override
+    public boolean canOpen() {
         return entry.getType() != GroupEntryType.FOLDER;
     }
 
-    @Override public boolean copy(Map<DataFormat, Object> content) {
+    @Override
+    public boolean copy(Map<DataFormat, Object> content) {
         @SuppressWarnings("unchecked")
         List<File> files = (List<File>) content.get(DataFormat.FILES);
         if (files == null) {
@@ -114,21 +125,25 @@ public class GroupEntryResource extends Resource {
         return true;
     }
 
-    @Override public void paste(Clipboard clipboard, Operation operation) {
+    @Override
+    public void paste(Clipboard clipboard, Operation operation) {
         int index = getParent().getChildren().indexOf(this);
         ((GroupResource) getParent()).paste(index + 1, clipboard, operation);
     }
 
-    @Override public boolean droppable(Dragboard dragboard) {
+    @Override
+    public boolean droppable(Dragboard dragboard) {
         return ((GroupResource) getParent()).droppable(dragboard);
     }
 
-    @Override public void pasteInto(Clipboard clipboard, Operation operation) {
+    @Override
+    public void pasteInto(Clipboard clipboard, Operation operation) {
         int index = getParent().getChildren().indexOf(this);
         ((GroupResource) getParent()).paste(index + 1, clipboard, operation);
     }
 
-    @Override public Optional<ButtonType> delete(Optional<ButtonType> option) {
+    @Override
+    public Optional<ButtonType> delete(Optional<ButtonType> option) {
         if (!option.isPresent() || option.get() != FXUIUtils.YES_ALL) {
             option = FXUIUtils.showConfirmDialog(null, "Do you want to delete the entry `" + entry.getName() + "`?", "Confirm",
                     AlertType.CONFIRMATION, ButtonType.YES, ButtonType.NO, FXUIUtils.YES_ALL, ButtonType.CANCEL);
@@ -147,36 +162,43 @@ public class GroupEntryResource extends Resource {
         return option;
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return true;
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public MenuItem[] getUnhideMenuItem() {
+    @Override
+    public MenuItem[] getUnhideMenuItem() {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public void deleted() {
+    @Override
+    public void deleted() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public void moved() {
+    @Override
+    public void moved() {
         GroupResource suiteResource = (GroupResource) getParent();
         if (suiteResource != null) {
             suiteResource.getSuite().getEntries().remove(suiteResource.getChildren().indexOf(this));

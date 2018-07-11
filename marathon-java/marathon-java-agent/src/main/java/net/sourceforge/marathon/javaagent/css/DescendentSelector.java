@@ -34,11 +34,13 @@ public class DescendentSelector implements Selector {
         this.descendent = child;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return parent + " " + descendent;
     }
 
-    @Override public List<IJavaElement> findElements(IJavaAgent driver, IJavaElement container, long implicitWait) {
+    @Override
+    public List<IJavaElement> findElements(IJavaAgent driver, IJavaElement container, long implicitWait) {
         List<IJavaElement> result = new ArrayList<IJavaElement>();
         List<IJavaElement> parents = parent.findElements(driver, container, implicitWait);
         for (IJavaElement parent : parents) {

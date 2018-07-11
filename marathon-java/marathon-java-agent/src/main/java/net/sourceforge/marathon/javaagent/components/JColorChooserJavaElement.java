@@ -33,7 +33,8 @@ public class JColorChooserJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         if (!value.equals("")) {
             try {
                 ((JColorChooser) component).setColor(Color.decode(value));

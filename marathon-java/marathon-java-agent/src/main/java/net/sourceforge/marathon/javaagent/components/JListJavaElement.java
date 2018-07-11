@@ -62,16 +62,19 @@ public class JListJavaElement extends AbstractJavaElement {
         return content;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSelectionText((JList) component);
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("nth-item")) {
             return Arrays.asList((IJavaElement) new JListItemJavaElement(this, ((Integer) params[0]).intValue() - 1));
         } else if (selector.equals("all-items") || selector.equals("all-cells")) {
             return collectItems(new ArrayList<IJavaElement>(), new Predicate() {
-                @Override public boolean isValid(JListItemJavaElement e) {
+                @Override
+                public boolean isValid(JListItemJavaElement e) {
                     return true;
                 }
             });
@@ -88,7 +91,8 @@ public class JListJavaElement extends AbstractJavaElement {
         final String item = o.getString("select");
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         return collectItems(r, new Predicate() {
-            @Override public boolean isValid(JListItemJavaElement e) {
+            @Override
+            public boolean isValid(JListItemJavaElement e) {
                 return item.equals(e._getText());
             }
         });
@@ -108,7 +112,8 @@ public class JListJavaElement extends AbstractJavaElement {
     public int getCount() {
         try {
             return EventQueueWait.exec(new Callable<Integer>() {
-                @Override public Integer call() {
+                @Override
+                public Integer call() {
                     return ((JList) getComponent()).getModel().getSize();
                 }
             });
@@ -117,7 +122,8 @@ public class JListJavaElement extends AbstractJavaElement {
         }
     }
 
-    @Override public boolean marathon_select(JSONArray jsonArray) {
+    @Override
+    public boolean marathon_select(JSONArray jsonArray) {
         Properties[] pa = new Properties[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++) {
             pa[i] = PropertyHelper.asProperties(jsonArray.getJSONObject(i));
@@ -125,7 +131,8 @@ public class JListJavaElement extends AbstractJavaElement {
         return setItemSelection(pa);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         Properties[] pa = PropertyHelper.fromStringToArray(value, new String[][] { { "text" } });
         return setItemSelection(pa);
     }
@@ -134,7 +141,8 @@ public class JListJavaElement extends AbstractJavaElement {
         List<IJavaElement> r = new ArrayList<IJavaElement>();
         for (final Properties properties : pa) {
             collectItems(r, new Predicate() {
-                @Override public boolean isValid(JListItemJavaElement e) {
+                @Override
+                public boolean isValid(JListItemJavaElement e) {
                     Set<Object> keySet = properties.keySet();
                     for (Object object : keySet) {
                         if (!properties.getProperty(object.toString()).equals(e.getAttribute(object.toString()))) {

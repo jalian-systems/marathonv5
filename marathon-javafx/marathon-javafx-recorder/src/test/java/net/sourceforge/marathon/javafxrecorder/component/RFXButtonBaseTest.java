@@ -34,15 +34,18 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXButtonBaseTest extends RFXComponentTest {
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ColorButtonSample();
     }
 
-    @Test public void click() {
+    @Test
+    public void click() {
         Button button = (Button) getPrimaryStage().getScene().getRoot().lookup(".button");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXButtonBase rfxButtonBase = new RFXButtonBase(button, null, null, lr);
                 Point2D sceneXY = button.localToScene(new Point2D(3, 3));
                 PickResult pickResult = new PickResult(button, sceneXY.getX(), sceneXY.getY());
@@ -58,12 +61,14 @@ public class RFXButtonBaseTest extends RFXComponentTest {
         AssertJUnit.assertEquals("", select.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         Button button = (Button) getPrimaryStage().getScene().getRoot().lookup(".button");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXButtonBase rfxButtonBase = new RFXButtonBase(button, null, null, lr);
                 Point2D sceneXY = button.localToScene(new Point2D(3, 3));
                 PickResult pickResult = new PickResult(button, sceneXY.getX(), sceneXY.getY());
@@ -75,7 +80,8 @@ public class RFXButtonBaseTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for button text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };

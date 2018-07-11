@@ -30,11 +30,13 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXSliderTest extends RFXComponentTest {
 
-    @Test public void slider() throws Throwable {
+    @Test
+    public void slider() throws Throwable {
         Slider slider = (Slider) getPrimaryStage().getScene().getRoot().lookup(".slider");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 slider.setValue(25.0);
                 RFXSlider rfxSlider = new RFXSlider(slider, null, null, lr);
                 rfxSlider.focusLost(null);
@@ -46,12 +48,14 @@ public class RFXSliderTest extends RFXComponentTest {
         AssertJUnit.assertEquals("25.0", recording.getParameters()[0]);
     }
 
-    @Test public void getText() throws Throwable {
+    @Test
+    public void getText() throws Throwable {
         Slider slider = (Slider) getPrimaryStage().getScene().getRoot().lookup(".slider");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 slider.setValue(25.0);
                 RFXSlider rfxSlider = new RFXSlider(slider, null, null, lr);
                 rfxSlider.focusLost(null);
@@ -59,14 +63,16 @@ public class RFXSliderTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for slider text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("25.0", text.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new SliderSample();
     }
 }

@@ -27,7 +27,8 @@ public class WaitUtil {
         if (TRACE)
             System.out.println(message);
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return until.until();
             }
         }.wait(message);
@@ -37,7 +38,8 @@ public class WaitUtil {
         if (TRACE)
             System.out.println(message);
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return until.until();
             }
         }.wait(message, timeoutInMilliseconds);
@@ -47,7 +49,8 @@ public class WaitUtil {
         if (TRACE)
             System.out.println(message);
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return until.until();
             }
         }.wait(message, timeoutInMilliseconds, intervalInMilliseconds);
@@ -57,7 +60,8 @@ public class WaitUtil {
         if (TRACE)
             System.out.println(message);
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return until.until();
             }
         }.waitWithoutException(message);
@@ -67,7 +71,8 @@ public class WaitUtil {
         if (TRACE)
             System.out.println(message);
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return until.until();
             }
         }.waitWithoutException(message, timeoutInMilliseconds);
@@ -77,7 +82,8 @@ public class WaitUtil {
         if (TRACE)
             System.out.println(message);
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return until.until();
             }
         }.waitWithoutException(message, timeoutInMilliseconds, intervalInMilliseconds);

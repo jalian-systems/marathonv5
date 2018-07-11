@@ -29,8 +29,9 @@ public class MenuItemTransformer implements ClassFileTransformer {
 
     public static final Logger LOGGER = Logger.getLogger(MenuItemTransformer.class.getName());
 
-    @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+    @Override
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
+            byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformClass(classBeingRedefined, classfileBuffer);
     }
 
@@ -41,8 +42,7 @@ public class MenuItemTransformer implements ClassFileTransformer {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
             if (cl.getName().equals("javafx.scene.control.MenuItem")) {
                 CtMethod method = cl.getDeclaredMethod("fire");
-                String code = "{"
-                        + JavaCompatibility.getRootAccessCode()
+                String code = "{" + JavaCompatibility.getRootAccessCode()
                         + "((javafx.event.EventHandler)m$r.getProperties().get(\"marathon.menu.handler\")).handle(new javafx.event.ActionEvent(this, this));"
                         + "}";
                 method.insertBefore(code);

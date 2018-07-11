@@ -15,7 +15,8 @@ public class HeaderVBoxer extends CheckListItemVBoxer {
         this.item = item;
     }
 
-    @Override protected VBox createVBox(boolean selectable, boolean editable) {
+    @Override
+    protected VBox createVBox(boolean selectable, boolean editable) {
         VBox headerBox = new VBox();
         HBox hBox = new HBox();
         Separator separator = new Separator();
@@ -26,7 +27,8 @@ public class HeaderVBoxer extends CheckListItemVBoxer {
         return headerBox;
     }
 
-    @Override public Header getItem() {
+    @Override
+    public Header getItem() {
         return item;
     }
 

@@ -100,24 +100,30 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
                 }
             }
             webEngine.addLoadListener(new LoadListener() {
-                @Override public void onStartLoadingFrame(StartLoadingEvent arg0) {
+                @Override
+                public void onStartLoadingFrame(StartLoadingEvent arg0) {
                 }
 
-                @Override public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
+                @Override
+                public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
                     webview.getProperties().remove("player" + arg0.getFrameId());
                     webview.getProperties().remove("document" + arg0.getFrameId());
                 }
 
-                @Override public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
+                @Override
+                public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
                 }
 
-                @Override public void onFailLoadingFrame(FailLoadingEvent arg0) {
+                @Override
+                public void onFailLoadingFrame(FailLoadingEvent arg0) {
                 }
 
-                @Override public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
+                @Override
+                public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
                 }
 
-                @Override public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
+                @Override
+                public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
                     if (arg0.isMainFrame())
                         loadScript(webview, webEngine, -1);
                     else
@@ -137,7 +143,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
         }
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("select-by-properties")) {
             try {
                 JSONObject o = new JSONObject((String) params[0]);
@@ -170,7 +177,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
 
     private boolean documentHasSelector(String selector, long frameId) {
         return EventQueueWait.exec(new Callable<Boolean>() {
-            @Override public Boolean call() throws Exception {
+            @Override
+            public Boolean call() throws Exception {
                 try {
                     return ((BrowserView) getComponent()).getBrowser().getDocument() != null
                             && getComponent().getProperties().containsKey("player" + frameId) && hasSelector();
@@ -189,7 +197,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
     public void click(String selector, long frameId) {
         EventQueueWait.exec(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 JSObject player = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
                 player.getProperty("click").asFunction().invoke(player, selector);
             }
@@ -202,7 +211,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
 
     public boolean select(String selector, String value, long frameId) {
         Boolean selected = EventQueueWait.exec(new Callable<Boolean>() {
-            @Override public Boolean call() throws Exception {
+            @Override
+            public Boolean call() throws Exception {
                 JSObject player = ((JSValue) getComponent().getProperties().get("player" + frameId)).asObject();
                 return player.getProperty("select").asFunction().invoke(player, selector, value).getBooleanValue();
             }
@@ -217,7 +227,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
 
     public static String getText(Node component, String selector, long frameId) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 Object player = component.getProperties().get("player" + frameId);
                 JSObject doc = ((JSValue) player).asObject();
                 JSValue invoke = doc.getProperty("text").asFunction().invoke(doc, selector);
@@ -228,7 +239,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
 
     public static String getLabeledBy(Node component, String selector, long frameId) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 JSObject doc = ((JSValue) component.getProperties().get("player" + frameId)).asObject();
                 JSValue invoke = doc.getProperty("label").asFunction().invoke(doc, selector);
                 return invoke.isNull() ? null : invoke.getStringValue();
@@ -238,7 +250,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
 
     public static String getValue(Node component, String selector, long frameId) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 JSObject doc = ((JSValue) component.getProperties().get("player" + frameId)).asObject();
                 JSValue invoke = doc.getProperty("value").asFunction().invoke(doc, selector);
                 return invoke.isNull() ? null : invoke.getStringValue();
@@ -268,7 +281,8 @@ public class JavaFXBrowserViewElement extends JavaFXElement {
         initializedRemoteDebug = true;
         List<String> chromiumSwitches = BrowserPreferences.getChromiumSwitches();
         Optional<String> findFirst = chromiumSwitches.stream().filter(new Predicate<String>() {
-            @Override public boolean test(String t) {
+            @Override
+            public boolean test(String t) {
                 return t.startsWith("--remote-debugging-port=");
             }
         }).findFirst();

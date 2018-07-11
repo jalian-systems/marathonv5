@@ -55,17 +55,21 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         this.path = rowToPath(row);
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters",
                 new JSONArray().put(new JSONObject().put("select", path).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @SuppressWarnings("unchecked") @Override public Node getPseudoComponent() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public Node getPseudoComponent() {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         @SuppressWarnings("rawtypes")
         TreeItem item = getPath(treeView, path);
@@ -76,7 +80,9 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         return getCellAt(treeView, item);
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         @SuppressWarnings("rawtypes")
         TreeItem item = getPath(treeView, path);
@@ -92,7 +98,8 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         return super.getByPseudoElement(selector, params);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) private Node getEditor() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private Node getEditor() {
         TreeCell cell = (TreeCell) getPseudoComponent();
         TreeView treeView = (TreeView) getComponent();
         treeView.edit(cell.getTreeItem());
@@ -102,18 +109,21 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         return cellComponent;
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         Point2D midpoint = _getMidpoint();
         parent._moveto(midpoint.getX(), midpoint.getY());
     }
 
-    @Override public void _moveto(double xoffset, double yoffset) {
+    @Override
+    public void _moveto(double xoffset, double yoffset) {
         Node cell = getPseudoComponent();
         Point2D pCoords = cell.localToParent(xoffset, yoffset);
         parent._moveto(pCoords.getX(), pCoords.getY());
     }
 
-    @Override public Point2D _getMidpoint() {
+    @Override
+    public Point2D _getMidpoint() {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         Node cell = getCellAt(treeView, getPath(treeView, path));
         Bounds boundsInParent = cell.getBoundsInParent();
@@ -122,7 +132,9 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         return cell.localToParent(x, y);
     }
 
-    @SuppressWarnings("unchecked") @Override public Object _makeVisible() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object _makeVisible() {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         @SuppressWarnings("rawtypes")
         TreeItem item = getPath(treeView, path);
@@ -138,12 +150,14 @@ public class JavaFXTreeViewNodeElement extends JavaFXElement implements IPseudoE
         return path;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         return getTextForNode(treeView, getPath(treeView, path));
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         Node cell = getPseudoComponent();
         target = getTextObj((TreeCell<?>) cell);
         Point2D targetXY = node.localToScene(xoffset, yoffset);

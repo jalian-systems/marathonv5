@@ -58,12 +58,14 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox content = new VBox();
         content.setId("FixtureStage");
         content.getStyleClass().add("fixture");
@@ -151,7 +153,8 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
         return fixtures.contains(fixtureName + ".rb");
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 }

@@ -43,12 +43,14 @@ public class ChildSelector implements Selector {
         this.child = child;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return parent + " > " + child;
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
-            final IJavaElement container, long implicitWait) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<IJavaElement> findElements(final IJavaAgent driver, final IJavaElement container, long implicitWait) {
         final List<IJavaElement> pElements = parent.findElements(driver, container, implicitWait);
         if (pElements.size() == 0) {
             return pElements;
@@ -56,7 +58,8 @@ public class ChildSelector implements Selector {
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
             EventQueueWait.exec(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     try {
                         r[0] = found(pElements, driver);
                     } catch (NoSuchWindowException e) {
@@ -70,7 +73,8 @@ public class ChildSelector implements Selector {
             });
         } else {
             new EventQueueWait() {
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     List<IJavaElement> list;
                     try {
                         list = found(pElements, driver);

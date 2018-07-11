@@ -47,12 +47,14 @@ public class TestTreeItem extends TreeItem<Test> {
         this.test = test;
     }
 
-    @Override public ObservableList<TreeItem<Test>> getChildren() {
+    @Override
+    public ObservableList<TreeItem<Test>> getChildren() {
         ObservableList<TreeItem<Test>> children = super.getChildren();
         if (!children.isEmpty()) {
             if (testRunner.showFailures()) {
                 List<TreeItem<Test>> failures = children.stream().filter(new Predicate<TreeItem<Test>>() {
-                    @Override public boolean test(TreeItem<Test> t) {
+                    @Override
+                    public boolean test(TreeItem<Test> t) {
                         return ((TestTreeItem) t).getState() == State.ERROR || ((TestTreeItem) t).getState() == State.FAILURE;
                     }
                 }).collect(Collectors.toList());
@@ -76,7 +78,8 @@ public class TestTreeItem extends TreeItem<Test> {
         return children;
     }
 
-    @Override public boolean isLeaf() {
+    @Override
+    public boolean isLeaf() {
         return !(test instanceof TestSuite);
     }
 

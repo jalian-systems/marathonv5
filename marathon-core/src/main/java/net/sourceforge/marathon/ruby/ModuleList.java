@@ -80,7 +80,8 @@ public class ModuleList {
         for (String moduleDir : moduleDirs) {
             File file = new File(moduleDir);
             File[] files = file.listFiles(new FileFilter() {
-                @Override public boolean accept(File pathname) {
+                @Override
+                public boolean accept(File pathname) {
                     if (pathname.getName().startsWith(".")) {
                         return false;
                     }
@@ -103,7 +104,8 @@ public class ModuleList {
         if (file.isDirectory()) {
             Module module = new Module(getModuleName(file), parent);
             File[] files = file.listFiles(new FileFilter() {
-                @Override public boolean accept(File pathname) {
+                @Override
+                public boolean accept(File pathname) {
                     if (pathname.getName().startsWith(".")) {
                         return false;
                     }
@@ -134,13 +136,16 @@ public class ModuleList {
             Node node = parser.parse(file.getName(), new FileReader(file), new ParserConfiguration());
             List<Node> defnNodes = findNodes(node, new INodeFilter() {
 
-                @Override public void visitStart(Node node) {
+                @Override
+                public void visitStart(Node node) {
                 }
 
-                @Override public void visitEnd(Node node) {
+                @Override
+                public void visitEnd(Node node) {
                 }
 
-                @Override public boolean accept(Node node) {
+                @Override
+                public boolean accept(Node node) {
                     return node instanceof DefnNode;
                 }
             });
@@ -293,13 +298,16 @@ public class ModuleList {
 
         findNodes(defn, new INodeFilter() {
 
-            @Override public void visitStart(Node node) {
+            @Override
+            public void visitStart(Node node) {
             }
 
-            @Override public void visitEnd(Node node) {
+            @Override
+            public void visitEnd(Node node) {
             }
 
-            @Override public boolean accept(Node node) {
+            @Override
+            public boolean accept(Node node) {
                 if (node instanceof FCallNode && ((FCallNode) node).getName().equals("with_window") && callNodes[0] == null) {
                     callNodes[0] = (FCallNode) node;
                 }

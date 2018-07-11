@@ -29,17 +29,20 @@ public class JavaFXTableViewCheckBoxElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement tableView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         tableView = driver.findElementByTagName("table-view");
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         String expected = "[[\":checked\",\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\":unchecked\",\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\":checked\",\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\":checked\",\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\":unchecked\",\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
         AssertJUnit.assertEquals(expected, tableView.getAttribute("content"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TableCellFactorySample();
     }
 }

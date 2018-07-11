@@ -20,19 +20,23 @@ public class Java8 {
         return stages;
     }
 
-    @SuppressWarnings("deprecation") public static Iterator<Window> getWindows() {
+    @SuppressWarnings("deprecation")
+    public static Iterator<Window> getWindows() {
         return Window.impl_getWindows();
     }
 
-    @SuppressWarnings("deprecation") public static String getChar(KeyCode keyCode) {
+    @SuppressWarnings("deprecation")
+    public static String getChar(KeyCode keyCode) {
         return keyCode.impl_getChar();
     }
 
-    @SuppressWarnings("deprecation") public static int getCode(KeyCode keyCode) {
+    @SuppressWarnings("deprecation")
+    public static int getCode(KeyCode keyCode) {
         return keyCode.impl_getCode();
     }
 
-    @SuppressWarnings("deprecation") public static String getUrl(Image image) {
+    @SuppressWarnings("deprecation")
+    public static String getUrl(Image image) {
         return image.impl_getUrl();
     }
 

@@ -33,18 +33,21 @@ public class RFXTextInputControl extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         prevText = ((TextInputControl) getComponent()).getText();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         String text = ((TextInputControl) getComponent()).getText();
         if (!text.equals(prevText)) {
             recorder.recordSelect(this, text);
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return ((TextInputControl) getComponent()).getText();
     }
 }

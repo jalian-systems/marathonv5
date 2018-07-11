@@ -39,13 +39,16 @@ import net.sourceforge.marathon.javaagent.IDevice;
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RTabbedPaneTest extends RComponentTest {
+@Test
+public class RTabbedPaneTest extends RComponentTest {
     protected JFrame frame;
     private JTabbedPane tabbedPane;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RTabbedPaneTest.class.getSimpleName());
                 frame.setName("frame-" + RTabbedPaneTest.class.getSimpleName());
                 frame.getContentPane().add(new TabbedPaneDemo(), BorderLayout.CENTER);
@@ -55,9 +58,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -67,7 +72,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectANormalTab() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, lr);
                 rtp.stateChanged(null);
@@ -77,7 +83,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("select", call.getFunction());
         AssertJUnit.assertEquals("Tab 1", call.getState());
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, lr);
                 tabbedPane.setSelectedIndex(2);
@@ -92,7 +99,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectANoTextTab() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(3, null);
                 RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, lr);
@@ -108,7 +116,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectANoIconAndTextTab() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(3, null);
                 tabbedPane.setIconAt(3, null);
@@ -129,7 +138,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         Point p = getTabClickPoint(tp, 1);
         d.click(tp, Buttons.LEFT, 1, p.x, p.y);
         tp.addChangeListener(new ChangeListener() {
-            @Override public void stateChanged(ChangeEvent e) {
+            @Override
+            public void stateChanged(ChangeEvent e) {
                 RTabbedPane rtp = new RTabbedPane(tp, null, null, lr);
                 rtp.stateChanged(e);
             }
@@ -142,7 +152,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void tabDuplicates() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(2, "Tab 2");
                 RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, lr);
@@ -155,7 +166,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("Tab 2", cal.getState());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(2, "Tab 2");
                 RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, lr);
@@ -171,7 +183,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void tabMultipleDuplicates() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(2, "Tab 2");
                 RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, lr);
@@ -184,7 +197,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("Tab 2", cal.getState());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(0, "Tab 2");
                 tabbedPane.setTitleAt(2, "Tab 2");
@@ -201,7 +215,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     protected Point getTabClickPoint(final JTabbedPane tp, final int tabIndex) {
         final Point[] ps = new Point[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Rectangle boundsAt = tp.getBoundsAt(tabIndex);
                 ps[0] = new Point(boundsAt.x + boundsAt.width / 2, boundsAt.y + boundsAt.height / 2);
             }
@@ -212,14 +227,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContent() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
             }
         });
         final RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rtp.getContent();
             }
         });
@@ -229,7 +246,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContentDuplicates() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabbedPane = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tabbedPane.setTitleAt(2, "Tab 2");
             }
@@ -237,7 +255,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final RTabbedPane rtp = new RTabbedPane(tabbedPane, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rtp.getContent();
             }
         });

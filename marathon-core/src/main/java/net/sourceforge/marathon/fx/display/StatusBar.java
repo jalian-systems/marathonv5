@@ -75,7 +75,8 @@ public class StatusBar extends HBox implements IStatusBar {
         return separator;
     }
 
-    @Override public void setCaretLocation(Object row, Object col) {
+    @Override
+    public void setCaretLocation(Object row, Object col) {
         if (row == null && col == null) {
             this.rowLabel.setText("");
             this.columnLabel.setText("");
@@ -87,7 +88,8 @@ public class StatusBar extends HBox implements IStatusBar {
         columnLabel.setMinWidth(Region.USE_PREF_SIZE);
     }
 
-    @Override public void setIsOverwriteEnabled(boolean isOverwriteEnabled) {
+    @Override
+    public void setIsOverwriteEnabled(boolean isOverwriteEnabled) {
         if (isOverwriteEnabled) {
             this.insertLabel.setText("Overwrite");
         } else {

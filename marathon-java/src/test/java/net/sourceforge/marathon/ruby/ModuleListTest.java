@@ -34,7 +34,8 @@ import net.sourceforge.marathon.runtime.api.Argument;
 import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.Module;
 
-@Test public class ModuleListTest {
+@Test
+public class ModuleListTest {
 
     // @formatter:off
     private static final String[] TESTMODULE = { "=begin", "comment", "=end", "def module_function_1(f, s='Hello')", "end" };
@@ -86,7 +87,8 @@ import net.sourceforge.marathon.runtime.api.Module;
     };
     // @formatter:on
 
-    @BeforeMethod public void setUp() throws Exception {
+    @BeforeMethod
+    public void setUp() throws Exception {
         new File("emptymoduledir").mkdirs();
         createModuleFile("moduledir/testmodule.rb", convert2code(TESTMODULE));
         createModuleFile("moduledir2/subdir/testmodule.rb", convert2code(TESTMODULE));
@@ -95,7 +97,8 @@ import net.sourceforge.marathon.runtime.api.Module;
         createModuleFile("selection/arrays.rb", convert2code(TESTMODULE_WITH_ARRAY_PARAMS));
     }
 
-    @AfterMethod public void tearDown() throws Exception {
+    @AfterMethod
+    public void tearDown() throws Exception {
         deleteDir(new File("emptymoduledir"));
         deleteDir(new File("moduledir"));
         deleteDir(new File("moduledir2"));

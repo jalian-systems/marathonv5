@@ -58,7 +58,8 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         this.tabIndex = tabIndex;
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("component")) {
             return Arrays.asList(JavaElementFactory.createElement(getTabComponent(tabIndex), getDriver(), getWindow()));
         }
@@ -75,7 +76,8 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
     private Component getTabComponent(final int tabIndex) {
         validateTab();
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 return ((JTabbedPane) getComponent()).getComponentAt(tabIndex);
             }
         });
@@ -84,18 +86,21 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
     private Component getTabTabComponent(final int tabIndex) {
         validateTab();
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 return ((JTabbedPane) getComponent()).getTabComponentAt(tabIndex);
             }
         });
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "nth-tab").put("parameters", new JSONArray().put(tabIndex + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getText((JTabbedPane) parent.getComponent(), tabIndex);
     }
 
@@ -146,11 +151,13 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         }
     }
 
-    @Override public IJavaElement getParent() {
+    @Override
+    public IJavaElement getParent() {
         return parent;
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         Rectangle bounds = getTabBounds();
         getDriver().getDevices().moveto(parent.getComponent(), bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     }
@@ -201,23 +208,27 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         return isVisible;
     }
 
-    @Override public boolean _isDisplayed() {
+    @Override
+    public boolean _isDisplayed() {
         Rectangle bounds = ((JTabbedPane) parent.getComponent()).getBoundsAt(tabIndex);
         return bounds != null
                 && SwingUtilities.isRectangleContainingRectangle(((JTabbedPane) parent.getComponent()).getVisibleRect(), bounds);
     }
 
-    @Override public boolean _isEnabled() {
+    @Override
+    public boolean _isEnabled() {
         return ((JTabbedPane) parent.getComponent()).isEnabledAt(tabIndex);
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         throw new RuntimeException("No physical pseudo component available for JTabbedPane's tab items");
     }
 
     private void validateTab() {
         EventQueueWait.exec(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane pane = (JTabbedPane) parent.getComponent();
                 int tabCount = pane.getTabCount();
                 if (tabIndex < 0 || tabIndex >= tabCount) {
@@ -227,12 +238,14 @@ public class JTabbedPaneTabJavaElement extends AbstractJavaElement implements IP
         });
     }
 
-    @Override public Object _makeVisible() {
+    @Override
+    public Object _makeVisible() {
         makeTabVisible((JTabbedPane) parent.getComponent(), tabIndex);
         return null;
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         // makeTabVisible((JTabbedPane) parent.getComponent(), tabIndex);
         if (!isDisplayed()) {
             throw new InvalidElementStateException("The tabitem " + (tabIndex + 1) + " is not visible", null);

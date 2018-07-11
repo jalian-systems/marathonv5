@@ -57,7 +57,8 @@ public class MarathonModuleStage extends ModalDialog<ModuleInfo> {
         initComponents();
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox content = new VBox();
         content.getStyleClass().add("marathon-module");
         FormPane form = new FormPane("marathon-module-form", 2);
@@ -82,7 +83,8 @@ public class MarathonModuleStage extends ModalDialog<ModuleInfo> {
         return borderPane;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
@@ -193,7 +195,8 @@ public class MarathonModuleStage extends ModalDialog<ModuleInfo> {
         return Pattern.matches("^\\d+$", string);
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 }

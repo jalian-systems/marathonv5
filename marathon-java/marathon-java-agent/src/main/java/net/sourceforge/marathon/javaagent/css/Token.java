@@ -33,7 +33,8 @@ public class Token {
         this(type, null);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return type.toString() + (value != null ? "(" + value + ")" : "");
     }
 

@@ -32,14 +32,17 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 
-@Test public class JSplitPaneJavaElementTest extends JavaElementTest {
+@Test
+public class JSplitPaneJavaElementTest extends JavaElementTest {
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         JavaElementFactory.add(JSplitPane.class, JSplitPaneJavaElement.class);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JSplitPaneJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JSplitPaneJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new SplitPaneDemo().getSplitPane(), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

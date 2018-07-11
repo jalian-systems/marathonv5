@@ -33,7 +33,8 @@ public class ContextManager {
             componentClass = klass;
         }
 
-        @Override public boolean isContext(Component c) {
+        @Override
+        public boolean isContext(Component c) {
             return componentClass.isInstance(c);
         }
 

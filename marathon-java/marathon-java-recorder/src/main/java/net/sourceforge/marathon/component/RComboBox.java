@@ -37,7 +37,8 @@ public class RComboBox extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         JComboBox comboBox = (JComboBox) component;
         Object selectedItem = comboBox.getSelectedItem();
         if (selectedItem != null && selectedItem.equals(prevSelectedItem)) {
@@ -60,15 +61,18 @@ public class RComboBox extends RComponent {
         return JComboBoxOptionJavaElement.getText(comboBox, comboBox.getSelectedIndex(), appendText);
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         prevSelectedItem = ((JComboBox) component).getSelectedItem();
     }
 
-    @Override public String[][] getContent() {
+    @Override
+    public String[][] getContent() {
         return JComboBoxJavaElement.getContent((JComboBox) component);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return JComboBoxJavaElement.getSelectedItemText((JComboBox) component);
     }
 }

@@ -58,12 +58,14 @@ public class JComboBoxJavaElement extends AbstractJavaElement {
         return content;
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("nth-option")) {
             return Arrays.asList((IJavaElement) new JComboBoxOptionJavaElement(this, ((Integer) params[0]).intValue() - 1));
         } else if (selector.equals("all-options") || selector.equals("all-cells")) {
             return collectItems(new ArrayList<IJavaElement>(), new Predicate() {
-                @Override public boolean isValid(JComboBoxOptionJavaElement e) {
+                @Override
+                public boolean isValid(JComboBoxOptionJavaElement e) {
                     return true;
                 }
             });
@@ -85,7 +87,8 @@ public class JComboBoxJavaElement extends AbstractJavaElement {
     private int getCount() {
         try {
             return EventQueueWait.exec(new Callable<Integer>() {
-                @Override public Integer call() {
+                @Override
+                public Integer call() {
                     return ((JComboBox) getComponent()).getModel().getSize();
                 }
             });
@@ -94,7 +97,8 @@ public class JComboBoxJavaElement extends AbstractJavaElement {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSelectedItemText((JComboBox) component);
     }
 
@@ -106,10 +110,12 @@ public class JComboBoxJavaElement extends AbstractJavaElement {
         return JComboBoxOptionJavaElement.getText(combo, selectedIndex, true);
     }
 
-    @Override public boolean marathon_select(final String value) {
+    @Override
+    public boolean marathon_select(final String value) {
         final String text = JComboBoxOptionJavaElement.stripHTMLTags(value);
         int selectedItem = findMatch(value, new Predicate() {
-            @Override public boolean isValid(JComboBoxOptionJavaElement e) {
+            @Override
+            public boolean isValid(JComboBoxOptionJavaElement e) {
                 if (!text.equals(e.getAttribute("text"))) {
                     return false;
                 }

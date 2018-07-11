@@ -29,13 +29,16 @@ import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 
-@Test public class JTreeJavaElementTest extends JavaElementTest {
+@Test
+public class JTreeJavaElementTest extends JavaElementTest {
     protected JFrame frame;
     private IJavaAgent driver;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTreeJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JTreeJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new DynamicTreeDemo(), BorderLayout.CENTER);
@@ -47,9 +50,11 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

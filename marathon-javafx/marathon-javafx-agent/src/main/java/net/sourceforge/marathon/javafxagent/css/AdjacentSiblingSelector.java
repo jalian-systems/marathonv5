@@ -44,12 +44,14 @@ public class AdjacentSiblingSelector implements Selector {
         this.sibling = sibling;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return parent + " + " + sibling;
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaFXElement> findElements(final IJavaFXAgent driver,
-            final IJavaFXElement container, long implicitWait) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<IJavaFXElement> findElements(final IJavaFXAgent driver, final IJavaFXElement container, long implicitWait) {
         final List<IJavaFXElement> pElements = parent.findElements(driver, container, implicitWait);
         if (pElements.size() == 0) {
             return pElements;
@@ -57,7 +59,8 @@ public class AdjacentSiblingSelector implements Selector {
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
             EventQueueWait.exec(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     try {
                         r[0] = found(pElements, driver);
                     } catch (NoSuchWindowException e) {
@@ -71,7 +74,8 @@ public class AdjacentSiblingSelector implements Selector {
             });
         } else {
             new EventQueueWait() {
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     List<IJavaFXElement> list;
                     try {
                         list = found(pElements, driver);

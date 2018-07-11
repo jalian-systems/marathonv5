@@ -45,7 +45,8 @@ public class AboutStage extends ModalDialog<VersionInfo> {
         super("About Marathon", "Marathon - GUI Testing Framework", FXUIUtils.getIcon("helpAbout"));
         this.versionInfo = versionInfo;
         creditsStageHandler = new ICreditsStageHandler() {
-            @Override public void createCreditsStage() {
+            @Override
+            public void createCreditsStage() {
                 CreditsStage creditsStage = new CreditsStage();
                 creditsStage.getStage().showAndWait();
             }
@@ -73,7 +74,8 @@ public class AboutStage extends ModalDialog<VersionInfo> {
 
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox root = new VBox();
         root.setStyle("-fx-background-color:black");
         root.getStyleClass().add("about-stage");
@@ -82,7 +84,8 @@ public class AboutStage extends ModalDialog<VersionInfo> {
         return root;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
@@ -118,7 +121,8 @@ public class AboutStage extends ModalDialog<VersionInfo> {
         this.creditsStageHandler = creditsStageHandler;
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 }

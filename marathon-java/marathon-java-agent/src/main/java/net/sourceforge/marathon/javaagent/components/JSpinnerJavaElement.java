@@ -38,7 +38,8 @@ public class JSpinnerJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         JComponent spinnerEditor = ((JSpinner) component).getEditor();
         if (spinnerEditor == null) {
             throw new JavaAgentException("Null value returned by getEditor() on spinner", null);
@@ -52,14 +53,16 @@ public class JSpinnerJavaElement extends AbstractJavaElement {
         return true;
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor")) {
             return Arrays.asList(JavaElementFactory.createElement(getEditor(), getDriver(), getWindow()));
         }
         return super.getByPseudoElement(selector, params);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         IJavaElement editor = JavaElementFactory.createElement(getEditor(), getDriver(), getWindow());
         return editor.getText();
     }

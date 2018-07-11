@@ -192,8 +192,8 @@ public class Constants {
 
     private static String frameWorkFromLauncherModel(String launcher) {
         try {
-            return (String) Class.forName("net.sourceforge.marathon.util.LauncherModelHelper").getMethod("getLauncherModelFramework", String.class)
-                    .invoke(null, launcher);
+            return (String) Class.forName("net.sourceforge.marathon.util.LauncherModelHelper")
+                    .getMethod("getLauncherModelFramework", String.class).invoke(null, launcher);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
                 | SecurityException | ClassNotFoundException e) {
             e.printStackTrace();

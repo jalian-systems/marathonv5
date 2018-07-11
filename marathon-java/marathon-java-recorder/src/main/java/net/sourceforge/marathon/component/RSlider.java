@@ -35,18 +35,21 @@ public class RSlider extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         int current = ((JSlider) component).getValue();
         if (current != value) {
             recorder.recordSelect(this, "" + current);
         }
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         value = ((JSlider) component).getValue();
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return JSliderJavaElement.getCurrentValue((JSlider) component);
     }
 }

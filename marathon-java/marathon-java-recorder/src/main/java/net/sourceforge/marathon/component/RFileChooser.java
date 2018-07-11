@@ -35,7 +35,8 @@ public class RFileChooser extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void actionPerformed(ActionEvent e) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
         if (e.getSource() != component) {
             return;
         }

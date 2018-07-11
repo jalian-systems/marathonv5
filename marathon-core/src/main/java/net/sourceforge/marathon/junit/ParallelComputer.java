@@ -47,11 +47,13 @@ public class ParallelComputer extends Computer {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
                 private final ExecutorService fService = Executors.newFixedThreadPool(nThreads);
 
-                @Override public void schedule(Runnable childStatement) {
+                @Override
+                public void schedule(Runnable childStatement) {
                     fService.submit(childStatement);
                 }
 
-                @Override public void finished() {
+                @Override
+                public void finished() {
                     try {
                         fService.shutdown();
                         fService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
@@ -64,12 +66,14 @@ public class ParallelComputer extends Computer {
         return runner;
     }
 
-    @Override public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes) throws InitializationError {
+    @Override
+    public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes) throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
         return fClasses ? parallelize(suite) : suite;
     }
 
-    @Override protected Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
+    @Override
+    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
         Runner runner = super.getRunner(builder, testClass);
         return fMethods ? parallelize(runner) : runner;
     }

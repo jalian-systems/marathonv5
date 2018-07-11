@@ -51,11 +51,13 @@ public class MarathonActionProvider implements IActionProvider {
             super(menuName, null, "", null, toolbar, menu);
         }
 
-        @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+        @Override
+        public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
                 int endCaretPosition, int startLine) throws Exception {
         }
 
-        @Override public boolean isSeperator() {
+        @Override
+        public boolean isSeperator() {
             return true;
         }
 
@@ -68,8 +70,9 @@ public class MarathonActionProvider implements IActionProvider {
         if (iteBlurbs) {
             MarathonAction[] mactions = new MarathonAction[1];
             mactions[0] = new MarathonAction("Welcome Message", "Show the welcome message", "", editorProvider, false, true) {
-                @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                        int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+                @Override
+                public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                        int endCaretPosition, int startLine) throws Exception {
                     WelcomeMessage.showWelcomeMessage();
                 }
             };
@@ -83,7 +86,8 @@ public class MarathonActionProvider implements IActionProvider {
         List<MarathonAction> mactions = new ArrayList<>();
         MarathonAction maction = new MarathonAction("extractModule", "Extract into a module method", "", editorProvider, true,
                 true) {
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int startOffset,
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int startOffset,
                     int endOffset, int startLine) throws Exception {
                 new Blurb("about/extract-module", "Refactoring - Extracting a Module") {
                 };
@@ -95,7 +99,8 @@ public class MarathonActionProvider implements IActionProvider {
         maction.setAccelKey("^S+M");
         mactions.add(maction);
         maction = new MarathonAction("createDDT", "Convert to a data driven test", "", editorProvider, true, true) {
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int startOffset,
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int startOffset,
                     int endOffset, int startLine) throws Exception {
                 new Blurb("about/create-ddt", "Refactoring - Create DDT") {
                 };
@@ -107,7 +112,8 @@ public class MarathonActionProvider implements IActionProvider {
         maction.setAccelKey("^S+D");
         mactions.add(maction);
         maction = new MarathonAction("createDataLoop", "Convert to a loop that uses data file", "", editorProvider, true, true) {
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int startOffset,
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int startOffset,
                     int endOffset, int startLine) throws Exception {
                 new Blurb("about/create-data-loop", "Refactoring - Create Data Loop") {
                 };
@@ -122,8 +128,9 @@ public class MarathonActionProvider implements IActionProvider {
         maction = new MarathonAction("objectMapCreate", "Create/modify the object map using the application", "", editorProvider,
                 true, true, "Create Object Map") {
 
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
                 new Blurb("about/create-object-map", "Creating a Object Map") {
                 };
             }
@@ -134,8 +141,9 @@ public class MarathonActionProvider implements IActionProvider {
         maction = new MarathonAction("editObjectMap", "Modify the recognition properties for objects", "", editorProvider, true,
                 true) {
 
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
                 new Blurb("about/edit-object-map", "Edit Object Map Entries") {
                 };
             }
@@ -147,8 +155,9 @@ public class MarathonActionProvider implements IActionProvider {
         maction = new MarathonAction("editObjectMapConfiguration", "Modify the object map configuration", "", editorProvider, true,
                 true) {
 
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
                 new Blurb("about/edit-object-map-configuration", "Edit Object Map Configuration") {
                 };
             }
@@ -157,15 +166,18 @@ public class MarathonActionProvider implements IActionProvider {
         maction.setMenuMnemonic('O');
         mactions.add(maction);
         maction = new MarathonAction("Clean Up", "Clean up the object map", "", editorProvider, false, true) {
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
             }
 
-            @Override public boolean isPopupMenu() {
+            @Override
+            public boolean isPopupMenu() {
                 return true;
             }
 
-            @Override public Menu getPopupMenu() {
+            @Override
+            public Menu getPopupMenu() {
                 Menu menu = new Menu("Cleanup");
                 menu.setGraphic(FXUIUtils.getIcon("refresh"));
                 CheckMenuItem enableCleanup = new CheckMenuItem("Enable cleanup options...", FXUIUtils.getIcon("warn"));
@@ -206,8 +218,9 @@ public class MarathonActionProvider implements IActionProvider {
         mactions.add(maction);
         maction = new MarathonAction("Object Map Server...", "Use remote object map server", "", editorProvider, false, true) {
 
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
                 new Blurb("about/object-map-server", "Use Remote Object Map Server") {
                 };
             }
@@ -215,16 +228,18 @@ public class MarathonActionProvider implements IActionProvider {
         maction.setMenuName("Object Map");
         mactions.add(maction);
         maction = new MarathonAction("Welcome Message", "Show the welcome message", "", editorProvider, false, true) {
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
                 WelcomeMessage.showWelcomeMessage();
             }
         };
         maction.setMenuName("File");
         mactions.add(maction);
         maction = new MarathonAction("helpAbout", "About Marathon", "", editorProvider, false, true, "About...") {
-            @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                    int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
+            @Override
+            public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+                    int endCaretPosition, int startLine) throws Exception {
                 AboutStage aboutStage = new AboutStage(new VersionInfo(Version.id(), Version.blurbTitle(), Version.blurbCompany(),
                         Version.blurbWebsite(), Version.blurbCredits()));
                 aboutStage.getStage().showAndWait();
@@ -251,13 +266,15 @@ public class MarathonActionProvider implements IActionProvider {
                     final String browserName = props.getProperty(proxyClassName);
                     MarathonAction baction = new MarathonAction(browserName, "Use " + browserName, "", editorProvider, false,
                             true) {
-                        @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
+                        @Override
+                        public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
                                 int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
                             net.sourceforge.marathon.runtime.api.Preferences.instance().setValue("project", "browser",
                                     proxyClassName);
                         }
 
-                        @Override public ToggleGroup getButtonGroup() {
+                        @Override
+                        public ToggleGroup getButtonGroup() {
                             return toggleGroup;
                         }
                     };
@@ -270,7 +287,8 @@ public class MarathonActionProvider implements IActionProvider {
         }
     }
 
-    @Override public IMarathonAction[] getActions() {
+    @Override
+    public IMarathonAction[] getActions() {
         return actions;
     }
 }

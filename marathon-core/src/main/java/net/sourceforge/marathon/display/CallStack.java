@@ -31,14 +31,16 @@ public class CallStack {
             this.methodName = methodName;
         }
 
-        @Override public int hashCode() {
+        @Override
+        public int hashCode() {
             final int prime = 31;
             int result = 1;
             result = prime * result + (methodName == null ? 0 : methodName.hashCode());
             return result;
         }
 
-        @Override public boolean equals(Object obj) {
+        @Override
+        public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -59,7 +61,8 @@ public class CallStack {
             return true;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return methodName;
         }
     }

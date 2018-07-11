@@ -26,7 +26,8 @@ public class EventLogger {
     public EventLogger(String eventsToLog) {
         long events = parse(eventsToLog);
         Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override
+            public void eventDispatched(AWTEvent event) {
                 log(event);
             }
         }, events);

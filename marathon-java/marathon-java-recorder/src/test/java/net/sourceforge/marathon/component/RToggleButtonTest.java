@@ -34,13 +34,16 @@ import components.RadioButtonDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RToggleButtonTest extends RComponentTest {
+@Test
+public class RToggleButtonTest extends RComponentTest {
 
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RToggleButtonTest.class.getSimpleName());
                 frame.setName("frame-" + RToggleButtonTest.class.getSimpleName());
                 frame.getContentPane().add(new CheckBoxDemo(), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -63,7 +68,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectCheckBoxSelected() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> comps = ComponentUtils.findComponents(JCheckBox.class, frame);
                 JCheckBox checkBox = (JCheckBox) comps.get(3);
                 checkBox.setSelected(true);
@@ -79,7 +85,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectCheckBoxNotSelected() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> comps = ComponentUtils.findComponents(JCheckBox.class, frame);
                 JCheckBox checkBox = (JCheckBox) comps.get(3);
                 RToggleButton rButton = new RToggleButton(checkBox, null, null, lr);
@@ -97,7 +104,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectRadioButtonSelected() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> comps = ComponentUtils.findComponents(JRadioButton.class, frame);
                 JRadioButton button = (JRadioButton) comps.get(2);
                 button.setSelected(true);
@@ -113,7 +121,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectRadioButtonNotSelected() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> comps = ComponentUtils.findComponents(JRadioButton.class, frame);
                 JRadioButton button = (JRadioButton) comps.get(2);
                 RToggleButton rButton = new RToggleButton(button, null, null, lr);

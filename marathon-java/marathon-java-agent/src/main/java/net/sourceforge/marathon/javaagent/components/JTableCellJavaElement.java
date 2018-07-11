@@ -54,19 +54,23 @@ public class JTableCellJavaElement extends AbstractJavaElement implements IPseud
         this.viewCol = col;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "mnth-cell").put("parameters",
                 new JSONArray().put(viewRow + 1).put(viewCol + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public IJavaElement getParent() {
+    @Override
+    public IJavaElement getParent() {
         return parent;
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 validateRowCol();
                 JTable table = (JTable) parent.getComponent();
                 int row = table.convertRowIndexToModel(viewRow);
@@ -78,7 +82,8 @@ public class JTableCellJavaElement extends AbstractJavaElement implements IPseud
         });
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor")) {
             return Arrays.asList(JavaElementFactory.createElement(parent.getEditor(viewRow, viewCol), getDriver(), getWindow()));
         }
@@ -99,7 +104,8 @@ public class JTableCellJavaElement extends AbstractJavaElement implements IPseud
         throw new NoSuchElementException("Invalid row/col for JTable: (" + viewRow + ", " + viewCol + ")", null);
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         validateRowCol();
         Rectangle bounds = getCellBounds();
         getDriver().getDevices().moveto(parent.getComponent(), bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
@@ -109,9 +115,11 @@ public class JTableCellJavaElement extends AbstractJavaElement implements IPseud
         return ((JTable) parent.getComponent()).getCellRect(viewRow, viewCol, false);
     }
 
-    @Override public boolean _isDisplayed() {
+    @Override
+    public boolean _isDisplayed() {
         return EventQueueWait.exec(new Callable<Boolean>() {
-            @Override public Boolean call() throws Exception {
+            @Override
+            public Boolean call() throws Exception {
                 return isVisible((JTable) parent.getComponent(), viewRow, viewCol);
             }
         });
@@ -123,7 +131,8 @@ public class JTableCellJavaElement extends AbstractJavaElement implements IPseud
         return SwingUtilities.isRectangleContainingRectangle(visibleRect, cellRect);
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         validateRowCol();
         Rectangle bounds = getCellBounds();
         return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);

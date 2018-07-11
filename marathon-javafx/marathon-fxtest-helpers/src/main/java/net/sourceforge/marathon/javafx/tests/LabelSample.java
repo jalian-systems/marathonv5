@@ -70,230 +70,229 @@ import treeviewsample.TreeViewSample.Employee;
 
 public class LabelSample extends Application {
 
-	Label label3 = new Label("A label that needs to be wrapped");
+    Label label3 = new Label("A label that needs to be wrapped");
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	@Override
-	public void start(Stage stage) {
-		Scene scene = new Scene(new Group());
-		stage.setTitle("Label Sample");
-		stage.setWidth(420);
-		stage.setHeight(180);
+    @Override
+    public void start(Stage stage) {
+        Scene scene = new Scene(new Group());
+        stage.setTitle("Label Sample");
+        stage.setWidth(420);
+        stage.setHeight(180);
 
-		HBox hbox = new HBox();
-		Image image = new Image(getClass().getResourceAsStream("labels.jpg"));
+        HBox hbox = new HBox();
+        Image image = new Image(getClass().getResourceAsStream("labels.jpg"));
 
-		Label label1 = new Label("Search");
-		label1.setGraphic(new ImageView(image));
-		label1.setFont(new Font("Arial", 30));
-		label1.setTextFill(Color.web("#0076a3"));
-		label1.setTextAlignment(TextAlignment.JUSTIFY);
-		label1.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Popup popup = new Popup();
-				TreeViewSample sample = new TreeViewSample();
-				VBox vBox = sample.getVBox();
-				vBox.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-					@Override
-					public void handle(KeyEvent event) {
-						if(event.getCode() == KeyCode.ESCAPE) {
-							popup.hide();
-						}
-					}
-				});
-				popup.getScene().setRoot(vBox);
-				popup.show((Node) event.getSource(), event.getScreenX(), event.getScreenY());
-			}
-		});
+        Label label1 = new Label("Search");
+        label1.setGraphic(new ImageView(image));
+        label1.setFont(new Font("Arial", 30));
+        label1.setTextFill(Color.web("#0076a3"));
+        label1.setTextAlignment(TextAlignment.JUSTIFY);
+        label1.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Popup popup = new Popup();
+                TreeViewSample sample = new TreeViewSample();
+                VBox vBox = sample.getVBox();
+                vBox.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent event) {
+                        if (event.getCode() == KeyCode.ESCAPE) {
+                            popup.hide();
+                        }
+                    }
+                });
+                popup.getScene().setRoot(vBox);
+                popup.show((Node) event.getSource(), event.getScreenX(), event.getScreenY());
+            }
+        });
 
-		Label label2 = new Label("Values");
-		label2.setFont(Font.font("Cambria", 32));
-		label2.setRotate(270);
-		label2.setTranslateY(50);
+        Label label2 = new Label("Values");
+        label2.setFont(Font.font("Cambria", 32));
+        label2.setRotate(270);
+        label2.setTranslateY(50);
 
-		label3.setWrapText(true);
-		label3.setTranslateY(50);
-		label3.setPrefWidth(100);
+        label3.setWrapText(true);
+        label3.setTranslateY(50);
+        label3.setPrefWidth(100);
 
-		label3.setOnMouseEntered((MouseEvent e) -> {
-			label3.setScaleX(1.5);
-			label3.setScaleY(1.5);
-		});
+        label3.setOnMouseEntered((MouseEvent e) -> {
+            label3.setScaleX(1.5);
+            label3.setScaleY(1.5);
+        });
 
-		label3.setOnMouseExited((MouseEvent e) -> {
-			label3.setScaleX(1);
-			label3.setScaleY(1);
-		});
+        label3.setOnMouseExited((MouseEvent e) -> {
+            label3.setScaleX(1);
+            label3.setScaleY(1);
+        });
 
-		hbox.setSpacing(10);
-		hbox.getChildren().add((label1));
-		hbox.getChildren().add(label2);
-		hbox.getChildren().add(label3);
-		((Group) scene.getRoot()).getChildren().add(hbox);
+        hbox.setSpacing(10);
+        hbox.getChildren().add((label1));
+        hbox.getChildren().add(label2);
+        hbox.getChildren().add(label3);
+        ((Group) scene.getRoot()).getChildren().add(hbox);
 
-		stage.setScene(scene);
-		stage.show();
-	}
+        stage.setScene(scene);
+        stage.show();
+    }
 
-	public class TreeViewSample extends Application {
+    public class TreeViewSample extends Application {
 
-		private final Node rootIcon = new ImageView(new Image(getClass().getResourceAsStream("root.png")));
-		private final Image depIcon = new Image(getClass().getResourceAsStream("department.png"));
-		List<Employee> employees = Arrays.<Employee> asList(new Employee("Jacob Smith", "Accounts Department"),
-				new Employee("Isabella Johnson", "Accounts Department"),
-				new Employee("Ethan Williams", "Sales Department"), new Employee("Emma Jones", "Sales Department"),
-				new Employee("Michael Brown", "Sales Department"), new Employee("Anna Black", "Sales Department"),
-				new Employee("Rodger York", "Sales Department"), new Employee("Susan Collins", "Sales Department"),
-				new Employee("Mike Graham", "IT Support"), new Employee("Judy Mayer", "IT Support"),
-				new Employee("Gregory Smith", "IT Support"));
-		TreeItem<String> rootNode = new TreeItem<>("MyCompany Human Resources", rootIcon);
+        private final Node rootIcon = new ImageView(new Image(getClass().getResourceAsStream("root.png")));
+        private final Image depIcon = new Image(getClass().getResourceAsStream("department.png"));
+        List<Employee> employees = Arrays.<Employee> asList(new Employee("Jacob Smith", "Accounts Department"),
+                new Employee("Isabella Johnson", "Accounts Department"), new Employee("Ethan Williams", "Sales Department"),
+                new Employee("Emma Jones", "Sales Department"), new Employee("Michael Brown", "Sales Department"),
+                new Employee("Anna Black", "Sales Department"), new Employee("Rodger York", "Sales Department"),
+                new Employee("Susan Collins", "Sales Department"), new Employee("Mike Graham", "IT Support"),
+                new Employee("Judy Mayer", "IT Support"), new Employee("Gregory Smith", "IT Support"));
+        TreeItem<String> rootNode = new TreeItem<>("MyCompany Human Resources", rootIcon);
 
-		@Override
-		public void start(Stage stage) {
-			VBox box = getVBox();
+        @Override
+        public void start(Stage stage) {
+            VBox box = getVBox();
 
-			stage.setTitle("Tree View Sample");
-			final Scene scene = new Scene(box, 400, 300);
-			scene.setFill(Color.LIGHTGRAY);
-			stage.setScene(scene);
-			stage.show();
-		}
+            stage.setTitle("Tree View Sample");
+            final Scene scene = new Scene(box, 400, 300);
+            scene.setFill(Color.LIGHTGRAY);
+            stage.setScene(scene);
+            stage.show();
+        }
 
-		private VBox getVBox() {
-			rootNode.setExpanded(true);
-			for (Employee employee : employees) {
-				TreeItem<String> empLeaf = new TreeItem<>(employee.getName());
-				boolean found = false;
-				for (TreeItem<String> depNode : rootNode.getChildren()) {
-					if (depNode.getValue().contentEquals(employee.getDepartment())) {
-						depNode.getChildren().add(empLeaf);
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					TreeItem depNode = new TreeItem(employee.getDepartment(), new ImageView(depIcon));
-					rootNode.getChildren().add(depNode);
-					depNode.getChildren().add(empLeaf);
-				}
-			}
+        private VBox getVBox() {
+            rootNode.setExpanded(true);
+            for (Employee employee : employees) {
+                TreeItem<String> empLeaf = new TreeItem<>(employee.getName());
+                boolean found = false;
+                for (TreeItem<String> depNode : rootNode.getChildren()) {
+                    if (depNode.getValue().contentEquals(employee.getDepartment())) {
+                        depNode.getChildren().add(empLeaf);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    TreeItem depNode = new TreeItem(employee.getDepartment(), new ImageView(depIcon));
+                    rootNode.getChildren().add(depNode);
+                    depNode.getChildren().add(empLeaf);
+                }
+            }
 
-			VBox box = new VBox();
+            VBox box = new VBox();
 
-			TreeView<String> treeView = new TreeView<>(rootNode);
-			treeView.setShowRoot(true);
-			treeView.setEditable(true);
-			treeView.setCellFactory((TreeView<String> p) -> new TextFieldTreeCellImpl());
+            TreeView<String> treeView = new TreeView<>(rootNode);
+            treeView.setShowRoot(true);
+            treeView.setEditable(true);
+            treeView.setCellFactory((TreeView<String> p) -> new TextFieldTreeCellImpl());
 
-			box.getChildren().add(treeView);
-			return box;
-		}
+            box.getChildren().add(treeView);
+            return box;
+        }
 
-		private final class TextFieldTreeCellImpl extends TreeCell<String> {
+        private final class TextFieldTreeCellImpl extends TreeCell<String> {
 
-			private TextField textField;
-			private final ContextMenu addMenu = new ContextMenu();
+            private TextField textField;
+            private final ContextMenu addMenu = new ContextMenu();
 
-			public TextFieldTreeCellImpl() {
-				MenuItem addMenuItem = new MenuItem("Add Employee");
-				addMenu.getItems().add(addMenuItem);
-				addMenuItem.setOnAction((ActionEvent t) -> {
-					TreeItem newEmployee = new TreeItem<>("New Employee");
-					getTreeItem().getChildren().add(newEmployee);
-				});
-			}
+            public TextFieldTreeCellImpl() {
+                MenuItem addMenuItem = new MenuItem("Add Employee");
+                addMenu.getItems().add(addMenuItem);
+                addMenuItem.setOnAction((ActionEvent t) -> {
+                    TreeItem newEmployee = new TreeItem<>("New Employee");
+                    getTreeItem().getChildren().add(newEmployee);
+                });
+            }
 
-			@Override
-			public void startEdit() {
-				super.startEdit();
+            @Override
+            public void startEdit() {
+                super.startEdit();
 
-				if (textField == null) {
-					createTextField();
-				}
-				setText(null);
-				setGraphic(textField);
-				textField.selectAll();
-			}
+                if (textField == null) {
+                    createTextField();
+                }
+                setText(null);
+                setGraphic(textField);
+                textField.selectAll();
+            }
 
-			@Override
-			public void cancelEdit() {
-				super.cancelEdit();
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
 
-				setText((String) getItem());
-				setGraphic(getTreeItem().getGraphic());
-			}
+                setText((String) getItem());
+                setGraphic(getTreeItem().getGraphic());
+            }
 
-			@Override
-			public void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
 
-				if (empty) {
-					setText(null);
-					setGraphic(null);
-				} else {
-					if (isEditing()) {
-						if (textField != null) {
-							textField.setText(getString());
-						}
-						setText(null);
-						setGraphic(textField);
-					} else {
-						setText(getString());
-						setGraphic(getTreeItem().getGraphic());
-						if (!getTreeItem().isLeaf() && getTreeItem().getParent() != null) {
-							setContextMenu(addMenu);
-						}
-					}
-				}
-			}
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    if (isEditing()) {
+                        if (textField != null) {
+                            textField.setText(getString());
+                        }
+                        setText(null);
+                        setGraphic(textField);
+                    } else {
+                        setText(getString());
+                        setGraphic(getTreeItem().getGraphic());
+                        if (!getTreeItem().isLeaf() && getTreeItem().getParent() != null) {
+                            setContextMenu(addMenu);
+                        }
+                    }
+                }
+            }
 
-			private void createTextField() {
-				textField = new TextField(getString());
-				textField.setOnKeyReleased((KeyEvent t) -> {
-					if (t.getCode() == KeyCode.ENTER) {
-						commitEdit(textField.getText());
-					} else if (t.getCode() == KeyCode.ESCAPE) {
-						cancelEdit();
-					}
-				});
+            private void createTextField() {
+                textField = new TextField(getString());
+                textField.setOnKeyReleased((KeyEvent t) -> {
+                    if (t.getCode() == KeyCode.ENTER) {
+                        commitEdit(textField.getText());
+                    } else if (t.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                });
 
-			}
+            }
 
-			private String getString() {
-				return getItem() == null ? "" : getItem().toString();
-			}
-		}
+            private String getString() {
+                return getItem() == null ? "" : getItem().toString();
+            }
+        }
 
-	}
+    }
 
-	public static class Employee {
+    public static class Employee {
 
-		private final SimpleStringProperty name;
-		private final SimpleStringProperty department;
+        private final SimpleStringProperty name;
+        private final SimpleStringProperty department;
 
-		private Employee(String name, String department) {
-			this.name = new SimpleStringProperty(name);
-			this.department = new SimpleStringProperty(department);
-		}
+        private Employee(String name, String department) {
+            this.name = new SimpleStringProperty(name);
+            this.department = new SimpleStringProperty(department);
+        }
 
-		public String getName() {
-			return name.get();
-		}
+        public String getName() {
+            return name.get();
+        }
 
-		public void setName(String fName) {
-			name.set(fName);
-		}
+        public void setName(String fName) {
+            name.set(fName);
+        }
 
-		public String getDepartment() {
-			return department.get();
-		}
+        public String getDepartment() {
+            return department.get();
+        }
 
-		public void setDepartment(String fName) {
-			department.set(fName);
-		}
-	}
+        public void setDepartment(String fName) {
+            department.set(fName);
+        }
+    }
 }

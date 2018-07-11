@@ -67,14 +67,16 @@ public class AceEditorTheme {
         this.theme = theme;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (theme == null ? 0 : theme.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -95,7 +97,8 @@ public class AceEditorTheme {
         return true;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return caption + " (" + (isDark() ? "Dark)" : "Light)");
     }
 }

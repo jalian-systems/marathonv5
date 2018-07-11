@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class CheckBoxListViewApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LisViewCheckBox");
         primaryStage.setScene(new Scene(new CheckBoxListViewSample()));
         primaryStage.sizeToScene();

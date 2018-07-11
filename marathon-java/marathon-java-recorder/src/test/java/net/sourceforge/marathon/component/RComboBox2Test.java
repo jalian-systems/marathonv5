@@ -30,13 +30,16 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RComboBox2Test extends RComponentTest {
+@Test
+public class RComboBox2Test extends RComponentTest {
     protected JFrame frame;
     private JComboBox combo;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RComboBox2Test.class.getName());
                 frame.setName("dialog-1");
                 Employee[] items = { new Employee("Phillip"), new Employee("Larry"), new Employee("Lisa"), new Employee("James"),
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -63,7 +68,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectDuplicateOption() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(combo, null, null, lr);
                 combo.setSelectedIndex(1);
@@ -75,7 +81,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("Larry", call.getState());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(combo, null, null, lr);
                 combo.setSelectedIndex(4);
@@ -89,14 +96,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContentDuplicates() throws InterruptedException {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
             }
         });
         final RComboBox rCombo = new RComboBox(combo, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rCombo.getContent();
             }
         });
@@ -106,14 +115,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertEditorSelection() throws InterruptedException {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 combo.setEditable(true);
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(combo, null, null, lr);
                 ((JTextField) combo.getEditor().getEditorComponent()).setText("Kate");
@@ -127,14 +138,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertEditorSelectionWithEmptyText() throws InterruptedException {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 combo.setEditable(true);
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 combo = (JComboBox) ComponentUtils.findComponent(JComboBox.class, frame);
                 RComboBox rCombo = new RComboBox(combo, null, null, lr);
                 ((JTextField) combo.getEditor().getEditorComponent()).setText("");
@@ -154,7 +167,8 @@ class MyComboBoxModel extends DefaultComboBoxModel {
         super(items);
     }
 
-    @Override public Employee getSelectedItem() {
+    @Override
+    public Employee getSelectedItem() {
         Object selectedItem = super.getSelectedItem();
         if (selectedItem instanceof Employee) {
             return (Employee) selectedItem;
@@ -170,7 +184,8 @@ class Employee {
         this.name = name;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return name;
     }
 }

@@ -194,7 +194,8 @@ public class RealMain {
         if (argProcessor.showSplash()) {
             MarathonSplashScreen splashScreen = new MarathonSplashScreen(new VersionInfo(Version.id(), Version.blurbTitle(),
                     Version.blurbCompany(), Version.blurbWebsite(), Version.blurbCredits())) {
-                @Override public void dispose() {
+                @Override
+                public void dispose() {
                     super.dispose();
                 }
             };
@@ -222,7 +223,8 @@ public class RealMain {
         List<List<String>> frameworks = Arrays.asList(Arrays.asList("Java/Swing Project", Constants.FRAMEWORK_SWING),
                 Arrays.asList("Java/FX Project", Constants.FRAMEWORK_FX));
         ProjectSelection selection = new ProjectSelection(projectList, frameworks) {
-            @Override protected void onSelect(ProjectInfo selected) {
+            @Override
+            protected void onSelect(ProjectInfo selected) {
                 super.onSelect(selected);
                 selectedProjects.add(selected.getFolder());
                 dispose();

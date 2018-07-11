@@ -55,7 +55,8 @@ public class EventListenerList {
         }
     }
 
-    @SuppressWarnings("unchecked") public <T extends EventListener> T[] getListeners(Class<T> t) {
+    @SuppressWarnings("unchecked")
+    public <T extends EventListener> T[] getListeners(Class<T> t) {
         Object[] lList = listenerList;
         int n = getListenerCount(lList, t);
         T[] result = (T[]) Array.newInstance(t, n);

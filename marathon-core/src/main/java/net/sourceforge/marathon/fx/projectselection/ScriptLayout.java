@@ -33,31 +33,38 @@ public class ScriptLayout extends CompositeLayout implements IPropertiesLayout {
         super(parent);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Language";
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return FXUIUtils.getIcon("script_obj");
     }
 
-    @Override protected String getResourceName() {
+    @Override
+    protected String getResourceName() {
         return "scriptmodel";
     }
 
-    @Override protected String getOptionFieldName() {
+    @Override
+    protected String getOptionFieldName() {
         return "Script: ";
     }
 
-    @Override protected String getClassProperty() {
+    @Override
+    protected String getClassProperty() {
         return Constants.PROP_PROJECT_SCRIPT_MODEL;
     }
 
-    @Override protected boolean isSelectable() {
+    @Override
+    protected boolean isSelectable() {
         return false;
     }
 
-    @Override protected void errorMessage() {
+    @Override
+    protected void errorMessage() {
         FXUIUtils.showMessageDialog(parent.getStage(), "Select a Script Language", "Script Language", AlertType.ERROR);
     }
 }

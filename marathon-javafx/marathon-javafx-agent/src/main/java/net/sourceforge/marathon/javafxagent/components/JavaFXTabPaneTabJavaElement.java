@@ -40,11 +40,13 @@ public class JavaFXTabPaneTabJavaElement extends JavaFXElement {
         return parent;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getTextForTab((TabPane) parent.getComponent(), ((TabPane) parent.getComponent()).getTabs().get(tabIndex));
     }
 
-    @Override public Point2D _getMidpoint() {
+    @Override
+    public Point2D _getMidpoint() {
         StackPane tabRegion = getTabRegion();
         Bounds boundsInParent = tabRegion.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;

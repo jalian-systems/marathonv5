@@ -29,7 +29,8 @@ public class CheckListTest extends Application {
 
     public static final Logger LOGGER = Logger.getLogger(CheckListTest.class.getName());
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setScene(getContent());
         primaryStage.show();
     }

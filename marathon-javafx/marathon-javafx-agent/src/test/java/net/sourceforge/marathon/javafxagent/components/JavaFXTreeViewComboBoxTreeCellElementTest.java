@@ -29,17 +29,20 @@ public class JavaFXTreeViewComboBoxTreeCellElementTest extends JavaFXElementTest
     private JavaFXAgent driver;
     private IJavaFXElement treeView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         treeView = driver.findElementByTagName("tree-view");
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         String expected = "[[\"Root node\",\"Option 1\",\"Option 2\",\"Option 3\"]]";
         AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ComboBoxTreeViewSample();
     }
 }

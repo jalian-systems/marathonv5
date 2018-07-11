@@ -105,7 +105,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 addEventFilter(stage);
             }
             stages.addListener(new ListChangeListener<Stage>() {
-                @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+                @Override
+                public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                     c.next();
                     if (c.wasAdded()) {
                         List<? extends Stage> addedSubList = c.getAddedSubList();
@@ -333,27 +334,32 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         stage.getScene().getRoot().addEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
         stage.getScene().getRoot().addEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
-            @Override public void handle(WindowEvent event) {
+            @Override
+            public void handle(WindowEvent event) {
                 recorder.recordWindowClosing(new WindowTitle(stage).getTitle());
             }
         });
         stage.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
         stage.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
         stage.xProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
         stage.yProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
@@ -375,7 +381,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                 if (done) {
                     return;
                 }
@@ -385,7 +392,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 c.next();
                 if (c.wasAdded()) {
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                        @Override public Object run() {
+                        @Override
+                        public Object run() {
                             return new JavaFxRecorderHook(port);
                         }
                     });
@@ -395,7 +403,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         });
     }
 
-    @Override public void handle(Event event) {
+    @Override
+    public void handle(Event event) {
         if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest) {
             return;
         }
@@ -504,7 +513,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     public class MenuEventHandler implements EventHandler<ActionEvent> {
-        @Override public void handle(ActionEvent event) {
+        @Override
+        public void handle(ActionEvent event) {
             if (event.getSource() instanceof Menu) {
                 return;
             }

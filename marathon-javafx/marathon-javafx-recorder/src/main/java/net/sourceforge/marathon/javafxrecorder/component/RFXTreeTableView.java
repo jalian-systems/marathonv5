@@ -66,7 +66,8 @@ public class RFXTreeTableView extends RFXComponent {
         }
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         TreeTableView<?> treeTableView = (TreeTableView<?>) node;
         if (row != -1 && column != -1) {
             cellValue = getTreeTableCellValueAt(treeTableView, row, column);
@@ -84,7 +85,8 @@ public class RFXTreeTableView extends RFXComponent {
         return cellComponent == null ? null : cellComponent.getValue();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         TreeTableView<?> treeTableView = (TreeTableView<?>) node;
         String currentCellValue = getTreeTableCellValueAt(treeTableView, row, column);
         if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
@@ -99,7 +101,8 @@ public class RFXTreeTableView extends RFXComponent {
         }
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + column;
@@ -107,7 +110,8 @@ public class RFXTreeTableView extends RFXComponent {
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -127,11 +131,13 @@ public class RFXTreeTableView extends RFXComponent {
         return true;
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         return cellInfo;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         if (row != -1 && column != -1) {
             TreeTableCell<?, ?> treeTableCell = getCellAt((TreeTableView<?>) node, row, column);
             if (treeTableCell != null) {
@@ -141,10 +147,12 @@ public class RFXTreeTableView extends RFXComponent {
         return getTreeTableSelection((TreeTableView<?>) node);
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
             return;
         recorder.recordClick2(this, me, true);

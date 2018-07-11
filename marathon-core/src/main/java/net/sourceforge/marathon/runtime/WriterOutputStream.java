@@ -84,7 +84,8 @@ public class WriterOutputStream extends OutputStream {
      * @exception IOException
      *                if an I/O error occurs.
      */
-    @Override public void close() throws IOException {
+    @Override
+    public void close() throws IOException {
         synchronized (writer) {
             if (!isOpen) {
                 throw new IOException("This stream has been already closed.");
@@ -112,7 +113,8 @@ public class WriterOutputStream extends OutputStream {
      * @exception IOException
      *                if an I/O error occurs.
      */
-    @Override public void flush() throws IOException {
+    @Override
+    public void flush() throws IOException {
         synchronized (writer) {
             if (!isOpen) {
                 return;
@@ -134,7 +136,8 @@ public class WriterOutputStream extends OutputStream {
      *                <code>IOException</code> may be thrown if the output
      *                stream has been closed.
      */
-    @Override public void write(int b) throws IOException {
+    @Override
+    public void write(int b) throws IOException {
         byte[] bb = new byte[] { (byte) b };
         write(bb, 0, 1);
     }
@@ -151,7 +154,8 @@ public class WriterOutputStream extends OutputStream {
      *                if an I/O error occurs.
      * @see java.io.OutputStream#write(byte[], int, int)
      */
-    @Override public void write(byte[] b) throws IOException {
+    @Override
+    public void write(byte[] b) throws IOException {
         write(b, 0, b.length);
     }
 
@@ -178,7 +182,8 @@ public class WriterOutputStream extends OutputStream {
      *                <code>IOException</code> is thrown if the output stream is
      *                closed.
      */
-    @Override public void write(byte[] b, int off, int len) throws IOException {
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
         synchronized (writer) {
             if (!isOpen) {
                 return;

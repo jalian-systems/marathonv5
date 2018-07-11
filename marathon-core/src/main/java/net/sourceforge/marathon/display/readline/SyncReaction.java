@@ -31,7 +31,8 @@ public abstract class SyncReaction extends Reaction {
         super(head, channels, false);
     }
 
-    @Override void dispatch(Join join, final Object[] args) {
+    @Override
+    void dispatch(Join join, final Object[] args) {
         final Call call = (Call) args[0];
         args[0] = call.getMessage();
         call.activate(join, this, args);

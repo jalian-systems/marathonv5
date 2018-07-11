@@ -48,7 +48,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
     private DockingDesktop desktop;
 
     ChangeListener<? super Tab> listener = new ChangeListener<Tab>() {
-        @Override public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+        @Override
+        public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
             Dockable o = null, n = null;
             for (Dockable d : dockables) {
                 if (oldValue != null && oldValue.getContent() == d.getComponent()) {
@@ -99,18 +100,21 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         setSide(base.getDockKey().getSide());
     }
 
-    @Override public void remove(Dockable dockable) {
+    @Override
+    public void remove(Dockable dockable) {
         dockables.remove(dockable);
         remove(dockable.getComponent());
         desktop.fireDockableStateChangeEvent(dockable, State.DOCKED, State.CLOSED);
     }
 
-    @Override public void split(Dockable base, Dockable dockable, Split position, double proportion) {
+    @Override
+    public void split(Dockable base, Dockable dockable, Split position, double proportion) {
         IDockingContainer parent = (IDockingContainer) getProperties().get(DockingDesktop.DOCKING_CONTAINER);
         parent.replace(this, () -> new SplitDockingContainer(desktop, parent, this, dockable, position, proportion));
     }
 
-    @Override public void tab(Dockable base, Dockable dockable, int order, boolean select) {
+    @Override
+    public void tab(Dockable base, Dockable dockable, int order, boolean select) {
         dockables.add(base);
         dockables.add(dockable);
         base.setContainer(this);
@@ -216,7 +220,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         rightTabs.stream().forEach((t) -> requestClose(t));
     }
 
-    @Override public void remove(Node node) {
+    @Override
+    public void remove(Node node) {
         node.getProperties().remove(DockingDesktop.DOCKING_CONTAINER);
         ObservableList<Tab> tabs = getTabs();
         Tab found = null;
@@ -234,7 +239,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         }
     }
 
-    @Override public void replace(Node base, INewDockingContainer indc) {
+    @Override
+    public void replace(Node base, INewDockingContainer indc) {
         ObservableList<Tab> tabs = getTabs();
         Tab found = null;
         for (Tab tab : tabs) {
@@ -251,7 +257,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         }
     }
 
-    @Override public void getDockables(List<DockableState> dockables) {
+    @Override
+    public void getDockables(List<DockableState> dockables) {
         ObservableList<Tab> tabs = getTabs();
         for (Tab tab : tabs) {
             if (tab.getContent() instanceof IDockingContainer) {
@@ -268,7 +275,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         }
     }
 
-    @Override public void debugPrint(String indent) {
+    @Override
+    public void debugPrint(String indent) {
         System.out.println(indent + "tab(" + getProperties().get(DockingDesktop.DOCKING_CONTAINER) + ")");
         ObservableList<Tab> tabs = getTabs();
         for (Tab tab : tabs) {
@@ -280,7 +288,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         }
     }
 
-    @Override public Dockable getSelectedDockable() {
+    @Override
+    public Dockable getSelectedDockable() {
         Tab selected = getSelectionModel().getSelectedItem();
         if (selected != null) {
             for (Dockable dockable : dockables) {
@@ -292,7 +301,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         return null;
     }
 
-    @Override public int indexOfDockable(Dockable dockable) {
+    @Override
+    public int indexOfDockable(Dockable dockable) {
         int index = findIndex(dockable);
         return index;
     }
@@ -309,7 +319,8 @@ public class TabDockingContainer extends TabPane implements IDockingContainer, T
         return -1;
     }
 
-    @Override public void setSelectedDockable(Dockable dockable) {
+    @Override
+    public void setSelectedDockable(Dockable dockable) {
         ObservableList<Tab> tabs = getTabs();
         for (Tab tab : tabs) {
             if (tab.getContent() == dockable.getComponent()) {

@@ -46,8 +46,8 @@ public class KeyboardMap {
         keyMap = new HashMap<Character, KeyboardMap.KeyboardMapEntry>();
         for (char c = 'a'; c <= 'z'; c++) {
             keyMap.put(c, new KeyboardMapEntry(0, c, JavaCompatibility.getCode(KeyCode.A) + c - 'a'));
-            keyMap.put(Character.toUpperCase(c), new KeyboardMapEntry(JavaCompatibility.getCode(KeyCode.SHIFT), Character.toUpperCase(c),
-                    JavaCompatibility.getCode(KeyCode.A) + c - 'a'));
+            keyMap.put(Character.toUpperCase(c), new KeyboardMapEntry(JavaCompatibility.getCode(KeyCode.SHIFT),
+                    Character.toUpperCase(c), JavaCompatibility.getCode(KeyCode.A) + c - 'a'));
         }
         for (char c = '0'; c < '9'; c++) {
             keyMap.put(c, new KeyboardMapEntry(0, c, JavaCompatibility.getCode(KeyCode.DIGIT0) + c - '0'));

@@ -8,7 +8,8 @@ import javafx.stage.Stage;
 
 public class CheckBoxTreeTableSampleApp extends Application {
 
-    @Override public void start(Stage primaryStage) {
+    @Override
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("CheckBox TreeTable View Sample");
         primaryStage.setScene(new Scene(new CheckBoxTreeTableSample()));
         primaryStage.sizeToScene();

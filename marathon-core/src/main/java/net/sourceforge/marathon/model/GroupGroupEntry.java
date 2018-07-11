@@ -38,15 +38,18 @@ public class GroupGroupEntry extends GroupEntry {
         group = Group.createGroup(path);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return group.getName();
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return group.getPath();
     }
 
-    @Override public JSONObject toJSON() {
+    @Override
+    public JSONObject toJSON() {
         JSONObject t = new JSONObject();
         t.put("type", getType().name());
         File suiteDirectory = getType().groupType().dir();
@@ -56,30 +59,36 @@ public class GroupGroupEntry extends GroupEntry {
         return t;
     }
 
-    @Override public void setName(String name) {
+    @Override
+    public void setName(String name) {
         group.setName(name);
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         return new TestCreator(acceptChecklist, console).getTest(group);
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return false;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (group == null ? 0 : group.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -100,14 +109,16 @@ public class GroupGroupEntry extends GroupEntry {
         return true;
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         try {
             group = Group.createGroup(group.getPath());
         } catch (IOException e) {
         }
     }
 
-    @Override public void rename(String text) {
+    @Override
+    public void rename(String text) {
         group.setName(text);
         try {
             Group.updateFile(group);

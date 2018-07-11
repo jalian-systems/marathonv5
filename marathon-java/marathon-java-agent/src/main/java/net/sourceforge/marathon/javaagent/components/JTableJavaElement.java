@@ -51,7 +51,8 @@ public class JTableJavaElement extends AbstractJavaElement {
             this.p = p;
         }
 
-        @Override public boolean isValid(JTableCellJavaElement e) {
+        @Override
+        public boolean isValid(JTableCellJavaElement e) {
             Enumeration<Object> keys = p.keys();
             while (keys.hasMoreElements()) {
                 String object = (String) keys.nextElement();
@@ -73,7 +74,8 @@ public class JTableJavaElement extends AbstractJavaElement {
             this.column = column;
         }
 
-        @Override public boolean isValid(JTableCellJavaElement e) {
+        @Override
+        public boolean isValid(JTableCellJavaElement e) {
             String eRow = e.getAttribute("row");
             String eColumn = e.getAttribute("column");
             if (row.equals(eRow)) {
@@ -98,7 +100,8 @@ public class JTableJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("header")) {
             return Arrays.asList((IJavaElement) new JTableHeaderJavaElement(((JTable) getComponent()).getTableHeader(), getDriver(),
                     getWindow()));
@@ -107,7 +110,8 @@ public class JTableJavaElement extends AbstractJavaElement {
                     ((Integer) params[1]).intValue() - 1));
         } else if (selector.equals("all-cells")) {
             return collectCells(new ArrayList<IJavaElement>(), new Predicate() {
-                @Override public boolean isValid(JTableCellJavaElement e) {
+                @Override
+                public boolean isValid(JTableCellJavaElement e) {
                     return true;
                 }
             });
@@ -149,7 +153,8 @@ public class JTableJavaElement extends AbstractJavaElement {
 
     public Component getEditor(final int viewRow, final int viewCol) {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 validate(viewRow, viewCol);
                 JTable table = (JTable) getComponent();
                 table.editCellAt(viewRow, viewCol);
@@ -163,7 +168,8 @@ public class JTableJavaElement extends AbstractJavaElement {
         });
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         JTable table = (JTable) getComponent();
         int rows = table.getRowCount();
         int cols = table.getColumnCount();
@@ -217,7 +223,8 @@ public class JTableJavaElement extends AbstractJavaElement {
         return content;
     }
 
-    @Override public boolean marathon_select(JSONArray jsonArray) {
+    @Override
+    public boolean marathon_select(JSONArray jsonArray) {
         List<IJavaElement> l = new ArrayList<IJavaElement>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject o = jsonArray.getJSONObject(i);
@@ -234,7 +241,8 @@ public class JTableJavaElement extends AbstractJavaElement {
         return true;
     }
 
-    @Override public boolean marathon_select(String text) {
+    @Override
+    public boolean marathon_select(String text) {
         JTable table = (JTable) component;
         boolean cellEditing = table.isEditing();
         if (cellEditing) {

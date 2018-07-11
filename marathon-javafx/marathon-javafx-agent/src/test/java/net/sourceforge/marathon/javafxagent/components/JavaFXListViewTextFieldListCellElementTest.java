@@ -30,24 +30,28 @@ public class JavaFXListViewTextFieldListCellElementTest extends JavaFXElementTes
     private JavaFXAgent driver;
     private IJavaFXElement listView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         listView = driver.findElementByTagName("list-view");
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         IJavaFXElement item = listView.findElementByCssSelector(".::select-by-properties('{\"select\":\"Row 5\"}')");
         IJavaFXElement tf = item.findElementByCssSelector(".::editor");
         Platform.runLater(() -> tf.marathon_select("Row 5 Modified"));
         new Wait("Wait for list item text field to set text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 String selected = tf.getAttribute("text");
                 return selected.equals("Row 5 Modified");
             }
         };
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TextFieldListViewSample();
     }
 }

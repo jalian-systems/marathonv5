@@ -24,11 +24,13 @@ public class ACEEditorProvider implements IEditorProvider {
 
     public static final Logger LOGGER = Logger.getLogger(ACEEditorProvider.class.getName());
 
-    @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
+    @Override
+    public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         return new ACEEditor(linenumbers, startLineNumber, withToolbar);
     }
 
-    @Override public boolean supports(EditorType type) {
+    @Override
+    public boolean supports(EditorType type) {
         if (type == EditorType.CSV || type == EditorType.SUITE || type == EditorType.OBJECTMAP_CONFIGURATION
                 || type == EditorType.OBJECTMAP || type == EditorType.CHECKLIST || type == EditorType.FEATURE
                 || type == EditorType.STORY || type == EditorType.ISSUE) {

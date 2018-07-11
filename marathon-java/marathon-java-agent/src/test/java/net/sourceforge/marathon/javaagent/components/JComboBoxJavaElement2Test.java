@@ -29,14 +29,17 @@ import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 
-@Test public class JComboBoxJavaElement2Test extends JavaElementTest {
+@Test
+public class JComboBoxJavaElement2Test extends JavaElementTest {
 
     protected JFrame frame;
     private IJavaAgent driver;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JComboBoxJavaElement2Test.class.getName());
                 frame.setName("dialog-1");
                 Employee[] items = { new Employee("Phillip"), new Employee("Larry"), new Employee("Lisa"), new Employee("James"),
@@ -53,9 +56,11 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -102,7 +107,8 @@ class MyComboBoxModel extends DefaultComboBoxModel {
         super(items);
     }
 
-    @Override public Employee getSelectedItem() {
+    @Override
+    public Employee getSelectedItem() {
         Object selectedItem = super.getSelectedItem();
         if (selectedItem instanceof Employee) {
             return (Employee) selectedItem;
@@ -118,7 +124,8 @@ class Employee {
         this.name = name;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return name;
     }
 }

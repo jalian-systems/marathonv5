@@ -71,7 +71,8 @@ public class UnSavedHistoryStage extends RunHistoryStage {
         MarathonInputStage testNameStage = new MarathonInputStage("Test name", "Save the current test run",
                 FXUIUtils.getIcon("testrunner")) {
 
-            @Override protected String validateInput(String name) {
+            @Override
+            protected String validateInput(String name) {
                 String errorMessage = null;
                 if (name.length() == 0 || name.trim().isEmpty()) {
                     errorMessage = "Enter a valid name";
@@ -79,11 +80,13 @@ public class UnSavedHistoryStage extends RunHistoryStage {
                 return errorMessage;
             }
 
-            @Override protected String getInputFiledLabelText() {
+            @Override
+            protected String getInputFiledLabelText() {
                 return "Enter a test name: ";
             }
 
-            @Override protected void setDefaultButton() {
+            @Override
+            protected void setDefaultButton() {
                 okButton.setDefaultButton(true);
             }
         };
@@ -129,7 +132,8 @@ public class UnSavedHistoryStage extends RunHistoryStage {
     final class TestNameHandler implements IInputHanler {
         private String testName;
 
-        @Override public void handleInput(String name) {
+        @Override
+        public void handleInput(String name) {
             this.testName = name;
         }
 
@@ -138,15 +142,18 @@ public class UnSavedHistoryStage extends RunHistoryStage {
         }
     }
 
-    @Override protected String getRemeberedCount() {
+    @Override
+    protected String getRemeberedCount() {
         return Preferences.instance().getValue("testrunner", "remember-count", 10) + "";
     }
 
-    @Override protected void addButtonsToVerticalButtonBar() {
+    @Override
+    protected void addButtonsToVerticalButtonBar() {
         verticalButtonBar.getChildren().addAll(favouriteButton, manageFavouritesButton, removeButton, removeAllButton);
     }
 
-    @Override protected void saveRememberedCount() {
+    @Override
+    protected void saveRememberedCount() {
         Preferences.instance().setValue("testrunner", "remember-count", Integer.parseInt(countField.getText()));
     }
 }

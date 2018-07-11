@@ -28,7 +28,8 @@ public class SelectorLexer extends AbstractLexer {
         super(new PushbackReader(new StringReader(selector)));
     }
 
-    @Override protected Token getNextToken() {
+    @Override
+    protected Token getNextToken() {
 
         int c;
         try {

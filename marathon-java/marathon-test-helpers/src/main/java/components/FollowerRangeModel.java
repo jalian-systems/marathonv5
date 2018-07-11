@@ -40,10 +40,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /**
- * Implements a model whose data is actually in another model (the
- * "source model"). The follower model adjusts the values obtained from the
- * source model (or set in the follower model) to be in a different unit of
- * measure.
+ * Implements a model whose data is actually in another model (the "source
+ * model"). The follower model adjusts the values obtained from the source model
+ * (or set in the follower model) to be in a different unit of measure.
  *
  */
 public class FollowerRangeModel extends ConverterRangeModel implements ChangeListener {

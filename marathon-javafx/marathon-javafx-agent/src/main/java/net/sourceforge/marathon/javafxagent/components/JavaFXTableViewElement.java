@@ -39,7 +39,8 @@ public class JavaFXTableViewElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("mnth-cell")) {
             return Arrays.asList(
                     new JavaFXTableCellElement(this, ((Integer) params[0]).intValue() - 1, ((Integer) params[1]).intValue() - 1));
@@ -74,7 +75,8 @@ public class JavaFXTableViewElement extends JavaFXElement {
         return r;
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         TableView<?> tableView = (TableView<?>) node;
         TableViewSelectionModel<?> selectionModel = tableView.getSelectionModel();
         if ("".equals(value)) {
@@ -102,7 +104,8 @@ public class JavaFXTableViewElement extends JavaFXElement {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSelection((TableView<?>) getComponent());
     }
 }

@@ -32,9 +32,11 @@ public class RIgnoreComponent extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 
-    @Override protected void keyPressed(KeyEvent ke) {
+    @Override
+    protected void keyPressed(KeyEvent ke) {
     }
 }

@@ -72,7 +72,8 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
         dispose();
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(imagePanel);
         borderPane.setBottom(buttonBar);
@@ -82,13 +83,15 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
 
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.setX(5.0);
         stage.setY(5.0);
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
     }
 
     public boolean isSaved() {

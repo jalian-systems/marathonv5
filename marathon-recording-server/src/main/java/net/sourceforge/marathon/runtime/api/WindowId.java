@@ -47,14 +47,16 @@ public class WindowId implements Serializable {
         return parent.getTitle();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (parent != null) {
             return parent.toString() + ">>" + getTitle();
         }
         return getTitle();
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (containerType == null ? 0 : containerType.hashCode());
@@ -63,7 +65,8 @@ public class WindowId implements Serializable {
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }

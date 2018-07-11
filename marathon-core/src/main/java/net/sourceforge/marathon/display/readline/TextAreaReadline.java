@@ -89,51 +89,60 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
     private static final Spec INPUT_SPEC = new Spec() {
         {
             addReaction(new FastReaction(Channel.SHUTDOWN, Channel.BUFFER) {
-                @Override public void react(Join join, Object[] args) {
+                @Override
+                public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new FastReaction(Channel.SHUTDOWN, Channel.EMPTY) {
-                @Override public void react(Join join, Object[] args) {
+                @Override
+                public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new FastReaction(Channel.SHUTDOWN, Channel.FINISHED) {
-                @Override public void react(Join join, Object[] args) {
+                @Override
+                public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new FastReaction(Channel.FINISHED, Channel.LINE) {
-                @Override public void react(Join join, Object[] args) {
+                @Override
+                public void react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                 }
             });
             addReaction(new SyncReaction(Channel.AVAILABLE, Channel.BUFFER) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     InputBuffer buffer = (InputBuffer) args[1];
                     join.send(Channel.BUFFER, buffer);
                     return buffer.bytes.length - buffer.offset;
                 }
             });
             addReaction(new SyncReaction(Channel.AVAILABLE, Channel.EMPTY) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     join.send(Channel.EMPTY, null);
                     return 0;
                 }
             });
             addReaction(new SyncReaction(Channel.AVAILABLE, Channel.FINISHED) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                     return 0;
                 }
             });
             addReaction(new SyncReaction(Channel.READ, Channel.BUFFER) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     return ((ReadRequest) args[0]).perform(join, (InputBuffer) args[1]);
                 }
             });
             addReaction(new SyncReaction(Channel.READ, Channel.EMPTY, Channel.LINE) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     final ReadRequest request = (ReadRequest) args[0];
                     final String line = (String) args[2];
                     if (line.length() != 0) {
@@ -150,18 +159,21 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
                 }
             });
             addReaction(new SyncReaction(Channel.READ, Channel.FINISHED) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                     return -1;
                 }
             });
             addReaction(new SyncReaction(Channel.GET_LINE, Channel.LINE) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     return args[1];
                 }
             });
             addReaction(new SyncReaction(Channel.GET_LINE, Channel.FINISHED) {
-                @Override public Object react(Join join, Object[] args) {
+                @Override
+                public Object react(Join join, Object[] args) {
                     join.send(Channel.FINISHED, null);
                     return EMPTY_LINE;
                 }
@@ -269,7 +281,8 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
             throw new RuntimeException("Cannot call readline from event dispatch thread");
         }
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 area.positionCaret(area.getLength());
                 readline.getHistory().moveToEnd();
             }
@@ -324,7 +337,8 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
             writeLineUnsafe(line, type);
         } else {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     writeLineUnsafe(line, type);
                 }
             });
@@ -334,14 +348,16 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
     private class Input extends InputStream {
         private volatile boolean closed = false;
 
-        @Override public int available() throws IOException {
+        @Override
+        public int available() throws IOException {
             if (closed) {
                 throw new IOException("Stream is closed");
             }
             return (Integer) inputJoin.call(Channel.AVAILABLE, null);
         }
 
-        @Override public int read() throws IOException {
+        @Override
+        public int read() throws IOException {
             byte[] b = new byte[1];
             if (read(b, 0, 1) == 1) {
                 return b[0];
@@ -350,7 +366,8 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
             }
         }
 
-        @Override public int read(byte[] b, int off, int len) throws IOException {
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
             if (closed) {
                 throw new IOException("Stream is closed");
             }
@@ -370,7 +387,8 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
             return (Integer) inputJoin.call(Channel.READ, request);
         }
 
-        @Override public void close() {
+        @Override
+        public void close() {
             closed = true;
             inputJoin.send(Channel.SHUTDOWN, null);
         }
@@ -383,11 +401,13 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
             this.type = type;
         }
 
-        @Override public void write(int b) throws IOException {
+        @Override
+        public void write(int b) throws IOException {
             writeLine("" + b, type);
         }
 
-        @Override public void write(byte[] b, int off, int len) {
+        @Override
+        public void write(byte[] b, int off, int len) {
             try {
                 writeLine(new String(b, off, len, "UTF-8"), type);
             } catch (UnsupportedEncodingException ex) {
@@ -395,7 +415,8 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
             }
         }
 
-        @Override public void write(byte[] b) {
+        @Override
+        public void write(byte[] b) {
             try {
                 writeLine(new String(b, "UTF-8"), type);
             } catch (UnsupportedEncodingException ex) {
@@ -412,7 +433,8 @@ public class TextAreaReadline implements EventHandler<KeyEvent> {
         readline.getHistory().setHistoryFile(file);
     }
 
-    @Override public void handle(KeyEvent event) {
+    @Override
+    public void handle(KeyEvent event) {
         if (event.getEventType() != KeyEvent.KEY_PRESSED) {
             return;
         }

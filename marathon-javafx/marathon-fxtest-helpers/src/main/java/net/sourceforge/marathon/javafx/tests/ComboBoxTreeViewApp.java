@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class ComboBoxTreeViewApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Combo Box TreeView");
         primaryStage.setScene(new Scene(new ComboBoxTreeViewSample()));
         primaryStage.sizeToScene();

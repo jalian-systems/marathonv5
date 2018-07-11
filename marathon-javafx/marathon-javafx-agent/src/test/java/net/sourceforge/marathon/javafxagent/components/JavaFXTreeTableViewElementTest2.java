@@ -36,12 +36,14 @@ public class JavaFXTreeTableViewElementTest2 extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement treeTable;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         treeTable = driver.findElementByTagName("tree-table-view");
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
@@ -50,19 +52,22 @@ public class JavaFXTreeTableViewElementTest2 extends JavaFXElementTest {
             text.add(treeTable.getAttribute("text"));
         });
         new Wait("Waiting for tree table text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\",\"/Sales Department/Anna Black\"]}", text.get(0));
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         String expected = "[[\"Sales Department\",\"\",\":unchecked\"],[\"Ethan Williams\",\"ethan.williams@example.com\",\":unchecked\"],[\"Emma Jones\",\"emma.jones@example.com\",\":unchecked\"],[\"Michael Brown\",\"michael.brown@example.com\",\":unchecked\"],[\"Anna Black\",\"anna.black@example.com\",\":unchecked\"],[\"Rodger York\",\"roger.york@example.com\",\":unchecked\"],[\"Susan Collins\",\"susan.collins@example.com\",\":unchecked\"]]";
         AssertJUnit.assertEquals(expected, treeTable.getAttribute("content"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new CheckBoxTreeTableSample();
     }
 

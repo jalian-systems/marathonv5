@@ -54,7 +54,8 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
         super();
     }
 
-    @BeforeMethod public void createDriver() {
+    @BeforeMethod
+    public void createDriver() {
         driver = new FXEventQueueDevice();
     }
 
@@ -66,7 +67,8 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
             exitItem = new MenuItem("Exit");
             exitItem.setOnAction(new EventHandler<ActionEvent>() {
 
-                @Override public void handle(ActionEvent event) {
+                @Override
+                public void handle(ActionEvent event) {
                     exitItemCalled = true;
                 }
             });
@@ -75,21 +77,24 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
             textField = new TextField();
             textField.setId("text");
             textField.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>() {
-                @Override public void handle(KeyEvent e) {
+                @Override
+                public void handle(KeyEvent e) {
                     addToList(e);
                 }
             });
             button = new Button("Click me");
             button.setId("click-me");
             button.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-                @Override public void handle(MouseEvent e) {
+                @Override
+                public void handle(MouseEvent e) {
                     if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
                         buttonClicked = true;
                     }
                 }
             });
             button.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-                @Override public void handle(MouseEvent e) {
+                @Override
+                public void handle(MouseEvent e) {
                     String s = "clicked";
                     if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
                         if (e.isPopupTrigger()) {
@@ -182,7 +187,8 @@ public class EventQueueDeviceTest extends JavaFXElementTest {
         return s;
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TestApp();
     }
 }

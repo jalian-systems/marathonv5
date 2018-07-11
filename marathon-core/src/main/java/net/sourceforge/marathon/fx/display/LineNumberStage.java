@@ -29,7 +29,8 @@ public class LineNumberStage extends MarathonInputStage {
         super("Goto", "Goto a line", FXUIUtils.getIcon("goto"));
     }
 
-    @Override protected String validateInput(String inputText) {
+    @Override
+    protected String validateInput(String inputText) {
         try {
             int line = Integer.parseInt(inputText);
             if (line < 1 || line > maxLine) {
@@ -41,7 +42,8 @@ public class LineNumberStage extends MarathonInputStage {
         return null;
     }
 
-    @Override protected String getInputFiledLabelText() {
+    @Override
+    protected String getInputFiledLabelText() {
         return "Line: ";
     }
 
@@ -53,7 +55,8 @@ public class LineNumberStage extends MarathonInputStage {
         setValue(line + "");
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 }

@@ -53,11 +53,13 @@ public class ProjectGroupResource extends Resource implements RootResource {
         setExpanded(true);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return type.dockName();
     }
 
-    @Override public ObservableList<TreeItem<Resource>> getChildren() {
+    @Override
+    public ObservableList<TreeItem<Resource>> getChildren() {
         ObservableList<TreeItem<Resource>> original = super.getChildren();
         if (loaded) {
             return original;
@@ -66,11 +68,13 @@ public class ProjectGroupResource extends Resource implements RootResource {
         return original;
     }
 
-    @Override public boolean isLeaf() {
+    @Override
+    public boolean isLeaf() {
         return false;
     }
 
-    @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
+    @Override
+    public List<Resource> findNodes(Resource resource, List<Resource> found) {
         getChildren().forEach((c) -> c.getValue().findNodes(resource, found));
         return found;
     }
@@ -85,7 +89,8 @@ public class ProjectGroupResource extends Resource implements RootResource {
         super.getChildren().setAll(children);
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         List<TreeItem<Resource>> expanded = super.getChildren().stream().filter((r) -> r.isExpanded()).collect(Collectors.toList());
         loadGroups();
         for (TreeItem<Resource> treeItem : expanded) {
@@ -99,87 +104,107 @@ public class ProjectGroupResource extends Resource implements RootResource {
         }
     }
 
-    @Override public void updated(Resource resource) {
+    @Override
+    public void updated(Resource resource) {
         refresh();
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         TestCreator tc = new TestCreator(acceptChecklist, console);
         return tc.getAllTestsForGroups(type);
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return false;
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return false;
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         return false;
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return false;
     }
 
-    @Override public boolean canOpen() {
+    @Override
+    public boolean canOpen() {
         return false;
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return true;
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public boolean copy(Map<DataFormat, Object> content) {
+    @Override
+    public boolean copy(Map<DataFormat, Object> content) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override public void paste(Clipboard clipboard, Operation clipboardOperation) {
+    @Override
+    public void paste(Clipboard clipboard, Operation clipboardOperation) {
     }
 
-    @Override public void pasteInto(Clipboard clipboard, Operation operation) {
+    @Override
+    public void pasteInto(Clipboard clipboard, Operation operation) {
     }
 
-    @Override public boolean droppable(Dragboard dragboard) {
+    @Override
+    public boolean droppable(Dragboard dragboard) {
         return false;
     }
 
-    @Override public Optional<ButtonType> delete(Optional<ButtonType> option) {
+    @Override
+    public Optional<ButtonType> delete(Optional<ButtonType> option) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public MenuItem[] getUnhideMenuItem() {
+    @Override
+    public MenuItem[] getUnhideMenuItem() {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public void deleted() {
+    @Override
+    public void deleted() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public void moved(Resource from, Resource to) {
+    @Override
+    public void moved(Resource from, Resource to) {
     }
 
-    @Override public void copied(Resource from, Resource to) {
+    @Override
+    public void copied(Resource from, Resource to) {
     }
 }

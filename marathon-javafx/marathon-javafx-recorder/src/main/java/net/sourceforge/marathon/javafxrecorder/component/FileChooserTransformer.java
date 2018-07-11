@@ -29,8 +29,9 @@ public class FileChooserTransformer implements ClassFileTransformer {
 
     public static final Logger LOGGER = Logger.getLogger(FileChooserTransformer.class.getName());
 
-    @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+    @Override
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
+            byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformClass(classBeingRedefined, classfileBuffer);
     }
 
@@ -41,8 +42,7 @@ public class FileChooserTransformer implements ClassFileTransformer {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
             if (cl.getName().equals("javafx.stage.FileChooser")) {
                 // @formatter: off
-                String codeSingle = "{"
-                        + JavaCompatibility.getRootAccessCode()
+                String codeSingle = "{" + JavaCompatibility.getRootAccessCode()
                         + "m$r.getProperties().put(\"marathon.selectedFiles\", $_ == null ? null : java.util.Arrays.asList(new Object[] { $_ }));"
                         + "m$r.fireEvent(new javafx.event.Event((javafx.event.EventType)m$r.getProperties().get(\"marathon.fileChooser.eventType\")));"
                         + "}";
@@ -51,17 +51,15 @@ public class FileChooserTransformer implements ClassFileTransformer {
                 showOpenDialog.insertAfter(codeSingle);
                 CtMethod showSaveDialog = cl.getDeclaredMethod("showSaveDialog");
                 showSaveDialog.insertAfter(codeSingle);
-                String codeMultiple = "{"
-                        + JavaCompatibility.getRootAccessCode()
+                String codeMultiple = "{" + JavaCompatibility.getRootAccessCode()
                         + "m$r.getProperties().put(\"marathon.selectedFiles\", $_ );"
                         + "m$r.fireEvent(new javafx.event.Event((javafx.event.EventType)m$r.getProperties().get(\"marathon.fileChooser.eventType\")));"
                         + "}";
                 CtMethod showOpenMultipleDialog = cl.getDeclaredMethod("showOpenMultipleDialog");
                 showOpenMultipleDialog.insertAfter(codeMultiple);
-            } else if(cl.getName().equals("javafx.stage.DirectoryChooser")) {
+            } else if (cl.getName().equals("javafx.stage.DirectoryChooser")) {
                 // @formatter: off
-                String codeSingle = "{"
-                        + JavaCompatibility.getRootAccessCode()
+                String codeSingle = "{" + JavaCompatibility.getRootAccessCode()
                         + "m$r.getProperties().put(\"marathon.selectedFolder\", $_);"
                         + "m$r.fireEvent(new javafx.event.Event((javafx.event.EventType)m$r.getProperties().get(\"marathon.folderChooser.eventType\")));"
                         + "}";

@@ -11,7 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class MyApp extends Application {
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         TreeViewSample root = new TreeViewSample();
         primaryStage.setScene(new Scene(root));
         // primaryStage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_CLICKED,
@@ -68,7 +69,8 @@ public class MyApp extends Application {
         System.out.println("MyApp.start(): " + lookupAll.size());
         for (Node node : lookupAll) {
             node.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<Event>() {
-                @Override public void handle(Event event) {
+                @Override
+                public void handle(Event event) {
                     MouseEvent me = (MouseEvent) event;
                     System.out.println("Bounds: " + ((Node) me.getSource()).getBoundsInParent());
                     System.out.println("Source Coords: " + me.getX() + ", " + me.getY());

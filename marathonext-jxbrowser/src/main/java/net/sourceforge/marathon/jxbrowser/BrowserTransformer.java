@@ -33,8 +33,9 @@ public class BrowserTransformer implements ClassFileTransformer {
         this.recording = recording;
     }
 
-    @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+    @Override
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
+            byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformClass(classBeingRedefined, classfileBuffer);
     }
 

@@ -8,7 +8,8 @@ import javafx.stage.Stage;
 
 public class TreeTableSampleApp extends Application {
 
-    @Override public void start(Stage primaryStage) {
+    @Override
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("TreeTable View Sample");
         primaryStage.setScene(new Scene(new TreeTableSample()));
         primaryStage.sizeToScene();

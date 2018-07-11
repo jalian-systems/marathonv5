@@ -34,75 +34,94 @@ public class DummyResource extends Resource {
 
     public static final Logger LOGGER = Logger.getLogger(DummyResource.class.getName());
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         return null;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return null;
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         return null;
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return false;
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return false;
     }
 
-    @Override public boolean canOpen() {
+    @Override
+    public boolean canOpen() {
         return false;
     }
 
-    @Override public boolean copy(Map<DataFormat, Object> content) {
+    @Override
+    public boolean copy(Map<DataFormat, Object> content) {
         return false;
     }
 
-    @Override public void paste(Clipboard clipboard, Operation operation) {
+    @Override
+    public void paste(Clipboard clipboard, Operation operation) {
     }
 
-    @Override public void pasteInto(Clipboard clipboard, Operation operation) {
+    @Override
+    public void pasteInto(Clipboard clipboard, Operation operation) {
     }
 
-    @Override public Optional<ButtonType> delete(Optional<ButtonType> option) {
+    @Override
+    public Optional<ButtonType> delete(Optional<ButtonType> option) {
         return null;
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return false;
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return null;
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return false;
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         return false;
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
     }
 
-    @Override public MenuItem[] getUnhideMenuItem() {
+    @Override
+    public MenuItem[] getUnhideMenuItem() {
         return null;
     }
 
-    @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
+    @Override
+    public List<Resource> findNodes(Resource resource, List<Resource> found) {
         return null;
     }
 
-    @Override public void deleted() {
+    @Override
+    public void deleted() {
     }
 
 }

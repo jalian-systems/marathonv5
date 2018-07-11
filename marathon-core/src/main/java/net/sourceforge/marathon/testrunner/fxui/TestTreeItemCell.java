@@ -32,7 +32,8 @@ public class TestTreeItemCell extends TreeCell<Test> {
     public TestTreeItemCell() {
     }
 
-    @Override protected void updateItem(Test test, boolean empty) {
+    @Override
+    protected void updateItem(Test test, boolean empty) {
         super.updateItem(test, empty);
         if (test != null && !empty) {
             String value;

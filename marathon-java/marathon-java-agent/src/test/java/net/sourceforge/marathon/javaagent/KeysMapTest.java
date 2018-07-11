@@ -22,7 +22,8 @@ import java.awt.event.KeyEvent;
 
 import org.testng.annotations.Test;
 
-@Test public class KeysMapTest {
+@Test
+public class KeysMapTest {
 
     public void findEntry() {
         KeysMap map = KeysMap.findMap(JavaAgentKeys.F1);

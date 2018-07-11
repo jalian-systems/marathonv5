@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class TextFieldListViewSampleApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("ListViewTextField");
         primaryStage.setScene(new Scene(new TextFieldListViewSample()));
         primaryStage.sizeToScene();

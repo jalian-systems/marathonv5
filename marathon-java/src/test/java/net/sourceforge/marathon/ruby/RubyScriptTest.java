@@ -35,7 +35,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.Failure;
 import net.sourceforge.marathon.runtime.api.PlaybackResult;
 
-@Test public class RubyScriptTest {
+@Test
+public class RubyScriptTest {
 
     private StringWriter out;
     private StringWriter err;
@@ -47,7 +48,8 @@ import net.sourceforge.marathon.runtime.api.PlaybackResult;
     private static final String[] SCRIPT_CONTENTS_ERROR_FROM_JAVA = { "print 'I am here'", "def my_function",
             "  include_class '" + RubyScriptTest.class.getCanonicalName() + "'", "  TestRubyScript.throwError", "end" };
 
-    @BeforeMethod public void setUp() throws Exception {
+    @BeforeMethod
+    public void setUp() throws Exception {
         System.setProperty(Constants.PROP_PROJECT_FRAMEWORK, Constants.FRAMEWORK_SWING);
         out = new StringWriter();
         err = new StringWriter();
@@ -68,7 +70,8 @@ import net.sourceforge.marathon.runtime.api.PlaybackResult;
         return file;
     }
 
-    @AfterMethod public void tearDown() throws Exception {
+    @AfterMethod
+    public void tearDown() throws Exception {
         Properties properties = System.getProperties();
         properties.remove(Constants.PROP_PROJECT_DIR);
         properties.remove(Constants.PROP_MODULE_DIRS);
@@ -122,7 +125,8 @@ import net.sourceforge.marathon.runtime.api.PlaybackResult;
         }
     }
 
-    @Test(enabled = false) public void resultsCapturesJavaError() throws Exception {
+    @Test(enabled = false)
+    public void resultsCapturesJavaError() throws Exception {
         RubyScript script = new RubyScript(out, err, converToCode(SCRIPT_CONTENTS_ERROR_FROM_JAVA),
                 new File(System.getProperty(Constants.PROP_PROJECT_DIR), "dummyfile.rb").getAbsolutePath(), false, null,
                 Constants.FRAMEWORK_SWING);

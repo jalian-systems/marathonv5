@@ -94,14 +94,16 @@ public class RFXComponentFactory {
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
          * .Node)
          */
-        @Override public Class<? extends RFXComponent> get(Node component) {
+        @Override
+        public Class<? extends RFXComponent> get(Node component) {
             if (componentKlass.isInstance(component)) {
                 return rComponentKlass;
             }
             return null;
         }
 
-        @Override public Node getRecordOn(Node component, Point2D point) {
+        @Override
+        public Node getRecordOn(Node component, Point2D point) {
             if (recordOn != null) {
                 return recordOn.getRecordOn(component, point);
             }
@@ -129,7 +131,8 @@ public class RFXComponentFactory {
         add(Region.class, RFXIgnoreComponent.class, null);
         add(TextInputControl.class, RFXTextInputControl.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof TextInputControl) {
@@ -142,7 +145,8 @@ public class RFXComponentFactory {
         });
         add(HTMLEditor.class, RFXHTMLEditor.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof HTMLEditor) {
@@ -155,7 +159,8 @@ public class RFXComponentFactory {
         });
         add(ButtonBase.class, RFXButtonBase.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ButtonBase) {
@@ -168,7 +173,8 @@ public class RFXComponentFactory {
         });
         add(MenuBar.class, RFXMenuBar.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof MenuBar) {
@@ -183,7 +189,8 @@ public class RFXComponentFactory {
         add(ToggleButton.class, RFXToggleButton.class, null);
         add(Slider.class, RFXSlider.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof Slider) {
@@ -196,7 +203,8 @@ public class RFXComponentFactory {
         });
         add(Spinner.class, RFXSpinner.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof Spinner) {
@@ -209,7 +217,8 @@ public class RFXComponentFactory {
         });
         add(TitledPane.class, RFXTitledPane.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 if (hasTitleRegion(component)) {
                     while (parent != null) {
@@ -235,7 +244,8 @@ public class RFXComponentFactory {
         });
         add(SplitPane.class, RFXSplitPane.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 if (hasDivider(component)) {
                     while (parent != null) {
@@ -261,7 +271,8 @@ public class RFXComponentFactory {
         });
         add(ProgressBar.class, RFXProgressBar.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ProgressBar) {
@@ -274,7 +285,8 @@ public class RFXComponentFactory {
         });
         add(TabPane.class, RFXTabPane.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 if (hasTab(component)) {
                     while (parent != null) {
@@ -314,7 +326,8 @@ public class RFXComponentFactory {
         });
         add(ChoiceBox.class, RFXChoiceBox.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ChoiceBox<?>) {
@@ -327,7 +340,8 @@ public class RFXComponentFactory {
         });
         add(ComboBox.class, RFXComboBox.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ComboBox<?>) {
@@ -340,7 +354,8 @@ public class RFXComponentFactory {
         });
         add(ColorPicker.class, RFXColorPicker.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof ColorPicker) {
@@ -353,7 +368,8 @@ public class RFXComponentFactory {
         });
         add(DatePicker.class, RFXDatePicker.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 Node parent = component;
                 while (parent != null) {
                     if (parent instanceof DatePicker) {
@@ -366,7 +382,8 @@ public class RFXComponentFactory {
         });
         add(ListView.class, RFXListView.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 if (hasListCellParent(component)) {
                     Node parent = component;
                     while (parent != null) {
@@ -391,7 +408,8 @@ public class RFXComponentFactory {
             }
         });
         add(TreeView.class, RFXTreeView.class, new IRecordOn() {
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 if (hasTreeCellParent(component)) {
                     Node parent = component;
                     while (parent != null) {
@@ -417,7 +435,8 @@ public class RFXComponentFactory {
         });
         add(TableView.class, RFXTableView.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 if (hasTableCellParent(component)) {
                     Node parent = component;
                     while (parent != null) {
@@ -443,7 +462,8 @@ public class RFXComponentFactory {
         });
         add(TreeTableView.class, RFXTreeTableView.class, new IRecordOn() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 if (hasTreeTableCellParent(component)) {
                     Node parent = component;
                     while (parent != null) {

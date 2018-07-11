@@ -21,7 +21,8 @@ public abstract class DefaultMatcher implements IPropertyAccessor {
 
     public static final Logger LOGGER = Logger.getLogger(DefaultMatcher.class.getName());
 
-    @Override public boolean isMatched(String method, String name, String value) {
+    @Override
+    public boolean isMatched(String method, String name, String value) {
         String actual = getProperty(name);
         if (actual == null) {
             return false;

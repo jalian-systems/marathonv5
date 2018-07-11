@@ -86,7 +86,8 @@ public class FailureDetailView extends BorderPane {
             this.sourceLine = line;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "    at " + sourceLine.fileName + ":" + sourceLine.lineNumber + " in function " + sourceLine.functionName;
         }
     }

@@ -49,7 +49,8 @@ public class SystemClipboard implements EventHandler<ActionEvent> {
         listeners.add(ClipboardListener.class, l);
     }
 
-    @Override public void handle(ActionEvent event) {
+    @Override
+    public void handle(ActionEvent event) {
         String data = clipboard.getString();
         if (prevData == null && data == null) {
             return;

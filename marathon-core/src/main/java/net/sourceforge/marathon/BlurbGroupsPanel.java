@@ -45,26 +45,33 @@ public class BlurbGroupsPanel extends AbstractGroupsPanel {
         node = sp;
     }
 
-    @Override public void deleted(IResourceActionSource source, Resource resource) {
+    @Override
+    public void deleted(IResourceActionSource source, Resource resource) {
     }
 
-    @Override public void updated(IResourceActionSource source, Resource resource) {
+    @Override
+    public void updated(IResourceActionSource source, Resource resource) {
     }
 
-    @Override public void moved(IResourceActionSource source, Resource from, Resource to) {
+    @Override
+    public void moved(IResourceActionSource source, Resource from, Resource to) {
     }
 
-    @Override public void copied(IResourceActionSource source, Resource from, Resource to) {
+    @Override
+    public void copied(IResourceActionSource source, Resource from, Resource to) {
     }
 
-    @Override public void initialize(IResourceActionHandler handler, IResourceChangeListener listener) {
+    @Override
+    public void initialize(IResourceActionHandler handler, IResourceChangeListener listener) {
     }
 
-    @Override public DockKey getDockKey() {
+    @Override
+    public DockKey getDockKey() {
         return DOCK_KEY;
     }
 
-    @Override public Node getComponent() {
+    @Override
+    public Node getComponent() {
         return node;
     }
 

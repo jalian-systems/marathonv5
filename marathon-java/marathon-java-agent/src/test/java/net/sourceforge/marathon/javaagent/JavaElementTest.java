@@ -28,7 +28,8 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.Device.Type;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JavaElementTest extends DeviceTest {
+@Test
+public class JavaElementTest extends DeviceTest {
 
     private IJavaElement ejButton;
     private IJavaAgent ejDriver;
@@ -41,7 +42,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         super(Type.EVENT_QUEUE);
     }
 
-    @BeforeMethod public void createWebDriver() throws Throwable {
+    @BeforeMethod
+    public void createWebDriver() throws Throwable {
         ejDriver = new JavaAgent();
         ejButton = ejDriver.findElementByName("click-me");
         ejText = ejDriver.findElementByName("text");
@@ -55,7 +57,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         AssertJUnit.assertFalse(buttonClicked);
         ejButton.click();
         new WaitWithoutException("Waiting for the button to be clicked") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return buttonClicked;
             }
         };
@@ -64,7 +67,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void clickDisabled() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setEnabled(false);
             }
         });
@@ -83,7 +87,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void sendKeysDisabled() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textField.setEnabled(false);
             }
         });
@@ -120,7 +125,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void isEnabled() throws Throwable {
         AssertJUnit.assertTrue(ejButton.isEnabled());
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setEnabled(false);
             }
         });
@@ -155,7 +161,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void isDisplayed() throws Throwable {
         AssertJUnit.assertTrue(ejButton.isDisplayed());
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setVisible(false);
             }
         });

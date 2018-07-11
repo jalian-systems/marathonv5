@@ -29,7 +29,8 @@ public class GUIMain extends Application {
         launch(args);
     }
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         List<String> args = getParameters().getRaw();
         RealMain.realmain(args.toArray(new String[args.size()]));
     }

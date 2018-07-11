@@ -46,7 +46,8 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
             this.p = p;
         }
 
-        @Override public boolean isValid(JTableHeaderItemJavaElement e) {
+        @Override
+        public boolean isValid(JTableHeaderItemJavaElement e) {
             Enumeration<Object> keys = p.keys();
             while (keys.hasMoreElements()) {
                 String object = (String) keys.nextElement();
@@ -66,7 +67,8 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
         super(header, javaAgent, window);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         int nitems = getCount();
         JSONArray r = new JSONArray();
         for (int i = 0; i < nitems; i++) {
@@ -75,7 +77,8 @@ public class JTableHeaderJavaElement extends AbstractJavaElement {
         return r.toString();
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("nth-item")) {
             return Arrays.asList((IJavaElement) new JTableHeaderItemJavaElement(this, ((Integer) params[0]).intValue() - 1));
         } else if (selector.equals("all-items")) {

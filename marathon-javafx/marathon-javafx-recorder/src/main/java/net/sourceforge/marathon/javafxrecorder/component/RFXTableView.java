@@ -70,7 +70,8 @@ public class RFXTableView extends RFXComponent {
         }
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         TableView<?> tableView = (TableView<?>) node;
         if (row != -1 && column != -1) {
             cellValue = getTableCellValueAt(tableView, row, column);
@@ -91,7 +92,8 @@ public class RFXTableView extends RFXComponent {
         return cellComponent == null ? null : cellComponent.getValue();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         TableView<?> tableView = (TableView<?>) getComponent();
         String currentCellValue = getTableCellValueAt(tableView, row, column);
         if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
@@ -106,7 +108,8 @@ public class RFXTableView extends RFXComponent {
         }
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + column;
@@ -114,7 +117,8 @@ public class RFXTableView extends RFXComponent {
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -134,11 +138,13 @@ public class RFXTableView extends RFXComponent {
         return true;
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         return cellInfo;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         TableView<?> tableView = (TableView<?>) node;
         if (row != -1 && column != -1) {
             TableCell<?, ?> tableCell = getCellAt(tableView, row, column);
@@ -149,10 +155,12 @@ public class RFXTableView extends RFXComponent {
         return getSelection((TableView<?>) getComponent());
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         if (me.isControlDown() || me.isAltDown() || me.isMetaDown() || onCheckBox((Node) me.getTarget()))
             return;
         recorder.recordClick2(this, me, true);

@@ -34,7 +34,8 @@ public class FixtureSelector {
 
         List<String> selectedFixtures = new ArrayList<>();
         fixtureSelection.setFixtureSelectionHandler(new IFixtureSelectionHandler() {
-            @Override public void handleFixture(String selectedFixture) {
+            @Override
+            public void handleFixture(String selectedFixture) {
                 selectedFixtures.add(selectedFixture);
             }
         });

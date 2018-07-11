@@ -33,11 +33,13 @@ public class NewProjectHandler implements INewProjectHandler {
         this.parent = parent;
     }
 
-    @Override public ProjectInfo createNewProject() {
+    @Override
+    public ProjectInfo createNewProject() {
         List<File> projects = new ArrayList<>();
         MPFConfigurationInfo mpfConfigurationInfo = new MPFConfigurationInfo("Configure - (New Project)");
         MPFConfigurationStage mpfConfigurationStage = new MPFConfigurationStage(parent, mpfConfigurationInfo) {
-            @Override public void onSave() {
+            @Override
+            public void onSave() {
                 if (validInupt()) {
                     projects.add(mpfConfigurationInfo.saveProjectFile(layouts));
                     dispose();

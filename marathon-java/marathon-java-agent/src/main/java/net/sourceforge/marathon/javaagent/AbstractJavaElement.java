@@ -61,7 +61,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#click()
      */
-    @Override public void click() {
+    @Override
+    public void click() {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(component);
@@ -75,7 +76,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * @see net.sourceforge.marathon.javaagent.IJavaElement#sendKeys(java.lang.
      * CharSequence)
      */
-    @Override public void sendKeys(CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(CharSequence... keysToSend) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(component);
@@ -88,7 +90,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#clear()
      */
-    @Override public void clear() {
+    @Override
+    public void clear() {
         EventQueueWait.call_noexc(this, "_clear");
     }
 
@@ -104,7 +107,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         }
     }
 
-    @Override public String getAttribute(final String name) {
+    @Override
+    public String getAttribute(final String name) {
         if (name.startsWith("matches-css-")) {
             return matchesCSS(name.substring("matches-css-".length()));
         } else if (name.startsWith("call-")) {
@@ -130,7 +134,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#getCssValue(java.lang
      * .String)
      */
-    @Override public String getCssValue(String propertyName) {
+    @Override
+    public String getCssValue(String propertyName) {
         throw new UnsupportedCommandException("Java driver does not support getCssValue()", null);
     }
 
@@ -161,7 +166,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementByName(java
      * .lang.String)
      */
-    @Override public final IJavaElement findElementByName(String using) {
+    @Override
+    public final IJavaElement findElementByName(String using) {
         List<IJavaElement> elements = findElementsByName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -169,7 +175,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         return elements.get(0);
     }
 
-    @Override public IJavaElement findElementByClassName(String using) {
+    @Override
+    public IJavaElement findElementByClassName(String using) {
         List<IJavaElement> elements = findElementsByClassName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -177,7 +184,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         return elements.get(0);
     }
 
-    @Override public List<IJavaElement> findElementsByClassName(String using) {
+    @Override
+    public List<IJavaElement> findElementsByClassName(String using) {
         return findByCss(":instance-of('" + using + "')");
     }
 
@@ -197,7 +205,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementsByName(java
      * .lang.String)
      */
-    @Override public List<IJavaElement> findElementsByName(final String using) {
+    @Override
+    public List<IJavaElement> findElementsByName(final String using) {
         return findByCss("#'" + using + "'");
     }
 
@@ -206,7 +215,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getHandle()
      */
-    @Override final public String getHandle() {
+    @Override
+    final public String getHandle() {
         if (this instanceof IPseudoElement) {
             try {
                 return URLEncoder.encode(((IPseudoElement) this).createHandle(), "utf8");
@@ -222,7 +232,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getId()
      */
-    @Override public UUID getId() {
+    @Override
+    public UUID getId() {
         return id;
     }
 
@@ -233,7 +244,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementByTagName(
      * java.lang.String)
      */
-    @Override public final IJavaElement findElementByTagName(String using) {
+    @Override
+    public final IJavaElement findElementByTagName(String using) {
         List<IJavaElement> elements = findElementsByTagName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -248,7 +260,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementsByTagName
      * (java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByTagName(final String using) {
+    @Override
+    public List<IJavaElement> findElementsByTagName(final String using) {
         return findByCss(using);
     }
 
@@ -259,7 +272,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementByCssSelector
      * (java.lang.String)
      */
-    @Override public final IJavaElement findElementByCssSelector(String using) {
+    @Override
+    public final IJavaElement findElementByCssSelector(String using) {
         List<IJavaElement> elements = findElementsByCssSelector(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
@@ -274,7 +288,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#findElementsByCssSelector
      * (java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByCssSelector(String using) {
+    @Override
+    public List<IJavaElement> findElementsByCssSelector(String using) {
         if (!(component instanceof Container)) {
             throw new UnsupportedCommandException(
                     "findElementsByCssSelector unsupported for non container objects: " + component.getClass().getName(),
@@ -291,7 +306,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#filterByPseudoClass(java
      * .lang.String, java.lang.Object)
      */
-    @Override public boolean filterByPseudoClass(String function, Object... args) {
+    @Override
+    public boolean filterByPseudoClass(String function, Object... args) {
         if (function.equals("enabled")) {
             return isEnabled();
         } else if (function.equals("disabled")) {
@@ -323,7 +339,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         }
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         String ids = id.toString();
         return "@    " + component + "\n     id=" + ids + "\n";
     }
@@ -333,7 +350,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getComponents()
      */
-    @Override public IJavaElement[] getComponents() {
+    @Override
+    public IJavaElement[] getComponents() {
         if (component instanceof Container) {
             Window[] ownedWindows = new Window[0];
             if (component instanceof Window) {
@@ -352,14 +370,16 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         return new IJavaElement[0];
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (id == null ? 0 : id.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -387,7 +407,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * net.sourceforge.marathon.javaagent.IJavaElement#getByPseudoElement(java
      * .lang.String, java.lang.Object[])
      */
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("call-select")) {
             if (marathon_select((String) params[0])) {
                 return Arrays.asList((IJavaElement) this);
@@ -404,12 +425,14 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
                 "Pseudo element selector " + selector + " is not applicable for " + component.getClass().getName(), null);
     }
 
-    @Override public boolean marathon_select(JSONArray jsonArray) {
+    @Override
+    public boolean marathon_select(JSONArray jsonArray) {
         throw new UnsupportedCommandException("Select method by properties" + " is not applicable for "
                 + component.getClass().getName() + " (" + this.getClass().getName() + ")", null);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         throw new UnsupportedCommandException("Select method" + " is not applicable for " + component.getClass().getName() + " ("
                 + this.getClass().getName() + ")", null);
     }
@@ -419,7 +442,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      *
      * @see net.sourceforge.marathon.javaagent.IJavaElement#createId()
      */
-    @Override public String createId() {
+    @Override
+    public String createId() {
         this.id = UUID.randomUUID();
         return this.id.toString();
     }
@@ -430,11 +454,13 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * @see
      * net.sourceforge.marathon.javaagent.IJavaElement#setId(java.util.UUID)
      */
-    @Override public void setId(UUID id) {
+    @Override
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    @Override public void moveto() {
+    @Override
+    public void moveto() {
         EventQueueWait.call_noexc(this, "_moveto");
     }
 
@@ -442,7 +468,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         driver.getDevices().moveto(component);
     }
 
-    @Override public void moveto(int xoffset, int yoffset) {
+    @Override
+    public void moveto(int xoffset, int yoffset) {
         EventQueueWait.call_noexc(this, "_moveto", xoffset, yoffset);
     }
 
@@ -458,7 +485,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         return window;
     }
 
-    @Override public void click(int button, int clickCount, int xoffset, int yoffset) {
+    @Override
+    public void click(int button, int clickCount, int xoffset, int yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(component);
@@ -466,7 +494,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         mouse.click(component, Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
     }
 
-    @Override public void buttonDown(int button, int xoffset, int yoffset) {
+    @Override
+    public void buttonDown(int button, int xoffset, int yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(component);
@@ -474,7 +503,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         mouse.buttonDown(component, Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
-    @Override public void buttonUp(int button, int xoffset, int yoffset) {
+    @Override
+    public void buttonUp(int button, int xoffset, int yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(component);
@@ -482,7 +512,8 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
         mouse.buttonUp(component, Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
-    @Override public void submit() {
+    @Override
+    public void submit() {
         if (component instanceof JComponent) {
             JComponent tc = (JComponent) component;
             Object clientProperty = tc.getClientProperty("marathon.celleditor.parent");

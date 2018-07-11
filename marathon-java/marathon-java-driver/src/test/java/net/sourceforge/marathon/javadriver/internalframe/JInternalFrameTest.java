@@ -30,14 +30,17 @@ import org.testng.annotations.Test;
 import components.InternalFrameDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JInternalFrameTest {
+@Test
+public class JInternalFrameTest {
 
     private WebDriver driver;
     protected InternalFrameDemo frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new InternalFrameDemo();
                 frame.setName("frame-" + JInternalFrameTest.class.getSimpleName());
                 frame.setSize(640, 480);
@@ -47,9 +50,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

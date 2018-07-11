@@ -58,7 +58,8 @@ public class MarathonGuiceModule extends AbstractModule {
         editorProvider.add(marathonCheckListEditorProvider, false);
     }
 
-    @Override protected void configure() {
+    @Override
+    protected void configure() {
         bind(Properties.class).annotatedWith(IDisplayProperties.class).toInstance(System.getProperties());
         bindRuntime();
         bind(RecorderProvider.class).toInstance(new RecorderProvider());
@@ -76,7 +77,8 @@ public class MarathonGuiceModule extends AbstractModule {
 
     protected void bindRuntime() {
         bind(IRuntimeFactory.class).toInstance(new IRuntimeFactory() {
-            @Override public IMarathonRuntime createRuntime() {
+            @Override
+            public IMarathonRuntime createRuntime() {
                 return null;
             }
         });

@@ -52,7 +52,8 @@ public class TransparentFrame implements AWTEventListener {
         if (b) {
             Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.PAINT_EVENT_MASK);
             SwingUtilities.invokeLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     paintTransparentFrame();
                 }
             });
@@ -65,15 +66,18 @@ public class TransparentFrame implements AWTEventListener {
         disposed = true;
         Toolkit.getDefaultToolkit().removeAWTEventListener(this);
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 paintTransparentFrame();
             }
         });
     }
 
-    @Override public void eventDispatched(AWTEvent event) {
+    @Override
+    public void eventDispatched(AWTEvent event) {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 paintTransparentFrame();
             }
         });

@@ -36,7 +36,8 @@ public class RSplitPane extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         JSplitPane c = (JSplitPane) (component instanceof JSplitPane ? component
                 : SwingUtilities.getAncestorOfClass(JSplitPane.class, component));
         if (c == null) {
@@ -45,7 +46,8 @@ public class RSplitPane extends RComponent {
         dividerLocation = c.getDividerLocation();
     }
 
-    @Override protected void mouseReleased(MouseEvent me) {
+    @Override
+    protected void mouseReleased(MouseEvent me) {
         JSplitPane c = (JSplitPane) (component instanceof JSplitPane ? component
                 : SwingUtilities.getAncestorOfClass(JSplitPane.class, component));
         if (c == null || dividerLocation == c.getDividerLocation()) {

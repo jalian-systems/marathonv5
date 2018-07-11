@@ -35,7 +35,8 @@ public class StreamPumper implements Runnable {
         this.writer = writer == null ? new BitBucket() : writer;
     }
 
-    @Override public void run() {
+    @Override
+    public void run() {
         char[] cbuf = new char[1024];
         try {
             while (true) {

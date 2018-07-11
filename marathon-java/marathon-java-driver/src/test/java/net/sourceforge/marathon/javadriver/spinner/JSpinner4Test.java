@@ -32,7 +32,8 @@ import org.testng.annotations.Test;
 import components.SpinnerDemo4;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JSpinner4Test {
+@Test
+public class JSpinner4Test {
 
     private WebDriver driver;
     protected JFrame frame;
@@ -40,9 +41,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private WebElement spinnerButttonUp;
     private WebElement spinnerButtonDown;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JSpinner2Test.class.getSimpleName());
                 frame.setName("frame-" + JSpinner2Test.class.getSimpleName());
                 frame.getContentPane().add(new SpinnerDemo4(), BorderLayout.CENTER);
@@ -60,9 +63,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

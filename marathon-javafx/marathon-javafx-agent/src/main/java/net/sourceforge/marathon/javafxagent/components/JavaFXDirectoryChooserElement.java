@@ -36,7 +36,8 @@ public class JavaFXDirectoryChooserElement extends JavaFXElement {
         super(new DirctoryChooserNode(), driver, window);
     }
 
-    @Override public void sendKeys(CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(CharSequence... keysToSend) {
         String value = (String) keysToSend[0];
         javafx.scene.Node m$r = JavaCompatibility.getStages().get(0).getScene().getRoot();
         File folder = null;

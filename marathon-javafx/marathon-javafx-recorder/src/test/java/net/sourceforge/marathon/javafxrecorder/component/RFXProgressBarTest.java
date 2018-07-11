@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXProgressBarTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         ProgressBar progressBar = (ProgressBar) getPrimaryStage().getScene().getRoot().lookup(".progress-bar");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -44,7 +45,8 @@ public class RFXProgressBarTest extends RFXComponentTest {
         AssertJUnit.assertEquals("0.56", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         ProgressBar progressBar = (ProgressBar) getPrimaryStage().getScene().getRoot().lookup(".progress-bar");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -55,14 +57,16 @@ public class RFXProgressBarTest extends RFXComponentTest {
             text.add(rfxProgressBar.getAttribute("text"));
         });
         new Wait("Waiting for progress bar text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("0.56", text.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ProgressBarSample();
     }
 }

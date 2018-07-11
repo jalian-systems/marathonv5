@@ -38,11 +38,13 @@ public class RFXCheckBox extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseEntered(MouseEvent me) {
+    @Override
+    protected void mouseEntered(MouseEvent me) {
         prevSelection = getSelection((CheckBox) node);
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         int selection = getSelection((CheckBox) node);
         if (prevSelection == null || selection != prevSelection) {
             recorder.recordSelect(this, JavaFXCheckBoxElement.states[selection]);
@@ -50,16 +52,19 @@ public class RFXCheckBox extends RFXComponent {
         prevSelection = selection;
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         int selection = getSelection((CheckBox) node);
         return JavaFXCheckBoxElement.states[selection];
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getCheckBoxText((CheckBox) node);
     }
 
-    @Override protected void keyPressed(KeyEvent ke) {
+    @Override
+    protected void keyPressed(KeyEvent ke) {
         if (ke.getCode() == KeyCode.SPACE) {
             recorder.recordRawKeyEvent(this, ke);
         }

@@ -68,34 +68,42 @@ public final class LoggingRecorder implements IJSONRecorder {
 
     private List<LoggingRecorder.Call> calls = new ArrayList<LoggingRecorder.Call>();
 
-    @Override public void recordSelect2(RComponent r, String state, boolean withCellInfo) {
+    @Override
+    public void recordSelect2(RComponent r, String state, boolean withCellInfo) {
         calls.add(new Call("select", state, withCellInfo, null, r.getCellInfo()));
     }
 
-    @Override public void recordSelect(RComponent r, String state) {
+    @Override
+    public void recordSelect(RComponent r, String state) {
         calls.add(new Call("select", state, false, null, r.getCellInfo()));
     }
 
-    @Override public void recordRawKeyEvent(RComponent r, KeyEvent e) {
+    @Override
+    public void recordRawKeyEvent(RComponent r, KeyEvent e) {
         calls.add(new Call("raw", "", false, e, r.getCellInfo()));
     }
 
-    @Override public void recordRawMouseEvent(RComponent r, MouseEvent e) {
+    @Override
+    public void recordRawMouseEvent(RComponent r, MouseEvent e) {
         calls.add(new Call("raw", "", false, e, r.getCellInfo()));
     }
 
-    @Override public void recordClick2(RComponent r, MouseEvent e, boolean withCellInfo) {
+    @Override
+    public void recordClick2(RComponent r, MouseEvent e, boolean withCellInfo) {
         calls.add(new Call("click", "", withCellInfo, e, r.getCellInfo()));
     }
 
-    @Override public void recordClick(RComponent r, MouseEvent e) {
+    @Override
+    public void recordClick(RComponent r, MouseEvent e) {
         calls.add(new Call("click", "", false, e, r.getCellInfo()));
     }
 
-    @Override public void recordAction(RComponent r, String action, String property, Object value) {
+    @Override
+    public void recordAction(RComponent r, String action, String property, Object value) {
     }
 
-    @Override public boolean isCreatingObjectMap() {
+    @Override
+    public boolean isCreatingObjectMap() {
         return false;
     }
 
@@ -111,46 +119,57 @@ public final class LoggingRecorder implements IJSONRecorder {
         calls.clear();
     }
 
-    @Override public void recordSelectMenu(RComponent r, String selection) {
+    @Override
+    public void recordSelectMenu(RComponent r, String selection) {
         calls.add(new Call("select_menu", selection, false, null, r.getCellInfo()));
     }
 
-    @Override public void recordWindowClosing(RComponent r) {
+    @Override
+    public void recordWindowClosing(RComponent r) {
     }
 
-    @Override public void recordWindowState(RComponent r, Rectangle bounds) {
+    @Override
+    public void recordWindowState(RComponent r, Rectangle bounds) {
     }
 
-    @Override public JSONOMapConfig getObjectMapConfiguration() {
+    @Override
+    public JSONOMapConfig getObjectMapConfiguration() {
         return null;
     }
 
-    @Override public JSONObject getContextMenuTriggers() {
+    @Override
+    public JSONObject getContextMenuTriggers() {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public boolean isRawRecording() {
+    @Override
+    public boolean isRawRecording() {
         return false;
     }
 
-    @Override public void recordMenuItem(RComponent rComponent) {
+    @Override
+    public void recordMenuItem(RComponent rComponent) {
     }
 
-    @Override public void recordFocusedWindow(RComponent r) {
+    @Override
+    public void recordFocusedWindow(RComponent r) {
     }
 
-    @Override public void recordFileDialog(String string) {
+    @Override
+    public void recordFileDialog(String string) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public boolean isPaused() {
+    @Override
+    public boolean isPaused() {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override public boolean isInsertingScript() {
+    @Override
+    public boolean isInsertingScript() {
         // TODO Auto-generated method stub
         return false;
     }

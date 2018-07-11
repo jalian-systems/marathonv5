@@ -73,7 +73,8 @@ public class ObjectMapConfiguration implements Serializable {
             return pl;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "PropertyList [properties=" + properties + ", priority=" + priority + "]";
         }
 
@@ -108,7 +109,8 @@ public class ObjectMapConfiguration implements Serializable {
             propertyLists.add(pl);
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "ObjectIdentity [className=" + className + ", propertyLists=" + propertyLists + "]";
         }
 
@@ -163,7 +165,7 @@ public class ObjectMapConfiguration implements Serializable {
     public void createDefault() {
         createDefault(Constants.getFramework());
     }
-    
+
     public void createDefault(String framework) {
         LOGGER.info("Creating a default object map configuration. Loading from stream...");
         Reader reader = new InputStreamReader(Constants.getOMapConfigurationStream(framework));
@@ -213,7 +215,8 @@ public class ObjectMapConfiguration implements Serializable {
         generalProperties = configuration.generalProperties;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "ObjectMapConfiguration [namingProperties=" + namingProperties + ", recognitionProperties=" + recognitionProperties
                 + ", generalProperties=" + generalProperties + ", containerNamingProperties=" + containerNamingProperties
                 + ", containerRecognitionProperties=" + containerRecognitionProperties + "]";

@@ -91,7 +91,8 @@ public class LogView extends Dockable {
         infoButton.setTooltip(new Tooltip("Show all messages"));
         infoButton.setOnAction((e) -> {
             FilteredList<LogRecord> filtered = logList.filtered(new Predicate<LogRecord>() {
-                @Override public boolean test(LogRecord t) {
+                @Override
+                public boolean test(LogRecord t) {
                     if (t.getType() == ILogger.INFO || t.getType() == ILogger.MESSAGE) {
                         return true;
                     }
@@ -107,7 +108,8 @@ public class LogView extends Dockable {
         warnButton.setTooltip(new Tooltip("Show only warnings and errors"));
         warnButton.setOnAction((e) -> {
             FilteredList<LogRecord> filtered = logList.filtered(new Predicate<LogRecord>() {
-                @Override public boolean test(LogRecord t) {
+                @Override
+                public boolean test(LogRecord t) {
                     if (t.getType() == ILogger.WARN || t.getType() == ILogger.MESSAGE || t.getType() == ILogger.ERROR) {
                         return true;
                     }
@@ -123,7 +125,8 @@ public class LogView extends Dockable {
         errorButton.setTooltip(new Tooltip("Show only errors"));
         errorButton.setOnAction((e) -> {
             FilteredList<LogRecord> filtered = logList.filtered(new Predicate<LogRecord>() {
-                @Override public boolean test(LogRecord t) {
+                @Override
+                public boolean test(LogRecord t) {
                     if (t.getType() == ILogger.ERROR || t.getType() == ILogger.MESSAGE) {
                         return true;
                     }
@@ -170,13 +173,15 @@ public class LogView extends Dockable {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) private void initLogTable() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void initLogTable() {
         logTable.setId("logTable");
         TableColumn<LogRecord, Integer> iconColumn = new TableColumn<>("");
         iconColumn.prefWidthProperty().bind(logTable.widthProperty().multiply(0.05));
         iconColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         iconColumn.setCellFactory(new Callback<TableColumn<LogRecord, Integer>, TableCell<LogRecord, Integer>>() {
-            @Override public TableCell call(TableColumn<LogRecord, Integer> param) {
+            @Override
+            public TableCell call(TableColumn<LogRecord, Integer> param) {
                 return new IconTableCell();
             }
         });
@@ -194,7 +199,8 @@ public class LogView extends Dockable {
         dateColumn.prefWidthProperty().bind(logTable.widthProperty().multiply(0.25));
 
         logList.addListener(new ListChangeListener<LogRecord>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends LogRecord> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends LogRecord> c) {
                 if (logList.size() == 0) {
                     clearButton.setDisable(true);
                 } else {
@@ -225,7 +231,8 @@ public class LogView extends Dockable {
 
         errorButton.setSelected(true);
         FilteredList<LogRecord> filtered = logList.filtered(new Predicate<LogRecord>() {
-            @Override public boolean test(LogRecord t) {
+            @Override
+            public boolean test(LogRecord t) {
                 if (t.getType() == ILogger.ERROR || t.getType() == ILogger.MESSAGE) {
                     return true;
                 }
@@ -263,7 +270,8 @@ public class LogView extends Dockable {
 
     public class IconTableCell extends TableCell<LogRecord, Integer> {
 
-        @Override protected void updateItem(Integer item, boolean empty) {
+        @Override
+        protected void updateItem(Integer item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
                 Node value = null;
@@ -283,11 +291,13 @@ public class LogView extends Dockable {
 
     }
 
-    @Override public DockKey getDockKey() {
+    @Override
+    public DockKey getDockKey() {
         return DOCK_KEY;
     }
 
-    @Override public Node getComponent() {
+    @Override
+    public Node getComponent() {
         return logViewLayout;
     }
 

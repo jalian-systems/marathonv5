@@ -295,7 +295,8 @@ public class PropertyHelper {
         private String[] rows;
         private String[] columns;
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "TableSelection [rows=" + Arrays.toString(rows) + ", columns=" + Arrays.toString(columns) + "]";
         }
 

@@ -23,12 +23,15 @@ public class BitBucket extends Writer {
 
     public static final Logger LOGGER = Logger.getLogger(BitBucket.class.getName());
 
-    @Override public void write(char cbuf[], int off, int len) throws IOException {
+    @Override
+    public void write(char cbuf[], int off, int len) throws IOException {
     }
 
-    @Override public void flush() throws IOException {
+    @Override
+    public void flush() throws IOException {
     }
 
-    @Override public void close() throws IOException {
+    @Override
+    public void close() throws IOException {
     }
 }

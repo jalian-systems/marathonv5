@@ -108,7 +108,7 @@ public class CheckListFormNode extends VBox {
         }
         Iterator<CheckList.CheckListItem> items = checkList.getItems();
         List<CheckListItemVBoxer> vboxers = new ArrayList<CheckListItemVBoxer>();
-        while(items.hasNext()) {
+        while (items.hasNext()) {
             vboxers.add(getVBoxer(items.next()));
         }
         vboxers.forEach(vboxer -> {
@@ -122,11 +122,11 @@ public class CheckListFormNode extends VBox {
     }
 
     private CheckListItemVBoxer getVBoxer(CheckListItem item) {
-        if(item instanceof CommentBox)
+        if (item instanceof CommentBox)
             return new CommentBoxVBoxer((CommentBox) item);
-        else if(item instanceof FailureNote)
+        else if (item instanceof FailureNote)
             return new FailureNoteVBoxer((FailureNote) item);
-        else if(item instanceof Header)
+        else if (item instanceof Header)
             return new HeaderVBoxer((Header) item);
         throw new RuntimeException("Unknown CheckListItem type: " + item.getClass().getName());
     }

@@ -44,7 +44,8 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
         addEventHook();
     }
 
-    @Override public String run(String script) {
+    @Override
+    public String run(String script) {
         try {
             script = asciize(script);
             IRubyObject evalScriptlet = interpreter.evalScriptlet(script);
@@ -73,7 +74,8 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
         return sb.toString();
     }
 
-    @Override public void setListener(IPlaybackListener listener) {
+    @Override
+    public void setListener(IPlaybackListener listener) {
         this.listener = listener;
     }
 

@@ -35,14 +35,17 @@ import com.sun.swingset3.demos.editorpane.EditorPaneDemo;
 
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JEditorPaneTest {
+@Test
+public class JEditorPaneTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JEditorPaneTest.class.getSimpleName());
                 frame.setName("frame-" + JEditorPaneTest.class.getSimpleName());
                 frame.getContentPane().add(new EditorPaneDemo(), BorderLayout.CENTER);
@@ -54,9 +57,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -109,7 +114,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertEquals("Title Page", title.getText());
         title.click();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 WebElement editor = driver.findElement(By.cssSelector("editor-pane"));
                 List<WebElement> links = editor.findElements(By.cssSelector(".::tag('a')"));
                 return links.size() == 2;

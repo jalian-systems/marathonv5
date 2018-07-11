@@ -88,12 +88,8 @@ public class TextFieldSample extends Application {
         grid.getChildren().add(label);
 
         submit.setOnAction((ActionEvent e) -> {
-            if (
-                    (comment.getText() != null && !comment.getText().isEmpty())
-                    ) {
-                label.setText(name.getText() + " " +
-                        lastName.getText() + ", "
-                        + "thank you for your comment!");
+            if ((comment.getText() != null && !comment.getText().isEmpty())) {
+                label.setText(name.getText() + " " + lastName.getText() + ", " + "thank you for your comment!");
             } else {
                 label.setText("You have not left a comment.");
             }

@@ -48,7 +48,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@Test public class JavaDriverLogsTest {
+@Test
+public class JavaDriverLogsTest {
 
     private WebDriver driver;
 
@@ -60,10 +61,12 @@ import org.testng.annotations.Test;
     protected boolean buttonClicked = false;
     protected StringBuilder buttonMouseActions;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 JMenuBar menuBar = new JMenuBar();
@@ -83,9 +86,11 @@ import org.testng.annotations.Test;
                 button = new JButton("Click Me!!");
                 box.add(button);
                 new Timer().schedule(new TimerTask() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         SwingUtilities.invokeLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 JButton button1 = new JButton("Click Me Delayed!!");
                                 button1.setName("click-me-delayed");
                                 frame.getContentPane().add(button1);
@@ -95,39 +100,47 @@ import org.testng.annotations.Test;
                 }, 1000);
                 button.setName("click-me");
                 button.addActionListener(new ActionListener() {
-                    @Override public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         buttonClicked = true;
                     }
                 });
                 buttonMouseActions = new StringBuilder();
                 button.addMouseListener(new MouseListener() {
-                    @Override public void mouseReleased(MouseEvent e) {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
                         buttonMouseActions.append("released-");
                     }
 
-                    @Override public void mousePressed(MouseEvent e) {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
                         buttonMouseActions.append("pressed-");
                     }
 
-                    @Override public void mouseExited(MouseEvent e) {
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                         buttonMouseActions.append("exited-");
                     }
 
-                    @Override public void mouseEntered(MouseEvent e) {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
                         buttonMouseActions.append("entered-");
                     }
 
-                    @Override public void mouseClicked(MouseEvent e) {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
                         buttonMouseActions.append("clicked(" + e.getButton() + ")-");
                     }
                 });
                 button.addMouseMotionListener(new MouseMotionListener() {
 
-                    @Override public void mouseMoved(MouseEvent e) {
+                    @Override
+                    public void mouseMoved(MouseEvent e) {
                         buttonMouseActions.append("moved-");
                     }
 
-                    @Override public void mouseDragged(MouseEvent e) {
+                    @Override
+                    public void mouseDragged(MouseEvent e) {
                         buttonMouseActions.append("dragged-");
                     }
                 });
@@ -138,9 +151,11 @@ import org.testng.annotations.Test;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

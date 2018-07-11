@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class TextFieldTreeViewApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Text Field TreeView");
         primaryStage.setScene(new Scene(new TextFieldTreeViewSample()));
         primaryStage.sizeToScene();

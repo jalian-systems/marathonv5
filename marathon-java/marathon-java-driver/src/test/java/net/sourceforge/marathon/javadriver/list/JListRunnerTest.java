@@ -40,14 +40,17 @@ import components.ListDialogRunner;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JListRunnerTest {
+@Test
+public class JListRunnerTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JListRunnerTest.class.getSimpleName());
                 frame.setName("frame-" + JListRunnerTest.class.getSimpleName());
                 frame.getContentPane().add(ListDialogRunner.createUI(), BorderLayout.CENTER);
@@ -58,9 +61,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class TextAreaApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Text Area Sample");
         primaryStage.setScene(new Scene(new TextAreaSample()));
         primaryStage.sizeToScene();

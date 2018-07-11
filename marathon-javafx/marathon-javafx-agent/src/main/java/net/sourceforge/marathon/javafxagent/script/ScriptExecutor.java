@@ -63,7 +63,8 @@ public class ScriptExecutor {
             final Object[] newArgs = new Object[args.length + 1];
             System.arraycopy(args, 0, newArgs, 0, args.length);
             newArgs[args.length] = new Callback() {
-                @Override public void call(Object o) {
+                @Override
+                public void call(Object o) {
                     result = o;
                     callback = true;
                     synchronized (ScriptExecutor.this) {
@@ -72,9 +73,11 @@ public class ScriptExecutor {
                 }
             };
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             try {
                                 declaredMethod.invoke(helloClazz.getConstructor().newInstance(), newArgs);
                             } catch (Exception e) {
@@ -97,14 +100,15 @@ public class ScriptExecutor {
             return result;
         }
         return EventQueueWait.exec(new Callable<Object>() {
-            @Override public Object call() throws Exception {
+            @Override
+            public Object call() throws Exception {
                 try {
                     return declaredMethod.invoke(helloClazz.getConstructor().newInstance(), args);
                 } catch (Exception e) {
                     return e;
                 }
             }
-            
+
         });
     }
 

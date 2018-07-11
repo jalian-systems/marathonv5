@@ -33,7 +33,8 @@ public class JavaFXChoiceBoxElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         ChoiceBox<?> choiceBox = (ChoiceBox<?>) getComponent();
         String text = stripHTMLTags(value);
         int selectedItem = getChoiceBoxItemIndex(choiceBox, text);
@@ -48,7 +49,8 @@ public class JavaFXChoiceBoxElement extends JavaFXElement {
         return new JSONArray(getContent((ChoiceBox<?>) getComponent())).toString();
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getChoiceBoxText((ChoiceBox<?>) getComponent(),
                 ((ChoiceBox<?>) getComponent()).getSelectionModel().getSelectedIndex());
     }

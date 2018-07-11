@@ -50,11 +50,9 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 
 public class ColorPickerSample extends Application {
-      
-    ImageView logo = new ImageView(
-        new Image(getClass().getResourceAsStream("OracleLogo.png"))
-    );
-    
+
+    ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("OracleLogo.png")));
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -64,7 +62,7 @@ public class ColorPickerSample extends Application {
         stage.setTitle("ColorPickerSample");
 
         Scene scene = new Scene(new VBox(20), 300, 300);
-        //scene.getStylesheets().add("colorpickersample/ControlStyle.css");
+        // scene.getStylesheets().add("colorpickersample/ControlStyle.css");
         scene.setFill(Color.web("#ccffcc"));
         VBox box = (VBox) scene.getRoot();
 
@@ -74,23 +72,16 @@ public class ColorPickerSample extends Application {
         final ComboBox logoSamples = new ComboBox();
         logoSamples.setPromptText("Logo");
         logoSamples.setValue("Oracle");
-        logoSamples.getItems().addAll(
-                "Oracle",
-                "Java",
-                "JavaFX",
-                "Cup");
-        
-        logoSamples.valueProperty().addListener(new ChangeListener<String>() {
-            @Override 
-            public void changed(ObservableValue ov, String t, String t1) {                
-                logo.setImage(
-                    new Image(getClass().getResourceAsStream(t1+"Logo.png"))
-                );                  
-            }    
-        });
-        
+        logoSamples.getItems().addAll("Oracle", "Java", "JavaFX", "Cup");
 
-        final ColorPicker colorPicker = new ColorPicker();  
+        logoSamples.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue ov, String t, String t1) {
+                logo.setImage(new Image(getClass().getResourceAsStream(t1 + "Logo.png")));
+            }
+        });
+
+        final ColorPicker colorPicker = new ColorPicker();
         colorPicker.setValue(Color.CORAL);
         tb.getItems().addAll(logoSamples, colorPicker);
 
@@ -98,9 +89,8 @@ public class ColorPickerSample extends Application {
         box.getChildren().add(stack);
 
         final SVGPath svg = new SVGPath();
-        svg.setContent("M70,50 L90,50 L120,90 L150,50 L170,50"
-            + "L210,90 L180,120 L170,110 L170,200 L70,200 L70,110 L60,120 L30,90"
-            + "L70,50");
+        svg.setContent("M70,50 L90,50 L120,90 L150,50 L170,50" + "L210,90 L180,120 L170,110 L170,200 L70,200 L70,110 L60,120 L30,90"
+                + "L70,50");
         svg.setStroke(Color.DARKGREY);
         svg.setStrokeWidth(2);
         svg.setEffect(new DropShadow());

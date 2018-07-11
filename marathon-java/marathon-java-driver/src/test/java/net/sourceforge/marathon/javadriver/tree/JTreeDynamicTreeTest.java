@@ -38,15 +38,18 @@ import org.testng.annotations.Test;
 import components.DynamicTreeDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JTreeDynamicTreeTest {
+@Test
+public class JTreeDynamicTreeTest {
 
     private WebDriver driver;
     protected JFrame frame;
     private DynamicTreePage page;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTreeDynamicTreeTest.class.getSimpleName());
                 frame.setName("frame-" + JTreeDynamicTreeTest.class.getSimpleName());
                 frame.getContentPane().add(new DynamicTreeDemo(), BorderLayout.CENTER);
@@ -59,9 +62,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         page = PageFactory.initElements(driver, DynamicTreePage.class);
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -120,7 +125,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         editor.sendKeys("Hello World", Keys.ENTER);
         root.submit();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver input) {
+            @Override
+            public Boolean apply(WebDriver input) {
                 return root.getText().equals("Hello World");
             }
         });
@@ -180,11 +186,13 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     private Function<WebDriver, Boolean> hasAttributeValue(final WebElement element, final String attribute, final String value) {
         return new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver input) {
+            @Override
+            public Boolean apply(WebDriver input) {
                 return value.equals(element.getAttribute(attribute));
             }
 
-            @Override public String toString() {
+            @Override
+            public String toString() {
                 return "[hasAttributeValue attribute = " + attribute + ", value = " + value + "] on element = " + element + "]";
             }
         };

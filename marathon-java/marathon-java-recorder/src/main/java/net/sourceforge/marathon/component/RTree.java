@@ -57,7 +57,8 @@ public class RTree extends RComponent {
         cellInfo = getTextForNode(tree, row);
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         JTree tree = (JTree) component;
         String currentText = getText();
         if (currentText != null && !currentText.equals(text)) {
@@ -78,12 +79,14 @@ public class RTree extends RComponent {
         }
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         text = getText();
         cellInfo = getTextForNode((JTree) component, row);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         JTree tree = (JTree) component;
         if (row == -1) {
             return null;
@@ -135,14 +138,16 @@ public class RTree extends RComponent {
         return name.replaceAll("/", "\\\\/");
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + row;
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -159,7 +164,8 @@ public class RTree extends RComponent {
         return true;
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
         // Ignore double clicks on non-leaf tree nodes
         if (me.getButton() == MouseEvent.BUTTON1 && me.getModifiersEx() == InputEvent.BUTTON1_DOWN_MASK && me.getClickCount() > 1) {
             TreePath path = ((JTree) component).getPathForRow(row);
@@ -183,15 +189,18 @@ public class RTree extends RComponent {
         super.mousePressed(me);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick2(this, me, true);
     }
-    
-    @Override public String getCellInfo() {
+
+    @Override
+    public String getCellInfo() {
         return cellInfo;
     }
 
-    @Override public String[][] getContent() {
+    @Override
+    public String[][] getContent() {
         return JTreeJavaElement.getContent((JTree) component);
     }
 

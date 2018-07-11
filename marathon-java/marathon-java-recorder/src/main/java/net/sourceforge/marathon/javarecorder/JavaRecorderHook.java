@@ -89,10 +89,12 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
             Toolkit.getDefaultToolkit().addAWTEventListener(this,
                     AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK);
             Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-                @Override public void eventDispatched(final AWTEvent event) {
+                @Override
+                public void eventDispatched(final AWTEvent event) {
                     if (event instanceof ComponentEvent && event.getSource() instanceof Component) {
                         AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                            @Override public Object run() {
+                            @Override
+                            public Object run() {
                                 handleListener((Component) event.getSource(), event, ChangeListener.class);
                                 handleListener((Component) event.getSource(), event, ActionListener.class);
                                 return null;
@@ -243,7 +245,8 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         final AWTEventListener listener = new AWTEventListener() {
             boolean done = false;
 
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override
+            public void eventDispatched(AWTEvent event) {
                 if (done) {
                     return;
                 }
@@ -257,7 +260,8 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
                 done = true;
                 LOGGER.info("JavaVersion: " + System.getProperty("java.version"));
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    @Override public Object run() {
+                    @Override
+                    public Object run() {
                         return new JavaRecorderHook(port);
                     }
                 });
@@ -292,12 +296,14 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         Toolkit.getDefaultToolkit().addAWTEventListener(listener, AWTEvent.WINDOW_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK);
     }
 
-    @Override public void eventDispatched(final AWTEvent event) {
+    @Override
+    public void eventDispatched(final AWTEvent event) {
         if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest)
             return;
         try {
             AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                @Override public Object run() {
+                @Override
+                public Object run() {
                     Object source = event.getSource();
                     if (event instanceof ActionEvent && source instanceof FileDialog) {
                         handleFileDialog((ActionEvent) event);
@@ -496,7 +502,8 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         return KeyEvent.getKeyText(keycode);
     }
 
-    @Override public void stateChanged(ChangeEvent e) {
+    @Override
+    public void stateChanged(ChangeEvent e) {
         if (recorder.isRawRecording()) {
             return;
         }
@@ -506,7 +513,8 @@ public class JavaRecorderHook implements AWTEventListener, ChangeListener, Actio
         current.stateChanged(e);
     }
 
-    @Override public void actionPerformed(ActionEvent e) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
         if (recorder.isRawRecording()) {
             return;
         }

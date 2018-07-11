@@ -34,27 +34,33 @@ public abstract class AbstractScriptElement implements IScriptElement {
         return componentId;
     }
 
-    @Override public WindowId getWindowId() {
+    @Override
+    public WindowId getWindowId() {
         return windowId;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return toScriptCode();
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         return obj instanceof AbstractScriptElement && toString().equals(obj.toString());
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return toString().hashCode();
     }
 
-    @Override public boolean isUndo() {
+    @Override
+    public boolean isUndo() {
         return false;
     }
 
-    @Override public IScriptElement getUndoElement() {
+    @Override
+    public IScriptElement getUndoElement() {
         return null;
     }
 }

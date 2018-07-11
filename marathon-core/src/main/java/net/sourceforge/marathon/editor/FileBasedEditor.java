@@ -52,10 +52,12 @@ public abstract class FileBasedEditor extends AbstractEditor {
 
     private static NewFileNameGenerator newFileNameGenerator = new NewFileNameGenerator();
 
-    @Override public IResourceHandler createResourceHandler(EditorType type, INameValidateChecker nameChecker) throws IOException {
+    @Override
+    public IResourceHandler createResourceHandler(EditorType type, INameValidateChecker nameChecker) throws IOException {
         if (type == EditorType.CHECKLIST) {
             MarathonFileFilter marathonFileFilter = new MarathonFileFilter() {
-                @Override public String getSuffix() {
+                @Override
+                public String getSuffix() {
                     return ".xml";
                 }
             };
@@ -66,7 +68,8 @@ public abstract class FileBasedEditor extends AbstractEditor {
         return fileHandler;
     }
 
-    @Override public void refreshResource() {
+    @Override
+    public void refreshResource() {
         File currentFile = fileHandler.getCurrentFile();
         try {
             String script = fileHandler.readFile(currentFile);
@@ -76,7 +79,8 @@ public abstract class FileBasedEditor extends AbstractEditor {
         }
     }
 
-    @Override public String getDockKey() {
+    @Override
+    public String getDockKey() {
         File currentFile = fileHandler.getCurrentFile();
         if (currentFile != null) {
             return currentFile.getAbsolutePath();
@@ -84,7 +88,8 @@ public abstract class FileBasedEditor extends AbstractEditor {
         return (String) getData("filename");
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         File currentFile = fileHandler.getCurrentFile();
         if (currentFile != null) {
             return currentFile.getName();
@@ -92,7 +97,8 @@ public abstract class FileBasedEditor extends AbstractEditor {
         return (String) getData("filename");
     }
 
-    @Override public String getResourcePath() {
+    @Override
+    public String getResourcePath() {
         if (fileHandler.getCurrentFile() == null) {
             return (String) getData("filename");
         }
@@ -104,7 +110,8 @@ public abstract class FileBasedEditor extends AbstractEditor {
         }
     }
 
-    @Override public String getDisplayName() {
+    @Override
+    public String getDisplayName() {
         File currentFile = fileHandler.getCurrentFile();
         if (currentFile == null) {
             return (String) getData("displayname");
@@ -121,38 +128,46 @@ public abstract class FileBasedEditor extends AbstractEditor {
         return currentFile.getName();
     }
 
-    @Override public void readResource(File to) throws IOException {
+    @Override
+    public void readResource(File to) throws IOException {
         String script = fileHandler.readFile(to);
         setText(script);
         setDirty(false);
         setMode(fileHandler.getMode(getName()));
     }
 
-    @Override public boolean isProjectFile() {
+    @Override
+    public boolean isProjectFile() {
         return fileHandler.isProjectFile();
     }
 
-    @Override public boolean isTestFile() {
+    @Override
+    public boolean isTestFile() {
         return fileHandler.isTestFile();
     }
 
-    @Override public File saveAs() throws IOException {
+    @Override
+    public File saveAs() throws IOException {
         return fileHandler.saveAs(getText(), getNode().getScene().getWindow(), getName());
     }
 
-    @Override public File save() throws IOException {
+    @Override
+    public File save() throws IOException {
         return fileHandler.save(getText(), getNode().getScene().getWindow(), getName());
     }
 
-    @Override public boolean isModuleFile() {
+    @Override
+    public boolean isModuleFile() {
         return fileHandler.isModuleFile();
     }
 
-    @Override public void saveTo(File file) throws IOException {
+    @Override
+    public void saveTo(File file) throws IOException {
         fileHandler.saveTo(file, getText());
     }
 
-    @Override public void createNewResource(String script, File directory) {
+    @Override
+    public void createNewResource(String script, File directory) {
         fileHandler.setCurrentDirectory(directory);
         fileHandler.clearCurrentFile();
         String newFileName = newFileNameGenerator.getNewFileName();
@@ -164,21 +179,25 @@ public abstract class FileBasedEditor extends AbstractEditor {
         setFocus();
     }
 
-    @Override public boolean isEditingResource(File file) {
+    @Override
+    public boolean isEditingResource(File file) {
         return fileHandler.getCurrentFile() != null && file.equals(fileHandler.getCurrentFile());
     }
 
-    @Override public boolean isFileBased() {
+    @Override
+    public boolean isFileBased() {
         return true;
     }
 
-    @Override public void changeResource(File file) {
+    @Override
+    public void changeResource(File file) {
         setData("filename", file.getName());
         setData("displayname", file.getName());
         fileHandler.setCurrentFile(file);
     }
 
-    @Override public boolean isNewFile() {
+    @Override
+    public boolean isNewFile() {
         return fileHandler.isNewFile();
     }
 }

@@ -81,11 +81,14 @@ public abstract class GroupEntry {
 
     public abstract boolean canPlaySingle();
 
-    @Override public abstract String toString();
+    @Override
+    public abstract String toString();
 
-    @Override public abstract int hashCode();
+    @Override
+    public abstract int hashCode();
 
-    @Override public abstract boolean equals(Object obj);
+    @Override
+    public abstract boolean equals(Object obj);
 
     public abstract void refresh();
 

@@ -50,62 +50,78 @@ public final class LoggingRecorder implements IJSONRecorder {
 
     private List<Recording> recordings = new ArrayList<>();
 
-    @Override public void recordSelect(RFXComponent r, String state) {
+    @Override
+    public void recordSelect(RFXComponent r, String state) {
         recordings.add(new Recording("recordSelect", state));
     }
 
-    @Override public void recordClick(RFXComponent r, MouseEvent e) {
+    @Override
+    public void recordClick(RFXComponent r, MouseEvent e) {
         recordings.add(new Recording("click", ""));
     }
 
-    @Override public void recordClick2(RFXComponent r, MouseEvent e, boolean withCellInfo) {
+    @Override
+    public void recordClick2(RFXComponent r, MouseEvent e, boolean withCellInfo) {
         recordings.add(new Recording("click", r.getCellInfo()));
     }
 
-    @Override public void recordRawMouseEvent(RFXComponent r, MouseEvent e) {
+    @Override
+    public void recordRawMouseEvent(RFXComponent r, MouseEvent e) {
     }
 
-    @Override public void recordRawKeyEvent(RFXComponent r, KeyEvent e) {
+    @Override
+    public void recordRawKeyEvent(RFXComponent r, KeyEvent e) {
     }
 
-    @Override public void recordSelect2(RFXComponent r, String state, boolean withCellInfo) {
+    @Override
+    public void recordSelect2(RFXComponent r, String state, boolean withCellInfo) {
         recordings.add(new Recording("recordSelect", state, r.getCellInfo()));
     }
 
-    @Override public boolean isCreatingObjectMap() {
+    @Override
+    public boolean isCreatingObjectMap() {
         return false;
     }
 
-    @Override public void recordAction(RFXComponent r, String action, String property, Object value) {
+    @Override
+    public void recordAction(RFXComponent r, String action, String property, Object value) {
     }
 
-    @Override public void recordSelectMenu(RFXComponent r, String menuType, String selection) {
+    @Override
+    public void recordSelectMenu(RFXComponent r, String menuType, String selection) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public void recordWindowClosing(RFXComponent r) {
+    @Override
+    public void recordWindowClosing(RFXComponent r) {
     }
 
-    @Override public void recordWindowState(RFXComponent r, Rectangle2D bounds) {
+    @Override
+    public void recordWindowState(RFXComponent r, Rectangle2D bounds) {
     }
 
-    @Override public JSONOMapConfig getObjectMapConfiguration() {
+    @Override
+    public JSONOMapConfig getObjectMapConfiguration() {
         return null;
     }
 
-    @Override public JSONObject getContextMenuTriggers() {
+    @Override
+    public JSONObject getContextMenuTriggers() {
         return null;
     }
 
-    @Override public boolean isRawRecording() {
+    @Override
+    public boolean isRawRecording() {
         return false;
     }
 
-    @Override public void recordMenuItem(RFXComponent rComponent) {
+    @Override
+    public void recordMenuItem(RFXComponent rComponent) {
     }
 
-    @Override public void recordFocusedWindow(RFXComponent r) throws IOException {
+    @Override
+    public void recordFocusedWindow(RFXComponent r) throws IOException {
     }
 
     public List<Recording> getRecordings() {
@@ -117,46 +133,56 @@ public final class LoggingRecorder implements IJSONRecorder {
             return recordings;
         }
         new Wait("Waiting for " + count + " recordings") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return recordings.size() >= count;
             }
         };
         return recordings;
     }
 
-    @Override public void recordFileChooser(String state) {
+    @Override
+    public void recordFileChooser(String state) {
     }
 
-    @Override public void recordFolderChooser(String state) {
+    @Override
+    public void recordFolderChooser(String state) {
     }
 
-    @Override public void recordWindowClosing(String title) {
+    @Override
+    public void recordWindowClosing(String title) {
     }
 
-    @Override public void recordWindowState(String title, int x, int y, int width, int height) {
+    @Override
+    public void recordWindowState(String title, int x, int y, int width, int height) {
     }
 
-    @Override public boolean isPaused() {
+    @Override
+    public boolean isPaused() {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override public void recordSelect3(RFXComponent r, String state, String info) {
+    @Override
+    public void recordSelect3(RFXComponent r, String state, String info) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public void recordClick3(RFXComponent r, String info) {
+    @Override
+    public void recordClick3(RFXComponent r, String info) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public void log(String string) {
+    @Override
+    public void log(String string) {
         // TODO Auto-generated method stub
-        
+
     }
 
-    @Override public boolean isInsertingScript() {
+    @Override
+    public boolean isInsertingScript() {
         // TODO Auto-generated method stub
         return false;
     }

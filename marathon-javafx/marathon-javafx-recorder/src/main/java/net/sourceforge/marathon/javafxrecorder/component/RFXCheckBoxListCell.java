@@ -33,7 +33,9 @@ public class RFXCheckBoxListCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         CheckBoxListCell cell = (CheckBoxListCell) node;
         ObservableValue<Boolean> call = (ObservableValue<Boolean>) cell.getSelectedStateCallback().call(cell.getItem());

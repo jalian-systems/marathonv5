@@ -62,7 +62,8 @@ public class FileSelectionHandler implements EventHandler<ActionEvent> {
             this.previousDir = previousDir;
     }
 
-    @Override public void handle(ActionEvent event) {
+    @Override
+    public void handle(ActionEvent event) {
         if (mode == FILE_CHOOSER) {
             List<File> selectedFiles = FXUIUtils.showOpenMultipleFileChooser(title, previousDir,
                     parent != null ? parent.getStage() : null, filter);

@@ -31,8 +31,9 @@ public class Main extends JFrame {
                 if (klass != null)
                     klasses.add(klass);
             }
-            Collections.sort(klasses, new Comparator<Class> () {
-                @Override public int compare(Class arg0, Class arg1) {
+            Collections.sort(klasses, new Comparator<Class>() {
+                @Override
+                public int compare(Class arg0, Class arg1) {
                     return arg0.getName().compareTo(arg1.getName());
                 }
             });
@@ -50,11 +51,13 @@ public class Main extends JFrame {
             return null;
         }
 
-        @Override public int getSize() {
+        @Override
+        public int getSize() {
             return klasses.size();
         }
 
-        @Override public Object getElementAt(int index) {
+        @Override
+        public Object getElementAt(int index) {
             return klasses.get(index).getName();
         }
 
@@ -63,11 +66,12 @@ public class Main extends JFrame {
             try {
                 klass.getMethod("main", String[].class).invoke(null, (Object) new String[] {});
                 SwingUtilities.invokeLater(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Frame[] frames = Frame.getFrames();
                         for (Frame frame : frames) {
-                            if(!frame.getTitle().equals("Demo Programs") && frame instanceof JFrame)
-                                ((JFrame)frame).setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            if (!frame.getTitle().equals("Demo Programs") && frame instanceof JFrame)
+                                ((JFrame) frame).setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         }
                     }
                 });
@@ -85,10 +89,11 @@ public class Main extends JFrame {
         final ResourceListModel dataModel = new ResourceListModel(resources);
         final JList list = new JList(dataModel);
         list.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() > 1) {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() > 1) {
                     int index = list.locationToIndex(e.getPoint());
-                    if(index != -1)
+                    if (index != -1)
                         dataModel.load(index);
                 }
             }
@@ -99,7 +104,8 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 new Main().setVisible(true);
             }
         });

@@ -26,7 +26,8 @@ public class VLToolBar extends ToolBar {
 
     public static final Logger LOGGER = Logger.getLogger(VLToolBar.class.getName());
 
-    @SuppressWarnings("unused") private boolean collapse;
+    @SuppressWarnings("unused")
+    private boolean collapse;
 
     public VLToolBar() {
     }

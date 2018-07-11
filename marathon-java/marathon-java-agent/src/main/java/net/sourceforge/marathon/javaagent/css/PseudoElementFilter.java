@@ -36,7 +36,8 @@ public class PseudoElementFilter implements SelectorFilter {
         this.args = args;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder("::" + function);
         if (args.length > 0) {
             sb.append("(");
@@ -50,7 +51,8 @@ public class PseudoElementFilter implements SelectorFilter {
         return sb.toString();
     }
 
-    @Override public List<IJavaElement> match(IJavaElement je) {
+    @Override
+    public List<IJavaElement> match(IJavaElement je) {
         Object[] params = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
             params[i] = args[i].getValue();

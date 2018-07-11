@@ -62,7 +62,8 @@ public class State {
         return this == PLAYINGPAUSED;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return name;
     }
 }

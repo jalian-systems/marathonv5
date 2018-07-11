@@ -31,14 +31,17 @@ import components.TextAreaDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.OSUtils;
 
-@Test public class JTextAreaTest {
+@Test
+public class JTextAreaTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new TextAreaDemo();
                 frame.setName("frame-" + JTextAreaTest.class.getSimpleName());
                 frame.pack();
@@ -48,9 +51,11 @@ import net.sourceforge.marathon.javadriver.OSUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

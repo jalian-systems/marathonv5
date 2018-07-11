@@ -105,7 +105,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         keyBindings.put("^-,", new AbstractSimpleAction("settings", "Change editor settings", "", null) {
             private static final long serialVersionUID = 1L;
 
-            @Override public void handle(ActionEvent e) {
+            @Override
+            public void handle(ActionEvent e) {
                 onSettings();
             }
         });
@@ -116,63 +117,78 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         clipboard.addListener(this);
     }
 
-    @Override public void setStatusBar(IStatusBar statusBar) {
+    @Override
+    public void setStatusBar(IStatusBar statusBar) {
         this.statusBar = statusBar;
     }
 
-    @Override public void startInserting() {
+    @Override
+    public void startInserting() {
         editorExecuteProc("startInserting");
     }
 
-    @Override public void stopInserting() {
+    @Override
+    public void stopInserting() {
         editorExecuteProc("stopInserting");
     }
 
-    @Override public void insertScript(String script) {
+    @Override
+    public void insertScript(String script) {
         editorExecuteProc("insertScript", new JSONObject().put("script", script));
     }
 
-    @Override public void addKeyBinding(String keyBinding, AbstractSimpleAction action) {
+    @Override
+    public void addKeyBinding(String keyBinding, AbstractSimpleAction action) {
         keyBindings.put(keyBinding, action);
     }
 
-    @Override public void highlightLine(int line) {
+    @Override
+    public void highlightLine(int line) {
         editorExecuteProc("highlightLine", new JSONObject().put("row", line));
     }
 
-    @Override public boolean isEditable() {
+    @Override
+    public boolean isEditable() {
         return editorExecuteMethod("isEditable").getBoolean("editable");
     }
 
-    @Override public int getSelectionStart() {
+    @Override
+    public int getSelectionStart() {
         return editorExecuteMethod("getSelectionStart").getInt("position");
     }
 
-    @Override public int getSelectionEnd() {
+    @Override
+    public int getSelectionEnd() {
         return editorExecuteMethod("getSelectionEnd").getInt("position");
     }
 
-    @Override public void setDirty(boolean b) {
+    @Override
+    public void setDirty(boolean b) {
         this.dirty = b;
     }
 
-    @Override public boolean isDirty() {
+    @Override
+    public boolean isDirty() {
         return this.dirty;
     }
 
-    @Override public void addCaretListener(CaretListener listener) {
+    @Override
+    public void addCaretListener(CaretListener listener) {
         listeners.add(CaretListener.class, listener);
     }
 
-    @Override public void addContentChangeListener(IContentChangeListener l) {
+    @Override
+    public void addContentChangeListener(IContentChangeListener l) {
         listeners.add(IContentChangeListener.class, l);
     }
 
-    @Override public int getCaretLine() {
+    @Override
+    public int getCaretLine() {
         return editorExecuteMethod("getCaretLine").getInt("row");
     }
 
-    @Override public void setCaretLine(int line) {
+    @Override
+    public void setCaretLine(int line) {
         editorExecuteProc("setCaretLine", new JSONObject().put("row", line));
         if (getCaretLine() != line) {
             Platform.runLater(() -> editorExecuteProc("setCaretLine", new JSONObject().put("row", line)));
@@ -185,7 +201,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         String externalForm = ACEEditor.class.getResource("/Ace.html").toExternalForm();
         WebEngine engine = webView.getEngine();
         engine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-            @Override public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+            @Override
+            public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
                 if (newValue != State.SUCCEEDED) {
                     return;
                 }
@@ -263,31 +280,38 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
     private void onSettings() {
         AceEditorPreferencesStage stage = new AceEditorPreferencesStage(new AceEditorPreferencesInfo(this));
         stage.setPreferenceHandler(new IAceEditorPreferenceHandler() {
-            @Override public void changeTheme(AceEditorTheme n) {
+            @Override
+            public void changeTheme(AceEditorTheme n) {
                 setTheme(n.getTheme());
             }
 
-            @Override public void changeKeyboardHandler(String n) {
+            @Override
+            public void changeKeyboardHandler(String n) {
                 setKeyboardHandler(n);
             }
 
-            @Override public void changeTabSize(int tabSize) {
+            @Override
+            public void changeTabSize(int tabSize) {
                 setTabSize(tabSize);
             }
 
-            @Override public void changeTabConversion(Boolean tabConversion) {
+            @Override
+            public void changeTabConversion(Boolean tabConversion) {
                 setTabConversion(tabConversion);
             }
 
-            @Override public void changeShowLineNumbers(Boolean showLineNumbers) {
+            @Override
+            public void changeShowLineNumbers(Boolean showLineNumbers) {
                 setShowLineNumbers(showLineNumbers);
             }
 
-            @Override public void changeShowInvisibles(Boolean showInvisibles) {
+            @Override
+            public void changeShowInvisibles(Boolean showInvisibles) {
                 setShowInvisibles(showInvisibles);
             }
 
-            @Override public void changeFontSize(String fontSize) {
+            @Override
+            public void changeFontSize(String fontSize) {
                 setFontSize(fontSize);
             }
         });
@@ -311,64 +335,78 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         clipboard.setData(cutData.getString("text"));
     }
 
-    @Override public void addGutterListener(IGutterListener l) {
+    @Override
+    public void addGutterListener(IGutterListener l) {
         listeners.add(IGutterListener.class, l);
     }
 
-    @Override public Object getData(String key) {
+    @Override
+    public Object getData(String key) {
         return data.get(key);
     }
 
-    @Override public void setData(String key, Object value) {
+    @Override
+    public void setData(String key, Object value) {
         data.put(key, value);
     }
 
-    @Override public void setCaretPosition(int position) {
+    @Override
+    public void setCaretPosition(int position) {
         editorExecuteProc("setCaretPosition", new JSONObject().put("position", position));
     }
 
-    @Override public int getCaretPosition() {
+    @Override
+    public int getCaretPosition() {
         return editorExecuteMethod("getCaretPosition").getInt("position");
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return editorExecuteMethod("getContent").getString("content");
     }
 
-    @Override public void setText(String code) {
+    @Override
+    public void setText(String code) {
         JSONObject o = new JSONObject();
         o.put("line", 1);
         o.put("content", code);
         editorExecuteProc("setContent", o);
     }
 
-    @Override public void setMode(String mode) {
+    @Override
+    public void setMode(String mode) {
         editorExecuteProc("setMode", new JSONObject().put("mode", mode));
     }
 
-    @Override public int getLineOfOffset(int selectionStart) {
+    @Override
+    public int getLineOfOffset(int selectionStart) {
         return editorExecuteMethod("getLineOfOffset", new JSONObject().put("offset", selectionStart)).getInt("line");
     }
 
-    @Override public int getLineStartOffset(int startLine) {
+    @Override
+    public int getLineStartOffset(int startLine) {
         return editorExecuteMethod("getLineStartOffset", new JSONObject().put("line", startLine)).getInt("offset");
     }
 
-    @Override public int getLineEndOffset(int endLine) {
+    @Override
+    public int getLineEndOffset(int endLine) {
         return editorExecuteMethod("getLineEndOffset", new JSONObject().put("line", endLine)).getInt("offset");
     }
 
-    @Override public void setFocus() {
+    @Override
+    public void setFocus() {
         runWhenReady(() -> {
             editorExecuteProc("requestFocus");
             webView.requestFocus();
         });
     }
 
-    @Override public void setMenuItems(MenuItem[] menuItems) {
+    @Override
+    public void setMenuItems(MenuItem[] menuItems) {
     }
 
-    @Override public void toggleInsertMode() {
+    @Override
+    public void toggleInsertMode() {
         boolean overwrite = !editorExecuteMethod("isOverwriteEnabled").getBoolean("overwrite");
         editorExecuteProc("setOptions", new JSONObject().put("overwrite", overwrite));
         updateStatusBar();
@@ -382,7 +420,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         statusBar.setIsOverwriteEnabled(editorExecuteMethod("isOverwriteEnabled").getBoolean("overwrite"));
     }
 
-    @Override public void setEditable(boolean b) {
+    @Override
+    public void setEditable(boolean b) {
         editorExecuteProc("setEditable", new JSONObject().put("editable", b));
     }
 
@@ -393,7 +432,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
     private void editorExecuteProc(String method, JSONObject o) {
         if (engine == null || !editorDefined()) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     editorExecuteProc(method, o);
                 }
             });
@@ -467,7 +507,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         IContentChangeListener[] la = listeners.getListeners(IContentChangeListener.class);
         for (final IContentChangeListener l : la) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     l.contentChanged();
                 }
             });
@@ -478,14 +519,16 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         CaretListener[] la = listeners.getListeners(CaretListener.class);
         for (final CaretListener l : la) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     l.caretUpdate();
                 }
             });
         }
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         updateStatusBar();
         editorExecuteProc("removeAllBreakPoints");
         IGutterListener[] la = listeners.getListeners(IGutterListener.class);
@@ -503,7 +546,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         IGutterListener[] la = listeners.getListeners(IGutterListener.class);
         for (IGutterListener listener : la) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     listener.gutterDoubleClickedAt(row);
                 }
             });
@@ -511,14 +555,17 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
 
     }
 
-    @Override public Node getNode() {
+    @Override
+    public Node getNode() {
         return node;
     }
 
-    @Override public void runWhenReady(Runnable r) {
+    @Override
+    public void runWhenReady(Runnable r) {
         if (engine == null || !editorDefined()) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     runWhenReady(r);
                 }
             });
@@ -527,10 +574,12 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         r.run();
     }
 
-    @Override public void runWhenContentLoaded(Runnable r) {
+    @Override
+    public void runWhenContentLoaded(Runnable r) {
         if ((engine == null || !editorDefined()) || !setContentCalled) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     runWhenContentLoaded(r);
                 }
             });
@@ -539,11 +588,13 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         r.run();
     }
 
-    @Override public Font getFont() {
+    @Override
+    public Font getFont() {
         return null;
     }
 
-    @Override public void clipboardChanged(String data) {
+    @Override
+    public void clipboardChanged(String data) {
         Platform.runLater(() -> {
             if (pasteButton != null) {
                 pasteButton.setDisable(data == null);
@@ -580,7 +631,8 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         return null;
     }
 
-    @Override public void preferencesChanged(String section, JSONObject preferences) {
+    @Override
+    public void preferencesChanged(String section, JSONObject preferences) {
         loadPreferences(preferences);
     }
 
@@ -672,14 +724,17 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         action.handle(new ActionEvent(this, this.node));
     }
 
-    @Override public boolean canSaveAs() {
+    @Override
+    public boolean canSaveAs() {
         return true;
     }
 
-    @Override public IResourceHandler createResourceHandler(EditorType type, INameValidateChecker nameChecker) throws IOException {
+    @Override
+    public IResourceHandler createResourceHandler(EditorType type, INameValidateChecker nameChecker) throws IOException {
         IResourceHandler handler = super.createResourceHandler(type, nameChecker);
         infoButton.showingProperty().addListener(new InvalidationListener() {
-            @Override public void invalidated(Observable observable) {
+            @Override
+            public void invalidated(Observable observable) {
                 infoButton.getItems().clear();
                 populateInfoMenu();
             }

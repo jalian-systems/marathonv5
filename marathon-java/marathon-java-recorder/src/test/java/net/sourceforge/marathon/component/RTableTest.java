@@ -37,13 +37,16 @@ import components.TableFilterDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RTableTest extends RComponentTest {
+@Test
+public class RTableTest extends RComponentTest {
 
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RTableTest.class.getSimpleName());
                 frame.setName("frame-" + RTableTest.class.getSimpleName());
                 frame.getContentPane().add(new TableFilterDemo(), BorderLayout.CENTER);
@@ -53,9 +56,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -66,7 +71,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RTable rTable = new RTable(table, null, null, lr);
                 rTable.focusLost(null);
             }
@@ -80,7 +86,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 table.setColumnSelectionAllowed(true);
                 table.setRowSelectionAllowed(true);
                 table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -102,7 +109,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 table.setRowSelectionAllowed(true);
                 table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 table.addRowSelectionInterval(1, 1);
@@ -120,7 +128,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 table.setRowSelectionAllowed(true);
                 table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 table.addRowSelectionInterval(1, 1);
@@ -139,7 +148,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTableHeader tableHeader = table.getTableHeader();
                 String[] columnNames = new String[table.getColumnCount()];
                 for (int i = 0; i < table.getColumnCount(); i++) {
@@ -177,7 +187,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 table.addRowSelectionInterval(2, 2);
                 table.addColumnSelectionInterval(2, 2);
                 RTable rTable = new RTable(table, null, null, lr);
@@ -201,7 +212,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 String[] columnNames = new String[table.getColumnCount()];
                 for (int i = 0; i < table.getColumnCount(); i++) {
                     columnNames[i] = table.getColumnName(i);
@@ -242,7 +254,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final RTable rTable = new RTable(table, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rTable.getContent();
             }
         });

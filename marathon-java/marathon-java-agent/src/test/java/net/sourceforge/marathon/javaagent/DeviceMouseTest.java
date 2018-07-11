@@ -26,7 +26,8 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.Device.Type;
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 
-@Test public abstract class DeviceMouseTest extends DeviceTest {
+@Test
+public abstract class DeviceMouseTest extends DeviceTest {
 
     public DeviceMouseTest(Type type) {
         super(type);
@@ -38,7 +39,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             EventQueueWait.requestFocus(button);
             driver.click(button, Buttons.LEFT, 1, 0, 0);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonClicked;
                 }
             };
@@ -64,7 +66,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             driver.click(button, Buttons.LEFT, 1, 0, 0);
             driver.releaseKey(button, JavaAgentKeys.ALT);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonClicked;
                 }
             };
@@ -92,7 +95,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             driver.releaseKey(button, JavaAgentKeys.CONTROL);
             driver.releaseKey(button, JavaAgentKeys.ALT);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonClicked;
                 }
             };
@@ -117,7 +121,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             EventQueueWait.requestFocus(button);
             driver.click(button, Buttons.LEFT, 2, 0, 0);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return maxClickCount == 2;
                 }
             };
@@ -141,7 +146,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             EventQueueWait.requestFocus(button);
             driver.buttonDown(button, Buttons.LEFT, 0, 0);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonPressed;
                 }
             };
@@ -167,7 +173,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             driver.buttonDown(button, Buttons.LEFT, 0, 0);
             driver.buttonUp(button, Buttons.LEFT, 0, 0);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonClicked;
                 }
             };
@@ -191,31 +198,36 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             EventQueueWait.requestFocus(button);
             final StringBuilder moveText = new StringBuilder();
             button.addMouseMotionListener(new MouseMotionListener() {
-                @Override public void mouseDragged(MouseEvent e) {
+                @Override
+                public void mouseDragged(MouseEvent e) {
                     moveText.append("dragged ");
                 }
 
-                @Override public void mouseMoved(MouseEvent e) {
+                @Override
+                public void mouseMoved(MouseEvent e) {
                     moveText.append("moved(" + e.getX() + "," + e.getY() + ") ");
                 }
             });
             driver.moveto(button, 2, 6);
             driver.moveto(button, 8, 8);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return moveText.toString().contains("moved(8,8)");
                 }
             };
             moveText.setLength(0);
             driver.moveto(button, 3, 3);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return "moved(3,3)".equals(moveText.toString().trim());
                 }
             };
             driver.moveto(button, 5, 10);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return "moved(3,3) moved(5,10)".equals(moveText.toString().trim());
                 }
             };
@@ -231,23 +243,27 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             driver.buttonDown(button, Buttons.LEFT, 10, 8);
             final StringBuilder moveText = new StringBuilder();
             button.addMouseMotionListener(new MouseMotionListener() {
-                @Override public void mouseDragged(MouseEvent e) {
+                @Override
+                public void mouseDragged(MouseEvent e) {
                     moveText.append("dragged(" + e.getX() + "," + e.getY() + ") ");
                 }
 
-                @Override public void mouseMoved(MouseEvent e) {
+                @Override
+                public void mouseMoved(MouseEvent e) {
                     moveText.append("moved(" + e.getX() + "," + e.getY() + ") ");
                 }
             });
             driver.moveto(button, 3, 3);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return "dragged(3,3)".equals(moveText.toString().trim());
                 }
             };
             driver.moveto(button, 5, 10);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return "dragged(3,3) dragged(5,10)".equals(moveText.toString().trim());
                 }
             };
@@ -264,7 +280,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             EventQueueWait.requestFocus(button);
             driver.click(button, Buttons.RIGHT, 1, 3, 3);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonClicked;
                 }
             };
@@ -292,7 +309,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             driver.click(button, Buttons.RIGHT, 1, 0, 0);
             driver.releaseKey(button, JavaAgentKeys.ALT);
             new DeviceTest.WaitWithoutException("Waiting for events to be processed") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return buttonClicked;
                 }
             };
@@ -316,7 +334,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             textFieldClicked = false;
             driver.click(textField, Buttons.LEFT, 1, 1, 1);
             new DeviceTest.WaitWithoutException("Waiting for the text field to be clicked") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return textFieldClicked;
                 }
             };
@@ -335,7 +354,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
             textFieldClicked = false;
             driver.click(textField, Buttons.RIGHT, 1, 1, 1);
             new DeviceTest.WaitWithoutException("Waiting for the text field to be clicked") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return textFieldClicked;
                 }
             };
@@ -350,7 +370,8 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
         driver.click(textField, Buttons.RIGHT, 1, 1, 1);
         driver.click(textField, Buttons.LEFT, 1, 1, 1);
         new DeviceTest.WaitWithoutException("Waiting for the text field to be clicked") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return textFieldClicked;
             }
         };

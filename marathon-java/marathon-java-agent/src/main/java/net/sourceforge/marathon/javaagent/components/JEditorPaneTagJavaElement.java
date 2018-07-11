@@ -55,7 +55,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         this.index = index;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         Iterator iterator = findTag((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument());
         int startOffset = iterator.getStartOffset();
         int endOffset = iterator.getEndOffset();
@@ -82,17 +83,20 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         return iterator;
     }
 
-    @Override public IJavaElement getParent() {
+    @Override
+    public IJavaElement getParent() {
         return parent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "tag").put("parameters",
                 new JSONArray().put(tag.toString()).put(index + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public String getAttribute(final String name) {
+    @Override
+    public String getAttribute(final String name) {
         if ("text".equals(name)) {
             return getText();
         }
@@ -103,7 +107,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
             return getTextIndex() + "";
         }
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 Iterator iterator = findTag((HTMLDocument) ((JEditorPane) parent.getComponent()).getDocument());
                 AttributeSet attributes = iterator.getAttributes();
                 Attribute attr = findAttribute(name);
@@ -115,7 +120,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         });
     }
 
-    @Override public Object _makeVisible() {
+    @Override
+    public Object _makeVisible() {
         JEditorPane editor = (JEditorPane) parent.getComponent();
         Iterator iterator = findTag((HTMLDocument) editor.getDocument());
         int startOffset = iterator.getStartOffset();
@@ -132,7 +138,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         return null;
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         JEditorPane editor = (JEditorPane) parent.getComponent();
         Iterator iterator = findTag((HTMLDocument) editor.getDocument());
         int startOffset = iterator.getStartOffset();
@@ -145,11 +152,13 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         }
     }
 
-    @Override public boolean _isEnabled() {
+    @Override
+    public boolean _isEnabled() {
         return true;
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         throw new RuntimeException("No physical pseudo component available for JEditorPane tag items");
     }
 
@@ -181,7 +190,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
         return null;
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         JEditorPane editor = (JEditorPane) parent.getComponent();
         Iterator iterator = findTag((HTMLDocument) editor.getDocument());
         int startOffset = iterator.getStartOffset();
@@ -197,7 +207,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
 
     public int getHRefIndex() {
         return EventQueueWait.exec(new Callable<Integer>() {
-            @Override public Integer call() throws Exception {
+            @Override
+            public Integer call() throws Exception {
                 String href = getAttribute("href");
                 int hRefIndex = 0;
                 int current = 0;
@@ -227,7 +238,8 @@ public class JEditorPaneTagJavaElement extends AbstractJavaElement implements IP
 
     public int getTextIndex() {
         return EventQueueWait.exec(new Callable<Integer>() {
-            @Override public Integer call() throws Exception {
+            @Override
+            public Integer call() throws Exception {
                 String href = getText();
                 int hRefIndex = 0;
                 int current = 0;

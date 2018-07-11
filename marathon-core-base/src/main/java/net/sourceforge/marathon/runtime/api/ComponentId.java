@@ -75,11 +75,13 @@ public class ComponentId implements Serializable {
         return componentInfoProps.getProperty(INFO_KEY);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "('" + nameProps + "'" + (componentInfoProps != null ? ", '" + componentInfoProps + "'" : "") + ")";
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((componentInfoProps == null) ? 0 : componentInfoProps.hashCode());
@@ -88,7 +90,8 @@ public class ComponentId implements Serializable {
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)

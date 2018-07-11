@@ -37,7 +37,8 @@ public class HistoryUpDownHandler implements EventHandler<ActionEvent> {
         this.shouldMoveUp = shouldMoveUp;
     }
 
-    @Override public void handle(ActionEvent event) {
+    @Override
+    public void handle(ActionEvent event) {
         MultipleSelectionModel<JSONObject> selectionModel = historyView.getSelectionModel();
         ObservableList<JSONObject> items = historyView.getItems();
         int selectedIndex = selectionModel.getSelectedIndex();

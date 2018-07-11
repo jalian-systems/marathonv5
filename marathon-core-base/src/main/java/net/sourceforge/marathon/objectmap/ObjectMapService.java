@@ -42,7 +42,8 @@ public class ObjectMapService implements IObjectMapService {
 
     private Collection<String> allProperties;
 
-    @SuppressWarnings("unused") private static final Logger logger = Logger.getLogger(ObjectMapService.class.getName());
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger.getLogger(ObjectMapService.class.getName());
 
     public ObjectMapService() {
         init();
@@ -60,28 +61,33 @@ public class ObjectMapService implements IObjectMapService {
         synchronized (objectMap) {
             final OMapContainer topLevelComponent = objectMap.getTopLevelComponent(pa, rproperties, gproperties, title, false);
             return new IOMapContainer() {
-                @Override public OMapContainer getOMapContainer(ObjectMap objectMap) {
+                @Override
+                public OMapContainer getOMapContainer(ObjectMap objectMap) {
                     return topLevelComponent;
                 }
 
-                @Override public String toString() {
+                @Override
+                public String toString() {
                     return topLevelComponent.toString();
                 }
 
-                @Override public List<String> getUsedRecognitionProperties() {
+                @Override
+                public List<String> getUsedRecognitionProperties() {
                     return topLevelComponent.getUsedRecognitionProperties();
                 }
             };
         }
     }
 
-    @Override public void save() {
+    @Override
+    public void save() {
         synchronized (objectMap) {
             objectMap.save();
         }
     }
 
-    @Override public void setDirty(boolean b) {
+    @Override
+    public void setDirty(boolean b) {
         synchronized (objectMap) {
             objectMap.setDirty(b);
         }
@@ -98,15 +104,18 @@ public class ObjectMapService implements IObjectMapService {
         return configuration.getGeneralProperties();
     }
 
-    @Override public void load() throws IOException {
+    @Override
+    public void load() throws IOException {
         configuration.load();
     }
 
-    @Override public List<ObjectIdentity> getNamingProperties() {
+    @Override
+    public List<ObjectIdentity> getNamingProperties() {
         return configuration.getNamingProperties();
     }
 
-    @Override public List<ObjectIdentity> getContainerNamingProperties() {
+    @Override
+    public List<ObjectIdentity> getContainerNamingProperties() {
         return configuration.getContainerNamingProperties();
     }
 
@@ -125,15 +134,18 @@ public class ObjectMapService implements IObjectMapService {
         synchronized (objectMap) {
             final OMapContainer topLevelComponent = objectMap.getTopLevelComponent(attributes, urp);
             return new IOMapContainer() {
-                @Override public OMapContainer getOMapContainer(ObjectMap objectMap) {
+                @Override
+                public OMapContainer getOMapContainer(ObjectMap objectMap) {
                     return topLevelComponent;
                 }
 
-                @Override public String toString() {
+                @Override
+                public String toString() {
                     return topLevelComponent.toString();
                 }
 
-                @Override public List<String> getUsedRecognitionProperties() {
+                @Override
+                public List<String> getUsedRecognitionProperties() {
                     return topLevelComponent.getUsedRecognitionProperties();
                 }
             };
@@ -147,24 +159,28 @@ public class ObjectMapService implements IObjectMapService {
         }
     }
 
-    @Override public OMapComponent findComponentByName(String name, IPropertyAccessor containerAccessor) throws ObjectMapException {
+    @Override
+    public OMapComponent findComponentByName(String name, IPropertyAccessor containerAccessor) throws ObjectMapException {
         IOMapContainer container = getContainer(containerAccessor);
         return findComponentByName(name, container);
     }
 
-    @Override public List<OMapComponent> findComponentsByProperties(Properties attributes, Properties urpContainer,
+    @Override
+    public List<OMapComponent> findComponentsByProperties(Properties attributes, Properties urpContainer,
             Properties attributesContainer) throws ObjectMapException {
         IOMapContainer container = getContainer(urpContainer, attributesContainer);
         return findComponentsByProperties(attributes, container);
     }
 
-    @Override public OMapComponent insertNameForComponent(String name, Properties urp, Properties properties,
-            Properties urpContainer, Properties attributesContainer) throws ObjectMapException {
+    @Override
+    public OMapComponent insertNameForComponent(String name, Properties urp, Properties properties, Properties urpContainer,
+            Properties attributesContainer) throws ObjectMapException {
         IOMapContainer container = getContainer(urpContainer, attributesContainer);
         return insertNameForComponent(name, urp, properties, container);
     }
 
-    @Override public OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer)
+    @Override
+    public OMapComponent findComponentByName(String name, Properties urpContainer, Properties attributesContainer)
             throws ObjectMapException {
         IOMapContainer container = getContainer(urpContainer, attributesContainer);
         return findComponentByName(name, container);
@@ -195,7 +211,8 @@ public class ObjectMapService implements IObjectMapService {
             }
         }
         Collections.sort(selection, new Comparator<PropertyList>() {
-            @Override public int compare(PropertyList o1, PropertyList o2) {
+            @Override
+            public int compare(PropertyList o1, PropertyList o2) {
                 return o2.getPriority() - o1.getPriority();
             }
         });
@@ -206,7 +223,8 @@ public class ObjectMapService implements IObjectMapService {
         return sortedList;
     }
 
-    @Override public String[] findComponentNames(IPropertyAccessor containerAccessor) throws ObjectMapException {
+    @Override
+    public String[] findComponentNames(IPropertyAccessor containerAccessor) throws ObjectMapException {
         IOMapContainer container = getContainer(containerAccessor);
         return findComponentNames(container);
     }
@@ -218,7 +236,8 @@ public class ObjectMapService implements IObjectMapService {
         }
     }
 
-    @Override public Collection<String> findProperties() {
+    @Override
+    public Collection<String> findProperties() {
         if (allProperties == null) {
             allProperties = collectProperties();
         }
@@ -252,7 +271,8 @@ public class ObjectMapService implements IObjectMapService {
         }
     }
 
-    @Override public ObjectMapConfiguration getObjectMapConfiguration() {
+    @Override
+    public ObjectMapConfiguration getObjectMapConfiguration() {
         return configuration;
     }
 

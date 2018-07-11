@@ -37,7 +37,8 @@ public class RFXMenuItemTest extends RFXComponentTest {
 
     public static URL imgURL = RFXTabPaneTest.class.getResource("/net/sourceforge/marathon/javafxrecorder/component/middle.png");
 
-    @Test public void menuPath() {
+    @Test
+    public void menuPath() {
         List<String> path = new ArrayList<>();
         Platform.runLater(() -> {
             Menu menuFile = new Menu("File");
@@ -49,14 +50,16 @@ public class RFXMenuItemTest extends RFXComponentTest {
             path.add(rfxMenuItem.getSelectedMenuPath(clear));
         });
         new Wait("Waiting for menu selection path") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return path.size() > 0;
             }
         };
         AssertJUnit.assertEquals("File>>Clear", path.get(0));
     }
 
-    @Test public void menuItemIconNoText() {
+    @Test
+    public void menuItemIconNoText() {
         List<String> path = new ArrayList<>();
         Platform.runLater(() -> {
             Menu menuFile = new Menu("File");
@@ -69,14 +72,16 @@ public class RFXMenuItemTest extends RFXComponentTest {
             path.add(rfxMenuItem.getSelectedMenuPath(clear));
         });
         new Wait("Waiting for menu selection path") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return path.size() > 0;
             }
         };
         AssertJUnit.assertEquals("File>>middle", path.get(0));
     }
 
-    @Test public void subMenuPath() {
+    @Test
+    public void subMenuPath() {
         List<String> path = new ArrayList<>();
         Platform.runLater(() -> {
             Menu menuEdit = new Menu("Edit");
@@ -91,14 +96,16 @@ public class RFXMenuItemTest extends RFXComponentTest {
             path.add(rfxMenuItem.getSelectedMenuPath(add));
         });
         new Wait("Waiting for menu selection path") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return path.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Edit>>Picture Effect>>Shuffle", path.get(0));
     }
 
-    @Test public void specialChars() {
+    @Test
+    public void specialChars() {
         List<String> path = new ArrayList<>();
         Platform.runLater(() -> {
             Menu menuView = new Menu("View");
@@ -112,14 +119,16 @@ public class RFXMenuItemTest extends RFXComponentTest {
             path.add(rfxMenuItem.getSelectedMenuPath(titleView));
         });
         new Wait("Waiting for menu selection path") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return path.size() > 0;
             }
         };
         AssertJUnit.assertEquals("View>>Tit\\>le", path.get(0));
     }
 
-    @Test public void duplicateMenuPath() {
+    @Test
+    public void duplicateMenuPath() {
         List<String> path = new ArrayList<>();
         Platform.runLater(() -> {
             Menu menuFile = new Menu("File");
@@ -136,7 +145,8 @@ public class RFXMenuItemTest extends RFXComponentTest {
             path.add(rfxMenuItem.getSelectedMenuPath(clear2));
         });
         new Wait("Waiting for menu selection path") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return path.size() > 0;
             }
         };
@@ -149,7 +159,8 @@ public class RFXMenuItemTest extends RFXComponentTest {
         return cmi;
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new StackPane(new MenuBar(new Menu("Menu test")));
     }
 }

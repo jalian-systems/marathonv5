@@ -33,7 +33,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXDatePickerTest extends RFXComponentTest {
 
-    @Test public void pickDate() {
+    @Test
+    public void pickDate() {
         DatePicker datePicker = (DatePicker) getPrimaryStage().getScene().getRoot().lookup(".date-picker");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -48,7 +49,8 @@ public class RFXDatePickerTest extends RFXComponentTest {
         AssertJUnit.assertEquals(datePicker.getConverter().toString(date), recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         DatePicker datePicker = (DatePicker) getPrimaryStage().getScene().getRoot().lookup(".date-picker");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -58,14 +60,16 @@ public class RFXDatePickerTest extends RFXComponentTest {
             text.add(rfxDatePicker._getText());
         });
         new Wait("Waiting for date picker text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals(datePicker.getConverter().toString(LocalDate.now()), text.get(0));
     }
 
-    @Test public void pickEditorDate() {
+    @Test
+    public void pickEditorDate() {
         Set<Node> datePickerNodes = getPrimaryStage().getScene().getRoot().lookupAll(".date-picker");
         List<Node> pickers = new ArrayList<>(datePickerNodes);
         DatePicker datePicker = (DatePicker) pickers.get(1);
@@ -82,7 +86,8 @@ public class RFXDatePickerTest extends RFXComponentTest {
 
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new DatePickerSample();
     }
 }

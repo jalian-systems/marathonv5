@@ -87,12 +87,14 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane content = new BorderPane();
         content.getStyleClass().add("function-stage");
         content.setId("functionStage");
@@ -140,7 +142,8 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
         tree.setShowRoot(false);
         tree.getSelectionModel().selectedItemProperty().addListener(new TreeViewSelectionChangeListener());
         tree.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
-            @Override public TreeCell<Object> call(TreeView<Object> param) {
+            @Override
+            public TreeCell<Object> call(TreeView<Object> param) {
                 return new FunctionTreeCell();
             }
         });
@@ -206,7 +209,8 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
 
     public class FunctionTreeCell extends TreeCell<Object> {
 
-        @Override protected void updateItem(Object item, boolean empty) {
+        @Override
+        protected void updateItem(Object item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && !empty) {
                 String fqn;
@@ -236,7 +240,8 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
 
     public class TreeViewSelectionChangeListener implements ChangeListener<TreeItem<Object>> {
 
-        @Override public void changed(ObservableValue<? extends TreeItem<Object>> observable, TreeItem<Object> oldValue,
+        @Override
+        public void changed(ObservableValue<? extends TreeItem<Object>> observable, TreeItem<Object> oldValue,
                 TreeItem<Object> newValue) {
             if (newValue == null) {
                 okButton.setDisable(true);
@@ -298,7 +303,8 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
 
     public class OkHandler implements EventHandler<ActionEvent> {
 
-        @Override public void handle(ActionEvent event) {
+        @Override
+        public void handle(ActionEvent event) {
             if (FunctionStage.this.functionItem == null) {
                 return;
             }
@@ -322,7 +328,8 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
         }
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 }

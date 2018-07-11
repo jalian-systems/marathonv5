@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTitledPaneTest extends RFXComponentTest {
 
-    @Test public void click() {
+    @Test
+    public void click() {
         TitledPane titledPane = (TitledPane) getPrimaryStage().getScene().getRoot().lookup(".titled-pane");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -43,7 +44,8 @@ public class RFXTitledPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("click", recording.getCall());
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         TitledPane titledPane = (TitledPane) getPrimaryStage().getScene().getRoot().lookup(".titled-pane");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -54,14 +56,16 @@ public class RFXTitledPaneTest extends RFXComponentTest {
             text.add(rfxTitledPane.getAttribute("text"));
         });
         new Wait("Waiting for titled pane text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Node 1", text.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new AccordionSample();
     }
 }

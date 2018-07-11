@@ -32,62 +32,73 @@ public class JavaFXTextAreaElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement textarea;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         textarea = driver.findElementByTagName("text-area");
     }
 
-    @Test public void marathon_select() {
+    @Test
+    public void marathon_select() {
         TextArea textAreaNode = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         textarea.marathon_select("Hello World");
         new Wait("Waiting for the text area value to be set") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return "Hello World".equals(textAreaNode.getText());
             }
         };
     }
 
-    @Test public void clear() {
+    @Test
+    public void clear() {
         TextArea textAreaNode = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         textarea.marathon_select("Hello World");
         new Wait("Waiting for the text area value to be set") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return "Hello World".equals(textAreaNode.getText());
             }
         };
         textarea.clear();
         new Wait("Waiting for the text area value to be cleared") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return "".equals(textAreaNode.getText());
             }
         };
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         TextArea textAreaNode = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         AssertJUnit.assertEquals("", textarea.getText());
         textarea.marathon_select("Hello World");
         new Wait("Waiting for the text area value to be set") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return "Hello World".equals(textAreaNode.getText());
             }
         };
         AssertJUnit.assertEquals("Hello World", textarea.getText());
     }
 
-    @Test public void getAttributeText() {
+    @Test
+    public void getAttributeText() {
         Platform.runLater(() -> {
             textarea.marathon_select("Hello World");
         });
         new Wait("Waiting for the text area text") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return textarea.getAttribute("text").equals("Hello World");
             }
         };
         AssertJUnit.assertEquals("Hello World", textarea.getAttribute("text"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TextAreaSample();
     }
 }

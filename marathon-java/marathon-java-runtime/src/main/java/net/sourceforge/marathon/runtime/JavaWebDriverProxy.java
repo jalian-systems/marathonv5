@@ -32,15 +32,18 @@ public class JavaWebDriverProxy implements IWebdriverProxy {
         this.driver = driver;
     }
 
-    @Override public String getURL() {
+    @Override
+    public String getURL() {
         return profile.getURL();
     }
 
-    @Override public void quit(boolean force) {
+    @Override
+    public void quit(boolean force) {
         driver.quit();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return driver.toString();
     }
 

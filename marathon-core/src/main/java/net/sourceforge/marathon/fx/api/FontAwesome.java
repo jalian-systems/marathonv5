@@ -756,7 +756,8 @@ public class FontAwesome {
             this.ch = ch;
         }
 
-        @Override public char getChar() {
+        @Override
+        public char getChar() {
             return ch;
         }
     };

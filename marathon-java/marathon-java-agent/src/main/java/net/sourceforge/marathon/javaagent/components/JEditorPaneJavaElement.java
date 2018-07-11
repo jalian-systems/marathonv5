@@ -49,7 +49,8 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
             this.p = p;
         }
 
-        @Override public boolean isValid(JEditorPaneTagJavaElement e) {
+        @Override
+        public boolean isValid(JEditorPaneTagJavaElement e) {
             Enumeration<Object> keys = p.keys();
             while (keys.hasMoreElements()) {
                 String object = (String) keys.nextElement();
@@ -69,7 +70,8 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("tag")) {
             final ArrayList<IJavaElement> r = new ArrayList<IJavaElement>();
             if (!(((JEditorPane) getComponent()).getDocument() instanceof HTMLDocument)) {
@@ -81,9 +83,11 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
             }
             if (params.length == 1) {
                 EventQueueWait.exec(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         fillElements(tag, r, new Predicate() {
-                            @Override public boolean isValid(JEditorPaneTagJavaElement e) {
+                            @Override
+                            public boolean isValid(JEditorPaneTagJavaElement e) {
                                 return true;
                             }
                         });
@@ -117,7 +121,8 @@ public class JEditorPaneJavaElement extends AbstractJavaElement {
             p = PropertyHelper.asProperties(o);
         }
         EventQueueWait.exec(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 fillElements(Tag.A, r, new PropertyPredicate(p));
             }
         });

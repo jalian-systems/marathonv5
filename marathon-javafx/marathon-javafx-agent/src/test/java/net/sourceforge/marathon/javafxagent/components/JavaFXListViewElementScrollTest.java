@@ -38,16 +38,19 @@ public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement listView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         listView = driver.findElementByTagName("list-view");
     }
 
-    @Test public void scrollToItem() throws Throwable {
+    @Test
+    public void scrollToItem() throws Throwable {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(() -> listView.marathon_select("[\"Row 23\"]"));
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return getPoint(listViewNode, 22) != null;
             }
         };
@@ -67,11 +70,13 @@ public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
         return null;
     }
 
-    @Test public void selectForMultipleItems() {
+    @Test
+    public void selectForMultipleItems() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(() -> listView.marathon_select("[\"Row 2\",\"Row 25\"]"));
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return getPoint(listViewNode, 24) != null;
             }
         };
@@ -79,21 +84,24 @@ public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
         AssertJUnit.assertTrue(listViewNode.getBoundsInLocal().contains(point));
     }
 
-    @Test public void clickNthelement() {
+    @Test
+    public void clickNthelement() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         JavaFXListViewItemElement item = (JavaFXListViewItemElement) listView.findElementByCssSelector(".::nth-item(23)");
         Platform.runLater(() -> {
             item.getPseudoComponent();
         });
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 Point2D point = getPoint(listViewNode, 22);
                 return listViewNode.getBoundsInLocal().contains(point);
             }
         };
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new SimpleListViewScrollSample();
     }
 }

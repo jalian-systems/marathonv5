@@ -41,11 +41,13 @@ public class RList extends RComponent {
         cellInfo = index != -1 ? JListItemJavaElement.getText(list, index) : null;
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         cellInfo = index != -1 ? JListItemJavaElement.getText((JList) component, index) : null;
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         JList list = (JList) component;
         Object[] selectedValues = list.getSelectedValues();
         if (next == null || getComponent() != next.getComponent()) {
@@ -58,17 +60,20 @@ public class RList extends RComponent {
         }
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         if (index == -1)
             return JListJavaElement.getSelectionText((JList) component);
         return JListItemJavaElement.getText((JList) component, index);
     }
 
-    @Override public String[][] getContent() {
+    @Override
+    public String[][] getContent() {
         return JListJavaElement.getContent((JList) component);
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
         // Ignore Ctrl+Clicks used to select the nodes
         if (me.getButton() == MouseEvent.BUTTON1 && isMenuShortcutKeyDown(me)) {
             return;
@@ -79,22 +84,26 @@ public class RList extends RComponent {
         super.mousePressed(me);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick2(this, me, true);
     }
-    
-    @Override public String getCellInfo() {
+
+    @Override
+    public String getCellInfo() {
         return cellInfo;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + index;
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (!super.equals(obj))

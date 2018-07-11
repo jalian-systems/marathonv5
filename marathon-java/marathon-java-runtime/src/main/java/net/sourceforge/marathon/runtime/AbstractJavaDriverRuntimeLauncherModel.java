@@ -42,7 +42,8 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
 
     public static final Logger LOGGER = Logger.getLogger(AbstractJavaDriverRuntimeLauncherModel.class.getName());
 
-    @Override public ITestLauncher createLauncher(Properties props) {
+    @Override
+    public ITestLauncher createLauncher(Properties props) {
         Map<String, Object> ps = new HashMap<String, Object>();
         Enumeration<Object> ks = props.keys();
         while (ks.hasMoreElements()) {
@@ -52,7 +53,8 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         return new TestLauncher(this, ps);
     }
 
-    @Override public IWebdriverProxy createDriver(Map<String, Object> props, int recordingPort, OutputStream outputStream) {
+    @Override
+    public IWebdriverProxy createDriver(Map<String, Object> props, int recordingPort, OutputStream outputStream) {
         final JavaProfile profile = createProfile(props, recordingPort > 0 ? MarathonMode.RECORDING : MarathonMode.PLAYING);
         profile.setRecordingPort(recordingPort);
         profile.copyOutputTo(outputStream);
@@ -65,7 +67,8 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         JavaDriver driver = new JavaDriver(profile, caps, caps);
         RuntimeLogger.getRuntimeLogger().info("WebDriverRuntime", "Launching application", "Launching: " + driver);
         new Wait("The Server did not start") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     Socket s = new Socket("localhost", profile.getPort());
                     s.close();
@@ -79,7 +82,8 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         return new JavaWebDriverProxy(profile, driver);
     }
 
-    @Override public URL getProfileAsURL(Map<String, Object> props, int recordingPort, OutputStream outputStream)
+    @Override
+    public URL getProfileAsURL(Map<String, Object> props, int recordingPort, OutputStream outputStream)
             throws URISyntaxException, IOException {
         final JavaProfile profile = createProfile(props, recordingPort > 0 ? MarathonMode.RECORDING : MarathonMode.PLAYING);
         if (recordingPort != -1) {
@@ -90,15 +94,18 @@ public abstract class AbstractJavaDriverRuntimeLauncherModel implements IJavaDri
         return profile.asURL();
     }
 
-    @Override public boolean needReplaceEnviron() {
+    @Override
+    public boolean needReplaceEnviron() {
         return true;
     }
 
-    @Override public String getFramework() {
+    @Override
+    public String getFramework() {
         return Constants.FRAMEWORK_SWING;
     }
 
-    @Override public boolean confirmConfiguration() {
+    @Override
+    public boolean confirmConfiguration() {
         return true;
     }
 }

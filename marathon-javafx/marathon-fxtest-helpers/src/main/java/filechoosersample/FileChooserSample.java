@@ -57,7 +57,8 @@ public final class FileChooserSample extends Application {
 
     private final Desktop desktop = Desktop.getDesktop();
 
-    @Override public void start(final Stage stage) {
+    @Override
+    public void start(final Stage stage) {
         stage.setTitle("File Chooser Sample");
 
         final FileChooser fileChooser = new FileChooser();

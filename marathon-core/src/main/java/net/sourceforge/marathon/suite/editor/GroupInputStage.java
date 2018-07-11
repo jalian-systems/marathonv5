@@ -47,13 +47,15 @@ public class GroupInputStage extends ModalDialog<GroupInputInfo> {
         this.type = type;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(true);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane borderPane = new BorderPane();
 
         FormPane formPane = new FormPane("group-editor-input-stage", 2);
@@ -81,7 +83,8 @@ public class GroupInputStage extends ModalDialog<GroupInputInfo> {
         dispose();
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 

@@ -34,14 +34,17 @@ import org.testng.annotations.Test;
 import components.ComboBoxDemo2;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JComboBox2Test {
+@Test
+public class JComboBox2Test {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JComboBox2Test.class.getSimpleName());
                 frame.setName("frame-" + JComboBox2Test.class.getSimpleName());
                 frame.getContentPane().add(new ComboBoxDemo2(), BorderLayout.CENTER);
@@ -52,9 +55,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

@@ -47,11 +47,13 @@ public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IP
     private TextArea programArgumentsField = new TextArea();
     private TextArea vmArgumentsField = new TextArea();
     private TextField workingDirField = new TextField() {
-        @Override public void requestFocus() {
+        @Override
+        public void requestFocus() {
         };
     };
     private TextField javaHomeField = new TextField() {
-        @Override public void requestFocus() {
+        @Override
+        public void requestFocus() {
         };
     };
     private Button workindDirBrowse = FXUIUtils.createButton("browse", "Browse working dir", true, "Browse");
@@ -62,7 +64,8 @@ public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IP
         iniComponents();
     }
 
-    @Override public Node getContent() {
+    @Override
+    public Node getContent() {
         FormPane form = new FormPane("main-layout", 3);
         // @formatter:off
             form.addFormField("Class Name: ", classNameField)
@@ -90,15 +93,18 @@ public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IP
 
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Main";
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return FXUIUtils.getIcon("main_obj");
     }
 
-    @Override public void getProperties(Properties props) {
+    @Override
+    public void getProperties(Properties props) {
         props.setProperty(Constants.PROP_APPLICATION_MAINCLASS, classNameField.getText());
         props.setProperty(Constants.PROP_APPLICATION_ARGUMENTS, programArgumentsField.getText().trim());
         props.setProperty(Constants.PROP_APPLICATION_VM_ARGUMENTS, vmArgumentsField.getText().trim());
@@ -106,7 +112,8 @@ public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IP
         props.setProperty(Constants.PROP_APPLICATION_WORKING_DIR, workingDirField.getText());
     }
 
-    @Override public void setProperties(Properties props) {
+    @Override
+    public void setProperties(Properties props) {
         classNameField.setText(props.getProperty(Constants.PROP_APPLICATION_MAINCLASS, ""));
         programArgumentsField.setText(props.getProperty(Constants.PROP_APPLICATION_ARGUMENTS, ""));
         vmArgumentsField.setText(props.getProperty(Constants.PROP_APPLICATION_VM_ARGUMENTS, ""));
@@ -114,7 +121,8 @@ public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IP
         workingDirField.setText(props.getProperty(Constants.PROP_APPLICATION_WORKING_DIR, ""));
     }
 
-    @Override public boolean isValidInput(boolean showAlert) {
+    @Override
+    public boolean isValidInput(boolean showAlert) {
         if (classNameField.getText() == null || classNameField.getText().equals("")) {
             if (showAlert) {
                 FXUIUtils.showMessageDialog(parent.getStage(), "Main class can't be empty", "Main Class", AlertType.ERROR);
@@ -164,7 +172,8 @@ public class MainLayout implements ISubPropertiesLayout, IFileSelectedAction, IP
         return true;
     }
 
-    @Override public void filesSelected(List<File> selectedFiles, Object cookie) {
+    @Override
+    public void filesSelected(List<File> selectedFiles, Object cookie) {
         if (selectedFiles != null && selectedFiles.size() != 0) {
             ((TextField) cookie).setText(selectedFiles.get(0).getAbsolutePath());
         }

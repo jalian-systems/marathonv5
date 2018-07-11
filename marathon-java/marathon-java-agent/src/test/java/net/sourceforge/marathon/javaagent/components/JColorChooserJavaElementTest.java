@@ -29,14 +29,17 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 
-@Test public class JColorChooserJavaElementTest extends JavaElementTest {
+@Test
+public class JColorChooserJavaElementTest extends JavaElementTest {
     protected JFrame frame;
     private IJavaAgent driver;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         JavaElementFactory.add(JColorChooser.class, JColorChooserJavaElement.class);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 JColorChooser colorChooser = new JColorChooser();
@@ -49,9 +52,11 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -65,7 +70,8 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
         AssertJUnit.assertEquals("[r=128,g=0,b=128]", colorChooser.getAttribute("color"));
     }
 
-    @Test(expectedExceptions = NumberFormatException.class) public void colorChooserWithInvalidColorCode() {
+    @Test(expectedExceptions = NumberFormatException.class)
+    public void colorChooserWithInvalidColorCode() {
         IJavaElement colorChooser = driver.findElementByTagName("color-chooser");
         marathon_select(colorChooser, "#87436278");
     }

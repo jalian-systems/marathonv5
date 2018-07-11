@@ -45,7 +45,8 @@ public abstract class Device implements IDevice {
     public static Component getActiveComponent(Component component) {
         final Component comp = component;
         Dimension d = EventQueueWait.exec(new Callable<Dimension>() {
-            @Override public Dimension call() {
+            @Override
+            public Dimension call() {
                 return comp.getSize();
             }
         });
@@ -73,7 +74,8 @@ public abstract class Device implements IDevice {
             d.y = point.y;
         }
         EventQueueWait.exec(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 parent.scrollRectToVisible(d);
             }
         });

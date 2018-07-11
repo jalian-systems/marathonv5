@@ -32,7 +32,8 @@ public class JSliderJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         JSlider slider = (JSlider) component;
         return getCurrentValue(slider);
     }
@@ -41,7 +42,8 @@ public class JSliderJavaElement extends AbstractJavaElement {
         return Integer.toString(slider.getValue());
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         ((JSlider) component).setValue(Integer.valueOf(Integer.parseInt(value)));
         return true;
     }

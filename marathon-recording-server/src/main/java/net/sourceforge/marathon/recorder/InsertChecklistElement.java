@@ -36,7 +36,8 @@ public class InsertChecklistElement implements IScriptElement {
         this.fileName = fileName;
     }
 
-    @Override public String toScriptCode() {
+    @Override
+    public String toScriptCode() {
         return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForInsertChecklist(fileName);
     }
 
@@ -44,15 +45,18 @@ public class InsertChecklistElement implements IScriptElement {
         return null;
     }
 
-    @Override public WindowId getWindowId() {
+    @Override
+    public WindowId getWindowId() {
         return windowId;
     }
 
-    @Override public boolean isUndo() {
+    @Override
+    public boolean isUndo() {
         return false;
     }
 
-    @Override public IScriptElement getUndoElement() {
+    @Override
+    public IScriptElement getUndoElement() {
         return null;
     }
 }

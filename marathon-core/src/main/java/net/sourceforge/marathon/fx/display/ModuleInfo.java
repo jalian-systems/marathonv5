@@ -49,7 +49,8 @@ public class ModuleInfo {
             this.prefix = prefix;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return prefix + file.getName();
         }
 
@@ -66,7 +67,8 @@ public class ModuleInfo {
             this.file = file;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return file.getName();
         }
     }
@@ -160,7 +162,8 @@ public class ModuleInfo {
         moduleFileElements.clear();
         File file = selectedItem.getFile();
         file.list(new FilenameFilter() {
-            @Override public boolean accept(File dir, String name) {
+            @Override
+            public boolean accept(File dir, String name) {
                 File f = new File(dir, name);
                 boolean b = f.isFile() && name.endsWith(suffix);
                 if (b) {

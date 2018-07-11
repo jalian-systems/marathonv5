@@ -33,14 +33,17 @@ import org.testng.annotations.Test;
 import components.SliderDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JSliderTest {
+@Test
+public class JSliderTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JSliderTest.class.getSimpleName());
                 frame.setName("frame-" + JSliderTest.class.getSimpleName());
                 frame.getContentPane().add(new SliderDemo(), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

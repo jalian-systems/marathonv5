@@ -31,12 +31,15 @@ import components.SplitPaneDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RSplitPaneTest extends RComponentTest {
+@Test
+public class RSplitPaneTest extends RComponentTest {
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RSplitPaneTest.class.getSimpleName());
                 frame.setName("frame-" + RSplitPaneTest.class.getSimpleName());
                 frame.getContentPane().add(new SplitPaneDemo().getSplitPane(), BorderLayout.CENTER);
@@ -46,9 +49,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -58,7 +63,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectSplitPane() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JSplitPane splitPane = (JSplitPane) ComponentUtils.findComponent(JSplitPane.class, frame);
                 splitPane.setDividerLocation(150);
                 RSplitPane rSplitPane = new RSplitPane(splitPane, null, null, lr);
@@ -73,7 +79,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectSplitPaneDividerLocation() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JSplitPane splitPane = (JSplitPane) ComponentUtils.findComponent(JSplitPane.class, frame);
                 splitPane.setDividerLocation(300);
                 BasicSplitPaneDivider divider = (BasicSplitPaneDivider) ComponentUtils.findComponent(BasicSplitPaneDivider.class,

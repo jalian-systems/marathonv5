@@ -52,7 +52,8 @@ public class JavaFxAgentHook {
         stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                 if (done) {
                     return;
                 }
@@ -63,7 +64,8 @@ public class JavaFxAgentHook {
                         LOGGER.info("Checking for windowTitle is not implemented.. ignoring and continuing...");
                     }
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                        @Override public Object run() {
+                        @Override
+                        public Object run() {
                             try {
                                 LOGGER.info("JavaVersion: " + System.getProperty("java.version"));
                                 LOGGER.info("JavaHome: " + System.getProperty("java.home"));
@@ -85,23 +87,27 @@ public class JavaFxAgentHook {
             }
         });
         EventHandler<MouseEvent> mouseEventLogger = new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
+            @Override
+            public void handle(MouseEvent event) {
                 LOGGER.info(event.toString());
             }
         };
         EventHandler<KeyEvent> keyEventLogger = new EventHandler<KeyEvent>() {
-            @Override public void handle(KeyEvent event) {
+            @Override
+            public void handle(KeyEvent event) {
                 LOGGER.info(event.toString());
             }
         };
         stages.addListener(new ListChangeListener<Stage>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                 c.next();
                 if (c.wasAdded()) {
                     List<? extends Stage> added = c.getAddedSubList();
                     for (Stage stage : added) {
                         stage.addEventFilter(WindowEvent.WINDOW_SHOWN, new EventHandler<WindowEvent>() {
-                            @Override public void handle(WindowEvent event) {
+                            @Override
+                            public void handle(WindowEvent event) {
                                 stage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEventLogger);
                                 stage.getScene().getRoot().addEventFilter(MouseEvent.MOUSE_RELEASED, mouseEventLogger);
                                 stage.getScene().getRoot().addEventFilter(KeyEvent.KEY_PRESSED, keyEventLogger);
@@ -109,7 +115,8 @@ public class JavaFxAgentHook {
                             }
                         });
                         stage.addEventFilter(WindowEvent.WINDOW_HIDING, new EventHandler<WindowEvent>() {
-                            @Override public void handle(WindowEvent event) {
+                            @Override
+                            public void handle(WindowEvent event) {
                                 stage.getScene().getRoot().removeEventFilter(MouseEvent.MOUSE_PRESSED, mouseEventLogger);
                                 stage.getScene().getRoot().removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseEventLogger);
                                 stage.getScene().getRoot().removeEventFilter(KeyEvent.KEY_PRESSED, keyEventLogger);

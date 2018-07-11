@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class DatePickerApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Date Picker");
         primaryStage.setScene(new Scene(new DatePickerSample()));
         primaryStage.sizeToScene();

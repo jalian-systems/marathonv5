@@ -33,7 +33,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTableViewTest extends RFXComponentTest {
 
-    @Test public void selectNoRows() {
+    @Test
+    public void selectNoRows() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -46,7 +47,8 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("", recording.getParameters()[0]);
     }
 
-    @Test public void selectNoCells() {
+    @Test
+    public void selectNoCells() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -61,7 +63,8 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("", recording.getParameters()[0]);
     }
 
-    @Test public void selectARow() {
+    @Test
+    public void selectARow() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -77,7 +80,8 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"rows\":[1]}", recording.getParameters()[0]);
     }
 
-    @Test public void selectMulpitleRows() {
+    @Test
+    public void selectMulpitleRows() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -94,7 +98,8 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"rows\":[1,3]}", recording.getParameters()[0]);
     }
 
-    @Test public void selectAllRows() {
+    @Test
+    public void selectAllRows() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -111,7 +116,9 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("all", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectACell() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectACell() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -130,7 +137,9 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"cells\":[[\"1\",\"Last\"]]}", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectCell() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectCell() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -149,7 +158,9 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"cells\":[[\"1\",\"Last\"]]}", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectMultipleCells() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectMultipleCells() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -170,7 +181,9 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"cells\":[[\"1\",\"Last\"],[\"2\",\"Last\"]]}", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectAllCells() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectAllCells() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -188,7 +201,9 @@ public class RFXTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("all", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void getText() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void getText() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         List<Object> text = new ArrayList<>();
@@ -204,18 +219,21 @@ public class RFXTableViewTest extends RFXComponentTest {
             text.add(rfxTableView.getAttribute("text"));
         });
         new Wait("Waiting for table text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("{\"cells\":[[\"1\",\"Last\"]]}", text.get(0));
     }
 
-    @SuppressWarnings("rawtypes") private TableColumn getTableColumnAt(TableView<?> tableView, int i) {
+    @SuppressWarnings("rawtypes")
+    private TableColumn getTableColumnAt(TableView<?> tableView, int i) {
         return tableView.getColumns().get(i);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TableSample();
     }
 }

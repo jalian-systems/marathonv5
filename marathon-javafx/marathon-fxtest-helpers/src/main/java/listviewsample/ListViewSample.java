@@ -50,10 +50,8 @@ import javafx.stage.Stage;
 public class ListViewSample extends Application {
 
     ListView<String> list = new ListView<>();
-    ObservableList<String> data = FXCollections.observableArrayList(
-            "chocolate", "salmon", "gold", "coral", "darkorchid",
-            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-            "blueviolet", "brown");
+    ObservableList<String> data = FXCollections.observableArrayList("chocolate", "salmon", "gold", "coral", "darkorchid",
+            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue", "blueviolet", "brown");
     final Label label = new Label();
 
     @Override
@@ -72,16 +70,15 @@ public class ListViewSample extends Application {
         list.setItems(data);
 
         list.setCellFactory((ListView<String> l) -> new ColorRectCell());
- 
-        list.getSelectionModel().selectedItemProperty().addListener(
-            (ObservableValue<? extends String> ov, String old_val, 
-                String new_val) -> {
+
+        list.getSelectionModel().selectedItemProperty()
+                .addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
                     label.setText(new_val);
                     label.setTextFill(Color.web(new_val));
-        });
+                });
         stage.show();
     }
-    
+
     static class ColorRectCell extends ListCell<String> {
         @Override
         public void updateItem(String item, boolean empty) {
@@ -95,7 +92,7 @@ public class ListViewSample extends Application {
             }
         }
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }

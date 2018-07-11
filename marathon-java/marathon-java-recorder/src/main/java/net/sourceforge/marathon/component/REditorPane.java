@@ -55,7 +55,8 @@ public class REditorPane extends RComponent {
         }
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         int location = ((JEditorPane) component).viewToModel(me.getPoint());
         Document document = ((JEditorPane) component).getDocument();
         setHRef(location, document);
@@ -63,7 +64,8 @@ public class REditorPane extends RComponent {
         recorder.recordClick2(this, me, true);
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         if (text != null && !"".equals(text)) {
             return "text=" + text + (textIndex > 0 ? "(" + textIndex + ")" : "");
         }
@@ -137,12 +139,14 @@ public class REditorPane extends RComponent {
         }
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "REditorPane [linkPosition=" + linkPosition + ", hRef=" + hRef + ", text=" + text + ", SEPARATER=" + SEPARATER
                 + ", hRefIndex=" + hRefIndex + ", textIndex=" + textIndex + "]";
     }
 
-    @Override public String getCText() {
+    @Override
+    public String getCText() {
         return null;
     }
 }

@@ -75,11 +75,13 @@ public class CheckList {
         public Header() {
         }
 
-        @Override public String getType() {
+        @Override
+        public String getType() {
             return TYPE;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "<header label = \"" + getLabel() + "\" />";
         }
     }
@@ -96,27 +98,33 @@ public class CheckList {
         public FailureNote() {
         }
 
-        @Override public String getType() {
+        @Override
+        public String getType() {
             return TYPE;
         }
 
-        @Override public String getText() {
+        @Override
+        public String getText() {
             return text;
         }
 
-        @Override public void setSelected(int selected) {
+        @Override
+        public void setSelected(int selected) {
             this.selected = selected;
         }
 
-        @Override public int getSelected() {
+        @Override
+        public int getSelected() {
             return selected;
         }
 
-        @Override public void setText(String text) {
+        @Override
+        public void setText(String text) {
             this.text = text;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "<failureNote label = \"" + getLabel() + "\" />";
         }
     }
@@ -132,19 +140,23 @@ public class CheckList {
         public CommentBox() {
         }
 
-        @Override public String getType() {
+        @Override
+        public String getType() {
             return TYPE;
         }
 
-        @Override public String getText() {
+        @Override
+        public String getText() {
             return text;
         }
 
-        @Override public void setText(String text) {
+        @Override
+        public void setText(String text) {
             this.text = text;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "<commentBox label = \"" + getLabel() + "\" />";
         }
     }

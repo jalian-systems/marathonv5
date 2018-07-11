@@ -69,7 +69,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     private IScript script;
     private ArrayList<CheckList> checkLists = new ArrayList<CheckList>();
     private List<ScreenShotEntry> screenshots = new ArrayList<>();
-    
+
     private boolean acceptChecklist;
     private IConsole console;
     private Properties dataVariables;
@@ -102,19 +102,23 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         this.nameSuffix = name;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return Project.getTestName(file) + nameSuffix;
     }
 
-    @Override public void setName(String name) {
+    @Override
+    public void setName(String name) {
         Project.setTestName(name, file);
     }
 
-    @Override public void run(TestResult result) {
+    @Override
+    public void run(TestResult result) {
         super.run(result);
     }
 
-    @Override protected synchronized void runTest() throws Throwable {
+    @Override
+    protected synchronized void runTest() throws Throwable {
         if (script == null) {
             initialize();
         }
@@ -156,14 +160,16 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         return sWriter.toString();
     }
 
-    @Override public void playbackFinished(PlaybackResult result, boolean shutdown) {
+    @Override
+    public void playbackFinished(PlaybackResult result, boolean shutdown) {
         this.result = result;
         synchronized (waitLock) {
             waitLock.notify();
         }
     }
 
-    @Override public int lineReached(SourceLine line) {
+    @Override
+    public int lineReached(SourceLine line) {
         return CONTINUE;
     }
 
@@ -181,15 +187,18 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         return file;
     }
 
-    @Override public int methodReturned(SourceLine line) {
+    @Override
+    public int methodReturned(SourceLine line) {
         return CONTINUE;
     }
 
-    @Override public int methodCalled(SourceLine line) {
+    @Override
+    public int methodCalled(SourceLine line) {
         return CONTINUE;
     }
 
-    @Override public int acceptChecklist(final String fileName) {
+    @Override
+    public int acceptChecklist(final String fileName) {
         Platform.runLater(() -> {
             File file = new File(System.getProperty(Constants.PROP_CHECKLIST_DIR), fileName);
             showAndEnterChecklist(file, runtime, null);
@@ -198,7 +207,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         return 0;
     }
 
-    @Override public int showChecklist(final String fileName) {
+    @Override
+    public int showChecklist(final String fileName) {
         return 0;
     }
 
@@ -257,7 +267,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         return checklist;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 
@@ -268,7 +279,7 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
     public Properties getDataVariables() {
         return dataVariables;
     }
-    
+
     public IRuntimeFactory getRuntimeFactory(String scriptText) {
         Map<String, Object> fixtureProperties = ScriptModel.getModel().getFixtureProperties(scriptText);
         if (fixtureProperties == null || fixtureProperties.size() == 0) {
@@ -287,7 +298,8 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
         this.fullName = name;
     }
 
-    @Override public String getFullName() {
+    @Override
+    public String getFullName() {
         return fullName;
     }
 
@@ -320,16 +332,18 @@ public class MarathonTestCase extends TestCase implements IPlaybackListener, Tes
                 dataVariables);
     }
 
-    @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+    @Override
+    public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
         screenshots.add(new ScreenShotEntry(error.getMessage(), fileName, null));
     }
-    
+
     public List<ScreenShotEntry> getScreenshots() {
         return screenshots;
     }
 
-    @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+    @Override
+    public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
         screenshots.add(new ScreenShotEntry(title, filePath, assertions));
     }
-    
+
 }

@@ -30,12 +30,15 @@ import components.SliderDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RSliderTest extends RComponentTest {
+@Test
+public class RSliderTest extends RComponentTest {
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RSliderTest.class.getSimpleName());
                 frame.setName("frame-" + RSliderTest.class.getSimpleName());
                 frame.getContentPane().add(new SliderDemo(), BorderLayout.CENTER);
@@ -45,9 +48,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -57,7 +62,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void sliderTest() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JSlider slider = (JSlider) ComponentUtils.findComponent(JSlider.class, frame);
                 slider.setValue(25);
                 RSlider rslider = new RSlider(slider, null, null, lr);

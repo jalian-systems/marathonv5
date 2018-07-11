@@ -32,7 +32,8 @@ public class JavaFXCheckBoxTreeCellElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         CheckBoxTreeCell cell = (CheckBoxTreeCell) getComponent();
         @SuppressWarnings("unchecked")

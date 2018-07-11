@@ -37,7 +37,8 @@ public class SwingSet3TreeDemo extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JFrame f = new SwingSet3TreeDemo();
                 f.setVisible(true);
             }

@@ -28,7 +28,7 @@ public class EditorConsole extends AbstractFileConsole {
     private IDisplayView display;
 
     private Map<Integer, StringBuilder> hold = new HashMap<>();
-    
+
     public EditorConsole(IDisplayView display) {
         this.display = display;
         hold.put(IStdOut.STD_OUT, new StringBuilder());
@@ -37,38 +37,43 @@ public class EditorConsole extends AbstractFileConsole {
         hold.put(IStdOut.SCRIPT_ERR, new StringBuilder());
     }
 
-    @Override public void writeScriptOut(char cbuf[], int off, int len) {
+    @Override
+    public void writeScriptOut(char cbuf[], int off, int len) {
         appendToDisplay(cbuf, off, len, IStdOut.SCRIPT_OUT);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
-    @Override public void writeScriptErr(char cbuf[], int off, int len) {
+    @Override
+    public void writeScriptErr(char cbuf[], int off, int len) {
         appendToDisplay(cbuf, off, len, IStdOut.SCRIPT_ERR);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
-    @Override public void writeStdOut(char cbuf[], int off, int len) {
+    @Override
+    public void writeStdOut(char cbuf[], int off, int len) {
         appendToDisplay(cbuf, off, len, IStdOut.STD_OUT);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
-    @Override public void writeStdErr(char cbuf[], int off, int len) {
+    @Override
+    public void writeStdErr(char cbuf[], int off, int len) {
         appendToDisplay(cbuf, off, len, IStdOut.STD_ERR);
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
     private void appendToDisplay(char[] cbuf, int off, int len, int type) {
-        for(int i = off; i < off+len; i++) {
+        for (int i = off; i < off + len; i++) {
             StringBuilder sb = hold.get(type);
             sb.append(cbuf[i]);
-            if(cbuf[i] == '\n') {
+            if (cbuf[i] == '\n') {
                 display.getOutputPane().append(sb.toString(), type);
                 sb.setLength(0);
             }
         }
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
         display.getOutputPane().clear();
     }
 }

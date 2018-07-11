@@ -83,7 +83,8 @@ public class RobotDevice extends Device {
 
     private DeviceState deviceState = new DeviceState();
 
-    @Override public void sendKeys(Component component, CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(Component component, CharSequence... keysToSend) {
         component = Device.getActiveComponent(component);
         EventQueueWait.requestFocus(component);
         for (CharSequence seq : keysToSend) {
@@ -136,46 +137,55 @@ public class RobotDevice extends Device {
         }
     }
 
-    @Override public void pressKey(Component component, JavaAgentKeys keyToPress) {
+    @Override
+    public void pressKey(Component component, JavaAgentKeys keyToPress) {
         KeysMap keysMap = KeysMap.findMap(keyToPress);
         int keycode = keysMap.getCode();
         robotXkeyPress(keycode);
     }
 
-    @Override public void releaseKey(Component component, JavaAgentKeys keyToRelease) {
+    @Override
+    public void releaseKey(Component component, JavaAgentKeys keyToRelease) {
         KeysMap keysMap = KeysMap.findMap(keyToRelease);
         int keycode = keysMap.getCode();
         robotXkeyRelease(keycode);
     }
 
-    @Override public void buttonDown(Component component, Buttons button, int xoffset, int yoffset) {
+    @Override
+    public void buttonDown(Component component, Buttons button, int xoffset, int yoffset) {
         moveto(component, xoffset, yoffset);
         robotXmousePress(InputEvent.BUTTON1_MASK);
     }
 
-    @Override public void buttonUp(Component component, Buttons button, int xoffset, int yoffset) {
+    @Override
+    public void buttonUp(Component component, Buttons button, int xoffset, int yoffset) {
         robotXmouseRelease(InputEvent.BUTTON1_MASK);
     }
 
-    @Override public void moveto(final Component component) {
+    @Override
+    public void moveto(final Component component) {
         Dimension d = EventQueueWait.exec(new Callable<Dimension>() {
-            @Override public Dimension call() {
+            @Override
+            public Dimension call() {
                 return component.getSize();
             }
         });
         moveto(component, d.width / 2, d.height / 2);
     }
 
-    @Override public void moveto(final Component component, int xoffset, int yoffset) {
+    @Override
+    public void moveto(final Component component, int xoffset, int yoffset) {
         Point compLocation = EventQueueWait.exec(new Callable<Point>() {
-            @Override public Point call() {
+            @Override
+            public Point call() {
                 return component.getLocationOnScreen();
             }
         });
         robotXmouseMove(compLocation.x + xoffset, compLocation.y + yoffset);
     }
 
-    @Override public void click(Component component, Buttons button, int clickCount, int xoffset, int yoffset) {
+    @Override
+    public void click(Component component, Buttons button, int clickCount, int xoffset, int yoffset) {
         ensureVisible(component, new Rectangle(xoffset, yoffset, 50, 50));
         int b = InputEvent.BUTTON1_MASK;
         if (button.getButton() == 0) {

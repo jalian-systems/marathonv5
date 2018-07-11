@@ -63,7 +63,8 @@ public class RFXWebView extends RFXComponent {
                 loadScript(webview);
             }
             webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-                @Override public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
+                @Override
+                public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
                     if (newState == State.SUCCEEDED) {
                         loadScript(webview);
                     }
@@ -73,7 +74,8 @@ public class RFXWebView extends RFXComponent {
         JavaFXWebViewElement.init(source);
     }
 
-    @Override public void processEvent(Event event) {
+    @Override
+    public void processEvent(Event event) {
     }
 
     public void record_select(String info, String value) {
@@ -100,11 +102,13 @@ public class RFXWebView extends RFXComponent {
         webEngine.executeScript(script);
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         return (String) getComponent().getProperties().get("current_selector");
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return (String) ((JSObject) getComponent().getProperties().get("player")).call("text",
                 (String) getComponent().getProperties().get("current_selector"));
     }
@@ -113,7 +117,8 @@ public class RFXWebView extends RFXComponent {
         return new String[] { "getAttributes", "getValue" };
     }
 
-    @Override protected String _getLabeledBy() {
+    @Override
+    protected String _getLabeledBy() {
         return (String) ((JSObject) getComponent().getProperties().get("player")).call("label",
                 (String) getComponent().getProperties().get("current_selector"));
     }
@@ -130,7 +135,8 @@ public class RFXWebView extends RFXComponent {
         return rm;
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         return (String) ((JSObject) getComponent().getProperties().get("player")).call("value",
                 (String) getComponent().getProperties().get("current_selector"));
     }

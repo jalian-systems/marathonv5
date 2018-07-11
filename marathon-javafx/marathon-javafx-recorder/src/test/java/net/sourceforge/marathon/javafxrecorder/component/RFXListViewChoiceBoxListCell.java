@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXListViewChoiceBoxListCell extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         @SuppressWarnings("unchecked")
         ListView<String> listView = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
@@ -51,7 +52,8 @@ public class RFXListViewChoiceBoxListCell extends RFXComponentTest {
         AssertJUnit.assertEquals("Option 3", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ChoiceBoxListViewSample();
     }
 }

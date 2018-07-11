@@ -29,7 +29,8 @@ public class FailureNoteVBoxer extends CheckListItemVBoxer {
         // TODO Auto-generated constructor stub
     }
 
-    @Override protected VBox createVBox(boolean selectable, boolean editable) {
+    @Override
+    protected VBox createVBox(boolean selectable, boolean editable) {
         VBox checkListBox = new VBox();
         checkListBox.getChildren().addAll(createButtonBar(selectable, editable), createTextArea(selectable, editable));
         if (selectable) {
@@ -103,7 +104,8 @@ public class FailureNoteVBoxer extends CheckListItemVBoxer {
         return scrollPane;
     }
 
-    @Override public FailureNote getItem() {
+    @Override
+    public FailureNote getItem() {
         return item;
     }
 }

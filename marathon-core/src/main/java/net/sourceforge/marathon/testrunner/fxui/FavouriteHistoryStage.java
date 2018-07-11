@@ -97,14 +97,17 @@ public class FavouriteHistoryStage extends RunHistoryStage {
         TestRunnerHistory.getInstance().save();
     }
 
-    @Override protected String getRemeberedCount() {
+    @Override
+    protected String getRemeberedCount() {
         return "";
     }
 
-    @Override protected void addButtonsToVerticalButtonBar() {
+    @Override
+    protected void addButtonsToVerticalButtonBar() {
         verticalButtonBar.getChildren().addAll(upButton, downButton, unSaveButton, removeButton, removeAllButton);
     }
 
-    @Override protected void saveRememberedCount() {
+    @Override
+    protected void saveRememberedCount() {
     }
 }

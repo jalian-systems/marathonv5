@@ -73,7 +73,8 @@ public class ActionInjector {
         return new AbstractSimpleAction(name, description, mneumonic, commandName) {
             private static final long serialVersionUID = 1L;
 
-            @Override public void handle(ActionEvent e) {
+            @Override
+            public void handle(ActionEvent e) {
                 try {
                     m.invoke(o);
                 } catch (IllegalArgumentException e1) {

@@ -47,16 +47,19 @@ public class JTableHeaderItemJavaElement extends AbstractJavaElement implements 
         this.item = item;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "nth-item").put("parameters", new JSONArray().put(item + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public IJavaElement getParent() {
+    @Override
+    public IJavaElement getParent() {
         return parent;
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         int columnCount = getColumnCount();
         if (item < 0 || item >= columnCount) {
             throw new NoSuchElementException("Index out of bounds error on JTableHeader: " + item, null);
@@ -65,9 +68,11 @@ public class JTableHeaderItemJavaElement extends AbstractJavaElement implements 
         getDriver().getDevices().moveto(parent.getComponent(), bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() {
+            @Override
+            public Component call() {
                 return getRendererComponent((JTableHeader) parent.getComponent(), item);
             }
         });
@@ -77,7 +82,8 @@ public class JTableHeaderItemJavaElement extends AbstractJavaElement implements 
         return ((JTableHeader) parent.getComponent()).getHeaderRect(item);
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         int columnCount = getColumnCount();
         if (item < 0 || item >= columnCount) {
             throw new NoSuchElementException("Index out of bounds error on JTableHeader: " + item, null);
@@ -105,7 +111,8 @@ public class JTableHeaderItemJavaElement extends AbstractJavaElement implements 
         return rendererComponent;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getText((JTableHeader) component, item);
     }
 
