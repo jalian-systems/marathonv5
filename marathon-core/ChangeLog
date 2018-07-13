@@ -1,3 +1,17 @@
+Marathon Version 5.2.2.0 (16th July 2018)
+
+01. feat: Added JavaDoc for JavaDriver and JavaProfile
+02. chore: Formatted all code using eclipse
+03. fix: Java9/Java10 Compatibility Issues
+04. chore: Enhanced FileChooserSample
+05. fixed: Updated javassist version to 3.23.1
+
+commit 2585c892ea04ab5cc7c5771f6e7c9816a498b81d
+Merge: 62e0465a 8ddb52d5
+Author: Dakshinamurthy Karra <dakshinamurthy.karra@jaliansystems.com>
+Date:   Tue Jul 3 12:13:00 2018 +0530
+
+    Merge branch 'release/v5.2.1.0' into develop
 Marathon Version 5.2.1.0 (3rd July 2018)
 
 01. feat: Sorting the test classes in components.Main - test helper
