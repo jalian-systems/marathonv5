@@ -36,6 +36,19 @@ public class JavaVersion {
         return null;
     }
 
+    public static String atMost(String target) {
+        int[] current = makeParts(version);
+        int[] expected = makeParts(target);
+        for (int i = 0; i < 4; i++) {
+            if (expected[i] < current[i]) {
+                return "Expected: <= " + target + " Actual: " + version;
+            } else if (expected[i] >= current[i]) {
+                return null;
+            }
+        }
+        return null;
+    }
+
     private static int[] makeParts(String v) {
         int[] r = new int[] { 0, 0, 0, 0 };
         String[] parts = v.split("\\.");
