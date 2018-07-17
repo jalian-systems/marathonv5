@@ -30,8 +30,7 @@ import javafx.util.Callback;
 
 public class ComboBoxTableViewSample extends Sample {
 
-    private final ObservableList items = FXCollections.observableArrayList("Smith", "Johnson", "Williams", "Jones",
-            "Brown");
+    private final ObservableList items = FXCollections.observableArrayList("Smith", "Johnson", "Williams", "Jones", "Brown");
 
     public ComboBoxTableViewSample() {
         final ObservableList<Person> data = FXCollections.observableArrayList(
@@ -40,7 +39,7 @@ public class ComboBoxTableViewSample extends Sample {
                 new Person(true, "Ethan", "Williams", "ethan.williams@example.com"),
                 new Person(true, "Emma", "Jones", "emma.jones@example.com"),
                 new Person(false, "Michael", "Brown", "michael.brown@example.com"));
-        //"Invited" column
+        // "Invited" column
         TableColumn invitedCol = new TableColumn<Person, Boolean>();
         invitedCol.setText("Invited");
         invitedCol.setMinWidth(50);
@@ -51,115 +50,128 @@ public class ComboBoxTableViewSample extends Sample {
                 return new CheckBoxTableCell<Person, Boolean>();
             }
         });
-        //"First Name" column
+        // "First Name" column
         TableColumn firstNameCol = new TableColumn();
         firstNameCol.setText("First");
         firstNameCol.setCellValueFactory(new PropertyValueFactory("firstName"));
-        //"Last Name" column
+        // "Last Name" column
         TableColumn lastNameCol = new TableColumn();
         lastNameCol.setText("Last");
-//        lastNameCol.setCellValueFactory(new PropertyValueFactory("lastName"));
+        // lastNameCol.setCellValueFactory(new
+        // PropertyValueFactory("lastName"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory("lastName"));
-        //"Email" column
+        // "Email" column
         TableColumn emailCol = new TableColumn();
         emailCol.setText("Email");
         emailCol.setMinWidth(200);
         emailCol.setCellValueFactory(new PropertyValueFactory("email"));
 
-        //Set cell factory for cells that allow editing
-        Callback<TableColumn, TableCell> cellFactory =
-                new Callback<TableColumn, TableCell>() {
+        // Set cell factory for cells that allow editing
+        Callback<TableColumn, TableCell> cellFactory = new Callback<TableColumn, TableCell>() {
 
-                    public TableCell call(TableColumn p) {
-                        return new EditingCell();
-                    }
-                };
-        
-        Callback<TableColumn, TableCell> comboCellFactory =
-                        new Callback<TableColumn, TableCell>() {
+            public TableCell call(TableColumn p) {
+                return new EditingCell();
+            }
+        };
 
-                            public TableCell call(TableColumn p) {
-                                return new ComboBoxTableCell<>(items);
-                            }
-                        };       
-                
+        Callback<TableColumn, TableCell> comboCellFactory = new Callback<TableColumn, TableCell>() {
+
+            public TableCell call(TableColumn p) {
+                return new ComboBoxTableCell<>(items);
+            }
+        };
+
         emailCol.setCellFactory(cellFactory);
         firstNameCol.setCellFactory(cellFactory);
         lastNameCol.setCellFactory(comboCellFactory);
 
-        //Set handler to update ObservableList properties. Applicable if cell is edited
+        // Set handler to update ObservableList properties. Applicable if cell
+        // is edited
         updateObservableListProperties(emailCol, firstNameCol, lastNameCol);
 
         TableView tableView = new TableView();
         tableView.setItems(data);
-        //Enabling editing
+        // Enabling editing
         tableView.setEditable(true);
         tableView.getColumns().addAll(invitedCol, firstNameCol, lastNameCol, emailCol);
-        getChildren().add(tableView); 
+        getChildren().add(tableView);
     }
 
-  private void updateObservableListProperties(TableColumn emailCol, TableColumn firstNameCol,
-            TableColumn lastNameCol) {
-        //Modifying the email property in the ObservableList
-        emailCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {           
-            @Override public void handle(CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setEmail(t.getNewValue());
+    private void updateObservableListProperties(TableColumn emailCol, TableColumn firstNameCol, TableColumn lastNameCol) {
+        // Modifying the email property in the ObservableList
+        emailCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
+            @Override
+            public void handle(CellEditEvent<Person, String> t) {
+                ((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setEmail(t.getNewValue());
             }
         });
-        //Modifying the firstName property in the ObservableList
-        firstNameCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {          
-            @Override public void handle(CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setFirstName(t.getNewValue());
+        // Modifying the firstName property in the ObservableList
+        firstNameCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
+            @Override
+            public void handle(CellEditEvent<Person, String> t) {
+                ((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setFirstName(t.getNewValue());
             }
         });
-        //Modifying the lastName property in the ObservableList
-        lastNameCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {           
-            @Override public void handle(CellEditEvent<Person, String> t) {
-                ((Person) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setLastName(t.getNewValue());
+        // Modifying the lastName property in the ObservableList
+        lastNameCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
+            @Override
+            public void handle(CellEditEvent<Person, String> t) {
+                ((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setLastName(t.getNewValue());
             }
         });
-    }    
-    
-    //Person object
+    }
+
+    // Person object
     public static class Person {
         private BooleanProperty invited;
         private StringProperty firstName;
         private StringProperty lastName;
         private StringProperty email;
-        
+
         private Person(boolean invited, String fName, String lName, String email) {
             this.invited = new SimpleBooleanProperty(invited);
             this.firstName = new SimpleStringProperty(fName);
             this.lastName = new SimpleStringProperty(lName);
             this.email = new SimpleStringProperty(email);
             this.invited = new SimpleBooleanProperty(invited);
-            
+
             this.invited.addListener(new ChangeListener<Boolean>() {
                 public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
                     System.out.println(firstNameProperty().get() + " invited: " + t1);
                 }
-            });            
+            });
         }
 
-        public BooleanProperty invitedProperty() { return invited; }
- 
-        public StringProperty firstNameProperty() { return firstName; }
+        public BooleanProperty invitedProperty() {
+            return invited;
+        }
 
-        public StringProperty lastNameProperty() { return lastName; }
- 
-        public StringProperty emailProperty() { return email; }
+        public StringProperty firstNameProperty() {
+            return firstName;
+        }
 
-        public void setLastName(String lastName) { this.lastName.set(lastName); }
- 
-        public void setFirstName(String firstName) { this.firstName.set(firstName); }
-  
-        public void setEmail(String email) { this.email.set(email); }
+        public StringProperty lastNameProperty() {
+            return lastName;
+        }
+
+        public StringProperty emailProperty() {
+            return email;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName.set(lastName);
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName.set(firstName);
+        }
+
+        public void setEmail(String email) {
+            this.email.set(email);
+        }
     }
 
-    //CheckBoxTableCell for creating a CheckBox in a table cell
+    // CheckBoxTableCell for creating a CheckBox in a table cell
     public static class CheckBoxTableCell<S, T> extends TableCell<S, T> {
         private final CheckBox checkBox;
         private ObservableValue<T> ov;
@@ -170,9 +182,10 @@ public class ComboBoxTableViewSample extends Sample {
 
             setAlignment(Pos.CENTER);
             setGraphic(checkBox);
-        } 
-        
-        @Override public void updateItem(T item, boolean empty) {
+        }
+
+        @Override
+        public void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
                 setText(null);
@@ -196,8 +209,9 @@ public class ComboBoxTableViewSample extends Sample {
 
         public EditingCell() {
         }
-       
-        @Override public void startEdit() {
+
+        @Override
+        public void startEdit() {
             super.startEdit();
 
             if (textField == null) {
@@ -207,14 +221,16 @@ public class ComboBoxTableViewSample extends Sample {
             setGraphic(textField);
             textField.selectAll();
         }
-       
-        @Override public void cancelEdit() {
+
+        @Override
+        public void cancelEdit() {
             super.cancelEdit();
             setText((String) getItem());
             setGraphic(null);
         }
-       
-        @Override public void updateItem(String item, boolean empty) {
+
+        @Override
+        public void updateItem(String item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
                 setText(null);
@@ -236,8 +252,9 @@ public class ComboBoxTableViewSample extends Sample {
         private void createTextField() {
             textField = new TextField(getString());
             textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {                
-                @Override public void handle(KeyEvent t) {
+            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
                         commitEdit(textField.getText());
                     } else if (t.getCode() == KeyCode.ESCAPE) {
@@ -250,7 +267,7 @@ public class ComboBoxTableViewSample extends Sample {
         private String getString() {
             return getItem() == null ? "" : getItem().toString();
         }
-    
+
     }
 
 }

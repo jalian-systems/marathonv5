@@ -34,37 +34,45 @@ public class GroupFolderEntry extends GroupEntry {
         path = new TestCreator(false, null).getFile(name).toPath();
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return super.getRawName();
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return path;
     }
 
-    @Override public void setName(String name) {
+    @Override
+    public void setName(String name) {
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         return new TestCreator(acceptChecklist, console).getTest(super.getRawName());
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return false;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return super.getRawName();
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (path == null ? 0 : path.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -85,9 +93,11 @@ public class GroupFolderEntry extends GroupEntry {
         return true;
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
     }
 
-    @Override public void rename(String text) {
+    @Override
+    public void rename(String text) {
     }
 }

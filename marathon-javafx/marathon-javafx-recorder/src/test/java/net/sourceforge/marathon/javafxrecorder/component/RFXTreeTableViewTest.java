@@ -34,7 +34,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTreeTableViewTest extends RFXComponentTest {
 
-    @Test public void selectNoRows() {
+    @Test
+    public void selectNoRows() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -47,7 +48,8 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("", recording.getParameters()[0]);
     }
 
-    @Test public void selectARow() {
+    @Test
+    public void selectARow() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -61,7 +63,8 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\"]}", recording.getParameters()[0]);
     }
 
-    @Test public void selectMulptipleRows() {
+    @Test
+    public void selectMulptipleRows() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -77,7 +80,8 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
                 recording.getParameters()[0]);
     }
 
-    @Test public void selectAllRows() {
+    @Test
+    public void selectAllRows() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -95,7 +99,8 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("all", recording.getParameters()[0]);
     }
 
-    @Test public void selectNoCell() {
+    @Test
+    public void selectNoCell() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -109,7 +114,9 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectMultipleCells() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectMultipleCells() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -133,7 +140,9 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
                 recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectACell() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectACell() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -153,7 +162,9 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("{\"cells\":[[\"/Sales Department/Ethan Williams\",\"Employee\"]]}", recording.getParameters()[0]);
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectAllCells() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectAllCells() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -170,7 +181,8 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("all", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -181,18 +193,21 @@ public class RFXTreeTableViewTest extends RFXComponentTest {
             text.add(rfxTreeTableView.getAttribute("text"));
         });
         new Wait("Waiting for tree table view text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\"]}", text.get(0));
     }
 
-    @SuppressWarnings("rawtypes") private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
+    @SuppressWarnings("rawtypes")
+    private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
         return treeTableView.getColumns().get(index);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TreeTableSample();
     }
 }

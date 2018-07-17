@@ -32,15 +32,18 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXCheckBoxTest extends RFXComponentTest {
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new CheckBoxes();
     }
 
-    @Test public void selectCheckBoxSelected() throws Throwable {
+    @Test
+    public void selectCheckBoxSelected() throws Throwable {
         CheckBox checkBox = findCheckbox("Simple checkbox");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 checkBox.setSelected(true);
                 RFXCheckBox rfxCheckBox = new RFXCheckBox(checkBox, null, null, lr);
                 rfxCheckBox.mouseClicked(null);
@@ -62,11 +65,13 @@ public class RFXCheckBoxTest extends RFXComponentTest {
         return null;
     }
 
-    @Test public void selectCheckBoxNotSelected() throws Throwable {
+    @Test
+    public void selectCheckBoxNotSelected() throws Throwable {
         CheckBox checkBox = findCheckbox("Simple checkbox");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXCheckBox rfxCheckBox = new RFXCheckBox(checkBox, null, null, lr);
                 checkBox.setSelected(false);
                 rfxCheckBox.mouseEntered(null);
@@ -80,11 +85,13 @@ public class RFXCheckBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("checked", select.getParameters()[0]);
     }
 
-    @Test public void selectCheckBoxSelectedTriState() throws Throwable {
+    @Test
+    public void selectCheckBoxSelectedTriState() throws Throwable {
         CheckBox checkBox = findCheckbox("Three state checkbox");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 checkBox.setIndeterminate(true);
                 checkBox.setSelected(true);
                 RFXCheckBox rfxCheckBox = new RFXCheckBox(checkBox, null, null, lr);
@@ -97,12 +104,14 @@ public class RFXCheckBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("indeterminate", select.getParameters()[0]);
     }
 
-    @Test public void getText() throws Throwable {
+    @Test
+    public void getText() throws Throwable {
         CheckBox checkBox = findCheckbox("Simple checkbox");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 checkBox.setSelected(true);
                 RFXCheckBox rfxCheckBox = new RFXCheckBox(checkBox, null, null, lr);
                 rfxCheckBox.mouseClicked(null);
@@ -110,7 +119,8 @@ public class RFXCheckBoxTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for checkbox text") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };

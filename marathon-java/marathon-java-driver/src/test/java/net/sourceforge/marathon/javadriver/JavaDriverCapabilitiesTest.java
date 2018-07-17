@@ -29,7 +29,8 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-@Test public class JavaDriverCapabilitiesTest {
+@Test
+public class JavaDriverCapabilitiesTest {
 
     private WebDriver driver;
 
@@ -41,7 +42,8 @@ import org.testng.annotations.Test;
     protected boolean buttonClicked = false;
     protected StringBuilder buttonMouseActions;
 
-    @AfterMethod public void quitDriver() {
+    @AfterMethod
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();
         }

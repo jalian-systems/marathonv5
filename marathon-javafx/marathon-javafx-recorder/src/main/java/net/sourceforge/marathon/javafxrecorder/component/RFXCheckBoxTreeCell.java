@@ -33,7 +33,8 @@ public class RFXCheckBoxTreeCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         CheckBoxTreeCell cell = (CheckBoxTreeCell) node;
         @SuppressWarnings("unchecked")

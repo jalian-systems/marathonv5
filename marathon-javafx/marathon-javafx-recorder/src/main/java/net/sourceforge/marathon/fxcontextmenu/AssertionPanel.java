@@ -74,7 +74,8 @@ public class AssertionPanel extends GridPane {
         toolbar.setCenter(label);
         final Delta dragDelta = new Delta();
         label.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
                 dragDelta.x = mouseEvent.getScreenX();
                 dragDelta.y = mouseEvent.getScreenY();
@@ -82,7 +83,8 @@ public class AssertionPanel extends GridPane {
             }
         });
         label.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 popup.setX(popup.getX() + mouseEvent.getScreenX() - dragDelta.x);
                 popup.setY(popup.getY() + mouseEvent.getScreenY() - dragDelta.y);
                 dragDelta.x = mouseEvent.getScreenX();
@@ -91,7 +93,8 @@ public class AssertionPanel extends GridPane {
             }
         });
         label.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 popup.setX(popup.getX() + mouseEvent.getScreenX() - dragDelta.x);
                 popup.setY(popup.getY() + mouseEvent.getScreenY() - dragDelta.y);
                 dragDelta.x = mouseEvent.getScreenX();
@@ -99,7 +102,8 @@ public class AssertionPanel extends GridPane {
             }
         });
         label.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 label.setCursor(Cursor.HAND);
             }
         });
@@ -109,8 +113,9 @@ public class AssertionPanel extends GridPane {
         TextArea textArea = new TextArea();
         add(textArea, 0, 2);
         attributes.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<PropertyWrapper>>() {
-            @Override public void changed(ObservableValue<? extends TreeItem<PropertyWrapper>> observable,
-                    TreeItem<PropertyWrapper> oldValue, TreeItem<PropertyWrapper> newValue) {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<PropertyWrapper>> observable, TreeItem<PropertyWrapper> oldValue,
+                    TreeItem<PropertyWrapper> newValue) {
                 if (newValue != null) {
                     assertButton.setDisable(false);
                     insertWaitButton.setDisable(false);
@@ -126,14 +131,16 @@ public class AssertionPanel extends GridPane {
         assertButton = new Button("Add Assertion");
         assertButton.setDisable(true);
         assertButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
+            @Override
+            public void handle(ActionEvent event) {
                 recordAction(event, "assert");
             }
         });
         insertWaitButton = new Button("Insert Wait");
         insertWaitButton.setDisable(true);
         insertWaitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
+            @Override
+            public void handle(ActionEvent event) {
                 recordAction(event, "wait");
             }
 
@@ -141,7 +148,8 @@ public class AssertionPanel extends GridPane {
         bar.getButtons().addAll(assertButton, insertWaitButton);
         add(bar, 0, 3);
         addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override public void handle(KeyEvent event) {
+            @Override
+            public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ESCAPE) {
                     popup.hide();
                 }

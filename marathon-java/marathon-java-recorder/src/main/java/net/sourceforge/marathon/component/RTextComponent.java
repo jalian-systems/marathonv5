@@ -34,14 +34,16 @@ public class RTextComponent extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         String t = ((JTextComponent) component).getText();
         if (!t.equals(text)) {
             recorder.recordSelect(this, t);
         }
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         text = ((JTextComponent) component).getText();
     }
 }

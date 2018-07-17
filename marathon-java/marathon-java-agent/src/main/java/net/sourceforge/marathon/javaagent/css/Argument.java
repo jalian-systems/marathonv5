@@ -42,7 +42,8 @@ public class Argument {
         this.s = s;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (b != null) {
             return b.toString();
         } else if (i != null) {

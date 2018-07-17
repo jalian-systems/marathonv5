@@ -27,13 +27,16 @@ import org.testng.annotations.Test;
 import components.TextFieldDemo;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RTextComponentTest extends RComponentTest {
+@Test
+public class RTextComponentTest extends RComponentTest {
     protected TextFieldDemo frame;
     protected RComponent rTextComponent;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new TextFieldDemo();
                 frame.setName("frame-" + RTextComponentTest.class.getSimpleName());
                 frame.pack();
@@ -42,9 +45,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -55,13 +60,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTextField tf;
         tf = (JTextField) ComponentUtils.findComponent(JTextField.class, frame);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tf.setText("Hello World");
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextComponent = new RTextComponent(tf, null, null, lr);
                 rTextComponent.focusLost(null);
             }
@@ -75,13 +82,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTextField tf;
         tf = (JTextField) ComponentUtils.findComponent(JTextField.class, frame);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tf.setText("Hello World'\"");
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextComponent = new RTextComponent(tf, null, null, lr);
                 rTextComponent.focusLost(null);
             }
@@ -96,13 +105,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTextField tf;
         tf = (JTextField) ComponentUtils.findComponent(JTextField.class, frame);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tf.setText("å∫ç∂´ƒ©˙ˆ∆");
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextComponent = new RTextComponent(tf, null, null, lr);
                 rTextComponent.focusLost(null);
             }

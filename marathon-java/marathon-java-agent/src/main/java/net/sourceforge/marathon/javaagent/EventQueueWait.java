@@ -37,10 +37,12 @@ public abstract class EventQueueWait extends Wait {
     private static Component focusComponent;
     private boolean setupDone = false;
 
-    @Override public boolean until() {
+    @Override
+    public boolean until() {
         final boolean[] condition = { false };
         invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (!setupDone) {
                     setupDone = true;
                     setup();
@@ -69,11 +71,13 @@ public abstract class EventQueueWait extends Wait {
     public void setup() {
     }
 
-    @SuppressWarnings("unchecked") public static <X> X exec(final Callable<X> callable) {
+    @SuppressWarnings("unchecked")
+    public static <X> X exec(final Callable<X> callable) {
         final Object[] result = new Object[] { null };
         final Exception[] exc = new Exception[] { null };
         Runnable r = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     result[0] = callable.call();
                 } catch (Exception e) {
@@ -109,8 +113,8 @@ public abstract class EventQueueWait extends Wait {
         }
     }
 
-    @SuppressWarnings("unchecked") public static <T> T call(final Object o, String f, final Object... args)
-            throws NoSuchMethodException {
+    @SuppressWarnings("unchecked")
+    public static <T> T call(final Object o, String f, final Object... args) throws NoSuchMethodException {
         Class<?>[] params = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Integer) {
@@ -127,7 +131,8 @@ public abstract class EventQueueWait extends Wait {
         }
         final Object[] r = new Object[] { null };
         invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 boolean accessible = method.isAccessible();
                 try {
                     method.setAccessible(true);
@@ -155,7 +160,8 @@ public abstract class EventQueueWait extends Wait {
      */
     public static void empty() {
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return true;
             }
         }.wait("Waiting for the EventQueue to be empty");
@@ -176,14 +182,16 @@ public abstract class EventQueueWait extends Wait {
         }
         try {
             new EventQueueWait() {
-                @Override public void setup() {
+                @Override
+                public void setup() {
                     c.requestFocusInWindow();
                     if (!c.isFocusOwner()) {
                         c.requestFocusInWindow();
                     }
                 };
 
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     if (!c.requestFocusInWindow()) {
                         generateFocusEvents(c);
                         return true;
@@ -230,7 +238,8 @@ public abstract class EventQueueWait extends Wait {
 
     private static void dispatchEvent(final AWTEvent event) {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 ((Component) event.getSource()).dispatchEvent(event);
             }
         });
@@ -238,7 +247,8 @@ public abstract class EventQueueWait extends Wait {
 
     public static void waitTillDisabled(final Component c) {
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return !c.isEnabled();
             }
         }.wait("Waiting for the component to be disabled", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
@@ -246,7 +256,8 @@ public abstract class EventQueueWait extends Wait {
 
     public static void waitTillInvisibled(final Component c) {
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return !c.isVisible();
             }
         }.wait("Waiting for the component to be hidden", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
@@ -254,7 +265,8 @@ public abstract class EventQueueWait extends Wait {
 
     public static void waitTillShown(final Component c) {
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return c.isShowing();
             }
         }.wait("Waiting for the component to be shown", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);

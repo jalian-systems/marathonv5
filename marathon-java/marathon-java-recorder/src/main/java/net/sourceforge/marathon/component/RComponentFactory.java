@@ -73,14 +73,16 @@ public class RComponentFactory {
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
          * .Component)
          */
-        @Override public Class<? extends RComponent> get(Component component) {
+        @Override
+        public Class<? extends RComponent> get(Component component) {
             if (componentKlass.isInstance(component)) {
                 return rComponentKlass;
             }
             return null;
         }
 
-        @Override public Component getActiveSource(Component source) {
+        @Override
+        public Component getActiveSource(Component source) {
             return source;
         }
     }

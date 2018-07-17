@@ -52,69 +52,67 @@ import javafx.stage.Stage;
 
 public class ScrollPaneSample2 extends Application {
 
-	final ScrollPane sp = new ScrollPane();
-	final ImageView[] pics = new ImageView[5];
-	final HBox hb = new HBox();
-	final Button fileName = new Button("Click Me");
-	Rectangle[] rectangles = new Rectangle[10];
+    final ScrollPane sp = new ScrollPane();
+    final ImageView[] pics = new ImageView[5];
+    final HBox hb = new HBox();
+    final Button fileName = new Button("Click Me");
+    Rectangle[] rectangles = new Rectangle[10];
 
-	@Override
-	public void start(Stage stage) {
-		VBox box = new VBox();
-		Scene scene = new Scene(box, 180, 180);
-		stage.setScene(scene);
-		stage.setTitle("ScrollPaneSample");
-		box.getChildren().addAll(sp, fileName);
-		VBox.setVgrow(sp, Priority.ALWAYS);
+    @Override
+    public void start(Stage stage) {
+        VBox box = new VBox();
+        Scene scene = new Scene(box, 180, 180);
+        stage.setScene(scene);
+        stage.setTitle("ScrollPaneSample");
+        box.getChildren().addAll(sp, fileName);
+        VBox.setVgrow(sp, Priority.ALWAYS);
 
-		fileName.setLayoutX(30);
-		fileName.setLayoutY(160);
-		sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        fileName.setLayoutX(30);
+        fileName.setLayoutY(160);
+        sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-		Color[] colors = new Color[] { Color.RED, Color.ALICEBLUE, Color.AQUA, Color.BEIGE, Color.BLANCHEDALMOND };
-		for (int i = 0; i < 10; i++) {
-			int cindex = (i + 5) % 5;
-			Rectangle rectangle = new Rectangle(100, 50, colors[cindex]);
-			rectangles[i] = rectangle;
-			hb.getChildren().add(rectangle);
-		}
+        Color[] colors = new Color[] { Color.RED, Color.ALICEBLUE, Color.AQUA, Color.BEIGE, Color.BLANCHEDALMOND };
+        for (int i = 0; i < 10; i++) {
+            int cindex = (i + 5) % 5;
+            Rectangle rectangle = new Rectangle(100, 50, colors[cindex]);
+            rectangles[i] = rectangle;
+            hb.getChildren().add(rectangle);
+        }
 
-		sp.setPrefSize(115, 150);
-		sp.setContent(hb);
-		fileName.setOnMouseClicked((e) -> {
-			scrollTo(rectangles[4]);
-		});
-		stage.show();
-	}
+        sp.setPrefSize(115, 150);
+        sp.setContent(hb);
+        fileName.setOnMouseClicked((e) -> {
+            scrollTo(rectangles[4]);
+        });
+        stage.show();
+    }
 
-	private void scrollTo(Node target) {
-		ScrollPane scrollPane = getParentScrollPane(target);
-		if (scrollPane == null)
-			return;
-		Node content = scrollPane.getContent();
-		Bounds contentBounds = content.localToScene(content.getBoundsInLocal());
-		Bounds viewportBounds = scrollPane.getViewportBounds();
-		Bounds nodeBounds = target.localToScene(target.getBoundsInLocal());
-		double toVScroll = (nodeBounds.getMinY() - contentBounds.getMinY())
-				* ((scrollPane.getVmax() - scrollPane.getVmin())
-						/ (contentBounds.getHeight() - viewportBounds.getHeight()));
-		if (toVScroll >= scrollPane.getVmin() && toVScroll < scrollPane.getVmax())
-			scrollPane.setVvalue(toVScroll);
-		double toHScroll = (nodeBounds.getMinX() - contentBounds.getMinX())
-				* ((scrollPane.getHmax() - scrollPane.getHmin())
-						/ (contentBounds.getWidth() - viewportBounds.getWidth()));
-		if (toHScroll >= scrollPane.getHmin() && toHScroll < scrollPane.getHmax())
-			scrollPane.setHvalue(toHScroll);
-	}
+    private void scrollTo(Node target) {
+        ScrollPane scrollPane = getParentScrollPane(target);
+        if (scrollPane == null)
+            return;
+        Node content = scrollPane.getContent();
+        Bounds contentBounds = content.localToScene(content.getBoundsInLocal());
+        Bounds viewportBounds = scrollPane.getViewportBounds();
+        Bounds nodeBounds = target.localToScene(target.getBoundsInLocal());
+        double toVScroll = (nodeBounds.getMinY() - contentBounds.getMinY())
+                * ((scrollPane.getVmax() - scrollPane.getVmin()) / (contentBounds.getHeight() - viewportBounds.getHeight()));
+        if (toVScroll >= scrollPane.getVmin() && toVScroll < scrollPane.getVmax())
+            scrollPane.setVvalue(toVScroll);
+        double toHScroll = (nodeBounds.getMinX() - contentBounds.getMinX())
+                * ((scrollPane.getHmax() - scrollPane.getHmin()) / (contentBounds.getWidth() - viewportBounds.getWidth()));
+        if (toHScroll >= scrollPane.getHmin() && toHScroll < scrollPane.getHmax())
+            scrollPane.setHvalue(toHScroll);
+    }
 
-	private ScrollPane getParentScrollPane(Node target) {
-		Parent p = target.getParent();
-		while (p != null && !(p instanceof ScrollPane))
-			p = p.getParent();
-		return (ScrollPane) p;
-	}
+    private ScrollPane getParentScrollPane(Node target) {
+        Parent p = target.getParent();
+        while (p != null && !(p instanceof ScrollPane))
+            p = p.getParent();
+        return (ScrollPane) p;
+    }
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

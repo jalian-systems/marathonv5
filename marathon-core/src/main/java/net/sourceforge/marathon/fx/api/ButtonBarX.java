@@ -8,7 +8,8 @@ import javafx.scene.layout.Region;
 
 public class ButtonBarX extends ButtonBar {
 
-    @Override protected double computePrefWidth(double height) {
+    @Override
+    protected double computePrefWidth(double height) {
         resizeButtons();
         return super.computePrefWidth(height);
     }

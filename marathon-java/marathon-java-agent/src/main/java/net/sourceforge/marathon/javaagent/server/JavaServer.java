@@ -300,7 +300,8 @@ public class JavaServer extends NanoHTTPD {
         return null;
     }
 
-    @Override public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
+    @Override
+    public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
             Map<String, String> files) {
         JSONObject jsonQuery = null;
         String query = files.get("postData");
@@ -358,7 +359,7 @@ public class JavaServer extends NanoHTTPD {
     }
 
     public Response serve_internal(String uri, Method method, JSONObject jsonQuery) {
-        JavaServer.handlingRequest = true ;
+        JavaServer.handlingRequest = true;
         try {
             Route route = findRoute(method, uri);
             if (route != null && route.getProc() != null) {
@@ -373,7 +374,7 @@ public class JavaServer extends NanoHTTPD {
             e.printStackTrace();
             return newFixedLengthResponse(Status.BAD_REQUEST, MIME_HTML, "");
         } finally {
-            JavaServer.handlingRequest = false ;
+            JavaServer.handlingRequest = false;
         }
     }
 

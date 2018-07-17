@@ -26,7 +26,8 @@ public class RecorderInit {
     public static void init() {
         RFXComponentFactory.add(new IRFXComponentFinder() {
 
-            @Override public Node getRecordOn(Node component, Point2D point) {
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
                 while (component != null) {
                     if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
                         return component;
@@ -36,7 +37,8 @@ public class RecorderInit {
                 return null;
             }
 
-            @Override public Class<? extends RFXComponent> get(Node component) {
+            @Override
+            public Class<? extends RFXComponent> get(Node component) {
                 while (component != null) {
                     if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
                         return RFXBrowserView.class;

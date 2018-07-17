@@ -31,7 +31,8 @@ public class RAbstractButton extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         if (component.isEnabled()) {
             recorder.recordClick(this, me);
         }

@@ -46,21 +46,30 @@ public class Group {
 
     public static final Logger LOGGER = Logger.getLogger(Group.SuitesPanel.class.getName());
 
-    @BindingAnnotation @Retention(RUNTIME) public @interface SuitesPanel {
+    @BindingAnnotation
+    @Retention(RUNTIME)
+    public @interface SuitesPanel {
     }
 
-    @BindingAnnotation @Retention(RUNTIME) public @interface FeaturesPanel {
+    @BindingAnnotation
+    @Retention(RUNTIME)
+    public @interface FeaturesPanel {
     }
 
-    @BindingAnnotation @Retention(RUNTIME) public @interface StoriesPanel {
+    @BindingAnnotation
+    @Retention(RUNTIME)
+    public @interface StoriesPanel {
     }
 
-    @BindingAnnotation @Retention(RUNTIME) public @interface IssuesPanel {
+    @BindingAnnotation
+    @Retention(RUNTIME)
+    public @interface IssuesPanel {
     }
 
     public enum GroupType {
         SUITE("Suite", Constants.getSuiteDirectory(), ".suite", "Suites", "Show All Suites", "tsuite", EditorType.SUITE) {
-            @Override public boolean droppable(List<File> files, Path self) {
+            @Override
+            public boolean droppable(List<File> files, Path self) {
                 if (files.size() == 0) {
                     return false;
                 }
@@ -86,7 +95,8 @@ public class Group {
                 return true;
             }
 
-            @Override public String fileCommentHeader() {
+            @Override
+            public String fileCommentHeader() {
         // @formatter:off
                 return  
                     "# You can assign one or more tests to a suite. The suite file\n" +
@@ -127,7 +137,8 @@ public class Group {
         },
         FEATURE("Feature", Constants.getFeatureDirectory(), ".feature", "Features", "Show All Features", "tfeature",
                 EditorType.FEATURE) {
-            @Override public boolean droppable(List<File> files, Path self) {
+            @Override
+            public boolean droppable(List<File> files, Path self) {
                 if (files.size() == 0) {
                     return false;
                 }
@@ -139,7 +150,8 @@ public class Group {
                 return true;
             }
 
-            @Override public String fileCommentHeader() {
+            @Override
+            public String fileCommentHeader() {
         // @formatter:off
                 return
                     "# You can assign one or more tests to a feature. The feature file\n" +
@@ -168,7 +180,8 @@ public class Group {
 
         },
         STORY("Story", Constants.getStoryDirectory(), ".story", "Stories", "Show All Stories", "tstory", EditorType.STORY) {
-            @Override public boolean droppable(List<File> files, Path self) {
+            @Override
+            public boolean droppable(List<File> files, Path self) {
                 if (files.size() == 0) {
                     return false;
                 }
@@ -180,7 +193,8 @@ public class Group {
                 return true;
             }
 
-            @Override public String fileCommentHeader() {
+            @Override
+            public String fileCommentHeader() {
         // @formatter:off
                 return
                     "# You can assign one or more tests to a story. The story file\n" +
@@ -209,7 +223,8 @@ public class Group {
 
         },
         ISSUE("Issue", Constants.getIssueDirectory(), ".issue", "Issues", "Show All Issues", "tissue", EditorType.ISSUE) {
-            @Override public boolean droppable(List<File> files, Path self) {
+            @Override
+            public boolean droppable(List<File> files, Path self) {
                 if (files.size() == 0) {
                     return false;
                 }
@@ -221,7 +236,8 @@ public class Group {
                 return true;
             }
 
-            @Override public String fileCommentHeader() {
+            @Override
+            public String fileCommentHeader() {
         // @formatter:off
                 return
                     "# You can assign one or more tests to a issue. The issue file\n" +
@@ -399,7 +415,8 @@ public class Group {
         return groups;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 
@@ -407,14 +424,16 @@ public class Group {
         return path;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (path == null ? 0 : path.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -501,7 +520,8 @@ public class Group {
         data.put(p, v);
     }
 
-    @SuppressWarnings("unchecked") public <T> T getProperty(String p, T def) {
+    @SuppressWarnings("unchecked")
+    public <T> T getProperty(String p, T def) {
         if (!data.has(p)) {
             return def;
         }

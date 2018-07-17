@@ -217,7 +217,8 @@ public class EventQueueDevice extends Device {
             }
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "DeviceState [shiftPressed=" + isShiftPressed() + ", ctrlPressed=" + isCtrlPressed() + ", altPressed="
                     + isAltPressed() + ", metaPressed=" + isMetaPressed() + ", button1Pressed=" + button1Pressed
                     + ", button2Pressed=" + button2Pressed + ", button3Pressed=" + button3Pressed + ", y=" + y + ", x=" + x + "]";
@@ -237,7 +238,8 @@ public class EventQueueDevice extends Device {
      * net.sourceforge.marathon.javaagent.Device#sendKeys(java.awt.Component,
      * java.lang.CharSequence)
      */
-    @Override public void sendKeys(Component component, CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(Component component, CharSequence... keysToSend) {
         for (CharSequence seq : keysToSend) {
             for (int i = 0; i < seq.length(); i++) {
                 sendKey(component, seq.charAt(i));
@@ -252,7 +254,8 @@ public class EventQueueDevice extends Device {
      * @see net.sourceforge.marathon.javaagent.Device#pressKey(net.sourceforge.
      * marathon .javaagent.Keys)
      */
-    @Override public void pressKey(Component component, JavaAgentKeys keyToPress) {
+    @Override
+    public void pressKey(Component component, JavaAgentKeys keyToPress) {
         if (keyToPress == JavaAgentKeys.NULL) {
             deviceState.resetModifierState(component);
         } else {
@@ -271,7 +274,8 @@ public class EventQueueDevice extends Device {
      * net.sourceforge.marathon.javaagent.Device#releaseKey(net.sourceforge.
      * marathon.javaagent.Keys)
      */
-    @Override public void releaseKey(Component component, JavaAgentKeys keyToRelease) {
+    @Override
+    public void releaseKey(Component component, JavaAgentKeys keyToRelease) {
         if (deviceState.isModifier(keyToRelease)) {
             deviceState.setKeyStateReleased(component, keyToRelease);
         }
@@ -279,10 +283,12 @@ public class EventQueueDevice extends Device {
         EventQueueWait.empty();
     }
 
-    @Override public void moveto(final Component component) {
+    @Override
+    public void moveto(final Component component) {
         try {
             Dimension d = EventQueueWait.exec(new Callable<Dimension>() {
-                @Override public Dimension call() {
+                @Override
+                public Dimension call() {
                     return component.getSize();
                 }
             });
@@ -293,7 +299,8 @@ public class EventQueueDevice extends Device {
         EventQueueWait.empty();
     }
 
-    @Override public void moveto(Component component, int xOffset, int yOffset) {
+    @Override
+    public void moveto(Component component, int xOffset, int yOffset) {
         int buttons = deviceState.getButtons();
         if (component != deviceState.getComponent()) {
             if (deviceState.getComponent() != null) {
@@ -321,7 +328,8 @@ public class EventQueueDevice extends Device {
         deviceState.setMousePosition(xOffset, yOffset);
     }
 
-    @Override public void buttonDown(Component component, Buttons button, int xoffset, int yoffset) {
+    @Override
+    public void buttonDown(Component component, Buttons button, int xoffset, int yoffset) {
         dispatchEvent(new MouseEvent(component, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(),
                 deviceState.getModifierEx() | InputEvent.BUTTON1_DOWN_MASK, xoffset, yoffset, 1, false, MouseEvent.BUTTON1));
         deviceState.storeMouseDown(MouseEvent.BUTTON1);
@@ -329,7 +337,8 @@ public class EventQueueDevice extends Device {
         EventQueueWait.empty();
     }
 
-    @Override public void buttonUp(Component component, Buttons button, int xoffset, int yoffset) {
+    @Override
+    public void buttonUp(Component component, Buttons button, int xoffset, int yoffset) {
         if (button.getButton() == 0) {
             if (handleDnD(component, xoffset, yoffset)) {
                 EventQueueWait.empty();
@@ -420,7 +429,8 @@ public class EventQueueDevice extends Device {
     private void dispatchKeyEvent(final Component component, JavaAgentKeys keyToPress, int id, char c) {
         try {
             Rectangle d = EventQueueWait.exec(new Callable<Rectangle>() {
-                @Override public Rectangle call() {
+                @Override
+                public Rectangle call() {
                     return component.getBounds();
                 }
             });
@@ -445,7 +455,8 @@ public class EventQueueDevice extends Device {
     private void dispatchEvent(final AWTEvent event) {
         LOGGER.info(event.toString());
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 ((Component) event.getSource()).dispatchEvent(event);
             }
         });
@@ -481,7 +492,8 @@ public class EventQueueDevice extends Device {
         }
     }
 
-    @Override public void click(Component component, Buttons button, int clickCount, int xoffset, int yoffset) {
+    @Override
+    public void click(Component component, Buttons button, int clickCount, int xoffset, int yoffset) {
         int b = MouseEvent.BUTTON1;
         if (button.getButton() == 0) {
             b = MouseEvent.BUTTON1;
@@ -495,7 +507,8 @@ public class EventQueueDevice extends Device {
         deviceState.setComponent(component);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "EventQueueDevice [deviceState=" + deviceState + "]";
     }
 

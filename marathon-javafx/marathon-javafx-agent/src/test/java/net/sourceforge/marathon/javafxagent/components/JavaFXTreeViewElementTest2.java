@@ -32,12 +32,14 @@ public class JavaFXTreeViewElementTest2 extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement treeView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         treeView = driver.findElementByTagName("tree-view");
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         TreeView<?> treeViewNode = (TreeView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         Platform.runLater(() -> {
             TreeItem<?> treeItem = treeViewNode.getTreeItem(treeViewNode.getExpandedItemCount() - 1);
@@ -47,7 +49,8 @@ public class JavaFXTreeViewElementTest2 extends JavaFXElementTest {
         AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TreeViewSample1();
     }
 }

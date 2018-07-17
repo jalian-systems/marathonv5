@@ -23,39 +23,49 @@ import java.util.logging.Logger;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 
 public class FileChooserTransformer implements ClassFileTransformer {
 
     public static final Logger LOGGER = Logger.getLogger(FileChooserTransformer.class.getName());
 
-    @Override public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+    @Override
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
+            byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformClass(classBeingRedefined, classfileBuffer);
     }
-
-    // @formatter:off
-	// @formatter:on
 
     private byte[] transformClass(Class<?> classBeingRedefined, byte[] b) {
         ClassPool classPool = ClassPool.getDefault();
         CtClass cl = null;
         try {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
-            if (cl.getName().equals("com.sun.glass.ui.CommonDialogs")) {
-                CtMethod showFileChooser = cl.getDeclaredMethod("showFileChooser");
-                String code = "{"
-                        + "javafx.scene.Node m$r = ((javafx.stage.Stage)com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene().getRoot() ;"
-                        + "m$r.getProperties().put(\"marathon.selectedFiles\", $_);"
+            if (cl.getName().equals("javafx.stage.FileChooser")) {
+                // @formatter: off
+                String codeSingle = "{" + JavaCompatibility.getRootAccessCode()
+                        + "m$r.getProperties().put(\"marathon.selectedFiles\", $_ == null ? null : java.util.Arrays.asList(new Object[] { $_ }));"
                         + "m$r.fireEvent(new javafx.event.Event((javafx.event.EventType)m$r.getProperties().get(\"marathon.fileChooser.eventType\")));"
                         + "}";
-                showFileChooser.insertAfter(code);
-                CtMethod showFolderChooser = cl.getDeclaredMethod("showFolderChooser");
-                code = "{"
-                        + "javafx.scene.Node m$r = ((javafx.stage.Stage)com.sun.javafx.stage.StageHelper.getStages().get(0)).getScene().getRoot() ;"
+                // @formatter: on
+                CtMethod showOpenDialog = cl.getDeclaredMethod("showOpenDialog");
+                showOpenDialog.insertAfter(codeSingle);
+                CtMethod showSaveDialog = cl.getDeclaredMethod("showSaveDialog");
+                showSaveDialog.insertAfter(codeSingle);
+                String codeMultiple = "{" + JavaCompatibility.getRootAccessCode()
+                        + "m$r.getProperties().put(\"marathon.selectedFiles\", $_ );"
+                        + "m$r.fireEvent(new javafx.event.Event((javafx.event.EventType)m$r.getProperties().get(\"marathon.fileChooser.eventType\")));"
+                        + "}";
+                CtMethod showOpenMultipleDialog = cl.getDeclaredMethod("showOpenMultipleDialog");
+                showOpenMultipleDialog.insertAfter(codeMultiple);
+            } else if (cl.getName().equals("javafx.stage.DirectoryChooser")) {
+                // @formatter: off
+                String codeSingle = "{" + JavaCompatibility.getRootAccessCode()
                         + "m$r.getProperties().put(\"marathon.selectedFolder\", $_);"
                         + "m$r.fireEvent(new javafx.event.Event((javafx.event.EventType)m$r.getProperties().get(\"marathon.folderChooser.eventType\")));"
                         + "}";
-                showFolderChooser.insertAfter(code);
+                // @formatter: on
+                CtMethod showDialog = cl.getDeclaredMethod("showDialog");
+                showDialog.insertAfter(codeSingle);
             }
             b = cl.toBytecode();
         } catch (Exception e) {
@@ -67,4 +77,5 @@ public class FileChooserTransformer implements ClassFileTransformer {
         }
         return b;
     }
+
 }

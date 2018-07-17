@@ -36,14 +36,17 @@ import org.testng.annotations.Test;
 import components.MenuDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JMenuTest {
+@Test
+public class JMenuTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JMenuTest.class.getSimpleName());
                 frame.setName("frame-" + JMenuTest.class.getSimpleName());
                 MenuDemo demo = new MenuDemo();
@@ -57,10 +60,12 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         MenuSelectionManager.defaultManager().clearSelectedPath();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         MenuSelectionManager.defaultManager().clearSelectedPath();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -162,7 +167,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         new Actions(driver).moveToElement(menu).click().perform();
 
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("radio-button-menu-item")).size() > 0;
             }
         });
@@ -233,7 +239,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         new Actions(driver).moveToElement(menus.get(2)).click().perform();
 
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 List<WebElement> menus = driver.findElements(By.cssSelector("menu-item"));
                 return menus.size() == 5;
             }
@@ -263,7 +270,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         new Actions(driver).moveToElement(menus.get(2)).click().perform();
 
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 List<WebElement> menus = driver.findElements(By.cssSelector("menu-item"));
                 return menus.size() == 5;
             }

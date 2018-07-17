@@ -32,35 +32,43 @@ public class ClassPathLayout extends ListLayout implements ISubPropertiesLayout 
         super(parent, true);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Class Path";
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return FXUIUtils.getIcon("cp_obj");
     }
 
-    @Override public boolean isValidInput(boolean showAlert) {
+    @Override
+    public boolean isValidInput(boolean showAlert) {
         return true;
     }
 
-    @Override public boolean isAddArchivesNeeded() {
+    @Override
+    public boolean isAddArchivesNeeded() {
         return true;
     }
 
-    @Override public boolean isAddFoldersNeeded() {
+    @Override
+    public boolean isAddFoldersNeeded() {
         return true;
     }
 
-    @Override public boolean isAddClassesNeeded() {
+    @Override
+    public boolean isAddClassesNeeded() {
         return false;
     }
 
-    @Override public boolean isSingleSelection() {
+    @Override
+    public boolean isSingleSelection() {
         return false;
     }
 
-    @Override public String getPropertyKey() {
+    @Override
+    public String getPropertyKey() {
         return Constants.PROP_APPLICATION_PATH;
     }
 }

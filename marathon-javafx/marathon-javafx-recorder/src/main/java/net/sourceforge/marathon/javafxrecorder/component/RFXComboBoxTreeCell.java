@@ -31,7 +31,9 @@ public class RFXComboBoxTreeCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         ComboBoxTreeCell cell = (ComboBoxTreeCell) node;
         return cell.getConverter().toString(cell.getItem());

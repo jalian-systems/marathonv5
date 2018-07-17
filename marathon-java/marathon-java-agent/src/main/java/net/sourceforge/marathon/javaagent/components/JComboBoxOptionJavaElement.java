@@ -49,9 +49,11 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
         this.option = option;
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 return getRendererComponent((JComboBox) parent.getComponent(), option);
             }
         });
@@ -67,17 +69,20 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
         return rendererComponent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "nth-option").put("parameters", new JSONArray().put(option + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public void click(int button, int clickCount, int xoffset, int yoffset) {
+    @Override
+    public void click(int button, int clickCount, int xoffset, int yoffset) {
         long implicitWait = parent.getDriver().getImplicitWait();
         try {
             parent.getDriver().setImplicitWait(0);
             EventQueueWait.exec(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     List<IJavaElement> menus = parent.getDriver().findElementsByCssSelector("basic-combo-popup");
                     if (menus.size() == 0) {
                         try {
@@ -95,7 +100,8 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
             });
             EventQueueWait.empty();
             EventQueueWait.exec(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     IJavaElement menu;
                     try {
                         menu = parent.getDriver().findElementByCssSelector("basic-combo-popup");
@@ -111,7 +117,8 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getText((JComboBox) component, option, true);
     }
 
@@ -162,7 +169,8 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
         return text;
     }
 
-    @Override public JComboBoxJavaElement getParent() {
+    @Override
+    public JComboBoxJavaElement getParent() {
         return parent;
     }
 }

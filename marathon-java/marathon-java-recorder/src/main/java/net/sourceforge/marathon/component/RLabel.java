@@ -31,7 +31,8 @@ public class RLabel extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick(this, me);
     }
 }

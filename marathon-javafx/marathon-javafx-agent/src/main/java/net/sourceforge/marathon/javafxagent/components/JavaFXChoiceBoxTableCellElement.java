@@ -32,7 +32,9 @@ public class JavaFXChoiceBoxTableCellElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         ChoiceBoxTableCell cell = (ChoiceBoxTableCell) node;
         @SuppressWarnings("rawtypes")

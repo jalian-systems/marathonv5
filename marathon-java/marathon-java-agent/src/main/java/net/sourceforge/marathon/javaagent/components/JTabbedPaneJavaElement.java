@@ -42,7 +42,8 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSelectedItemText((JTabbedPane) component);
     }
 
@@ -54,7 +55,8 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
         return "";
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("nth-tab")) {
             int tabIndex = ((Integer) params[0]).intValue() - 1;
             return Arrays.asList((IJavaElement) new JTabbedPaneTabJavaElement(this, tabIndex));
@@ -92,7 +94,8 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
     private int getCount() {
         try {
             return EventQueueWait.exec(new Callable<Integer>() {
-                @Override public Integer call() {
+                @Override
+                public Integer call() {
                     JTabbedPane pane = (JTabbedPane) getComponent();
                     return pane.getTabCount();
                 }
@@ -102,7 +105,8 @@ public class JTabbedPaneJavaElement extends AbstractJavaElement {
         }
     }
 
-    @Override public boolean marathon_select(String tab) {
+    @Override
+    public boolean marathon_select(String tab) {
         int tabIndex = findTabIndex((JTabbedPane) component, tab);
         if (tabIndex != -1) {
             ((JTabbedPane) component).setSelectedIndex(tabIndex);

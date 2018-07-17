@@ -25,7 +25,8 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.runtime.api.FixturePropertyHelper;
 
-@Test public class FixturePropertyHelperTest {
+@Test
+public class FixturePropertyHelperTest {
 
     // @formatter:off
     private String typicalTestScript =

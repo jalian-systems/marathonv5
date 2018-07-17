@@ -48,7 +48,8 @@ public class ProgressBarDemo extends JPanel implements ActionListener, PropertyC
         /*
          * Main task. Executed in background thread.
          */
-        @Override public Void doInBackground() {
+        @Override
+        public Void doInBackground() {
             Random random = new Random();
             int progress = 0;
             // Initialize progress property.
@@ -69,7 +70,8 @@ public class ProgressBarDemo extends JPanel implements ActionListener, PropertyC
         /*
          * Executed in event dispatching thread
          */
-        @Override public void done() {
+        @Override
+        public void done() {
             Toolkit.getDefaultToolkit().beep();
             startButton.setEnabled(true);
             setCursor(null); // turn off the wait cursor

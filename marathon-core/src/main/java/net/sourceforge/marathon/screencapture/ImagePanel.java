@@ -121,11 +121,13 @@ public class ImagePanel extends SplitPane {
             this.text = text;
         }
 
-        @Override public boolean equals(Object arg0) {
+        @Override
+        public boolean equals(Object arg0) {
             return super.equals(arg0);
         }
 
-        @Override public int hashCode() {
+        @Override
+        public int hashCode() {
             return super.hashCode();
         }
 
@@ -240,9 +242,11 @@ public class ImagePanel extends SplitPane {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) private void createRightPane() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void createRightPane() {
         annotationTable.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Annotation>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Annotation> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Annotation> c) {
                 drawGraphics();
                 markSelected();
             }
@@ -258,7 +262,8 @@ public class ImagePanel extends SplitPane {
         PropertyValueFactory<Annotation, String> value = new PropertyValueFactory<>("text");
         messageColumn.setCellValueFactory(value);
         messageColumn.setCellFactory(new Callback<TableColumn<Annotation, String>, TableCell<Annotation, String>>() {
-            @Override public TableCell<Annotation, String> call(TableColumn<Annotation, String> param) {
+            @Override
+            public TableCell<Annotation, String> call(TableColumn<Annotation, String> param) {
                 return new TextAreaTableCell();
             }
         });
@@ -266,9 +271,11 @@ public class ImagePanel extends SplitPane {
 
         TableColumn<Annotation, String> numCol = new TableColumn<>("#");
         numCol.setCellFactory(new Callback<TableColumn<Annotation, String>, TableCell<Annotation, String>>() {
-            @Override public TableCell<Annotation, String> call(TableColumn<Annotation, String> p) {
+            @Override
+            public TableCell<Annotation, String> call(TableColumn<Annotation, String> p) {
                 return new TableCell() {
-                    @Override protected void updateItem(Object item, boolean empty) {
+                    @Override
+                    protected void updateItem(Object item, boolean empty) {
                         super.updateItem(item, empty);
                         setGraphic(null);
                         setText(empty ? null : getIndex() + 1 + "");
@@ -296,7 +303,8 @@ public class ImagePanel extends SplitPane {
         }
     }
 
-    @SuppressWarnings("unchecked") public void save(File file) {
+    @SuppressWarnings("unchecked")
+    public void save(File file) {
         try {
             VBox box = new VBox();
             TableView<Annotation> tv = new TableView<>();
@@ -304,7 +312,8 @@ public class ImagePanel extends SplitPane {
             PropertyValueFactory<Annotation, String> value = new PropertyValueFactory<>("text");
             messageColumn.setCellValueFactory(value);
             messageColumn.setCellFactory(new Callback<TableColumn<Annotation, String>, TableCell<Annotation, String>>() {
-                @Override public TableCell<Annotation, String> call(TableColumn<Annotation, String> param) {
+                @Override
+                public TableCell<Annotation, String> call(TableColumn<Annotation, String> param) {
                     return new TextAreaTableCell();
                 }
             });
@@ -312,10 +321,12 @@ public class ImagePanel extends SplitPane {
 
             TableColumn<Annotation, String> numCol = new TableColumn<>("#");
             numCol.setCellFactory(new Callback<TableColumn<Annotation, String>, TableCell<Annotation, String>>() {
-                @Override @SuppressWarnings({ "rawtypes" }) public TableCell<Annotation, String> call(
-                        TableColumn<Annotation, String> p) {
+                @Override
+                @SuppressWarnings({ "rawtypes" })
+                public TableCell<Annotation, String> call(TableColumn<Annotation, String> p) {
                     return new TableCell() {
-                        @Override protected void updateItem(Object item, boolean empty) {
+                        @Override
+                        protected void updateItem(Object item, boolean empty) {
                             super.updateItem(item, empty);
                             setGraphic(null);
                             setText(empty ? null : getIndex() + 1 + "");
@@ -405,7 +416,8 @@ public class ImagePanel extends SplitPane {
         private double starting_point_y;
         private Annotation newRect;
 
-        @Override public void handle(MouseEvent e) {
+        @Override
+        public void handle(MouseEvent e) {
             if (e.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 requestFocus();
                 if (new_rectangle_is_being_drawn == false) {
@@ -484,7 +496,8 @@ public class ImagePanel extends SplitPane {
             setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         }
 
-        @Override public void startEdit() {
+        @Override
+        public void startEdit() {
             if (!isEmpty()) {
                 super.startEdit();
                 textArea.setEditable(true);
@@ -493,7 +506,8 @@ public class ImagePanel extends SplitPane {
             }
         }
 
-        @Override public void updateItem(String item, boolean empty) {
+        @Override
+        public void updateItem(String item, boolean empty) {
 
             super.updateItem(item, empty);
 
@@ -522,7 +536,8 @@ public class ImagePanel extends SplitPane {
         textArea.setPrefRowCount(1);
         textArea.setWrapText(true);
         textArea.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
                 if (!textArea.isFocused() && cell.getItem() != null && cell.isEditing()) {
                     cell.commitEdit(textArea.getText());
                 }

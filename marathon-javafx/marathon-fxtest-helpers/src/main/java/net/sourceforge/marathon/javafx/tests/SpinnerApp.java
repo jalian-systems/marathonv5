@@ -6,13 +6,14 @@ import javafx.stage.Stage;
 
 public class SpinnerApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Spinner");
         primaryStage.setScene(new Scene(new SpinnerSample()));
         primaryStage.sizeToScene();
         primaryStage.show();
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }

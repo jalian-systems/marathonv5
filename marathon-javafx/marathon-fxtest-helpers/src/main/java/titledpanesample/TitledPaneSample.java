@@ -48,17 +48,18 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TitledPaneSample extends Application {
-    final String[] imageNames = new String[]{"Apples", "Flowers", "Leaves"};
+    final String[] imageNames = new String[] { "Apples", "Flowers", "Leaves" };
     final Image[] images = new Image[imageNames.length];
     final ImageView[] pics = new ImageView[imageNames.length];
     final TitledPane[] tps = new TitledPane[imageNames.length];
     final Label label = new Label("N/A");
-       
+
     public static void main(String[] args) {
         launch(args);
     }
 
-    @Override public void start(Stage stage) {
+    @Override
+    public void start(Stage stage) {
         stage.setTitle("TitledPane");
         Scene scene = new Scene(new Group(), 450, 250);
 
@@ -71,37 +72,33 @@ public class TitledPaneSample extends Application {
         grid.add(new Label("Last Name: "), 0, 1);
         grid.add(new TextField(), 1, 1);
         grid.add(new Label("Email: "), 0, 2);
-        grid.add(new TextField(), 1, 2);        
+        grid.add(new TextField(), 1, 2);
         grid.add(new Label("Attachment: "), 0, 3);
-        grid.add(label,1, 3);
+        grid.add(label, 1, 3);
         gridTitlePane.setText("Grid");
         gridTitlePane.setContent(grid);
 
-        final Accordion accordion = new Accordion ();      
-        
-        for (int i = 0; i < imageNames.length; i++) {
-            images[i] = 
-                new Image(getClass().getResourceAsStream(imageNames[i]+".jpg"));
-            pics[i] = new ImageView(images[i]);
-            tps[i] = new TitledPane(imageNames[i],pics[i]); 
-        }   
-        accordion.getPanes().addAll(tps);
-        
+        final Accordion accordion = new Accordion();
 
-        accordion.expandedPaneProperty().addListener(
-            (ObservableValue<? extends TitledPane> ov, TitledPane old_val, 
-            TitledPane new_val) -> {
-                if (new_val != null) {
-                    label.setText(accordion.getExpandedPane().getText()
-                            + ".jpg");
-                }
-        });
-        
+        for (int i = 0; i < imageNames.length; i++) {
+            images[i] = new Image(getClass().getResourceAsStream(imageNames[i] + ".jpg"));
+            pics[i] = new ImageView(images[i]);
+            tps[i] = new TitledPane(imageNames[i], pics[i]);
+        }
+        accordion.getPanes().addAll(tps);
+
+        accordion.expandedPaneProperty()
+                .addListener((ObservableValue<? extends TitledPane> ov, TitledPane old_val, TitledPane new_val) -> {
+                    if (new_val != null) {
+                        label.setText(accordion.getExpandedPane().getText() + ".jpg");
+                    }
+                });
+
         HBox hbox = new HBox(10);
         hbox.setPadding(new Insets(20, 0, 0, 20));
         hbox.getChildren().setAll(gridTitlePane, accordion);
 
-        Group root = (Group)scene.getRoot();
+        Group root = (Group) scene.getRoot();
         root.getChildren().add(hbox);
         stage.setScene(scene);
         stage.show();

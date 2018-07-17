@@ -84,7 +84,8 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         Action close = new AbstractAction("Close") {
             private static final long serialVersionUID = 1L;
 
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 ContextMenuWindow.this.setVisible(false);
             }
         };
@@ -112,13 +113,15 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
 
     private void setWindowMove(Component c) {
         c.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 startX = e.getX();
                 startY = e.getY();
             }
         });
         c.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override public void mouseDragged(MouseEvent e) {
+            @Override
+            public void mouseDragged(MouseEvent e) {
                 ContextMenuWindow.this.setLocation(ContextMenuWindow.this.getX() + e.getX() - startX,
                         ContextMenuWindow.this.getY() + e.getY() - startY);
             }
@@ -155,7 +158,8 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         setVisible(true);
     }
 
-    @Override public void setVisible(boolean b) {
+    @Override
+    public void setVisible(boolean b) {
         if (b) {
             Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK);
         } else {
@@ -178,7 +182,8 @@ public class ContextMenuWindow extends JWindow implements IRecordingArtifact, AW
         }
     }
 
-    @Override public void eventDispatched(AWTEvent event) {
+    @Override
+    public void eventDispatched(AWTEvent event) {
         if (ignoreMouseEvents) {
             return;
         }

@@ -72,7 +72,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         }
     }
 
-    @Override public void setDirty() {
+    @Override
+    public void setDirty() {
         omapService.setDirty(true);
     }
 
@@ -80,7 +81,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return new ObjectMapService();
     }
 
-    @Override public void setTopLevelComponent(IPropertyAccessor accessor) {
+    @Override
+    public void setTopLevelComponent(IPropertyAccessor accessor) {
         topContainerAccessor = accessor;
     }
 
@@ -158,7 +160,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         throw new RuntimeException("Unknown method " + method + " when converting to CSS");
     }
 
-    @Override public String getName(JSONObject s, String n) throws JSONException, ObjectMapException {
+    @Override
+    public String getName(JSONObject s, String n) throws JSONException, ObjectMapException {
         OMapComponent o = findOMapComponent(s, n);
         if (o != null) {
             o.markEntryNeeded(true);
@@ -250,11 +253,13 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return null;
     }
 
-    @Override public void save() {
+    @Override
+    public void save() {
         omapService.save();
     }
 
-    @Override public String getContainerName(JSONObject container) throws JSONException, ObjectMapException {
+    @Override
+    public String getContainerName(JSONObject container) throws JSONException, ObjectMapException {
         // For a container we shall use urp to generate the name
         JSONObject attributes = container.getJSONObject("attributes");
         String name;
@@ -277,7 +282,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return getName(component, null);
     }
 
-    @Override public String[] toCSS(ComponentId componentId, boolean visibility) throws ObjectMapException {
+    @Override
+    public String[] toCSS(ComponentId componentId, boolean visibility) throws ObjectMapException {
         String[] r = new String[] { null, null };
         r[0] = findCSS(componentId, visibility);
         r[1] = findCSSForInfo(componentId);
@@ -300,7 +306,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
 
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    @SuppressWarnings("unused") private String bytesToHex(byte[] bytes) {
+    @SuppressWarnings("unused")
+    private String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;
@@ -310,7 +317,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return new String(hexChars);
     }
 
-    @SuppressWarnings("unused") private byte[] hexToBytes(String hex) {
+    @SuppressWarnings("unused")
+    private byte[] hexToBytes(String hex) {
         byte[] bytes = new byte[hex.length() / 2];
         for (int i = 0, j = 0; i < hex.length(); i += 2, j++) {
             bytes[j] = (byte) Integer.parseInt(hex.substring(i, i + 2), 16);
@@ -318,11 +326,13 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return bytes;
     }
 
-    @Override public String[] getComponentNames() throws ObjectMapException {
+    @Override
+    public String[] getComponentNames() throws ObjectMapException {
         return omapService.findComponentNames(topContainerAccessor);
     }
 
-    @Override public List<List<String>> getContainerNamingProperties(String name) {
+    @Override
+    public List<List<String>> getContainerNamingProperties(String name) {
         List<PropertyList> allProperties = new ArrayList<>();
         List<ObjectIdentity> namingProperties = omapService.getContainerNamingProperties();
         for (ObjectIdentity objectIdentity : namingProperties) {
@@ -332,7 +342,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
             }
         }
         Collections.sort(allProperties, new Comparator<PropertyList>() {
-            @Override public int compare(PropertyList o1, PropertyList o2) {
+            @Override
+            public int compare(PropertyList o1, PropertyList o2) {
                 return o2.getPriority() - o1.getPriority();
             }
         });
@@ -343,7 +354,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return r;
     }
 
-    @Override public Map<String, List<List<String>>> getContainerNamingProperties() {
+    @Override
+    public Map<String, List<List<String>>> getContainerNamingProperties() {
         Map<String, List<List<String>>> containerNamingProperties = new HashMap<>();
         List<ObjectIdentity> namingProperties = omapService.getContainerNamingProperties();
         for (ObjectIdentity objectIdentity : namingProperties) {
@@ -354,7 +366,8 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return containerNamingProperties;
     }
 
-    @Override public OMapComponent getOMapComponent(ComponentId id) throws ObjectMapException {
+    @Override
+    public OMapComponent getOMapComponent(ComponentId id) throws ObjectMapException {
         if (id.getName() != null) {
             OMapComponent findComponentByName = omapService.findComponentByName(id.getName(), topContainerAccessor);
             if (findComponentByName == null) {
@@ -365,21 +378,23 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         return null;
     }
 
-    @Override public Collection<String> getAllProperties() {
+    @Override
+    public Collection<String> getAllProperties() {
         return omapService.findProperties();
     }
 
-    @Override public ObjectMapConfiguration getObjectMapConfiguration() {
+    @Override
+    public ObjectMapConfiguration getObjectMapConfiguration() {
         return omapService.getObjectMapConfiguration();
     }
 
     private List<List<String>> toList(JSONArray a) {
         List<List<String>> collection = new ArrayList<>();
-        for(int i = 0; i < a.length(); i++) {
+        for (int i = 0; i < a.length(); i++) {
             JSONArray b = a.getJSONArray(i);
             List<String> c2 = new ArrayList<>();
             collection.add(c2);
-            for(int j = 0; j < b.length(); j++) {
+            for (int j = 0; j < b.length(); j++) {
                 String s = b.getString(j);
                 c2.add(s);
             }

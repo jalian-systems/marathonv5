@@ -40,7 +40,8 @@ public class JSONScriptElement implements IScriptElement {
         this.name = name;
     }
 
-    @Override public String toScriptCode() {
+    @Override
+    public String toScriptCode() {
         if (event.getString("type").equals("key_raw")) {
             return enscriptKeystroke();
         } else if (event.getString("type").equals("click_raw")) {
@@ -66,7 +67,8 @@ public class JSONScriptElement implements IScriptElement {
     }
 
     private String enscriptWindowClosed() {
-        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("window_closed", "", windowId.getTitle());
+        return Indent.getIndent()
+                + RecordingScriptModel.getModel().getScriptCodeForGenericAction("window_closed", "", windowId.getTitle());
     }
 
     private String enscriptWindowState() {
@@ -97,7 +99,8 @@ public class JSONScriptElement implements IScriptElement {
             return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, value);
         }
         if (cellinfo == null || "".equals(cellinfo)) {
-            return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, property, value);
+            return Indent.getIndent()
+                    + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, property, value);
         } else {
             return Indent.getIndent()
                     + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, property, value, cellinfo);
@@ -115,7 +118,8 @@ public class JSONScriptElement implements IScriptElement {
             cellinfo = event.getString("cellinfo");
         }
         if (cellinfo == null) {
-            return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select", suffix, name, value);
+            return Indent.getIndent()
+                    + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select", suffix, name, value);
         } else {
             return Indent.getIndent()
                     + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select", suffix, name, value, cellinfo);
@@ -138,7 +142,7 @@ public class JSONScriptElement implements IScriptElement {
         }
         return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("hover", suffix, name);
     }
-    
+
     private String enscriptRawMouseClick() {
         boolean popupTrigger = event.getInt("button") == MouseEvent.BUTTON3;
         int clickCount = event.getInt("clickCount");
@@ -150,9 +154,11 @@ public class JSONScriptElement implements IScriptElement {
             method = "rightclick";
         }
         if ("".equals(mtext)) {
-            return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, clickCount, x, y);
+            return Indent.getIndent()
+                    + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, clickCount, x, y);
         }
-        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, clickCount, x, y, mtext);
+        return Indent.getIndent()
+                + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", name, clickCount, x, y, mtext);
     }
 
     private String enscriptMouseClick() {
@@ -184,31 +190,32 @@ public class JSONScriptElement implements IScriptElement {
                         return Indent.getIndent()
                                 + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix, name, mtext);
                     }
-                    return Indent.getIndent()
-                            + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix, name, mtext, cellinfo);
+                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix,
+                            name, mtext, cellinfo);
                 }
             } else {
                 if ("".equals(mtext)) {
                     if (cellinfo == null) {
-                        return Indent.getIndent()
-                                + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix, name, clickCount);
+                        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick",
+                                suffix, name, clickCount);
                     }
-                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix, name,
-                            clickCount, cellinfo);
+                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix,
+                            name, clickCount, cellinfo);
                 } else {
                     if (cellinfo == null) {
-                        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix,
-                                name, clickCount, mtext);
+                        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick",
+                                suffix, name, clickCount, mtext);
                     }
-                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix, name,
-                            clickCount, mtext, cellinfo);
+                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("rightclick", suffix,
+                            name, clickCount, mtext, cellinfo);
                 }
             }
         } else {
             if (clickCount == 1) {
                 if ("".equals(mtext)) {
                     if (cellinfo == null) {
-                        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("click", suffix, name);
+                        return Indent.getIndent()
+                                + RecordingScriptModel.getModel().getScriptCodeForGenericAction("click", suffix, name);
                     }
                     return Indent.getIndent()
                             + RecordingScriptModel.getModel().getScriptCodeForGenericAction("click", suffix, name, cellinfo);
@@ -233,8 +240,8 @@ public class JSONScriptElement implements IScriptElement {
                         return Indent.getIndent()
                                 + RecordingScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", suffix, name, mtext);
                     }
-                    return Indent.getIndent()
-                            + RecordingScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", suffix, name, mtext, cellinfo);
+                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("doubleclick", suffix,
+                            name, mtext, cellinfo);
                 }
             }
         }
@@ -254,19 +261,23 @@ public class JSONScriptElement implements IScriptElement {
         return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("keystroke", "", name, keytext);
     }
 
-    @Override public WindowId getWindowId() {
+    @Override
+    public WindowId getWindowId() {
         return windowId;
     }
 
-    @Override public IScriptElement getUndoElement() {
+    @Override
+    public IScriptElement getUndoElement() {
         return null;
     }
 
-    @Override public boolean isUndo() {
+    @Override
+    public boolean isUndo() {
         return false;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "JSONScriptElement [windowId=" + windowId + ", event=" + event + ", name=" + name + "]";
     }
 

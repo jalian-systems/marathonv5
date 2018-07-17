@@ -34,19 +34,23 @@ public class ApplicationLayout extends CompositeLayout implements IPropertiesLay
         super(parent);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Application";
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return FXUIUtils.getIcon("app_obj");
     }
 
-    @Override protected String getResourceName() {
+    @Override
+    protected String getResourceName() {
         return "launcher-" + Constants.getFramework();
     }
 
-    @Override protected String getOptionFieldName() {
+    @Override
+    protected String getOptionFieldName() {
         return "Launcher: ";
     }
 
@@ -60,11 +64,13 @@ public class ApplicationLayout extends CompositeLayout implements IPropertiesLay
         return null;
     }
 
-    @Override protected String getClassProperty() {
+    @Override
+    protected String getClassProperty() {
         return Constants.PROP_PROJECT_LAUNCHER_MODEL;
     }
 
-    @Override protected void errorMessage() {
+    @Override
+    protected void errorMessage() {
         FXUIUtils.showMessageDialog(parent.getStage(), "Select an application launcher", "Application Launcher", AlertType.ERROR);
     }
 }

@@ -32,15 +32,18 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXHyperlinkButtonTest extends RFXComponentTest {
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new HyperlinkSample();
     }
 
-    @Test public void click() {
+    @Test
+    public void click() {
         Hyperlink button = (Hyperlink) getPrimaryStage().getScene().getRoot().lookup(".hyperlink");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXButtonBase rfxButtonBase = new RFXButtonBase(button, null, null, lr);
                 Point2D sceneXY = button.localToScene(new Point2D(3, 3));
                 PickResult pickResult = new PickResult(button, sceneXY.getX(), sceneXY.getY());

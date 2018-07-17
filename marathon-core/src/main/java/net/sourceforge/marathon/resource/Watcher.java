@@ -51,7 +51,8 @@ public class Watcher {
             this.watchService = watchService;
         }
 
-        @Override public void run() {
+        @Override
+        public void run() {
 
             for (;;) {
                 // wait for key to be signalled

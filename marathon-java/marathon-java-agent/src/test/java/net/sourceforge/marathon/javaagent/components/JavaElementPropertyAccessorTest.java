@@ -26,14 +26,17 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 
-@Test public class JavaElementPropertyAccessorTest {
+@Test
+public class JavaElementPropertyAccessorTest {
 
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 Object[] listData = new Object[30];
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

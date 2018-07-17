@@ -32,7 +32,8 @@ public abstract class CompositeScriptElement implements IScriptElement {
         list.addFirst(tag);
     }
 
-    @Override public String toScriptCode() {
+    @Override
+    public String toScriptCode() {
         return list.toScriptCode();
     }
 
@@ -45,11 +46,13 @@ public abstract class CompositeScriptElement implements IScriptElement {
      * want to compare our children's text, so unless this is the same instance,
      * containers are not the same objects
      */
-    @Override public boolean equals(Object that) {
+    @Override
+    public boolean equals(Object that) {
         return this == that;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return super.hashCode();
     }
 

@@ -34,14 +34,17 @@ import org.testng.annotations.Test;
 import components.ScrollDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JScrollBarTest {
+@Test
+public class JScrollBarTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JScrollBarTest.class.getSimpleName());
                 frame.setSize(320, 350);
                 frame.setName("frame-" + JScrollBarTest.class.getSimpleName());
@@ -53,9 +56,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -88,7 +93,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertTrue(scrollBarValue > 10);
     }
 
-    @Test(enabled = false) public void sendKeys() throws Throwable {
+    @Test(enabled = false)
+    public void sendKeys() throws Throwable {
         driver = new JavaDriver();
         List<WebElement> scrollBars = driver.findElements(By.cssSelector("scroll-bar"));
         WebElement scrollbar = scrollBars.get(0);

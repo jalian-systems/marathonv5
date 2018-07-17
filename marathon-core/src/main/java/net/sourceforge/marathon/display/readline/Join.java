@@ -24,7 +24,8 @@ public final class Join {
     public static final Logger LOGGER = Logger.getLogger(Join.class.getName());
 
     public static final Executor TRIVIAL_EXECUTOR = new Executor() {
-        @Override public void execute(Runnable command) {
+        @Override
+        public void execute(Runnable command) {
             new Thread(command).start();
         }
     };
@@ -132,9 +133,11 @@ public final class Join {
             super(message);
         }
 
-        @Override public void activate(final Join join, final SyncReaction reaction, final Object[] args) {
+        @Override
+        public void activate(final Join join, final SyncReaction reaction, final Object[] args) {
             join.executor.execute(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     reaction.react(join, args);
                 }
             });
@@ -150,7 +153,8 @@ public final class Join {
             super(message);
         }
 
-        @Override public synchronized void activate(Join join, SyncReaction reaction, Object[] args) {
+        @Override
+        public synchronized void activate(Join join, SyncReaction reaction, Object[] args) {
             this.join = join;
             this.reaction = reaction;
             this.args = args;

@@ -27,11 +27,13 @@ public class FXRuntimeLauncherModel extends RuntimeLauncherModel {
 
     public static final Logger LOGGER = Logger.getLogger(FXRuntimeLauncherModel.class.getName());
 
-    @Override public JavaProfile createProfile(Map<String, Object> props, MarathonMode mode) {
+    @Override
+    public JavaProfile createProfile(Map<String, Object> props, MarathonMode mode) {
         return super.createProfile(props, mode).setLaunchType(LaunchType.FX_APPLICATION);
     }
 
-    @Override public String getFramework() {
+    @Override
+    public String getFramework() {
         return Constants.FRAMEWORK_FX;
     }
 }

@@ -57,7 +57,8 @@ public enum TokenType {
         return description;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return description;
     }
 }

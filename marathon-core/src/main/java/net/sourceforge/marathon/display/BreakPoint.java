@@ -32,11 +32,13 @@ public class BreakPoint implements Serializable {
         this.linenumber = linenumber;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return (filePath + linenumber).hashCode();
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         return obj != null && obj instanceof BreakPoint && ((BreakPoint) obj).filePath.equals(filePath)
                 && ((BreakPoint) obj).linenumber == linenumber;
     }

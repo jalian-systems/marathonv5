@@ -38,7 +38,8 @@ public class RFXTabPane extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
         Node target = (Node) me.getTarget();
         if (onCloseButton(target)) {
             recorder.recordSelect(this, getTextForTab((TabPane) node, getTab(target)) + "::close");
@@ -74,7 +75,8 @@ public class RFXTabPane extends RFXComponent {
         return target.getStyleClass().contains("tab-close-button");
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         TabPane tp = (TabPane) node;
         SingleSelectionModel<Tab> selectionModel = tp.getSelectionModel();
         Tab selectedTab = selectionModel.getSelectedItem();
@@ -84,7 +86,8 @@ public class RFXTabPane extends RFXComponent {
         prevSelection = selectionModel.getSelectedIndex();
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getTextForTab((TabPane) node, ((TabPane) node).getSelectionModel().getSelectedItem());
     }
 }

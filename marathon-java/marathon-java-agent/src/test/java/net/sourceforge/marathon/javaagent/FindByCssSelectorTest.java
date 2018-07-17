@@ -42,7 +42,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@Test public class FindByCssSelectorTest {
+@Test
+public class FindByCssSelectorTest {
 
     private IJavaAgent driver;
     protected JFrame frame;
@@ -53,10 +54,12 @@ import org.testng.annotations.Test;
     private JCheckBox checkbox;
     private JButton buttonDelayed;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 JMenuBar menuBar = new JMenuBar();
@@ -84,13 +87,16 @@ import org.testng.annotations.Test;
                 box.add(button);
                 button.addActionListener(new ActionListener() {
 
-                    @Override public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                     }
                 });
                 new Timer().schedule(new TimerTask() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         SwingUtilities.invokeLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 buttonDelayed = new JButton("Click Me Delayed!!");
                                 buttonDelayed.setName("click-me-delayed");
                                 box.add(buttonDelayed);
@@ -114,9 +120,11 @@ import org.testng.annotations.Test;
                 JButton button = new JButton("Click Me!!");
                 box.add(new JScrollPane(button));
                 new Timer().schedule(new TimerTask() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         SwingUtilities.invokeLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 buttonDelayed = new JButton("Click Me Delayed!!");
                                 buttonDelayed.setName("click-me-delayed");
                                 box.add(buttonDelayed);
@@ -134,9 +142,11 @@ import org.testng.annotations.Test;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -198,7 +208,8 @@ import org.testng.annotations.Test;
         AssertJUnit.assertNotNull(element);
         AssertJUnit.assertEquals(EventQueueWait.call(button, "getName"), element.getAttribute("name"));
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setEnabled(false);
             }
         });
@@ -209,7 +220,8 @@ import org.testng.annotations.Test;
         AssertJUnit.assertNotNull(element);
         AssertJUnit.assertEquals(EventQueueWait.call(button, "getName"), element.getAttribute("name"));
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setVisible(false);
             }
         });

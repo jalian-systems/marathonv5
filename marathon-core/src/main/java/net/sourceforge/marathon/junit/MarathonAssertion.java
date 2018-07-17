@@ -39,15 +39,18 @@ public class MarathonAssertion extends AssertionFailedError {
         this.failures = failures;
     }
 
-    @Override public void printStackTrace() {
+    @Override
+    public void printStackTrace() {
         super.printStackTrace(System.err);
     }
 
-    @Override public void printStackTrace(PrintStream s) {
+    @Override
+    public void printStackTrace(PrintStream s) {
         super.printStackTrace(new PrintWriter(s));
     }
 
-    @Override public void printStackTrace(PrintWriter s) {
+    @Override
+    public void printStackTrace(PrintWriter s) {
         StringWriter output;
         PrintWriter writer = new PrintWriter(output = new StringWriter());
         super.printStackTrace(writer);

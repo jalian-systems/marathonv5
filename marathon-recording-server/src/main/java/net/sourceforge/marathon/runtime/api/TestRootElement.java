@@ -28,7 +28,8 @@ public class TestRootElement extends CompositeScriptElement {
         this.story = story;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -38,23 +39,28 @@ public class TestRootElement extends CompositeScriptElement {
         return super.equals(obj) && ObjectComparator.compare(story, ((TestRootElement) obj).story) == 0;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return super.hashCode();
     }
 
-    @Override public WindowId getWindowId() {
+    @Override
+    public WindowId getWindowId() {
         return null;
     }
 
-    @Override public boolean owns(CompositeScriptElement child) {
+    @Override
+    public boolean owns(CompositeScriptElement child) {
         return true;
     }
 
-    @Override public boolean isUndo() {
+    @Override
+    public boolean isUndo() {
         return false;
     }
 
-    @Override public IScriptElement getUndoElement() {
+    @Override
+    public IScriptElement getUndoElement() {
         return null;
     }
 }

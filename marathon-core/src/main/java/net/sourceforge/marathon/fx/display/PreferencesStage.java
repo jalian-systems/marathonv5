@@ -62,7 +62,8 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
         initComponents();
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("preferences-stage");
         root.setId("PreferencesStage");
@@ -79,7 +80,8 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
         return root;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
@@ -152,7 +154,8 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
         this.preferenceHandler = preferenceHandler;
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 }

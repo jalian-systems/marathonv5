@@ -42,14 +42,17 @@ import net.sourceforge.marathon.javadriver.OSUtils;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JTableTest {
+@Test
+public class JTableTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTableTest.class.getSimpleName());
                 frame.setName("frame-" + JTableTest.class.getSimpleName());
                 frame.getContentPane().add(new TableFilterDemo(), BorderLayout.CENTER);
@@ -60,9 +63,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -152,7 +157,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void tableCellDisplayed() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setSize(640, 150);
                 frame.requestFocus();
             }
@@ -237,7 +243,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         AssertJUnit.assertNull(firstItem.getAttribute("icon"));
         firstItem.click();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver input) {
+            @Override
+            public Boolean apply(WebDriver input) {
                 return firstItem.getAttribute("icon") != null;
             }
         });
@@ -252,7 +259,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaDriver();
         final JTable ctable = (JTable) ComponentUtils.findComponent(JTable.class, frame);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 ctable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             }
         });
@@ -261,7 +269,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         WebElement cell_3_3 = driver.findElement(By.cssSelector("table::mnth-cell(" + 3 + ", " + 3 + ")"));
         cell_3_3.click();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver input) {
+            @Override
+            public Boolean apply(WebDriver input) {
                 return "2".equals(table.getAttribute("selectedRow"));
             }
         });
@@ -269,7 +278,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         WebElement cell_5_1 = driver.findElement(By.cssSelector("table::mnth-cell(" + 5 + ", " + 1 + ")"));
         new Actions(driver).moveToElement(cell_5_1).sendKeys(menuKey).click().sendKeys(Keys.NULL).perform();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver input) {
+            @Override
+            public Boolean apply(WebDriver input) {
                 return "[2, 4]".equals(table.getAttribute("selectedRows"));
             }
         });

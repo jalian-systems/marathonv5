@@ -34,14 +34,17 @@ import org.testng.annotations.Test;
 import components.ProgressBarDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JProgressBarTest {
+@Test
+public class JProgressBarTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JProgressBarTest.class.getSimpleName());
                 frame.setName("frame-" + JProgressBarTest.class.getSimpleName());
                 frame.getContentPane().add(new ProgressBarDemo(), BorderLayout.CENTER);
@@ -52,9 +55,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -74,7 +79,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         Wait<WebDriver> wait = new WebDriverWait(driver, 30);
         // Wait for a process to complete
         wait.until(new ExpectedCondition<Boolean>() {
-            @Override public Boolean apply(WebDriver webDriver) {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
                 return progressbar.getAttribute("value").equals("100");
             }
         });

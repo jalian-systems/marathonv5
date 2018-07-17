@@ -50,7 +50,8 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
         this.property = property;
     }
 
-    @Override public boolean isLeaf() {
+    @Override
+    public boolean isLeaf() {
         return isPrimitive(object);
     }
 
@@ -61,7 +62,8 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
                 || object.getClass() == Void.class || object.getClass() == String.class;
     }
 
-    @Override public int getChildCount() {
+    @Override
+    public int getChildCount() {
         if (isLeaf()) {
             return 0;
         }
@@ -77,7 +79,8 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
         return getMethods(object).size();
     }
 
-    @Override public TreeNode getChildAt(int index) {
+    @Override
+    public TreeNode getChildAt(int index) {
         if (object instanceof List) {
             return getNodeForList((List<?>) object, index);
         }
@@ -164,7 +167,8 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
 
     private void sort(List<Method> list) {
         Collections.sort(list, new Comparator<Method>() {
-            @Override public int compare(Method o1, Method o2) {
+            @Override
+            public int compare(Method o1, Method o2) {
                 String name1 = o1.getName();
                 String name2 = o2.getName();
                 if (name1.startsWith("is")) {
@@ -210,7 +214,8 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
         return object;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return property;
     }
 }

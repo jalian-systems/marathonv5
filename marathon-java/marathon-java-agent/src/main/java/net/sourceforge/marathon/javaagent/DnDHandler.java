@@ -53,7 +53,8 @@ public class DnDHandler {
     public Boolean performDrop() {
         try {
             return EventQueueWait.exec(new Callable<Boolean>() {
-                @Override public Boolean call() throws Exception {
+                @Override
+                public Boolean call() throws Exception {
                     return performInEQ();
                 }
             });
@@ -114,42 +115,53 @@ public class DnDHandler {
 
     private DropTargetContextPeer createDropTargetContextPeer() {
         return new DropTargetContextPeer() {
-            @Override public void setTargetActions(int actions) {
+            @Override
+            public void setTargetActions(int actions) {
             }
 
-            @Override public void rejectDrop() {
+            @Override
+            public void rejectDrop() {
             }
 
-            @Override public void rejectDrag() {
+            @Override
+            public void rejectDrag() {
             }
 
-            @Override public boolean isTransferableJVMLocal() {
+            @Override
+            public boolean isTransferableJVMLocal() {
                 return true;
             }
 
-            @Override public Transferable getTransferable() {
+            @Override
+            public Transferable getTransferable() {
                 return transferable;
             }
 
-            @Override public DataFlavor[] getTransferDataFlavors() {
+            @Override
+            public DataFlavor[] getTransferDataFlavors() {
                 return transferable.getTransferDataFlavors();
             }
 
-            @Override public int getTargetActions() {
+            @Override
+            public int getTargetActions() {
                 return dropAction;
             }
 
-            @Override public DropTarget getDropTarget() {
+            @Override
+            public DropTarget getDropTarget() {
                 return dest.getDropTarget();
             }
 
-            @Override public void dropComplete(boolean success) {
+            @Override
+            public void dropComplete(boolean success) {
             }
 
-            @Override public void acceptDrop(int dropAction) {
+            @Override
+            public void acceptDrop(int dropAction) {
             }
 
-            @Override public void acceptDrag(int dragAction) {
+            @Override
+            public void acceptDrag(int dragAction) {
             }
         };
     }

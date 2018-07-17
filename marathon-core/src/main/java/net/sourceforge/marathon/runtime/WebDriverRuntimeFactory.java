@@ -30,7 +30,8 @@ public class WebDriverRuntimeFactory implements IRuntimeFactory {
         this.launcherModel = launcherModel;
     }
 
-    @Override public IMarathonRuntime createRuntime() {
+    @Override
+    public IMarathonRuntime createRuntime() {
         return new WebDriverRuntime(launcherModel);
     }
 

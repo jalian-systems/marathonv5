@@ -36,14 +36,17 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class JFileChooserJavaElementTest extends JavaElementTest {
+@Test
+public class JFileChooserJavaElementTest extends JavaElementTest {
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         JavaElementFactory.add(JFileChooser.class, JFileChooserJavaElement.class);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JFileChooserJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JFileChooserJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new FileChooserDemo(), BorderLayout.CENTER);
@@ -57,9 +60,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -71,7 +76,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         button.click();
         new DeviceTest.WaitWithoutException("Waiting for the window to open") {
 
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     driver.switchTo().window("Open");
                     return true;
@@ -93,7 +99,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         button.click();
         new DeviceTest.WaitWithoutException("Waiting for the window to open") {
 
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     driver.switchTo().window("Open");
                     return true;
@@ -114,7 +121,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         button.click();
         new DeviceTest.WaitWithoutException("Waiting for the window to open") {
 
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     driver.switchTo().window("Open");
                     return true;
@@ -146,7 +154,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         button.click();
         new DeviceTest.WaitWithoutException("Waiting for the window to open") {
 
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     driver.switchTo().window("Open");
                     return true;
@@ -168,7 +177,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         button.click();
         new DeviceTest.WaitWithoutException("Waiting for the window to open") {
 
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     driver.switchTo().window("Open");
                     return true;

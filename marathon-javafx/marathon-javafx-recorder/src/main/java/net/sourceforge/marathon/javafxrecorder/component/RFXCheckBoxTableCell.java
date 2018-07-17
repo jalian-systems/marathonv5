@@ -34,7 +34,9 @@ public class RFXCheckBoxTableCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) @Override public String _getValue() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public String _getValue() {
         CheckBoxTableCell cell = (CheckBoxTableCell) node;
         Callback selectedStateCallback = cell.getSelectedStateCallback();
         String cbText;

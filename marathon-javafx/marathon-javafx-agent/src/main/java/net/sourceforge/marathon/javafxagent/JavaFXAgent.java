@@ -68,7 +68,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getDevices()
      */
-    @Override public IDevice getDevices() {
+    @Override
+    public IDevice getDevices() {
         return devices;
     }
 
@@ -77,7 +78,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getTitle()
      */
-    @Override public String getTitle() {
+    @Override
+    public String getTitle() {
         return targetLocator.getTitle();
     }
 
@@ -86,7 +88,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindowHandles()
      */
-    @Override public Collection<String> getWindowHandles() {
+    @Override
+    public Collection<String> getWindowHandles() {
         return targetLocator.getWindowHandles();
     }
 
@@ -95,7 +98,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindowHandle()
      */
-    @Override public String getWindowHandle() {
+    @Override
+    public String getWindowHandle() {
         return targetLocator.getWindowHandle();
     }
 
@@ -104,7 +108,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#switchTo()
      */
-    @Override public JavaFXTargetLocator switchTo() {
+    @Override
+    public JavaFXTargetLocator switchTo() {
         return targetLocator;
     }
 
@@ -113,7 +118,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#manage()
      */
-    @Override public JOptions manage() {
+    @Override
+    public JOptions manage() {
         if (options == null) {
             options = new JOptions(this);
         }
@@ -125,7 +131,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getVersion()
      */
-    @Override public String getVersion() {
+    @Override
+    public String getVersion() {
         return VERSION;
     }
 
@@ -134,7 +141,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getName()
      */
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "javadriver";
     }
 
@@ -143,7 +151,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#deleteWindow()
      */
-    @Override public void deleteWindow() {
+    @Override
+    public void deleteWindow() {
         targetLocator.deleteWindow();
     }
 
@@ -153,7 +162,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElement(java.lang.
      * String)
      */
-    @Override public IJavaFXElement findElement(String id) {
+    @Override
+    public IJavaFXElement findElement(String id) {
         return targetLocator.findElement(id);
     }
 
@@ -162,7 +172,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getActiveElement()
      */
-    @Override public IJavaFXElement getActiveElement() {
+    @Override
+    public IJavaFXElement getActiveElement() {
         return targetLocator.getActiveElement();
     }
 
@@ -171,12 +182,15 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#quit()
      */
-    @Override public void quit() {
+    @Override
+    public void quit() {
         Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    @Override public Object run() {
+                    @Override
+                    public Object run() {
                         Runtime.getRuntime().halt(1);
                         return null;
                     }
@@ -191,7 +205,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * @see
      * net.sourceforge.marathon.javaagent.IJavaAgent#getWindow(java.lang.String)
      */
-    @Override public JFXWindow getWindow(String windowHandle) {
+    @Override
+    public JFXWindow getWindow(String windowHandle) {
         return targetLocator.getWindowForHandle(windowHandle);
     }
 
@@ -200,7 +215,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getCurrentWindow()
      */
-    @Override public JFXWindow getCurrentWindow() {
+    @Override
+    public JFXWindow getCurrentWindow() {
         return targetLocator.getCurrentWindow();
     }
 
@@ -211,7 +227,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByTagName(java.
      * lang.String)
      */
-    @Override public IJavaFXElement findElementByTagName(String using) {
+    @Override
+    public IJavaFXElement findElementByTagName(String using) {
         List<IJavaFXElement> elements = findElementsByTagName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -226,7 +243,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByTagName(java.
      * lang.String)
      */
-    @Override public List<IJavaFXElement> findElementsByTagName(final String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByTagName(final String using) {
         if (using.equals("#filechooser")) {
             JFXWindow topContainer = targetLocator.getTopContainer();
             return Arrays.asList(topContainer.findFileChooserElement());
@@ -250,7 +268,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByName(java.lang
      * .String)
      */
-    @Override public IJavaFXElement findElementByName(String using) {
+    @Override
+    public IJavaFXElement findElementByName(String using) {
         List<IJavaFXElement> elements = findElementsByName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -265,7 +284,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByName(java.
      * lang.String)
      */
-    @Override public List<IJavaFXElement> findElementsByName(final String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByName(final String using) {
         return findByCss("#'" + using + "'");
     }
 
@@ -276,7 +296,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByCssSelector(
      * java.lang.String)
      */
-    @Override public IJavaFXElement findElementByCssSelector(String using) {
+    @Override
+    public IJavaFXElement findElementByCssSelector(String using) {
         List<IJavaFXElement> elements = findElementsByCssSelector(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
@@ -291,7 +312,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByCssSelector(
      * java.lang.String)
      */
-    @Override public List<IJavaFXElement> findElementsByCssSelector(String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByCssSelector(String using) {
         Stage window = targetLocator.getTopContainer().getWindow();
         IJavaFXElement je = JavaFXElementFactory.createElement(window.getScene().getRoot(), this, targetLocator.getTopContainer());
         FindByCssSelector finder = new FindByCssSelector(je, this, implicitWait);
@@ -305,7 +327,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByClassName(java
      * .lang.String)
      */
-    @Override public IJavaFXElement findElementByClassName(String using) {
+    @Override
+    public IJavaFXElement findElementByClassName(String using) {
         List<IJavaFXElement> elements = findElementsByClassName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
@@ -320,7 +343,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByClassName(
      * java.lang.String)
      */
-    @Override public List<IJavaFXElement> findElementsByClassName(String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByClassName(String using) {
         return findByCss(":instance-of('" + using + "')");
     }
 
@@ -336,7 +360,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindowProperties()
      */
-    @Override public JSONObject getWindowProperties() {
+    @Override
+    public JSONObject getWindowProperties() {
         return targetLocator.getWindowProperties();
     }
 
@@ -345,11 +370,13 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#setImplicitWait(long)
      */
-    @Override public void setImplicitWait(long implicitWait) {
+    @Override
+    public void setImplicitWait(long implicitWait) {
         this.implicitWait = implicitWait;
     }
 
-    @Override public IJavaFXElement findElement(Node component) {
+    @Override
+    public IJavaFXElement findElement(Node component) {
         return targetLocator.getTopContainer().findElement(component);
     }
 
@@ -358,7 +385,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getScreenShot()
      */
-    @Override public byte[] getScreenShot() throws IOException {
+    @Override
+    public byte[] getScreenShot() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             BufferedImage bufferedImage;
@@ -376,7 +404,8 @@ public class JavaFXAgent implements IJavaFXAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getImplicitWait()
      */
-    @Override public long getImplicitWait() {
+    @Override
+    public long getImplicitWait() {
         return implicitWait;
     }
 }

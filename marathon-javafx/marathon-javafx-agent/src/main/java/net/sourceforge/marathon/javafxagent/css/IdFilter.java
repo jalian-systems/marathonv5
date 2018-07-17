@@ -32,7 +32,8 @@ public class IdFilter implements SelectorFilter {
         this.id = id;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         char[] cs = id.toCharArray();
         boolean needQuotes = false;
         for (char c : cs) {
@@ -44,7 +45,8 @@ public class IdFilter implements SelectorFilter {
         return "#" + id;
     }
 
-    @Override public List<IJavaFXElement> match(IJavaFXElement je) {
+    @Override
+    public List<IJavaFXElement> match(IJavaFXElement je) {
         if (id.equals(je.getAttribute("name"))) {
             return Arrays.asList(je);
         }

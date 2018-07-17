@@ -30,11 +30,13 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTreeViewCheckBoxTreeCellTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         TreeView<?> treeView = (TreeView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Point2D point = getPoint(treeView, 1);
                 RFXTreeView rfxListView = new RFXTreeView(treeView, null, point, lr);
                 rfxListView.focusGained(rfxListView);
@@ -49,11 +51,13 @@ public class RFXTreeViewCheckBoxTreeCellTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Child Node 1:checked", recording.getParameters()[0]);
     }
 
-    @Test public void selectSelectedTreeItemCheckBox() {
+    @Test
+    public void selectSelectedTreeItemCheckBox() {
         TreeView<?> treeView = (TreeView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Point2D point = getPoint(treeView, 1);
                 RFXTreeView rfxListView = new RFXTreeView(treeView, null, point, lr);
                 CheckBoxTreeItem<?> treeItem = (CheckBoxTreeItem<?>) treeView.getTreeItem(1);
@@ -69,7 +73,8 @@ public class RFXTreeViewCheckBoxTreeCellTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Child Node 1:unchecked", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new CheckBoxTreeViewSample();
     }
 }

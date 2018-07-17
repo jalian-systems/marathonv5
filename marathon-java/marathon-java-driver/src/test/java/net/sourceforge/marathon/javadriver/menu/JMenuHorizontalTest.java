@@ -36,14 +36,17 @@ import components.MenuLayoutDemo;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JMenuHorizontalTest {
+@Test
+public class JMenuHorizontalTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws InterruptedException, InvocationTargetException, NoSuchWindowException {
+    @BeforeMethod
+    public void showDialog() throws InterruptedException, InvocationTargetException, NoSuchWindowException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JMenuHorizontalTest.class.getSimpleName());
                 frame.setName("frame-" + JMenuHorizontalTest.class.getSimpleName());
                 MenuLayoutDemo demo = new MenuLayoutDemo();
@@ -56,9 +59,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws InterruptedException, InvocationTargetException {
+    @AfterMethod
+    public void disposeDriver() throws InterruptedException, InvocationTargetException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -100,7 +105,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         new Actions(driver).moveToElement(menu).click().perform();
 
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 3;
             }
         });
@@ -179,7 +185,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
         subMenu.click();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 5;
             }
         });
@@ -210,7 +217,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
         subMenu.click();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == 5;
             }
         });
@@ -251,7 +259,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         menu.click();
         subMenu.click();
         new WebDriverWait(driver, 3).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 return driver.findElements(By.cssSelector("menu-item")).size() == initialMenuItemsSize + 2;
             }
         });

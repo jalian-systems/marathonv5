@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTreeViewTextFieldTreeCellTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         @SuppressWarnings("unchecked")
         TreeView<String> treeView = (TreeView<String>) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
@@ -51,7 +52,8 @@ public class RFXTreeViewTextFieldTreeCellTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Child node 4 Modified", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TextFieldTreeViewSample();
     }
 }

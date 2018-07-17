@@ -153,11 +153,13 @@ public class OMapContainer implements IObjectMapTreeItem {
         return '_';
     }
 
-    @Override public void setRootNode(IObjectMapTreeItem parentNode) {
+    @Override
+    public void setRootNode(IObjectMapTreeItem parentNode) {
         this.parent = (ObjectMapItem) parentNode;
     }
 
-    @SuppressWarnings("unchecked") public void load(File omapFolder) throws FileNotFoundException {
+    @SuppressWarnings("unchecked")
+    public void load(File omapFolder) throws FileNotFoundException {
         if (loaded) {
             return;
         }
@@ -328,11 +330,13 @@ public class OMapContainer implements IObjectMapTreeItem {
         return new Enumeration<IObjectMapTreeItem>() {
             int index = 0;
 
-            @Override public boolean hasMoreElements() {
+            @Override
+            public boolean hasMoreElements() {
                 return index < components.size();
             }
 
-            @Override public IObjectMapTreeItem nextElement() {
+            @Override
+            public IObjectMapTreeItem nextElement() {
                 return components.get(index++);
             }
         };
@@ -434,7 +438,8 @@ public class OMapContainer implements IObjectMapTreeItem {
         options.setDefaultFlowStyle(FlowStyle.AUTO);
 
         Representer representer = new Representer() {
-            @Override protected Set<Property> getProperties(Class<? extends Object> type) throws IntrospectionException {
+            @Override
+            protected Set<Property> getProperties(Class<? extends Object> type) throws IntrospectionException {
                 Set<Property> properties = super.getProperties(type);
                 Property parentProperty = null;
                 for (Property property : properties) {

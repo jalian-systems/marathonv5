@@ -49,7 +49,8 @@ public class FixtureSelection extends ModalDialog<String> {
         initComponents();
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox root = new VBox();
         root.getStyleClass().add("fixture-selection");
         root.setId("fixtureSelection");
@@ -57,7 +58,8 @@ public class FixtureSelection extends ModalDialog<String> {
         return root;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
@@ -95,7 +97,8 @@ public class FixtureSelection extends ModalDialog<String> {
         dispose();
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         selectButton.setDefaultButton(true);
     }
 

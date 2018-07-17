@@ -36,7 +36,8 @@ public class JSplitPaneJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         JSplitPane pane = (JSplitPane) component;
         if (selector.equals("left") || selector.equals("top")) {
             return Arrays.asList(JavaElementFactory.createElement(pane.getTopComponent(), getDriver(), getWindow()));
@@ -46,7 +47,8 @@ public class JSplitPaneJavaElement extends AbstractJavaElement {
         return super.getByPseudoElement(selector, params);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         ((JSplitPane) component).setDividerLocation(Integer.parseInt(value));
         return true;
     }

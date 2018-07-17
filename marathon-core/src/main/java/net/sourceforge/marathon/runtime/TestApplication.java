@@ -53,19 +53,23 @@ public class TestApplication extends Stage implements ITestApplication {
             textArea = area;
         }
 
-        @Override public void write(char[] cbuf, int off, int len) throws IOException {
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
             final String newText = new String(cbuf, off, len);
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     textArea.setText(textArea.getText() + newText);
                 }
             });
         }
 
-        @Override public void close() throws IOException {
+        @Override
+        public void close() throws IOException {
         }
 
-        @Override public void flush() throws IOException {
+        @Override
+        public void flush() throws IOException {
         }
     }
 
@@ -106,7 +110,8 @@ public class TestApplication extends Stage implements ITestApplication {
         setScene(new Scene(content));
     }
 
-    @Override public void launch() throws IOException, InterruptedException {
+    @Override
+    public void launch() throws IOException, InterruptedException {
         if (launchCommand == null) {
             commandField.setText("This launcher does not support launch in test mode.");
             showAndWait();

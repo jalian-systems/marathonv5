@@ -37,14 +37,17 @@ import components.ListDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JListTest {
+@Test
+public class JListTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JListTest.class.getSimpleName());
                 frame.setName("frame-" + JListTest.class.getSimpleName());
                 frame.getContentPane().add(new ListDemo(), BorderLayout.CENTER);
@@ -55,9 +58,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

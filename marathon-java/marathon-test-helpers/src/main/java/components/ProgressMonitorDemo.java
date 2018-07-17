@@ -45,7 +45,8 @@ public class ProgressMonitorDemo extends JPanel implements ActionListener, Prope
     private Task task;
 
     class Task extends SwingWorker<Void, Void> {
-        @Override public Void doInBackground() {
+        @Override
+        public Void doInBackground() {
             Random random = new Random();
             int progress = 0;
             setProgress(0);
@@ -63,7 +64,8 @@ public class ProgressMonitorDemo extends JPanel implements ActionListener, Prope
             return null;
         }
 
-        @Override public void done() {
+        @Override
+        public void done() {
             Toolkit.getDefaultToolkit().beep();
             startButton.setEnabled(true);
             progressMonitor.setProgress(0);

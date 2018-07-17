@@ -36,7 +36,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 import net.sourceforge.marathon.runtime.api.Constants;
 
-@Test public class LaunchWebStartTest extends RecordingTest {
+@Test
+public class LaunchWebStartTest extends RecordingTest {
 
     private JavaDriver driver;
 
@@ -51,7 +52,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
         driver = new JavaDriver(profile);
     }
 
-    @AfterMethod public void quitDriver() {
+    @AfterMethod
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();
         }
@@ -60,7 +62,8 @@ import net.sourceforge.marathon.runtime.api.Constants;
     public void checkBasicRecording() throws Throwable {
         createDriver("SwingSet3");
         new WebDriverWait(driver, 60).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 try {
                     driver.switchTo().window("SwingSet3");
                 } catch (NoSuchWindowException e) {

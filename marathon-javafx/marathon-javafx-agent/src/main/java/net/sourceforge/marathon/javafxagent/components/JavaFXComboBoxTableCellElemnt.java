@@ -31,7 +31,9 @@ public class JavaFXComboBoxTableCellElemnt extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         ComboBoxTableCell cell = (ComboBoxTableCell) node;
         return cell.getConverter().toString(cell.getItem());

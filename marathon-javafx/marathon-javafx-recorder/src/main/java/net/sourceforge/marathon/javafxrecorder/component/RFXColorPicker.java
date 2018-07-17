@@ -33,19 +33,22 @@ public class RFXColorPicker extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         ColorPicker colorPicker = (ColorPicker) node;
         prevColor = getColorCode(colorPicker.getValue());
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         String currentColor = getColorCode(((ColorPicker) node).getValue());
         if (!currentColor.equals(prevColor)) {
             recorder.recordSelect(this, currentColor);
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getColorCode(((ColorPicker) node).getValue());
     }
 }

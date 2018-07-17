@@ -32,11 +32,13 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTreeViewTest extends RFXComponentTest {
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TreeViewSample();
     }
 
-    @Test public void select() throws InterruptedException {
+    @Test
+    public void select() throws InterruptedException {
         @SuppressWarnings("rawtypes")
         final TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
@@ -51,13 +53,15 @@ public class RFXTreeViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"/Root node/Child Node 2\"]", select.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         @SuppressWarnings("rawtypes")
         TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXTreeView rTreeView = new RFXTreeView(treeView, null, null, lr);
                 treeView.getSelectionModel().select(2);
                 rTreeView.focusLost(new RFXTreeView(null, null, null, null));
@@ -65,20 +69,23 @@ public class RFXTreeViewTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for tree text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[\"/Root node/Child Node 2\"]", text.get(0));
     }
 
-    @Test public void getTextForMultipleSelection() {
+    @Test
+    public void getTextForMultipleSelection() {
         @SuppressWarnings("rawtypes")
         TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXTreeView rTreeView = new RFXTreeView(treeView, null, null, lr);
                 @SuppressWarnings("rawtypes")
                 MultipleSelectionModel selectionModel = treeView.getSelectionModel();
@@ -89,14 +96,16 @@ public class RFXTreeViewTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for tree text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[\"/Root node/Child Node 2\",\"/Root node/Child Node 3\"]", text.get(0));
     }
 
-    @Test public void select_multiple() throws InterruptedException {
+    @Test
+    public void select_multiple() throws InterruptedException {
         @SuppressWarnings("rawtypes")
         final TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();
@@ -114,7 +123,8 @@ public class RFXTreeViewTest extends RFXComponentTest {
         AssertJUnit.assertEquals("[\"/Root node/Child Node 1\",\"/Root node/Child Node 2\"]", select.getParameters()[0]);
     }
 
-    @Test public void select_none() throws InterruptedException {
+    @Test
+    public void select_none() throws InterruptedException {
         @SuppressWarnings("rawtypes")
         final TreeView treeView = (TreeView) getPrimaryStage().getScene().getRoot().lookup(".tree-view");
         LoggingRecorder lr = new LoggingRecorder();

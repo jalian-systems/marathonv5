@@ -300,10 +300,11 @@ public class JavaServer extends NanoHTTPD {
         return null;
     }
 
-    @Override public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
+    @Override
+    public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
             Map<String, String> files) {
         try {
-            handlingRequest = true ;
+            handlingRequest = true;
             JSONObject jsonQuery = null;
             String query = files.get("postData");
             LOGGER.info("JavaServer.serve(" + method + " " + uri + "): " + (query != null ? query : "{}"));

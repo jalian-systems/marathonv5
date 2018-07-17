@@ -34,12 +34,14 @@ public class RFXSplitPane extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         SplitPane sp = (SplitPane) node;
         prevLocations = getDividerLocations(sp);
     }
 
-    @Override protected void mouseReleased(MouseEvent me) {
+    @Override
+    protected void mouseReleased(MouseEvent me) {
         SplitPane splitPane = (SplitPane) node;
         String currentDividerLoctions = getDividerLocations(splitPane);
         if (!currentDividerLoctions.equals(prevLocations)) {
@@ -47,7 +49,8 @@ public class RFXSplitPane extends RFXComponent {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getDividerLocations((SplitPane) node);
     }
 }

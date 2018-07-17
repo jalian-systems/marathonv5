@@ -68,34 +68,44 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     public static final Logger LOGGER = Logger.getLogger(Display.class.getName());
 
     public static final class DummyRecorder implements IRecorder {
-        @Override public void record(IScriptElement element) {
+        @Override
+        public void record(IScriptElement element) {
         }
 
-        @Override public void abortRecording() {
+        @Override
+        public void abortRecording() {
         }
 
-        @Override public void insertChecklist(String name) {
+        @Override
+        public void insertChecklist(String name) {
         }
 
-        @Override public String recordInsertScriptElement(WindowId windowId, String script) {
+        @Override
+        public String recordInsertScriptElement(WindowId windowId, String script) {
             return null;
         }
 
-        @Override public void recordInsertChecklistElement(WindowId windowId, String fileName) {
+        @Override
+        public void recordInsertChecklistElement(WindowId windowId, String fileName) {
         }
 
-        @Override public void recordShowChecklistElement(WindowId windowId, String fileName) {
+        @Override
+        public void recordShowChecklistElement(WindowId windowId, String fileName) {
         }
 
-        @Override public boolean isCreatingObjectMap() {
+        @Override
+        public boolean isCreatingObjectMap() {
             return true;
         }
 
-        @Override public void updateScript() {
+        @Override
+        public void updateScript() {
         }
     }
 
-    @Retention(RetentionPolicy.RUNTIME) @BindingAnnotation public @interface IDisplayProperties {
+    @Retention(RetentionPolicy.RUNTIME)
+    @BindingAnnotation
+    public @interface IDisplayProperties {
     }
 
     public static final int LINE_REACHED = 1;
@@ -103,9 +113,12 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     public static final int METHOD_CALLED = 3;
     private static final Logger logger = Logger.getLogger(Display.class.getName());
 
-    private @Inject IRuntimeFactory runtimeFactory;
-    private @Inject RecorderProvider recorderProvider;
-    private @Inject PlaybackResultProvider playbackResultProvider;
+    private @Inject
+    IRuntimeFactory runtimeFactory;
+    private @Inject
+    RecorderProvider recorderProvider;
+    private @Inject
+    PlaybackResultProvider playbackResultProvider;
 
     private IMarathonRuntime runtime;
     private IPlayer player;
@@ -465,13 +478,15 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
     }
 
     /* Implementation of IPlaybackListener * */
-    @Override public void playbackFinished(final PlaybackResult result, boolean shutdown) {
+    @Override
+    public void playbackFinished(final PlaybackResult result, boolean shutdown) {
         this.autShutdown = shutdown;
         displayView.endTest(result);
         if (ddTestRunner != null && ddTestRunner.hasNext() && !playbackStopped) {
             ddTestRunner.next();
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (result.failureCount() == 0) {
                         shouldClose = !reuseFixture;
                         displayView.trackProgress();
@@ -496,32 +511,39 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         ddTestRunner = null;
     }
 
-    @Override public int lineReached(SourceLine line) {
+    @Override
+    public int lineReached(SourceLine line) {
         return displayView.trackProgress(line, LINE_REACHED);
     }
 
-    @Override public int methodReturned(SourceLine line) {
+    @Override
+    public int methodReturned(SourceLine line) {
         return displayView.trackProgress(line, METHOD_RETURNED);
     }
 
-    @Override public int methodCalled(SourceLine line) {
+    @Override
+    public int methodCalled(SourceLine line) {
         return displayView.trackProgress(line, METHOD_CALLED);
     }
 
-    @Override public int acceptChecklist(String fileName) {
+    @Override
+    public int acceptChecklist(String fileName) {
         return displayView.acceptChecklist(fileName);
     }
 
-    @Override public int showChecklist(String fileName) {
+    @Override
+    public int showChecklist(String fileName) {
         return displayView.showChecklist(fileName);
     }
 
     /** Implementation of IScriptListener **/
-    @Override public void setScript(String script) {
+    @Override
+    public void setScript(String script) {
         displayView.insertScript(script);
     }
 
-    @Override public void abortRecording() {
+    @Override
+    public void abortRecording() {
         if (state.isRecording()) {
             displayView.stopInserting();
         }
@@ -531,12 +553,14 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         setState(State.STOPPED_WITH_APP_CLOSED);
     }
 
-    @Override public void insertChecklistAction(String name) {
+    @Override
+    public void insertChecklistAction(String name) {
         displayView.insertChecklistAction(name);
     }
 
     /** Implementation IExceptionReporter **/
-    @Override public void reportException(Throwable e) {
+    @Override
+    public void reportException(Throwable e) {
         if (e instanceof ApplicationLaunchException) {
             destroyRuntime();
         }
@@ -544,7 +568,8 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
                 e.getClass().getName().substring(e.getClass().getName().lastIndexOf('.') + 1) + " : " + e.getMessage());
     }
 
-    @Override public void addImportStatement(String ims) {
+    @Override
+    public void addImportStatement(String ims) {
         displayView.addImport(ims);
     }
 
@@ -582,15 +607,18 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         }
     }
 
-    @Override public String getFullName() {
+    @Override
+    public String getFullName() {
         return "Display";
     }
 
-    @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+    @Override
+    public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
         displayView.addErrorScreenShotEntry(error, fileName);
     }
 
-    @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+    @Override
+    public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
         displayView.addScreenShotEntry(title, filePath, assertions);
     }
 

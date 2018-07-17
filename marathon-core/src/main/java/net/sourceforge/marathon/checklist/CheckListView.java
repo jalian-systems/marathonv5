@@ -165,7 +165,8 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
         }
     }
 
-    @Override public void contentChanged() {
+    @Override
+    public void contentChanged() {
         fireContentChanged();
     }
 
@@ -187,7 +188,8 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
             initComponents();
         }
 
-        @Override protected void initialize(Stage stage) {
+        @Override
+        protected void initialize(Stage stage) {
             super.initialize(stage);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -203,7 +205,8 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
             buttonBar.getButtons().addAll(okButton, cancelButton);
         }
 
-        @Override protected Parent getContentPane() {
+        @Override
+        protected Parent getContentPane() {
             BorderPane borderPane = new BorderPane();
             borderPane.setId("check-list-input-stage");
             FormPane form = new FormPane("check-list-input-stage-form", 2);
@@ -231,7 +234,8 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
             dispose();
         }
 
-        @Override protected void setDefaultButton() {
+        @Override
+        protected void setDefaultButton() {
             okButton.setDefaultButton(true);
         }
     }

@@ -21,7 +21,8 @@ public class DockGroup {
 
     public static final Logger LOGGER = Logger.getLogger(DockGroup.class.getName());
 
-    @SuppressWarnings("unused") private String name;
+    @SuppressWarnings("unused")
+    private String name;
 
     public DockGroup(String name) {
         this.name = name;

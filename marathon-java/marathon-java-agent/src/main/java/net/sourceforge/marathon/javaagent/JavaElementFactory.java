@@ -100,7 +100,8 @@ public class JavaElementFactory {
          * net.sourceforge.marathon.javaagent.IJavaElementFinder#get(java.awt
          * .Component)
          */
-        @Override public Class<? extends IJavaElement> get(Component component) {
+        @Override
+        public Class<? extends IJavaElement> get(Component component) {
             if (componentKlass.isInstance(component)) {
                 return javaElementKlass;
             }

@@ -56,12 +56,14 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
         this.viewRow = row;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "nth-node").put("parameters", new JSONArray().put(viewRow + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor")) {
             Component editor = getEditor();
             if (editor == null) {
@@ -75,7 +77,8 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
 
     private Component getEditor() {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 JTree tree = (JTree) parent.getComponent();
                 TreePath pathForRow = tree.getPathForRow(viewRow);
                 tree.startEditingAtPath(pathForRow);
@@ -109,13 +112,16 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
         });
     }
 
-    @Override public IJavaElement getParent() {
+    @Override
+    public IJavaElement getParent() {
         return parent;
     }
 
-    @Override public Component getPseudoComponent() {
+    @Override
+    public Component getPseudoComponent() {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 validateRow();
                 JTree tree = (JTree) parent.getComponent();
                 TreeCellRenderer cellRenderer = tree.getCellRenderer();
@@ -134,7 +140,8 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
         throw new NoSuchElementException("Invalid row for JTree: (" + viewRow + ")", null);
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         validateRow();
         Rectangle bounds = getCellBounds();
         getDriver().getDevices().moveto(parent.getComponent(), bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
@@ -142,7 +149,8 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
 
     private Rectangle getCellBounds() {
         Callable<Rectangle> x = new Callable<Rectangle>() {
-            @Override public Rectangle call() {
+            @Override
+            public Rectangle call() {
                 JTree tree = (JTree) parent.getComponent();
                 return tree.getRowBounds(viewRow);
             }
@@ -154,7 +162,8 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
         }
     }
 
-    @Override public boolean _isDisplayed() {
+    @Override
+    public boolean _isDisplayed() {
         return isVisible((JTree) parent.getComponent(), viewRow);
     }
 
@@ -164,7 +173,8 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
         return SwingUtilities.isRectangleContainingRectangle(visibleRect, cellRect);
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         validateRow();
         Rectangle bounds = getCellBounds();
         return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
@@ -172,7 +182,8 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
 
     public boolean isExpanded() {
         return EventQueueWait.exec(new Callable<Boolean>() {
-            @Override public Boolean call() throws Exception {
+            @Override
+            public Boolean call() throws Exception {
                 JTree tree = (JTree) parent.getComponent();
                 return tree.isExpanded(viewRow);
             }
@@ -191,9 +202,11 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
         return viewRow + 1;
     }
 
-    @Override public void submit() {
+    @Override
+    public void submit() {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 ((JTree) parent.getComponent()).stopEditing();
             }
         });

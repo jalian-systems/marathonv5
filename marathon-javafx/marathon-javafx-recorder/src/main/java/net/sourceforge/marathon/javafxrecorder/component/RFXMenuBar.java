@@ -31,6 +31,7 @@ public class RFXMenuBar extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 }

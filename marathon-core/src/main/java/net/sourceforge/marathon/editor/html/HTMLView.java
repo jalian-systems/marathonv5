@@ -78,15 +78,18 @@ public class HTMLView extends FileBasedEditor implements IEditor {
         viewport.getToolBarPanel().add(bar);
     }
 
-    @Override public Object getData(String key) {
+    @Override
+    public Object getData(String key) {
         return dataMap.get(key);
     }
 
-    @Override public void setData(String key, Object value) {
+    @Override
+    public void setData(String key, Object value) {
         dataMap.put(key, value);
     }
 
-    @Override public void setText(String text) {
+    @Override
+    public void setText(String text) {
         File currentFile = fileHandler.getCurrentFile();
         if (currentFile == null) {
             return;
@@ -94,7 +97,8 @@ public class HTMLView extends FileBasedEditor implements IEditor {
         webView.getEngine().load(currentFile.toURI().toString());
     }
 
-    @Override public Node getNode() {
+    @Override
+    public Node getNode() {
         return viewport;
     }
 }

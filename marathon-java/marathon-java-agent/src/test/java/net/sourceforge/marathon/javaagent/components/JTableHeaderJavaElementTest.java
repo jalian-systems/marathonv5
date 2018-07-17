@@ -36,13 +36,16 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class JTableHeaderJavaElementTest extends JavaElementTest {
+@Test
+public class JTableHeaderJavaElementTest extends JavaElementTest {
     protected JFrame frame;
     private IJavaAgent driver;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTableHeaderJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JTableHeaderJavaElementTest.class.getSimpleName());
                 TableDemo demo = new TableDemo();
@@ -57,9 +60,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         JavaElementFactory.add(JTableHeader.class, JTableHeaderJavaElement.class);
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -107,7 +112,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void assertContentWithDuplicates() {
         IJavaElement tableHeader = driver.findElementByTagName("table-header");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
                 table.getColumnModel().getColumn(1).setHeaderValue("Movie Title");
             }
@@ -119,7 +125,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void assertContentWithMultipleDuplicates() {
         IJavaElement tableHeader = driver.findElementByTagName("table-header");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
                 table.getColumnModel().getColumn(1).setHeaderValue("Movie Title");
                 table.getColumnModel().getColumn(3).setHeaderValue("Movie Title");

@@ -38,7 +38,8 @@ public class PseudoClassFilter implements SelectorFilter {
         this.args = args;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder(":" + function);
         if (args.length > 0) {
             sb.append("(");
@@ -52,7 +53,8 @@ public class PseudoClassFilter implements SelectorFilter {
         return sb.toString();
     }
 
-    @Override public List<IJavaFXElement> match(IJavaFXElement je) {
+    @Override
+    public List<IJavaFXElement> match(IJavaFXElement je) {
         if (doesMatch(je)) {
             return Arrays.asList(je);
         }

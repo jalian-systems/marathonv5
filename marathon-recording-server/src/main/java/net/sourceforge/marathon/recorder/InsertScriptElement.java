@@ -36,7 +36,8 @@ public class InsertScriptElement extends AbstractScriptElement {
         this.pkg = RecordingScriptModel.getModel().getPackageFromInsertDialog(function);
     }
 
-    @Override public String toScriptCode() {
+    @Override
+    public String toScriptCode() {
         StringBuffer sb = new StringBuffer();
         sb.append(Indent.getIndent()).append(function).append("\n");
         return sb.toString();

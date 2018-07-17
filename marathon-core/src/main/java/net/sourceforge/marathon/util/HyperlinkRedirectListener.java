@@ -29,7 +29,8 @@ public class HyperlinkRedirectListener implements ChangeListener<State>, EventLi
         this.webView = webView;
     }
 
-    @Override public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+    @Override
+    public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
         if (State.SUCCEEDED.equals(newValue)) {
             Document document = webView.getEngine().getDocument();
             NodeList anchors = document.getElementsByTagName(ANCHOR_TAG);
@@ -41,7 +42,8 @@ public class HyperlinkRedirectListener implements ChangeListener<State>, EventLi
         }
     }
 
-    @Override public void handleEvent(Event event) {
+    @Override
+    public void handleEvent(Event event) {
         HTMLAnchorElement anchorElement = (HTMLAnchorElement) event.getCurrentTarget();
         String href = anchorElement.getHref();
 

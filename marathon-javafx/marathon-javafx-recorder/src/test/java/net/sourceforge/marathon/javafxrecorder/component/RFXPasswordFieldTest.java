@@ -28,17 +28,20 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXPasswordFieldTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         final PasswordField passwordField = (PasswordField) getPrimaryStage().getScene().getRoot().lookup(".password-field");
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 passwordField.setText("Hello World");
             }
         });
         LoggingRecorder lr = new LoggingRecorder();
         RFXComponent rTextField = new RFXTextInputControl(passwordField, null, null, lr);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextField.focusLost(null);
             }
         });
@@ -48,7 +51,8 @@ public class RFXPasswordFieldTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Hello World", select.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new PasswordFieldSample();
     }
 }

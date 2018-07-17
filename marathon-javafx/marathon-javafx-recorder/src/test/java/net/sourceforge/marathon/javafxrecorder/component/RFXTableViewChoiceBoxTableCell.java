@@ -32,7 +32,9 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTableViewChoiceBoxTableCell extends RFXComponentTest {
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) @Test public void select() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    public void select() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -53,7 +55,8 @@ public class RFXTableViewChoiceBoxTableCell extends RFXComponentTest {
         AssertJUnit.assertEquals("Jones", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ChoiceBoxTableViewSample();
     }
 }

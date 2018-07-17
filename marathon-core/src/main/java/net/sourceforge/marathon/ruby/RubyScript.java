@@ -72,10 +72,12 @@ public class RubyScript implements IScript {
             this.thread = playbackThread;
         }
 
-        @Override public void run() {
+        @Override
+        public void run() {
             if (fixture) {
                 invokeAndWaitForWindow(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         try {
                             try {
                                 RuntimeLogger.getRuntimeLogger().info(MODULE, "Running fixture setup...");
@@ -132,7 +134,8 @@ public class RubyScript implements IScript {
         loadScript(out, err, isDebugging);
     }
 
-    @Override public void setDriverURL(String driverURL) {
+    @Override
+    public void setDriverURL(String driverURL) {
         this.driverURL = driverURL;
         readGlobals();
         debugger = new RubyDebugger(interpreter);
@@ -172,7 +175,8 @@ public class RubyScript implements IScript {
 
     protected Callable<Ruby> getInitRuby(final Writer out, final Writer err) {
         return new Callable<Ruby>() {
-            @Override public Ruby call() throws Exception {
+            @Override
+            public Ruby call() throws Exception {
                 RubyInstanceConfig config = new RubyInstanceConfig();
                 config.setCompileMode(CompileMode.OFF);
                 List<String> loadPaths = new ArrayList<String>();
@@ -256,7 +260,8 @@ public class RubyScript implements IScript {
         }
     }
 
-    @Override public synchronized void exec(String function) {
+    @Override
+    public synchronized void exec(String function) {
         try {
             Matcher matcher = FUNCTION_PATTERN.matcher(function);
             if (matcher.matches()) {
@@ -273,15 +278,18 @@ public class RubyScript implements IScript {
         }
     }
 
-    @Override public IDebugger getDebugger() {
+    @Override
+    public IDebugger getDebugger() {
         return debugger;
     }
 
-    @Override public Module getModuleFunctions() {
+    @Override
+    public Module getModuleFunctions() {
         return moduleList.getTop();
     }
 
-    @Override public IPlayer getPlayer(IPlaybackListener playbackListener, PlaybackResult result) {
+    @Override
+    public IPlayer getPlayer(IPlaybackListener playbackListener, PlaybackResult result) {
         runtime.result = result;
         return new MarathonPlayer(this, playbackListener, result);
     }
@@ -314,15 +322,18 @@ public class RubyScript implements IScript {
         return interpreter;
     }
 
-    @Override public void attachPlaybackListener(IPlaybackListener listener) {
+    @Override
+    public void attachPlaybackListener(IPlaybackListener listener) {
         debugger.setListener(listener);
     }
 
-    @Override public Runnable playbackBody(boolean shouldRunFixture, Thread playbackThread) {
+    @Override
+    public Runnable playbackBody(boolean shouldRunFixture, Thread playbackThread) {
         return new FixtureRunner(shouldRunFixture, playbackThread);
     }
 
-    @Override public synchronized String evaluate(String code) {
+    @Override
+    public synchronized String evaluate(String code) {
         try {
             return interpreter.evalScriptlet(code).inspect().toString();
         } catch (Throwable t) {
@@ -351,7 +362,8 @@ public class RubyScript implements IScript {
 
     private void loadAssertionProvidersFromDir(final File dirFile) {
         File[] listFiles = dirFile.listFiles(new FilenameFilter() {
-            @Override public boolean accept(File dir, String name) {
+            @Override
+            public boolean accept(File dir, String name) {
                 return dir.equals(dirFile) && name.endsWith(".rb");
             }
         });
@@ -377,7 +389,8 @@ public class RubyScript implements IScript {
         return assertions.toArray(new String[assertions.size()][]);
     }
 
-    @Override public void setDataVariables(Properties dataVariables) {
+    @Override
+    public void setDataVariables(Properties dataVariables) {
         Set<Entry<Object, Object>> set = dataVariables.entrySet();
         for (Entry<Object, Object> entry : set) {
             try {
@@ -405,7 +418,8 @@ public class RubyScript implements IScript {
         }
     }
 
-    @Override public void quit() {
+    @Override
+    public void quit() {
         try {
             runtime.quit();
         } catch (Throwable t) {
@@ -413,28 +427,33 @@ public class RubyScript implements IScript {
         }
     }
 
-    @Override public void releaseInterpreters() {
+    @Override
+    public void releaseInterpreters() {
         RubyInterpreters.release(interpreter);
     }
 
-    @Override public File getScreenCapture() {
+    @Override
+    public File getScreenCapture() {
         return runtime.getScreenCapture();
     }
 
-    @Override public void runFixtureSetup() {
+    @Override
+    public void runFixtureSetup() {
         getFixture().callMethod(interpreter.getCurrentContext(), "setup");
         if (getFixture().respondsTo("test_setup")) {
             getFixture().callMethod(interpreter.getCurrentContext(), "test_setup");
         }
     }
 
-    @Override public synchronized void onWSConnectionClose(int port) {
+    @Override
+    public synchronized void onWSConnectionClose(int port) {
         if (runtime != null) {
             runtime.onWSConnectionClose(port);
         }
     }
 
-    @Override public boolean isDriverAvailable() {
+    @Override
+    public boolean isDriverAvailable() {
         return runtime.isDriverAvailable();
     }
 

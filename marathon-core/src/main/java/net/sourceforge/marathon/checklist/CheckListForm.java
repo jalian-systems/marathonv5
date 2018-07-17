@@ -38,7 +38,8 @@ public class CheckListForm {
             this.checkList = checkList;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             String name = checkList.getName();
             name = name.substring(0, name.length() - 4);
             return name;
@@ -59,7 +60,8 @@ public class CheckListForm {
         File[] items = null;
         if (checklistDir != null) {
             items = checklistDir.listFiles(new FilenameFilter() {
-                @Override public boolean accept(File dir, String name) {
+                @Override
+                public boolean accept(File dir, String name) {
                     if (dir.equals(checklistDir) && name.endsWith(".xml")) {
                         return true;
                     }

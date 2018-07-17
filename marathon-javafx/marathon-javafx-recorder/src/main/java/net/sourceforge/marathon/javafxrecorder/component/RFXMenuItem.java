@@ -115,7 +115,8 @@ public class RFXMenuItem extends RFXComponent {
         return sb.toString();
     }
 
-    @Override protected String escapeSpecialCharacters(String name) {
+    @Override
+    protected String escapeSpecialCharacters(String name) {
         return name.replaceAll(">", "\\\\>");
     }
 }

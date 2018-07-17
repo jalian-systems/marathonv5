@@ -42,7 +42,8 @@ public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
     private TextField testManagementPattern = new TextField();
     private TextArea descriptionArea = new TextArea();
     private TextField dirField = new TextField() {
-        @Override public void requestFocus() {
+        @Override
+        public void requestFocus() {
         };
     };
     private Button browseButton = FXUIUtils.createButton("browse", "Browse project", true, "Browse");
@@ -59,7 +60,8 @@ public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
         initComponents();
     }
 
-    @Override public Node getContent() {
+    @Override
+    public Node getContent() {
         FormPane form = new FormPane("project-layout", 3);
         issuesTrackerPattern.setPromptText("https://bugzilla.mozilla.org/show_bug.cgi?id=%s");
         testManagementPattern.setPromptText("http://mantis.testlink.org/view.php?id=%s");
@@ -83,15 +85,18 @@ public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
         browseButton.setOnAction(fileSelectionHandler);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Project";
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return FXUIUtils.getIcon("prj_obj");
     }
 
-    @Override public void getProperties(Properties props) {
+    @Override
+    public void getProperties(Properties props) {
         System.setProperty(Constants.PROP_PROJECT_NAME, projectNameField.getText());
         props.setProperty(Constants.PROP_PROJECT_NAME, projectNameField.getText());
         props.setProperty(Constants.PROP_PROJECT_DIR, dirField.getText().replace(File.separatorChar, '/'));
@@ -115,7 +120,8 @@ public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
         }
     }
 
-    @Override public void setProperties(Properties props) {
+    @Override
+    public void setProperties(Properties props) {
         // Also store the directory props and give them back
         testDir = props.getProperty(Constants.PROP_TEST_DIR);
         fixtureDir = props.getProperty(Constants.PROP_FIXTURE_DIR);
@@ -133,7 +139,8 @@ public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
         testManagementPattern.setText(props.getProperty(Constants.PROP_TMS_PATTERN, ""));
     }
 
-    @Override public boolean isValidInput(boolean showAlert) {
+    @Override
+    public boolean isValidInput(boolean showAlert) {
         if (projectNameField.getText() == null || projectNameField.getText().equals("")) {
             if (showAlert) {
                 FXUIUtils.showMessageDialog(parent.getStage(), "Project name can't be empty", "Project Name", AlertType.ERROR);
@@ -152,7 +159,8 @@ public class ProjectLayout implements IPropertiesLayout, IFileSelectedAction {
         return true;
     }
 
-    @Override public void filesSelected(List<File> selectedFiles, Object cookie) {
+    @Override
+    public void filesSelected(List<File> selectedFiles, Object cookie) {
         if (selectedFiles != null && selectedFiles.size() != 0) {
             dirField.setText(selectedFiles.get(0).getAbsolutePath());
         }

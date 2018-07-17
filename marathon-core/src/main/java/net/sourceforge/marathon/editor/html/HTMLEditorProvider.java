@@ -24,11 +24,13 @@ public class HTMLEditorProvider implements IEditorProvider {
 
     public static final Logger LOGGER = Logger.getLogger(HTMLEditorProvider.class.getName());
 
-    @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
+    @Override
+    public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         return new HTMLView();
     }
 
-    @Override public boolean supports(EditorType type) {
+    @Override
+    public boolean supports(EditorType type) {
         return type == EditorType.HTML;
     }
 

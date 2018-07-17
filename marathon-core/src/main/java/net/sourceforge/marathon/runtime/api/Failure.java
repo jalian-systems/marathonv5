@@ -38,7 +38,8 @@ public class Failure implements Serializable {
         return message;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return message + "\n(" + Arrays.asList(traceback) + ")";
     }
 

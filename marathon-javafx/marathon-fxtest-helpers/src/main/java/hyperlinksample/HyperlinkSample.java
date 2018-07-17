@@ -43,18 +43,8 @@ import javafx.stage.Stage;
 
 public class HyperlinkSample extends Application {
 
-    final static String[] imageFiles = new String[]{
-        "product.png",
-        "education.png",
-        "partners.png",
-        "support.png"
-    };
-    final static String[] captions = new String[]{
-        "Products",
-        "Education",
-        "Partners",
-        "Support"
-    };
+    final static String[] imageFiles = new String[] { "product.png", "education.png", "partners.png", "support.png" };
+    final static String[] captions = new String[] { "Products", "Education", "Partners", "Support" };
     final ImageView selectedImage = new ImageView();
     final ScrollPane list = new ScrollPane();
     final Hyperlink[] hpls = new Hyperlink[captions.length];
@@ -76,8 +66,7 @@ public class HyperlinkSample extends Application {
 
         for (int i = 0; i < captions.length; i++) {
             final Hyperlink hpl = hpls[i] = new Hyperlink(captions[i]);
-            final Image image = images[i] = 
-                new Image(getClass().getResourceAsStream(imageFiles[i]));
+            final Image image = images[i] = new Image(getClass().getResourceAsStream(imageFiles[i]));
             hpl.setOnAction((ActionEvent e) -> {
                 selectedImage.setImage(image);
             });

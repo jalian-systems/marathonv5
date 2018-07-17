@@ -45,18 +45,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-
 public class TooltipSample extends Application {
 
-    final static String[] rooms = new String[]{
-        "Accommodation (BB)",
-        "Half Board",
-        "Late Check-out",
-        "Extra Bed"
-    };
-    final static Integer[] rates = new Integer[]{
-        100, 20, 10, 30
-    };
+    final static String[] rooms = new String[] { "Accommodation (BB)", "Half Board", "Late Check-out", "Extra Bed" };
+    final static Integer[] rates = new Integer[] { 100, 20, 10, 30 };
     final CheckBox[] cbs = new CheckBox[rooms.length];
     final Label total = new Label("Total: $0");
     Integer sum = 0;
@@ -73,24 +65,21 @@ public class TooltipSample extends Application {
         stage.setHeight(150);
 
         total.setFont(new Font("Arial", 20));
-        
+
         for (int i = 0; i < rooms.length; i++) {
             final CheckBox cb = cbs[i] = new CheckBox(rooms[i]);
             final Integer rate = rates[i];
             final Tooltip tooltip = new Tooltip("$" + rates[i].toString());
             tooltip.setFont(new Font("Arial", 16));
             cb.setTooltip(tooltip);
-	    cb.selectedProperty().addListener(
-                (ObservableValue<? extends Boolean> ov, Boolean old_val, 
-                Boolean new_val) -> {
-                    if (cb.isSelected()) {
-                        sum = sum + rate;
-                    } else {
-                        sum = sum - rate;
-                    }
-                    total.setText("Total: $" + sum.toString());
+            cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if (cb.isSelected()) {
+                    sum = sum + rate;
+                } else {
+                    sum = sum - rate;
                 }
-            );
+                total.setText("Total: $" + sum.toString());
+            });
         }
 
         VBox vbox = new VBox();

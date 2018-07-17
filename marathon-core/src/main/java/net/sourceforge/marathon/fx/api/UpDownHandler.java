@@ -36,7 +36,8 @@ public class UpDownHandler implements EventHandler<ActionEvent> {
         this.shouldMoveUp = shouldMoveUp;
     }
 
-    @Override public void handle(ActionEvent event) {
+    @Override
+    public void handle(ActionEvent event) {
         MultipleSelectionModel<ClassPathElement> selectionModel = classPathListView.getSelectionModel();
         ObservableList<ClassPathElement> items = classPathListView.getItems();
         int selectedIndex = selectionModel.getSelectedIndex();

@@ -36,11 +36,13 @@ public class RFXToggleButton extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseEntered(MouseEvent me) {
+    @Override
+    protected void mouseEntered(MouseEvent me) {
         prevSelection = ((ToggleButton) node).isSelected();
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         boolean selected = ((ToggleButton) node).isSelected();
         if (prevSelection == null || selected != prevSelection.booleanValue()) {
             recorder.recordSelect(this, Boolean.toString(selected));
@@ -48,11 +50,13 @@ public class RFXToggleButton extends RFXComponent {
         prevSelection = selected;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getToggleText((ToggleButton) node);
     }
 
-    @Override protected void keyPressed(KeyEvent ke) {
+    @Override
+    protected void keyPressed(KeyEvent ke) {
         if (ke.getCode() == KeyCode.SPACE) {
             recorder.recordRawKeyEvent(this, ke);
         }

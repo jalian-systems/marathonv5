@@ -30,11 +30,13 @@ public abstract class MarathonAction implements IMarathonAction {
             super(menuName, null, "", null, toolbar, menu);
         }
 
-        @Override public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
+        @Override
+        public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
                 int endCaretPosition, int startLine) throws Exception {
         }
 
-        @Override public boolean isSeperator() {
+        @Override
+        public boolean isSeperator() {
             return true;
         }
 
@@ -69,15 +71,18 @@ public abstract class MarathonAction implements IMarathonAction {
         this.command = command;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return name;
     }
 
-    @Override public String getDescription() {
+    @Override
+    public String getDescription() {
         return description;
     }
 
-    @Override public String getMneumonic() {
+    @Override
+    public String getMneumonic() {
         return mneumonic;
     }
 
@@ -85,11 +90,13 @@ public abstract class MarathonAction implements IMarathonAction {
         return editorProvider;
     }
 
-    @Override public boolean isToolBarAction() {
+    @Override
+    public boolean isToolBarAction() {
         return toolbar;
     }
 
-    @Override public boolean isMenuBarAction() {
+    @Override
+    public boolean isMenuBarAction() {
         return menubar;
     }
 
@@ -97,7 +104,8 @@ public abstract class MarathonAction implements IMarathonAction {
         this.menuName = menuName;
     }
 
-    @Override public String getMenuName() {
+    @Override
+    public String getMenuName() {
         return menuName;
     }
 
@@ -105,11 +113,13 @@ public abstract class MarathonAction implements IMarathonAction {
         this.accelKey = accelKey;
     }
 
-    @Override public String getAccelKey() {
+    @Override
+    public String getAccelKey() {
         return accelKey;
     }
 
-    @Override public boolean isSeperator() {
+    @Override
+    public boolean isSeperator() {
         return false;
     }
 
@@ -117,31 +127,38 @@ public abstract class MarathonAction implements IMarathonAction {
         this.menuMnemonic = mnemonicChar;
     }
 
-    @Override public char getMenuMnemonic() {
+    @Override
+    public char getMenuMnemonic() {
         return menuMnemonic;
     }
 
-    @Override public ToggleGroup getButtonGroup() {
+    @Override
+    public ToggleGroup getButtonGroup() {
         return null;
     }
 
-    @Override public boolean isSelected() {
+    @Override
+    public boolean isSelected() {
         return false;
     }
 
-    @Override public boolean isPopupMenu() {
+    @Override
+    public boolean isPopupMenu() {
         return false;
     }
 
-    @Override public Menu getPopupMenu() {
+    @Override
+    public Menu getPopupMenu() {
         return null;
     }
 
-    @Override public String getCommand() {
+    @Override
+    public String getCommand() {
         return command;
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return null;
     }
 }

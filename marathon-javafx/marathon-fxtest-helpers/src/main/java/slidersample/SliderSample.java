@@ -48,23 +48,18 @@ import javafx.stage.Stage;
 
 public class SliderSample extends Application {
 
-    final Slider opacityLevel = new Slider(0, 1, 1);    
+    final Slider opacityLevel = new Slider(0, 1, 1);
     final Slider sepiaTone = new Slider(0, 1, 1);
-    final Slider scaling = new Slider (0.5, 1, 1);
-    final Image image  = new Image(getClass().getResourceAsStream(
-        "cappuccino.jpg")
-    );
+    final Slider scaling = new Slider(0.5, 1, 1);
+    final Image image = new Image(getClass().getResourceAsStream("cappuccino.jpg"));
 
     final Label opacityCaption = new Label("Opacity Level:");
     final Label sepiaCaption = new Label("Sepia Tone:");
     final Label scalingCaption = new Label("Scaling Factor:");
 
-    final Label opacityValue = new Label(
-        Double.toString(opacityLevel.getValue()));
-    final Label sepiaValue = new Label(
-        Double.toString(sepiaTone.getValue()));
-    final Label scalingValue = new Label(
-        Double.toString(scaling.getValue()));
+    final Label opacityValue = new Label(Double.toString(opacityLevel.getValue()));
+    final Label sepiaValue = new Label(Double.toString(sepiaTone.getValue()));
+    final Label scalingValue = new Label(Double.toString(scaling.getValue()));
 
     final static Color textColor = Color.BLACK;
     final static SepiaTone sepiaEffect = new SepiaTone();
@@ -81,7 +76,7 @@ public class SliderSample extends Application {
         grid.setVgap(10);
         grid.setHgap(70);
 
-        final ImageView cappuccino = new ImageView (image);
+        final ImageView cappuccino = new ImageView(image);
         cappuccino.setEffect(sepiaEffect);
         GridPane.setConstraints(cappuccino, 0, 0);
         GridPane.setColumnSpan(cappuccino, 3);
@@ -91,13 +86,10 @@ public class SliderSample extends Application {
         opacityCaption.setTextFill(textColor);
         GridPane.setConstraints(opacityCaption, 0, 1);
         grid.getChildren().add(opacityCaption);
-        
 
-        opacityLevel.valueProperty().addListener((
-            ObservableValue<? extends Number> ov, 
-            Number old_val, Number new_val) -> {
-                cappuccino.setOpacity(new_val.doubleValue());
-                opacityValue.setText(String.format("%.2f", new_val));
+        opacityLevel.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            cappuccino.setOpacity(new_val.doubleValue());
+            opacityValue.setText(String.format("%.2f", new_val));
         });
 
         GridPane.setConstraints(opacityLevel, 1, 1);
@@ -111,11 +103,9 @@ public class SliderSample extends Application {
         GridPane.setConstraints(sepiaCaption, 0, 2);
         grid.getChildren().add(sepiaCaption);
 
-        sepiaTone.valueProperty().addListener((
-            ObservableValue<? extends Number> ov, Number old_val, 
-            Number new_val) -> {
-                sepiaEffect.setLevel(new_val.doubleValue());
-                sepiaValue.setText(String.format("%.2f", new_val));
+        sepiaTone.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            sepiaEffect.setLevel(new_val.doubleValue());
+            sepiaValue.setText(String.format("%.2f", new_val));
         });
         GridPane.setConstraints(sepiaTone, 1, 2);
         grid.getChildren().add(sepiaTone);
@@ -128,12 +118,10 @@ public class SliderSample extends Application {
         GridPane.setConstraints(scalingCaption, 0, 3);
         grid.getChildren().add(scalingCaption);
 
-        scaling.valueProperty().addListener((
-            ObservableValue<? extends Number> ov, Number old_val, 
-            Number new_val) -> {
-                cappuccino.setScaleX(new_val.doubleValue());
-                cappuccino.setScaleY(new_val.doubleValue());
-                scalingValue.setText(String.format("%.2f", new_val));
+        scaling.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            cappuccino.setScaleX(new_val.doubleValue());
+            cappuccino.setScaleY(new_val.doubleValue());
+            scalingValue.setText(String.format("%.2f", new_val));
         });
         GridPane.setConstraints(scaling, 1, 3);
         grid.getChildren().add(scaling);

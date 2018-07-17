@@ -60,7 +60,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         this.id = parent.getElementId();
     }
 
-    @Override public void click() {
+    @Override
+    public void click() {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -68,7 +69,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         click(0, null, null, 1, (int) p.getX(), (int) p.getY());
     }
 
-    @Override public void sendKeys(CharSequence... keysToSend) {
+    @Override
+    public void sendKeys(CharSequence... keysToSend) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -76,7 +78,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         kb.sendKeys(node, keysToSend);
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
         EventQueueWait.call_noexc(this, "_clear");
     }
 
@@ -89,17 +92,20 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         }
     }
 
-    @Override public Point2D getLocation() {
+    @Override
+    public Point2D getLocation() {
         Bounds bounds = node.getBoundsInParent();
         return new Point2D(bounds.getMinX(), bounds.getMinY());
     }
 
-    @Override public Dimension2D getSize() {
+    @Override
+    public Dimension2D getSize() {
         Bounds bounds = node.getBoundsInParent();
         return new Dimension2D(bounds.getWidth(), bounds.getHeight());
     }
 
-    @Override public String getCssValue(String propertyName) {
+    @Override
+    public String getCssValue(String propertyName) {
         List<CssMetaData<? extends Styleable, ?>> cssMetaData = node.getCssMetaData();
         if (propertyName.equals("all")) {
             return cssMetaData.toString();
@@ -116,7 +122,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return null;
     }
 
-    @Override public String getHandle() {
+    @Override
+    public String getHandle() {
         if (this instanceof IPseudoElement) {
             try {
                 return URLEncoder.encode(((IPseudoElement) this).createHandle(), "utf8");
@@ -127,11 +134,13 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return id.toString();
     }
 
-    @Override public UUID getElementId() {
+    @Override
+    public UUID getElementId() {
         return id;
     }
 
-    @Override public boolean filterByPseudoClass(String function, Object... args) {
+    @Override
+    public boolean filterByPseudoClass(String function, Object... args) {
         if (function.equals("enabled")) {
             return isEnabled();
         } else if (function.equals("disabled")) {
@@ -163,7 +172,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         }
     }
 
-    @Override public IJavaFXElement[] getComponents() {
+    @Override
+    public IJavaFXElement[] getComponents() {
         List<IJavaFXElement> elements = new ArrayList<>();
         if (node instanceof Parent) {
             ObservableList<Node> childrenUnmodifiable = ((Parent) node).getChildrenUnmodifiable();
@@ -174,7 +184,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return elements.toArray(new IJavaFXElement[elements.size()]);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("call-select")) {
             if (marathon_select((String) params[0])) {
                 return Arrays.asList((IJavaFXElement) this);
@@ -191,16 +202,19 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
                 "Pseudo element selector " + selector + " is not applicable for " + node.getClass().getName(), null);
     }
 
-    @Override public String createId() {
+    @Override
+    public String createId() {
         this.id = UUID.randomUUID();
         return this.id.toString();
     }
 
-    @Override public void setId(UUID id) {
+    @Override
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    @Override public void moveto() {
+    @Override
+    public void moveto() {
         EventQueueWait.call_noexc(this, "_moveto");
     }
 
@@ -208,7 +222,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         driver.getDevices().moveto(node);
     }
 
-    @Override public void moveto(double xoffset, double yoffset) {
+    @Override
+    public void moveto(double xoffset, double yoffset) {
         EventQueueWait.call_noexc(this, "_moveto", xoffset, yoffset);
     }
 
@@ -216,7 +231,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         driver.getDevices().moveto(node, xoffset, yoffset);
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -224,7 +240,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         mouse.click(node, target, pickResult, Buttons.getButtonFor(button), clickCount, xoffset, yoffset);
     }
 
-    @Override public void buttonDown(int button, double xoffset, double yoffset) {
+    @Override
+    public void buttonDown(int button, double xoffset, double yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -232,7 +249,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         mouse.buttonDown(node, Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
-    @Override public void buttonUp(int button, double xoffset, double yoffset) {
+    @Override
+    public void buttonUp(int button, double xoffset, double yoffset) {
         verifyCanInteractWithElement();
 
         EventQueueWait.requestFocus(node);
@@ -240,17 +258,20 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         mouse.buttonUp(node, Buttons.getButtonFor(button), xoffset, yoffset);
     }
 
-    @Override public boolean marathon_select(JSONArray jsonArray) {
+    @Override
+    public boolean marathon_select(JSONArray jsonArray) {
         throw new UnsupportedCommandException("Select method by properties" + " is not applicable for " + node.getClass().getName()
                 + " (" + this.getClass().getName() + ")", null);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         throw new UnsupportedCommandException(
                 "Select method is not applicable for " + node.getClass().getName() + " (" + this.getClass().getName() + ")", null);
     }
 
-    @Override public void submit() {
+    @Override
+    public void submit() {
     }
 
     private void verifyCanInteractWithElement() {
@@ -273,14 +294,16 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         }
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (id == null ? 0 : id.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -301,7 +324,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return true;
     }
 
-    @Override public IJavaFXElement findElementByName(String using) {
+    @Override
+    public IJavaFXElement findElementByName(String using) {
         List<IJavaFXElement> elements = findElementsByName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No node found using name: " + using, null);
@@ -309,7 +333,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return elements.get(0);
     }
 
-    @Override public IJavaFXElement findElementByClassName(String using) {
+    @Override
+    public IJavaFXElement findElementByClassName(String using) {
         List<IJavaFXElement> elements = findElementsByClassName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -317,15 +342,18 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return elements.get(0);
     }
 
-    @Override public List<IJavaFXElement> findElementsByClassName(String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByClassName(String using) {
         return findElementsByCssSelector(":instance-of('" + using + "')");
     }
 
-    @Override public List<IJavaFXElement> findElementsByName(String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByName(String using) {
         return findElementsByCssSelector("#'" + using + "'");
     }
 
-    @Override public IJavaFXElement findElementByTagName(String using) {
+    @Override
+    public IJavaFXElement findElementByTagName(String using) {
         List<IJavaFXElement> elements = findElementsByTagName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -333,11 +361,13 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return elements.get(0);
     }
 
-    @Override public List<IJavaFXElement> findElementsByTagName(String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByTagName(String using) {
         return findElementsByCssSelector(using);
     }
 
-    @Override public IJavaFXElement findElementByCssSelector(String using) {
+    @Override
+    public IJavaFXElement findElementByCssSelector(String using) {
         List<IJavaFXElement> elements = findElementsByCssSelector(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
@@ -345,7 +375,8 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         return elements.get(0);
     }
 
-    @Override public List<IJavaFXElement> findElementsByCssSelector(String using) {
+    @Override
+    public List<IJavaFXElement> findElementsByCssSelector(String using) {
         FindByCssSelector finder = new FindByCssSelector(this, driver, driver.getImplicitWait());
         return finder.findElements(using);
     }

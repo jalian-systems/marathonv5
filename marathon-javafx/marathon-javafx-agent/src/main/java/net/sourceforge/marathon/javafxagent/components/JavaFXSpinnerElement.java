@@ -38,7 +38,9 @@ public class JavaFXSpinnerElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @SuppressWarnings("unchecked") @Override public boolean marathon_select(String value) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean marathon_select(String value) {
         Spinner<?> spinner = (Spinner<?>) getComponent();
         if (!spinner.isEditable()) {
             @SuppressWarnings("rawtypes")
@@ -57,14 +59,16 @@ public class JavaFXSpinnerElement extends JavaFXElement {
         return true;
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor")) {
             return Arrays.asList(JavaFXElementFactory.createElement(getEditor(), driver, window));
         }
         return super.getByPseudoElement(selector, params);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSpinnerText((Spinner<?>) getComponent());
     }
 

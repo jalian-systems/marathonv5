@@ -17,7 +17,9 @@ public class RFXTextFieldListCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         TextFieldListCell<?> cell = (TextFieldListCell<?>) node;
         @SuppressWarnings("rawtypes")
         StringConverter converter = cell.getConverter();

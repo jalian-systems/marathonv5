@@ -35,13 +35,16 @@ import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.javaagent.components.PropertyHelper;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RListTest extends RComponentTest {
+@Test
+public class RListTest extends RComponentTest {
     protected JFrame frame;
     private JList list;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RListTest.class.getSimpleName());
                 frame.setName("frame-" + RListTest.class.getSimpleName());
                 frame.getContentPane().add(new ListDemo(), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -63,7 +68,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectNoSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 list.setSelectedIndices(new int[0]);
                 RList rList = new RList(list, null, null, lr);
@@ -78,7 +84,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectSingleItemSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 list.setSelectedIndices(new int[] { 1 });
                 RList rList = new RList(list, null, null, lr);
@@ -93,7 +100,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectMultipleItemSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 list.setSelectedIndices(new int[] { 0, 2 });
@@ -109,7 +117,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectSpecialItemSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
                 model.set(0, " Special Characters ([],)");
@@ -126,7 +135,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void listDuplicates() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 list.setSelectedIndices(new int[] { 1 });
                 RList rList = new RList(list, null, null, lr);
@@ -138,7 +148,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("[John Smith]", call.getState());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
                 model.set(2, "John Smith");
@@ -155,7 +166,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void listMultipleDuplicates() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 list.setSelectedIndices(new int[] { 1 });
                 RList rList = new RList(list, null, null, lr);
@@ -167,7 +179,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("[John Smith]", call.getState());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
                 model.set(0, "John Smith");
@@ -192,14 +205,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContent() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
             }
         });
         final RList rList = new RList(list, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rList.getContent();
             }
         });
@@ -209,7 +224,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContentDuplicates() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
                 model.set(2, "John Smith");
@@ -219,7 +235,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final RList rList = new RList(list, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rList.getContent();
             }
         });

@@ -29,14 +29,16 @@ public abstract class Dockable {
 
     abstract public Node getComponent();
 
-    @Override public final int hashCode() {
+    @Override
+    public final int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (getDockKey() == null ? 0 : getDockKey().hashCode());
         return result;
     }
 
-    @Override public final boolean equals(Object obj) {
+    @Override
+    public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }

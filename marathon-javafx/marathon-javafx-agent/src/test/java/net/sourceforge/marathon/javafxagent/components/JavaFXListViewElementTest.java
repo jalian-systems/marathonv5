@@ -36,93 +36,109 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement listView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         listView = driver.findElementByTagName("list-view");
     }
 
-    @Test public void selectForNoCells() {
+    @Test
+    public void selectForNoCells() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         listView.marathon_select("[]");
         new Wait("Waiting for no selection") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return listViewNode.getSelectionModel().getSelectedIndices().size() == 0;
             }
         };
     }
 
-    @Test public void selectForSingleItem() {
+    @Test
+    public void selectForSingleItem() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(() -> listView.marathon_select("[\"Row 2\"]"));
         new Wait("Waiting for list item to be select") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return listViewNode.getSelectionModel().getSelectedIndex() == 1;
             }
         };
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             listView.marathon_select("[\"Row 2\"]");
             text.add(listView.getAttribute("text"));
         });
         new Wait("Waiting for list item text") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[\"Row 2\"]", text.get(0));
     }
 
-    @Test public void getTextForMultipleSelection() {
+    @Test
+    public void getTextForMultipleSelection() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             listView.marathon_select("[\"Row 2\",\"Row 20\"]");
             text.add(listView.getAttribute("text"));
         });
         new Wait("Waiting for list item text") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[\"Row 2\",\"Row 20\"]", text.get(0));
     }
 
-    @Test public void selectForMultipleItems() {
+    @Test
+    public void selectForMultipleItems() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(() -> listView.marathon_select("[\"Row 2\",\"Row 20\"]"));
         new Wait("Waiting for list item to be select") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 ObservableList<Integer> selectedIndices = listViewNode.getSelectionModel().getSelectedIndices();
                 return selectedIndices.size() == 2;
             }
         };
     }
 
-    @Test public void selectForDuplicateItems() {
+    @Test
+    public void selectForDuplicateItems() {
         @SuppressWarnings("unchecked")
         ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 listViewNode.getItems().add(2, "Row 2");
             }
         });
         Platform.runLater(() -> listView.marathon_select("[\"Row 2(1)\"]"));
         new Wait("Waiting for list item to be select") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return listViewNode.getSelectionModel().getSelectedIndex() == 2;
             }
         };
     }
 
-    @Test public void selectForMultipleDuplicates() {
+    @Test
+    public void selectForMultipleDuplicates() {
         @SuppressWarnings("unchecked")
         ListView<String> listViewNode = (ListView<String>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         Platform.runLater(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 listViewNode.getItems().add(2, "Row 2");
                 listViewNode.getItems().add(9, "Row 2");
                 listViewNode.getItems().add(10, "Row 2");
@@ -130,24 +146,28 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
         });
         Platform.runLater(() -> listView.marathon_select("[\"Row 2(3)\"]"));
         new Wait("Waiting for list item to be select") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return listViewNode.getSelectionModel().getSelectedIndex() == 10;
             }
         };
     }
 
-    @Test public void clickNthelement() {
+    @Test
+    public void clickNthelement() {
         ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         IJavaFXElement item = listView.findElementByCssSelector(".::nth-item(3)");
         item.click();
         new Wait("Waiting for list item to be select") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return listViewNode.getSelectionModel().getSelectedIndex() == 2;
             }
         };
     }
 
-    @Test public void getTextNthelement() {
+    @Test
+    public void getTextNthelement() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             IJavaFXElement item = listView.findElementByCssSelector(".::nth-item(3)");
@@ -156,19 +176,22 @@ public class JavaFXListViewElementTest extends JavaFXElementTest {
 
         });
         new Wait("Waiting for list item text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Long Row 3", text.get(0));
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         String expected = "[[\"Row 1\",\"Row 2\",\"Long Row 3\",\"Row 4\",\"Row 5\",\"Row 6\",\"Row 7\",\"Row 8\",\"Row 9\",\"Row 10\",\"Row 11\",\"Row 12\",\"Row 13\",\"Row 14\",\"Row 15\",\"Row 16\",\"Row 17\",\"Row 18\",\"Row 19\",\"Row 20\"]]";
         AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new SimpleListViewSample();
     }
 }

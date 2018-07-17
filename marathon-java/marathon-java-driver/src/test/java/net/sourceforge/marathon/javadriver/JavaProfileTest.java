@@ -31,7 +31,8 @@ import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JavaProfileTest {
+@Test
+public class JavaProfileTest {
 
     public void getCommandLine() {
         JavaProfile profile = new JavaProfile();
@@ -52,7 +53,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         commandLine.copyOutputTo(baos);
         commandLine.executeAsync();
         new Wait("Waiting till the command is complete") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !commandLine.isRunning();
             }
         };
@@ -103,7 +105,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         commandLine.copyOutputTo(baos);
         commandLine.executeAsync();
         new Wait("Waiting till the command is complete") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !commandLine.isRunning();
             }
         };

@@ -178,7 +178,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             });
         }
 
-        @Override public void startEdit() {
+        @Override
+        public void startEdit() {
             Resource resource = getItem();
             if (resource == null || !resource.canRename()) {
                 return;
@@ -195,7 +196,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             textField.requestFocus();
         }
 
-        @Override public void cancelEdit() {
+        @Override
+        public void cancelEdit() {
             super.cancelEdit();
             if (getItem() != null) {
                 setText(getItem().getName());
@@ -205,7 +207,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             }
         }
 
-        @Override public void updateItem(Resource item, boolean empty) {
+        @Override
+        public void updateItem(Resource item, boolean empty) {
             super.updateItem(item, empty);
 
             if (empty) {
@@ -233,7 +236,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             textField = new TextField(getString());
             textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
-                @Override public void handle(KeyEvent t) {
+                @Override
+                public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
                         Resource value = getTreeItem().getValue();
                         File file = new File(((FolderResource) value.getParent()).getFilePath().toFile(), textField.getText());
@@ -292,7 +296,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
             this.to = to;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "ResourceModificationEvent [getTarget()=" + getTarget() + ", getEventType()=" + getEventType() + ", getSource()="
                     + getSource() + "]";
         }
@@ -334,12 +339,14 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         setContextMenuItems();
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         getSelectionModel().getSelectedItems().addListener(new ListChangeListener<TreeItem<Resource>>() {
-            @Override public void onChanged(Change<? extends TreeItem<Resource>> c) {
+            @Override
+            public void onChanged(Change<? extends TreeItem<Resource>> c) {
                 setContextMenuItems();
             }
         });
         Callback<TreeView<Resource>, TreeCell<Resource>> value = new Callback<TreeView<Resource>, TreeCell<Resource>>() {
-            @Override public TreeCell<Resource> call(TreeView<Resource> param) {
+            @Override
+            public TreeCell<Resource> call(TreeView<Resource> param) {
                 return new TextFieldTreeCellImpl();
             }
         };
@@ -645,7 +652,8 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         paste(getSelectionModel().getSelectedItem().getValue());
     }
 
-    @Override public void deleted(IResourceActionSource source, Resource resource) {
+    @Override
+    public void deleted(IResourceActionSource source, Resource resource) {
         List<Resource> found = new ArrayList<>();
         ((Resource) getRoot()).findNodes(resource, found);
         for (Resource r : found) {
@@ -655,15 +663,18 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         }
     }
 
-    @Override public void updated(IResourceActionSource source, Resource resource) {
+    @Override
+    public void updated(IResourceActionSource source, Resource resource) {
         ((RootResource) getRoot()).updated(resource);
     }
 
-    @Override public void moved(IResourceActionSource source, Resource from, Resource to) {
+    @Override
+    public void moved(IResourceActionSource source, Resource from, Resource to) {
         ((RootResource) getRoot()).moved(from, to);
     }
 
-    @Override public void copied(IResourceActionSource source, Resource from, Resource to) {
+    @Override
+    public void copied(IResourceActionSource source, Resource from, Resource to) {
         ((RootResource) getRoot()).copied(from, to);
     }
 

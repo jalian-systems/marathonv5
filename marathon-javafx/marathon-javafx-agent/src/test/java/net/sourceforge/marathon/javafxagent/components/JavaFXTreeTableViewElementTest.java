@@ -38,63 +38,74 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement treeTable;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         treeTable = driver.findElementByTagName("tree-table-view");
     }
 
-    @Test public void selectNoRow() {
+    @Test
+    public void selectNoRow() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             treeTableNode.getSelectionModel().select(0);
             treeTable.marathon_select("");
         });
         new Wait("Waiting for no selection") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedIndices().size() == 0;
             }
         };
     }
 
-    @Test public void selectAllRows() {
+    @Test
+    public void selectAllRows() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             treeTableNode.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             treeTable.marathon_select("all");
         });
         new Wait("Waiting for all rows to be selected.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedIndices().size() == treeTableNode.getExpandedItemCount();
             }
         };
     }
 
-    @Test public void selectARow() {
+    @Test
+    public void selectARow() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             treeTable.marathon_select("{\"rows\":[\"/Sales Department/Emma Jones\"]}");
         });
         new Wait("Waiting for row to be selected.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedIndex() == 2;
             }
         };
     }
 
-    @Test public void selectMultipleRows() {
+    @Test
+    public void selectMultipleRows() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             treeTableNode.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             treeTable.marathon_select("{\"rows\":[\"/Sales Department/Emma Jones\",\"/Sales Department/Anna Black\"]}");
         });
         new Wait("Waiting for rows to be selected.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedIndices().size() > 1;
             }
         };
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectNoCell() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectNoCell() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             TreeTableViewSelectionModel<?> selectionModel = treeTableNode.getSelectionModel();
@@ -103,13 +114,16 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
             treeTable.marathon_select("");
         });
         new Wait("Waiting for no cell selection") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedCells().size() == 0;
             }
         };
     }
 
-    @SuppressWarnings("unchecked") @Test public void selectAllCells() {
+    @SuppressWarnings("unchecked")
+    @Test
+    public void selectAllCells() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             TreeTableViewSelectionModel<?> selectionModel = treeTableNode.getSelectionModel();
@@ -120,14 +134,16 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
             treeTable.marathon_select("all");
         });
         new Wait("Waiting for all cells to be selected") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedCells().size() == treeTableNode.getExpandedItemCount()
                         * treeTableNode.getColumns().size();
             }
         };
     }
 
-    @Test public void selectACell() {
+    @Test
+    public void selectACell() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             TreeTableViewSelectionModel<?> selectionModel = treeTableNode.getSelectionModel();
@@ -135,13 +151,15 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
             treeTable.marathon_select("{\"cells\":[[\"/Sales Department/Ethan Williams\",\"Employee\"]]}");
         });
         new Wait("Waiting for cell to be selected") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedCells().size() == 1;
             }
         };
     }
 
-    @Test public void selectMultipleCells() {
+    @Test
+    public void selectMultipleCells() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         Platform.runLater(() -> {
             TreeTableViewSelectionModel<?> selectionModel = treeTableNode.getSelectionModel();
@@ -151,27 +169,31 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
                     "{\"cells\":[[\"/Sales Department/Ethan Williams\",\"Employee\"],[\"/Sales Department/Michael Brown\",\"Email\"]]}");
         });
         new Wait("Waiting for cells to be selected") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return treeTableNode.getSelectionModel().getSelectedCells().size() == 2;
             }
         };
     }
 
-    @Test public void selectPseudoElement() {
+    @Test
+    public void selectPseudoElement() {
         List<Object> columnName = new ArrayList<>();
         Platform.runLater(() -> {
             IJavaFXElement e = treeTable.findElementByCssSelector(".::mnth-cell(3,2)");
             columnName.add(e.getAttribute("viewColumnName"));
         });
         new Wait("Waiting for column name") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return columnName.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Email", columnName.get(0));
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         TreeTableView<?> treeTableNode = (TreeTableView<?>) getPrimaryStage().getScene().getRoot().lookup(".tree-table-view");
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
@@ -180,23 +202,27 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
             text.add(treeTable.getAttribute("text"));
         });
         new Wait("Waiting for tree table text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("{\"rows\":[\"/Sales Department/Emma Jones\",\"/Sales Department/Anna Black\"]}", text.get(0));
     }
 
-    @Test public void assertContent() {
+    @Test
+    public void assertContent() {
         String expected = "[[\"Sales Department\",\"\"],[\"Ethan Williams\",\"ethan.williams@example.com\"],[\"Emma Jones\",\"emma.jones@example.com\"],[\"Michael Brown\",\"michael.brown@example.com\"],[\"Anna Black\",\"anna.black@example.com\"],[\"Rodger York\",\"roger.york@example.com\"],[\"Susan Collins\",\"susan.collins@example.com\"]]";
         AssertJUnit.assertEquals(expected, treeTable.getAttribute("content"));
     }
 
-    @SuppressWarnings("rawtypes") private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
+    @SuppressWarnings("rawtypes")
+    private TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
         return treeTableView.getColumns().get(index);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TreeTableSample();
     }
 

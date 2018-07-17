@@ -53,12 +53,14 @@ public class CreditsStage extends ModalDialog<String> {
         buttonBar.getButtons().add(okButton);
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox content = new VBox();
         content.getStyleClass().add("credits-stage");
         content.setId("creditsStage");
@@ -127,7 +129,8 @@ public class CreditsStage extends ModalDialog<String> {
         dispose();
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         okButton.setDefaultButton(true);
     }
 

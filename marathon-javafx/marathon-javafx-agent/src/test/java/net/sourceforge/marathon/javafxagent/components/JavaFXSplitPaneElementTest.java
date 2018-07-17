@@ -36,19 +36,22 @@ public class JavaFXSplitPaneElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement splitPane;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         splitPane = driver.findElementByTagName("split-pane");
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         SplitPane splitPaneNode = (SplitPane) getPrimaryStage().getScene().getRoot().lookup(".split-pane");
         JSONArray initialValue = new JSONArray(splitPaneNode.getDividerPositions());
         Platform.runLater(() -> {
             splitPane.marathon_select("[0.6]");
         });
         new Wait("Waiting for split pane to set divider location") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return initialValue.getDouble(0) != new JSONArray(splitPaneNode.getDividerPositions()).getDouble(0);
             }
         };
@@ -56,28 +59,32 @@ public class JavaFXSplitPaneElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals(0.6, pa.getDouble(0), 0.2);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             splitPane.marathon_select("[0.6]");
             text.add(splitPane.getAttribute("text"));
         });
         new Wait("Waiting for split pane text") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("[0.6,0.6008064516129032]", text.get(0));
     }
 
-    @Test public void select2() {
+    @Test
+    public void select2() {
         SplitPane splitPaneNode = (SplitPane) getPrimaryStage().getScene().getRoot().lookup(".split-pane");
         JSONArray initialValue = new JSONArray(splitPaneNode.getDividerPositions());
         Platform.runLater(() -> {
             splitPane.marathon_select("[0.30158730158730157,0.8]");
         });
         new Wait("Waiting for split pane to set divider location") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return initialValue.getDouble(1) != new JSONArray(splitPaneNode.getDividerPositions()).getDouble(1);
             }
         };
@@ -85,7 +92,8 @@ public class JavaFXSplitPaneElementTest extends JavaFXElementTest {
         AssertJUnit.assertEquals(0.8, pa.getDouble(1), 0.1);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new SplitPaneSample();
     }
 

@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class HTMLEditorSampleApp extends Application {
 
-    @Override public void start(Stage stage) {
+    @Override
+    public void start(Stage stage) {
         stage.setTitle("Message Composing");
         stage.setWidth(500);
         stage.setHeight(500);

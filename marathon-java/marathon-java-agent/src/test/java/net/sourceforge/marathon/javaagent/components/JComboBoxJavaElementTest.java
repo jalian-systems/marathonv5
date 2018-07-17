@@ -36,15 +36,18 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class JComboBoxJavaElementTest extends JavaElementTest {
+@Test
+public class JComboBoxJavaElementTest extends JavaElementTest {
 
     protected JFrame frame;
     private IJavaAgent driver;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         JavaElementFactory.add(JComboBox.class, JComboBoxJavaElement.class);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JComboBoxJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JComboBoxJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new ComboBoxDemo(), BorderLayout.CENTER);
@@ -56,9 +59,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -118,7 +123,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("Howard, Scott, Hans", nthOption.getText());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> combos = ComponentUtils.findComponents(JComboBox.class, frame);
                 JComboBox presets = (JComboBox) combos.get(0);
                 presets.insertItemAt("Howard, Scott, Hans", 4);
@@ -139,7 +145,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("Howard, Scott, Hans", nthOption.getText());
 
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> combos = ComponentUtils.findComponents(JComboBox.class, frame);
                 JComboBox presets = (JComboBox) combos.get(0);
                 presets.insertItemAt("Howard, Scott, Hans", 4);
@@ -164,7 +171,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         List<IJavaElement> combos = driver.findElementsByTagName("combo-box");
         IJavaElement presets = combos.get(0);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> combos = ComponentUtils.findComponents(JComboBox.class, frame);
                 JComboBox presets = (JComboBox) combos.get(0);
                 presets.insertItemAt("Howard, Scott, Hans", 4);
@@ -178,7 +186,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         List<IJavaElement> combos = driver.findElementsByTagName("combo-box");
         IJavaElement presets = combos.get(0);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 List<Component> combos = ComponentUtils.findComponents(JComboBox.class, frame);
                 JComboBox presets = (JComboBox) combos.get(0);
                 presets.insertItemAt("Howard, Scott, Hans", 4);

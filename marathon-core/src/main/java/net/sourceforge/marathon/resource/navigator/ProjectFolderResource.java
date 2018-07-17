@@ -51,11 +51,13 @@ public final class ProjectFolderResource extends FolderResource implements RootR
         }
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return name;
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         try {
             ProjectFile.updateProjectProperty(Constants.PROP_PROJECT_NAME, text);
             name = text;
@@ -66,14 +68,17 @@ public final class ProjectFolderResource extends FolderResource implements RootR
         return this;
     }
 
-    @Override public void setIcon() {
+    @Override
+    public void setIcon() {
         setGraphic(FXUIUtils.getIcon("prj_obj"));
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
     }
 
-    @Override public void updated(Resource resource) {
+    @Override
+    public void updated(Resource resource) {
         Path projectFilePath = super.getFilePath().resolve(ProjectFile.PROJECT_FILE);
         if (projectFilePath.equals(resource.getFilePath())) {
             setName();
@@ -81,29 +86,36 @@ public final class ProjectFolderResource extends FolderResource implements RootR
         }
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return false;
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return true;
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return true;
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         return false;
     }
 
-    @Override public void moved(Resource from, Resource to) {
+    @Override
+    public void moved(Resource from, Resource to) {
     }
 
-    @Override public void copied(Resource from, Resource to) {
+    @Override
+    public void copied(Resource from, Resource to) {
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         TestCreator testCreator = new TestCreator(acceptChecklist, console);
         return testCreator.getTest("AllTests");
     }

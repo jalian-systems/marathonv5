@@ -39,7 +39,8 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("select-by-properties")) {
             return findNodeByProperties(new JSONObject((String) params[0]));
         } else if (selector.equals("root")) {
@@ -71,11 +72,13 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         return r;
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         return setSelectionPath(value);
     }
 
-    @SuppressWarnings("unchecked") private boolean setSelectionPath(String value) {
+    @SuppressWarnings("unchecked")
+    private boolean setSelectionPath(String value) {
         TreeView<?> treeView = (TreeView<?>) getComponent();
         JSONArray pathElements = new JSONArray(value);
         List<TreeItem<?>> paths = new ArrayList<>();
@@ -93,7 +96,8 @@ public class JavaFXTreeViewElement extends JavaFXElement {
         return true;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSelectedTreeNodeText((TreeView<?>) getComponent(),
                 ((TreeView<?>) getComponent()).getSelectionModel().getSelectedItems());
     }

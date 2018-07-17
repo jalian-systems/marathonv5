@@ -51,27 +51,27 @@ import javafx.util.Callback;
  */
 public class DynamicTreeViewSample extends Application {
 
-	private AssertionTreeView treeView;
+    private AssertionTreeView treeView;
 
-	public DynamicTreeViewSample() {
-		treeView = new AssertionTreeView();
-		treeView.setRootObject(new File("./src"));
-	}
+    public DynamicTreeViewSample() {
+        treeView = new AssertionTreeView();
+        treeView.setRootObject(new File("./src"));
+    }
 
-	@Override
-	public void start(Stage stage) throws Exception {
-		stage.setTitle("Tree View Sample");
-		final Scene scene = new Scene(getBox(), 400, 300);
-		scene.setFill(Color.LIGHTGRAY);
-		stage.setScene(scene);
-		stage.show();
-	}
+    @Override
+    public void start(Stage stage) throws Exception {
+        stage.setTitle("Tree View Sample");
+        final Scene scene = new Scene(getBox(), 400, 300);
+        scene.setFill(Color.LIGHTGRAY);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-	private Parent getBox() {
-		return treeView;
-	}
+    private Parent getBox() {
+        return treeView;
+    }
 
-	public static void main(String[] args) {
-		Application.launch(args);
-	}
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
 }

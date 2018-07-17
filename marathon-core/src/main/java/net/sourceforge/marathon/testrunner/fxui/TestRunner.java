@@ -85,12 +85,14 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     }
 
     private class MarathonRunListener extends RunListener {
-        @Override public void testStarted(Description description) throws Exception {
+        @Override
+        public void testStarted(Description description) throws Exception {
             Test t = (Test) TestAttributes.get("test_object");
             if (t == null)
                 return;
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     collapseAllNodes();
                     TestTreeItem testNode = findTestItem(t);
                     testNode.setState(State.RUNNING);
@@ -107,7 +109,8 @@ public class TestRunner extends Dockable implements IResourceActionSource {
             });
         }
 
-        @Override public void testFinished(Description description) throws Exception {
+        @Override
+        public void testFinished(Description description) throws Exception {
             Test t = (Test) TestAttributes.get("test_object");
             TestTreeItem testNode = findTestItem(t);
             Platform.runLater(() -> progressBar.increment());
@@ -115,7 +118,8 @@ public class TestRunner extends Dockable implements IResourceActionSource {
             testTree.refresh();
         }
 
-        @Override public void testAssumptionFailure(Failure failure) {
+        @Override
+        public void testAssumptionFailure(Failure failure) {
             Test t = (Test) TestAttributes.get("test_object");
             TestTreeItem testNode = findTestItem(t);
             testNode.setThrowable(new AssertionFailedError(failure.getMessage()));
@@ -127,7 +131,8 @@ public class TestRunner extends Dockable implements IResourceActionSource {
             });
         }
 
-        @Override public void testFailure(Failure failure) throws Exception {
+        @Override
+        public void testFailure(Failure failure) throws Exception {
             Test t = (Test) TestAttributes.get("test_object");
             TestTreeItem testNode = findTestItem(t);
             testNode.setThrowable(failure.getException());
@@ -159,16 +164,26 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     private Label errorMsgLabel = new Label();
 
     private RunListener runListener = new MarathonRunListener();
-    @ISimpleAction(description = "Expand All") AbstractSimpleAction expandAllAction;
-    @ISimpleAction(description = "Collapse All") AbstractSimpleAction collapseAllAction;
-    @ISimpleAction(description = "Next Failure") AbstractSimpleAction nextFailureAction;
-    @ISimpleAction(description = "Previous Failure") AbstractSimpleAction prevFailureAction;
-    @ISimpleAction(description = "Show Failures only") AbstractSimpleAction failuresAction;
-    @ISimpleAction(description = "Run History") AbstractSimpleAction runAction;
-    @ISimpleAction(description = "Manage History...") AbstractSimpleAction manageHistoryAction;
-    @ISimpleAction(description = "Stop") AbstractSimpleAction stopAction;
-    @ISimpleAction(description = "Run Selected Test") AbstractSimpleAction runSelected;
-    @ISimpleAction(description = "Test Report") AbstractSimpleAction reportAction;
+    @ISimpleAction(description = "Expand All")
+    AbstractSimpleAction expandAllAction;
+    @ISimpleAction(description = "Collapse All")
+    AbstractSimpleAction collapseAllAction;
+    @ISimpleAction(description = "Next Failure")
+    AbstractSimpleAction nextFailureAction;
+    @ISimpleAction(description = "Previous Failure")
+    AbstractSimpleAction prevFailureAction;
+    @ISimpleAction(description = "Show Failures only")
+    AbstractSimpleAction failuresAction;
+    @ISimpleAction(description = "Run History")
+    AbstractSimpleAction runAction;
+    @ISimpleAction(description = "Manage History...")
+    AbstractSimpleAction manageHistoryAction;
+    @ISimpleAction(description = "Stop")
+    AbstractSimpleAction stopAction;
+    @ISimpleAction(description = "Run Selected Test")
+    AbstractSimpleAction runSelected;
+    @ISimpleAction(description = "Test Report")
+    AbstractSimpleAction reportAction;
 
     private Mode mode = Mode.NORMAL;
     private ITestListener testOpenListener = null;
@@ -214,7 +229,8 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         testTree.setContextMenu(new ContextMenu(expandAllAction.getMenuItem(), collapseAllAction.getMenuItem()));
         testTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         testTree.setCellFactory(new Callback<TreeView<Test>, TreeCell<Test>>() {
-            @Override public TreeCell<Test> call(TreeView<Test> param) {
+            @Override
+            public TreeCell<Test> call(TreeView<Test> param) {
                 return new TestTreeItemCell();
             }
         });
@@ -417,11 +433,13 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         return null;
     }
 
-    @Override public DockKey getDockKey() {
+    @Override
+    public DockKey getDockKey() {
         return DOCK_KEY;
     }
 
-    @Override public Node getComponent() {
+    @Override
+    public Node getComponent() {
         if (component == null) {
             component = getPane();
         }
@@ -474,7 +492,8 @@ public class TestRunner extends Dockable implements IResourceActionSource {
 
     private void resetToolBar() {
         Runnable doRun = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 nextFailureAction.setEnabled(mode == Mode.RESULTS);
                 prevFailureAction.setEnabled(mode == Mode.RESULTS);
                 failuresToggleButton.setDisable(!(mode == Mode.RESULTS));
@@ -712,7 +731,8 @@ public class TestRunner extends Dockable implements IResourceActionSource {
         resetToolBar();
         startTime = System.currentTimeMillis();
         runnerThread = new Thread("TestRunner-Thread") {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     runner = new MarathonTestRunner();
                     runner.addListener(runListener);

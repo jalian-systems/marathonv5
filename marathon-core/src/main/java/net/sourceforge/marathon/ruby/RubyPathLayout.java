@@ -46,7 +46,8 @@ public class RubyPathLayout extends ListLayout implements ISubPropertiesLayout {
         super(parent);
     }
 
-    @Override public Node getContent() {
+    @Override
+    public Node getContent() {
         Node content = super.getContent();
         listViewBox.getChildren().add(createRubyHomeField());
         return content;
@@ -70,15 +71,18 @@ public class RubyPathLayout extends ListLayout implements ISubPropertiesLayout {
         return label;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Ruby Path";
     }
 
-    @Override public Node getIcon() {
+    @Override
+    public Node getIcon() {
         return FXUIUtils.getIcon("cp_obj");
     }
 
-    @Override public boolean isValidInput(boolean showAlert) {
+    @Override
+    public boolean isValidInput(boolean showAlert) {
         if (rubyHomeField.getText().equals("")) {
             return true;
         }
@@ -102,32 +106,39 @@ public class RubyPathLayout extends ListLayout implements ISubPropertiesLayout {
         return true;
     }
 
-    @Override public boolean isAddArchivesNeeded() {
+    @Override
+    public boolean isAddArchivesNeeded() {
         return false;
     }
 
-    @Override public boolean isAddFoldersNeeded() {
+    @Override
+    public boolean isAddFoldersNeeded() {
         return true;
     }
 
-    @Override public boolean isAddClassesNeeded() {
+    @Override
+    public boolean isAddClassesNeeded() {
         return false;
     }
 
-    @Override public boolean isSingleSelection() {
+    @Override
+    public boolean isSingleSelection() {
         return true;
     }
 
-    @Override public String getPropertyKey() {
+    @Override
+    public String getPropertyKey() {
         return PROP_APPLICATION_RUBYPATH;
     }
 
-    @Override public void setProperties(Properties props) {
+    @Override
+    public void setProperties(Properties props) {
         super.setProperties(props);
         rubyHomeField.setText(props.getProperty(PROP_APPLICATION_RUBYHOME, ""));
     }
 
-    @Override public void getProperties(Properties props) {
+    @Override
+    public void getProperties(Properties props) {
         super.getProperties(props);
         props.setProperty(PROP_APPLICATION_RUBYHOME, rubyHomeField.getText());
     }

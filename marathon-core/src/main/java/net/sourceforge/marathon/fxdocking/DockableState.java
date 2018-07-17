@@ -58,7 +58,8 @@ public class DockableState {
         this.state = state;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "DockableState [dockable=" + dockable.getDockKey() + "]";
     }
 

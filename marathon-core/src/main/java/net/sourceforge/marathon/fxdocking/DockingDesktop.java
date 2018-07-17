@@ -39,7 +39,8 @@ public class DockingDesktop extends BorderPane {
     public static final Logger LOGGER = Logger.getLogger(DockingDesktop.class.getName());
 
     public static final String DOCKING_CONTAINER = "dockContainer";
-    @SuppressWarnings("unused") private String name;
+    @SuppressWarnings("unused")
+    private String name;
 
     private VBoxDockingContainer head;
 

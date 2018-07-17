@@ -48,7 +48,8 @@ public class ProgressBarDemo2 extends JPanel implements ActionListener, Property
         /*
          * Main task. Executed in background thread.
          */
-        @Override public Void doInBackground() {
+        @Override
+        public Void doInBackground() {
             Random random = new Random();
             int progress = 0;
             // Initialize progress property.

@@ -45,7 +45,8 @@ public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> 
         this.versionInfo = versionInfo;
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox root = new VBox();
         root.setStyle("-fx-background-color:black");
         root.setId("marathonITESplashScreen");
@@ -58,7 +59,8 @@ public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> 
         return root;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initStyle(StageStyle.UNDECORATED);
     }
@@ -79,11 +81,13 @@ public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> 
         return label;
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
     }
 
     public static class Main extends Application {
-        @Override public void start(Stage primaryStage) throws Exception {
+        @Override
+        public void start(Stage primaryStage) throws Exception {
             Properties licensee = new Properties();
             licensee.put("Organization", "Jalian Systems Pvt. Ltd");
             licensee.put("License Type", "Trial");

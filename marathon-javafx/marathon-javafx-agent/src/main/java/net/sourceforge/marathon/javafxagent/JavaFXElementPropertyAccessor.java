@@ -89,6 +89,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.web.HTMLEditor;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 
 public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
@@ -104,7 +105,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public final String getText() {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return _getText();
             }
         });
@@ -112,7 +114,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public final String getId() {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return node.getId();
             }
         });
@@ -132,7 +135,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
 
     public final String getValue() {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return _getValue();
             }
         });
@@ -439,14 +443,16 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return true;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (node == null ? 0 : node.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -677,7 +683,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return itemText;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) public ListCell getCellAt(ListView listView, Integer index) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public ListCell getCellAt(ListView listView, Integer index) {
         ListCell<?> cell = getVisibleCellAt(listView, index);
         if (cell != null) {
             return cell;
@@ -687,7 +694,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             ListCell listCell = null;
             if (cellFactory == null) {
                 listCell = new ListCell() {
-                    @Override public void updateItem(Object item, boolean empty) {
+                    @Override
+                    public void updateItem(Object item, boolean empty) {
                         super.updateItem(item, empty);
 
                         if (empty) {
@@ -725,7 +733,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
-    @SuppressWarnings("rawtypes") public ListCell<?> getVisibleCellAt(ListView listView, Integer index) {
+    @SuppressWarnings("rawtypes")
+    public ListCell<?> getVisibleCellAt(ListView listView, Integer index) {
         Set<Node> lookupAll = getListCells(listView);
         ListCell<?> cell = null;
         for (Node node : lookupAll) {
@@ -755,7 +764,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return (TreeCell<?>) getCellAt(treeView, getPath(treeView, rowToPath(index)));
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) public Node getCellAt(TreeView treeView, TreeItem<?> treeItem1) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Node getCellAt(TreeView treeView, TreeItem<?> treeItem1) {
         TreeCell visibleCell = getVisibleCellAt(treeView, treeItem1);
         if (visibleCell != null) {
             return visibleCell;
@@ -774,7 +784,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                     };
 
                     private InvalidationListener treeItemListener = new InvalidationListener() {
-                        @Override public void invalidated(Observable observable) {
+                        @Override
+                        public void invalidated(Observable observable) {
                             TreeItem<Object> oldTreeItem = treeItemRef == null ? null : treeItemRef.get();
                             if (oldTreeItem != null) {
                                 oldTreeItem.graphicProperty().removeListener(weakTreeItemGraphicListener);
@@ -841,7 +852,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
                         }
                     }
 
-                    @Override public void updateItem(Object item, boolean empty) {
+                    @Override
+                    public void updateItem(Object item, boolean empty) {
                         super.updateItem(item, empty);
                         updateDisplay(item, empty);
                     }
@@ -857,7 +869,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
-    @SuppressWarnings("rawtypes") public TreeCell getVisibleCellAt(TreeView treeView, TreeItem<?> treeItem1) {
+    @SuppressWarnings("rawtypes")
+    public TreeCell getVisibleCellAt(TreeView treeView, TreeItem<?> treeItem1) {
         Set<Node> lookupAll = getTreeCells(treeView);
         TreeCell cell = null;
         for (Node treeNode : lookupAll) {
@@ -1042,8 +1055,9 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return itemText;
     }
 
-    @SuppressWarnings("unchecked") private String getChoiceBoxItemText(@SuppressWarnings("rawtypes") ChoiceBox choiceBox,
-            int index) {
+    @SuppressWarnings("unchecked")
+    private String getChoiceBoxItemText(@SuppressWarnings("rawtypes")
+    ChoiceBox choiceBox, int index) {
         @SuppressWarnings("rawtypes")
         StringConverter converter = choiceBox.getConverter();
         String text = null;
@@ -1153,7 +1167,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return new JSONObject().put("cell", new JSONArray().put(row).put(getColumnName(tableView, column))).toString();
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public TableCell<?, ?> getCellAt(TableView<?> tableView, int row, int column) {
         TableCell<?, ?> cell = getVisibleCellAt(tableView, row, column);
         if (cell != null) {
             return cell;
@@ -1313,7 +1328,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return rows;
     }
 
-    @SuppressWarnings("unchecked") public void selectCells(TableView<?> tableView, String value) {
+    @SuppressWarnings("unchecked")
+    public void selectCells(TableView<?> tableView, String value) {
         @SuppressWarnings("rawtypes")
         TableViewSelectionModel selectionModel = tableView.getSelectionModel();
         selectionModel.clearSelection();
@@ -1377,8 +1393,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return selected.getTreeTableRow().getIndex();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) protected TreeTableCell<?, ?> getCellAt(TreeTableView<?> treeTableView, int row,
-            int column) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected TreeTableCell<?, ?> getCellAt(TreeTableView<?> treeTableView, int row, int column) {
         TreeTableCell cell = getVisibleCellAt(treeTableView, row, column);
         if (cell != null) {
             return cell;
@@ -1397,7 +1413,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
-    @SuppressWarnings("rawtypes") public TreeTableCell getVisibleCellAt(TreeTableView<?> treeTableView, int row, int column) {
+    @SuppressWarnings("rawtypes")
+    public TreeTableCell getVisibleCellAt(TreeTableView<?> treeTableView, int row, int column) {
         Set<Node> lookupAll = getTreeTableCells(treeTableView);
         TreeTableCell cell = null;
         for (Node node : lookupAll) {
@@ -1430,8 +1447,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return getTreeTableItemText(treeTableView, lastPathComponent);
     }
 
-    @SuppressWarnings("unchecked") private String getTreeTableItemText(TreeTableView<?> treeTableView,
-            TreeItem<?> lastPathComponent) {
+    @SuppressWarnings("unchecked")
+    private String getTreeTableItemText(TreeTableView<?> treeTableView, TreeItem<?> lastPathComponent) {
         @SuppressWarnings("rawtypes")
         TreeTableColumn treeTableColumn = treeTableView.getTreeColumn();
         if (treeTableColumn == null) {
@@ -1535,7 +1552,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         throw new RuntimeException("Could not find column " + columnName + " in tree table");
     }
 
-    @SuppressWarnings("unchecked") protected int getTreeTableNodeIndex(TreeTableView<?> treeTableView, String path) {
+    @SuppressWarnings("unchecked")
+    protected int getTreeTableNodeIndex(TreeTableView<?> treeTableView, String path) {
         String[] tokens = path.substring(1).split("(?<!\\\\)/");
         Object rootNode = treeTableView.getRoot();
         int start = treeTableView.isShowRoot() ? 1 : 0;
@@ -1589,7 +1607,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return rows;
     }
 
-    @SuppressWarnings("unchecked") protected void selectTreeTableCells(TreeTableView<?> treeTableView, String value) {
+    @SuppressWarnings("unchecked")
+    protected void selectTreeTableCells(TreeTableView<?> treeTableView, String value) {
         @SuppressWarnings("rawtypes")
         TreeTableViewSelectionModel selectionModel = treeTableView.getSelectionModel();
         JSONObject cells = new JSONObject(value);
@@ -1608,7 +1627,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         }
     }
 
-    @SuppressWarnings("rawtypes") protected TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
+    @SuppressWarnings("rawtypes")
+    protected TreeTableColumn getTreeTableColumnAt(TreeTableView<?> treeTableView, int index) {
         return treeTableView.getColumns().get(index);
     }
 
@@ -1620,12 +1640,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return titleAt;
     }
 
-    @SuppressWarnings("deprecation") private static String getTabNameFromIcon(TabPane tabPane, int index) {
+    private static String getTabNameFromIcon(TabPane tabPane, int index) {
         Node graphic = tabPane.getTabs().get(index).getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
             return "tabIndex-" + index;
         }
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+        return nameFromImage(JavaCompatibility.getUrl(((ImageView) graphic).getImage()));
     }
 
     private static String nameFromImage(String description) {
@@ -1665,12 +1685,12 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return text;
     }
 
-    @SuppressWarnings("deprecation") private String getMenuTextFromIcon(Menu menu, int index) {
+    private String getMenuTextFromIcon(Menu menu, int index) {
         Node graphic = menu.getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
             return "menuindex-" + index;
         }
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+        return nameFromImage(JavaCompatibility.getUrl(((ImageView) graphic).getImage()));
     }
 
     public String getTextForMenuItem(MenuItem menuItem, Menu parentMenu) {
@@ -1698,7 +1718,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         return text;
     }
 
-    @SuppressWarnings("deprecation") protected String getTextFromIcon(MenuItem menuItem, int index) {
+    protected String getTextFromIcon(MenuItem menuItem, int index) {
         Node graphic = menuItem.getGraphic();
         if (graphic == null || !(graphic instanceof ImageView)) {
             if (index == -1) {
@@ -1706,7 +1726,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
             }
             return "MenuItemIndex-" + index;
         }
-        return nameFromImage(((ImageView) graphic).getImage().impl_getUrl());
+        return nameFromImage(JavaCompatibility.getUrl(((ImageView) graphic).getImage()));
     }
 
     protected String getButtonText(ButtonBase button) {

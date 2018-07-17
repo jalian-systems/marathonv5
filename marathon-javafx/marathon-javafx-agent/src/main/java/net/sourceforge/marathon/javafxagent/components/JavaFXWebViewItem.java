@@ -27,47 +27,57 @@ public class JavaFXWebViewItem extends JavaFXElement implements IPseudoElement {
         this.selector = selector;
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor"))
             return Arrays.asList(this);
         return super.getByPseudoElement(selector, params);
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters",
                 new JSONArray().put(new JSONObject().put("select", selector).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         return parent.select(selector, value);
     }
 
-    @Override public Node getPseudoComponent() {
+    @Override
+    public Node getPseudoComponent() {
         return null;
     }
 
-    @Override public void click() {
+    @Override
+    public void click() {
         parent.click(selector);
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         parent.click(selector);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return parent.getText(selector);
     }
 
-    @Override protected String _getLabeledBy() {
+    @Override
+    protected String _getLabeledBy() {
         return parent.getLabeledBy(selector);
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         return parent.getValue(selector);
     }
 

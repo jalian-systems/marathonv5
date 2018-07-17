@@ -57,7 +57,7 @@ public class DatePickerSample extends Application {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
-        launch(args);        
+        launch(args);
     }
 
     @Override
@@ -75,30 +75,23 @@ public class DatePickerSample extends Application {
         stage.setScene(scene);
 
         checkInDatePicker = new DatePicker();
-        checkOutDatePicker = new DatePicker();                         
+        checkOutDatePicker = new DatePicker();
         checkInDatePicker.setValue(LocalDate.now());
-        
-        final Callback<DatePicker, DateCell> dayCellFactory = 
-            new Callback<DatePicker, DateCell>() {
-                @Override
-                public DateCell call(final DatePicker datePicker) {
-                    return new DateCell() {
-                        @Override
-                        public void updateItem(LocalDate item, boolean empty) {
-                            super.updateItem(item, empty);
-                           
-                            if (item.isBefore(
-                                    checkInDatePicker.getValue().plusDays(1))
-                                ) {
-                                    setDisable(true);
-                                    setStyle("-fx-background-color: #ffc0cb;");                                       
-                            }
-                            long p = ChronoUnit.DAYS.between(
-                                    checkInDatePicker.getValue(), item
-                            );
-                            setTooltip(new Tooltip(
-                                "You're about to stay for " + p + " days")
-                            );
+
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item.isBefore(checkInDatePicker.getValue().plusDays(1))) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #ffc0cb;");
+                        }
+                        long p = ChronoUnit.DAYS.between(checkInDatePicker.getValue(), item);
+                        setTooltip(new Tooltip("You're about to stay for " + p + " days"));
                     }
                 };
             }
@@ -108,7 +101,7 @@ public class DatePickerSample extends Application {
         checkOutDatePicker.setValue(checkInDatePicker.getValue().plusDays(1));
         checkInDatePicker.setChronology(ThaiBuddhistChronology.INSTANCE);
         checkOutDatePicker.setChronology(HijrahChronology.INSTANCE);
-        
+
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -129,4 +122,3 @@ public class DatePickerSample extends Application {
 
     }
 }
-

@@ -35,14 +35,16 @@ public class RColorChooser extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         String currentColor = getColorCode(((JColorChooser) component).getColor());
         if (!currentColor.equals(color)) {
             recorder.recordSelect(this, currentColor);
         }
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         JColorChooser colorChooser = (JColorChooser) component;
         color = getColorCode(colorChooser.getColor());
     }

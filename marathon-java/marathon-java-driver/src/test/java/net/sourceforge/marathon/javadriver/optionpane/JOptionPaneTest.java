@@ -38,7 +38,8 @@ import components.DialogDemo;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JOptionPaneTest {
+@Test
+public class JOptionPaneTest {
     private WebDriver driver;
     protected JFrame frame;
     private String parentWindow;
@@ -50,9 +51,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private WebElement featurePanel;
     private WebElement iconPanel;
 
-    @BeforeMethod public void showDialog() throws InterruptedException, InvocationTargetException, NoSuchWindowException {
+    @BeforeMethod
+    public void showDialog() throws InterruptedException, InvocationTargetException, NoSuchWindowException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JOptionPaneTest.class.getSimpleName());
                 frame.setName("frame-" + JOptionPaneTest.class.getSimpleName());
                 frame.getContentPane().add(new DialogDemo(frame), BorderLayout.CENTER);
@@ -88,9 +91,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         AssertJUnit.assertEquals("panel", iconPanel.getTagName());
     }
 
-    @AfterMethod public void disposeDriver() throws InterruptedException, InvocationTargetException {
+    @AfterMethod
+    public void disposeDriver() throws InterruptedException, InvocationTargetException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

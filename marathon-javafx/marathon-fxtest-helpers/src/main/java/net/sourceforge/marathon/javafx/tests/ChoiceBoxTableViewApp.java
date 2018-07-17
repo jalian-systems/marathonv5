@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class ChoiceBoxTableViewApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Choice Box TableView");
         primaryStage.setScene(new Scene(new ChoiceBoxTableViewSample()));
         primaryStage.sizeToScene();

@@ -33,7 +33,8 @@ public class RFXDatePicker extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         DatePicker datePicker = (DatePicker) node;
         LocalDate value = datePicker.getValue();
         if (value == null && datePicker.isEditable()) {
@@ -43,7 +44,8 @@ public class RFXDatePicker extends RFXComponent {
         }
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         DatePicker datePicker = (DatePicker) node;
         LocalDate value = datePicker.getValue();
         String currentDate;
@@ -56,7 +58,8 @@ public class RFXDatePicker extends RFXComponent {
             recorder.recordSelect(this, currentDate);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getDatePickerText((DatePicker) node, ((DatePicker) node).getValue());
     }
 }

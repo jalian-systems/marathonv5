@@ -32,22 +32,27 @@ public class StdOutConsole extends AbstractFileConsole {
         writeToFile(String.valueOf(cbuf, off, len));
     }
 
-    @Override public void writeStdOut(char cbuf[], int off, int len) {
+    @Override
+    public void writeStdOut(char cbuf[], int off, int len) {
         write(cbuf, 0, len);
     }
 
-    @Override public void writeStdErr(char cbuf[], int off, int len) {
+    @Override
+    public void writeStdErr(char cbuf[], int off, int len) {
         write(cbuf, 0, len);
     }
 
-    @Override public void writeScriptOut(char cbuf[], int off, int len) {
+    @Override
+    public void writeScriptOut(char cbuf[], int off, int len) {
         write(cbuf, 0, len);
     }
 
-    @Override public void writeScriptErr(char cbuf[], int off, int len) {
+    @Override
+    public void writeScriptErr(char cbuf[], int off, int len) {
         write(cbuf, 0, len);
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
     }
 }

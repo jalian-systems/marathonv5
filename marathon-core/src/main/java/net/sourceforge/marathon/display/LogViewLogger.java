@@ -48,31 +48,38 @@ public class LogViewLogger implements ILogger {
         logView.addLog(r);
     }
 
-    @Override public void info(String module, String message) {
+    @Override
+    public void info(String module, String message) {
         log(new LogRecord(ILogger.INFO, message, null, module, new Date()));
     }
 
-    @Override public void info(String module, String message, String description) {
+    @Override
+    public void info(String module, String message, String description) {
         log(new LogRecord(ILogger.INFO, message, description, module, new Date()));
     }
 
-    @Override public void warning(String module, String message) {
+    @Override
+    public void warning(String module, String message) {
         log(new LogRecord(ILogger.WARN, message, null, module, new Date()));
     }
 
-    @Override public void warning(String module, String message, String description) {
+    @Override
+    public void warning(String module, String message, String description) {
         log(new LogRecord(ILogger.WARN, message, description, module, new Date()));
     }
 
-    @Override public void error(String module, String message) {
+    @Override
+    public void error(String module, String message) {
         log(new LogRecord(ILogger.ERROR, message, null, module, new Date()));
     }
 
-    @Override public void error(String module, String message, String description) {
+    @Override
+    public void error(String module, String message, String description) {
         log(new LogRecord(ILogger.ERROR, message, description, module, new Date()));
     }
 
-    @Override public void setLogLevel(int level) {
+    @Override
+    public void setLogLevel(int level) {
         Preferences p = Preferences.userNodeForPackage(LogViewLogger.class);
         p.putInt("loglevel", level);
         try {
@@ -82,15 +89,18 @@ public class LogViewLogger implements ILogger {
         this.level = level;
     }
 
-    @Override public int getLogLevel() {
+    @Override
+    public int getLogLevel() {
         return level;
     }
 
-    @Override public void msg(String module, String message) {
+    @Override
+    public void msg(String module, String message) {
         log(new LogRecord(ILogger.MESSAGE, message, null, module, new Date()));
     }
 
-    @Override public void msg(String module, String message, String description) {
+    @Override
+    public void msg(String module, String message, String description) {
         log(new LogRecord(ILogger.MESSAGE, message, description, module, new Date()));
     }
 

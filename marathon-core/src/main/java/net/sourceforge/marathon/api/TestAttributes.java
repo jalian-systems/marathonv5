@@ -27,7 +27,8 @@ public class TestAttributes {
     public static final Logger LOGGER = Logger.getLogger(TestAttributes.class.getName());
 
     private static ThreadLocal<Map<String, Object>> localStorage = new ThreadLocal<Map<String, Object>>() {
-        @Override protected java.util.Map<String, Object> initialValue() {
+        @Override
+        protected java.util.Map<String, Object> initialValue() {
             return new HashMap<String, Object>();
         };
     };

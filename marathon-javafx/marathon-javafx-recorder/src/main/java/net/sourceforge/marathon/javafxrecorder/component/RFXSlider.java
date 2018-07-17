@@ -33,18 +33,21 @@ public class RFXSlider extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         prevValue = ((Slider) node).getValue();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         double current = ((Slider) node).getValue();
         if (current != prevValue) {
             recorder.recordSelect(this, "" + current);
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSliderValue((Slider) node);
     }
 }

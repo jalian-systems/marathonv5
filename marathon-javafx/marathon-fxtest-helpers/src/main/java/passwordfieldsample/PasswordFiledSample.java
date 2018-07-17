@@ -64,7 +64,7 @@ public class PasswordFiledSample extends Application {
         hb.setAlignment(Pos.CENTER_LEFT);
 
         Label label = new Label("Password");
-        final PasswordField pb = new PasswordField();  
+        final PasswordField pb = new PasswordField();
         pb.setText("Your password");
 
         pb.setOnAction((ActionEvent e) -> {

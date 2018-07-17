@@ -30,21 +30,25 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTextAreaTest extends RFXComponentTest {
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TextAreaSample();
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         final TextArea textArea = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textArea.setText("Hello World");
             }
         });
         LoggingRecorder lr = new LoggingRecorder();
         RFXComponent rTextField = new RFXTextInputControl(textArea, null, null, lr);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextField.focusLost(null);
             }
         });
@@ -54,7 +58,8 @@ public class RFXTextAreaTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Hello World", select.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         final TextArea textArea = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         LoggingRecorder lr = new LoggingRecorder();
         List<Object> text = new ArrayList<>();
@@ -65,24 +70,28 @@ public class RFXTextAreaTest extends RFXComponentTest {
             text.add(rTextField.getAttribute("text"));
         });
         new Wait("Waiting for text area text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Hello World", text.get(0));
     }
 
-    @Test public void selectWithSpecialChars() throws InterruptedException {
+    @Test
+    public void selectWithSpecialChars() throws InterruptedException {
         final TextArea textArea = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textArea.setText("Hello\n World'\"");
             }
         });
         LoggingRecorder lr = new LoggingRecorder();
         RFXComponent rTextField = new RFXTextInputControl(textArea, null, null, lr);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextField.focusLost(null);
             }
         });
@@ -92,17 +101,20 @@ public class RFXTextAreaTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Hello\n World'\"", select.getParameters()[0]);
     }
 
-    @Test public void selectWithUtf8Chars() throws InterruptedException {
+    @Test
+    public void selectWithUtf8Chars() throws InterruptedException {
         final TextArea textArea = (TextArea) getPrimaryStage().getScene().getRoot().lookup(".text-area");
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textArea.setText("å∫ç∂´ƒ©˙ˆ∆");
             }
         });
         LoggingRecorder lr = new LoggingRecorder();
         RFXComponent rTextField = new RFXTextInputControl(textArea, null, null, lr);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rTextField.focusLost(null);
             }
         });

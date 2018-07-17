@@ -43,12 +43,14 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement tableView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         tableView = driver.findElementByTagName("table-view");
     }
 
-    @Test public void scrollToRow() throws Throwable {
+    @Test
+    public void scrollToRow() throws Throwable {
         Stage primaryStage = getPrimaryStage();
         primaryStage.setWidth(250);
         primaryStage.setHeight(250);
@@ -57,19 +59,22 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
             tableView.marathon_select("{\"rows\":[10]}");
         });
         new Wait("Wating for rows to be select.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return tableViewNode.getSelectionModel().getSelectedIndex() == 10;
             }
         };
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 Point2D point = getPoint(tableViewNode, 1, 10);
                 return tableViewNode.getBoundsInLocal().contains(point);
             }
         };
     }
 
-    @Test public void scrollMultipleRows() {
+    @Test
+    public void scrollMultipleRows() {
         Stage primaryStage = getPrimaryStage();
         primaryStage.setWidth(250);
         primaryStage.setHeight(250);
@@ -79,19 +84,22 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
             tableView.marathon_select("{\"rows\":[2,9]}");
         });
         new Wait("Wating for rows to be select.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return tableViewNode.getSelectionModel().getSelectedIndices().size() > 1;
             }
         };
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 Point2D point = getPoint(tableViewNode, 2, 9);
                 return tableViewNode.getBoundsInLocal().contains(point);
             }
         };
     }
 
-    @Test public void scrollToCell() throws Throwable {
+    @Test
+    public void scrollToCell() throws Throwable {
         Stage primaryStage = getPrimaryStage();
         primaryStage.setWidth(250);
         primaryStage.setHeight(250);
@@ -101,7 +109,8 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
             tableView.marathon_select("{\"cells\":[[\"10\",\"Email\"]]}");
         });
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return getPoint(tableViewNode, 2, 10) != null;
             }
         };
@@ -109,7 +118,8 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
         AssertJUnit.assertTrue(tableViewNode.getBoundsInLocal().contains(point));
     }
 
-    @Test public void scrollTomnthCell() {
+    @Test
+    public void scrollTomnthCell() {
         Stage primaryStage = getPrimaryStage();
         primaryStage.setWidth(250);
         primaryStage.setHeight(250);
@@ -121,12 +131,14 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
             columnName.add(cell.getAttribute("viewColumnName"));
         });
         new Wait("Wating cells column name.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return columnName.size() > 0;
             }
         };
         new Wait("Waiting for the point to be in viewport") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return getPoint(tableViewNode, 2, 7) != null;
             }
         };
@@ -158,7 +170,8 @@ public class JavaFXTableViewElementScrollTest extends JavaFXElementTest {
         return null;
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TableScrollSample();
     }
 }

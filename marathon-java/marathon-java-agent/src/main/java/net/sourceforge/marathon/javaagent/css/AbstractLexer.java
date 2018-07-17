@@ -47,7 +47,8 @@ public abstract class AbstractLexer implements ILexer {
 
     abstract protected Token getNextToken();
 
-    @Override public Token expect1(TokenType... types) {
+    @Override
+    public Token expect1(TokenType... types) {
         Token t = expect1r0(types);
         if (t == null) {
             t = nextToken();
@@ -66,7 +67,8 @@ public abstract class AbstractLexer implements ILexer {
         return null;
     }
 
-    @Override public Token expect1r0(TokenType... types) {
+    @Override
+    public Token expect1r0(TokenType... types) {
         ignoreWhitespace = !Arrays.asList(types).contains(TokenType.TT_WHITESPACE);
         return findMatchingToken(lookAhead(), types);
     }

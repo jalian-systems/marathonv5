@@ -37,7 +37,8 @@ public class EditProjectHandler implements IEditProjectHandler {
         this.parent = parent;
     }
 
-    @Override public boolean editProject(ProjectInfo selected) {
+    @Override
+    public boolean editProject(ProjectInfo selected) {
         List<Boolean> projectEdited = new ArrayList<>();
         String title = "Configure";
         String dirName = selected.getFolder();
@@ -55,7 +56,8 @@ public class EditProjectHandler implements IEditProjectHandler {
         }
         MPFConfigurationInfo mpfConfigurationInfo = new MPFConfigurationInfo(title, selected.getFolder(), properties);
         MPFConfigurationStage mpfConfigurationStage = new MPFConfigurationStage(parent, mpfConfigurationInfo) {
-            @Override public void onSave() {
+            @Override
+            public void onSave() {
                 if (validInupt()) {
                     File projectFile = mpfConfigurationInfo.saveProjectFile(layouts);
                     selected.setName(System.getProperty(Constants.PROP_PROJECT_NAME));

@@ -15,17 +15,14 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
-
-import com.sun.javafx.application.PlatformImpl;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 
 public abstract class EventQueueWait extends Wait {
 
@@ -36,10 +33,12 @@ public abstract class EventQueueWait extends Wait {
 
     private boolean setupDone = false;
 
-    @Override public boolean until() {
+    @Override
+    public boolean until() {
         final boolean[] condition = { false };
         invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (!setupDone) {
                     setupDone = true;
                     setup();
@@ -68,11 +67,13 @@ public abstract class EventQueueWait extends Wait {
     public void setup() {
     }
 
-    @SuppressWarnings("unchecked") public static <X> X exec(final Callable<X> callable) {
+    @SuppressWarnings("unchecked")
+    public static <X> X exec(final Callable<X> callable) {
         final Object[] result = new Object[] { null };
         final Exception[] exc = new Exception[] { null };
         Runnable r = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     result[0] = callable.call();
                 } catch (Exception e) {
@@ -108,8 +109,8 @@ public abstract class EventQueueWait extends Wait {
         }
     }
 
-    @SuppressWarnings("unchecked") public static <T> T call(final Object o, String f, final Object... args)
-            throws NoSuchMethodException {
+    @SuppressWarnings("unchecked")
+    public static <T> T call(final Object o, String f, final Object... args) throws NoSuchMethodException {
         Class<?>[] params = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Integer) {
@@ -126,7 +127,8 @@ public abstract class EventQueueWait extends Wait {
         }
         final Object[] r = new Object[] { null };
         invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     r[0] = method.invoke(o, args);
                 } catch (Exception e) {
@@ -145,8 +147,8 @@ public abstract class EventQueueWait extends Wait {
         return (T) r[0];
     }
 
-    @SuppressWarnings("unchecked") public static <T> T call_force(final Object o, String f, final Object... args)
-            throws NoSuchMethodException {
+    @SuppressWarnings("unchecked")
+    public static <T> T call_force(final Object o, String f, final Object... args) throws NoSuchMethodException {
         Class<?>[] params = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Integer) {
@@ -163,7 +165,8 @@ public abstract class EventQueueWait extends Wait {
         }
         final Object[] r = new Object[] { null };
         invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 boolean accessible = method.isAccessible();
                 try {
                     method.setAccessible(true);
@@ -199,11 +202,13 @@ public abstract class EventQueueWait extends Wait {
         }
         try {
             new EventQueueWait() {
-                @Override public void setup() {
+                @Override
+                public void setup() {
                     c.requestFocus();
                 };
 
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     return c.isFocused();
                 }
 
@@ -216,7 +221,8 @@ public abstract class EventQueueWait extends Wait {
 
     public static void waitTillDisabled(final Node c) {
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return c.isDisabled();
             }
         }.wait("Waiting for the component to be disabled", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
@@ -224,7 +230,8 @@ public abstract class EventQueueWait extends Wait {
 
     public static void waitTillInvisibled(final Node c) {
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return !c.isVisible();
             }
         }.wait("Waiting for the component to be hidden", FOCUS_WAIT, FOCUS_WAIT_INTERVAL);
@@ -236,7 +243,8 @@ public abstract class EventQueueWait extends Wait {
         } else {
             final boolean[] lock = new boolean[] { false };
             Runnable r1 = new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     try {
                         r.run();
                     } finally {
@@ -279,29 +287,8 @@ public abstract class EventQueueWait extends Wait {
         return null;
     }
 
-    private static AtomicInteger pendingRunnables;
-
-    static {
-        try {
-            Field pendingRunnablesField = PlatformImpl.class.getDeclaredField("pendingRunnables");
-            pendingRunnablesField.setAccessible(true);
-            pendingRunnables = (AtomicInteger) pendingRunnablesField.get(null);
-            pendingRunnablesField.setAccessible(false);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void waitTillAllEventsProcessed() {
-        if (pendingRunnables != null) {
-            int count = 0;
-            while (pendingRunnables.get() > 0 && count++ < 3) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                }
-            }
-        }
+        JavaCompatibility.waitTillAllEventsProcessed();
     }
 
 }

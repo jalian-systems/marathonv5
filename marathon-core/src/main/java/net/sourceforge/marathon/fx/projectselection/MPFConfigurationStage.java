@@ -52,13 +52,15 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
         this.mpfConfigurationInfo = mpfConfigurationInfo;
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(parent);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox root = new VBox();
         root.setId("MPFConfigurationParent");
         root.getStyleClass().add("mpf-configuration");
@@ -156,7 +158,8 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
         }
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         saveButton.setDefaultButton(true);
     }
 }

@@ -18,13 +18,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import net.sourceforge.marathon.api.TestAttributes;
 
-@RunWith(Parameterized.class) public class MarathonTestProvider {
+@RunWith(Parameterized.class)
+public class MarathonTestProvider {
 
     public static final Logger LOGGER = Logger.getLogger(MarathonTestProvider.class.getName());
 
     private static Test suite;
 
-    @Parameters(name = "{1}") public static Iterable<Object[]> data() {
+    @Parameters(name = "{1}")
+    public static Iterable<Object[]> data() {
         ArrayList<Object[]> tests = new ArrayList<Object[]>();
         collectTests(suite, tests);
         return tests;
@@ -60,9 +62,11 @@ import net.sourceforge.marathon.api.TestAttributes;
     }
 
     private Test fTest;
-    @SuppressWarnings("unused") private String fName;
+    @SuppressWarnings("unused")
+    private String fName;
 
-    @org.junit.Test public void test() throws Throwable {
+    @org.junit.Test
+    public void test() throws Throwable {
         ((MarathonTestCase) fTest).initialize();
         ((MarathonTestCase) fTest).runTest();
     }

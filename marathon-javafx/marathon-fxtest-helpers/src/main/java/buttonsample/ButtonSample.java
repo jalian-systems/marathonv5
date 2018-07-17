@@ -56,7 +56,6 @@ public class ButtonSample extends Application {
     DropShadow shadow = new DropShadow();
     Label label = new Label();
 
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -87,7 +86,6 @@ public class ButtonSample extends Application {
             label.setText("Accepted");
         });
 
-
         Button button2 = new Button("Accept");
         button2.setOnAction((ActionEvent e) -> {
             label.setText("Accepted");
@@ -105,7 +103,6 @@ public class ButtonSample extends Application {
             button3.setEffect(null);
         });
 
-
         hbox1.getChildren().add(button2);
         hbox1.getChildren().add(button3);
         hbox1.getChildren().add(label);
@@ -117,7 +114,6 @@ public class ButtonSample extends Application {
         button4.setOnAction((ActionEvent e) -> {
             label.setText("Accepted");
         });
-
 
         Button button5 = new Button();
         button5.setGraphic(new ImageView(imageDecline));
@@ -133,7 +129,7 @@ public class ButtonSample extends Application {
         vbox.getChildren().add(hbox1);
         vbox.getChildren().add(hbox2);
         vbox.setSpacing(10);
-        ((Group)scene.getRoot()).getChildren().add(vbox);
+        ((Group) scene.getRoot()).getChildren().add(vbox);
 
         stage.setScene(scene);
         stage.show();

@@ -26,7 +26,8 @@ public class MultiEditorProvider implements IEditorProvider {
     private List<IEditorProvider> providers = new ArrayList<IEditorProvider>();
     private IEditorProvider defaultProvider;
 
-    @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
+    @Override
+    public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         if (type == IEditorProvider.EditorType.OTHER) {
             return defaultProvider.get(linenumbers, startLineNumber, type, withToolbar);
         }
@@ -42,7 +43,8 @@ public class MultiEditorProvider implements IEditorProvider {
         return defaultProvider;
     }
 
-    @Override public boolean supports(EditorType type) {
+    @Override
+    public boolean supports(EditorType type) {
         throw new UnsupportedOperationException("Multi editor provider can't support supports");
     }
 

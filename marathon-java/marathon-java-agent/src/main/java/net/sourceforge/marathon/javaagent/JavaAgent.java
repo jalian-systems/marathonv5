@@ -68,7 +68,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getDevices()
      */
-    @Override public IDevice getDevices() {
+    @Override
+    public IDevice getDevices() {
         return devices;
     }
 
@@ -77,7 +78,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getTitle()
      */
-    @Override public String getTitle() {
+    @Override
+    public String getTitle() {
         return targetLocator.getTitle();
     }
 
@@ -86,7 +88,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindowHandles()
      */
-    @Override public Collection<String> getWindowHandles() {
+    @Override
+    public Collection<String> getWindowHandles() {
         return targetLocator.getWindowHandles();
     }
 
@@ -95,7 +98,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindowHandle()
      */
-    @Override public String getWindowHandle() {
+    @Override
+    public String getWindowHandle() {
         return targetLocator.getWindowHandle();
     }
 
@@ -104,7 +108,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#switchTo()
      */
-    @Override public JavaTargetLocator switchTo() {
+    @Override
+    public JavaTargetLocator switchTo() {
         return targetLocator;
     }
 
@@ -113,7 +118,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#manage()
      */
-    @Override public JOptions manage() {
+    @Override
+    public JOptions manage() {
         return options;
     }
 
@@ -122,7 +128,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getVersion()
      */
-    @Override public String getVersion() {
+    @Override
+    public String getVersion() {
         return VERSION;
     }
 
@@ -131,7 +138,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getName()
      */
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "javadriver";
     }
 
@@ -140,7 +148,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#deleteWindow()
      */
-    @Override public void deleteWindow() {
+    @Override
+    public void deleteWindow() {
         targetLocator.deleteWindow();
     }
 
@@ -150,7 +159,8 @@ public class JavaAgent implements IJavaAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElement(java.lang.
      * String)
      */
-    @Override public IJavaElement findElement(String id) {
+    @Override
+    public IJavaElement findElement(String id) {
         return targetLocator.findElement(id);
     }
 
@@ -159,7 +169,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getActiveElement()
      */
-    @Override public IJavaElement getActiveElement() {
+    @Override
+    public IJavaElement getActiveElement() {
         return targetLocator.getActiveElement();
     }
 
@@ -168,12 +179,15 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#quit()
      */
-    @Override public void quit() {
+    @Override
+    public void quit() {
         Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    @Override public Object run() {
+                    @Override
+                    public Object run() {
                         Runtime.getRuntime().halt(1);
                         return null;
                     }
@@ -188,7 +202,8 @@ public class JavaAgent implements IJavaAgent {
      * @see
      * net.sourceforge.marathon.javaagent.IJavaAgent#getWindow(java.lang.String)
      */
-    @Override public JWindow getWindow(String windowHandle) {
+    @Override
+    public JWindow getWindow(String windowHandle) {
         return targetLocator.getWindowForHandle(windowHandle);
     }
 
@@ -197,7 +212,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getCurrentWindow()
      */
-    @Override public JWindow getCurrentWindow() {
+    @Override
+    public JWindow getCurrentWindow() {
         return targetLocator.getCurrentWindow();
     }
 
@@ -208,7 +224,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByTagName(java.
      * lang.String)
      */
-    @Override public IJavaElement findElementByTagName(String using) {
+    @Override
+    public IJavaElement findElementByTagName(String using) {
         List<IJavaElement> elements = findElementsByTagName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -223,7 +240,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByTagName(java.
      * lang.String)
      */
-    @Override public List<IJavaElement> findElementsByTagName(final String using) {
+    @Override
+    public List<IJavaElement> findElementsByTagName(final String using) {
         if (using.equals("#fileDialog")) {
             JWindow topContainer = targetLocator.getTopContainer();
             return Arrays.asList(topContainer.findFileDialogElement(targetLocator.getFileDialogContainer()));
@@ -238,7 +256,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByName(java.lang
      * .String)
      */
-    @Override public IJavaElement findElementByName(String using) {
+    @Override
+    public IJavaElement findElementByName(String using) {
         List<IJavaElement> elements = findElementsByName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using name: " + using, null);
@@ -253,7 +272,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByName(java.
      * lang.String)
      */
-    @Override public List<IJavaElement> findElementsByName(final String using) {
+    @Override
+    public List<IJavaElement> findElementsByName(final String using) {
         return findByCss("#'" + using + "'");
     }
 
@@ -264,7 +284,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByCssSelector(
      * java.lang.String)
      */
-    @Override public IJavaElement findElementByCssSelector(String using) {
+    @Override
+    public IJavaElement findElementByCssSelector(String using) {
         List<IJavaElement> elements = findElementsByCssSelector(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
@@ -279,7 +300,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByCssSelector(
      * java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByCssSelector(String using) {
+    @Override
+    public List<IJavaElement> findElementsByCssSelector(String using) {
         Window window = targetLocator.getTopContainer().getWindow();
         IJavaElement je = JavaElementFactory.createElement(window, this, targetLocator.getTopContainer());
         FindByCssSelector finder = new FindByCssSelector(je, this, implicitWait);
@@ -293,7 +315,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementByClassName(java
      * .lang.String)
      */
-    @Override public IJavaElement findElementByClassName(String using) {
+    @Override
+    public IJavaElement findElementByClassName(String using) {
         List<IJavaElement> elements = findElementsByClassName(using);
         if (elements.size() == 0) {
             throw new NoSuchElementException("No component found using selector: `" + using + "'", null);
@@ -308,7 +331,8 @@ public class JavaAgent implements IJavaAgent {
      * net.sourceforge.marathon.javaagent.IJavaAgent#findElementsByClassName(
      * java.lang.String)
      */
-    @Override public List<IJavaElement> findElementsByClassName(String using) {
+    @Override
+    public List<IJavaElement> findElementsByClassName(String using) {
         return findByCss(":instance-of('" + using + "')");
     }
 
@@ -324,7 +348,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getWindowProperties()
      */
-    @Override public JSONObject getWindowProperties() {
+    @Override
+    public JSONObject getWindowProperties() {
         return targetLocator.getWindowProperties();
     }
 
@@ -333,7 +358,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#setImplicitWait(long)
      */
-    @Override public void setImplicitWait(long implicitWait) {
+    @Override
+    public void setImplicitWait(long implicitWait) {
         this.implicitWait = implicitWait;
     }
 
@@ -343,7 +369,8 @@ public class JavaAgent implements IJavaAgent {
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#findElement(java.awt.
      * Component)
      */
-    @Override public IJavaElement findElement(Component component) {
+    @Override
+    public IJavaElement findElement(Component component) {
         return targetLocator.getTopContainer().findElement(component);
     }
 
@@ -352,7 +379,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getScreenShot()
      */
-    @Override public byte[] getScreenShot() throws IOException {
+    @Override
+    public byte[] getScreenShot() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             BufferedImage bufferedImage;
@@ -370,7 +398,8 @@ public class JavaAgent implements IJavaAgent {
      *
      * @see net.sourceforge.marathon.javaagent.IJavaAgent#getImplicitWait()
      */
-    @Override public long getImplicitWait() {
+    @Override
+    public long getImplicitWait() {
         return implicitWait;
     }
 }

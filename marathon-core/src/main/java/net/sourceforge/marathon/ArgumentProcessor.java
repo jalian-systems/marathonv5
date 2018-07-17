@@ -78,8 +78,8 @@ public class ArgumentProcessor {
      */
     public void process(String[] args) {
         String msg;
-        if ((msg = JavaVersion.atLeast("1.8.0_112")) != null) {
-            help("You need to use Java version >= 1.8.0_112 (" + msg + ")");
+        if ((msg = JavaVersion.atLeast("1.8.0_112")) != null || (msg = JavaVersion.atMost("1.8.0_999")) != null) {
+            help("You need to use Java version >= 1.8.0_112 and Below 9.0 (" + msg + ")");
         }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-help") || args[i].equals("-?") || args[i].equals("-h")) {
@@ -218,7 +218,10 @@ public class ArgumentProcessor {
                 + "-noconsolelog                      Do not create console.log files\n"
                 + "-capture                           Capture failure screenshots\n"
                 + "-delay delayInSeconds              Delay used in slow play\n"
-                + "-reportdir dir                     Marathon report directory (default: marathon-reports)\n" + "\n" + "";
+                + "-reportdir dir                     Marathon report directory (default: marathon-reports)\n" + "\n"
+                + "You need to use JDK8 (> jdk1.8.0_112) for marathonite executing Marathon.\n"
+                + "The AUT can be executed with any version of Java\n"
+                + "";
         // @formatter: on
         message.append(help);
         return message.toString();

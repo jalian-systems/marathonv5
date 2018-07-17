@@ -50,8 +50,7 @@ public class ScrollPaneSample extends Application {
     final ImageView[] pics = new ImageView[5];
     final VBox vb = new VBox();
     final Label fileName = new Label();
-    final String [] imageNames = new String [] {"fw1.jpg", "fw2.jpg",
-        "fw3.jpg", "fw4.jpg", "fw5.jpg"};
+    final String[] imageNames = new String[] { "fw1.jpg", "fw2.jpg", "fw3.jpg", "fw4.jpg", "fw5.jpg" };
 
     @Override
     public void start(Stage stage) {
@@ -64,13 +63,11 @@ public class ScrollPaneSample extends Application {
 
         fileName.setLayoutX(30);
         fileName.setLayoutY(160);
-        
+
         Image roses = new Image(getClass().getResourceAsStream("roses.jpg"));
         sp.setContent(new ImageView(roses));
         sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        
-        
-        
+
         for (int i = 0; i < 5; i++) {
             images[i] = new Image(getClass().getResourceAsStream(imageNames[i]));
             pics[i] = new ImageView(images[i]);
@@ -82,9 +79,8 @@ public class ScrollPaneSample extends Application {
         sp.setVmax(440);
         sp.setPrefSize(115, 150);
         sp.setContent(vb);
-        sp.vvalueProperty().addListener((ObservableValue<? extends Number> ov, 
-            Number old_val, Number new_val) -> {
-                fileName.setText(imageNames[(new_val.intValue() - 1)/100]);
+        sp.vvalueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            fileName.setText(imageNames[(new_val.intValue() - 1) / 100]);
         });
         stage.show();
     }

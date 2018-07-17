@@ -53,14 +53,16 @@ public class JTreeJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("root")) {
             return Arrays.asList((IJavaElement) new JTreeNodeJavaElement(this, 0));
         } else if (selector.equals("nth-node")) {
             return Arrays.asList((IJavaElement) new JTreeNodeJavaElement(this, ((Integer) params[0]).intValue() - 1));
         } else if (selector.equals("all-nodes") || selector.equals("all-cells")) {
             return collectNodes(new ArrayList<IJavaElement>(), new Predicate() {
-                @Override public boolean isValid(JTreeNodeJavaElement e) {
+                @Override
+                public boolean isValid(JTreeNodeJavaElement e) {
                     return true;
                 }
             });
@@ -94,15 +96,18 @@ public class JTreeJavaElement extends AbstractJavaElement {
         return Arrays.asList((IJavaElement) new JTreeNodeJavaElement(this, rowForPath));
     }
 
-    @SuppressWarnings("unused") private Component getEditor(final int viewRow, final int viewCol) {
+    @SuppressWarnings("unused")
+    private Component getEditor(final int viewRow, final int viewCol) {
         return EventQueueWait.exec(new Callable<Component>() {
-            @Override public Component call() throws Exception {
+            @Override
+            public Component call() throws Exception {
                 return null;
             }
         });
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         int rows = ((JTree) component).getRowCount();
         JSONArray r = new JSONArray();
         for (int i = 0; i < rows; i++) {
@@ -111,17 +116,20 @@ public class JTreeJavaElement extends AbstractJavaElement {
         return r.toString();
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         Properties[] properties = PropertyHelper.fromStringToArray(value, new String[][] { { "Path" } });
         return setCellSelection(properties);
     }
 
-    @Override public boolean marathon_select(JSONArray jsonArray) {
+    @Override
+    public boolean marathon_select(JSONArray jsonArray) {
         List<IJavaElement> nodes = new ArrayList<IJavaElement>();
         for (int index = 0; index < jsonArray.length(); index++) {
             final Properties p = PropertyHelper.asProperties(jsonArray.getJSONObject(index));
             collectNodes(nodes, new Predicate() {
-                @Override public boolean isValid(JTreeNodeJavaElement e) {
+                @Override
+                public boolean isValid(JTreeNodeJavaElement e) {
                     Enumeration<Object> keys = p.keys();
                     while (keys.hasMoreElements()) {
                         String key = (String) keys.nextElement();

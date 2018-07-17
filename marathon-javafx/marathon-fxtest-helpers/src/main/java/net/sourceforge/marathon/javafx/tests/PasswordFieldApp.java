@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 
 public class PasswordFieldApp extends Application {
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("PasswordField Sample");
         primaryStage.setScene(new Scene(new PasswordFieldSample()));
         primaryStage.sizeToScene();

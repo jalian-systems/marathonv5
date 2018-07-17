@@ -21,35 +21,45 @@ public class NullLogger implements ILogger {
 
     public static final Logger LOGGER = Logger.getLogger(NullLogger.class.getName());
 
-    @Override public void info(String module, String message) {
+    @Override
+    public void info(String module, String message) {
     }
 
-    @Override public void info(String module, String message, String description) {
+    @Override
+    public void info(String module, String message, String description) {
     }
 
-    @Override public void warning(String module, String message) {
+    @Override
+    public void warning(String module, String message) {
     }
 
-    @Override public void warning(String module, String message, String description) {
+    @Override
+    public void warning(String module, String message, String description) {
     }
 
-    @Override public void error(String module, String message) {
+    @Override
+    public void error(String module, String message) {
     }
 
-    @Override public void error(String module, String message, String description) {
+    @Override
+    public void error(String module, String message, String description) {
     }
 
-    @Override public void setLogLevel(int level) {
+    @Override
+    public void setLogLevel(int level) {
     }
 
-    @Override public int getLogLevel() {
+    @Override
+    public int getLogLevel() {
         return INFO;
     }
 
-    @Override public void msg(String string, String string2) {
+    @Override
+    public void msg(String string, String string2) {
     }
 
-    @Override public void msg(String module, String message, String description) {
+    @Override
+    public void msg(String module, String message, String description) {
     }
 
 }

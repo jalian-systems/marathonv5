@@ -29,7 +29,8 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.javaagent.Device.Type;
 
-@Test public abstract class DeviceKBTest extends DeviceTest {
+@Test
+public abstract class DeviceKBTest extends DeviceTest {
 
     public DeviceKBTest(Type type) {
         super(type);
@@ -38,7 +39,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
     public void sendKeys() throws Throwable {
         driver.sendKeys(textField, "Hello ", "World");
         new WaitWithoutException("Waiting for text to be set") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 String text;
                 try {
                     text = EventQueueWait.call(textField, "getText");
@@ -60,7 +62,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         kss.clear();
         driver.sendKeys(textField, "A");
         new WaitWithoutException("Waiting for the keypress") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     return kss.toString().contains(KeyStroke.getKeyStroke("released SHIFT").toString());
                 } catch (Throwable t) {
@@ -82,7 +85,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         driver.sendKeys(textField, getOSKey(), "a");
         driver.sendKeys(textField, JavaAgentKeys.NULL);
         new WaitWithoutException("Waiting for the select event") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     Object text = EventQueueWait.call(textField, "getSelectedText");
                     return text != null && text.equals("Hello World");
@@ -105,7 +109,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         kss.clear();
         driver.sendKeys(textField, osKey);
         new WaitWithoutException("Waiting for meta press") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return kss.size() > 0;
             }
         };
@@ -113,7 +118,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         driver.sendKeys(textField, JavaAgentKeys.F2);
         final String expected1 = "[" + osString + " pressed F2, " + osString + " released F2]";
         new WaitWithoutException("Waiting for ctrl+f2") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return expected1.equals(kss.toString());
             }
         };
@@ -121,7 +127,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         kss.clear();
         driver.sendKeys(textField, JavaAgentKeys.NULL);
         new WaitWithoutException("Waiting for meta press") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return kss.size() > 0;
             }
         };
@@ -129,7 +136,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         driver.sendKeys(textField, JavaAgentKeys.F2);
         final String expected2 = "[pressed F2, released F2]";
         new WaitWithoutException("Waiting for ctrl+f2") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return expected2.equals(kss.toString());
             }
         };
@@ -143,7 +151,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         driver.releaseKey(textField, JavaAgentKeys.F1);
         driver.releaseKey(textField, JavaAgentKeys.ALT);
         new WaitWithoutException("Waiting for alt release") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return kss.toString().contains("released ALT");
             }
         };
@@ -157,7 +166,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         kss.clear();
         driver.sendKeys(textField, JavaAgentKeys.ALT, JavaAgentKeys.F1, JavaAgentKeys.ALT);
         new WaitWithoutException("Waiting for alt release") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return kss.toString().contains("released ALT");
             }
         };
@@ -174,7 +184,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         driver.releaseKey(textField, JavaAgentKeys.F1);
         driver.releaseKey(textField, JavaAgentKeys.SHIFT);
         new WaitWithoutException("Waiting for shift release") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return kss.toString().contains("released SHIFT");
             }
         };
@@ -191,13 +202,15 @@ import net.sourceforge.marathon.javaagent.Device.Type;
         exitItemCalled = false;
         driver.sendKeys(textField, JavaAgentKeys.chord(JavaAgentKeys.ALT, "f"));
         new WaitWithoutException("Waiting for exit item to be called") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return menu.isPopupMenuVisible();
             }
         };
         driver.sendKeys(exitItem, JavaAgentKeys.ENTER);
         new WaitWithoutException("Waiting for exit item to be called") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return exitItemCalled;
             }
         };
@@ -207,7 +220,8 @@ import net.sourceforge.marathon.javaagent.Device.Type;
     public void whetherAllKeysAreMapped() throws Throwable {
         driver.sendKeys(textField, ");!@#$%^&*(");
         new WaitWithoutException("Waiting for exit item to be called") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !textField.getText().equals("");
             }
         };

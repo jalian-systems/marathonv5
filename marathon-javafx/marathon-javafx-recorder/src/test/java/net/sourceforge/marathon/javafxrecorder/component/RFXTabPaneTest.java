@@ -35,15 +35,18 @@ public class RFXTabPaneTest extends RFXComponentTest {
 
     public static URL imgURL = RFXTabPaneTest.class.getResource("/net/sourceforge/marathon/javafxrecorder/component/middle.png");
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TabSample();
     }
 
-    @Test public void selectNormalTab() throws Throwable {
+    @Test
+    public void selectNormalTab() throws Throwable {
         TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
                 rfxTabPane.mouseClicked(null);
             }
@@ -53,7 +56,8 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("recordSelect", select.getCall());
         AssertJUnit.assertEquals("Tab 1", select.getParameters()[0]);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
                 tabPane.getSelectionModel().select(1);
                 rfxTabPane.mouseClicked(null);
@@ -65,12 +69,14 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Tab 2", select.getParameters()[0]);
     }
 
-    @Test public void getText() throws Throwable {
+    @Test
+    public void getText() throws Throwable {
         TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
                 tabPane.getSelectionModel().select(1);
                 rfxTabPane.mouseClicked(null);
@@ -78,18 +84,21 @@ public class RFXTabPaneTest extends RFXComponentTest {
             }
         });
         new Wait("Waiting for tab pane text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Tab 2", text.get(0));
     }
 
-    @Test public void selectNoTextTab() {
+    @Test
+    public void selectNoTextTab() {
         TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Tab tab = new Tab();
                 tab.setGraphic(new ImageView(RFXTabPaneTest.imgURL.toString()));
                 tabPane.getTabs().add(tab);
@@ -104,11 +113,13 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("middle", select.getParameters()[0]);
     }
 
-    @Test public void selectNoIconAndTextTab() {
+    @Test
+    public void selectNoIconAndTextTab() {
         TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabPane.getTabs().add(new Tab());
                 tabPane.getSelectionModel().select(4);
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
@@ -121,11 +132,13 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("tabIndex-4", select.getParameters()[0]);
     }
 
-    @Test public void tabDuplicates() throws Throwable {
+    @Test
+    public void tabDuplicates() throws Throwable {
         TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabPane.getSelectionModel().select(1);
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
                 rfxTabPane.mouseClicked(null);
@@ -136,7 +149,8 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("recordSelect", select.getCall());
         AssertJUnit.assertEquals("Tab 2", select.getParameters()[0]);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabPane.getTabs().add(2, new Tab("Tab 2"));
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
                 tabPane.getSelectionModel().select(2);
@@ -149,11 +163,13 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Tab 2(1)", select.getParameters()[0]);
     }
 
-    @Test public void tabMultipleDuplicates() throws Throwable {
+    @Test
+    public void tabMultipleDuplicates() throws Throwable {
         TabPane tabPane = (TabPane) getPrimaryStage().getScene().getRoot().lookup(".tab-pane");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabPane.getSelectionModel().select(1);
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);
                 rfxTabPane.mouseClicked(null);
@@ -164,7 +180,8 @@ public class RFXTabPaneTest extends RFXComponentTest {
         AssertJUnit.assertEquals("recordSelect", select.getCall());
         AssertJUnit.assertEquals("Tab 2", select.getParameters()[0]);
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tabPane.getTabs().add(2, new Tab("Tab 2"));
                 tabPane.getTabs().add(3, new Tab("Tab 2"));
                 RFXTabPane rfxTabPane = new RFXTabPane(tabPane, null, null, lr);

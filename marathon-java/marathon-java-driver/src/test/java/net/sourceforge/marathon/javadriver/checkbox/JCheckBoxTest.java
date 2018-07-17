@@ -33,14 +33,17 @@ import org.testng.annotations.Test;
 import components.CheckBoxDemo;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JCheckBoxTest {
+@Test
+public class JCheckBoxTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JCheckBoxTest.class.getSimpleName());
                 frame.setName("frame-" + JCheckBoxTest.class.getSimpleName());
                 frame.getContentPane().add(new CheckBoxDemo(), BorderLayout.CENTER);
@@ -51,9 +54,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

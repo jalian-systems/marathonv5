@@ -21,7 +21,8 @@ import java.util.List;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
-@Test public class KeyBoardMapTest {
+@Test
+public class KeyBoardMapTest {
 
     public void findEntryFora() {
         KeyboardMap kbMap = new KeyboardMap('a');

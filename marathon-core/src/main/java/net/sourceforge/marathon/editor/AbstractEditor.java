@@ -28,173 +28,221 @@ public abstract class AbstractEditor implements IEditor {
 
     public static final Logger LOGGER = Logger.getLogger(AbstractEditor.class.getName());
 
-    @Override public void setStatusBar(IStatusBar statusBar) {
+    @Override
+    public void setStatusBar(IStatusBar statusBar) {
     }
 
-    @Override public void startInserting() {
+    @Override
+    public void startInserting() {
     }
 
-    @Override public void stopInserting() {
+    @Override
+    public void stopInserting() {
     }
 
-    @Override public void insertScript(String script) {
+    @Override
+    public void insertScript(String script) {
     }
 
-    @Override public void addKeyBinding(String keyBinding, AbstractSimpleAction action) {
+    @Override
+    public void addKeyBinding(String keyBinding, AbstractSimpleAction action) {
     }
 
-    @Override public void highlightLine(int line) {
+    @Override
+    public void highlightLine(int line) {
     }
 
-    @Override public boolean isEditable() {
+    @Override
+    public boolean isEditable() {
         return false;
     }
 
-    @Override public int getSelectionStart() {
+    @Override
+    public int getSelectionStart() {
         return 0;
     }
 
-    @Override public int getSelectionEnd() {
+    @Override
+    public int getSelectionEnd() {
         return 0;
     }
 
-    @Override public void setDirty(boolean b) {
+    @Override
+    public void setDirty(boolean b) {
     }
 
-    @Override public boolean isDirty() {
+    @Override
+    public boolean isDirty() {
         return false;
     }
 
-    @Override public void addCaretListener(CaretListener listener) {
+    @Override
+    public void addCaretListener(CaretListener listener) {
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
     }
 
-    @Override public void addContentChangeListener(IContentChangeListener l) {
+    @Override
+    public void addContentChangeListener(IContentChangeListener l) {
     }
 
-    @Override public int getCaretLine() {
+    @Override
+    public int getCaretLine() {
         return 0;
     }
 
-    @Override public void setCaretLine(int line) {
+    @Override
+    public void setCaretLine(int line) {
     }
 
-    @Override public Node getNode() {
+    @Override
+    public Node getNode() {
         return null;
     }
 
-    @Override public void addGutterListener(IGutterListener provider) {
+    @Override
+    public void addGutterListener(IGutterListener provider) {
     }
 
-    @Override public Object getData(String key) {
+    @Override
+    public Object getData(String key) {
         return null;
     }
 
-    @Override public void setData(String key, Object value) {
+    @Override
+    public void setData(String key, Object value) {
     }
 
-    @Override public void setCaretPosition(int position) {
+    @Override
+    public void setCaretPosition(int position) {
     }
 
-    @Override public int getCaretPosition() {
+    @Override
+    public int getCaretPosition() {
         return 0;
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return null;
     }
 
-    @Override public void setText(String text) {
+    @Override
+    public void setText(String text) {
     }
 
-    @Override public void setMode(String mode) {
+    @Override
+    public void setMode(String mode) {
     }
 
-    @Override public int getLineOfOffset(int selectionStart) {
+    @Override
+    public int getLineOfOffset(int selectionStart) {
         return 0;
     }
 
-    @Override public int getLineStartOffset(int startLine) {
+    @Override
+    public int getLineStartOffset(int startLine) {
         return 0;
     }
 
-    @Override public int getLineEndOffset(int endLine) {
+    @Override
+    public int getLineEndOffset(int endLine) {
         return 0;
     }
 
-    @Override public void setFocus() {
+    @Override
+    public void setFocus() {
     }
 
-    @Override public void setMenuItems(MenuItem[] menuItems) {
+    @Override
+    public void setMenuItems(MenuItem[] menuItems) {
     }
 
-    @Override public void toggleInsertMode() {
+    @Override
+    public void toggleInsertMode() {
     }
 
-    @Override public void setEditable(boolean b) {
+    @Override
+    public void setEditable(boolean b) {
     }
 
-    @Override public void runWhenReady(Runnable r) {
+    @Override
+    public void runWhenReady(Runnable r) {
         r.run();
     }
 
-    @Override public void runWhenContentLoaded(Runnable r) {
+    @Override
+    public void runWhenContentLoaded(Runnable r) {
         r.run();
     }
 
-    @Override public Font getFont() {
+    @Override
+    public Font getFont() {
         return null;
     }
 
-    @Override public void refreshResource() {
+    @Override
+    public void refreshResource() {
     }
 
-    @Override public String getResourcePath() {
+    @Override
+    public String getResourcePath() {
         return null;
     }
 
-    @Override public boolean isProjectFile() {
+    @Override
+    public boolean isProjectFile() {
         return false;
     }
 
-    @Override public boolean isTestFile() {
+    @Override
+    public boolean isTestFile() {
         return false;
     }
 
-    @Override public File saveAs() throws IOException {
+    @Override
+    public File saveAs() throws IOException {
         throw new RuntimeException("SaveAs not supported by editor");
     }
 
-    @Override public boolean isModuleFile() {
+    @Override
+    public boolean isModuleFile() {
         return false;
     }
 
-    @Override public void saveTo(File file) throws IOException {
+    @Override
+    public void saveTo(File file) throws IOException {
         throw new RuntimeException("SaveAs not supported by editor");
     }
 
-    @Override public void createNewResource(String script, File directory) {
+    @Override
+    public void createNewResource(String script, File directory) {
         throw new RuntimeException("createNewResource not supported by editor");
     }
 
-    @Override public boolean isEditingResource(File file) {
+    @Override
+    public boolean isEditingResource(File file) {
         return false;
     }
 
-    @Override public boolean isFileBased() {
+    @Override
+    public boolean isFileBased() {
         return false;
     }
 
-    @Override public boolean canSaveAs() {
+    @Override
+    public boolean canSaveAs() {
         return false;
     }
 
-    @Override public void changeResource(File file) {
+    @Override
+    public void changeResource(File file) {
     }
 
-    @Override public boolean isNewFile() {
+    @Override
+    public boolean isNewFile() {
         return false;
     }
 }

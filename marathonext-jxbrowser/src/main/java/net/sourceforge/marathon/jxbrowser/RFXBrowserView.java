@@ -35,7 +35,7 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
 public class RFXBrowserView extends RFXComponent {
 
     private static final String script;
-	private static final int MAX_TRIES = 5;
+    private static final int MAX_TRIES = 5;
 
     static {
         InputStream r = RFXBrowserView.class.getResourceAsStream("browserview_recorder.js");
@@ -77,22 +77,28 @@ public class RFXBrowserView extends RFXComponent {
                 }
             }
             webEngine.addLoadListener(new LoadListener() {
-                @Override public void onStartLoadingFrame(StartLoadingEvent arg0) {
+                @Override
+                public void onStartLoadingFrame(StartLoadingEvent arg0) {
                 }
 
-                @Override public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
+                @Override
+                public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
                 }
 
-                @Override public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
+                @Override
+                public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
                 }
 
-                @Override public void onFailLoadingFrame(FailLoadingEvent arg0) {
+                @Override
+                public void onFailLoadingFrame(FailLoadingEvent arg0) {
                 }
 
-                @Override public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
+                @Override
+                public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
                 }
 
-                @Override public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
+                @Override
+                public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
                     long frameId = arg0.getFrameId();
                     if (arg0.isMainFrame())
                         frameId = -1;
@@ -103,7 +109,8 @@ public class RFXBrowserView extends RFXComponent {
         JavaFXBrowserViewElement.init(source);
     }
 
-    @Override public void processEvent(Event event) {
+    @Override
+    public void processEvent(Event event) {
     }
 
     public void record_select(String info, String value, int id) {
@@ -142,21 +149,21 @@ public class RFXBrowserView extends RFXComponent {
     }
 
     private void loadScript(BrowserView webview, Browser webEngine, long frameId) {
-    	for(int i = 0; i < MAX_TRIES; i++) {
-    		try {
-    			loadScriptx(webview, webEngine, frameId);
-    			return;
-    		} catch(RuntimeException e) {
-    			if(i == MAX_TRIES -1)
-    				throw e;
-    			try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e1) {
-				}
-    		}
-    	}
+        for (int i = 0; i < MAX_TRIES; i++) {
+            try {
+                loadScriptx(webview, webEngine, frameId);
+                return;
+            } catch (RuntimeException e) {
+                if (i == MAX_TRIES - 1)
+                    throw e;
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e1) {
+                }
+            }
+        }
     }
-    
+
     private void loadScriptx(BrowserView webview, Browser webEngine, long frameId) {
         webview.getProperties().put("current_selector", "body");
         JSValue win = webEngine.executeJavaScriptAndReturnValue(frameId, "window");
@@ -167,7 +174,8 @@ public class RFXBrowserView extends RFXComponent {
         webEngine.executeJavaScript(frameId, script);
     }
 
-    @Override public String getCellInfo() {
+    @Override
+    public String getCellInfo() {
         if (getFrameId() == -1)
             return (String) getComponent().getProperties().get("current_selector");
         return getFrameId() + ":" + (String) getComponent().getProperties().get("current_selector");
@@ -181,7 +189,8 @@ public class RFXBrowserView extends RFXComponent {
         return (long) getComponent().getProperties().get("browserview_frame_id");
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return JavaFXBrowserViewElement.getText(getComponent(), getCellInfo2(), getFrameId());
     }
 
@@ -189,7 +198,8 @@ public class RFXBrowserView extends RFXComponent {
         return new String[] { "getAttributes", "getValue" };
     }
 
-    @Override protected String _getLabeledBy() {
+    @Override
+    protected String _getLabeledBy() {
         return JavaFXBrowserViewElement.getLabeledBy(getComponent(), getCellInfo2(), getFrameId());
     }
 
@@ -197,13 +207,15 @@ public class RFXBrowserView extends RFXComponent {
         return JavaFXBrowserViewElement.getAttributes(getComponent(), getCellInfo2(), getFrameId());
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         return JavaFXBrowserViewElement.getValue(getComponent(), getCellInfo2(), getFrameId());
     }
 
     public static void generateEvent(Node n) {
         JavaFxRecorderHook.instance.addListener(new ChangeListener<JavaFxRecorderHook>() {
-            @Override public void changed(ObservableValue<? extends JavaFxRecorderHook> observable, JavaFxRecorderHook oldValue,
+            @Override
+            public void changed(ObservableValue<? extends JavaFxRecorderHook> observable, JavaFxRecorderHook oldValue,
                     JavaFxRecorderHook newValue) {
                 Platform.runLater(() -> {
                     MouseEvent e = new MouseEvent(n, n, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false, false,

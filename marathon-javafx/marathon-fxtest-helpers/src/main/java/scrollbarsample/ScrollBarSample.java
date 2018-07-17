@@ -69,27 +69,22 @@ public class ScrollBarSample extends Application {
         vb.setLayoutX(5);
         vb.setSpacing(10);
 
-        sc.setLayoutX(scene.getWidth()-sc.getWidth());
+        sc.setLayoutX(scene.getWidth() - sc.getWidth());
         sc.setMin(0);
         sc.setOrientation(Orientation.VERTICAL);
         sc.setPrefHeight(180);
         sc.setMax(360);
 
         for (int i = 0; i < 5; i++) {
-            final Image image = images[i] =
-                new Image(getClass().getResourceAsStream("fw" +(i+1)+ ".jpg"));
-            final ImageView pic = pics[i] =
-                new ImageView(images[i]);
+            final Image image = images[i] = new Image(getClass().getResourceAsStream("fw" + (i + 1) + ".jpg"));
+            final ImageView pic = pics[i] = new ImageView(images[i]);
             pic.setEffect(shadow);
             vb.getChildren().add(pics[i]);
         }
-        
-      
 
-      sc.valueProperty().addListener((ObservableValue<? extends Number> ov, 
-            Number old_val, Number new_val) -> {
-                vb.setLayoutY(-new_val.doubleValue());
-        });  
+        sc.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            vb.setLayoutY(-new_val.doubleValue());
+        });
 
         stage.show();
     }

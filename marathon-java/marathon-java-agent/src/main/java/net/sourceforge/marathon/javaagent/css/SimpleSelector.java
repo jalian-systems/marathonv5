@@ -54,7 +54,8 @@ public class SimpleSelector implements Selector {
         }
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(tag);
         for (SelectorFilter selectorFilter : filters) {
@@ -66,12 +67,14 @@ public class SimpleSelector implements Selector {
         return sb.toString();
     }
 
-    @SuppressWarnings("unchecked") @Override public List<IJavaElement> findElements(final IJavaAgent driver,
-            final IJavaElement container, long implicitWait) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<IJavaElement> findElements(final IJavaAgent driver, final IJavaElement container, long implicitWait) {
         final Object[] r = new Object[] { null };
         if (implicitWait == 0) {
             EventQueueWait.exec(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     try {
                         r[0] = found(container, driver);
                     } catch (NoSuchWindowException e) {
@@ -87,7 +90,8 @@ public class SimpleSelector implements Selector {
             });
         } else {
             new EventQueueWait() {
-                @Override public boolean till() {
+                @Override
+                public boolean till() {
                     List<IJavaElement> list;
                     try {
                         list = found(container, driver);

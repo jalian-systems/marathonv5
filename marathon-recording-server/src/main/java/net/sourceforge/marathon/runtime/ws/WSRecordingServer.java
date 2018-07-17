@@ -54,19 +54,24 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             value = o.getString("value");
         }
 
-        @Override public String toScriptCode() {
-            return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select_fx_menu", "", type, value);
+        @Override
+        public String toScriptCode() {
+            return Indent.getIndent()
+                    + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select_fx_menu", "", type, value);
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return windowId;
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
@@ -80,19 +85,23 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             this.comment = comment;
         }
 
-        @Override public String toScriptCode() {
+        @Override
+        public String toScriptCode() {
             return Indent.getIndent() + "# " + comment + "\n";
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return null;
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
@@ -108,20 +117,24 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             value = o.getString("value");
         }
 
-        @Override public String toScriptCode() {
+        @Override
+        public String toScriptCode() {
             return Indent.getIndent()
                     + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select_file_chooser", "", type, value);
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return null;
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
@@ -137,19 +150,24 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             value = o.getString("value");
         }
 
-        @Override public String toScriptCode() {
-            return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select_file_dialog", "", type, value);
+        @Override
+        public String toScriptCode() {
+            return Indent.getIndent()
+                    + RecordingScriptModel.getModel().getScriptCodeForGenericAction("select_file_dialog", "", type, value);
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return null;
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
@@ -163,19 +181,23 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             title = o.getString("value");
         }
 
-        @Override public String toScriptCode() {
+        @Override
+        public String toScriptCode() {
             return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("window_closed", "", title);
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return null;
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
@@ -198,20 +220,24 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             height = value.getInt("height");
         }
 
-        @Override public String toScriptCode() {
+        @Override
+        public String toScriptCode() {
             String bounds = "" + x + ":" + y + ":" + width + ":" + height;
             return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("window_changed", "", bounds);
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return new WindowId(title, null, "window");
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
@@ -220,7 +246,8 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
     private final class JavaVersionScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
 
-        @Override public String toScriptCode() {
+        @Override
+        public String toScriptCode() {
             if (java_version != null) {
                 return Indent.getIndent() + "java_recorded_version = '" + java_version + "'\n";
             }
@@ -228,31 +255,35 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
             return "";
         }
 
-        @Override public boolean isUndo() {
+        @Override
+        public boolean isUndo() {
             return false;
         }
 
-        @Override public WindowId getWindowId() {
+        @Override
+        public WindowId getWindowId() {
             return null;
         }
 
-        @Override public IScriptElement getUndoElement() {
+        @Override
+        public IScriptElement getUndoElement() {
             return null;
         }
     }
 
     private IRecorder recorder;
-    INamingStrategy ns ;
+    INamingStrategy ns;
     private String java_version;
     private boolean javaVersionRecorded = false;
     private WindowId focusedWindowId;
 
     public WSRecordingServer(int port, INamingStrategy ns) {
         super(new InetSocketAddress(port));
-        this.ns = ns ;
+        this.ns = ns;
     }
 
-    @Override public void startRecording(IRecorder recorder) {
+    @Override
+    public void startRecording(IRecorder recorder) {
         this.recorder = recorder;
         if (recorder != null && !javaVersionRecorded) {
             recorder.record(new JavaVersionScriptElement());
@@ -260,7 +291,8 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         }
     }
 
-    @Override public void stopRecording() {
+    @Override
+    public void stopRecording() {
         this.recorder = null;
         try {
             stop();
@@ -270,7 +302,8 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         ns.save();
     }
 
-    @Override public void setRawRecording(boolean rawRecording) throws IOException {
+    @Override
+    public void setRawRecording(boolean rawRecording) throws IOException {
         JSONObject o = new JSONObject();
         o.put("value", Boolean.toString(rawRecording));
         Collection<WebSocket> cs = connections();
@@ -279,11 +312,13 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         }
     }
 
-    @Override public void pauseRecording() {
+    @Override
+    public void pauseRecording() {
         setRecordingPause(true);
     }
 
-    @Override public void resumeRecording() {
+    @Override
+    public void resumeRecording() {
         setRecordingPause(false);
     }
 
@@ -303,7 +338,7 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         return new JSONObject(s);
     }
 
-    public abstract JSONObject getContextMenuTriggers() ;
+    public abstract JSONObject getContextMenuTriggers();
 
     public JSONObject record(WebSocket conn, JSONObject query) throws IOException {
         LOGGER.info("WSRecordingServer.record(" + query.toString(2) + ")");
@@ -386,18 +421,21 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         return urp.toString();
     }
 
-    @Override public void abortApplication() {
+    @Override
+    public void abortApplication() {
         Collection<WebSocket> cs = connections();
         for (WebSocket webSocket : cs) {
             post(webSocket, "abortApplication", null);
         }
     }
 
-    @Override public WindowId getFocusedWindowId() {
+    @Override
+    public WindowId getFocusedWindowId() {
         return focusedWindowId;
     }
 
-    @Override public void onOpen(WebSocket conn, ClientHandshake handshake) {
+    @Override
+    public void onOpen(WebSocket conn, ClientHandshake handshake) {
         post(conn, "setContextMenuTriggers", getContextMenuTriggers().toString());
         post(conn, "setObjectMapConfig", getObjectMapConfiguration().toString());
     }
@@ -407,17 +445,20 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         post(conn, "setObjectMapConfig", getObjectMapConfiguration().toString());
     }
 
-    @Override public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+    @Override
+    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
     }
 
-    @Override public void onMessage(WebSocket conn, String message) {
+    @Override
+    public void onMessage(WebSocket conn, String message) {
         JSONObject o = new JSONObject(message);
         String method = o.getString("method");
         String data = o.has("data") ? o.getString("data") : null;
         serve(method, conn, data);
     }
 
-    @Override public void onError(WebSocket conn, Exception ex) {
+    @Override
+    public void onError(WebSocket conn, Exception ex) {
     }
 
     public void serve(String method, WebSocket conn, String data) {
@@ -491,7 +532,8 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         conn.send(o.toString());
     }
 
-    @Override public boolean isRecording() {
+    @Override
+    public boolean isRecording() {
         return recorder != null;
     }
 
@@ -509,42 +551,48 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
         recorder.record(new IScriptElement() {
             private static final long serialVersionUID = 1L;
 
-            @Override public String toScriptCode() {
+            @Override
+            public String toScriptCode() {
                 String method = query.getString("method");
                 if (method.equals("prompt") || method.equals("confirm")) {
                     String result = query.getString("result");
                     if (result == null)
-                        return Indent.getIndent()
-                                + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", query.optString("text", ""));
+                        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "",
+                                query.optString("text", ""));
                     else
                         return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "",
                                 query.optString("text", ""), result);
                 } else {
-                    return Indent.getIndent()
-                            + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "", query.optString("text", ""));
+                    return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction(method, "",
+                            query.optString("text", ""));
                 }
             }
 
-            @Override public WindowId getWindowId() {
+            @Override
+            public WindowId getWindowId() {
                 return windowId;
             }
 
-            @Override public IScriptElement getUndoElement() {
+            @Override
+            public IScriptElement getUndoElement() {
                 return null;
             }
 
-            @Override public boolean isUndo() {
+            @Override
+            public boolean isUndo() {
                 return false;
             }
 
         });
     }
 
-    @Override public void insertingScriptStart() {
+    @Override
+    public void insertingScriptStart() {
         setInsertingScript(true);
     }
 
-    @Override public void insertingScriptFinish() {
+    @Override
+    public void insertingScriptFinish() {
         setInsertingScript(false);
     }
 

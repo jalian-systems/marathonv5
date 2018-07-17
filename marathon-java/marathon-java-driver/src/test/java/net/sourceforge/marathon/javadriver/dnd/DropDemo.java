@@ -50,7 +50,8 @@ import javax.swing.UIManager;
 import net.sourceforge.marathon.javaagent.DnDHandler;
 import net.sourceforge.marathon.javaagent.DragAndDropException;
 
-@SuppressWarnings({ "unchecked", "rawtypes" }) public class DropDemo extends JPanel implements ActionListener {
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class DropDemo extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JComboBox dropCombo;
     private JList list;
@@ -66,7 +67,8 @@ import net.sourceforge.marathon.javaagent.DragAndDropException;
         JRadioButton r1 = new JRadioButton(new AbstractAction("Use COPY") {
             private static final long serialVersionUID = 1L;
 
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 dndAction = DnDConstants.ACTION_COPY;
             }
         });
@@ -75,7 +77,8 @@ import net.sourceforge.marathon.javaagent.DragAndDropException;
         JRadioButton r2 = new JRadioButton(new AbstractAction("Use MOVE") {
             private static final long serialVersionUID = 1L;
 
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 dndAction = DnDConstants.ACTION_MOVE;
             }
         });
@@ -85,7 +88,8 @@ import net.sourceforge.marathon.javaagent.DragAndDropException;
         JButton dndList2List = new JButton(new AbstractAction("DnD-List to List") {
             private static final long serialVersionUID = 1L;
 
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 Rectangle cellBounds = list.getCellBounds(3, 3);
                 DnDHandler dnd = new DnDHandler(list, list, cellBounds.x + cellBounds.width / 2,
                         cellBounds.y + cellBounds.height / 2, dndAction);
@@ -99,7 +103,8 @@ import net.sourceforge.marathon.javaagent.DragAndDropException;
         JButton dndList2Text = new JButton(new AbstractAction("DnD-List to TextArea") {
             private static final long serialVersionUID = 1L;
 
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 Rectangle cellBounds = list.getCellBounds(3, 3);
                 DnDHandler dnd = new DnDHandler(list, textArea, cellBounds.x + cellBounds.width / 2,
                         cellBounds.y + cellBounds.height / 2, dndAction);
@@ -159,7 +164,8 @@ import net.sourceforge.marathon.javaagent.DragAndDropException;
         return panel;
     }
 
-    @Override public void actionPerformed(ActionEvent ae) {
+    @Override
+    public void actionPerformed(ActionEvent ae) {
         Object val = dropCombo.getSelectedItem();
         if (val == "USE_SELECTION") {
             list.setDropMode(DropMode.USE_SELECTION);
@@ -196,7 +202,8 @@ import net.sourceforge.marathon.javaagent.DragAndDropException;
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 // Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
                 createAndShowGUI();

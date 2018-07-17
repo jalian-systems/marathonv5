@@ -34,7 +34,8 @@ public class PlugInModelInfo implements Serializable {
         this.className = className;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return name;
     }
 }

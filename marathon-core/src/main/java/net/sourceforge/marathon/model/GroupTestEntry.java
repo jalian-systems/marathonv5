@@ -40,7 +40,8 @@ public class GroupTestEntry extends GroupEntry {
         path = getFilePath();
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         Test test = getTest();
         if (test == null)
             return null;
@@ -49,7 +50,8 @@ public class GroupTestEntry extends GroupEntry {
         return ((TestCase) test).getName();
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         Test test = getTest();
         if (test == null)
             return null;
@@ -58,33 +60,39 @@ public class GroupTestEntry extends GroupEntry {
         return ((MarathonTestCase) test).getFile().toPath();
     }
 
-    @Override public void setName(String name) {
+    @Override
+    public void setName(String name) {
         if (getTest() instanceof MarathonDDTestSuite)
             ((MarathonDDTestSuite) getTest()).setName(name);
         else
             ((TestCase) getTest()).setName(name);
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         return new TestCreator(acceptChecklist, console).getTest(super.getRawName());
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return getTest() instanceof TestCase;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (path == null ? 0 : path.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -105,12 +113,14 @@ public class GroupTestEntry extends GroupEntry {
         return true;
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override public void rename(String text) {
+    @Override
+    public void rename(String text) {
         if (getTest() instanceof MarathonDDTestSuite)
             ((MarathonDDTestSuite) getTest()).setName(text);
         else

@@ -78,7 +78,8 @@ public class NavigatorPanel extends Dockable implements IResourceActionSource, I
         paste.setOnAction((event) -> resourceView.paste());
         toolbar.add(paste);
         ListChangeListener<? super TreeItem<Resource>> listener = new ListChangeListener<TreeItem<Resource>>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends TreeItem<Resource>> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends TreeItem<Resource>> c) {
                 cut.setDisable(resourceView.getSelectionModel().getSelectedItems().size() <= 0);
                 copy.setDisable(resourceView.getSelectionModel().getSelectedItems().size() <= 0);
                 paste.setDisable(resourceView.getSelectionModel().getSelectedItems().size() != 1);
@@ -88,31 +89,38 @@ public class NavigatorPanel extends Dockable implements IResourceActionSource, I
         return toolbar;
     }
 
-    @Override public DockKey getDockKey() {
+    @Override
+    public DockKey getDockKey() {
         return DOCK_KEY;
     }
 
-    @Override public Node getComponent() {
+    @Override
+    public Node getComponent() {
         return component;
     }
 
-    @Override public void deleted(IResourceActionSource source, Resource resource) {
+    @Override
+    public void deleted(IResourceActionSource source, Resource resource) {
         resourceView.deleted(source, resource);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "Navigator Panel";
     }
 
-    @Override public void updated(IResourceActionSource source, Resource resource) {
+    @Override
+    public void updated(IResourceActionSource source, Resource resource) {
         resourceView.updated(source, resource);
     }
 
-    @Override public void moved(IResourceActionSource source, Resource from, Resource to) {
+    @Override
+    public void moved(IResourceActionSource source, Resource from, Resource to) {
         resourceView.moved(source, from, to);
     }
 
-    @Override public void copied(IResourceActionSource source, Resource from, Resource to) {
+    @Override
+    public void copied(IResourceActionSource source, Resource from, Resource to) {
         resourceView.copied(source, from, to);
     }
 }

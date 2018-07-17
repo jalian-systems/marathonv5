@@ -32,7 +32,8 @@ public class DefaultEditorJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         ((DefaultEditor) component).getTextField().setText(value);
         return true;
     }

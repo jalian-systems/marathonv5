@@ -43,7 +43,8 @@ public class CheckListEditor extends FileBasedEditor implements IContentChangeLi
     private ToolBarContainer container = ToolBarContainer.createDefaultContainer(Orientation.RIGHT);
     private CheckListView checkListView;
     private CheckList checklist;
-    @SuppressWarnings("unused") private IStatusBar statusBar;
+    @SuppressWarnings("unused")
+    private IStatusBar statusBar;
     private boolean dirty;
 
     public CheckListEditor() {
@@ -71,27 +72,33 @@ public class CheckListEditor extends FileBasedEditor implements IContentChangeLi
         toolBarPanel.add(toolBar);
     }
 
-    @Override public void setStatusBar(IStatusBar statusBar) {
+    @Override
+    public void setStatusBar(IStatusBar statusBar) {
         this.statusBar = statusBar;
     }
 
-    @Override public void addContentChangeListener(IContentChangeListener l) {
+    @Override
+    public void addContentChangeListener(IContentChangeListener l) {
         checkListView.addContentChangeListener(l);
     }
 
-    @Override public Node getNode() {
+    @Override
+    public Node getNode() {
         return container;
     }
 
-    @Override public Object getData(String key) {
+    @Override
+    public Object getData(String key) {
         return dataMap.get(key);
     }
 
-    @Override public void setData(String key, Object value) {
+    @Override
+    public void setData(String key, Object value) {
         dataMap.put(key, value);
     }
 
-    @Override public void setText(String code) {
+    @Override
+    public void setText(String code) {
         ByteArrayInputStream stream = new ByteArrayInputStream(code.getBytes(StandardCharsets.UTF_8));
         XMLDecoder decoder = new XMLDecoder(stream);
         checklist = (CheckList) decoder.readObject();
@@ -99,7 +106,8 @@ public class CheckListEditor extends FileBasedEditor implements IContentChangeLi
         checkListView.setCheckListNode(new CheckListFormNode(checklist, Mode.EDIT));
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         String string = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         checklist.save(out);
@@ -107,24 +115,29 @@ public class CheckListEditor extends FileBasedEditor implements IContentChangeLi
         return string;
     }
 
-    @Override public void setDirty(boolean b) {
+    @Override
+    public void setDirty(boolean b) {
         dirty = b;
     }
 
-    @Override public boolean isDirty() {
+    @Override
+    public boolean isDirty() {
         return dirty;
     }
 
-    @Override public void contentChanged() {
+    @Override
+    public void contentChanged() {
         setDirty(true);
     }
 
-    @Override public void createNewResource(String script, File directory) {
+    @Override
+    public void createNewResource(String script, File directory) {
         super.createNewResource(script, directory);
         setDirty(true);
     }
 
-    @Override public boolean canSaveAs() {
+    @Override
+    public boolean canSaveAs() {
         return true;
     }
 }

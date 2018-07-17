@@ -44,15 +44,18 @@ import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class JEditorPaneJavaElementTest extends JavaElementTest {
+@Test
+public class JEditorPaneJavaElementTest extends JavaElementTest {
     protected JFrame frame;
     private IJavaAgent driver;
     private IJavaElement editor;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JEditorPaneJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JEditorPaneJavaElementTest.class.getSimpleName());
 
@@ -68,7 +71,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         JavaElementFactory.add(JEditorPane.class, JEditorPaneJavaElement.class);
         editor = driver.findElementByTagName("editor-pane");
         new Wait("Waiting for document to load") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     return getFileName() != null;
                 } catch (Throwable t) {
@@ -79,9 +83,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         Thread.sleep(500);
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -89,10 +95,12 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         JavaElementFactory.reset();
     }
 
-    @Test(enabled = false) public void clickOnText() throws Throwable {
+    @Test(enabled = false)
+    public void clickOnText() throws Throwable {
         AssertJUnit.assertEquals("index.html", getFileName());
         new Wait("Waiting for element to be available") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     marathon_select_by_properties(editor, "text=Of a Louse", false);
                     return true;
@@ -104,7 +112,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         IJavaElement prop = marathon_select_by_properties(editor, "text=Of a Louse", false);
         prop.click();
         new Wait("Waiting for document to load") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     return getFileName().equals("bug.html");
                 } catch (Throwable t) {
@@ -118,7 +127,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void clickOnLink() throws Throwable {
         AssertJUnit.assertEquals("index.html", getFileName());
         new Wait("Waiting for element to be available") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     marathon_select_by_properties(editor, "link=bug.html", false);
                     return true;
@@ -130,7 +140,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         IJavaElement prop = marathon_select_by_properties(editor, "link=bug.html", false);
         prop.click();
         new Wait("Waiting for document to load") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     return getFileName().equals("bug.html");
                 } catch (Throwable t) {
@@ -145,7 +156,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final String htmlText = "<a href='http://localhost' id='#first'><img src='none.gif'></a>" + "Some stuff here"
                 + "<a href='http://localhost' id='#second'><img src='none.gif'></a>";
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JEditorPane editor = (JEditorPane) ComponentUtils.findComponent(JEditorPane.class, frame);
                 Document d = editor.getEditorKit().createDefaultDocument();
                 editor.setDocument(d);
@@ -153,7 +165,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for element to be available") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     marathon_select_by_properties(editor, "link=http://localhost(1)", false);
                     return true;
@@ -170,7 +183,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final String htmlText = "<a href='http://localhost' id='#first'>Goto Google</a>" + "Some stuff here"
                 + "<a href='http://localhost' id='#second'>Goto Google</a>";
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JEditorPane editor = (JEditorPane) ComponentUtils.findComponent(JEditorPane.class, frame);
                 Document d = editor.getEditorKit().createDefaultDocument();
                 editor.setDocument(d);
@@ -178,7 +192,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for element to be available") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     marathon_select_by_properties(editor, "text=Goto Google(1)", false);
                     return true;
@@ -194,7 +209,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     protected String getFileName() throws InterruptedException, InvocationTargetException {
         final String[] values = new String[] { null };
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JEditorPane editor = (JEditorPane) ComponentUtils.findComponent(JEditorPane.class, frame);
                 HTMLDocument document = (HTMLDocument) editor.getDocument();
                 URL base = document.getBase();
@@ -215,13 +231,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final Point actual = new Point();
         final JEditorPane editorPane = (JEditorPane) ComponentUtils.findComponent(JEditorPane.class, frame);
         editorPane.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 actual.x = e.getPoint().x;
                 actual.y = e.getPoint().y;
             }
         });
         new Wait("Waiting for element to be available") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 try {
                     marathon_select_by_properties(editor, "353", false);
                     return true;
@@ -231,7 +249,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         };
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     Rectangle bounds = editorPane.modelToView(353);
                     Point location = new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);

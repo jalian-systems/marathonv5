@@ -43,15 +43,18 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RTableHeaderTest extends RComponentTest {
+@Test
+public class RTableHeaderTest extends RComponentTest {
 
     protected JFrame frame;
     private JTableHeader tableHeader;
     private Point p;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RTableHeaderTest.class.getSimpleName());
                 frame.setName("frame-" + RTableHeaderTest.class.getSimpleName());
                 TableDemo demo = new TableDemo();
@@ -63,9 +66,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -75,7 +80,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void tableHeader() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tableHeader = (JTableHeader) ComponentUtils.findComponent(JTableHeader.class, frame);
                 int columnIndex = getIndexFromHeader("Award Category");
                 Rectangle rect = tableHeader.getHeaderRect(columnIndex);
@@ -84,7 +90,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
 
         tableHeader.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 RTableHeader rtableHeader = new RTableHeader(tableHeader, null, e.getPoint(), lr);
                 rtableHeader.mouseButton1Pressed(e);
             }
@@ -94,7 +101,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         device.click(tableHeader, Buttons.LEFT, 1, p.x, p.y);
 
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -107,7 +115,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void tableHeaderDuplicates() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tableHeader = (JTableHeader) ComponentUtils.findComponent(JTableHeader.class, frame);
                 JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
                 table.getColumnModel().getColumn(1).setHeaderValue("Movie Title");
@@ -118,7 +127,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
 
         tableHeader.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 RTableHeader rtableHeader = new RTableHeader(tableHeader, null, e.getPoint(), lr);
                 rtableHeader.mouseButton1Pressed(e);
             }
@@ -128,7 +138,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         device.click(tableHeader, Buttons.LEFT, 1, p.x, p.y);
 
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -154,14 +165,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContent() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tableHeader = (JTableHeader) ComponentUtils.findComponent(JTableHeader.class, frame);
             }
         });
         final RTableHeader rtableHeader = new RTableHeader(tableHeader, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rtableHeader.getContent();
             }
         });
@@ -171,7 +184,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     public void assertContentDuplicates() {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tableHeader = (JTableHeader) ComponentUtils.findComponent(JTableHeader.class, frame);
                 JTable table = (JTable) ComponentUtils.findComponent(JTable.class, frame);
                 table.getColumnModel().getColumn(1).setHeaderValue("Movie Title");
@@ -180,7 +194,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final RTableHeader rtableHeader = new RTableHeader(tableHeader, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rtableHeader.getContent();
             }
         });

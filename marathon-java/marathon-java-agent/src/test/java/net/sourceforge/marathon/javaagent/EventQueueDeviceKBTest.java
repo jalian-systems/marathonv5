@@ -26,15 +26,18 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.Device.Type;
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 
-@Test public class EventQueueDeviceKBTest extends DeviceKBTest {
+@Test
+public class EventQueueDeviceKBTest extends DeviceKBTest {
 
     public EventQueueDeviceKBTest() {
         super(Type.EVENT_QUEUE);
     }
 
-    @Override public void whetherMenusAreAccessible() throws Throwable {
+    @Override
+    public void whetherMenusAreAccessible() throws Throwable {
         Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override
+            public void eventDispatched(AWTEvent event) {
                 System.err.println(event);
             }
         }, AWTEvent.KEY_EVENT_MASK);
@@ -44,22 +47,26 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
         exitItemCalled = false;
         driver.sendKeys(textField, JavaAgentKeys.chord(JavaAgentKeys.ALT, "f"));
         new WaitWithoutException("Waiting for exit item to be shown") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return exitItem.isShowing();
             }
         };
         driver.click(exitItem, Buttons.LEFT, 1, 0, 0);
         new WaitWithoutException("Waiting for exit item to be called") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return exitItemCalled;
             }
         };
         AssertJUnit.assertEquals(true, exitItemCalled);
     }
 
-    @Test(enabled = false) public void sendingEnterToMenuItemDoesntWork() throws Throwable {
+    @Test(enabled = false)
+    public void sendingEnterToMenuItemDoesntWork() throws Throwable {
         Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override
+            public void eventDispatched(AWTEvent event) {
                 System.err.println(event);
             }
         }, AWTEvent.KEY_EVENT_MASK);
@@ -73,13 +80,15 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
         exitItemCalled = false;
         driver.sendKeys(textField, JavaAgentKeys.chord(JavaAgentKeys.ALT, "f"));
         new WaitWithoutException("Waiting for exit item to be shown") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return exitItem.isShowing();
             }
         };
         driver.sendKeys(exitItem, JavaAgentKeys.ENTER);
         new WaitWithoutException("Waiting for exit item to be called") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return exitItemCalled;
             }
         };

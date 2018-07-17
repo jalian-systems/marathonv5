@@ -59,12 +59,14 @@ public class MarathonCheckListStage extends ModalDialog<CheckListForm> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane pane = new BorderPane();
         pane.setCenter(splitPane);
         pane.setBottom(buttonBar);
@@ -146,7 +148,8 @@ public class MarathonCheckListStage extends ModalDialog<CheckListForm> {
         this.insertCheckListHandler = insertCheckListHandler;
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
     }
 
     protected void onCancel() {

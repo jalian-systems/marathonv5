@@ -75,11 +75,13 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox content = new VBox();
         content.setId("ProjectSelectionParent");
         content.getStyleClass().add("project-selection");
@@ -91,7 +93,8 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         projectInfotable.setItems(projects);
         projectInfotable.setId("ProjectInfoTable");
         projectInfotable.setRowFactory(new Callback<TableView<ProjectInfo>, TableRow<ProjectInfo>>() {
-            @Override public TableRow<ProjectInfo> call(TableView<ProjectInfo> param) {
+            @Override
+            public TableRow<ProjectInfo> call(TableView<ProjectInfo> param) {
                 return new ProjectInfoTableRow();
             }
         });
@@ -318,13 +321,15 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
         }
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         selectButton.setDefaultButton(true);
     }
 
     public class ProjectInfoTableRow extends TableRow<ProjectInfo> {
 
-        @Override protected void updateItem(ProjectInfo item, boolean empty) {
+        @Override
+        protected void updateItem(ProjectInfo item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
                 String description = item.getDescription();

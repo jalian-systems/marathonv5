@@ -33,7 +33,8 @@ public class RecorderProvider implements Provider<IRecorder> {
         this.scriptListener = scriptListener;
     }
 
-    @Override public IRecorder get() {
+    @Override
+    public IRecorder get() {
         return new ScriptRecorder(scriptListener);
     }
 

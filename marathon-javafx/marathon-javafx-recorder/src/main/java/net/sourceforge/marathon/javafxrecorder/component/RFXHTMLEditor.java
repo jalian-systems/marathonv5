@@ -33,22 +33,26 @@ public class RFXHTMLEditor extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         prevText = getHTMLEditorText((HTMLEditor) node);
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         String currentText = getHTMLEditorText((HTMLEditor) node);
         if (currentText != null && !currentText.equals(prevText)) {
             recorder.recordSelect(this, currentText);
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getHTMLEditorText((HTMLEditor) node);
     }
 
-    @Override public String getTagName() {
+    @Override
+    public String getTagName() {
         return "html-editor";
     }
 }

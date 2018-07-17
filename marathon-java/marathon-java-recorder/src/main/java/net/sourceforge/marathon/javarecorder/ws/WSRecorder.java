@@ -62,7 +62,8 @@ public class WSRecorder implements IJSONRecorder {
 
     public WSRecorder(final int port) throws IOException, URISyntaxException {
         wsClient = AccessController.doPrivileged(new PrivilegedAction<WSClient>() {
-            @Override public WSClient run() {
+            @Override
+            public WSClient run() {
                 try {
                     return new WSClient(port, WSRecorder.this);
                 } catch (URISyntaxException e) {
@@ -79,15 +80,18 @@ public class WSRecorder implements IJSONRecorder {
         post(method, data.toString());
     }
 
-    @Override public void recordSelect(RComponent r, String state) {
+    @Override
+    public void recordSelect(RComponent r, String state) {
         recordSelect2(r, state, false);
     }
 
-    @Override public void recordClick(RComponent r, MouseEvent e) {
+    @Override
+    public void recordClick(RComponent r, MouseEvent e) {
         recordClick2(r, e, false);
     }
 
-    @Override public void recordClick2(final RComponent r, MouseEvent e, boolean withCellInfo) {
+    @Override
+    public void recordClick2(final RComponent r, MouseEvent e, boolean withCellInfo) {
         final JSONObject event = new JSONObject();
         event.put("type", "click");
         event.put("button", e.getButton());
@@ -105,7 +109,8 @@ public class WSRecorder implements IJSONRecorder {
         if (e.getClickCount() == 1) {
             clickTimer = new Timer();
             clickTimer.schedule(new TimerTask() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     sendRecordMessage(o);
                 }
             }, timerinterval.intValue());
@@ -118,7 +123,8 @@ public class WSRecorder implements IJSONRecorder {
         }
     }
 
-    @Override public void recordRawMouseEvent(final RComponent r, MouseEvent e) {
+    @Override
+    public void recordRawMouseEvent(final RComponent r, MouseEvent e) {
         final JSONObject event = new JSONObject();
         event.put("type", "click_raw");
         event.put("button", e.getButton());
@@ -133,7 +139,8 @@ public class WSRecorder implements IJSONRecorder {
         if (e.getClickCount() == 1) {
             clickTimer = new Timer();
             clickTimer.schedule(new TimerTask() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     sendRecordMessage(o);
                 }
             }, timerinterval.intValue());
@@ -167,7 +174,8 @@ public class WSRecorder implements IJSONRecorder {
         return mtext;
     }
 
-    @Override public void recordRawKeyEvent(RComponent r, KeyEvent e) {
+    @Override
+    public void recordRawKeyEvent(RComponent r, KeyEvent e) {
         JSONObject event = new JSONObject();
         event.put("type", "key_raw");
         int keyCode = e.getKeyCode();
@@ -220,7 +228,8 @@ public class WSRecorder implements IJSONRecorder {
         controlKeyMappings.put('\177', "Delete");
     }
 
-    @Override public void recordSelect2(RComponent r, String state, boolean withCellInfo) {
+    @Override
+    public void recordSelect2(RComponent r, String state, boolean withCellInfo) {
         JSONObject event = new JSONObject();
         event.put("type", "select");
         event.put("value", state);
@@ -254,11 +263,13 @@ public class WSRecorder implements IJSONRecorder {
         o.put("namingProperties", new JSONArray(r.getNamingProperties()));
     }
 
-    @Override public boolean isCreatingObjectMap() {
+    @Override
+    public boolean isCreatingObjectMap() {
         return false;
     }
 
-    @Override public void recordAction(RComponent r, String action, String property, Object value) {
+    @Override
+    public void recordAction(RComponent r, String action, String property, Object value) {
         JSONObject event = new JSONObject();
         event.put("type", action);
         event.put("value", value);
@@ -267,20 +278,23 @@ public class WSRecorder implements IJSONRecorder {
         recordEvent(r, event);
     }
 
-    @Override public void recordSelectMenu(RComponent r, String selection) {
+    @Override
+    public void recordSelectMenu(RComponent r, String selection) {
         JSONObject event = new JSONObject();
         event.put("type", "select_menu");
         event.put("value", selection);
         recordEvent(r, event);
     }
 
-    @Override public void recordWindowClosing(RComponent r) {
+    @Override
+    public void recordWindowClosing(RComponent r) {
         JSONObject event = new JSONObject();
         event.put("type", "window_closed");
         recordEvent(r, event);
     }
 
-    @Override public void recordWindowState(final RComponent r, Rectangle bounds) {
+    @Override
+    public void recordWindowState(final RComponent r, Rectangle bounds) {
         final JSONObject event = new JSONObject();
         event.put("type", "window_state");
         event.put("bounds", bounds.x + ":" + bounds.y + ":" + bounds.width + ":" + bounds.height);
@@ -291,7 +305,8 @@ public class WSRecorder implements IJSONRecorder {
         }
         windowStateTimer = new Timer();
         windowStateTimer.schedule(new TimerTask() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 recordEvent(r, event);
                 windowStateTimer = null;
             }
@@ -300,7 +315,8 @@ public class WSRecorder implements IJSONRecorder {
 
     private final Object jsonOMapConfigLock = new Object();
 
-    @Override public JSONOMapConfig getObjectMapConfiguration() {
+    @Override
+    public JSONOMapConfig getObjectMapConfiguration() {
         if (jsonOMapConfig == null) {
             synchronized (jsonOMapConfigLock) {
                 if (jsonOMapConfig != null) {
@@ -328,7 +344,8 @@ public class WSRecorder implements IJSONRecorder {
 
     private boolean insertingScript;
 
-    @Override public JSONObject getContextMenuTriggers() {
+    @Override
+    public JSONObject getContextMenuTriggers() {
         if (contextMenuTriggers == null) {
             synchronized (contextMenuTriggersLock) {
                 if (contextMenuTriggers != null) {
@@ -350,7 +367,8 @@ public class WSRecorder implements IJSONRecorder {
         }
     }
 
-    @Override public boolean isRawRecording() {
+    @Override
+    public boolean isRawRecording() {
         return rawRecording;
     }
 
@@ -365,16 +383,18 @@ public class WSRecorder implements IJSONRecorder {
     public void setInsertingScript(JSONObject o) {
         insertingScript = o.getBoolean("value");
     }
-    
+
     public void abortApplication() {
         System.exit(0);
     }
 
-    @Override public boolean isPaused() {
+    @Override
+    public boolean isPaused() {
         return paused;
     }
 
-    @Override public void recordMenuItem(RComponent r) {
+    @Override
+    public void recordMenuItem(RComponent r) {
         JSONObject event = new JSONObject();
         event.put("type", "menu_item");
         event.put("value", "");
@@ -382,7 +402,8 @@ public class WSRecorder implements IJSONRecorder {
 
     }
 
-    @Override public void recordFocusedWindow(RComponent r) throws IOException {
+    @Override
+    public void recordFocusedWindow(RComponent r) throws IOException {
         JSONObject o = new JSONObject();
         JSONObject container = r.findContextHeirarchy((Container) r.getComponent());
         if (container != null) {
@@ -397,7 +418,8 @@ public class WSRecorder implements IJSONRecorder {
 
     public void post(final String method, final String postData) throws IOException {
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
-            @Override public Object run() {
+            @Override
+            public Object run() {
                 wsClient.post(method, postData);
                 return null;
             }
@@ -473,7 +495,8 @@ public class WSRecorder implements IJSONRecorder {
         return null;
     }
 
-    @Override public void recordFileDialog(String state) {
+    @Override
+    public void recordFileDialog(String state) {
         JSONObject event = new JSONObject();
         event.put("type", "select_file_dialog");
         event.put("value", state);
@@ -483,7 +506,8 @@ public class WSRecorder implements IJSONRecorder {
         sendRecordMessage(o);
     }
 
-    @Override public boolean isInsertingScript() {
+    @Override
+    public boolean isInsertingScript() {
         return insertingScript;
     }
 

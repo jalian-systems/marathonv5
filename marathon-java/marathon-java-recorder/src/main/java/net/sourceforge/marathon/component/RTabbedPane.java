@@ -35,7 +35,8 @@ public class RTabbedPane extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void stateChanged(ChangeEvent e) {
+    @Override
+    public void stateChanged(ChangeEvent e) {
         JTabbedPane tp = (JTabbedPane) component;
         int selectedIndex = tp.getSelectedIndex();
         if (selectedIndex != -1) {
@@ -43,11 +44,13 @@ public class RTabbedPane extends RComponent {
         }
     }
 
-    @Override public String[][] getContent() {
+    @Override
+    public String[][] getContent() {
         return JTabbedPaneJavaElement.getContent((JTabbedPane) component);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return JTabbedPaneJavaElement.getSelectedItemText((JTabbedPane) component);
     }
 

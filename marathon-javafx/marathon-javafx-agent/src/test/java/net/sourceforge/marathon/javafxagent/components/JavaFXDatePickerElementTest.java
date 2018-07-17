@@ -40,14 +40,16 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
     private List<IJavaFXElement> datePickers;
     private String dateString;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         LocalDate d = LocalDate.of(2016, 3, 16);
         dateString = new DatePicker(d).getConverter().toString(d);
         driver = new JavaFXAgent();
         datePickers = driver.findElementsByTagName("date-picker");
     }
 
-    @Test public void selectDate() {
+    @Test
+    public void selectDate() {
         DatePicker datePickerNode = (DatePicker) getPrimaryStage().getScene().getRoot().lookup(".date-picker");
         IJavaFXElement datePicker = datePickers.get(0);
         Platform.runLater(() -> {
@@ -59,14 +61,16 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
             dates.add(datePickerNode.getConverter().toString(value));
         });
         new Wait("Waiting for date to be set.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return dates.size() > 0;
             }
         };
         AssertJUnit.assertEquals(dateString, dates.get(0));
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         IJavaFXElement datePicker = datePickers.get(0);
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
@@ -74,14 +78,16 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
             text.add(datePicker.getAttribute("text"));
         });
         new Wait("Waiting for date picker text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals(dateString, text.get(0));
     }
 
-    @Test public void selectEdiotrDate() {
+    @Test
+    public void selectEdiotrDate() {
         Set<Node> datePickerNodes = getPrimaryStage().getScene().getRoot().lookupAll(".date-picker");
         List<Node> pickers = new ArrayList<>(datePickerNodes);
         DatePicker datePickerNode = (DatePicker) pickers.get(1);
@@ -95,18 +101,21 @@ public class JavaFXDatePickerElementTest extends JavaFXElementTest {
             dates.add(datePickerNode.getConverter().toString(value));
         });
         new Wait("Waiting for date to be set.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return dates.size() > 0;
             }
         };
         AssertJUnit.assertEquals(dateString, dates.get(0));
     }
 
-    @Test(expectedExceptions = DateTimeException.class) public void datePickerWithInvalidDateFormat() {
+    @Test(expectedExceptions = DateTimeException.class)
+    public void datePickerWithInvalidDateFormat() {
         datePickers.get(1).marathon_select("16/7");
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new DatePickerSample();
     }
 }

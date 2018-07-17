@@ -58,10 +58,10 @@ public class ToggleButtonSample extends Application {
         stage.setTitle("Toggle Button Sample");
         stage.setWidth(250);
         stage.setHeight(180);
-        
+
         HBox hbox = new HBox();
-        VBox vbox = new VBox();        
-        
+        VBox vbox = new VBox();
+
         Scene scene = new Scene(new Group(vbox));
         stage.setScene(scene);
         scene.getStylesheets().add("togglebuttonsample/ControlStyle.css");
@@ -76,9 +76,7 @@ public class ToggleButtonSample extends Application {
 
         final ToggleGroup group = new ToggleGroup();
 
-        group.selectedToggleProperty().addListener(
-            (ObservableValue<? extends Toggle> ov, 
-            Toggle toggle, Toggle new_toggle) -> {
+        group.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) -> {
             if (new_toggle == null)
                 rect.setFill(Color.WHITE);
             else
@@ -101,8 +99,6 @@ public class ToggleButtonSample extends Application {
         tb3.setUserData(Color.SALMON);
         tb3.getStyleClass().add("toggle-button3");
 
-        
-
         hbox.getChildren().addAll(tb1, tb2, tb3);
 
         vbox.getChildren().add(new Label("Priority:"));
@@ -110,7 +106,6 @@ public class ToggleButtonSample extends Application {
         vbox.getChildren().add(rect);
         vbox.setPadding(new Insets(20, 10, 10, 20));
 
-              
         stage.show();
         rect.setWidth(hbox.getWidth());
     }

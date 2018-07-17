@@ -35,11 +35,13 @@ public class RToggleButton extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseEntered(MouseEvent me) {
+    @Override
+    protected void mouseEntered(MouseEvent me) {
         prevSelection = ((JToggleButton) component).isSelected();
     }
 
-    @Override protected void mouseClicked(MouseEvent me) {
+    @Override
+    protected void mouseClicked(MouseEvent me) {
         boolean selected = ((JToggleButton) component).isSelected();
         if (prevSelection == null || selected != prevSelection.booleanValue()) {
             recorder.recordSelect(this, Boolean.toString(selected));

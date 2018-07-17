@@ -77,7 +77,8 @@ public class FolderResource extends Resource {
             }
         }
         hiddenFiles.addListener(new ListChangeListener<String>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends String> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends String> c) {
                 JSONObject section = Preferences.instance().getSection("navigator");
                 section.put("hidden-files", new JSONArray(hiddenFiles));
                 Preferences.instance().save("navigator");
@@ -121,7 +122,8 @@ public class FolderResource extends Resource {
         });
     }
 
-    @Override public ObservableList<TreeItem<Resource>> getChildren() {
+    @Override
+    public ObservableList<TreeItem<Resource>> getChildren() {
         ObservableList<TreeItem<Resource>> children = super.getChildren();
         if (loaded) {
             return children;
@@ -130,19 +132,23 @@ public class FolderResource extends Resource {
         return children;
     }
 
-    @Override public boolean isLeaf() {
+    @Override
+    public boolean isLeaf() {
         return false;
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return path.toFile().getName();
     }
 
-    @Override public boolean isTestFile() {
+    @Override
+    public boolean isTestFile() {
         return Constants.isTestFile(path.toFile());
     }
 
-    @Override public Resource rename(String text) {
+    @Override
+    public Resource rename(String text) {
         try {
             Path moved = Files.move(path, path.resolveSibling(text));
             FileResource to = new FileResource(moved.toFile());
@@ -155,7 +161,8 @@ public class FolderResource extends Resource {
         }
     }
 
-    @Override public boolean copy(Map<DataFormat, Object> content) {
+    @Override
+    public boolean copy(Map<DataFormat, Object> content) {
         @SuppressWarnings("unchecked")
         List<File> files = (List<File>) content.get(DataFormat.FILES);
         if (files == null) {
@@ -166,13 +173,15 @@ public class FolderResource extends Resource {
         return true;
     }
 
-    @Override public void paste(Clipboard clipboard, Operation operation) {
+    @Override
+    public void paste(Clipboard clipboard, Operation operation) {
         if (getValue() != null) {
             getValue().pasteInto(clipboard, operation);
         }
     }
 
-    @Override public void pasteInto(Clipboard clipboard, Operation operation) {
+    @Override
+    public void pasteInto(Clipboard clipboard, Operation operation) {
         if (clipboard.hasFiles()) {
             List<File> files = clipboard.getFiles();
             List<Path> paths = new ArrayList<>();
@@ -213,7 +222,8 @@ public class FolderResource extends Resource {
         Platform.runLater(() -> refresh());
     }
 
-    @Override public Optional<ButtonType> delete(Optional<ButtonType> option) {
+    @Override
+    public Optional<ButtonType> delete(Optional<ButtonType> option) {
         if (!option.isPresent() || option.get() != FXUIUtils.YES_ALL) {
             option = FXUIUtils.showConfirmDialog(null, "Do you want to delete the folder `" + path + "` and all its children?",
                     "Confirm", AlertType.CONFIRMATION, ButtonType.YES, ButtonType.NO, FXUIUtils.YES_ALL, ButtonType.CANCEL);
@@ -263,10 +273,12 @@ public class FolderResource extends Resource {
         }
     }
 
-    @Override public void refresh() {
+    @Override
+    public void refresh() {
         ObservableList<TreeItem<Resource>> children = FXCollections.observableArrayList();
         File[] files = path.toFile().listFiles(new FileFilter() {
-            @Override public boolean accept(File pathname) {
+            @Override
+            public boolean accept(File pathname) {
                 return predicate.test(pathname);
             }
         });
@@ -307,7 +319,8 @@ public class FolderResource extends Resource {
         return null;
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
         FolderResource folderResource = (FolderResource) getParent();
         if (folderResource != null) {
             folderResource.hideChild(this);
@@ -318,11 +331,13 @@ public class FolderResource extends Resource {
         hiddenFiles.add(Constants.getProjectPath().relativize(resource.getFilePath()).toString());
     }
 
-    @Override public Path getFilePath() {
+    @Override
+    public Path getFilePath() {
         return path;
     }
 
-    @Override public MenuItem[] getUnhideMenuItem() {
+    @Override
+    public MenuItem[] getUnhideMenuItem() {
         return hiddenFiles.stream().map((file) -> {
             MenuItem menuItem = new MenuItem(file, new ImageView());
             menuItem.setOnAction((event) -> hiddenFiles.remove(file));
@@ -330,7 +345,8 @@ public class FolderResource extends Resource {
         }).collect(Collectors.toList()).toArray(new MenuItem[hiddenFiles.size()]);
     }
 
-    @Override public List<Resource> findNodes(Resource resource, List<Resource> found) {
+    @Override
+    public List<Resource> findNodes(Resource resource, List<Resource> found) {
         if (path.equals(resource.getFilePath())) {
             found.add(this);
         } else {
@@ -339,13 +355,15 @@ public class FolderResource extends Resource {
         return found;
     }
 
-    @Override public void deleted() {
+    @Override
+    public void deleted() {
         if (getParent() != null) {
             getParent().getChildren().remove(this);
         }
     }
 
-    @Override public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
+    @Override
+    public Test getTest(boolean acceptChecklist, IConsole console) throws IOException {
         if (path.toString().endsWith("ExploratoryTests")) {
             return null;
         }
@@ -353,31 +371,38 @@ public class FolderResource extends Resource {
         return testCreator.getTest(path.toFile(), null);
     }
 
-    @Override public boolean canOpen() {
+    @Override
+    public boolean canOpen() {
         return false;
     }
 
-    @Override public boolean canPlaySingle() {
+    @Override
+    public boolean canPlaySingle() {
         return false;
     }
 
-    @Override public boolean canRename() {
+    @Override
+    public boolean canRename() {
         return true;
     }
 
-    @Override public boolean canRun() {
+    @Override
+    public boolean canRun() {
         return isTestFile();
     }
 
-    @Override public boolean canDelete() {
+    @Override
+    public boolean canDelete() {
         return true;
     }
 
-    @Override public boolean canHide() {
+    @Override
+    public boolean canHide() {
         return true;
     }
 
-    @Override public void moved() {
+    @Override
+    public void moved() {
         if (getParent() != null) {
             getParent().getChildren().remove(this);
         }

@@ -121,24 +121,24 @@ public abstract class Wait {
     public void waitWithoutException(String message, long timeoutInMilliseconds, long intervalInMilliseconds) {
         try {
             wait(message, timeoutInMilliseconds, intervalInMilliseconds);
-        } catch(WaitTimedOutException e) {
+        } catch (WaitTimedOutException e) {
         }
     }
-    
+
     public void waitWithoutException(String message, long timeoutInMilliseconds) {
         try {
             wait(message, timeoutInMilliseconds);
-        } catch(WaitTimedOutException e) {
+        } catch (WaitTimedOutException e) {
         }
     }
-    
+
     public void waitWithoutException(String message) {
         try {
             wait(message);
-        } catch(WaitTimedOutException e) {
+        } catch (WaitTimedOutException e) {
         }
     }
-    
+
     public class WaitTimedOutException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
@@ -160,5 +160,5 @@ public abstract class Wait {
         }
 
     }
-    
+
 }

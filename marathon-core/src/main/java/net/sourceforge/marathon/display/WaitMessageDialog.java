@@ -50,7 +50,6 @@ public class WaitMessageDialog {
         private Label timerLabel = new Label();
         private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
 
-
         private MessageDialog() {
             setAlwaysOnTop(true);
             initStyle(StageStyle.UNDECORATED);
@@ -70,7 +69,7 @@ public class WaitMessageDialog {
             timerLabel.setTextFill(Color.RED);
 
             VBox vbox = new VBox(FXUIUtils.getImage("wait"), messageLabel);
-            
+
             StackPane.setMargin(timerLabel, new Insets(90, 0, 0, 0));
             StackPane root = new StackPane(vbox, timerLabel);
             setScene(new Scene(root));
@@ -131,5 +130,5 @@ public class WaitMessageDialog {
     public static void setVisible(boolean b) {
         setVisible(b, DEFAULT_MESSAGE);
     }
-    
+
 }

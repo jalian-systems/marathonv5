@@ -99,14 +99,16 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
         }
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (node == null ? 0 : node.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -138,7 +140,7 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
     public List<List<String>> getNamingProperties() {
         return omapConfig.findNP(node.getClass());
     }
-    
+
     public JSONObject findContextHeirarchy() {
         return findContextHeirarchy(node.getParent());
     }
@@ -252,7 +254,8 @@ public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
             addMethod(l, "getLabeledBy");
         }
         Arrays.sort(methods, new Comparator<String>() {
-            @Override public int compare(String o1, String o2) {
+            @Override
+            public int compare(String o1, String o2) {
                 if (o1.startsWith("is")) {
                     o1 = o1.substring(2);
                 } else if (o1.startsWith("get")) {

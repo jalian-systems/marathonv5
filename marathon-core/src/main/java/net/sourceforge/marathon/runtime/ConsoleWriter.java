@@ -33,17 +33,20 @@ public abstract class ConsoleWriter extends Writer {
         writer = adapter;
     }
 
-    @Override public void close() throws IOException {
+    @Override
+    public void close() throws IOException {
     }
 
-    @Override public void flush() throws IOException {
+    @Override
+    public void flush() throws IOException {
         synchronized (lock) {
             writer.write(cb, 0, nextChar);
             nextChar = 0;
         }
     }
 
-    @Override public void write(char[] cbuf, int off, int len) throws IOException {
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             addCharToBuffer(cbuf[i]);
         }

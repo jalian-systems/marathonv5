@@ -75,11 +75,13 @@ public class Generator extends JFrame {
             this.keyCode = keyCode;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return keyChar + " " + (shiftDown ? "shift " : "") + keyCodeText.get(keyCode).substring(3);
         }
 
-        @Override public int compareTo(KeyMap o) {
+        @Override
+        public int compareTo(KeyMap o) {
             return Character.valueOf(keyChar).compareTo(Character.valueOf(o.keyChar));
         }
     }
@@ -109,10 +111,12 @@ public class Generator extends JFrame {
     private JPanel createActions() {
         generateEvents = new JButton("Generate Events");
         generateEvents.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 textField.requestFocusInWindow();
                 new Thread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         try {
                             Robot robot = new Robot();
                             mappings = new ArrayList<Generator.KeyMap>();
@@ -131,7 +135,8 @@ public class Generator extends JFrame {
         saveFile = new JButton("Save file");
         saveFile.setEnabled(false);
         saveFile.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 File marathon = new File(System.getProperty("user.home"), ".marathon");
                 marathon.mkdirs();
                 JFileChooser chooser = new JFileChooser(marathon);
@@ -174,10 +179,12 @@ public class Generator extends JFrame {
         textField = new JTextField();
         textField.addKeyListener(new KeyListener() {
 
-            @Override public void keyTyped(KeyEvent e) {
+            @Override
+            public void keyTyped(KeyEvent e) {
             }
 
-            @Override public void keyReleased(KeyEvent e) {
+            @Override
+            public void keyReleased(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                     return;
                 }
@@ -185,7 +192,8 @@ public class Generator extends JFrame {
                 mappings.add(m);
             }
 
-            @Override public void keyPressed(KeyEvent e) {
+            @Override
+            public void keyPressed(KeyEvent e) {
 
             }
         });
@@ -214,7 +222,8 @@ public class Generator extends JFrame {
     public static void main(String[] args) throws AWTException, Throwable {
         final Generator test = new Generator();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 test.setVisible(true);
             }
         });

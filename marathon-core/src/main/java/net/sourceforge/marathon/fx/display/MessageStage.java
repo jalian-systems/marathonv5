@@ -44,7 +44,8 @@ public class MessageStage extends ModalDialog<MessageInfo> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
@@ -60,7 +61,8 @@ public class MessageStage extends ModalDialog<MessageInfo> {
         buttonBar.getButtons().add(closeButton);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.setId("message-stage");
         root.setCenter(new ScrollPane(textArea));
@@ -68,7 +70,8 @@ public class MessageStage extends ModalDialog<MessageInfo> {
         return root;
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         closeButton.setDefaultButton(true);
     }
 }

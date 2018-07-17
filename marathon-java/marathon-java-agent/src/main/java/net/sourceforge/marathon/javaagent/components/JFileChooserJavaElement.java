@@ -33,7 +33,8 @@ public class JFileChooserJavaElement extends JavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         JFileChooser fc = (JFileChooser) component;
         if (value.equals("")) {
             fc.cancelSelection();

@@ -104,11 +104,13 @@ public class FXUIUtils {
     public final static Font icoMoon;
     public static INamedCharacter SPACE = new INamedCharacter() {
 
-        @Override public String name() {
+        @Override
+        public String name() {
             return "space";
         }
 
-        @Override public char getChar() {
+        @Override
+        public char getChar() {
             return ' ';
         }
     };
@@ -470,8 +472,9 @@ public class FXUIUtils {
         alert.showAndWait();
     }
 
-    @SuppressWarnings("unchecked") public static Optional<ButtonType> showConfirmDialog(Window parent, String message, String title,
-            AlertType type, ButtonType... buttonTypes) {
+    @SuppressWarnings("unchecked")
+    public static Optional<ButtonType> showConfirmDialog(Window parent, String message, String title, AlertType type,
+            ButtonType... buttonTypes) {
         if (Platform.isFxApplicationThread()) {
             return _showConfirmDialog(parent, message, title, type, buttonTypes);
         } else {

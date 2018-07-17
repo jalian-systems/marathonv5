@@ -33,11 +33,13 @@ public class RFXSpinner extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         oldValue = getSpinnerText((Spinner<?>) node);
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         Spinner<?> spinner = (Spinner<?>) node;
         String currentValue = getSpinnerText(spinner);
         if (!currentValue.equals(oldValue)) {
@@ -45,7 +47,8 @@ public class RFXSpinner extends RFXComponent {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSpinnerText((Spinner<?>) node);
     }
 }

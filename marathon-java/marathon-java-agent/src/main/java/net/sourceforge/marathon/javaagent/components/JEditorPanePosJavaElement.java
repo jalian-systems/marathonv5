@@ -38,7 +38,8 @@ public class JEditorPanePosJavaElement extends AbstractJavaElement {
         this.pos = pos;
     }
 
-    @Override public Object _makeVisible() {
+    @Override
+    public Object _makeVisible() {
         JEditorPane editor = (JEditorPane) parent.getComponent();
         try {
             Rectangle bounds = editor.modelToView(pos);
@@ -52,7 +53,8 @@ public class JEditorPanePosJavaElement extends AbstractJavaElement {
         return null;
     }
 
-    @Override public Point _getMidpoint() {
+    @Override
+    public Point _getMidpoint() {
         JEditorPane editor = (JEditorPane) parent.getComponent();
         try {
             Rectangle bounds = editor.modelToView(pos);
@@ -62,7 +64,8 @@ public class JEditorPanePosJavaElement extends AbstractJavaElement {
         }
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         JEditorPane editor = (JEditorPane) parent.getComponent();
         try {
             Rectangle bounds = editor.modelToView(pos);

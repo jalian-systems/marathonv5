@@ -34,7 +34,8 @@ public class JavaFXColorPickerElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         ColorPicker colorPicker = (ColorPicker) getComponent();
         if (!value.equals("")) {
             try {
@@ -48,7 +49,8 @@ public class JavaFXColorPickerElement extends JavaFXElement {
         return false;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getColorCode(((ColorPicker) getComponent()).getValue());
     }
 }

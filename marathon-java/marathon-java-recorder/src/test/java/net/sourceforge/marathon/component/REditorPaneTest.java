@@ -46,11 +46,14 @@ import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class REditorPaneTest extends RComponentTest {
+@Test
+public class REditorPaneTest extends RComponentTest {
     private JFrame frame;
     private int linkPosition;
-    @SuppressWarnings("unused") private String hRef;
-    @SuppressWarnings("unused") private String text;
+    @SuppressWarnings("unused")
+    private String hRef;
+    @SuppressWarnings("unused")
+    private String text;
     private char SEPARATER = ',';
     private int hRefIndex;
     private int textIndex;
@@ -62,10 +65,12 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         return editor;
     }
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(REditorPaneTest.class.getSimpleName());
                 frame.setName("frame-" + REditorPaneTest.class.getSimpleName());
                 frame.getContentPane().add(new EditorPaneDemo(), BorderLayout.CENTER);
@@ -76,9 +81,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         editor = (JEditorPane) ComponentUtils.findComponent(JEditorPane.class, frame);
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -88,14 +95,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void clickOnText() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         editor.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 REditorPane rEditorPane = new REditorPane(editor, null, e.getPoint(), lr);
                 rEditorPane.mouseButton1Pressed(e);
             }
         });
         parseLastClickSpec("text=Title Page");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     rect = editor.modelToView(linkPosition);
                     p = new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -107,7 +116,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -119,20 +129,23 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final String htmlText = "<a href='http://localhost'>Goto Google</a>Some stuff here<a href='http://localhost'>Goto Google</a>";
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 editor.setText(htmlText);
             }
         });
         EventQueueWait.empty();
         editor.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 REditorPane rEditorPane = new REditorPane(editor, null, e.getPoint(), lr);
                 rEditorPane.mouseButton1Pressed(e);
             }
         });
         parseLastClickSpec("text=Goto Google(1)");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     rect = editor.modelToView(linkPosition);
                     p = new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -144,7 +157,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -157,13 +171,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
                 + "<a href='http://localhost'><img src='none.gif'></a>";
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 editor.setText(htmlText);
             }
         });
         EventQueueWait.empty();
         editor.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 REditorPane rEditorPane = new REditorPane(editor, null, e.getPoint(), lr);
                 rEditorPane.mouseButton1Pressed(e);
             }
@@ -171,7 +187,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         parseLastClickSpec("link=http://localhost(1)");
         System.out.println("LinkPosition: " + linkPosition);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     rect = editor.modelToView(linkPosition);
                     p = new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -183,7 +200,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -194,7 +212,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void clickOnLink() throws Throwable {
         parseLastClickSpec("text=Title Page");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     rect = editor.modelToView(linkPosition);
                     p = new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -208,14 +227,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         parseLastClickSpec("link=index.html");
         final LoggingRecorder lr = new LoggingRecorder();
         editor.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 REditorPane rEditorPane = new REditorPane(editor, null, e.getPoint(), lr);
                 rEditorPane.mouseButton1Pressed(e);
             }
         });
         parseLastClickSpec("link=index.html");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     rect = editor.modelToView(linkPosition);
                     p = new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -227,7 +248,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -239,14 +261,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void clickOnEditorPane() throws Throwable {
         final LoggingRecorder lr = new LoggingRecorder();
         editor.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(MouseEvent e) {
+            @Override
+            public void mousePressed(MouseEvent e) {
                 REditorPane rEditorPane = new REditorPane(editor, null, e.getPoint(), lr);
                 rEditorPane.mouseButton1Pressed(e);
             }
         });
         parseLastClickSpec("953");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     rect = editor.modelToView(linkPosition);
                     p = new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -258,7 +282,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
             }
         });
         new Wait("Waiting for logging recorder callback") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return lr.getCalls().size() > 0;
             }
         };
@@ -268,9 +293,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
     private void parseLastClickSpec(final String spec) {
         new Wait("Waiting for the spec `" + spec + "` to be available") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 siw(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         parseLastClickSpecX(spec);
                     }
                 });

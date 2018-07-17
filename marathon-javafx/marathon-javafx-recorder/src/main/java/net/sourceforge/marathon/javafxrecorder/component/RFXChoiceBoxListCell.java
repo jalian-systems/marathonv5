@@ -32,7 +32,9 @@ public class RFXChoiceBoxListCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         @SuppressWarnings("rawtypes")
         ChoiceBoxListCell cell = (ChoiceBoxListCell) node;
         @SuppressWarnings("rawtypes")

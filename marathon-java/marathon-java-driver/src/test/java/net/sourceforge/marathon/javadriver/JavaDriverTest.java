@@ -80,7 +80,8 @@ import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JavaDriverTest {
+@Test
+public class JavaDriverTest {
 
     private WebDriver driver;
 
@@ -100,12 +101,14 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     protected java.awt.Window window;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
 
             private JLabel textLabel;
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 titleOfWindow = JavaDriverTest.class.getName();
                 frame = new JFrame(titleOfWindow);
                 frame.setName("dialog-1");
@@ -138,9 +141,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 button = new JButton("Click Me!!");
                 box.add(button);
                 new Timer().schedule(new TimerTask() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         SwingUtilities.invokeLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 JButton button1 = new JButton("Click Me Delayed!!");
                                 button1.setName("click-me-delayed");
                                 frame.getContentPane().add(button1);
@@ -150,39 +155,47 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 }, 1000);
                 button.setName("click-me");
                 button.addActionListener(new ActionListener() {
-                    @Override public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         buttonClicked = true;
                     }
                 });
                 buttonMouseActions = new StringBuilder();
                 button.addMouseListener(new MouseListener() {
-                    @Override public void mouseReleased(MouseEvent e) {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
                         buttonMouseActions.append("released(" + e.getButton() + (e.isPopupTrigger() ? "-popup" : "") + ")-");
                     }
 
-                    @Override public void mousePressed(MouseEvent e) {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
                         buttonMouseActions.append("pressed(" + e.getButton() + (e.isPopupTrigger() ? "-popup" : "") + ")-");
                     }
 
-                    @Override public void mouseExited(MouseEvent e) {
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                         buttonMouseActions.append("exited-");
                     }
 
-                    @Override public void mouseEntered(MouseEvent e) {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
                         buttonMouseActions.append("entered-");
                     }
 
-                    @Override public void mouseClicked(MouseEvent e) {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
                         buttonMouseActions.append("clicked(" + e.getButton() + (e.isPopupTrigger() ? "-popup" : "") + ")-");
                     }
                 });
                 button.addMouseMotionListener(new MouseMotionListener() {
 
-                    @Override public void mouseMoved(MouseEvent e) {
+                    @Override
+                    public void mouseMoved(MouseEvent e) {
                         buttonMouseActions.append("moved-");
                     }
 
-                    @Override public void mouseDragged(MouseEvent e) {
+                    @Override
+                    public void mouseDragged(MouseEvent e) {
                         buttonMouseActions.append("dragged-");
                     }
                 });
@@ -195,9 +208,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
                 if (window != null) {
@@ -282,7 +297,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getWindowHandles() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(true);
             }
         });
@@ -293,7 +309,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void close() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(true);
             }
         });
@@ -303,7 +320,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void window() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(true);
             }
         });
@@ -313,7 +331,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowSelectWithProperties() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(true);
             }
         });
@@ -326,7 +345,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowThrowsExceptionWhenNotExisting() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(true);
             }
         });
@@ -341,10 +361,12 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaDriver();
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         new Timer().schedule(new TimerTask() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     SwingUtilities.invokeAndWait(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             frame.setVisible(true);
                         }
                     });
@@ -373,7 +395,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowHandle() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(true);
             }
         });
@@ -383,7 +406,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowSize() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -399,7 +423,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowPosition() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -415,7 +440,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowSetSize() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -435,7 +461,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowSetPosition() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -455,7 +482,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowMaximize() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -467,7 +495,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElement() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -480,7 +509,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementGetsTheSameElementBetweenCalls() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -495,7 +525,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementGetsTheSameElementBetweenWindowCalls() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -511,7 +542,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementThrowsNoSuchElementIfNotFound() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -526,7 +558,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElements() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -539,7 +572,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findActive() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -553,7 +587,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementOfElement() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -567,7 +602,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementsOfElement() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -582,7 +618,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         buttonClicked = false;
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -595,7 +632,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void elementSubmit() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -607,7 +645,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void elementSendKeys() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -621,7 +660,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void keys() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
                 textField.requestFocusInWindow();
@@ -636,7 +676,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getName() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textField.setText("Hello World");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
@@ -649,7 +690,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getLabeledBy() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textField.setText("Hello World");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
@@ -661,7 +703,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getNameReturnsProperTagNameForAnonClasses() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textField.setText("Hello World");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
@@ -674,7 +717,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void elementClear() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -690,7 +734,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void elementClearOnNonClearableComponents() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -707,7 +752,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void isSelected() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -719,7 +765,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void isSelectedOnNonSelectableComponents() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -736,7 +783,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void isEnabled() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -744,7 +792,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         WebElement element1 = driver.findElement(By.name("click-me"));
         AssertJUnit.assertTrue(element1.isEnabled());
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setEnabled(false);
             }
         });
@@ -755,7 +804,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getAttribute() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -763,7 +813,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         WebElement element1 = driver.findElement(By.name("click-me"));
         AssertJUnit.assertTrue(Boolean.valueOf(element1.getAttribute("enabled")));
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setEnabled(false);
             }
         });
@@ -774,7 +825,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getAttributeUnsupportedAttribute() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -786,7 +838,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void elementEquals() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -801,7 +854,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void elementNotEquals() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -816,7 +870,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void isDisplayed() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -824,7 +879,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         WebElement element1 = driver.findElement(By.name("click-me"));
         AssertJUnit.assertTrue(element1.isDisplayed());
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 button.setVisible(false);
             }
         });
@@ -835,7 +891,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getLocation() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -850,7 +907,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getLocationInView() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -866,7 +924,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getSize() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -878,10 +937,12 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         AssertJUnit.assertEquals(d.height, size.height);
     }
 
-    @Test(enabled = false) public void moveTo() throws Throwable {
+    @Test(enabled = false)
+    public void moveTo() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -899,7 +960,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void click() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -919,7 +981,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void doubleClick() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -935,7 +998,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void buttonDownUp() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
                 button.requestFocusInWindow();
@@ -950,7 +1014,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void logs() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -968,7 +1033,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void logTypes() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -980,7 +1046,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementsByTagName() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -994,7 +1061,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementByTagName() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1007,7 +1075,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementsByTagNameOfElement() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1023,7 +1092,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementByTagNameOfElement() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1037,7 +1107,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementsByCSS() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1051,7 +1122,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementsByCSSWithUniversalSelector() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1063,7 +1135,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void findElementsByCSSWithSelfSelector() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1082,7 +1155,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getAccessibleName() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1094,7 +1168,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getLabelText() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1106,7 +1181,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getInstanceOf() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1120,7 +1196,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getPrecedingLabel() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1132,7 +1209,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getIndexOfType() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1147,7 +1225,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getCText() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1162,7 +1241,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getButtonText() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1177,7 +1257,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getFieldName() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1189,7 +1270,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getEnabled() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1203,7 +1285,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getType() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1217,19 +1300,23 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void sendkeysDriverDoesNotReleaseModifierKeys() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textField.addKeyListener(new KeyListener() {
 
-                    @Override public void keyTyped(KeyEvent e) {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
                     }
 
-                    @Override public void keyReleased(KeyEvent e) {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
                         if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altReleased = e.getKeyCode() == KeyEvent.VK_ALT;
                         }
                     }
 
-                    @Override public void keyPressed(KeyEvent e) {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
                         if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altPressed = e.getKeyCode() == KeyEvent.VK_ALT;
                         }
@@ -1251,19 +1338,23 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void sendkeysElementImplicitlyReleasesModifierKeys() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 textField.addKeyListener(new KeyListener() {
 
-                    @Override public void keyTyped(KeyEvent e) {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
                     }
 
-                    @Override public void keyReleased(KeyEvent e) {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
                         if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altReleased = e.getKeyCode() == KeyEvent.VK_ALT;
                         }
                     }
 
-                    @Override public void keyPressed(KeyEvent e) {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
                         if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
                             altPressed = e.getKeyCode() == KeyEvent.VK_ALT;
                         }
@@ -1285,7 +1376,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }
@@ -1302,7 +1394,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void getTitle() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1315,7 +1408,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     public void windowTitleWithPercentage() throws Throwable {
         driver = new JavaDriver();
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setTitle("My %Dialog%");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
@@ -1335,7 +1429,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }
@@ -1352,7 +1447,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }
@@ -1370,7 +1466,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }
@@ -1387,7 +1484,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }
@@ -1405,7 +1503,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }
@@ -1423,7 +1522,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         caps.setCapability("nativeEvents", true);
         driver = new JavaDriver(caps, caps);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
                 textField.requestFocusInWindow();
@@ -1440,7 +1540,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         caps.setCapability("nativeEvents", true);
         driver = new JavaDriver(new JavaProfile(), caps, caps);
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -1462,7 +1563,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         try {
             driver = new JavaDriver();
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 }

@@ -39,7 +39,8 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("root")) {
             return Arrays.asList(new JavaFXTreeTableViewCellElement(this, 0, 0));
         } else if (selector.equals("mnth-cell")) {
@@ -77,7 +78,9 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
         return r;
     }
 
-    @SuppressWarnings("unchecked") @Override public boolean marathon_select(String value) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean marathon_select(String value) {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
         TreeTableViewSelectionModel<?> selectionModel = treeTableView.getSelectionModel();
         if (value.equals("")) {
@@ -114,7 +117,8 @@ public class JavaFXTreeTableViewElement extends JavaFXElement {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getTreeTableSelection((TreeTableView<?>) getComponent());
     }
 }

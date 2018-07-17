@@ -30,11 +30,13 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXListViewCheckBoxListCellTest extends RFXComponentTest {
 
-    @Test public void selectListItemCheckBox() {
+    @Test
+    public void selectListItemCheckBox() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Point2D point = getPoint(listView, 5);
                 RFXListView rfxListView = new RFXListView(listView, null, point, lr);
                 rfxListView.focusGained(rfxListView);
@@ -49,11 +51,13 @@ public class RFXListViewCheckBoxListCellTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Item 6:checked", recording.getParameters()[0]);
     }
 
-    @Test public void selectSelectedListItemCheckBox() {
+    @Test
+    public void selectSelectedListItemCheckBox() {
         ListView<?> listView = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Point2D point = getPoint(listView, 6);
                 RFXListView rfxListView = new RFXListView(listView, null, point, lr);
                 Item x = (Item) listView.getItems().get(6);
@@ -69,7 +73,8 @@ public class RFXListViewCheckBoxListCellTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Item 7:unchecked", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new CheckBoxListViewSample();
     }
 }

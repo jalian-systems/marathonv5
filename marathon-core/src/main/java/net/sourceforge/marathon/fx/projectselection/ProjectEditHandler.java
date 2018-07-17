@@ -21,7 +21,8 @@ public class ProjectEditHandler implements IEditProjectHandler {
 
     public static final Logger LOGGER = Logger.getLogger(ProjectEditHandler.class.getName());
 
-    @Override public boolean editProject(ProjectInfo selected) {
+    @Override
+    public boolean editProject(ProjectInfo selected) {
         return false;
     }
 

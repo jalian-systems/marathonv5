@@ -19,7 +19,8 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.javaagent.Device.Type;
 
-@Test public class RobotDeviceMouseTest extends DeviceMouseTest {
+@Test
+public class RobotDeviceMouseTest extends DeviceMouseTest {
 
     public RobotDeviceMouseTest() {
         super(Type.ROBOT);

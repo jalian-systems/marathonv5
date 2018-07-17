@@ -47,31 +47,39 @@ public class RecordingTest {
         };
         recordingServer.start();
         recordingServer.startRecording(new IRecorder() {
-            @Override public void record(IScriptElement element) {
+            @Override
+            public void record(IScriptElement element) {
                 scriptElements.add(element);
             }
 
-            @Override public void abortRecording() {
+            @Override
+            public void abortRecording() {
             }
 
-            @Override public void insertChecklist(String name) {
+            @Override
+            public void insertChecklist(String name) {
             }
 
-            @Override public String recordInsertScriptElement(WindowId windowId, String script) {
+            @Override
+            public String recordInsertScriptElement(WindowId windowId, String script) {
                 return null;
             }
 
-            @Override public void recordInsertChecklistElement(WindowId windowId, String fileName) {
+            @Override
+            public void recordInsertChecklistElement(WindowId windowId, String fileName) {
             }
 
-            @Override public void recordShowChecklistElement(WindowId windowId, String fileName) {
+            @Override
+            public void recordShowChecklistElement(WindowId windowId, String fileName) {
             }
 
-            @Override public boolean isCreatingObjectMap() {
+            @Override
+            public boolean isCreatingObjectMap() {
                 return false;
             }
 
-            @Override public void updateScript() {
+            @Override
+            public void updateScript() {
             }
 
         });

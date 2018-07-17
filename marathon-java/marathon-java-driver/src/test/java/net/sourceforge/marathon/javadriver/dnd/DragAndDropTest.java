@@ -38,15 +38,18 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class DragAndDropTest {
+@Test
+public class DragAndDropTest {
 
     private JavaDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = DropDemo.createAndShowGUI();
                 frame.setAlwaysOnTop(true);
             }
@@ -54,9 +57,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         EventQueueWait.waitTillShown(frame);
     }
 
-    @AfterMethod public void disposeDialog() throws Throwable {
+    @AfterMethod
+    public void disposeDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.dispose();
             }
         });
@@ -115,7 +120,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private void waitTillDropCompletes(final String string, final WebElement list) {
         try {
             new WebDriverWait(driver, 5, 500).until(new Function<WebDriver, Boolean>() {
-                @Override public Boolean apply(WebDriver driver) {
+                @Override
+                public Boolean apply(WebDriver driver) {
                     return string.equals(list.getAttribute("content"));
                 }
             });

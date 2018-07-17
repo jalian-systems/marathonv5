@@ -29,7 +29,8 @@ public abstract class FastReaction extends Reaction {
         super(head, channels, true);
     }
 
-    @Override void dispatch(final Join join, final Object[] args) {
+    @Override
+    void dispatch(final Join join, final Object[] args) {
         try {
             react(join, args);
         } catch (Exception e) {

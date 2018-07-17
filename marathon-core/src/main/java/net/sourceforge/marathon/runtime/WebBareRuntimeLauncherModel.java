@@ -17,27 +17,33 @@ public class WebBareRuntimeLauncherModel implements IRuntimeLauncherModel {
 
     public static final Logger LOGGER = Logger.getLogger(WebBareRuntimeLauncherModel.class.getName());
 
-    @Override public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
+    @Override
+    public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
         return new ISubPropertiesLayout[0];
     }
 
-    @Override public List<String> getPropertyKeys() {
+    @Override
+    public List<String> getPropertyKeys() {
         return new ArrayList<String>();
     }
 
-    @Override public IRuntimeFactory getRuntimeFactory() {
+    @Override
+    public IRuntimeFactory getRuntimeFactory() {
         return new IRuntimeFactory() {
-            @Override public IMarathonRuntime createRuntime() {
+            @Override
+            public IMarathonRuntime createRuntime() {
                 return new BareRuntime();
             }
         };
     }
 
-    @Override public ITestLauncher createLauncher(Properties props) {
+    @Override
+    public ITestLauncher createLauncher(Properties props) {
         return null;
     }
 
-    @Override public String getFramework() {
+    @Override
+    public String getFramework() {
         return Constants.FRAMEWORK_WEB;
     }
 

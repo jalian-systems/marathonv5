@@ -54,7 +54,8 @@ public class ChoiceBoxTreeTableSample extends Sample {
     private void updateObservableListProperties(TreeTableColumn<Employee, String> empColumn) {
         empColumn.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<Employee, String>>() {
 
-            @Override public void handle(CellEditEvent<Employee, String> t) {
+            @Override
+            public void handle(CellEditEvent<Employee, String> t) {
                 TreeItem<Employee> treeItem = t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow());
                 treeItem.getValue().setName(t.getNewValue());
             }

@@ -52,18 +52,23 @@ import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@SuppressWarnings({ "unchecked", "rawtypes" }) @Test public class JListXTest {
+@SuppressWarnings({ "unchecked", "rawtypes" })
+@Test
+public class JListXTest {
 
     private WebDriver driver;
     protected JFrame frame;
     protected JList list;
     private JTextField textfield;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-                    @Override public void eventDispatched(AWTEvent event) {
+                    @Override
+                    public void eventDispatched(AWTEvent event) {
                     }
                 }, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
                 frame = new JFrame("My Dialog");
@@ -95,9 +100,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

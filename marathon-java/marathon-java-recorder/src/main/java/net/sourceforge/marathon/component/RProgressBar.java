@@ -15,7 +15,8 @@ public class RProgressBar extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return JProgressBarJavaElement.getText((JProgressBar) component);
     }
 

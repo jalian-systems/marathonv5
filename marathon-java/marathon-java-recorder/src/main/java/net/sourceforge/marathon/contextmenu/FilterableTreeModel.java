@@ -40,17 +40,21 @@ public class FilterableTreeModel<T> implements TreeModel {
     public FilterableTreeModel(TreeModel defaultTreeModel) {
         this.treeModel = defaultTreeModel;
         this.predicate = new Predicate<T>() {
-            @Override public boolean apply(T o) {
+            @Override
+            public boolean apply(T o) {
                 return true;
             }
         };
     }
 
-    @Override public Object getRoot() {
+    @Override
+    public Object getRoot() {
         return treeModel.getRoot();
     }
 
-    @Override @SuppressWarnings("unchecked") public int getIndexOfChild(Object parent, Object child2) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public int getIndexOfChild(Object parent, Object child2) {
         int childCount = treeModel.getChildCount(parent);
         int ourCount = 0;
         for (int i = 0; i < childCount; i++) {
@@ -65,7 +69,9 @@ public class FilterableTreeModel<T> implements TreeModel {
         return -1;
     }
 
-    @Override @SuppressWarnings("unchecked") public Object getChild(Object parent, int index) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public Object getChild(Object parent, int index) {
         int childCount = treeModel.getChildCount(parent);
         int ourCount = 0;
         for (int i = 0; i < childCount; i++) {
@@ -80,7 +86,9 @@ public class FilterableTreeModel<T> implements TreeModel {
         throw new RuntimeException("Reached unexpected code point");
     }
 
-    @Override @SuppressWarnings("unchecked") public int getChildCount(Object parent) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public int getChildCount(Object parent) {
         int childCount = treeModel.getChildCount(parent);
         int ourCount = 0;
         for (int i = 0; i < childCount; i++) {
@@ -92,19 +100,23 @@ public class FilterableTreeModel<T> implements TreeModel {
         return ourCount;
     }
 
-    @Override public boolean isLeaf(Object node) {
+    @Override
+    public boolean isLeaf(Object node) {
         return treeModel.isLeaf(node);
     }
 
-    @Override public void addTreeModelListener(TreeModelListener l) {
+    @Override
+    public void addTreeModelListener(TreeModelListener l) {
         treeModel.addTreeModelListener(l);
     }
 
-    @Override public void removeTreeModelListener(TreeModelListener l) {
+    @Override
+    public void removeTreeModelListener(TreeModelListener l) {
         treeModel.removeTreeModelListener(l);
     }
 
-    @Override public void valueForPathChanged(TreePath path, Object newValue) {
+    @Override
+    public void valueForPathChanged(TreePath path, Object newValue) {
         treeModel.valueForPathChanged(path, newValue);
     }
 

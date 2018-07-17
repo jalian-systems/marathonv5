@@ -36,13 +36,16 @@ import components.DynamicTreeDemo;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class RTreeTest extends RComponentTest {
+@Test
+public class RTreeTest extends RComponentTest {
 
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(RTreeTest.class.getSimpleName());
                 frame.setName("frame-" + RTreeTest.class.getSimpleName());
                 frame.getContentPane().add(new DynamicTreeDemo(), BorderLayout.CENTER);
@@ -52,9 +55,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -65,13 +70,15 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTree tree = (JTree) ComponentUtils.findComponent(JTree.class, frame);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tree.expandRow(0);
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RTree rTree = new RTree(tree, null, null, lr);
                 rTree.focusLost(null);
             }
@@ -85,14 +92,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTree tree = (JTree) ComponentUtils.findComponent(JTree.class, frame);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tree.expandRow(0);
                 tree.setSelectionRow(0);
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RTree rTree = new RTree(tree, null, null, lr);
                 rTree.focusLost(null);
             }
@@ -106,14 +115,16 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTree tree = (JTree) ComponentUtils.findComponent(JTree.class, frame);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 tree.expandRow(0);
                 tree.setSelectionRows(new int[] { 0, 2 });
             }
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RTree rTree = new RTree(tree, null, null, lr);
                 rTree.focusLost(null);
             }
@@ -127,7 +138,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final JTree tree = (JTree) ComponentUtils.findComponent(JTree.class, frame);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
                 root.setUserObject("Root Node [] , / Special");
@@ -137,7 +149,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         });
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 RTree rTree = new RTree(tree, null, null, lr);
                 rTree.focusLost(null);
             }
@@ -152,7 +165,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Rectangle rowBounds = tree.getRowBounds(0);
                 RTree rTree = new RTree(tree, null, rowBounds.getLocation(), lr);
                 rTree.focusGained(null);
@@ -180,7 +194,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         final RTree rTree = new RTree(tree, null, null, new LoggingRecorder());
         final Object[] content = new Object[] { null };
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 content[0] = rTree.getContent();
             }
         });

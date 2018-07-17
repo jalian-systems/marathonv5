@@ -87,7 +87,8 @@ public abstract class Blurb {
         } else {
             Object[] ret = new Object[1];
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     ret[0] = showDialog();
                 }
             });
@@ -110,12 +111,14 @@ public abstract class Blurb {
             initComponents();
         }
 
-        @Override protected void initialize(Stage stage) {
+        @Override
+        protected void initialize(Stage stage) {
             super.initialize(stage);
             stage.initModality(Modality.APPLICATION_MODAL);
         }
 
-        @Override protected Parent getContentPane() {
+        @Override
+        protected Parent getContentPane() {
             VBox content = new VBox();
             content.getStyleClass().add("blurb-stage");
             content.setId("blurbStage");
@@ -153,7 +156,8 @@ public abstract class Blurb {
             dispose();
         }
 
-        @Override protected void setDefaultButton() {
+        @Override
+        protected void setDefaultButton() {
             okButton.setDefaultButton(true);
         }
 

@@ -33,11 +33,13 @@ public class RFXChoiceBox extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RFXComponent prev) {
+    @Override
+    public void focusGained(RFXComponent prev) {
         prevSelectedItem = ((ChoiceBox<?>) node).getSelectionModel().getSelectedItem();
     }
 
-    @Override public void focusLost(RFXComponent next) {
+    @Override
+    public void focusLost(RFXComponent next) {
         ChoiceBox<?> choiceBox = (ChoiceBox<?>) node;
         Object selectedItem = choiceBox.getSelectionModel().getSelectedItem();
         if (selectedItem != null && selectedItem.equals(prevSelectedItem)) {
@@ -49,7 +51,8 @@ public class RFXChoiceBox extends RFXComponent {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getChoiceBoxText((ChoiceBox<?>) node, ((ChoiceBox<?>) node).getSelectionModel().getSelectedIndex());
     }
 

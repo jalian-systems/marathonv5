@@ -93,7 +93,7 @@ public class FindResources {
                         String fileName = file.getCanonicalPath();
                         final boolean accept = pattern.matcher(fileName).matches();
                         if (accept) {
-                            if(fileName.startsWith(dirPath) ) {
+                            if (fileName.startsWith(dirPath)) {
                                 fileName = fileName.substring((int) dirPath.length() + 1);
                             }
                             retval.add(fileName);

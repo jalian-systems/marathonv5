@@ -35,7 +35,8 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         CheckBox cb = (CheckBox) node;
         if (!isValidState(value)) {
             throw new JavaAgentException(value + " is not a valid state for CheckBox.", null);
@@ -70,11 +71,13 @@ public class JavaFXCheckBoxElement extends JavaFXElement {
         return Arrays.asList(states).contains(value);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getCheckBoxText((CheckBox) getComponent());
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         int selection = getSelection((CheckBox) node);
         return JavaFXCheckBoxElement.states[selection];
     }

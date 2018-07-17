@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXChoiceBoxTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         ChoiceBox<?> choiceBox = (ChoiceBox<?>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -44,7 +45,8 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Cat", recording.getParameters()[0]);
     }
 
-    @Test public void selectOptionWithQuotes() {
+    @Test
+    public void selectOptionWithQuotes() {
         @SuppressWarnings("unchecked")
         ChoiceBox<String> choiceBox = (ChoiceBox<String>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -60,7 +62,8 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals(" \"Mouse \" ", recording.getParameters()[0]);
     }
 
-    @Test public void htmlOptionSelect() {
+    @Test
+    public void htmlOptionSelect() {
         @SuppressWarnings("unchecked")
         ChoiceBox<String> choiceBox = (ChoiceBox<String>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -78,7 +81,8 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals(text, recording.getParameters()[0]);
     }
 
-    @Test public void selectDuplicateOption() {
+    @Test
+    public void selectDuplicateOption() {
         @SuppressWarnings("unchecked")
         ChoiceBox<String> choiceBox = (ChoiceBox<String>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -104,7 +108,8 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Cat(1)", recording.getParameters()[0]);
     }
 
-    @Test public void selectMultipleDuplicateOption() {
+    @Test
+    public void selectMultipleDuplicateOption() {
         @SuppressWarnings("unchecked")
         ChoiceBox<String> choiceBox = (ChoiceBox<String>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         LoggingRecorder lr = new LoggingRecorder();
@@ -131,7 +136,8 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Cat(2)", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         ChoiceBox<?> choiceBox = (ChoiceBox<?>) getPrimaryStage().getScene().getRoot().lookup(".choice-box");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -142,14 +148,16 @@ public class RFXChoiceBoxTest extends RFXComponentTest {
             text.add(rfxChoiceBox._getText());
         });
         new Wait("Waiting for choice box text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("Cat", text.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ChoiceBoxSample();
     }
 }

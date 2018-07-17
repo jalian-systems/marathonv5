@@ -43,13 +43,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ProgressSample  extends Application {
+public class ProgressSample extends Application {
 
-final Float[] values = new Float[] {-1.0f, 0f, 0.6f, 1.0f};
-final Label [] labels = new Label[values.length];
-final ProgressBar[] pbs = new ProgressBar[values.length];
-final ProgressIndicator[] pins = new ProgressIndicator[values.length];
-final HBox hbs [] = new HBox [values.length];
+    final Float[] values = new Float[] { -1.0f, 0f, 0.6f, 1.0f };
+    final Label[] labels = new Label[values.length];
+    final ProgressBar[] pbs = new ProgressBar[values.length];
+    final ProgressIndicator[] pins = new ProgressIndicator[values.length];
+    final HBox hbs[] = new HBox[values.length];
 
     @Override
     public void start(Stage stage) {
@@ -79,7 +79,7 @@ final HBox hbs [] = new HBox [values.length];
         scene.setRoot(vb);
         stage.show();
     }
-	
+
     public static void main(String[] args) {
         launch(args);
     }

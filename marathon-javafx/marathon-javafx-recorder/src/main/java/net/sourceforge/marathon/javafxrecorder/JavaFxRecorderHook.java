@@ -29,9 +29,6 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
-import com.sun.glass.ui.CommonDialogs;
-import com.sun.javafx.stage.StageHelper;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,6 +49,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.fxcontextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javafxagent.WindowTitle;
 import net.sourceforge.marathon.javafxagent.server.JavaServer;
@@ -102,12 +100,13 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             setContextMenuTriggers(recorder.getContextMenuTriggers());
             finder = new RFXComponentFactory(objectMapConfiguration);
             contextMenuHandler = new ContextMenuHandler(recorder, finder);
-            ObservableList<Stage> stages = StageHelper.getStages();
+            ObservableList<Stage> stages = JavaCompatibility.getStages();
             for (Stage stage : stages) {
                 addEventFilter(stage);
             }
             stages.addListener(new ListChangeListener<Stage>() {
-                @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+                @Override
+                public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                     c.next();
                     if (c.wasAdded()) {
                         List<? extends Stage> addedSubList = c.getAddedSubList();
@@ -297,9 +296,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             double x = boundsInParent.getWidth() / 2;
             double y = boundsInParent.getHeight() / 2;
             Point2D screenXY = source.localToScreen(x, y);
-            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, x, y, screenXY.getX(),
-                    screenXY.getY(), MouseButton.SECONDARY, 1, false, true, false, false, false, false, true, true, true,
-                    false, null);
+            MouseEvent e = new MouseEvent(source, source, MouseEvent.MOUSE_PRESSED, x, y, screenXY.getX(), screenXY.getY(),
+                    MouseButton.SECONDARY, 1, false, true, false, false, false, false, true, true, true, false, null);
             return e;
         }
     }
@@ -336,27 +334,32 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         stage.getScene().getRoot().addEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
         stage.getScene().getRoot().addEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
-            @Override public void handle(WindowEvent event) {
+            @Override
+            public void handle(WindowEvent event) {
                 recorder.recordWindowClosing(new WindowTitle(stage).getTitle());
             }
         });
         stage.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
         stage.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
         stage.xProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
         stage.yProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 recordWindowState = stage;
             }
         });
@@ -374,11 +377,12 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
             throw new Exception("Port number not specified");
         }
         windowTitle = System.getProperty("start.window.title", "");
-        ObservableList<Stage> stages = StageHelper.getStages();
+        ObservableList<Stage> stages = JavaCompatibility.getStages();
         stages.addListener(new ListChangeListener<Stage>() {
             boolean done = false;
 
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Stage> c) {
                 if (done) {
                     return;
                 }
@@ -388,7 +392,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 c.next();
                 if (c.wasAdded()) {
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                        @Override public Object run() {
+                        @Override
+                        public Object run() {
                             return new JavaFxRecorderHook(port);
                         }
                     });
@@ -398,7 +403,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
         });
     }
 
-    @Override public void handle(Event event) {
+    @Override
+    public void handle(Event event) {
         if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest) {
             return;
         }
@@ -485,12 +491,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
 
     private void handleFileChooser(Event event) {
         Node source = (Node) event.getSource();
-        CommonDialogs.FileChooserResult files = (CommonDialogs.FileChooserResult) source.getProperties()
-                .get("marathon.selectedFiles");
-        List<File> selectedFiles = null;
-        if (files != null) {
-            selectedFiles = files.getFiles();
-        }
+        @SuppressWarnings("unchecked")
+        List<File> selectedFiles = (List<File>) source.getProperties().get("marathon.selectedFiles");
         new RFXFileChooser(recorder).record(selectedFiles);
     }
 
@@ -511,7 +513,8 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     public class MenuEventHandler implements EventHandler<ActionEvent> {
-        @Override public void handle(ActionEvent event) {
+        @Override
+        public void handle(ActionEvent event) {
             if (event.getSource() instanceof Menu) {
                 return;
             }

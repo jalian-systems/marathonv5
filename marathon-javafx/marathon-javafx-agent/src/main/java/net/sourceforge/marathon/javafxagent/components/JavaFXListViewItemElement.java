@@ -55,28 +55,33 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         this.itemIndex = getListItemIndex((ListView<?>) getComponent(), itemText);
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters", new JSONArray()
                 .put(new JSONObject().put("select", getListSelectionText((ListView<?>) getComponent(), itemIndex)).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public void _moveto() {
+    @Override
+    public void _moveto() {
         Point2D midpoint = _getMidpoint();
         parent._moveto(midpoint.getX(), midpoint.getY());
     }
 
-    @Override public void _moveto(double xoffset, double yoffset) {
+    @Override
+    public void _moveto(double xoffset, double yoffset) {
         Node cell = getCellAt((ListView<?>) getComponent(), itemIndex);
         Point2D pCoords = cell.localToParent(xoffset, yoffset);
         parent._moveto(pCoords.getX(), pCoords.getY());
     }
 
-    @Override public Point2D _getMidpoint() {
+    @Override
+    public Point2D _getMidpoint() {
         Node cell = getPseudoComponent();
         Bounds boundsInParent = cell.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;
@@ -84,13 +89,15 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         return cell.localToParent(x, y);
     }
 
-    @Override public Node getPseudoComponent() {
+    @Override
+    public Node getPseudoComponent() {
         ListView<?> listView = (ListView<?>) getComponent();
         EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
         return getCellAt(listView, itemIndex);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         ListView<?> listView = (ListView<?>) getComponent();
         if (getVisibleCellAt(listView, itemIndex) == null) {
             EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
@@ -111,7 +118,8 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         return cellComponent;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         ListCell<?> cell = (ListCell<?>) getPseudoComponent();
         Node graphic = cell.getGraphic();
         JavaFXElement graphicElement = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);
@@ -126,7 +134,8 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         return cellElement._getValue();
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         Node cell = getPseudoComponent();
         target = getTextObj((ListCell<?>) cell);
         Point2D targetXY = node.localToScene(xoffset, yoffset);
@@ -142,7 +151,8 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         return cell;
     }
 
-    @Override public Object _makeVisible() {
+    @Override
+    public Object _makeVisible() {
         ListView<?> listView = (ListView<?>) getComponent();
         Node cell = getVisibleCellAt(listView, itemIndex);
         if (cell == null) {

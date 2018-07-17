@@ -38,92 +38,108 @@ public class JavaFXCheckBoxElementTest extends JavaFXElementTest {
     private IJavaFXElement checkBox;
     private IJavaFXElement triStateCheckBox;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         checkBox = driver.findElementByTagName("check-box");
         triStateCheckBox = driver.findElementByCssSelector("check-box[text='Three state checkbox']");
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new CheckBoxes();
     }
 
-    @Test public void selectCheckboxNotSelectedSelected() throws Throwable {
+    @Test
+    public void selectCheckboxNotSelectedSelected() throws Throwable {
         CheckBox checkBoxNode = (CheckBox) getPrimaryStage().getScene().getRoot().lookup(".check-box");
         AssertJUnit.assertEquals(false, checkBoxNode.isSelected());
         checkBox.marathon_select("checked");
         new Wait("Waiting for the check box selection.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return checkBoxNode.isSelected();
             }
         };
     }
 
-    @Test public void selectCheckboxSelectedSelected() throws Throwable {
+    @Test
+    public void selectCheckboxSelectedSelected() throws Throwable {
         CheckBox checkBoxNode = (CheckBox) getPrimaryStage().getScene().getRoot().lookup(".check-box");
         checkBoxNode.setSelected(true);
         AssertJUnit.assertEquals(true, checkBoxNode.isSelected());
         checkBox.marathon_select("checked");
         new Wait("Waiting for the check box selection.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return checkBoxNode.isSelected();
             }
         };
     }
 
-    @Test public void selectCheckboxSelectedNotSelected() throws Throwable {
+    @Test
+    public void selectCheckboxSelectedNotSelected() throws Throwable {
         CheckBox checkBoxNode = (CheckBox) getPrimaryStage().getScene().getRoot().lookup(".check-box");
         checkBoxNode.setSelected(true);
         AssertJUnit.assertEquals(true, checkBoxNode.isSelected());
         checkBox.marathon_select("unchecked");
         new Wait("Waiting for the check box deselect.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !checkBoxNode.isSelected();
             }
         };
     }
 
-    @Test public void selectCheckboxNotSelectedNotSelected() throws Throwable {
+    @Test
+    public void selectCheckboxNotSelectedNotSelected() throws Throwable {
         CheckBox checkBoxNode = (CheckBox) getPrimaryStage().getScene().getRoot().lookup(".check-box");
         AssertJUnit.assertEquals(false, checkBoxNode.isSelected());
         checkBox.marathon_select("unchecked");
         new Wait("Waiting for the check box deselect.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !checkBoxNode.isSelected();
             }
         };
     }
 
-    @Test public void undefinedCheckboxNotSelectedNotSelected() throws Throwable {
+    @Test
+    public void undefinedCheckboxNotSelectedNotSelected() throws Throwable {
         CheckBox checkBoxNode = findCheckbox("Three state checkbox");
         AssertJUnit.assertEquals(false, checkBoxNode.isSelected());
         triStateCheckBox.marathon_select("indeterminate");
         new Wait("Waiting for the check box deselect.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return checkBoxNode.isIndeterminate();
             }
         };
     }
 
-    @Test public void checkedCheckboxNotSelectedNotSelected() throws Throwable {
+    @Test
+    public void checkedCheckboxNotSelectedNotSelected() throws Throwable {
         CheckBox checkBoxNode = findCheckbox("Three state checkbox");
         AssertJUnit.assertEquals(false, checkBoxNode.isSelected());
         triStateCheckBox.marathon_select("checked");
         new Wait("Waiting for the check box deselect.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !checkBoxNode.isIndeterminate() && checkBoxNode.isSelected();
             }
         };
     }
 
-    @Test public void getText() throws Throwable {
+    @Test
+    public void getText() throws Throwable {
         CheckBox checkBoxNode = (CheckBox) getPrimaryStage().getScene().getRoot().lookup(".check-box");
         AssertJUnit.assertEquals(false, checkBoxNode.isSelected());
         checkBox.marathon_select("checked");
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> text.add(checkBox.getAttribute("text")));
         new Wait("Waiting for the check box text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };

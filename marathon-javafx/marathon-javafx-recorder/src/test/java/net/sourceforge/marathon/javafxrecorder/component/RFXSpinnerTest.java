@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXSpinnerTest extends RFXComponentTest {
 
-    @Test public void selectListSpinner() {
+    @Test
+    public void selectListSpinner() {
         Spinner<?> spinner = (Spinner<?>) getPrimaryStage().getScene().getRoot().lookup(".spinner");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -44,7 +45,8 @@ public class RFXSpinnerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("March", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         Spinner<?> spinner = (Spinner<?>) getPrimaryStage().getScene().getRoot().lookup(".spinner");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -55,14 +57,16 @@ public class RFXSpinnerTest extends RFXComponentTest {
             text.add(rfxSpinner.getAttribute("text"));
         });
         new Wait("Waiting for spinner text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("March", text.get(0));
     }
 
-    @Test public void selectListEditableSpinner() {
+    @Test
+    public void selectListEditableSpinner() {
         Spinner<?> spinner = (Spinner<?>) getPrimaryStage().getScene().getRoot().lookup(".spinner");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -77,7 +81,8 @@ public class RFXSpinnerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("April", recording.getParameters()[0]);
     }
 
-    @Test public void selectIntegerSpinner() {
+    @Test
+    public void selectIntegerSpinner() {
         Spinner<?> spinner = (Spinner<?>) getPrimaryStage().getScene().getRoot().lookup("#integer-spinner");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -91,7 +96,8 @@ public class RFXSpinnerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("25", recording.getParameters()[0]);
     }
 
-    @Test public void selectDoubleSpinner() {
+    @Test
+    public void selectDoubleSpinner() {
         Spinner<?> spinner = (Spinner<?>) getPrimaryStage().getScene().getRoot().lookup("#double-spinner");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -105,7 +111,8 @@ public class RFXSpinnerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("35.5", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new SpinnerSample();
     }
 }

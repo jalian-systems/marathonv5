@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXTableViewTextFieldTableCellTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         TableView<?> tableView = (TableView<?>) getPrimaryStage().getScene().getRoot().lookup(".table-view");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -48,7 +49,8 @@ public class RFXTableViewTextFieldTableCellTest extends RFXComponentTest {
         AssertJUnit.assertEquals("Cell Modified", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new TableCellFactorySample();
     }
 }

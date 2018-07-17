@@ -33,7 +33,8 @@ public class DockKey {
     private SimpleStringProperty name;
     private String tooltip;
     private Node icon;
-    @SuppressWarnings("unused") private DockGroup dockGroup;
+    @SuppressWarnings("unused")
+    private DockGroup dockGroup;
     private TabPolicy policy;
     private boolean closeOptions = false;
     private Side side;
@@ -51,7 +52,8 @@ public class DockKey {
         this.side = side;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "DockKey [dockKey=" + key + ", name=" + name + ", tooltip=" + tooltip + "]";
     }
 
@@ -75,14 +77,16 @@ public class DockKey {
         return icon;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (key == null ? 0 : key.hashCode());
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }

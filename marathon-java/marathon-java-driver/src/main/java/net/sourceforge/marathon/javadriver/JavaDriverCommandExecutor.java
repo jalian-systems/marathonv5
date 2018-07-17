@@ -73,7 +73,8 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
             command.executeAsync();
             try {
                 new Wait() {
-                    @Override public boolean until() {
+                    @Override
+                    public boolean until() {
                         if (isConnected())
                             return true;
                         if (!command.isRunning()) {
@@ -122,7 +123,8 @@ public class JavaDriverCommandExecutor extends HttpCommandExecutor {
         server = null;
     }
 
-    @Override public Response execute(Command command) throws IOException {
+    @Override
+    public Response execute(Command command) throws IOException {
         if (!this.started) {
             start();
             this.started = true;

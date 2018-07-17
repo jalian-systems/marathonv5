@@ -30,7 +30,8 @@ public abstract class JavaFXElementTest {
 
         public static void startApplication() {
             new Thread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     Application.launch(ApplicationHelper.class);
                 }
             }).start();
@@ -38,14 +39,16 @@ public abstract class JavaFXElementTest {
 
         private Stage primaryStage;
 
-        @Override public void start(Stage primaryStage) throws Exception {
+        @Override
+        public void start(Stage primaryStage) throws Exception {
             this.primaryStage = primaryStage;
             JavaFXElementTest.applicationHelper = this;
         }
 
         public void startGUI(Pane pane) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     primaryStage.hide();
                     primaryStage.setScene(new Scene(pane));
                     primaryStage.sizeToScene();
@@ -53,7 +56,8 @@ public abstract class JavaFXElementTest {
                 }
             });
             new Wait("Waiting for applicationHelper to be initialized") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     try {
                         return primaryStage.getScene().getRoot() == pane;
                     } catch (Throwable t) {
@@ -73,12 +77,14 @@ public abstract class JavaFXElementTest {
     public JavaFXElementTest() {
     }
 
-    @BeforeMethod public void startGUI() throws Throwable {
+    @BeforeMethod
+    public void startGUI() throws Throwable {
         if (applicationHelper == null) {
             ApplicationHelper.startApplication();
         }
         new Wait("Waiting for applicationHelper to be initialized") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return applicationHelper != null;
             }
         };
@@ -87,7 +93,8 @@ public abstract class JavaFXElementTest {
         }
         applicationHelper.startGUI(getMainPane());
         new Wait() {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return applicationHelper.getPrimaryStage().isShowing();
             }
         }.wait("Waiting for the primary stage to be displayed.", 10000);

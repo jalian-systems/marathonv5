@@ -39,14 +39,16 @@ public class CollatedTreeItem<T> extends TreeItem<T> {
     public CollatedTreeItem() {
         children = FXCollections.observableArrayList();
         filteredChildren = new FilteredList<>(children, new Predicate<TreeItem<T>>() {
-            @Override public boolean test(TreeItem<T> t) {
+            @Override
+            public boolean test(TreeItem<T> t) {
                 return filter.test(t.getValue());
             }
         });
         sortedChildren = new SortedList<>(filteredChildren);
         ObservableList<TreeItem<T>> original = super.getChildren();
         sortedChildren.addListener(new ListChangeListener<TreeItem<T>>() {
-            @Override public void onChanged(javafx.collections.ListChangeListener.Change<? extends TreeItem<T>> c) {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends TreeItem<T>> c) {
                 while (c.next()) {
                     original.removeAll(c.getRemoved());
                     original.addAll(c.getFrom(), c.getAddedSubList());
@@ -70,7 +72,8 @@ public class CollatedTreeItem<T> extends TreeItem<T> {
             filteredChildren.setPredicate(null);
         } else {
             filteredChildren.setPredicate(new Predicate<TreeItem<T>>() {
-                @Override public boolean test(TreeItem<T> t) {
+                @Override
+                public boolean test(TreeItem<T> t) {
                     return filter.test(t.getValue());
                 }
             });

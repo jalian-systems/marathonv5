@@ -41,7 +41,8 @@ public class JavaFXContextMenuElement extends JavaFXElement {
         this.contextMenu = contextMenu;
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         String[] items = value.split("\\>\\>");
         ObservableList<MenuItem> children = contextMenu.getItems();
         List<MenuItem> menuItems = new ArrayList<>();

@@ -33,7 +33,8 @@ public class JavaFXTreeTableCellElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public String _getValue() {
+    @Override
+    public String _getValue() {
         TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) node;
         Node graphic = cell.getGraphic();
         JavaFXElement component = (JavaFXElement) JavaFXElementFactory.createElement(graphic, driver, window);

@@ -46,7 +46,8 @@ public abstract class MarathonInputStage extends ModalDialog<String> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
@@ -76,7 +77,8 @@ public abstract class MarathonInputStage extends ModalDialog<String> {
         buttonBar.getButtons().addAll(okButton, cancelButton);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         VBox root = new VBox();
         root.setId("MarathonInputStage");
         root.getStyleClass().add("marathon-input");

@@ -35,19 +35,22 @@ public class JavaFXHTMLEditorTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement htmlEditor;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         htmlEditor = driver.findElementByTagName("html-editor");
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         HTMLEditor htmlEditorNode = (HTMLEditor) getPrimaryStage().getScene().getRoot().lookup(".html-editor");
         Platform.runLater(() -> {
             htmlEditor.marathon_select("This html editor test");
         });
         try {
             new Wait("Waiting for html text to be set.") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     String htmlText = htmlEditorNode.getHtmlText();
                     return htmlText.equals(
                             "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">This html editor test</body></html>");
@@ -63,7 +66,8 @@ public class JavaFXHTMLEditorTest extends JavaFXElementTest {
                 htmlEditorNode.getHtmlText());
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             htmlEditor.marathon_select("This html editor test");
@@ -71,7 +75,8 @@ public class JavaFXHTMLEditorTest extends JavaFXElementTest {
         });
         try {
             new Wait("Waiting for html text to be set.") {
-                @Override public boolean until() {
+                @Override
+                public boolean until() {
                     return htmlEditor.getAttribute("text").equals(
                             "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">This html editor test</body></html>");
                 }
@@ -83,7 +88,8 @@ public class JavaFXHTMLEditorTest extends JavaFXElementTest {
                 htmlEditor.getAttribute("text"));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new HTMLEditorSample();
     }
 

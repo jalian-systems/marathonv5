@@ -32,7 +32,8 @@ import org.testng.annotations.Test;
 import components.SpinnerDemo3;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test public class JSpinner3Test {
+@Test
+public class JSpinner3Test {
 
     private WebDriver driver;
     protected JFrame frame;
@@ -49,9 +50,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private WebElement spinnerDateField;
     private WebElement spinnerYearField;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JSpinner3Test.class.getSimpleName());
                 frame.setName("frame-" + JSpinner3Test.class.getSimpleName());
                 frame.getContentPane().add(new SpinnerDemo3(false), BorderLayout.CENTER);
@@ -82,9 +85,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         spinnerDateField = spinnerDate.findElement(By.cssSelector("formatted-text-field:nth(1)"));
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }

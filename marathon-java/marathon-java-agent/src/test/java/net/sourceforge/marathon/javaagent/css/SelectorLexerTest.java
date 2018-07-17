@@ -20,7 +20,8 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class SelectorLexerTest {
+@Test
+public class SelectorLexerTest {
 
     public void nextTokenIdent() throws Throwable {
         SelectorLexer selectorLexer = new SelectorLexer("menu");

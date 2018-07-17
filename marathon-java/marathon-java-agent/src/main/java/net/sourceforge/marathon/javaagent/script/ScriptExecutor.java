@@ -65,7 +65,8 @@ public class ScriptExecutor {
             final Object[] newArgs = new Object[args.length + 1];
             System.arraycopy(args, 0, newArgs, 0, args.length);
             newArgs[args.length] = new Callback() {
-                @Override public void call(Object o) {
+                @Override
+                public void call(Object o) {
                     result = o;
                     callback = true;
                     synchronized (ScriptExecutor.this) {
@@ -74,11 +75,13 @@ public class ScriptExecutor {
                 }
             };
             SwingUtilities.invokeLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             try {
-                                declaredMethod.invoke(helloClazz.newInstance(), newArgs);
+                                declaredMethod.invoke(helloClazz.getConstructor().newInstance(), newArgs);
                             } catch (Exception e) {
                                 result = e;
                             }
@@ -99,7 +102,8 @@ public class ScriptExecutor {
             return result;
         }
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     result = declaredMethod.invoke(helloClazz.newInstance(), args);
                 } catch (Exception e) {

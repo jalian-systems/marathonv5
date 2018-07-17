@@ -100,7 +100,8 @@ public class JSONOMapConfig {
             }
         }
         Collections.sort(selected, new Comparator<JSONObject>() {
-            @Override public int compare(JSONObject o1, JSONObject o2) {
+            @Override
+            public int compare(JSONObject o1, JSONObject o2) {
                 int o2prio = o2.getInt("priority");
                 int o1prio = o1.getInt("priority");
                 if (o1prio == o2prio) {

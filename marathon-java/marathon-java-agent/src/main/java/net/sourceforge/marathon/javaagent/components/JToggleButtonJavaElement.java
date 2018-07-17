@@ -32,7 +32,8 @@ public class JToggleButtonJavaElement extends JavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         boolean selected = Boolean.parseBoolean(value);
         boolean current = ((JToggleButton) component).isSelected();
         if (selected != current) {

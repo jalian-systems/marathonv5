@@ -38,15 +38,18 @@ import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test public class JTabbedPaneJavaElementTest extends JavaElementTest {
+@Test
+public class JTabbedPaneJavaElementTest extends JavaElementTest {
 
     private IJavaAgent driver;
     protected JFrame frame;
     ImageIcon icon = createImageIcon("images/middle.gif");
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTableJavaElementTest.class.getSimpleName());
                 frame.setName("frame-" + JTableJavaElementTest.class.getSimpleName());
                 frame.getContentPane().add(new TabbedPaneDemo(), BorderLayout.CENTER);
@@ -58,9 +61,11 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -74,7 +79,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
         AssertJUnit.assertEquals("1", tabbedPane.getAttribute("selectedIndex"));
     }
 
-    @Test(expectedExceptions = { RuntimeException.class }) public void selectAnInvalidTab() throws Throwable {
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void selectAnInvalidTab() throws Throwable {
         IJavaElement tabbedPane = driver.findElementByTagName("tabbed-pane");
         AssertJUnit.assertEquals("0", tabbedPane.getAttribute("selectedIndex"));
         marathon_select(tabbedPane, "Tab 21");
@@ -84,7 +90,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectTabWithNoText() {
         siw(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane tp = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 JComponent panel5 = makeTextPanel("Panel #5");
                 tp.addTab("", icon, panel5, "is a duplicate");
@@ -102,7 +109,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectTabWithNoIconAndText() {
         siw(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane tp = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 JComponent panel5 = makeTextPanel("Panel #5");
                 tp.addTab("", null, panel5, "is a duplicate");
@@ -120,7 +128,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectDuplicateTab() {
         siw(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane tp = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 JComponent panel5 = makeTextPanel("Panel #5");
                 tp.addTab("Tab 2", icon, panel5, "is a duplicate");
@@ -141,7 +150,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void selectTabWithMultipleDuplicates() {
         siw(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane tp = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tp.addTab("Tab 2", icon, makeTextPanel("Panel #5"), "is a duplicate");
                 tp.addTab("Tab 2", icon, makeTextPanel("Panel #6"), "is a duplicate");
@@ -191,7 +201,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void assertContentWithDuplicates() {
         IJavaElement tabbedPane = driver.findElementByTagName("tabbed-pane");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane tp = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tp.setTitleAt(2, "Tab 2");
             }
@@ -202,7 +213,8 @@ import net.sourceforge.marathon.testhelpers.ComponentUtils;
     public void assertContentWithMultipleDuplicates() {
         IJavaElement tabbedPane = driver.findElementByTagName("tabbed-pane");
         siw(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 JTabbedPane tp = (JTabbedPane) ComponentUtils.findComponent(JTabbedPane.class, frame);
                 tp.setTitleAt(2, "Tab 2");
                 tp.setTitleAt(3, "Tab 2");

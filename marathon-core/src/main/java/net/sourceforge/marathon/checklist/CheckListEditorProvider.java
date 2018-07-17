@@ -24,11 +24,13 @@ public class CheckListEditorProvider implements IEditorProvider {
 
     public static final Logger LOGGER = Logger.getLogger(CheckListEditorProvider.class.getName());
 
-    @Override public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
+    @Override
+    public IEditor get(boolean linenumbers, int startLineNumber, EditorType type, boolean withToolbar) {
         return new CheckListEditor();
     }
 
-    @Override public boolean supports(EditorType type) {
+    @Override
+    public boolean supports(EditorType type) {
         if (type == EditorType.CHECKLIST) {
             return true;
         }

@@ -40,21 +40,21 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
- 
+
 public class PaginationSample extends Application {
- 
+
     private Pagination pagination;
-    String[] fonts = new String[]{};
- 
+    String[] fonts = new String[] {};
+
     public static void main(String[] args) throws Exception {
         launch(args);
     }
- 
+
     public int itemsPerPage() {
         return 15;
     }
- 
-    public VBox createPage(int pageIndex) {        
+
+    public VBox createPage(int pageIndex) {
         VBox box = new VBox(5);
         int page = pageIndex * itemsPerPage();
         for (int i = page; i < page + itemsPerPage(); i++) {
@@ -63,13 +63,13 @@ public class PaginationSample extends Application {
         }
         return box;
     }
- 
+
     @Override
     public void start(final Stage stage) throws Exception {
         fonts = Font.getFamilies().toArray(fonts);
-        
-        pagination = new Pagination(fonts.length/itemsPerPage(), 0);
-        pagination.getStyleClass().add(Pagination.STYLE_CLASS_BULLET);       
+
+        pagination = new Pagination(fonts.length / itemsPerPage(), 0);
+        pagination.getStyleClass().add(Pagination.STYLE_CLASS_BULLET);
         pagination.setPageFactory((Integer pageIndex) -> createPage(pageIndex));
         AnchorPane anchor = new AnchorPane();
         AnchorPane.setTopAnchor(pagination, 10.0);

@@ -13,7 +13,9 @@ public class RFXTextFieldTreeTableCell extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @SuppressWarnings("unchecked") @Override public String _getValue() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String _getValue() {
         TextFieldTreeTableCell<?, ?> cell = (TextFieldTreeTableCell<?, ?>) node;
         @SuppressWarnings("rawtypes")
         StringConverter converter = cell.getConverter();

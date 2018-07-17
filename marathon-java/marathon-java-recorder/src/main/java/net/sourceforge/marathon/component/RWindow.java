@@ -35,7 +35,8 @@ public class RWindow extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public JSONObject findContextHeirarchy() {
+    @Override
+    public JSONObject findContextHeirarchy() {
         return findContextHeirarchy((Container) component);
     }
 

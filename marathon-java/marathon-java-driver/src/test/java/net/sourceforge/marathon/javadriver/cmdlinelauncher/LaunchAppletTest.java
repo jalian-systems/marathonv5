@@ -33,7 +33,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
-@Test public class LaunchAppletTest {
+@Test
+public class LaunchAppletTest {
 
     private JavaDriver driver;
 
@@ -47,7 +48,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         driver = new JavaDriver(profile);
     }
 
-    @AfterMethod public void quitDriver() {
+    @AfterMethod
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();
         }
@@ -70,7 +72,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         createDriver("Applet Viewer: SwingSet3Init.class");
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
         new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }
@@ -90,7 +93,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         createDriver(null);
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
         new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }
@@ -110,7 +114,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         createDriver("/.*SwingSet3Init.class");
         driver.switchTo().window("Applet Viewer: SwingSet3Init.class");
         new WebDriverWait(driver, 10).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
                 return buttons.size() > 0;
             }

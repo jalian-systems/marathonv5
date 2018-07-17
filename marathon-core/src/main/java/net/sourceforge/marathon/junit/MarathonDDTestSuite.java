@@ -62,11 +62,13 @@ public class MarathonDDTestSuite extends TestSuite implements Test {
         return filename.substring(0, filename.length() - 3);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return name;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getName();
     }
 
@@ -74,7 +76,8 @@ public class MarathonDDTestSuite extends TestSuite implements Test {
         return file;
     }
 
-    @Override public void setName(String name) {
+    @Override
+    public void setName(String name) {
         Project.setTestName(name, file);
     }
 

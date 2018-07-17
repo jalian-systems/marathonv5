@@ -32,11 +32,13 @@ public class RFXTitledPane extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseButton1Pressed(MouseEvent me) {
+    @Override
+    protected void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick(this, me);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getTitledPaneText((TitledPane) node);
     }
 }

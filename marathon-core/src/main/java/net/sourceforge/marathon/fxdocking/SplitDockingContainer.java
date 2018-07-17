@@ -69,19 +69,23 @@ public class SplitDockingContainer extends SplitPane implements IDockingContaine
         setDividerPositions(proportion);
     }
 
-    @Override public void remove(Dockable dockable) {
+    @Override
+    public void remove(Dockable dockable) {
         remove(dockable.getComponent());
     }
 
-    @Override public void split(Dockable base, Dockable dockable, Split position, double proportion) {
+    @Override
+    public void split(Dockable base, Dockable dockable, Split position, double proportion) {
         throw new RuntimeException("Not expected to reach here...");
     }
 
-    @Override public void tab(Dockable base, Dockable dockable, int order, boolean select) {
+    @Override
+    public void tab(Dockable base, Dockable dockable, int order, boolean select) {
         throw new RuntimeException("Not expected to reach here...");
     }
 
-    @Override public void remove(Node container) {
+    @Override
+    public void remove(Node container) {
         container.getProperties().remove(DockingDesktop.DOCKING_CONTAINER);
         getItems().remove(container);
         if (getItems().size() == 0) {
@@ -89,7 +93,8 @@ public class SplitDockingContainer extends SplitPane implements IDockingContaine
         }
     }
 
-    @Override public void replace(Node base, INewDockingContainer indc) {
+    @Override
+    public void replace(Node base, INewDockingContainer indc) {
         double[] dividerPositions = getDividerPositions();
         ObservableList<Node> items = getItems();
         int indexOf = items.indexOf(base);
@@ -98,14 +103,16 @@ public class SplitDockingContainer extends SplitPane implements IDockingContaine
         setDividerPositions(dividerPositions);
     }
 
-    @Override public void getDockables(List<DockableState> dockables) {
+    @Override
+    public void getDockables(List<DockableState> dockables) {
         ObservableList<Node> items = getItems();
         for (Node node : items) {
             ((IDockingContainer) node).getDockables(dockables);
         }
     }
 
-    @Override public void debugPrint(String indent) {
+    @Override
+    public void debugPrint(String indent) {
         System.out.println(indent + "split(" + getProperties().get(DockingDesktop.DOCKING_CONTAINER) + ")");
         ObservableList<Node> items = getItems();
         for (Node node : items) {

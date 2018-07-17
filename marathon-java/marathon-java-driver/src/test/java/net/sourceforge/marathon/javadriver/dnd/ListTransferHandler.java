@@ -27,14 +27,16 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.TransferHandler;
 
-@SuppressWarnings({ "unchecked", "rawtypes" }) public class ListTransferHandler extends TransferHandler {
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class ListTransferHandler extends TransferHandler {
     private static final long serialVersionUID = 1L;
 
     private int[] indices = null;
     private int addIndex = -1; // Location where items were added
     private int addCount = 0; // Number of items added.
 
-    @Override public boolean canImport(TransferHandler.TransferSupport info) {
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport info) {
         // Check for String flavor
         if (!info.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             return false;
@@ -42,15 +44,18 @@ import javax.swing.TransferHandler;
         return true;
     }
 
-    @Override protected Transferable createTransferable(JComponent c) {
+    @Override
+    protected Transferable createTransferable(JComponent c) {
         return new StringSelection(exportString(c));
     }
 
-    @Override public int getSourceActions(JComponent c) {
+    @Override
+    public int getSourceActions(JComponent c) {
         return TransferHandler.COPY_OR_MOVE;
     }
 
-    @Override public boolean importData(TransferHandler.TransferSupport info) {
+    @Override
+    public boolean importData(TransferHandler.TransferSupport info) {
         if (!info.isDrop()) {
             return false;
         }
@@ -79,7 +84,8 @@ import javax.swing.TransferHandler;
         return true;
     }
 
-    @Override protected void exportDone(JComponent c, Transferable data, int action) {
+    @Override
+    protected void exportDone(JComponent c, Transferable data, int action) {
         cleanup(c, action == TransferHandler.MOVE);
     }
 

@@ -63,12 +63,14 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
         initComponents();
     }
 
-    @Override protected void initialize(Stage stage) {
+    @Override
+    protected void initialize(Stage stage) {
         super.initialize(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override protected Parent getContentPane() {
+    @Override
+    protected Parent getContentPane() {
         addButtonsToVerticalButtonBar();
         BorderPane content = new BorderPane();
         content.getStyleClass().add("run-history-stage");
@@ -82,7 +84,8 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
         VBox.setVgrow(historyView, Priority.ALWAYS);
         historyView.setItems(FXCollections.observableArrayList(runHistoryInfo.getTests()));
         historyView.setCellFactory(new Callback<ListView<JSONObject>, ListCell<JSONObject>>() {
-            @Override public ListCell<JSONObject> call(ListView<JSONObject> param) {
+            @Override
+            public ListCell<JSONObject> call(ListView<JSONObject> param) {
                 return new HistoryStateCell();
             }
         });
@@ -117,12 +120,14 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
         dispose();
     }
 
-    @Override protected void setDefaultButton() {
+    @Override
+    protected void setDefaultButton() {
         doneButton.setDefaultButton(true);
     }
 
     public class HistoryStateCell extends ListCell<JSONObject> {
-        @Override protected void updateItem(JSONObject item, boolean empty) {
+        @Override
+        protected void updateItem(JSONObject item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && !empty) {
                 setGraphic(getIcon(State.valueOf(item.getString("state"))));
@@ -149,7 +154,8 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
     final class TestNameHandler implements IInputHanler {
         private String testName;
 
-        @Override public void handleInput(String name) {
+        @Override
+        public void handleInput(String name) {
             this.testName = name;
         }
 

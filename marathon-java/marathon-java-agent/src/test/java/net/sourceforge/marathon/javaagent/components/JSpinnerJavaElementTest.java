@@ -39,14 +39,17 @@ import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.Wait;
 
-@Test public class JSpinnerJavaElementTest extends JavaElementTest {
+@Test
+public class JSpinnerJavaElementTest extends JavaElementTest {
 
     private IJavaAgent driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 JSpinner listSpinner = createListSpinner();
@@ -96,9 +99,11 @@ import net.sourceforge.marathon.javaagent.Wait;
         return dateSpinner;
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -123,7 +128,8 @@ import net.sourceforge.marathon.javaagent.Wait;
         marathon_select(listSpinner, "Mar/");
         driver.findElementByName("date-spinner").click();
         new Wait("ListSpinner value was not reset") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 String attribute = listSpinner.getAttribute("text");
                 return attribute.equals("January");
             }

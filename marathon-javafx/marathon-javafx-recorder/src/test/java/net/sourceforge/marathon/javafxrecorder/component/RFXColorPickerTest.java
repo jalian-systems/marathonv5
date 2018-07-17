@@ -31,7 +31,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXColorPickerTest extends RFXComponentTest {
 
-    @Test public void selectColor() {
+    @Test
+    public void selectColor() {
         ColorPicker colorPicker = (ColorPicker) getPrimaryStage().getScene().getRoot().lookup(".color-picker");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -45,7 +46,8 @@ public class RFXColorPickerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("#ea9c2c", recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         ColorPicker colorPicker = (ColorPicker) getPrimaryStage().getScene().getRoot().lookup(".color-picker");
         LoggingRecorder lr = new LoggingRecorder();
         List<String> text = new ArrayList<>();
@@ -56,14 +58,16 @@ public class RFXColorPickerTest extends RFXComponentTest {
             text.add(rfxColorPicker._getText());
         });
         new Wait("Waiting for color picker text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("#ea9c2c", text.get(0));
     }
 
-    @Test public void colorChooserWithColorName() {
+    @Test
+    public void colorChooserWithColorName() {
         ColorPicker colorPicker = (ColorPicker) getPrimaryStage().getScene().getRoot().lookup(".color-picker");
         LoggingRecorder lr = new LoggingRecorder();
         Platform.runLater(() -> {
@@ -77,7 +81,8 @@ public class RFXColorPickerTest extends RFXComponentTest {
         AssertJUnit.assertEquals("#ff0000", recording.getParameters()[0]);
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ColorPickerSample();
     }
 }

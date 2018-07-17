@@ -40,7 +40,8 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JavaAgentTest {
+@Test
+public class JavaAgentTest {
 
     private IJavaAgent driver;
     protected JFrame frame;
@@ -50,9 +51,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
     protected JMenuItem exitItem;
     protected JDialog d2;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 JMenuBar menuBar = new JMenuBar();
@@ -69,9 +72,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
                 button = new JButton("Click Me!!");
                 box.add(button);
                 new Timer().schedule(new TimerTask() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         SwingUtilities.invokeLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 JButton button1 = new JButton("Click Me Delayed!!");
                                 button1.setName("click-me-delayed");
                                 frame.getContentPane().add(button1);
@@ -89,9 +94,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver = new JavaAgent();
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -104,7 +111,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void getWindowHandles() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 d2 = new JDialog(frame, false);
                 d2.setTitle("My Dialog 2");
                 d2.pack();
@@ -114,7 +122,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         Collection<String> windowHandles = driver.getWindowHandles();
         AssertJUnit.assertEquals(2, windowHandles.size());
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 d2.dispose();
             }
         });
@@ -126,7 +135,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void switchTo() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 d2 = new JDialog(frame, false);
                 d2.setName("dialog-2");
                 d2.setTitle("My Dialog 2");
@@ -142,7 +152,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         driver.switchTo().window("dialog-2");
         AssertJUnit.assertNotNull(driver.findElementByName("click-me-2"));
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 d2.dispose();
             }
         });
@@ -150,7 +161,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void staleElementThrowsError() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 d2 = new JDialog(frame, false);
                 d2.setName("dialog-2");
                 d2.setTitle("My Dialog 2");
@@ -168,7 +180,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         AssertJUnit.assertNotNull(e);
         driver.switchTo().window("dialog-1");
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 d2.dispose();
             }
         });

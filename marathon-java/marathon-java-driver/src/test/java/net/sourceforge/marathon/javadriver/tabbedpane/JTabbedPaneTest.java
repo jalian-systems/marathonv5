@@ -36,14 +36,17 @@ import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
-@Test public class JTabbedPaneTest {
+@Test
+public class JTabbedPaneTest {
 
     private WebDriver driver;
     protected JFrame frame;
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame(JTabbedPaneTest.class.getSimpleName());
                 frame.setName("frame-" + JTabbedPaneTest.class.getSimpleName());
                 frame.getContentPane().add(new TabbedPaneDemo(), BorderLayout.CENTER);
@@ -54,9 +57,11 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         });
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -96,7 +101,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void isDisplayedTabItem() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setSize(100, frame.getHeight());
             }
         });
@@ -104,7 +110,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         final List<WebElement> tabs = driver.findElements(By.cssSelector("tabbed-pane::nth-tab(4)"));
         AssertJUnit.assertEquals(1, tabs.size());
         new Wait("Wait for tab4 to non-displayable") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !tabs.get(0).isDisplayed();
             }
         };
@@ -116,7 +123,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
 
     public void clickTabItem() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setSize(100, frame.getHeight());
             }
         });
@@ -124,7 +132,8 @@ import net.sourceforge.marathon.testhelpers.MissingException;
         final List<WebElement> tabs = driver.findElements(By.cssSelector("tabbed-pane::nth-tab(4)"));
         AssertJUnit.assertEquals(1, tabs.size());
         new Wait("Wait for tab4 to non-displayable") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return !tabs.get(0).isDisplayed();
             }
         };

@@ -34,7 +34,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 
-@Test public class LaunchWebStartTest {
+@Test
+public class LaunchWebStartTest {
 
     private JavaDriver driver;
 
@@ -46,7 +47,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
         driver = new JavaDriver(profile);
     }
 
-    @AfterMethod public void quitDriver() {
+    @AfterMethod
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();
         }
@@ -55,7 +57,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public void getDriverWithProfile() throws Throwable {
         createDriver("SwingSet3");
         new WebDriverWait(driver, 60).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 try {
                     driver.switchTo().window("SwingSet3");
                 } catch (NoSuchWindowException e) {
@@ -76,7 +79,8 @@ import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
     public void getDriverWithProfileUsingRegexForTitle() throws Throwable {
         createDriver("/S.*3");
         new WebDriverWait(driver, 60).until(new Function<WebDriver, Boolean>() {
-            @Override public Boolean apply(WebDriver driver) {
+            @Override
+            public Boolean apply(WebDriver driver) {
                 try {
                     driver.switchTo().window("SwingSet3");
                 } catch (NoSuchWindowException e) {

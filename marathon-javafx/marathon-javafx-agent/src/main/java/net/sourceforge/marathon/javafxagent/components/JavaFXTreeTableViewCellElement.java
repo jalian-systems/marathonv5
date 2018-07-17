@@ -66,18 +66,21 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return getTextForTreeTableNode(treeTableView, treeItem);
     }
 
-    @Override public IJavaFXElement getParent() {
+    @Override
+    public IJavaFXElement getParent() {
         return parent;
     }
 
-    @Override public String createHandle() {
+    @Override
+    public String createHandle() {
         JSONObject pa = new JSONObject().put("cell", new JSONArray().put(path).put(getViewColumnName()));
         JSONObject o = new JSONObject().put("selector", "select-by-properties").put("parameters",
                 new JSONArray().put(new JSONObject().put("select", pa.toString()).toString()));
         return parent.getHandle() + "#" + o.toString();
     }
 
-    @Override public Node getPseudoComponent() {
+    @Override
+    public Node getPseudoComponent() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
         int rowIndex = getTreeTableNodeIndex(treeTableView, path);
         treeTableView.scrollToColumnIndex(viewColumn);
@@ -85,7 +88,8 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return getCellAt(treeTableView, rowIndex, viewColumn);
     }
 
-    @Override public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
+    @Override
+    public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
         int rowIndex = getTreeTableNodeIndex(treeTableView, path);
         if (getVisibleCellAt(treeTableView, rowIndex, viewColumn) == null) {
@@ -98,7 +102,8 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return super.getByPseudoElement(selector, params);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) private Node getEditor() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Node getEditor() {
         TreeTableCell cell = (TreeTableCell) getPseudoComponent();
         cell.getTreeTableView().edit(cell.getTreeTableRow().getIndex(), cell.getTableColumn());
         Node cellComponent = cell.getGraphic();
@@ -131,13 +136,15 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return path;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) getPseudoComponent();
         JavaFXElement cellElement = (JavaFXElement) JavaFXElementFactory.createElement(cell, driver, window);
         return cellElement._getValue();
     }
 
-    @Override public Point2D _getMidpoint() {
+    @Override
+    public Point2D _getMidpoint() {
         Node cell = getPseudoComponent();
         Bounds boundsInParent = cell.getBoundsInParent();
         double x = boundsInParent.getWidth() / 2;
@@ -145,7 +152,8 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return cell.getParent().localToParent(cell.localToParent(x, y));
     }
 
-    @Override public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
         Node cell = getPseudoComponent();
         target = getTextObj((TreeTableCell<?, ?>) cell);
         Point2D targetXY = target.localToParent(xoffset, yoffset);
@@ -162,7 +170,8 @@ public class JavaFXTreeTableViewCellElement extends JavaFXElement implements IPs
         return cell;
     }
 
-    @Override public Object _makeVisible() {
+    @Override
+    public Object _makeVisible() {
         TreeTableView<?> treeTableView = (TreeTableView<?>) getComponent();
         TreeTableCell<?, ?> cell = (TreeTableCell<?, ?>) getPseudoComponent();
         if (cell == null) {

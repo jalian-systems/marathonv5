@@ -51,7 +51,8 @@ public class Marathon {
 
     public interface ICloseHandler extends Runnable {
 
-        @Override public abstract void run();
+        @Override
+        public abstract void run();
 
         public abstract void setRunNeeded();
 
@@ -71,7 +72,8 @@ public class Marathon {
          * 
          * @see net.sourceforge.marathon.player.ICloseHandler#run()
          */
-        @Override public void run() {
+        @Override
+        public void run() {
             if (!runNeeded) {
                 return;
             }
@@ -86,17 +88,21 @@ public class Marathon {
          * 
          * @see net.sourceforge.marathon.player.ICloseHandler#setRunNeeded()
          */
-        @Override public void setRunNeeded() {
+        @Override
+        public void setRunNeeded() {
             this.runNeeded = true;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "Window: " + title + "(" + runNeeded + ")";
         }
     }
 
-    @SuppressWarnings("unused") private static final Logger logger = Logger.getLogger(Marathon.class.getName());
-    @SuppressWarnings("unused") private static final ILogger runtimeLogger = RuntimeLogger.getRuntimeLogger();
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger.getLogger(Marathon.class.getName());
+    @SuppressWarnings("unused")
+    private static final ILogger runtimeLogger = RuntimeLogger.getRuntimeLogger();
 
     protected INamingStrategy namingStrategy;
     private HashMap<Integer, Keys> keyMapping;
@@ -366,7 +372,7 @@ public class Marathon {
     public void assertEqualsX(ComponentId id, String property, Object expected, Object actual, SourceLine[] bt, boolean equal) {
         assertions.add(new UsedAssertion(id, property, expected == null ? "null" : expected.toString(),
                 actual == null ? "null" : actual.toString(), equal));
-        if(equal)
+        if (equal)
             return;
         String message = "Assertion failed for property: " + property + "on component = " + id.toString() + "\n     expected = `"
                 + expected + "'\n     actual = `" + actual + "'";
@@ -450,7 +456,8 @@ public class Marathon {
         if (captureDir != null) {
             File dir = new File(captureDir);
             File[] files = dir.listFiles(new FilenameFilter() {
-                @Override public boolean accept(File dir, String name) {
+                @Override
+                public boolean accept(File dir, String name) {
                     return name.matches(".*error[0-9]*.png");
                 }
             });

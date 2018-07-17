@@ -33,7 +33,8 @@ public class JavaFXDatePickerElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         DatePicker datePicker = (DatePicker) getComponent();
         if (!value.equals("")) {
             try {
@@ -47,7 +48,8 @@ public class JavaFXDatePickerElement extends JavaFXElement {
         return false;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getDatePickerText((DatePicker) getComponent(), ((DatePicker) getComponent()).getValue());
     }
 }

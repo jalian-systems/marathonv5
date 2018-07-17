@@ -54,7 +54,8 @@ public abstract class DeviceTest {
             super(message);
         }
 
-        @Override public void wait(String message, long timeoutInMilliseconds, long intervalInMilliseconds) {
+        @Override
+        public void wait(String message, long timeoutInMilliseconds, long intervalInMilliseconds) {
             timeoutInMilliseconds = OVERRIDDEN_TIMEOUT;
             long lastTimeInMillis = System.currentTimeMillis();
             while (true) {
@@ -91,7 +92,8 @@ public abstract class DeviceTest {
             return keystrokes.size();
         }
 
-        @Override public synchronized String toString() {
+        @Override
+        public synchronized String toString() {
             return keystrokes.toString();
         }
     }
@@ -130,7 +132,8 @@ public abstract class DeviceTest {
         this.type = type;
     }
 
-    @BeforeMethod public void showDialog() throws Throwable {
+    @BeforeMethod
+    public void showDialog() throws Throwable {
         driver = Device.getDevice(type);
         altDown = false;
         controlDown = false;
@@ -150,7 +153,8 @@ public abstract class DeviceTest {
         maxClickCount = -1;
 
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 dialog = new JDialog();
                 JMenuBar menuBar = new JMenuBar();
                 menu = new JMenu("File");
@@ -158,7 +162,8 @@ public abstract class DeviceTest {
                 menuBar.add(menu);
                 exitItem = new JMenuItem("Exit");
                 exitItem.addActionListener(new ActionListener() {
-                    @Override public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         exitItemCalled = true;
                     }
                 });
@@ -169,36 +174,44 @@ public abstract class DeviceTest {
                 textField = new JTextField("");
                 textField.setName("text");
                 textField.addKeyListener(new KeyAdapter() {
-                    @Override public void keyPressed(KeyEvent e) {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
                         kss.add(KeyStroke.getKeyStrokeForEvent(e));
                     }
 
-                    @Override public void keyReleased(KeyEvent e) {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
                         kss.add(KeyStroke.getKeyStrokeForEvent(e));
                     }
 
-                    @Override public void keyTyped(KeyEvent e) {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
                         kss.add(KeyStroke.getKeyStrokeForEvent(e));
                     }
                 });
                 textField.addMouseListener(new MouseListener() {
-                    @Override public void mousePressed(MouseEvent e) {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
                         tfMouseText.append(getModifiersExText(e.getModifiersEx()) + "pressed ");
                     }
 
-                    @Override public void mouseReleased(MouseEvent e) {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
                         tfMouseText.append(getModifiersExText(e.getModifiersEx()) + "released ");
                     }
 
-                    @Override public void mouseEntered(MouseEvent e) {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
                         tfMouseText.append(getModifiersExText(e.getModifiersEx()) + "entered ");
                     }
 
-                    @Override public void mouseExited(MouseEvent e) {
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                         tfMouseText.append(getModifiersExText(e.getModifiersEx()) + "exited ");
                     }
 
-                    @Override public void mouseClicked(MouseEvent e) {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
                         textFieldClicked = true;
                         tfMouseText.append(getModifiersExText(e.getModifiersEx()) + "clicked ");
                     }
@@ -207,7 +220,8 @@ public abstract class DeviceTest {
                 button = new JButton("Click Me!!");
                 button.setName("click-me");
                 button.addMouseListener(new MouseListener() {
-                    @Override public void mouseClicked(MouseEvent e) {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
                         String s = "clicked";
                         if (e.isPopupTrigger()) {
                             s = "contextclicked";
@@ -224,7 +238,8 @@ public abstract class DeviceTest {
                         maxClickCount = e.getClickCount();
                     }
 
-                    @Override public void mousePressed(MouseEvent e) {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
                         buttonClicked = false;
                         buttonPressed = true;
                         pressedButton = e.getButton();
@@ -237,17 +252,20 @@ public abstract class DeviceTest {
                         mouseText.append(getModifiersExText(e.getModifiersEx()) + "pressed ");
                     }
 
-                    @Override public void mouseReleased(MouseEvent e) {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
                         buttonReleased = true;
                         popupTriggerReleased = e.isPopupTrigger();
                         mouseText.append(getModifiersExText(e.getModifiersEx()) + "released ");
                     }
 
-                    @Override public void mouseEntered(MouseEvent e) {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
                         mouseText.append(getModifiersExText(e.getModifiersEx()) + "entered ");
                     }
 
-                    @Override public void mouseExited(MouseEvent e) {
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                         mouseText.append(getModifiersExText(e.getModifiersEx()) + "exited ");
                     }
                 });
@@ -269,9 +287,11 @@ public abstract class DeviceTest {
         EventQueueWait.empty();
     }
 
-    @AfterMethod public void disposeDialog() throws Throwable {
+    @AfterMethod
+    public void disposeDialog() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 dialog.dispose();
             }
         });

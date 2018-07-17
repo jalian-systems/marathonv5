@@ -53,7 +53,8 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
 
-@Test(enabled = false) public class NativeEventsTest {
+@Test(enabled = false)
+public class NativeEventsTest {
     private WebDriver driver;
 
     protected JFrame frame;
@@ -73,7 +74,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     private WebElement weTextArea;
 
-    @BeforeMethod public void showDialog(Method method) throws Throwable {
+    @BeforeMethod
+    public void showDialog(Method method) throws Throwable {
         testName = method.getName();
         SwingUtilities.invokeAndWait(new Runnable() {
 
@@ -117,7 +119,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
                 return mt;
             }
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame = new JFrame("My Dialog");
                 frame.setName("dialog-1");
                 JPanel box = new JPanel(new BorderLayout());
@@ -126,39 +129,47 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
                 box.add(button, BorderLayout.NORTH);
                 button.setName("click-me");
                 button.addActionListener(new ActionListener() {
-                    @Override public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         buttonClicked = true;
                     }
                 });
                 button.addMouseMotionListener(new MouseMotionListener() {
 
-                    @Override public void mouseMoved(MouseEvent e) {
+                    @Override
+                    public void mouseMoved(MouseEvent e) {
                         captureEvent(e, "moved");
                     }
 
-                    @Override public void mouseDragged(MouseEvent e) {
+                    @Override
+                    public void mouseDragged(MouseEvent e) {
                         captureEvent(e, "dragged");
                     }
                 });
 
                 button.addMouseListener(new MouseListener() {
-                    @Override public void mouseReleased(MouseEvent e) {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
                         captureEvent(e, "released");
                     }
 
-                    @Override public void mousePressed(MouseEvent e) {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
                         captureEvent(e, "pressed");
                     }
 
-                    @Override public void mouseExited(MouseEvent e) {
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                         captureEvent(e, "exited");
                     }
 
-                    @Override public void mouseEntered(MouseEvent e) {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
                         captureEvent(e, "entered");
                     }
 
-                    @Override public void mouseClicked(MouseEvent e) {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
                         captureEvent(e, "clicked");
                     }
 
@@ -169,15 +180,18 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
                 textField = new JTextField();
                 textField.setName("enter-text");
                 textField.addKeyListener(new KeyListener() {
-                    @Override public void keyTyped(KeyEvent e) {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
                         captureEvent(e, "typed");
                     }
 
-                    @Override public void keyReleased(KeyEvent e) {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
                         captureEvent(e, "released");
                     }
 
-                    @Override public void keyPressed(KeyEvent e) {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
                         captureEvent(e, "pressed");
                     }
                 });
@@ -195,9 +209,11 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     }
 
-    @AfterMethod public void disposeDriver() throws Throwable {
+    @AfterMethod
+    public void disposeDriver() throws Throwable {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -255,7 +271,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         robot.mousePress(InputEvent.BUTTON1_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -283,7 +300,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private void checkAltRightClickEvent(int eventToCheck) throws InterruptedException, InvocationTargetException, AWTException {
         events = eventToCheck;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -302,7 +320,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mouseRelease(InputEvent.BUTTON3_MASK);
         r.keyRelease(KeyEvent.VK_ALT);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -335,7 +354,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     private void checkDoubleClickEvent(int eventToCheck) throws InterruptedException, InvocationTargetException, AWTException {
         events = eventToCheck;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -355,7 +375,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mousePress(InputEvent.BUTTON1_MASK);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().contains("(2");
             }
         }.wait("Waiting for actionsArea failed?");
@@ -374,7 +395,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void enteredGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_ENTERED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -393,7 +415,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         r.keyRelease(KeyEvent.VK_ALT);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -413,7 +436,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void exitedGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_EXITED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -437,7 +461,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         r.keyRelease(KeyEvent.VK_ALT);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -451,7 +476,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void pressGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_PRESSED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -468,7 +494,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mousePress(InputEvent.BUTTON1_MASK);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -492,7 +519,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void releaseGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_RELEASED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -509,7 +537,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mousePress(InputEvent.BUTTON1_MASK);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -533,7 +562,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void rightClickGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_CLICKED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -550,7 +580,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mousePress(InputEvent.BUTTON3_MASK);
         r.mouseRelease(InputEvent.BUTTON3_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -570,7 +601,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void singleClickGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_CLICKED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -587,7 +619,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mousePress(InputEvent.BUTTON1_MASK);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -611,7 +644,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void movedGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_MOVED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -634,7 +668,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mousePress(InputEvent.BUTTON1_MASK);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -655,7 +690,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
     public void draggedGeneratesSameEvents() throws Throwable {
         events = MouseEvent.MOUSE_DRAGGED;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -676,7 +712,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
         r.mouseMove(location2.x + size2.width / 2, location2.y + size2.height / 2);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -721,7 +758,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
             throws InterruptedException, InvocationTargetException, AWTException {
         events = eventToCheck;
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });
@@ -744,7 +782,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
             r.keyRelease(keysToPress[i]);
         }
         new EventQueueWait() {
-            @Override public boolean till() {
+            @Override
+            public boolean till() {
                 return actionsArea.getText().length() > 0;
             }
         }.wait("Waiting for actionsArea failed?");
@@ -766,7 +805,8 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 
     private void tclear() throws InterruptedException, InvocationTargetException {
         SwingUtilities.invokeAndWait(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 actionsArea.setText("");
             }
         });

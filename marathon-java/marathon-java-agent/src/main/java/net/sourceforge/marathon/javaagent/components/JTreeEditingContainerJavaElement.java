@@ -31,7 +31,8 @@ public class JTreeEditingContainerJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         clear();
         sendKeys(value, JavaAgentKeys.ENTER);
         return true;

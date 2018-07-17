@@ -30,7 +30,8 @@ import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recordi
 
 public class RFXHTMLEditorTest extends RFXComponentTest {
 
-    @Test public void select() {
+    @Test
+    public void select() {
         HTMLEditor editor = (HTMLEditor) getPrimaryStage().getScene().getRoot().lookup(".html-editor");
         LoggingRecorder lr = new LoggingRecorder();
         String text = "This is a test text";
@@ -46,7 +47,8 @@ public class RFXHTMLEditorTest extends RFXComponentTest {
         AssertJUnit.assertEquals(htmlText, recording.getParameters()[0]);
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         HTMLEditor editor = (HTMLEditor) getPrimaryStage().getScene().getRoot().lookup(".html-editor");
         LoggingRecorder lr = new LoggingRecorder();
         String text = "This is a test text";
@@ -59,14 +61,16 @@ public class RFXHTMLEditorTest extends RFXComponentTest {
             attributeText.add(rfxhtmlEditor.getAttribute("text"));
         });
         new Wait("Waiting for html editor text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return attributeText.size() > 0;
             }
         };
         AssertJUnit.assertEquals(htmlText, attributeText.get(0));
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new HTMLEditorSample();
     }
 }

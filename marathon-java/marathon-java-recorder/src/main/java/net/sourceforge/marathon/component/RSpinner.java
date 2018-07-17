@@ -37,11 +37,13 @@ public class RSpinner extends RComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override public void focusGained(RComponent prev) {
+    @Override
+    public void focusGained(RComponent prev) {
         oldValue = getSpinnerText();
     }
 
-    @Override public void focusLost(RComponent next) {
+    @Override
+    public void focusLost(RComponent next) {
         String newValue = getSpinnerText();
         if (oldValue == null || !oldValue.equals(newValue)) {
             recorder.recordSelect(this, newValue);
@@ -62,13 +64,16 @@ public class RSpinner extends RComponent {
         return null;
     }
 
-    @Override public String getText() {
+    @Override
+    public String getText() {
         return getSpinnerText();
     }
 
-    @Override protected void mousePressed(MouseEvent me) {
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 
-    @Override protected void keyPressed(KeyEvent ke) {
+    @Override
+    protected void keyPressed(KeyEvent ke) {
     }
 }

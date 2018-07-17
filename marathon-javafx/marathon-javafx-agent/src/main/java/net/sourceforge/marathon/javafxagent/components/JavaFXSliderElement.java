@@ -31,12 +31,14 @@ public class JavaFXSliderElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         ((Slider) node).setValue(Double.valueOf(Double.parseDouble(value)));
         return true;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getSliderValue((Slider) getComponent());
     }
 }

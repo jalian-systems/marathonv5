@@ -73,7 +73,8 @@ public class SimpleListViewScrollSample extends Sample {
 
     public static class SimpleListViewScrollSampleApp extends Application {
 
-        @Override public void start(Stage primaryStage) throws Exception {
+        @Override
+        public void start(Stage primaryStage) throws Exception {
             final ListView<String> listView = new ListView<String>();
             listView.setItems(FXCollections.observableArrayList("Row 1", "Row 2", "Long Row 3", "Row 4", "Row 5", "Row 6", "Row 7",
                     "Row 8", "Row 9", "Row 10", "Row 11", "Row 12", "Row 13", "Row 14", "Row 15", "Row 16", "Row 17", "Row 18",
@@ -98,7 +99,8 @@ public class SimpleListViewScrollSample extends Sample {
                 ListCell listCell = null;
                 if (cellFactory == null) {
                     listCell = new ListCell() {
-                        @Override public void updateItem(Object item, boolean empty) {
+                        @Override
+                        public void updateItem(Object item, boolean empty) {
                             super.updateItem(item, empty);
 
                             if (empty) {
@@ -139,7 +141,8 @@ public class SimpleListViewScrollSample extends Sample {
 
         private static <T> ListCell<T> createDefaultCellImpl() {
             return new ListCell<T>() {
-                @Override public void updateItem(T item, boolean empty) {
+                @Override
+                public void updateItem(T item, boolean empty) {
                     super.updateItem(item, empty);
 
                     if (empty) {

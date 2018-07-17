@@ -55,7 +55,8 @@ public abstract class AbstractSimpleAction extends ActionEvent implements EventH
         this.commandName = commandName;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "AbstractSimpleAction [name=" + name + ", description=" + description + ", mneumonic=" + mneumonic + ", commandName="
                 + commandName + "]";
     }
@@ -111,7 +112,8 @@ public abstract class AbstractSimpleAction extends ActionEvent implements EventH
         }
     }
 
-    @Override public abstract void handle(ActionEvent e);
+    @Override
+    public abstract void handle(ActionEvent e);
 
     public String getName() {
         return name;

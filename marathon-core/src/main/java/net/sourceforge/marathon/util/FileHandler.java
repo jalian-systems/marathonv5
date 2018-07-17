@@ -63,11 +63,13 @@ public class FileHandler implements IResourceHandler {
         this(new MarathonFileFilter(), nameChecker);
     }
 
-    @Override public void clearCurrentFile() {
+    @Override
+    public void clearCurrentFile() {
         setCurrentFile(null);
     }
 
-    @Override public File getCurrentFile() {
+    @Override
+    public File getCurrentFile() {
         return currentFile;
     }
 
@@ -109,7 +111,8 @@ public class FileHandler implements IResourceHandler {
         return null;
     }
 
-    @Override public boolean isModuleFile() {
+    @Override
+    public boolean isModuleFile() {
         for (File moduleDirectorie : moduleDirectories) {
             if (rootDirectory.equals(moduleDirectorie)) {
                 return true;
@@ -118,7 +121,8 @@ public class FileHandler implements IResourceHandler {
         return false;
     }
 
-    @Override public boolean isProjectFile() {
+    @Override
+    public boolean isProjectFile() {
         if (rootDirectory.equals(testDirectory) || rootDirectory.equals(fixtureDirectory)) {
             return true;
         }
@@ -130,16 +134,19 @@ public class FileHandler implements IResourceHandler {
         return false;
     }
 
-    @Override public boolean isTestFile() {
+    @Override
+    public boolean isTestFile() {
         return rootDirectory.equals(testDirectory);
     }
 
-    @Override public String readFile(File file) throws IOException {
+    @Override
+    public String readFile(File file) throws IOException {
         setCurrentFile(file.getCanonicalFile());
         return readFile();
     }
 
-    @Override public File save(String script, Window parent, String filename) throws IOException {
+    @Override
+    public File save(String script, Window parent, String filename) throws IOException {
         if (currentFile != null) {
             saveToFile(currentFile, script);
             return currentFile;
@@ -149,7 +156,8 @@ public class FileHandler implements IResourceHandler {
         }
     }
 
-    @Override public File saveAs(String script, Window parent, String filename) throws IOException {
+    @Override
+    public File saveAs(String script, Window parent, String filename) throws IOException {
         boolean saved = false;
         while (!saved) {
             File file = askForFile(parent, filename);
@@ -178,7 +186,8 @@ public class FileHandler implements IResourceHandler {
         return null;
     }
 
-    @Override public File saveTo(File file, String script) throws IOException {
+    @Override
+    public File saveTo(File file, String script) throws IOException {
         if (file != null) {
             setCurrentFile(file);
             saveToFile(currentFile, script);
@@ -186,7 +195,8 @@ public class FileHandler implements IResourceHandler {
         return file;
     }
 
-    @Override public void setCurrentDirectory(File directory) {
+    @Override
+    public void setCurrentDirectory(File directory) {
         try {
             rootDirectory = directory.getCanonicalFile();
         } catch (IOException e) {
@@ -268,7 +278,8 @@ public class FileHandler implements IResourceHandler {
         }
     }
 
-    @Override public String getMode(String fileName) {
+    @Override
+    public String getMode(String fileName) {
         if (fileName == null) {
             return "text";
         }

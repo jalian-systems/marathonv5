@@ -33,7 +33,8 @@ import net.sourceforge.marathon.javaagent.server.JavaServer;
 public class JavaAgentHook {
 
     public static final Logger LOGGER = Logger.getLogger(JavaAgentHook.class.getName());
-    @SuppressWarnings("unused") private static EventLogger eventLogger;
+    @SuppressWarnings("unused")
+    private static EventLogger eventLogger;
 
     protected static String windowTitle;
 
@@ -52,7 +53,8 @@ public class JavaAgentHook {
         final AWTEventListener listener = new AWTEventListener() {
             boolean done = false;
 
-            @Override public void eventDispatched(AWTEvent event) {
+            @Override
+            public void eventDispatched(AWTEvent event) {
                 if (done) {
                     return;
                 }
@@ -65,7 +67,8 @@ public class JavaAgentHook {
                 }
                 done = true;
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    @Override public Object run() {
+                    @Override
+                    public Object run() {
                         try {
                             LOGGER.info("JavaVersion: " + System.getProperty("java.version"));
                             LOGGER.info("JavaHome: " + System.getProperty("java.home"));

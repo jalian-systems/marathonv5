@@ -35,40 +35,47 @@ public class JavaFXColorPickerElementTest extends JavaFXElementTest {
     private JavaFXAgent driver;
     private IJavaFXElement colorpicker;
 
-    @BeforeMethod public void initializeDirver() {
+    @BeforeMethod
+    public void initializeDirver() {
         driver = new JavaFXAgent();
         colorpicker = driver.findElementByTagName(".color-picker");
     }
 
-    @Test public void selectColor() {
+    @Test
+    public void selectColor() {
         ColorPicker colorPickerNode = (ColorPicker) getPrimaryStage().getScene().getRoot().lookup(".color-picker");
         Platform.runLater(() -> colorpicker.marathon_select("#ff0000"));
         new Wait("Waiting for color to be set.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return colorPickerNode.getValue().toString().equals("0xff0000ff");
             }
         };
     }
 
-    @Test public void getText() {
+    @Test
+    public void getText() {
         List<String> text = new ArrayList<>();
         Platform.runLater(() -> {
             colorpicker.marathon_select("#ff0000");
             text.add(colorpicker.getAttribute("text"));
         });
         new Wait("Waiting for color picker text.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 return text.size() > 0;
             }
         };
         AssertJUnit.assertEquals("#ff0000", text.get(0));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class) public void colorPickerWithInvalidColorCode() {
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void colorPickerWithInvalidColorCode() {
         colorpicker.marathon_select("#67899");
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ColorPickerSample();
     }
 }

@@ -32,7 +32,8 @@ public class RFXProgressBar extends RFXComponent {
         super(source, omapConfig, point, recorder);
     }
 
-    @Override protected void mouseReleased(MouseEvent me) {
+    @Override
+    protected void mouseReleased(MouseEvent me) {
         ProgressBar progressBar = (ProgressBar) node;
         String currentValue = getProgressText(progressBar);
         if (currentValue != null && !currentValue.equals("-1")) {
@@ -40,7 +41,8 @@ public class RFXProgressBar extends RFXComponent {
         }
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getProgressText((ProgressBar) node);
     }
 }

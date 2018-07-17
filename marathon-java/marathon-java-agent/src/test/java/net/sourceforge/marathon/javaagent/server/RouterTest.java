@@ -21,7 +21,8 @@ import org.testng.annotations.Test;
 
 import fi.iki.elonen.NanoHTTPD.Method;
 
-@Test public class RouterTest {
+@Test
+public class RouterTest {
 
     public void findRoute() throws Throwable {
         JavaServer router = new JavaServer(1020);

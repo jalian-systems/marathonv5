@@ -63,7 +63,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
 
     public static final Logger LOGGER = Logger.getLogger(DefaultContextMenu.PlaceHolderTextField.class.getName());
 
-    @SuppressWarnings("serial") public static class PlaceHolderTextField extends JTextField {
+    @SuppressWarnings("serial")
+    public static class PlaceHolderTextField extends JTextField {
 
         private String placeholder;
 
@@ -71,7 +72,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
             this.placeholder = placeholder;
         }
 
-        @Override protected void paintComponent(final Graphics pG) {
+        @Override
+        protected void paintComponent(final Graphics pG) {
             super.paintComponent(pG);
 
             if (placeholder.length() == 0 || getText().length() > 0 || isFocusOwner()) {
@@ -109,8 +111,9 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
             }
         }
 
-        @Override public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-                boolean leaf, int row, boolean hasFocus) {
+        @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+                int row, boolean hasFocus) {
             JTextPane pane = new JTextPane();
             if (sel) {
                 pane.setBackground(bgSel);
@@ -148,7 +151,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         super(window, recorder, finder);
     }
 
-    @Override public Component getContent() {
+    @Override
+    public Component getContent() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         JSplitPane splitPane = getAssertionPanel();
@@ -163,13 +167,15 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         buttonPanel.setLayout(new GridLayout(1, 2));
         insertAssertionButton = UIUtils.createInsertAssertionButton();
         insertAssertionButton.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 recordAction(ASSERT_ACTION);
             }
         });
         insertWaitButton = UIUtils.createInsertWaitButton();
         insertWaitButton.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 recordAction(WAIT_ACTION);
             }
         });
@@ -189,15 +195,18 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             private Timer timer;
 
-            @Override public void removeUpdate(DocumentEvent e) {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
                 handleSearch(searchField.getText());
             }
 
-            @Override public void insertUpdate(DocumentEvent e) {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
                 handleSearch(searchField.getText());
             }
 
-            @Override public void changedUpdate(DocumentEvent e) {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
             }
 
             private void handleSearch(final String text) {
@@ -205,7 +214,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
                     timer.stop();
                 }
                 timer = new Timer(300, new ActionListener() {
-                    @Override public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         DefaultContextMenu.this.searchText = text;
                         ((DefaultTreeModel) assertionTreeModel.getTreeModel()).reload();
                         int n = text.split("\\.").length;
@@ -225,7 +235,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         assertionTreeModel.setPredicate(new Predicate<AssertionTreeNode>() {
             private LinkedList<AssertionTreeNode> nodeList = new LinkedList<AssertionTreeNode>();
 
-            @Override public boolean apply(AssertionTreeNode o) {
+            @Override
+            public boolean apply(AssertionTreeNode o) {
                 if (searchText == null || "".equals(searchText) || searchText.length() < 3) {
                     return true;
                 }
@@ -267,13 +278,15 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         assertionTree.setShowsRootHandles(true);
         assertionTree.setModel(getTreeModel());
         assertionTree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override public void valueChanged(TreeSelectionEvent e) {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
                 AssertionTreeNode lastPathComponent = (AssertionTreeNode) e.getPath().getLastPathComponent();
                 textArea.setText(lastPathComponent.getDisplayValue());
             }
         });
         assertionTree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override public void valueChanged(TreeSelectionEvent e) {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
                 if (assertionTree.getSelectionCount() > 0) {
                     insertWaitButton.setEnabled(true);
                     insertAssertionButton.setEnabled(true);
@@ -285,7 +298,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         });
         assertionTree.setCellRenderer(new AssertionTreeNodeRenderer());
         assertionTree.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) {
                     if (assertionTree.getSelectionCount() > 0) {
                         recordAction(ASSERT_ACTION);
@@ -343,7 +357,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         }
     }
 
-    @Override public void setComponent(Component component, Point point, boolean isTriggered) {
+    @Override
+    public void setComponent(Component component, Point point, boolean isTriggered) {
         rcomponent = getFinder().findRComponent(component, point, recorder);
         if (rcomponent == null) {
             return;
@@ -354,7 +369,8 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
         assertionTree.setSelectionRow(0);
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Assertions";
     }
 

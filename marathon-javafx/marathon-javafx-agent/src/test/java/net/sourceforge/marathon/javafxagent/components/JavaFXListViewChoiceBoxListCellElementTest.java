@@ -30,26 +30,30 @@ public class JavaFXListViewChoiceBoxListCellElementTest extends JavaFXElementTes
     private JavaFXAgent driver;
     private IJavaFXElement listView;
 
-    @BeforeMethod public void initializeDriver() {
+    @BeforeMethod
+    public void initializeDriver() {
         driver = new JavaFXAgent();
         listView = driver.findElementByTagName("list-view");
     }
 
-    @Test public void select() {
+    @Test
+    public void select() {
         IJavaFXElement item = listView.findElementByCssSelector(".::select-by-properties('{\"select\":\"Option 5\"}')");
         IJavaFXElement choiceBox = item.findElementByCssSelector(".::editor");
         Platform.runLater(() -> {
             choiceBox.marathon_select("Option 3");
         });
         new Wait("Wait for list item combo box to set option.") {
-            @Override public boolean until() {
+            @Override
+            public boolean until() {
                 String selected = choiceBox.getAttribute("selectionModel.getSelectedIndex");
                 return selected.equals("2");
             }
         };
     }
 
-    @Override protected Pane getMainPane() {
+    @Override
+    protected Pane getMainPane() {
         return new ChoiceBoxListViewSample();
     }
 }

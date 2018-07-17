@@ -67,22 +67,18 @@ public class ChoiceBoxSample extends Application {
         stage.setTitle("ChoiceBox Sample");
         stage.setWidth(300);
         stage.setHeight(200);
-      
+
         label.setFont(Font.font("Arial", 25));
         label.setLayoutX(40);
 
-       final String[] greetings = new String[]{"Hello", "Hola", "Привет", "你好",
-           "こんにちは"};
-       final ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList(
-           "English", "Español", "Русский", "简体中文", "日本語")
-       );
-                                     
-       cb.getSelectionModel().selectedIndexProperty().addListener(
-           (ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) -> {
-                    label.setText(greetings[new_val.intValue()]);            
-        });
-             
+        final String[] greetings = new String[] { "Hello", "Hola", "Привет", "你好", "こんにちは" };
+        final ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("English", "Español", "Русский", "简体中文", "日本語"));
+
+        cb.getSelectionModel().selectedIndexProperty()
+                .addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+                    label.setText(greetings[new_val.intValue()]);
+                });
+
         cb.setTooltip(new Tooltip("Select the language"));
         cb.setValue("English");
         HBox hb = new HBox();
@@ -92,9 +88,6 @@ public class ChoiceBoxSample extends Application {
         hb.setPadding(new Insets(10, 0, 0, 10));
 
         ((Group) scene.getRoot()).getChildren().add(hb);
-        
-       
-       
-        
+
     }
 }

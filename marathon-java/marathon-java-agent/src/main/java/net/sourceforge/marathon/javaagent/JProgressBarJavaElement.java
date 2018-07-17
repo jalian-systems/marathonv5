@@ -12,7 +12,8 @@ public class JProgressBarJavaElement extends AbstractJavaElement {
         super(component, driver, window);
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getText((JProgressBar) component);
     }
 

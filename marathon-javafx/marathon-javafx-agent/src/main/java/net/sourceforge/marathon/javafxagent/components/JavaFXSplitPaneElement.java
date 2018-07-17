@@ -33,7 +33,8 @@ public class JavaFXSplitPaneElement extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @Override public boolean marathon_select(String value) {
+    @Override
+    public boolean marathon_select(String value) {
         SplitPane splitPane = (SplitPane) getComponent();
         JSONArray locations = new JSONArray(value);
         double[] dividerLocations = new double[locations.length()];
@@ -44,7 +45,8 @@ public class JavaFXSplitPaneElement extends JavaFXElement {
         return true;
     }
 
-    @Override public String _getText() {
+    @Override
+    public String _getText() {
         return getDividerLocations((SplitPane) getComponent());
     }
 }

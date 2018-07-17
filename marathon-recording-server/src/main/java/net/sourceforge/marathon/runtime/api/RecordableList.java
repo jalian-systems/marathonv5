@@ -69,7 +69,8 @@ public class RecordableList {
         return impl.iterator();
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
@@ -79,7 +80,8 @@ public class RecordableList {
         return this.impl.equals(((RecordableList) o).impl);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return impl.hashCode();
     }
 

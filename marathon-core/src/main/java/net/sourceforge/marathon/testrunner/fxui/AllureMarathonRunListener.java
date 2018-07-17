@@ -144,7 +144,8 @@ public class AllureMarathonRunListener extends RunListener {
         return "My Own Test Cases";
     }
 
-    @Override public void testStarted(Description description) {
+    @Override
+    public void testStarted(Description description) {
         TestCaseStartedEvent event = new TestCaseStartedEvent(getSuiteUid(description), getTestName());
 
         SeverityLevel severityLevel = SeverityLevel.NORMAL;
@@ -188,7 +189,8 @@ public class AllureMarathonRunListener extends RunListener {
         }
     }
 
-    @Override public void testFailure(Failure failure) {
+    @Override
+    public void testFailure(Failure failure) {
         if (failure.getDescription().isTest()) {
             fireTestCaseFailure(failure.getException());
         } else {
@@ -198,17 +200,20 @@ public class AllureMarathonRunListener extends RunListener {
         }
     }
 
-    @Override public void testAssumptionFailure(Failure failure) {
+    @Override
+    public void testAssumptionFailure(Failure failure) {
         testFailure(failure);
     }
 
-    @Override public void testIgnored(Description description) {
+    @Override
+    public void testIgnored(Description description) {
         startFakeTestCase(description);
         getLifecycle().fire(new TestCasePendingEvent().withMessage(getIgnoredMessage(description)));
         finishFakeTestCase();
     }
 
-    @Override public void testFinished(Description description) {
+    @Override
+    public void testFinished(Description description) {
         Test test = (Test) TestAttributes.get("test_object");
         if (test != null && test instanceof MarathonTestCase) {
             StringBuilder failed = new StringBuilder();
@@ -253,11 +258,13 @@ public class AllureMarathonRunListener extends RunListener {
         getLifecycle().fire(new TestSuiteFinishedEvent(uid));
     }
 
-    @Override public void testRunStarted(Description description) throws Exception {
+    @Override
+    public void testRunStarted(Description description) throws Exception {
         super.testRunStarted(description);
     }
 
-    @Override public void testRunFinished(Result result) {
+    @Override
+    public void testRunFinished(Result result) {
         for (String uid : getSuites().values()) {
             testSuiteFinished(uid);
         }

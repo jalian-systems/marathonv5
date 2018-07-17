@@ -36,14 +36,16 @@ public class AttributeFilter implements SelectorFilter {
         this.op = op;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (op == null) {
             return "[" + name + "]";
         }
         return "[" + name + " " + op + " " + arg + "]";
     }
 
-    @Override public List<IJavaElement> match(IJavaElement je) {
+    @Override
+    public List<IJavaElement> match(IJavaElement je) {
         if (doesMatch(je)) {
             return Arrays.asList(je);
         }

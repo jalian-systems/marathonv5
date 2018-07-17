@@ -44,7 +44,8 @@ public class JavaPropertyAccessor {
 
     public final String getAttribute(final String name, final boolean skipSelf) {
         return EventQueueWait.exec(new Callable<String>() {
-            @Override public String call() throws Exception {
+            @Override
+            public String call() throws Exception {
                 return _getAttribute(name, skipSelf);
             }
         });

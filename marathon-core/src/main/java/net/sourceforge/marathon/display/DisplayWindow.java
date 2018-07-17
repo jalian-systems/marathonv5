@@ -218,7 +218,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private class DockingListener
             implements DockableSelectionListener, DockableStateWillChangeListener, DockableStateChangeListener {
 
-        @Override public void selectionChanged(DockableSelectionEvent e) {
+        @Override
+        public void selectionChanged(DockableSelectionEvent e) {
             Dockable selectedDockable = e.getSelectedDockable();
             if (selectedDockable instanceof EditorDockable) {
                 setCurrentEditorDockable((EditorDockable) selectedDockable);
@@ -230,7 +231,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 setCurrentEditorDockable(null);
         }
 
-        @Override public void dockableStateWillChange(DockableStateWillChangeEvent event) {
+        @Override
+        public void dockableStateWillChange(DockableStateWillChangeEvent event) {
             if (resetWorkspaceOperation) {
                 return;
             }
@@ -241,7 +243,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void dockableStateChanged(DockableStateChangeEvent event) {
+        @Override
+        public void dockableStateChanged(DockableStateChangeEvent event) {
             DockableState dockableState = event.getNewState();
             Dockable dockable = dockableState.getDockable();
             if (dockableState.isClosed() && dockable instanceof EditorDockable) {
@@ -254,7 +257,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private DockingListener dockingListener = new DockingListener();
 
     private class ContentChangeListener implements IContentChangeListener {
-        @Override public void contentChanged() {
+        @Override
+        public void contentChanged() {
             updateView();
         }
 
@@ -263,11 +267,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private ContentChangeListener contentChangeListener = new ContentChangeListener();
 
     private class GutterListener implements IGutterListener {
-        @Override public boolean hasBreakpointAtLine(int line) {
+        @Override
+        public boolean hasBreakpointAtLine(int line) {
             return isBreakPointAtLine(line);
         }
 
-        @Override public void gutterDoubleClickedAt(int caretLine) {
+        @Override
+        public void gutterDoubleClickedAt(int caretLine) {
             toggleBreakPoint(caretLine);
         }
 
@@ -276,7 +282,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private GutterListener gutterListener = new GutterListener();
 
     private class ResultPaneSelectionListener implements IResultPaneSelectionListener {
-        @Override public void resultSelected(SourceLine line) {
+        @Override
+        public void resultSelected(SourceLine line) {
             goToFile(line.fileName, line.lineNumber);
         }
 
@@ -285,11 +292,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     ResultPaneSelectionListener resultPaneSelectionListener = new ResultPaneSelectionListener();
 
     private class ScriptConsoleListener implements IScriptConsoleListener {
-        @Override public String evaluateScript(String command) {
+        @Override
+        public String evaluateScript(String command) {
             return display.evaluateScript(command);
         }
 
-        @Override public void sessionClosed() {
+        @Override
+        public void sessionClosed() {
             closeScriptConsole();
             setState();
             if (state.isRecordingPaused()) {
@@ -299,7 +308,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     private class TestListener implements ITestListener {
-        @Override public void openTest(Test suite) {
+        @Override
+        public void openTest(Test suite) {
             Test test = null;
             if (suite instanceof TestSuite) {
                 test = ((TestSuite) suite).testAt(0);
@@ -318,7 +328,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public class DisplayView implements IDisplayView {
 
-        @Override public void setError(Throwable exception, String message) {
+        @Override
+        public void setError(Throwable exception, String message) {
             RuntimeLogger.getRuntimeLogger().error("Marathon", exception.getMessage(), ExceptionUtil.getTrace(exception));
             WaitMessageDialog.setVisible(false);
             if (exception instanceof MarathonRuntimeException) {
@@ -333,7 +344,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void setState(final State newState) {
+        @Override
+        public void setState(final State newState) {
             if (Platform.isFxApplicationThread()) {
                 _setState(newState);
             } else {
@@ -388,17 +400,20 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             showReportAction.setEnabled(runReportDir != null);
         }
 
-        @Override public IStdOut getOutputPane() {
+        @Override
+        public IStdOut getOutputPane() {
             if (scriptConsole != null) {
                 return scriptConsole;
             }
             return outputPane;
         }
 
-        @Override public void setResult(PlaybackResult result) {
+        @Override
+        public void setResult(PlaybackResult result) {
         }
 
-        @Override public int trackProgress(final SourceLine line, int type) {
+        @Override
+        public int trackProgress(final SourceLine line, int type) {
             if (scriptConsole != null) {
                 return IPlaybackListener.CONTINUE;
             }
@@ -422,7 +437,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     File file = new File(line.fileName);
                     if (file.exists()) {
                         Platform.runLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 goToFile(line.fileName, line.lineNumber - 1);
                             }
                         });
@@ -438,7 +454,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return IPlaybackListener.CONTINUE;
         }
 
-        @Override public String getScript() {
+        @Override
+        public String getScript() {
             List<String> texts = new ArrayList<String>();
             if (Platform.isFxApplicationThread()) {
                 texts.add(currentEditor.getText());
@@ -463,29 +480,34 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return texts.get(0);
         }
 
-        @Override public String getFilePath() {
+        @Override
+        public String getFilePath() {
             if (currentEditor == null) {
                 return null;
             }
             return currentEditor.getResourcePath();
         }
 
-        @Override public void insertScript(String script) {
+        @Override
+        public void insertScript(String script) {
             if (controller.isShowing()) {
                 controller.insertScript(script);
             }
             Platform.runLater(() -> currentEditor.insertScript(script));
         }
 
-        @Override public void trackProgress() {
+        @Override
+        public void trackProgress() {
             currentEditor.highlightLine(-1);
         }
 
-        @Override public void startInserting() {
+        @Override
+        public void startInserting() {
             currentEditor.startInserting();
         }
 
-        @Override public void stopInserting() {
+        @Override
+        public void stopInserting() {
             if (Platform.isFxApplicationThread()) {
                 currentEditor.stopInserting();
                 if (exploratoryTest) {
@@ -517,11 +539,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public boolean isDebugging() {
+        @Override
+        public boolean isDebugging() {
             return debugging;
         }
 
-        @Override public int acceptChecklist(final String fileName) {
+        @Override
+        public int acceptChecklist(final String fileName) {
             Platform.runLater(() -> {
                 fillUpChecklist(fileName);
                 display.resume();
@@ -529,7 +553,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return 0;
         }
 
-        @Override public int showChecklist(final String fileName) {
+        @Override
+        public int showChecklist(final String fileName) {
             Platform.runLater(() -> {
                 final File file = new File(reportDir, fileName);
                 final CheckList checklist;
@@ -545,7 +570,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                         screenCapture.setOnAction(new EventHandler<ActionEvent>() {
                             File captureFile = new File(file.getParent(), checklist.getCaptureFile());
 
-                            @Override public void handle(ActionEvent e) {
+                            @Override
+                            public void handle(ActionEvent e) {
                                 try {
                                     AnnotateScreenCapture annotate = new AnnotateScreenCapture(captureFile, false);
                                     annotate.getStage().show();
@@ -575,9 +601,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
         }
 
-        @Override public void insertChecklistAction(final String name) {
+        @Override
+        public void insertChecklistAction(final String name) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     insertChecklist(name);
                 }
             });
@@ -587,10 +615,12 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return exploratoryTest || generateReportsMenuItem.isSelected();
         }
 
-        @Override public void endTest(final PlaybackResult result) {
+        @Override
+        public void endTest(final PlaybackResult result) {
             if (!exploratoryTest) {
                 Platform.runLater(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         resultPane.addResult(result);
                     }
                 });
@@ -607,7 +637,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             runListener.testFinished(Description.createTestDescription(MarathonTestCase.class, getFilePath()));
         }
 
-        @Override public void endTestRun() {
+        @Override
+        public void endTestRun() {
             // Disable slowplay if set
             System.setProperty(Constants.PROP_RUNTIME_DELAY, "");
             if (!needReports()) {
@@ -644,7 +675,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             DisplayWindow.this.setState();
         }
 
-        @Override public void startTest() {
+        @Override
+        public void startTest() {
             if (!needReports()) {
                 return;
             }
@@ -652,7 +684,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 String t_suffix = display.getDDTestRunner() == null ? "" : display.getDDTestRunner().getName();
                 String name = exploratoryTest ? runReportDir.getName() : super.getName() + t_suffix;
 
-                @Override public String getName() {
+                @Override
+                public String getName() {
                     return name;
                 };
             };
@@ -662,7 +695,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             runListener.testStarted(Description.createTestDescription(MarathonTestCase.class, getFilePath()));
         }
 
-        @Override public void startTestRun() {
+        @Override
+        public void startTestRun() {
             if (!needReports()) {
                 return;
             }
@@ -688,11 +722,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void addImport(String ims) {
+        @Override
+        public void addImport(String ims) {
             importStatements.add(ims);
         }
 
-        @Override public void updateOMapFile() {
+        @Override
+        public void updateOMapFile() {
             File omapFile = new File(System.getProperty(Constants.PROP_PROJECT_DIR),
                     System.getProperty(Constants.PROP_OMAP_FILE, Constants.FILE_OMAP));
             fileUpdated(omapFile);
@@ -702,12 +738,14 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return logView;
         }
 
-        @Override public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
+        @Override
+        public void addErrorScreenShotEntry(AssertionFailedError error, String fileName) {
             if (testCase != null)
                 testCase.addErrorScreenShotEntry(error, fileName);
         }
 
-        @Override public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
+        @Override
+        public void addScreenShotEntry(String title, String filePath, List<UsedAssertion> assertions) {
             if (testCase != null)
                 testCase.addScreenShotEntry(title, filePath, assertions);
         }
@@ -718,16 +756,26 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     private static final String MODULE = "Marathon";
 
-    @Inject private Display display;
-    @Inject private IScriptModel scriptModel;
-    @Inject private FixtureSelector fixtureSelector;
-    @Inject private TextAreaOutput outputPane;
-    @Inject private ResultPane resultPane;
-    @Inject private LogView logView;
-    @Inject private StatusBar statusPanel;
-    @Inject private CallStack callStack;
-    @Inject private IEditorProvider editorProvider;
-    @Inject(optional = true) private IActionProvider actionProvider;
+    @Inject
+    private Display display;
+    @Inject
+    private IScriptModel scriptModel;
+    @Inject
+    private FixtureSelector fixtureSelector;
+    @Inject
+    private TextAreaOutput outputPane;
+    @Inject
+    private ResultPane resultPane;
+    @Inject
+    private LogView logView;
+    @Inject
+    private StatusBar statusPanel;
+    @Inject
+    private CallStack callStack;
+    @Inject
+    private IEditorProvider editorProvider;
+    @Inject(optional = true)
+    private IActionProvider actionProvider;
 
     /**
      * Editor panel
@@ -765,11 +813,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             this.dockGroup = dockGroup;
         }
 
-        @Override public Node getComponent() {
+        @Override
+        public Node getComponent() {
             return dockableEditor.getNode();
         }
 
-        @Override public DockKey getDockKey() {
+        @Override
+        public DockKey getDockKey() {
             if (dockKey == null) {
                 String key = dockableEditor.getDockKey();
                 dockKey = new DockKey(key, dockableEditor.getName());
@@ -783,7 +833,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return dockableEditor;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return super.toString() + getDockKey();
         }
 
@@ -914,7 +965,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
     }
 
-    @SuppressWarnings("unchecked") private void loadBreakPoints() {
+    @SuppressWarnings("unchecked")
+    private void loadBreakPoints() {
         String projectDir = System.getProperty(Constants.PROP_PROJECT_DIR);
         ObjectInputStream is = null;
         try {
@@ -956,10 +1008,18 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * The Navigator panel.
      */
     private NavigatorPanel navigatorPanel;
-    @Inject @SuitesPanel private AbstractGroupsPanel suitesPanel;
-    @Inject @FeaturesPanel private AbstractGroupsPanel featuresPanel;
-    @Inject @StoriesPanel private AbstractGroupsPanel storiesPanel;
-    @Inject @IssuesPanel private AbstractGroupsPanel issuesPanel;
+    @Inject
+    @SuitesPanel
+    private AbstractGroupsPanel suitesPanel;
+    @Inject
+    @FeaturesPanel
+    private AbstractGroupsPanel featuresPanel;
+    @Inject
+    @StoriesPanel
+    private AbstractGroupsPanel storiesPanel;
+    @Inject
+    @IssuesPanel
+    private AbstractGroupsPanel issuesPanel;
 
     /**
      * The current state of Marathon.
@@ -1037,7 +1097,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             textArea.setText(text.toString());
         }
 
-        @Override public void addError(LogRecord result) {
+        @Override
+        public void addError(LogRecord result) {
             msgLabel.setGraphic(FXUIUtils.getIcon("error"));
             msgLabel.setText(result.getMessage());
         }
@@ -1110,7 +1171,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         }
     }
 
-    @Inject public void setDisplay() {
+    @Inject
+    public void setDisplay() {
         initUI();
         display.setView(displayView);
         setDefaultFixture(getDefaultFixture());
@@ -1279,7 +1341,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         JSONObject state = preferences.optJSONObject("state");
         if (state != null) {
             List<Dockable> dockables = workspace.readDockableState(state, new DockableResolver() {
-                @Override public Dockable resolveDockable(final String keyName) {
+                @Override
+                public Dockable resolveDockable(final String keyName) {
                     if (keyName.equals("Navigator")) {
                         return navigatorPanel;
                     } else if (keyName.equals("Suites")) {
@@ -1758,7 +1821,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             e1.printStackTrace();
         }
         Preferences.instance().addPreferenceChangeListener("theme", new IPreferenceChangeListener() {
-            @Override public void preferencesChanged(String section, JSONObject preferences) {
+            @Override
+            public void preferencesChanged(String section, JSONObject preferences) {
                 setTheme();
                 ObservableList<MenuItem> items = menu.getItems();
                 for (MenuItem menuItem : items) {
@@ -1849,7 +1913,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         return new AbstractSimpleAction(action.getName(), action.getDescription(), action.getMneumonic(), action.getCommand()) {
             private static final long serialVersionUID = 1L;
 
-            @Override public void handle(ActionEvent arg0) {
+            @Override
+            public void handle(ActionEvent arg0) {
                 try {
                     int selectionStart = -1;
                     int selectionEnd = -1;
@@ -1881,7 +1946,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 }
             }
 
-            @Override public Node getIcon() {
+            @Override
+            public Node getIcon() {
                 Node icon = action.getIcon();
                 if (icon != null)
                     return icon;
@@ -1911,7 +1977,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     private void setState() {
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 displayView.setState(state);
             }
         });
@@ -1990,7 +2057,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public class GoToLineHandler implements IInputHanler {
 
-        @Override public void handleInput(String line) {
+        @Override
+        public void handleInput(String line) {
             int lineNumber = Integer.parseInt(line);
             if (lineNumber != -1) {
                 currentEditor.setCaretLine(lineNumber - 1);
@@ -2083,7 +2151,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     }
 
     class ModuleFunctionHandler implements IModuleFunctionHandler {
-        @Override public void handleModule(ModuleInfo moduleInfo) {
+        @Override
+        public void handleModule(ModuleInfo moduleInfo) {
             File moduleFile = new File(moduleInfo.getModuleDirElement().getFile(), moduleInfo.getFileName());
             int offset = 0;
             try {
@@ -2098,13 +2167,15 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 writer.close();
                 fileUpdated(moduleFile);
                 Platform.runLater(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         openFile(moduleFile);
                     }
                 });
                 final int o = offset;
                 Platform.runLater(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         currentEditor.setCaretPosition(scriptModel.getLinePositionForInsertionModule() + o);
                     }
                 });
@@ -2221,7 +2292,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         MarathonInputStage mid = new MarathonInputStage("New Module Directory",
                 "Create a new module folder to store extracted methods", FXUIUtils.getIcon("fldr")) {
 
-            @Override protected String validateInput(String moduleDirName) {
+            @Override
+            protected String validateInput(String moduleDirName) {
                 String errorMessage = null;
                 if (moduleDirName.length() == 0 || moduleDirName.trim().isEmpty()) {
                     errorMessage = "Enter a valid folder name";
@@ -2231,11 +2303,13 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 return errorMessage;
             }
 
-            @Override protected String getInputFiledLabelText() {
+            @Override
+            protected String getInputFiledLabelText() {
                 return "Module Directory: ";
             }
 
-            @Override protected void setDefaultButton() {
+            @Override
+            protected void setDefaultButton() {
                 okButton.setDefaultButton(true);
             }
         };
@@ -2245,7 +2319,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     class NewModuleDirHandler implements IInputHanler {
 
-        @Override public void handleInput(String moduleDirName) {
+        @Override
+        public void handleInput(String moduleDirName) {
             try {
                 if (moduleDirName == null || moduleDirName.trim().equals("")) {
                     return;
@@ -2305,7 +2380,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             this.type = type;
         }
 
-        @Override public void handleInput(GroupInputInfo info) {
+        @Override
+        public void handleInput(GroupInputInfo info) {
             try {
                 File file = info.getFile();
                 if (file == null) {
@@ -2476,7 +2552,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     class NewFixtureHandler implements IFixtureStageInfoHandler {
 
-        @Override public void handle(FixtureStageInfo fixtureInfo) {
+        @Override
+        public void handle(FixtureStageInfo fixtureInfo) {
             newFile(getFixtureHeader(fixtureInfo.getProperties(), fixtureInfo.getSelectedLauncher()),
                     new File(System.getProperty(Constants.PROP_FIXTURE_DIR)));
             currentEditor.setDirty(true);
@@ -2743,96 +2820,140 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
      * Marathon Actions available from Menu/Toolbars
      */
 
-    @ISimpleAction(mneumonic = "Shortcut+P", description = "Play the testcase") AbstractSimpleAction playAction;
+    @ISimpleAction(mneumonic = "Shortcut+P", description = "Play the testcase")
+    AbstractSimpleAction playAction;
 
-    @ISimpleAction(description = "Stop the playing testcase") AbstractSimpleAction stopPlayAction;
+    @ISimpleAction(description = "Stop the playing testcase")
+    AbstractSimpleAction stopPlayAction;
 
-    @ISimpleAction(description = "Show report for last test run") AbstractSimpleAction showReportAction;
+    @ISimpleAction(description = "Show report for last test run")
+    AbstractSimpleAction showReportAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+Alt+P", description = "Debug the testcase") AbstractSimpleAction debugAction;
+    @ISimpleAction(mneumonic = "Shortcut+Alt+P", description = "Debug the testcase")
+    AbstractSimpleAction debugAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+Shift+P", description = "Play the testcase with a delay") AbstractSimpleAction slowPlayAction;
+    @ISimpleAction(mneumonic = "Shortcut+Shift+P", description = "Play the testcase with a delay")
+    AbstractSimpleAction slowPlayAction;
 
-    @ISimpleAction(description = "Pause recording") AbstractSimpleAction pauseAction;
+    @ISimpleAction(description = "Pause recording")
+    AbstractSimpleAction pauseAction;
 
-    @ISimpleAction(description = "Resume recording") AbstractSimpleAction resumeRecordingAction;
+    @ISimpleAction(description = "Resume recording")
+    AbstractSimpleAction resumeRecordingAction;
 
-    @ISimpleAction(description = "Resume playing") AbstractSimpleAction resumePlayingAction;
+    @ISimpleAction(description = "Resume playing")
+    AbstractSimpleAction resumePlayingAction;
 
-    @ISimpleAction() AbstractSimpleAction selectFixtureAction;
+    @ISimpleAction()
+    AbstractSimpleAction selectFixtureAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+R", description = "Start recording") AbstractSimpleAction recordAction;
+    @ISimpleAction(mneumonic = "Shortcut+R", description = "Start recording")
+    AbstractSimpleAction recordAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+Shift+N", value = "Exploratory Test", description = "Record an exploratory test") AbstractSimpleAction etAction;
+    @ISimpleAction(mneumonic = "Shortcut+Shift+N", value = "Exploratory Test", description = "Record an exploratory test")
+    AbstractSimpleAction etAction;
 
-    @ISimpleAction(description = "Stop recording") AbstractSimpleAction stopAction;
+    @ISimpleAction(description = "Stop recording")
+    AbstractSimpleAction stopAction;
 
-    @ISimpleAction(description = "Start raw recording") AbstractSimpleAction rawRecordAction;
+    @ISimpleAction(description = "Start raw recording")
+    AbstractSimpleAction rawRecordAction;
 
-    @ISimpleAction(description = "Open Application") AbstractSimpleAction openApplicationAction;
+    @ISimpleAction(description = "Open Application")
+    AbstractSimpleAction openApplicationAction;
 
-    @ISimpleAction(description = "Close Application") AbstractSimpleAction closeApplicationAction;
+    @ISimpleAction(description = "Close Application")
+    AbstractSimpleAction closeApplicationAction;
 
-    @ISimpleAction(description = "Insert a module method") AbstractSimpleAction insertScriptAction;
+    @ISimpleAction(description = "Insert a module method")
+    AbstractSimpleAction insertScriptAction;
 
-    @ISimpleAction(description = "Insert a checklist") AbstractSimpleAction insertChecklistAction;
+    @ISimpleAction(description = "Insert a checklist")
+    AbstractSimpleAction insertChecklistAction;
 
-    @ISimpleAction(description = "Change project settings", value = "Project Settings...") AbstractSimpleAction projectSettingsAction;
+    @ISimpleAction(description = "Change project settings", value = "Project Settings...")
+    AbstractSimpleAction projectSettingsAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+N", description = "Create a new testcase") AbstractSimpleAction newTestcaseAction;
+    @ISimpleAction(mneumonic = "Shortcut+N", description = "Create a new testcase")
+    AbstractSimpleAction newTestcaseAction;
 
-    @ISimpleAction(description = "Create a new module method") AbstractSimpleAction newModuleAction;
+    @ISimpleAction(description = "Create a new module method")
+    AbstractSimpleAction newModuleAction;
 
-    @ISimpleAction(description = "Create a new fixture") AbstractSimpleAction newFixtureAction;
+    @ISimpleAction(description = "Create a new fixture")
+    AbstractSimpleAction newFixtureAction;
 
-    @ISimpleAction(description = "Create a new CheckList") AbstractSimpleAction newCheckListAction;
+    @ISimpleAction(description = "Create a new CheckList")
+    AbstractSimpleAction newCheckListAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+S", description = "Save current file") AbstractSimpleAction saveAction;
+    @ISimpleAction(mneumonic = "Shortcut+S", description = "Save current file")
+    AbstractSimpleAction saveAction;
 
-    @ISimpleAction(description = "Save as") AbstractSimpleAction saveAsAction;
+    @ISimpleAction(description = "Save as")
+    AbstractSimpleAction saveAsAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+Shift+S", description = "Save all modifications") AbstractSimpleAction saveAllAction;
+    @ISimpleAction(mneumonic = "Shortcut+Shift+S", description = "Save all modifications")
+    AbstractSimpleAction saveAllAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+Q", description = "Exit Marathon") AbstractSimpleAction exitAction;
+    @ISimpleAction(mneumonic = "Shortcut+Q", description = "Exit Marathon")
+    AbstractSimpleAction exitAction;
 
-    @ISimpleAction(description = "Show release notes", value = "Read me") AbstractSimpleAction releaseNotes;
+    @ISimpleAction(description = "Show release notes", value = "Read me")
+    AbstractSimpleAction releaseNotes;
 
-    @ISimpleAction(description = "Show change log") AbstractSimpleAction changeLog;
+    @ISimpleAction(description = "Show change log")
+    AbstractSimpleAction changeLog;
 
-    @ISimpleAction(description = "Show marathon website", value = "Marathon on web") AbstractSimpleAction visitWebsite;
+    @ISimpleAction(description = "Show marathon website", value = "Marathon on web")
+    AbstractSimpleAction visitWebsite;
 
-    @ISimpleAction(description = "Change preferences", value = "Preferences...") AbstractSimpleAction preferencesAction;
+    @ISimpleAction(description = "Change preferences", value = "Preferences...")
+    AbstractSimpleAction preferencesAction;
 
-    @ISimpleAction(description = "Reset workspace to default") AbstractSimpleAction resetWorkspaceAction;
+    @ISimpleAction(description = "Reset workspace to default")
+    AbstractSimpleAction resetWorkspaceAction;
 
-    @ISimpleAction(mneumonic = "Shortcut+B", description = "Toggle breakpoint at the current line") AbstractSimpleAction toggleBreakpointAction;
+    @ISimpleAction(mneumonic = "Shortcut+B", description = "Toggle breakpoint at the current line")
+    AbstractSimpleAction toggleBreakpointAction;
 
-    @ISimpleAction(description = "Remove all breakpoints", value = "Remove all breakpoints") AbstractSimpleAction clearAllBreakpointsAction;
+    @ISimpleAction(description = "Remove all breakpoints", value = "Remove all breakpoints")
+    AbstractSimpleAction clearAllBreakpointsAction;
 
-    @ISimpleAction(description = "Step into the method") AbstractSimpleAction stepIntoAction;
+    @ISimpleAction(description = "Step into the method")
+    AbstractSimpleAction stepIntoAction;
 
-    @ISimpleAction(description = "Step over the method") AbstractSimpleAction stepOverAction;
+    @ISimpleAction(description = "Step over the method")
+    AbstractSimpleAction stepOverAction;
 
-    @ISimpleAction(description = "Return from current method") AbstractSimpleAction stepReturnAction;
+    @ISimpleAction(description = "Return from current method")
+    AbstractSimpleAction stepReturnAction;
 
-    @ISimpleAction(description = "Player console") AbstractSimpleAction playerConsoleAction;
+    @ISimpleAction(description = "Player console")
+    AbstractSimpleAction playerConsoleAction;
 
-    @ISimpleAction(description = "Recorder console") AbstractSimpleAction recorderConsoleAction;
+    @ISimpleAction(description = "Recorder console")
+    AbstractSimpleAction recorderConsoleAction;
 
-    @ISimpleAction(description = "Create a new Module directory", value = "New Module Directory") AbstractSimpleAction newModuleDirAction;
+    @ISimpleAction(description = "Create a new Module directory", value = "New Module Directory")
+    AbstractSimpleAction newModuleDirAction;
 
-    @ISimpleAction(description = "Create a new Suite file", value = "New Suite") AbstractSimpleAction newSuiteFileAction;
+    @ISimpleAction(description = "Create a new Suite file", value = "New Suite")
+    AbstractSimpleAction newSuiteFileAction;
 
-    @ISimpleAction(description = "Create a new Feature file", value = "New Feature") AbstractSimpleAction newFeatureFileAction;
+    @ISimpleAction(description = "Create a new Feature file", value = "New Feature")
+    AbstractSimpleAction newFeatureFileAction;
 
-    @ISimpleAction(description = "Create a new Story file", value = "New Story") AbstractSimpleAction newStoryFileAction;
+    @ISimpleAction(description = "Create a new Story file", value = "New Story")
+    AbstractSimpleAction newStoryFileAction;
 
-    @ISimpleAction(description = "Create a new Issue file", value = "New Issue") AbstractSimpleAction newIssueFileAction;
+    @ISimpleAction(description = "Create a new Issue file", value = "New Issue")
+    AbstractSimpleAction newIssueFileAction;
 
     AbstractSimpleAction refreshAction = new AbstractSimpleAction("refresh", "Refresh Editor", "F5", "Refresh Editor Content") {
         private static final long serialVersionUID = 1L;
 
-        @Override public void handle(ActionEvent e) {
+        @Override
+        public void handle(ActionEvent e) {
             if (currentEditor != null) {
                 currentEditor.refreshResource();
                 currentEditor.refresh();
@@ -2915,7 +3036,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         controller.clear();
         WaitMessageDialog.setVisible(true);
         new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 display.record(taConsole);
             }
         }).start();
@@ -2931,7 +3053,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         displayView.startTestRun();
         displayView.startTest();
         currentEditor.runWhenContentLoaded(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 recordActionButton.fire();
             }
         });
@@ -2978,9 +3101,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             this.functionStage = functionStage;
         }
 
-        @Override public void handle(String[] arguments, Function function) {
+        @Override
+        public void handle(String[] arguments, Function function) {
             new Thread() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     insertScript(ScriptModel.getModel().getFunctionCallForInsertDialog(function, arguments));
                     Platform.runLater(() -> functionStage.dispose());
                 }
@@ -2994,7 +3119,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         CheckListForm checkListInfo = new CheckListForm(dir, true);
         MarathonCheckListStage checklistStage = new MarathonCheckListStage(checkListInfo);
         checklistStage.setInsertCheckListHandler(new IInsertCheckListHandler() {
-            @Override public boolean insert(CheckListElement selectedItem) {
+            @Override
+            public boolean insert(CheckListElement selectedItem) {
                 insertChecklist(selectedItem.getFile().getName());
                 return true;
             }
@@ -3023,7 +3149,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
             MPFConfigurationInfo mpfConfigurationInfo = new MPFConfigurationInfo(title, projectDir, properties);
             MPFConfigurationStage mpfConfigurationStage = new MPFConfigurationStage(null, mpfConfigurationInfo) {
-                @Override public void onSave() {
+                @Override
+                public void onSave() {
                     if (validInupt()) {
                         mpfConfigurationInfo.saveProjectFile(layouts);
                         System.getProperty(Constants.PROP_PROJECT_NAME);
@@ -3174,7 +3301,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public class PreferenceHandler implements IPreferenceHandler {
 
-        @Override public void setPreferences(MarathonPreferencesInfo preferenceInfo) {
+        @Override
+        public void setPreferences(MarathonPreferencesInfo preferenceInfo) {
             JSONObject prefs = preferenceInfo.getPreferences();
             prefs.put(Constants.PREF_RECORDER_MOUSE_TRIGGER, preferenceInfo.getMouseTriggerText());
             prefs.put(Constants.PREF_RECORDER_KEYBOARD_TRIGGER, preferenceInfo.getKeyTriggerText());
@@ -3405,7 +3533,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         return false;
     }
 
-    @Override public boolean okToOverwrite(File file) {
+    @Override
+    public boolean okToOverwrite(File file) {
         EditorDockable dockable = findEditorDockable(file);
         if (dockable == null) {
             return true;
@@ -3443,14 +3572,16 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public class ResourceActionHandler implements IResourceActionHandler {
 
-        @Override public void openAsText(IResourceActionSource source, Resource resource) {
+        @Override
+        public void openAsText(IResourceActionSource source, Resource resource) {
             Path filePath = resource.getFilePath();
             if (filePath != null) {
                 openFile(filePath.toFile(), EditorType.OTHER);
             }
         }
 
-        @Override public void openWithSystem(IResourceActionSource source, Resource resource) {
+        @Override
+        public void openWithSystem(IResourceActionSource source, Resource resource) {
             Path filePath = resource.getFilePath();
             if (filePath != null) {
                 try {
@@ -3462,14 +3593,16 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void open(IResourceActionSource source, Resource resource) {
+        @Override
+        public void open(IResourceActionSource source, Resource resource) {
             Path filePath = resource.getFilePath();
             if (filePath != null) {
                 openFile(filePath.toFile());
             }
         }
 
-        @Override public void play(IResourceActionSource source, List<Resource> resources) {
+        @Override
+        public void play(IResourceActionSource source, List<Resource> resources) {
             if (editingObjectMap())
                 return;
             Test test = null;
@@ -3512,17 +3645,20 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return "Multiple Tests";
         }
 
-        @Override public void slowPlay(IResourceActionSource source, Resource resource) {
+        @Override
+        public void slowPlay(IResourceActionSource source, Resource resource) {
             open(source, resource);
             currentEditor.runWhenReady(() -> onSlowPlay());
         }
 
-        @Override public void debug(IResourceActionSource source, Resource resource) {
+        @Override
+        public void debug(IResourceActionSource source, Resource resource) {
             open(source, resource);
             currentEditor.runWhenReady(() -> onDebug());
         }
 
-        @Override public void addProperties(IResourceActionSource source, Resource item) {
+        @Override
+        public void addProperties(IResourceActionSource source, Resource item) {
             AddPropertiesStage propertiesStage = new AddPropertiesStage(new TestPropertiesInfo(item.getFilePath().toFile()));
             propertiesStage.getStage().showAndWait();
         }
@@ -3530,7 +3666,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     public class ResourceChangeListener implements IResourceChangeListener {
 
-        @Override public void deleted(IResourceActionSource source, Resource resource) {
+        @Override
+        public void deleted(IResourceActionSource source, Resource resource) {
             String[] moduleDirs = Constants.getMarathonDirectoriesAsStringArray(Constants.PROP_MODULE_DIRS);
             for (String moduleDir : moduleDirs) {
                 if (moduleDir.equals(resource.getFilePath().toString())) {
@@ -3575,7 +3712,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void updated(IResourceActionSource source, Resource resource) {
+        @Override
+        public void updated(IResourceActionSource source, Resource resource) {
             if (resource.getFilePath() != null) {
                 File file = resource.getFilePath().toFile();
                 EditorDockable dockable = findEditorDockable(file);
@@ -3610,7 +3748,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void moved(IResourceActionSource source, Resource from, Resource to) {
+        @Override
+        public void moved(IResourceActionSource source, Resource from, Resource to) {
             if (from.getFilePath() != null && to.getFilePath() != null) {
                 File file = from.getFilePath().toFile();
                 EditorDockable dockable = findEditorDockable(file);
@@ -3639,7 +3778,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         }
 
-        @Override public void copied(IResourceActionSource source, Resource from, Resource to) {
+        @Override
+        public void copied(IResourceActionSource source, Resource from, Resource to) {
             if (source != navigatorPanel) {
                 navigatorPanel.copied(source, from, to);
             }

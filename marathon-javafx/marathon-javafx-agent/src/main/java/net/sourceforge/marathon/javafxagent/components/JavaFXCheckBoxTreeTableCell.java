@@ -34,7 +34,9 @@ public class JavaFXCheckBoxTreeTableCell extends JavaFXElement {
         super(component, driver, window);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" }) @Override public String _getValue() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public String _getValue() {
         CheckBoxTreeTableCell cell = (CheckBoxTreeTableCell) node;
         Callback selectedStateCallback = cell.getSelectedStateCallback();
         String cbText;

@@ -30,7 +30,8 @@ public class JXBrowserMarathonExtension {
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
         logger.warning("Loading extension " + JXBrowserMarathonExtension.class.getName());
         JavaFXElementFactory.add(new IJavaElementFinder() {
-            @Override public Class<? extends IJavaFXElement> get(Node component) {
+            @Override
+            public Class<? extends IJavaFXElement> get(Node component) {
                 if (component.getClass().getName().equals("com.teamdev.jxbrowser.chromium.javafx.BrowserView")) {
                     return JavaFXBrowserViewElement.class;
                 }
