@@ -34,6 +34,7 @@ package login;
 
 import java.io.IOException;
 
+import buttonsample.ButtonSample;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -45,7 +46,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import webviewexample.FxWebViewExample4;
 
 public class LoginApplication extends Application {
 
@@ -81,8 +81,11 @@ public class LoginApplication extends Application {
 
         submit.setOnAction((ActionEvent e) -> {
             ProcessBuilder pb = new ProcessBuilder("java", "-cp", System.getProperty("java.class.path"),
-                    FxWebViewExample4.class.getName());
+                    ButtonSample.class.getName());
             try {
+                if (System.getenv("USER_JTO") != null) {
+                    pb.environment().put("JAVA_TOOL_OPTIONS", System.getenv("USER_JTO"));
+                }
                 Process process = pb.start();
                 System.exit(0);
             } catch (IOException e1) {

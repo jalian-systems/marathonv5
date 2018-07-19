@@ -386,11 +386,13 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 if (done) {
                     return;
                 }
-                if (!"".equals(windowTitle)) {
-                    logger.warning("WindowTitle is not supported yet... Ignoring it.");
-                }
                 c.next();
                 if (c.wasAdded()) {
+                    if (!"".equals(windowTitle)) {
+                        LOGGER.info("Checking for windowTitle(" + windowTitle + ")");
+                        if (!validWindowTitle(stages))
+                            return;
+                    }
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
                         @Override
                         public Object run() {
@@ -401,6 +403,14 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 }
             }
         });
+    }
+
+    private static boolean validWindowTitle(ObservableList<Stage> stages) {
+        if (windowTitle.startsWith("//") || !windowTitle.startsWith("/")) {
+            String title = windowTitle.startsWith("//") ? windowTitle.substring(1) : windowTitle;
+            return stages.filtered(s -> s.getTitle().equals(title)).size() > 0;
+        }
+        return stages.filtered(s -> s.getTitle().matches(windowTitle.substring(1))).size() > 0;
     }
 
     @Override
