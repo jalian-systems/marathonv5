@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -64,6 +65,13 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
 
     @Override
     public int getChildCount() {
+        if (children == null) {
+            createChildren();
+        }
+        return super.getChildCount();
+    }
+
+    public int getChildCount_Internal() {
         if (isLeaf()) {
             return 0;
         }
@@ -81,6 +89,22 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
 
     @Override
     public TreeNode getChildAt(int index) {
+        if (children == null)
+            createChildren();
+        return super.getChildAt(index);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void createChildren() {
+        int n = getChildCount_Internal();
+        children = new Vector(n);
+        for (int i = 0; i < n; i++) {
+            children.add(getChildAt_internal(i));
+        }
+    }
+
+    public TreeNode getChildAt_internal(int index) {
+        long start = System.currentTimeMillis();
         if (object instanceof List) {
             return getNodeForList((List<?>) object, index);
         }
@@ -94,7 +118,7 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
         } else {
             method = getMethods(object).get(index);
         }
-        return getNodeForMethod(method);
+		return getNodeForMethod(method);
     }
 
     private TreeNode getNodeForMap(Map<?, ?> map, int index) {
