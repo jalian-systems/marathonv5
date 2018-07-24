@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.logging.Logger;
 
@@ -57,5 +58,9 @@ public class RFileChooser extends RComponent {
             File file = fc.getSelectedFile();
             recorder.recordSelect(this, ChooserHelper.encode(file));
         }
+    }
+
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 }
