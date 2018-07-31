@@ -445,6 +445,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     } else {
                         return IPlaybackListener.CONTINUE;
                     }
+                } else {
+                    Platform.runLater(() -> {
+                        currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(line.lineNumber - 1));
+                        currentEditor.highlightLine(line.lineNumber - 1);
+                    });
                 }
                 stepIntoActive = false;
                 breakStackDepth = -1;
@@ -992,7 +997,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             return;
         }
         currentEditor.setFocus();
-        if (currentEditor.isProjectFile()) {
+        if (Boolean.getBoolean("marathon.debugging") || currentEditor.isProjectFile()) {
             BreakPoint bp = new BreakPoint(displayView.getFilePath(), line);
             if (breakpoints.contains(bp)) {
                 breakpoints.remove(bp);
@@ -2079,13 +2084,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             openFile(file);
             currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(lineNumber - 1));
             currentEditor.highlightLine(lineNumber);
-        } else {
-            EditorDockable editorDockable = findEditorDockable(fileName);
-            if (editorDockable != null) {
-                selectEditor(editorDockable);
-                currentEditor.runWhenContentLoaded(() -> currentEditor.setCaretLine(lineNumber - 1));
-                currentEditor.highlightLine(lineNumber);
-            }
         }
     }
 
@@ -2628,20 +2626,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 EditorDockable editorDockable = (EditorDockable) dockableState.getDockable();
                 IEditor e = editorDockable.getEditor();
                 if (e.isEditingResource(file) || !e.isFileBased() && editorType.equals(e.getData("editorType"))) {
-                    return editorDockable;
-                }
-            }
-        }
-        return null;
-    }
-
-    private EditorDockable findEditorDockable(String fileName) {
-        DockableState[] dockables = workspace.getDockables();
-        for (DockableState dockableState : dockables) {
-            if (dockableState.getDockable() instanceof EditorDockable) {
-                EditorDockable editorDockable = (EditorDockable) dockableState.getDockable();
-                String name = editorDockable.getEditor().getName();
-                if (fileName.equals(name)) {
                     return editorDockable;
                 }
             }

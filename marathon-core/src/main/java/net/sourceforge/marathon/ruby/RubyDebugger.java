@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.ruby;
 
+import java.net.URL;
 import java.util.logging.Logger;
 
 import org.jruby.Ruby;
@@ -80,6 +81,15 @@ public class RubyDebugger extends AbstractDebugger implements IDebugger {
     }
 
     public void event(String event, String file, Number line, String name) {
+        if (Boolean.getBoolean("marathon.debugging") && file.startsWith("uri:classloader:")) {
+            URL resource = RubyDebugger.class.getClassLoader().getResource(file.substring("uri:classloader:".length() + 1));
+            if (resource != null) {
+                String r = resource.toString();
+                if (r.startsWith("file:")) {
+                    file = r.substring("file:".length());
+                }
+            }
+        }
         if (listener != null && !shouldIgnore(file) && !repeat(event, file, line.intValue())) {
             if (event.equals("line")) {
                 if (listener.lineReached(new SourceLine(file, name, line.intValue())) == IPlaybackListener.PAUSE) {

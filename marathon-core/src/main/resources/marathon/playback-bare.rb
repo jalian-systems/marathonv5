@@ -18,6 +18,7 @@ require 'cgi'
 class RubyMarathon < MarathonRuby
 
     def initialize(url)
+      $marathon = self
       @collector = Collector.new(self)
     end
 
