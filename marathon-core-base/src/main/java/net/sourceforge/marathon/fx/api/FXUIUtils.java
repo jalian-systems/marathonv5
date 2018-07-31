@@ -53,8 +53,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Window;
-import net.sourceforge.marathon.display.MarathonFileChooser;
-import net.sourceforge.marathon.display.MarathonFileChooserInfo;
 
 public class FXUIUtils {
 
@@ -512,12 +510,6 @@ public class FXUIUtils {
 
     public static void showExceptionMessage(String message, IOException e) {
         showMessageDialog(null, message + ": " + e.getMessage(), "Error", AlertType.ERROR);
-    }
-
-    public static File showMarathonSaveFileChooser(MarathonFileChooserInfo fileChooserInfo, String subTitle, Node icon) {
-        MarathonFileChooser marathonFileChooser = new MarathonFileChooser(fileChooserInfo, subTitle, icon);
-        marathonFileChooser.getStage().showAndWait();
-        return fileChooserInfo.getSavedFile();
     }
 
     public static File showSaveFileChooser(String title, File initialDirectory, Window ownerWindow, ExtensionFilter filter) {

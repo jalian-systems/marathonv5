@@ -26,9 +26,11 @@ import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Window;
+import net.sourceforge.marathon.display.MarathonFileChooser;
 import net.sourceforge.marathon.display.MarathonFileChooserInfo;
 import net.sourceforge.marathon.display.MarathonFileFilter;
 import net.sourceforge.marathon.editor.IMarathonFileFilter;
@@ -206,8 +208,7 @@ public class FileHandler implements IResourceHandler {
 
     private File askForFile(Window parent, String filename) {
         fileChooserInfo = new MarathonFileChooserInfo("Save File", filename, rootDirectory, isTestFile());
-        File selectedFile = FXUIUtils.showMarathonSaveFileChooser(fileChooserInfo, "Saving '" + filename + "'",
-                FXUIUtils.getIcon("saveAs"));
+        File selectedFile = showMarathonSaveFileChooser(fileChooserInfo, "Saving '" + filename + "'", FXUIUtils.getIcon("saveAs"));
         if (selectedFile != null) {
             String suffix = filter.getSuffix();
             if (suffix == null) {
@@ -220,6 +221,12 @@ public class FileHandler implements IResourceHandler {
         } else {
             return null;
         }
+    }
+
+    public static File showMarathonSaveFileChooser(MarathonFileChooserInfo fileChooserInfo, String subTitle, Node icon) {
+        MarathonFileChooser marathonFileChooser = new MarathonFileChooser(fileChooserInfo, subTitle, icon);
+        marathonFileChooser.getStage().showAndWait();
+        return fileChooserInfo.getSavedFile();
     }
 
     private File getRootDir(File file) {

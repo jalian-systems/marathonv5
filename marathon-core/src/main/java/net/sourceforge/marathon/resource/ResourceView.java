@@ -63,6 +63,7 @@ import net.sourceforge.marathon.display.MarathonFileChooserInfo;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.resource.navigator.FileResource;
 import net.sourceforge.marathon.resource.navigator.FolderResource;
+import net.sourceforge.marathon.util.FileHandler;
 
 public class ResourceView extends TreeView<Resource> implements IResourceChangeListener {
 
@@ -502,7 +503,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         } else {
             file = resource.getFilePath().getParent().toFile();
         }
-        File newFile = FXUIUtils.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new folder", file, true),
+        File newFile = FileHandler.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new folder", file, true),
                 "Create a folder with the given name", FXUIUtils.getIcon("fldr_obj"));
         if (newFile == null) {
             return;
@@ -527,7 +528,7 @@ public class ResourceView extends TreeView<Resource> implements IResourceChangeL
         } else {
             file = resource.getFilePath().getParent().toFile();
         }
-        File newFile = FXUIUtils.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new file", file, true),
+        File newFile = FileHandler.showMarathonSaveFileChooser(new MarathonFileChooserInfo("Create new file", file, true),
                 "Create a new file with the given name", FXUIUtils.getIcon("file_obj"));
         if (newFile == null) {
             return;
