@@ -78,7 +78,7 @@ public class JavaAgentHook {
                                         "Application is using a non-utf8 charset. Marathon might cause issues while playing");
                             }
                             JavaServer server = new JavaServer(port, true);
-                            server.start();
+                            server.start(0);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
