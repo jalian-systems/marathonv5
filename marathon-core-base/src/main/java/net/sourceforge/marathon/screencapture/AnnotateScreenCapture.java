@@ -98,8 +98,8 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
         return isSaved;
     }
 
-    public void saveToFile(File captureFile) {
-        imagePanel.save(captureFile);
+    public File saveToFile(File captureFile) {
+        return imagePanel.save(captureFile);
     }
 
 }
