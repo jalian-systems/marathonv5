@@ -101,6 +101,10 @@ public class Display implements IPlaybackListener, IScriptListener, IExceptionRe
         @Override
         public void updateScript() {
         }
+
+        @Override
+        public void recordInsertScreenShotElement(WindowId windowId, String description) {
+        }
     }
 
     @Retention(RetentionPolicy.RUNTIME)

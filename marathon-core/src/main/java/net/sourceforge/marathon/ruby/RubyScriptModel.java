@@ -471,4 +471,9 @@ public class RubyScriptModel implements IScriptModel {
     public ISubPropertiesLayout[] getSublayouts(ModalDialog<?> parent) {
         return new ISubPropertiesLayout[] { new RubyPathLayout(parent) };
     }
+
+    @Override
+    public String getScriptCodeForInsertScreenShot(String description) {
+        return null;
+    }
 }

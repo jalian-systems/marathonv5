@@ -57,4 +57,6 @@ dependencies {
   compile project(":marathon-core:JSON-java")
   compile "org.yaml:snakeyaml:${snakeyaml_version}"
   compile "commons-io:commons-io:${commons_io_version}"
+  compile "com.jgoodies:jgoodies-common:1.8.1"
+  compile "com.jgoodies:jgoodies-forms:1.8.0"
 }

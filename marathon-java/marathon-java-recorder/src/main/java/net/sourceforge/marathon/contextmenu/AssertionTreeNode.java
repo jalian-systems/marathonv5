@@ -104,7 +104,6 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
     }
 
     public TreeNode getChildAt_internal(int index) {
-        long start = System.currentTimeMillis();
         if (object instanceof List) {
             return getNodeForList((List<?>) object, index);
         }
@@ -118,7 +117,7 @@ public class AssertionTreeNode extends DefaultMutableTreeNode {
         } else {
             method = getMethods(object).get(index);
         }
-		return getNodeForMethod(method);
+        return getNodeForMethod(method);
     }
 
     private TreeNode getNodeForMap(Map<?, ?> map, int index) {

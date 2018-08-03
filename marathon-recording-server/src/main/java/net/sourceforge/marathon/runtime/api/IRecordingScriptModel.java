@@ -33,4 +33,6 @@ public interface IRecordingScriptModel {
 
     public String getScriptCodeForGenericAction(String method, String suffix, String name, Object... params);
 
+    public String getScriptCodeForInsertScreenShot(String description);
+
 }

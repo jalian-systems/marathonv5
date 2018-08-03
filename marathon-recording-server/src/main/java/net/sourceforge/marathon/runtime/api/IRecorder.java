@@ -28,6 +28,8 @@ public interface IRecorder {
 
     void recordShowChecklistElement(WindowId windowId, String fileName);
 
+    void recordInsertScreenShotElement(WindowId windowId, String description);
+
     boolean isCreatingObjectMap();
 
     void updateScript();
