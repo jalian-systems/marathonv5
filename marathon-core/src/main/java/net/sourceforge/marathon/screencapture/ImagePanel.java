@@ -304,8 +304,7 @@ public class ImagePanel extends SplitPane {
     }
 
     @SuppressWarnings("unchecked")
-    public File save(File file) {
-        File savedFile = new File(file.getParentFile(), "ext-" + file.getName());
+    public void save(File file) {
         try {
             VBox box = new VBox();
             TableView<Annotation> tv = new TableView<>();
@@ -341,9 +340,10 @@ public class ImagePanel extends SplitPane {
             tv.getColumns().addAll(numCol, messageColumn);
             box.getChildren().addAll(new ImageView(canvas.snapshot(new SnapshotParameters(), null)), tv);
             new Scene(box);
-            ImageIO.write(SwingFXUtils.fromFXImage(box.snapshot(new SnapshotParameters(), null), null), "png", savedFile);
+            ImageIO.write(SwingFXUtils.fromFXImage(box.snapshot(new SnapshotParameters(), null), null), "png",
+                    new File(file.getParentFile(), "ext-" + file.getName()));
         } catch (IOException e) {
-            throw new RuntimeException("Unable to save the image to " + savedFile, e);
+            throw new RuntimeException("Unable to save the image to " + new File(file.getParentFile(), "ext-" + file.getName()), e);
         }
         WritableImage snapshot = canvas.snapshot(new SnapshotParameters(), null);
         try {
@@ -387,7 +387,7 @@ public class ImagePanel extends SplitPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return savedFile;
+
     }
 
     private org.w3c.dom.Node getAnnotationNode(Annotation annotation, int i) {

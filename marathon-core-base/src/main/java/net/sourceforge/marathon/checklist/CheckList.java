@@ -166,7 +166,6 @@ public class CheckList {
     private String description;
     private String captureFile;
     private File dataFile;
-    private File extCaptureFile;
 
     public CheckList() {
         checkListItems = new ArrayList<CheckList.CheckListItem>();
@@ -355,13 +354,5 @@ public class CheckList {
 
     public void delete(CheckListItem item) {
         checkListItems.remove(item);
-    }
-
-    public File getExtCaptureFile() {
-        return extCaptureFile;
-    }
-
-    public void setExtCaptureFile(File extCaptureFile) {
-        this.extCaptureFile = extCaptureFile;
     }
 }
