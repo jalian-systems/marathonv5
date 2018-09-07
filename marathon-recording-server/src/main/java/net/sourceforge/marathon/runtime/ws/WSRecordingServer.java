@@ -41,6 +41,7 @@ import net.sourceforge.marathon.runtime.api.WindowId;
 public abstract class WSRecordingServer extends WebSocketServer implements IRecordingServer {
 
     public static final Logger LOGGER = Logger.getLogger(WSRecordingServer.class.getName());
+    public static String COMMENT_PREFIX = "# ";
 
     private static class MenuItemScriptElement implements IScriptElement {
         private static final long serialVersionUID = 1L;
@@ -87,7 +88,7 @@ public abstract class WSRecordingServer extends WebSocketServer implements IReco
 
         @Override
         public String toScriptCode() {
-            return Indent.getIndent() + "# " + comment + "\n";
+            return Indent.getIndent() + COMMENT_PREFIX + comment + "\n";
         }
 
         @Override
