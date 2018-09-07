@@ -18,6 +18,16 @@ subprojects {
     defaultOutputDir = file('bin')
   }
 
+	task sourceJar(type: Jar, dependsOn: classes) {
+			classifier 'sources'
+			from sourceSets.main.allSource
+	}
+
+	artifacts {
+		archives jar
+		archives sourceJar
+	}
+
   eclipse.classpath.file {
       beforeMerged { classpath -> 
           classpath.entries.clear()
