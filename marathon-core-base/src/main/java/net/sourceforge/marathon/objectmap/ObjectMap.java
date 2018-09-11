@@ -312,4 +312,8 @@ public class ObjectMap extends ObjectMapItem {
         return currentContainer.findComponentNames();
     }
 
+    public List<OMapComponent> findComponents(OMapContainer container) {
+        return container.findComponents();
+    }
+
 }

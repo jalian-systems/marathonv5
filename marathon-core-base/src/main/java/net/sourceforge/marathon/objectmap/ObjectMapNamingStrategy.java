@@ -401,4 +401,9 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
         }
         return collection;
     }
+
+    @Override
+    public List<OMapComponent> getComponents() throws ObjectMapException {
+        return omapService.findComponents(topContainerAccessor);
+    }
 }
