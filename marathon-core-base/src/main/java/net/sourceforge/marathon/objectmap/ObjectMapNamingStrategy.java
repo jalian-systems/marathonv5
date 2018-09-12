@@ -269,10 +269,12 @@ public class ObjectMapNamingStrategy implements INamingStrategy {
             JSONObject urp = container.getJSONObject("urp");
             StringBuilder sb = new StringBuilder();
             String[] keys = JSONObject.getNames(urp);
-            for (String key : keys) {
-                sb.append(urp.get(key).toString()).append(':');
+            if (keys != null) {
+                for (String key : keys) {
+                    sb.append(urp.get(key).toString()).append(':');
+                }
+                sb.setLength(sb.length() - 1);
             }
-            sb.setLength(sb.length() - 1);
             name = sb.toString();
         }
         return getName(container, name);
