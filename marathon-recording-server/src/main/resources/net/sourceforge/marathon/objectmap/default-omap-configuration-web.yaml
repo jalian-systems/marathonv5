@@ -55,6 +55,10 @@ namingProperties:
     propertyLists:
     -   priority: 100
         properties: [value]
+-   className: input[type='radio']
+    propertyLists:
+    -   priority: 100
+        properties: [value]
 -   className: div.wp-menu-name
     propertyLists: []
 -   className: image
