@@ -15,6 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 /**
@@ -78,6 +79,21 @@ public abstract class Wait {
      * Wait until the "until" condition returns true or time runs out.
      *
      * @param message
+     *            the failure message supplier
+     * @param timeoutInMilliseconds
+     *            the amount of time to wait before giving up
+     * @throws WaitTimedOutException
+     *             if "until" doesn't return true until the timeout
+     * @see #until()
+     */
+    public void wait(Supplier<String> supplier) {
+        wait(supplier, DEFAULT_TIMEOUT, DEFAULT_INTERVAL);
+    }
+
+    /**
+     * Wait until the "until" condition returns true or time runs out.
+     *
+     * @param message
      *            the failure message
      * @param timeoutInMilliseconds
      *            the amount of time to wait before giving up
@@ -96,6 +112,21 @@ public abstract class Wait {
      *            the failure message
      * @param timeoutInMilliseconds
      *            the amount of time to wait before giving up
+     * @throws WaitTimedOutException
+     *             if "until" doesn't return true until the timeout
+     * @see #until()
+     */
+    public void wait(Supplier<String> supplier, long timeoutInMilliseconds) {
+        wait(supplier, timeoutInMilliseconds, DEFAULT_INTERVAL);
+    }
+
+    /**
+     * Wait until the "until" condition returns true or time runs out.
+     *
+     * @param message
+     *            the failure message
+     * @param timeoutInMilliseconds
+     *            the amount of time to wait before giving up
      * @param intervalInMilliseconds
      *            the interval to pause between checking "until"
      * @throws WaitTimedOutException
@@ -103,6 +134,23 @@ public abstract class Wait {
      * @see #until()
      */
     public void wait(String message, long timeoutInMilliseconds, long intervalInMilliseconds) {
+        wait(() -> message, timeoutInMilliseconds, intervalInMilliseconds);
+    }
+
+    /**
+     * Wait until the "until" condition returns true or time runs out.
+     *
+     * @param message
+     *            the failure message supplier
+     * @param timeoutInMilliseconds
+     *            the amount of time to wait before giving up
+     * @param intervalInMilliseconds
+     *            the interval to pause between checking "until"
+     * @throws WaitTimedOutException
+     *             if "until" doesn't return true until the timeout
+     * @see #until()
+     */
+    public void wait(Supplier<String> messageSupplier, long timeoutInMilliseconds, long intervalInMilliseconds) {
         long start = System.currentTimeMillis();
         long end = start + timeoutInMilliseconds;
         while (System.currentTimeMillis() < end) {
@@ -115,7 +163,7 @@ public abstract class Wait {
                 throw new RuntimeException(e);
             }
         }
-        throw new WaitTimedOutException(message);
+        throw new WaitTimedOutException(messageSupplier.get());
     }
 
     public void waitWithoutException(String message, long timeoutInMilliseconds, long intervalInMilliseconds) {
