@@ -68,7 +68,7 @@ public class ObjectMap extends ObjectMapItem {
                 throw new ObjectMapException("No top level component matched for the given properties: " + pa);
             }
         } else {
-            throw new ObjectMapException("More than one toplevel container matched for given properties");
+            throw new ObjectMapException("More than one toplevel container matched for given properties: " + pa + " matched=" + matched);
         }
         currentContainer.addTitle(title);
         return currentContainer;

@@ -593,4 +593,10 @@ public class OMapContainer implements IObjectMapTreeItem {
         return components;
     }
 
+    @Override
+    public String toString() {
+        return "OMapContainer [containerTitles=" + containerTitles + ", containerRecognitionProperties="
+                + containerRecognitionProperties + "]";
+    }
+
 }
