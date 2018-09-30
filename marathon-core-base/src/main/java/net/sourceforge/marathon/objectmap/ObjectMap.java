@@ -68,7 +68,8 @@ public class ObjectMap extends ObjectMapItem {
                 throw new ObjectMapException("No top level component matched for the given properties: " + pa);
             }
         } else {
-            throw new ObjectMapException("More than one toplevel container matched for given properties: " + pa + " matched=" + matched);
+            throw new ObjectMapException(
+                    "More than one toplevel container matched for given properties: " + pa + " matched=" + matched);
         }
         currentContainer.addTitle(title);
         return currentContainer;
@@ -227,7 +228,7 @@ public class ObjectMap extends ObjectMapItem {
     }
 
     public OMapContainer getTopLevelComponent(Properties attributes, Properties urp) throws ObjectMapException {
-        IPropertyAccessor pa = new PropertiesPropertyAccessor(attributes);
+        IPropertyAccessor pa = new PropertiesPropertyAccessor(urp, attributes);
         OMapContainer currentContainer;
         List<OMapContainer> matched = new ArrayList<OMapContainer>();
         for (OMapContainer com : data) {
