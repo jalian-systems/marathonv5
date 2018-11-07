@@ -144,6 +144,15 @@ public class MPFConfigurationInfo {
         if (props.getProperty(Constants.PROP_STORY_DIR) == null) {
             createMarathonDir(projectDir, Constants.DIR_STORIES);
         }
+        if (getLauncherModel().getFramework().equals(Constants.FRAMEWORK_WEB)) {
+            File destDir = new File(projectDir);
+            File srcFile = new File(System.getProperty(Constants.PROP_HOME), "recorder_options.js");
+            try {
+                FileUtils.copyFileToDirectory(srcFile, destDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if (props.getProperty(Constants.PROP_CHECKLIST_DIR) == null) {
             createMarathonDir(projectDir, Constants.DIR_CHECKLIST);
             File srcDir = new File(System.getProperty(Constants.PROP_HOME), "Checklists");
