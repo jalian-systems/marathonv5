@@ -53,4 +53,6 @@ public interface INamingStrategy {
     Collection<String> getAllProperties();
 
     ObjectMapConfiguration getObjectMapConfiguration();
+
+    List<OMapComponent> getComponents() throws ObjectMapException;
 }

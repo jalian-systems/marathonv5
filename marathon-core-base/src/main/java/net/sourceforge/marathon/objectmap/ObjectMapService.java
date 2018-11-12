@@ -276,4 +276,13 @@ public class ObjectMapService implements IObjectMapService {
         return configuration;
     }
 
+    @Override
+    public List<OMapComponent> findComponents(IPropertyAccessor containerAccessor) throws ObjectMapException {
+        IOMapContainer container = getContainer(containerAccessor);
+        OMapContainer oMapContainer = container.getOMapContainer(objectMap);
+        synchronized (oMapContainer) {
+            return objectMap.findComponents(oMapContainer);
+        }
+    }
+
 }
