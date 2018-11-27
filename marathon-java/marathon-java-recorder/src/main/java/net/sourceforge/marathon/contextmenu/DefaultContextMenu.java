@@ -16,7 +16,6 @@
 package net.sourceforge.marathon.contextmenu;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -36,20 +35,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -62,6 +55,25 @@ import net.sourceforge.marathon.util.UIUtils;
 public class DefaultContextMenu extends AbstractContextMenu implements IContextMenu {
 
     public static final Logger LOGGER = Logger.getLogger(DefaultContextMenu.PlaceHolderTextField.class.getName());
+
+    private final static class AssertionTree extends JTree {
+        private static final long serialVersionUID = 1L;
+
+        private AssertionTree(TreeNode root) {
+            super(root);
+        }
+
+        @Override
+        public String convertValueToText(Object value, boolean selected, boolean expanded, boolean leaf, int row,
+                boolean hasFocus) {
+            AssertionTreeNode node = (AssertionTreeNode) value;
+            StringBuilder sb = new StringBuilder();
+            sb.append(node.getProperty() + " {");
+            sb.append(node.getDisplayNode().replace("\\", "\\\\").replace("\n", "\\n").replace("\r", "\\r"));
+            sb.append("}");
+            return sb.toString();
+        }
+    }
 
     @SuppressWarnings("serial")
     public static class PlaceHolderTextField extends JTextField {
@@ -86,54 +98,6 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
             g.drawString(placeholder, getInsets().left, pG.getFontMetrics().getMaxAscent() + getInsets().top);
         }
 
-    }
-
-    static class AssertionTreeNodeRenderer implements TreeCellRenderer {
-        private Color bgSel;
-        private Color fgSel;
-        private Color bgNonSel;
-        private Color fgNonSel;
-        private SimpleAttributeSet valueStyle;
-        private SimpleAttributeSet propertyStyle;
-        private Color valueForegroundColor = new Color(0x00, 0x00, 0xa4);
-
-        public AssertionTreeNodeRenderer() {
-            DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-            fgSel = renderer.getTextSelectionColor();
-            fgNonSel = renderer.getTextNonSelectionColor();
-            bgSel = renderer.getBackgroundSelectionColor();
-            bgNonSel = renderer.getBackgroundNonSelectionColor();
-            valueStyle = new SimpleAttributeSet();
-            StyleConstants.setForeground(valueStyle, valueForegroundColor);
-            propertyStyle = new SimpleAttributeSet();
-            if (fgNonSel != null) {
-                StyleConstants.setForeground(propertyStyle, fgNonSel);
-            }
-        }
-
-        @Override
-        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
-                int row, boolean hasFocus) {
-            JTextPane pane = new JTextPane();
-            if (sel) {
-                pane.setBackground(bgSel);
-                pane.setForeground(fgSel);
-            } else {
-                pane.setBackground(bgNonSel);
-                pane.setForeground(fgNonSel);
-            }
-            AssertionTreeNode node = (AssertionTreeNode) value;
-            pane.setText("");
-            try {
-                pane.getDocument().insertString(pane.getDocument().getLength(), node.getProperty() + " {", propertyStyle);
-                pane.getDocument().insertString(pane.getDocument().getLength(),
-                        node.getDisplayNode().replace("\\", "\\\\").replace("\n", "\\n").replace("\r", "\\r"), valueStyle);
-                pane.getDocument().insertString(pane.getDocument().getLength(), "}", propertyStyle);
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-            return pane;
-        }
     }
 
     protected static final int ASSERT_ACTION = 1;
@@ -273,7 +237,7 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
     }
 
     private JTree getTree() {
-        assertionTree = new JTree(rootNode);
+        assertionTree = new AssertionTree(rootNode);
         assertionTree.setRootVisible(false);
         assertionTree.setShowsRootHandles(true);
         assertionTree.setModel(getTreeModel());
@@ -296,7 +260,6 @@ public class DefaultContextMenu extends AbstractContextMenu implements IContextM
                 }
             }
         });
-        assertionTree.setCellRenderer(new AssertionTreeNodeRenderer());
         assertionTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

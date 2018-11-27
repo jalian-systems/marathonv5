@@ -82,6 +82,10 @@ public class RecordingTest {
             public void updateScript() {
             }
 
+            @Override
+            public void recordInsertScreenShotElement(WindowId windowId, String description) {
+            }
+
         });
         return port;
     }

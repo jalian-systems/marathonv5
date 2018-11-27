@@ -589,4 +589,14 @@ public class OMapContainer implements IObjectMapTreeItem {
         return parent;
     }
 
+    public List<OMapComponent> findComponents() {
+        return components;
+    }
+
+    @Override
+    public String toString() {
+        return "OMapContainer [containerTitles=" + containerTitles + ", containerRecognitionProperties="
+                + containerRecognitionProperties + "]";
+    }
+
 }

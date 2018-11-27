@@ -140,7 +140,16 @@ public class JSONScriptElement implements IScriptElement {
         if (event.has("suffix")) {
             suffix = "_" + event.getString("suffix");
         }
-        return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("hover", suffix, name);
+        String cellinfo = null;
+        if (event.has("cellinfo")) {
+            cellinfo = event.getString("cellinfo");
+        }
+        if (cellinfo == null) {
+            return Indent.getIndent() + RecordingScriptModel.getModel().getScriptCodeForGenericAction("hover", suffix, name);
+        } else {
+            return Indent.getIndent()
+                    + RecordingScriptModel.getModel().getScriptCodeForGenericAction("hover", suffix, name, cellinfo);
+        }
     }
 
     private String enscriptRawMouseClick() {

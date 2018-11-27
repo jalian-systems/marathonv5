@@ -128,4 +128,9 @@ public class ScriptRecorder implements IRecorder {
     public boolean isCreatingObjectMap() {
         return false;
     }
+
+    @Override
+    public void recordInsertScreenShotElement(WindowId windowId, String description) {
+        record(new InsertScreenShotElement(windowId, description));
+    }
 }

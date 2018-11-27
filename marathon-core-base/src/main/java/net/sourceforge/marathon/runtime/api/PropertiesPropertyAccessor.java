@@ -24,18 +24,22 @@ public class PropertiesPropertyAccessor extends DefaultMatcher implements Serial
     public static final Logger LOGGER = Logger.getLogger(PropertiesPropertyAccessor.class.getName());
 
     private static final long serialVersionUID = 1L;
-    private Properties attributes;
+    private Properties[] attributes;
 
     public PropertiesPropertyAccessor() {
     }
 
-    public PropertiesPropertyAccessor(Properties attributes) {
+    public PropertiesPropertyAccessor(Properties... attributes) {
         this.attributes = attributes;
     }
 
     @Override
     public String getProperty(String name) {
-        return attributes.getProperty(name);
+        for (Properties properties : attributes) {
+            if (properties.containsKey(name))
+                return properties.getProperty(name);
+        }
+        return null;
     }
 
 }

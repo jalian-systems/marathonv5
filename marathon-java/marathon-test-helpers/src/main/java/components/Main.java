@@ -3,7 +3,6 @@ package components;
 import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class Main extends JFrame {
         }
 
         public void load(int index) {
-            Class klass = klasses.get(index);
+            final Class klass = klasses.get(index);
             try {
                 klass.getMethod("main", String[].class).invoke(null, (Object) new String[] {});
                 SwingUtilities.invokeLater(new Runnable() {
@@ -70,8 +69,12 @@ public class Main extends JFrame {
                     public void run() {
                         Frame[] frames = Frame.getFrames();
                         for (Frame frame : frames) {
-                            if (!frame.getTitle().equals("Demo Programs") && frame instanceof JFrame)
-                                ((JFrame) frame).setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            if (!frame.getTitle().equals("Demo Programs") && frame instanceof JFrame) {
+                                JFrame f = (JFrame) frame;
+                                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                                if (f.getTitle() == null || f.getTitle().equals(""))
+                                    f.setTitle(klass.getName());
+                            }
                         }
                     }
                 });

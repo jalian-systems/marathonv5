@@ -61,7 +61,9 @@ public class JavaFxAgentHook {
                 if (c.wasAdded()) {
                     LOGGER.info("Checking for window: " + Thread.currentThread());
                     if (!"".equals(windowTitle)) {
-                        LOGGER.info("Checking for windowTitle is not implemented.. ignoring and continuing...");
+                        LOGGER.info("Checking for windowTitle(" + windowTitle + ")");
+                        if (!validWindowTitle(stages))
+                            return;
                     }
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
                         @Override
@@ -75,7 +77,7 @@ public class JavaFxAgentHook {
                                             "Application is using a non-utf8 charset. Marathon might cause issues while playing");
                                 }
                                 JavaServer server = new JavaServer(port, true);
-                                server.start();
+                                server.start(0);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -127,6 +129,14 @@ public class JavaFxAgentHook {
                 }
             }
         });
+    }
+
+    private static boolean validWindowTitle(ObservableList<Stage> stages) {
+        if (windowTitle.startsWith("//") || !windowTitle.startsWith("/")) {
+            String title = windowTitle.startsWith("//") ? windowTitle.substring(1) : windowTitle;
+            return stages.filtered(s -> s.getTitle().equals(title)).size() > 0;
+        }
+        return stages.filtered(s -> s.getTitle().matches(windowTitle.substring(1))).size() > 0;
     }
 
 }

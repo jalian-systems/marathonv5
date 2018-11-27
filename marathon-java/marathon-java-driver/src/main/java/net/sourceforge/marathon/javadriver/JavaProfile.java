@@ -276,7 +276,7 @@ public class JavaProfile {
             args.add(mainClass);
             args.addAll(appArguments);
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
-            commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
+            setToolOptions(commandLine);
             if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
             }
@@ -298,7 +298,7 @@ public class JavaProfile {
                 throw new WebDriverException("You must set either JNLP URL or File");
             }
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
-            commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
+            setToolOptions(commandLine);
             if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
             }
@@ -317,7 +317,7 @@ public class JavaProfile {
                 args.add(appletURL);
             }
             CommandLine commandLine = new CommandLine(args.toArray(new String[args.size()]));
-            commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
+            setToolOptions(commandLine);
             if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
             }
@@ -337,7 +337,7 @@ public class JavaProfile {
             if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
             }
-            commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
+            setToolOptions(commandLine);
             if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
             }
@@ -356,7 +356,7 @@ public class JavaProfile {
             if (javaHome != null) {
                 commandLine.setEnvironmentVariable("JAVA_HOME", javaHome);
             }
-            commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", getToolOptions());
+            setToolOptions(commandLine);
             if (workingDirectory != null) {
                 commandLine.setWorkingDirectory(workingDirectory);
             }
@@ -1038,7 +1038,7 @@ public class JavaProfile {
         }
     }
 
-    private String getToolOptions() {
+    private void setToolOptions(CommandLine commandLine) {
         StringBuilder java_tool_options = new StringBuilder();
         java_tool_options.append("-DkeepLog=" + Boolean.toString(keepLog)).append(" ");
         java_tool_options.append("-Dmarathon.launch.mode=" + launchMode.getName()).append(" ");
@@ -1067,7 +1067,11 @@ public class JavaProfile {
         if (java_tool_options.length() > 1023) {
             throw new RuntimeException("JAVA_TOOL_OPTIONS is more than 1023 bytes. Move marathon installation to a shorter path");
         }
-        return java_tool_options.toString();
+        String currentOptions = System.getenv("JAVA_TOOL_OPTIONS");
+        if (currentOptions != null) {
+            commandLine.setEnvironmentVariable("USER_JTO", currentOptions);
+        }
+        commandLine.setEnvironmentVariable("JAVA_TOOL_OPTIONS", java_tool_options.toString());
     }
 
     private String getRecorderJar() {

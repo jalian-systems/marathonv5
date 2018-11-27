@@ -46,7 +46,7 @@ public class CheckListStage extends ModalDialog<CheckListFormNode> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.setCenter(new CheckListView(checkListFormNode));
         root.setBottom(createButtonBar());

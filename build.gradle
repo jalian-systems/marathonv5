@@ -7,7 +7,7 @@ ext.appName = "Marathon (OSS) (Java Version)"
 subprojects {
   apply plugin: 'java'
   apply plugin: 'eclipse'
-  version = '5.2.2.0'
+  version = '5.2.3.0'
   task allDependencies(type: DependencyReportTask) {}
 
   tasks.withType(JavaCompile) {
@@ -17,6 +17,16 @@ subprojects {
   eclipse.classpath {
     defaultOutputDir = file('bin')
   }
+
+	task sourceJar(type: Jar, dependsOn: classes) {
+			classifier 'sources'
+			from sourceSets.main.allSource
+	}
+
+	artifacts {
+		archives jar
+		archives sourceJar
+	}
 
   eclipse.classpath.file {
       beforeMerged { classpath -> 

@@ -52,4 +52,6 @@ public interface IObjectMapService {
 
     public abstract ObjectMapConfiguration getObjectMapConfiguration();
 
+    public abstract List<OMapComponent> findComponents(IPropertyAccessor topContainerAccessor) throws ObjectMapException;
+
 }

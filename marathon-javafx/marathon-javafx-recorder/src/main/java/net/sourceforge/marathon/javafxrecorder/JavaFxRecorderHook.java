@@ -41,6 +41,8 @@ import javafx.event.EventType;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
@@ -328,11 +330,6 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     }
 
     private void addEventFilter(Stage stage) {
-        stage.getScene().getRoot().getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
-        stage.getScene().getRoot().getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
-        stage.getScene().getRoot().addEventFilter(InputEvent.ANY, JavaFxRecorderHook.this);
-        stage.getScene().getRoot().addEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
-        stage.getScene().getRoot().addEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
@@ -363,7 +360,23 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 recordWindowState = stage;
             }
         });
-        stage.getScene().getRoot().getProperties().put("marathon.menu.handler", menuEvent);
+
+        stage.sceneProperty().addListener((ob, o, n) -> setupScene(n));
+        setupScene(stage.getScene());
+    }
+
+    protected void setupScene(Scene scene) {
+        scene.rootProperty().addListener((ob, o, n) -> setupSceneRoot(n));
+        setupSceneRoot(scene.getRoot());
+    }
+
+    protected void setupSceneRoot(Parent root) {
+        root.getProperties().put("marathon.fileChooser.eventType", fileChooserEventType);
+        root.getProperties().put("marathon.folderChooser.eventType", folderChooserEventType);
+        root.addEventFilter(InputEvent.ANY, JavaFxRecorderHook.this);
+        root.addEventFilter(fileChooserEventType, JavaFxRecorderHook.this);
+        root.addEventFilter(folderChooserEventType, JavaFxRecorderHook.this);
+        root.getProperties().put("marathon.menu.handler", menuEvent);
     }
 
     public static void premain(final String args, Instrumentation instrumentation) throws Exception {
@@ -386,11 +399,13 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 if (done) {
                     return;
                 }
-                if (!"".equals(windowTitle)) {
-                    logger.warning("WindowTitle is not supported yet... Ignoring it.");
-                }
                 c.next();
                 if (c.wasAdded()) {
+                    if (!"".equals(windowTitle)) {
+                        LOGGER.info("Checking for windowTitle(" + windowTitle + ")");
+                        if (!validWindowTitle(stages))
+                            return;
+                    }
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
                         @Override
                         public Object run() {
@@ -401,6 +416,14 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
                 }
             }
         });
+    }
+
+    private static boolean validWindowTitle(ObservableList<Stage> stages) {
+        if (windowTitle.startsWith("//") || !windowTitle.startsWith("/")) {
+            String title = windowTitle.startsWith("//") ? windowTitle.substring(1) : windowTitle;
+            return stages.filtered(s -> s.getTitle().equals(title)).size() > 0;
+        }
+        return stages.filtered(s -> s.getTitle().matches(windowTitle.substring(1))).size() > 0;
     }
 
     @Override

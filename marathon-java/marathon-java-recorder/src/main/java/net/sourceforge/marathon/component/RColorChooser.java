@@ -18,6 +18,7 @@ package net.sourceforge.marathon.component;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import javax.swing.JColorChooser;
@@ -51,5 +52,9 @@ public class RColorChooser extends RComponent {
 
     private String getColorCode(Color color) {
         return "#" + Integer.toHexString(color.getRGB() & 0x00FFFFFF | 0x1000000).substring(1);
+    }
+
+    @Override
+    protected void mousePressed(MouseEvent me) {
     }
 }
