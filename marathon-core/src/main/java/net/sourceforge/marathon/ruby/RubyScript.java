@@ -142,7 +142,7 @@ public class RubyScript implements IScript {
     }
 
     private void readGlobals() {
-        interpreter.evalScriptlet("$marathon = RubyMarathon.new('" + driverURL + "')");
+        interpreter.evalScriptlet("RubyMarathon.new('" + driverURL + "')");
         IRubyObject marathon = interpreter.evalScriptlet("$marathon");
         interpreter.evalScriptlet("$test = proc { test }");
         runtime = (MarathonRuby) JavaEmbedUtils.rubyToJava(interpreter, marathon, MarathonRuby.class);

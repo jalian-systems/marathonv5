@@ -22,6 +22,7 @@ class RubyMarathon < MarathonRuby
     attr_reader :dndCopyKey
     
     def initialize(url)
+        $marathon = self
         @cwms = System.getProperty("marathon.COMPONENT_WAIT_MS", "30000").to_i
         if(url.length != 0)
           caps = Selenium::WebDriver::Remote::Capabilities.new

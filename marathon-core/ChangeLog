@@ -1,3 +1,15 @@
+Marathon Version 5.2.3.0 (31st July 2018)
+
+01. fixed: Clicks getting recorded on file and color choosers
+02. fixed: Slow opening of ContextMenu in some cases
+03. feat: Added support for start.window.title to FX
+04. refact: getToolOptions changed to setToolOptions
+05. feat: Setting USER_JTO environment variable if JAVA_TOOL_OPTIONS is set.
+06. chore: Added login and webview examples
+07. fixed: Not ignoring empty cells (for table, treeview, listview etc.)
+08. ref: Setting  to self in MarathonRuby constructor
+09. fix: Allow adding breakpoints in non-project files when debug flag is set. (marathon.debug)
+
 Marathon Version 5.2.2.0 (16th July 2018)
 
 01. feat: Added JavaDoc for JavaDriver and JavaProfile

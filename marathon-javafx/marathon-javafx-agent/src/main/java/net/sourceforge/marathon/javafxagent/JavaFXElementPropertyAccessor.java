@@ -282,16 +282,11 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
     }
 
     public int getIndexOfType() {
-        Object prop = node.getProperties().get("marathon.indexOfType");
-        if (prop != null) {
-            return (int) prop;
-        }
         List<Node> allComponents = findAllComponents();
         int index = 0;
         String type = getType();
         for (Node c : allComponents) {
             if (c == node) {
-                node.getProperties().put("marathon.indexOfType", index);
                 return index;
             }
             if (type.equals(getTagName(c))) {
@@ -754,7 +749,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> r = new HashSet<>();
         for (Node node : l) {
             if (node instanceof ListCell<?>) {
-                r.add(node);
+                if (!((ListCell<?>) node).isEmpty())
+                    r.add(node);
             }
         }
         return r;
@@ -890,7 +886,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> r = new HashSet<>();
         for (Node node : l) {
             if (node instanceof TreeCell<?>) {
-                r.add(node);
+                if (!((TreeCell<?>) node).isEmpty())
+                    r.add(node);
             }
         }
         return r;
@@ -1144,7 +1141,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> r = new HashSet<>();
         for (Node node : l) {
             if (node instanceof TableCell<?, ?>) {
-                r.add(node);
+                if (!((TableCell<?, ?>) node).isEmpty())
+                    r.add(node);
             }
         }
         return r;
@@ -1213,7 +1211,7 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         TableRow<?> row = null;
         for (Node tableRow : tableRowCell) {
             TableRow<?> r = (TableRow<?>) tableRow;
-            if (r.getIndex() == rowIndex) {
+            if (!r.isEmpty() && r.getIndex() == rowIndex) {
                 row = r;
                 break;
             }
@@ -1221,6 +1219,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> cells = row.lookupAll(".table-cell");
         for (Node node : cells) {
             TableCell<?, ?> cell = (TableCell<?, ?>) node;
+            if (cell.isEmpty())
+                continue;
             if (tableView.getColumns().indexOf(cell.getTableColumn()) == columnIndex) {
                 Bounds bounds = cell.getBoundsInParent();
                 Point2D localToParent = cell.localToParent(bounds.getWidth() / 2, bounds.getHeight() / 2);
@@ -1434,7 +1434,8 @@ public class JavaFXElementPropertyAccessor extends JavaPropertyAccessor {
         Set<Node> r = new HashSet<>();
         for (Node node : l) {
             if (node instanceof TreeTableCell<?, ?>) {
-                r.add(node);
+                if (!((TreeTableCell<?, ?>) node).isEmpty())
+                    r.add(node);
             }
         }
         return r;
