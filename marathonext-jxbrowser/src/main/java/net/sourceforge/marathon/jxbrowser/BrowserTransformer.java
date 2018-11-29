@@ -57,13 +57,13 @@ public class BrowserTransformer implements ClassFileTransformer {
             if (cl.getName().equals("com.teamdev.jxbrowser.chromium.Browser")) {
                 JavaFXBrowserViewElement.initRemoteDebug();
             }
-            b = cl.toBytecode();
+            return cl.toBytecode();
         } catch (Exception e) {
         } finally {
             if (cl != null) {
                 cl.detach();
             }
         }
-        return b;
+        return null;
     }
 }

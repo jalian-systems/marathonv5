@@ -5,7 +5,7 @@ if(null == properties['jdk6home']) {
 }
 if(hasProperty('rootProject'))
 	rootProject.name = "marathon-root"
-include 'marathon', 'marathon-core:JSON-java', 'marathon-core:ruby-selenium-webdriver', ':marathon-core',
+include 'marathon', 'marathon-core:ruby-selenium-webdriver', ':marathon-core',
           'marathon-java:marathon-java-agent', 'marathon-java:marathon-test-helpers',
           'marathon-java:marathon-java-driver', 'marathon-java:marathon-java-runtime',
           'marathon-java:marathon-java-recorder', ':marathon-java', 'marathon-java:marathon-kbmap-tool',

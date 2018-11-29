@@ -15,8 +15,10 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.List;
 import java.util.Set;
 
+import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -27,6 +29,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.SimpleListViewScrollSample;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
@@ -42,6 +45,18 @@ public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
     public void initializeDriver() {
         driver = new JavaFXAgent();
         listView = driver.findElementByTagName("list-view");
+    }
+
+    @Test
+    public void getAllItems() {
+        List<IJavaFXElement> elements = driver.findElementsByCssSelector("list-view::all-items");
+        AssertJUnit.assertEquals(25, elements.size());
+    }
+
+    @Test
+    public void getAnItem() {
+        IJavaFXElement element = driver.findElementByCssSelector("list-view::all-items[text='Row 21']");
+        System.out.println("Element = " + element.getText());
     }
 
     @Test
@@ -98,6 +113,42 @@ public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
                 return listViewNode.getBoundsInLocal().contains(point);
             }
         };
+    }
+
+    @Test
+    public void clickNthelementSelectionWithoutScrollIndex() throws InterruptedException {
+        ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        listViewNode.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        select_by_index("2");
+        select_by_index("8");
+        select_by_index("22");
+    }
+
+    protected void select_by_index(String index) throws InterruptedException {
+        JavaFXListViewItemElement item = (JavaFXListViewItemElement) listView
+                .findElementByCssSelector(".::nth-item(" + index + ")");
+        Platform.runLater(() -> {
+            item.click();
+        });
+    }
+
+    @Test
+    public void clickNthelementSelectionWithoutScrollText() throws InterruptedException {
+        ListView<?> listViewNode = (ListView<?>) getPrimaryStage().getScene().getRoot().lookup(".list-view");
+        listViewNode.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        select_by_text("Row 2");
+        select_by_text("Row 8");
+        select_by_text("Row 22");
+    }
+
+    private void select_by_text(String text) throws InterruptedException {
+        JSONObject o = new JSONObject();
+        o.put("select", text);
+        JavaFXListViewItemElement item = (JavaFXListViewItemElement) listView
+                .findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
+        Platform.runLater(() -> {
+            item.click();
+        });
     }
 
     @Override

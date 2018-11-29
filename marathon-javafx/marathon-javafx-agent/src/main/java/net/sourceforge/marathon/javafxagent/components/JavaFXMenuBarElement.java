@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
@@ -57,7 +58,7 @@ public class JavaFXMenuBarElement extends JavaFXElement {
                 RadioMenuItem radioMenuItem = (RadioMenuItem) menu;
                 radioMenuItem.setSelected(!isSelected());
             }
-            menu.fire();
+            Platform.runLater(() -> menu.fire());
         });
         return true;
     }

@@ -36,8 +36,8 @@ public interface IMarathonRuntime {
      *            stack traces.
      * @return - a Script which
      */
-    IScript createScript(MarathonMode playing, IConsole console, String scriptText, String absolutePath, boolean b, boolean c,
-            Properties dataVariables);
+    IScript createScript(MarathonMode playing, IConsole console, String scriptText, String absolutePath, boolean isRecording,
+            boolean isDebugging, Properties dataVariables);
 
     /**
      * begin capturing system events that are happening inside this runtime, and

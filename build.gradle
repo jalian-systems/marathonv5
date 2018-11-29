@@ -8,6 +8,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'eclipse'
   version = '5.2.3.0'
+  group = 'com.jaliansystems'
   task allDependencies(type: DependencyReportTask) {}
 
   tasks.withType(JavaCompile) {

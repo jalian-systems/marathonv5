@@ -28,8 +28,8 @@ import java.util.logging.Logger;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
-import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
+import net.sourceforge.marathon.runtime.api.Constants.MarathonMode;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.IMarathonRuntime;
 import net.sourceforge.marathon.runtime.api.IRecorder;
@@ -246,12 +246,15 @@ public class WebDriverRuntime implements IMarathonRuntime {
     public void stopRecording() {
         System.setProperty("marathon.recording.port", "");
         recordingServer.stopRecording();
+        recordingServer.insertingScriptStart();
         script.runFixtureTeardown();
     }
 
     @Override
     public void startApplication() {
+        recordingServer.insertingScriptStart();
         script.runFixtureSetup();
+        recordingServer.insertingScriptFinish();
     }
 
     @Override

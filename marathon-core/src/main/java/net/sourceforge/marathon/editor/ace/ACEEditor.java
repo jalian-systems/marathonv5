@@ -783,4 +783,14 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
         }
         infoButton.getItems().add(tmsMenuItem);
     }
+
+    public void _copy(String s) {
+        Platform.runLater(() -> clipboard.setData(s));
+    }
+
+    public void _cut(String s) {
+    }
+
+    public void _paste(String s) {
+    }
 }

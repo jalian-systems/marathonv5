@@ -67,15 +67,15 @@ public class FileChooserTransformer implements ClassFileTransformer {
                 CtMethod showDialog = cl.getDeclaredMethod("showDialog");
                 showDialog.insertAfter(codeSingle);
             }
-            b = cl.toBytecode();
+            return cl.toBytecode();
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         } finally {
             if (cl != null) {
                 cl.detach();
             }
         }
-        return b;
+        return null;
     }
 
 }

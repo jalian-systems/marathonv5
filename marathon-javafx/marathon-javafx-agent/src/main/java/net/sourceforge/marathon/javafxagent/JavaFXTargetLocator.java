@@ -18,6 +18,7 @@ package net.sourceforge.marathon.javafxagent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -176,6 +177,7 @@ public class JavaFXTargetLocator {
             for (int i = 0; i < parray.length(); i++) {
                 params[i] = parray.get(i);
             }
+            LOGGER.info("getByPseudoElement(" + selector + ", " + Arrays.asList(params));
             e = e.getByPseudoElement(selector, params).get(0);
             return e;
         }

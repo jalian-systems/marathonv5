@@ -40,11 +40,12 @@ public class FileChooserTransformer implements ClassFileTransformer {
         CtClass cl = null;
         try {
             cl = classPool.makeClass(new java.io.ByteArrayInputStream(b));
+
             if (cl.getName().equals("javafx.stage.FileChooser")) {
                 // @formatter:off"
                 String codeSingle =
                         "    {" +
-                        "        if (\"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
+                        "        if (Boolean.getBoolean(\"marathon.recording.paused\") || Boolean.getBoolean(\"marathon.recording.insertscript\") || \"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
                         "            synchronized(javafx.stage.FileChooser.class) {" +
                         "                try {" +
                         "                    javafx.stage.FileChooser.class.wait(5000L);" +
@@ -66,7 +67,7 @@ public class FileChooserTransformer implements ClassFileTransformer {
                 // @formatter:off"
                 String codeMultiple =
                         "    {" +
-                        "        if (\"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
+                        "        if (Boolean.getBoolean(\"marathon.recording.paused\") || Boolean.getBoolean(\"marathon.recording.insertscript\") || \"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
                         "            synchronized(javafx.stage.FileChooser.class) {" +
                         "                try {" +
                         "                    javafx.stage.FileChooser.class.wait(5000L);" +
@@ -87,7 +88,7 @@ public class FileChooserTransformer implements ClassFileTransformer {
                 // @formatter:off"
                 String codeSingle =
                         "    {" +
-                        "        if (\"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
+                        "        if (Boolean.getBoolean(\"marathon.recording.paused\") || Boolean.getBoolean(\"marathon.recording.insertscript\") || \"playing\".equals(System.getProperty(\"marathon.mode\"))) {" +
                         "            synchronized(javafx.stage.DirectoryChooser.class) {" +
                         "                try {" +
                         "                    javafx.stage.DirectoryChooser.class.wait(5000L);" +

@@ -43,10 +43,6 @@
 /marathon-core/test-output
 /marathon-core/.project
 /marathon-core/.settings/
-/marathon-core/JSON-java/.classpath
-/marathon-core/JSON-java/.project
-/marathon-core/JSON-java/.settings/
-/marathon-core/JSON-java/build/
 /marathon-core/build/
 /marathon-core/nanohttpd-2.1.1/.classpath
 /marathon-core/nanohttpd-2.1.1/.project
@@ -62,7 +58,6 @@
 /marathon-java/marathon-kbmap-tool/.gitignore
 /marathon-java/marathon-test-helpers/.gitignore
 /marathon-core/.gitignore
-/marathon-core/JSON-java/.gitignore
 /marathon-core/nanohttpd-2.1.1/.gitignore
 /marathon-core/ruby-selenium-webdriver/.gitignore
 /marathon-javafx/marathon-javafx-agent/.classpath
@@ -126,7 +121,6 @@
 /marathon-java/marathon-test-helpers/bin/
 /marathon-java/test-output/
 /marathon-javafx/marathon-javafx-runtime/bin/
-/marathon-core/JSON-java/bin/
 /marathon-core/nanohttpd-2.1.1/bin/
 /marathon-java/marathon-java-runtime/moduledir2/
 /marathon-java/marathon-java-runtime/testDir/

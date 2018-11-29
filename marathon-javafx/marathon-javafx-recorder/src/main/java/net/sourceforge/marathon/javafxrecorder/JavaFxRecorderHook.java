@@ -538,6 +538,9 @@ public class JavaFxRecorderHook implements EventHandler<Event> {
     public class MenuEventHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
+            if (recorder.isPaused() || recorder.isInsertingScript() || JavaServer.handlingRequest) {
+                return;
+            }
             if (event.getSource() instanceof Menu) {
                 return;
             }

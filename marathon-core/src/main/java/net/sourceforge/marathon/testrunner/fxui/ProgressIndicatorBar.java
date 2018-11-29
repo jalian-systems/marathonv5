@@ -57,7 +57,7 @@ class ProgressIndicatorBar extends StackPane {
         bar.setId("test-runner-bar");
         bar.setProgress(0);
         bar.setMaxWidth(Double.MAX_VALUE);
-        bar.setMinHeight(progressBarString.getBoundsInLocal().getHeight() + DEFAULT_LABEL_PADDING * 2);
+        bar.setMinHeight(progressBarString.getBoundsInLocal().getHeight() + DEFAULT_LABEL_PADDING * 3);
         bar.setMinWidth(progressBarString.getBoundsInLocal().getWidth() + DEFAULT_LABEL_PADDING * 2);
         initProgressBarUI();
         getChildren().setAll(bar, progressBarString);
@@ -112,17 +112,9 @@ class ProgressIndicatorBar extends StackPane {
         ObservableList<String> styleClass = bar.getStyleClass();
         String sucessColor = "green-bar";
         String failureColor = "red-bar";
-        if (error) {
-            if (styleClass.contains(sucessColor)) {
-                styleClass.remove(sucessColor);
-            }
-            styleClass.add(failureColor);
-        } else {
-            if (styleClass.contains(failureColor)) {
-                styleClass.remove(failureColor);
-            }
-            styleClass.add(sucessColor);
-        }
+        styleClass.removeAll(sucessColor);
+        styleClass.removeAll(failureColor);
+        styleClass.add(error ? failureColor : sucessColor);
     }
 
     public void incrementErrors() {

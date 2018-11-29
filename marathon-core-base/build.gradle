@@ -54,7 +54,7 @@ compileTestJava {
 }
 
 dependencies {
-  compile project(":marathon-core:JSON-java")
+  compile 'org.json:json:20180813'
   compile "org.yaml:snakeyaml:${snakeyaml_version}"
   compile "commons-io:commons-io:${commons_io_version}"
   compile "com.jgoodies:jgoodies-common:1.8.1"

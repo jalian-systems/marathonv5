@@ -56,12 +56,6 @@ public abstract class EventQueueWait extends Wait {
         }
     }
 
-    /**
-     * Returns true when it is time to stop waiting. This method is executed in
-     * the Event Dispatch Thread
-     *
-     * @return
-     */
     public abstract boolean till();
 
     public void setup() {
@@ -189,12 +183,6 @@ public abstract class EventQueueWait extends Wait {
         return (T) r[0];
     }
 
-    /**
-     * Requests for the focus of the component and waits till the component
-     * receives focus.
-     *
-     * @param c
-     */
     public static void requestFocus(final Node c) {
         if (Platform.isFxApplicationThread()) {
             c.requestFocus();

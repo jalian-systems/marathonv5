@@ -43,6 +43,9 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
 
+import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.javafxagent.JavaFXAgent;
+
 /**
  * Class to specify options to {@link JavaDriver}.
  * 
@@ -1153,6 +1156,15 @@ public class JavaProfile {
             Logger.getLogger(JavaProfile.class.getName()).info("Using " + path + " for agent");
             return path;
         }
+        Class<?> klass = null;
+        if (launchType == LaunchType.FX_APPLICATION) {
+            klass = JavaFXAgent.class;
+        } else {
+            klass = JavaAgent.class;
+        }
+        path = ClassPathHelper.getClassPath(klass);
+        if (path != null)
+            return path;
         throw new WebDriverException("Unable to find marathon-agent.jar. Set " + MARATHON_AGENT + ".file"
                 + " environment variable to point to the jar file: " + new File(".").getAbsolutePath());
     }
