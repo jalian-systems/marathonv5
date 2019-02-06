@@ -1,3 +1,24 @@
+Marathon Version 5.2.4.0 (6th February 2019)
+
+01. feat: Added maven-publish plugin to marathon-java-agent, marathon-java-driver and marathon-javafx-agent
+02. fixed: Use Java(FX)Agent to find classpath for java agent
+03. fixed: Class transformers return null when modification is not needed
+04. fixed: Support comments for JSON files in Group
+05. fixed: Opening a new stage from menu item hangs while playing script. We are using menu.fire that waits till the new stage is closed.
+06. fixed: Issue with ListView (jGnash). Not clicking on unscrolled items. Solution is to scroll only if needed.
+07. fixed: Recording Events - fixed MenuEvent not checking for the insertingScript and Paused states
+08. fixed: Recording Events - fixed FileChooserTransformer not checking the insertingScript and Paused recording states
+09. fixed: When executing fixtureSetup while recording, enable insertScriptStart so that the fixture code is considered as 'played'
+10. fixed: timeout error
+  Component wait time is used to set timeouts for both marathon ruby timeout
+  and webdriver timeouts. If it is set to the same value for both
+  ruby http_client#timeout and driver#timeout a timeout exception is thrown
+  instead of component not found exception. We set http_client#timeout 2 seconds
+  greater than the driver#timeout to avoid this.
+11. fixed: Cut, Copy & Paste in ace editor
+12. feat: Increased progressbar height
+13. fixed: Sometimes the bar color is shown as red when a test starts
+
 Marathon Version 5.2.3.0 (31st July 2018)
 
 01. fixed: Clicks getting recorded on file and color choosers
@@ -23,7 +44,6 @@ Merge: 62e0465a 8ddb52d5
 Author: Dakshinamurthy Karra <dakshinamurthy.karra@jaliansystems.com>
 Date:   Tue Jul 3 12:13:00 2018 +0530
 
-    Merge branch 'release/v5.2.1.0' into develop
 Marathon Version 5.2.1.0 (3rd July 2018)
 
 01. feat: Sorting the test classes in components.Main - test helper
