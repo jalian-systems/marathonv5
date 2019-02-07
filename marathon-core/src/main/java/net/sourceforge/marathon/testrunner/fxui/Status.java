@@ -17,9 +17,11 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import java.util.logging.Logger;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 public class Status extends Label {
 
@@ -29,7 +31,9 @@ public class Status extends Label {
         super("Ready");
         Font font = getFont();
         double size = font.getSize();
-        setFont(Font.font("System", FontPosture.ITALIC, size - 1));
+        setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, size - 1));
+        setPrefHeight(size + 14);
+        setAlignment(Pos.CENTER);
     }
 
     public void reset() {
