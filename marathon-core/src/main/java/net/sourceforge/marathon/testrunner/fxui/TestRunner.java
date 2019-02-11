@@ -36,7 +36,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
@@ -161,7 +160,6 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     private IConsole console;
     private ToggleButton failuresToggleButton;
     private FailureDetailView failureStackView;
-    private Label errorMsgLabel = new Label();
 
     private RunListener runListener = new MarathonRunListener();
     @ISimpleAction(description = "Expand All")
@@ -254,9 +252,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
                 }
             }
         });
-        errorMsgLabel.setGraphic(FXUIUtils.getIcon("error"));
-        errorMsgLabel.setVisible(false);
-        topPane.getChildren().addAll(toolBar, status, errorMsgLabel, progressBar, testTree);
+        topPane.getChildren().addAll(toolBar, status, progressBar, testTree);
         VBox.setVgrow(testTree, Priority.ALWAYS);
         return topPane;
     }
@@ -332,12 +328,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     private MenuItem createMenuItem(JSONObject testJSON, boolean selectSave) {
         MenuItem item = new MenuItem(testJSON.getString("name") + " (" + testJSON.get("run-on") + ")");
         item.setOnAction((e) -> {
-            errorMsgLabel.setVisible(false);
-            errorMsgLabel.setText(null);
             Test test = createTest(testJSON);
-            if (errorMsgLabel.getText() != null) {
-                errorMsgLabel.setVisible(true);
-            }
             console.clear();
             progressBar.reset(test.countTestCases());
             status.setText("Ready");
@@ -423,7 +414,7 @@ public class TestRunner extends Dockable implements IResourceActionSource {
             TestCreator testCreator = new TestCreator(acceptChecklist, console);
             File base = new File(System.getProperty(Constants.PROP_TEST_DIR), test.getString("path"));
             if (!base.exists()) {
-                errorMsgLabel.setText("Can not access some of the test files.");
+                LOGGER.warning("Can not access some of the test files.");
                 return null;
             }
             return testCreator.getTest(base, test.getString("name"));
@@ -683,7 +674,6 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     }
 
     public void onRun() {
-        errorMsgLabel.setVisible(false);
         console.clear();
         TreeItem<Test> root = testTree.getRoot();
         resetTestState(root);
@@ -909,7 +899,6 @@ public class TestRunner extends Dockable implements IResourceActionSource {
     }
 
     public void run(Test test) {
-        errorMsgLabel.setVisible(false);
         console.clear();
         progressBar.reset(test.countTestCases());
         TestTreeItem value = new TestTreeItem(test, this);

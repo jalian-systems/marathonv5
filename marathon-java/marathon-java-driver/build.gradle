@@ -19,7 +19,6 @@ apply plugin: 'signing'
 
 ext {
     pomFile = file("${project.buildDir}/generated-pom.xml")
-    isReleaseVersion = Boolean.getBoolean("maven.release");
 }
 
 repositories {
@@ -48,11 +47,7 @@ signing {
 
 publishing.repositories {
       maven {
-          if (project.ext.isReleaseVersion) {
-              url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-          } else {
-              url 'https://oss.sonatype.org/content/repositories/snapshots/'
-          }
+          url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
   
           credentials {
               username = mvnUser
