@@ -286,6 +286,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
                     p.put("dirName" + j++, projectInfotable.getItems().get(i).getFolder());
                 }
             }
+            p.flush();
         } catch (BackingStoreException e) {
             return;
         }
@@ -293,6 +294,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
 
     private void loadFileNames() {
         Preferences p = Preferences.userNodeForPackage(this.getClass());
+        int selected = 0;
         try {
             String[] keys = p.keys();
             for (int i = 0; i < keys.length; i++) {
@@ -311,10 +313,13 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
                         new RuntimeException("Processing " + dirName, e).printStackTrace();
                         continue;
                     }
+                    if (keys[i].equals("dirName0")) {
+                        selected = projects.size() - 1;
+                    }
                 }
             }
             if (projects.size() > 0) {
-                projectInfotable.getSelectionModel().select(0);
+                projectInfotable.getSelectionModel().select(selected);
             }
         } catch (BackingStoreException e) {
             return;

@@ -60,12 +60,6 @@ public abstract class EventQueueWait extends Wait {
         }
     }
 
-    /**
-     * Returns true when it is time to stop waiting. This method is executed in
-     * the Event Dispatch Thread
-     *
-     * @return
-     */
     public abstract boolean till();
 
     public void setup() {
@@ -155,9 +149,6 @@ public abstract class EventQueueWait extends Wait {
         return (T) r[0];
     }
 
-    /**
-     * Wait till the event queue is empty.
-     */
     public static void empty() {
         new EventQueueWait() {
             @Override
@@ -167,12 +158,6 @@ public abstract class EventQueueWait extends Wait {
         }.wait("Waiting for the EventQueue to be empty");
     }
 
-    /**
-     * Requests for the focus of the component and waits till the component
-     * receives focus.
-     *
-     * @param c
-     */
     public static void requestFocus(final Component c) {
         if (EventQueue.isDispatchThread()) {
             if (!c.requestFocusInWindow()) {

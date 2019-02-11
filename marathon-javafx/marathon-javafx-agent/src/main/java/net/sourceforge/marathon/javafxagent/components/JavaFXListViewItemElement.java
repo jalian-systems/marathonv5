@@ -92,15 +92,20 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
     @Override
     public Node getPseudoComponent() {
         ListView<?> listView = (ListView<?>) getComponent();
-        EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
+        EventQueueWait.exec(() -> scrollTo(listView));
         return getCellAt(listView, itemIndex);
+    }
+
+    protected void scrollTo(ListView<?> listView) {
+        if (getVisibleCellAt(listView, itemIndex) == null)
+            listView.scrollTo(itemIndex);
     }
 
     @Override
     public List<IJavaFXElement> getByPseudoElement(String selector, Object[] params) {
         ListView<?> listView = (ListView<?>) getComponent();
         if (getVisibleCellAt(listView, itemIndex) == null) {
-            EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
+            EventQueueWait.exec(() -> scrollTo(listView));
             return Arrays.asList();
         }
         if (selector.equals("editor")) {
@@ -156,8 +161,8 @@ public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoE
         ListView<?> listView = (ListView<?>) getComponent();
         Node cell = getVisibleCellAt(listView, itemIndex);
         if (cell == null) {
-            EventQueueWait.exec(() -> listView.scrollTo(itemIndex));
-            return false;
+            EventQueueWait.exec(() -> scrollTo(listView));
+            return true;
         }
         return true;
     }

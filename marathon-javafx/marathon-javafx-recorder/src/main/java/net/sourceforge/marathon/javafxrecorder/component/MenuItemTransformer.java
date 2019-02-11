@@ -47,14 +47,13 @@ public class MenuItemTransformer implements ClassFileTransformer {
                         + "}";
                 method.insertBefore(code);
             }
-            b = cl.toBytecode();
+            return cl.toBytecode();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (cl != null) {
                 cl.detach();
             }
         }
-        return b;
+        return null;
     }
 }

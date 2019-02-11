@@ -15,13 +15,6 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent;
 
-/**
- * Representations of pressable keys that aren't text. These are stored in the
- * Unicode PUA (Private Use Area) code points, 0xE000-0xF8FF.
- *
- * @see <a href="http://www.google.com.au/search?&q=unicode+pua&btnG=Search">
- *      http://www.google.com.au/search?&q=unicode+pua&btnG=Search</a>
- */
 public enum JavaAgentKeys implements CharSequence {
 
     // @formatter:off
@@ -132,16 +125,6 @@ public enum JavaAgentKeys implements CharSequence {
         throw new IndexOutOfBoundsException();
     }
 
-    /**
-     * Simulate pressing many keys at once in a "chord". Takes a sequence of
-     * Keys.XXXX or strings; appends each of the values to a string, and adds
-     * the chord termination key (Keys.NULL) and returns the resultant string.
-     *
-     * Note: When the low-level webdriver key handlers see Keys.NULL, active
-     * modifier keys (CTRL/ALT/SHIFT/etc) release via a keyup event.
-     *
-     * Issue: http://code.google.com/p/webdriver/issues/detail?id=79
-     */
     public static String chord(CharSequence... value) {
         StringBuilder builder = new StringBuilder();
 
@@ -153,16 +136,6 @@ public enum JavaAgentKeys implements CharSequence {
         return builder.toString();
     }
 
-    /**
-     * Get the special key representation, {@link JavaAgentKeys}, of the
-     * supplied character if there is one. If there is no special key tied to
-     * this character, null will be returned.
-     *
-     * @param key
-     *            unicode character code
-     * @return special key linked to the character code, or null if character is
-     *         not a special key
-     */
     public static JavaAgentKeys getKeyFromUnicode(char key) {
         for (JavaAgentKeys unicodeKey : values()) {
             if (unicodeKey.charAt(0) == key) {

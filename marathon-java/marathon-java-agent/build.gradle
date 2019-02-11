@@ -14,6 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+ext {
+    pomFile = file("${project.buildDir}/generated-pom.xml")
+}
+
 repositories {
   mavenCentral()
   maven {
@@ -23,6 +30,11 @@ repositories {
 
 configurations {
   antBuildXML
+}
+
+javadoc {
+  exclude 'net/sourceforge/marathon/javaagent/Wait.java'
+  exclude 'net/sourceforge/marathon/javaagent/server/Base64.java'
 }
 
 eclipse {
@@ -56,12 +68,12 @@ compileTestJava {
 }
 
 dependencies {
-  compile project(":marathon-core:JSON-java")
+  compile 'org.json:json:20180813'
   compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
   compile "org.javassist:javassist:${javassist_version}"
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-java:marathon-test-helpers")
-  antBuildXML project(":marathon-core:JSON-java").files("bin")
+  antBuildXML 'org.json:json:20180813'
   antBuildXML "org.nanohttpd:nanohttpd:${nanohttpd_version}"
   antBuildXML "org.javassist:javassist:${javassist_version}"
 }
@@ -74,6 +86,72 @@ jar {
       'Can-Redefine-Classes': 'false',
       'Can-Retransform-Classes': 'false',
       'Premain-Class': 'net.sourceforge.marathon.javaagent.JavaAgentHook'
+  }
+}
+
+task packageJavadoc(type: Jar, dependsOn: javadoc) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
+signing {
+    required { signatory != null }
+	sign configurations.archives
+}
+
+publishing.repositories {
+      maven {
+          url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+  
+          credentials {
+              username = mvnUser
+              password = mvnPassword
+          }
+      }
+}
+
+publishing.publications {
+  mavenJava(MavenPublication) {
+      artifactId = 'marathon-java-agent'
+
+      pom.withXml {
+        Node pomNode = asNode()
+        pomNode.dependencies.'*'.each() {
+          it.parent().remove(it)
+        }
+      }
+
+      from components.java
+
+      artifact sourceJar
+      artifact packageJavadoc
+
+      // Sign the pom.xml and artifacts.
+      if (signing.required) {
+          // Sign the pom.xml.
+          pom.withXml {
+              writeTo(project.ext.pomFile)
+              def pomAscFile = signing.sign(project.ext.pomFile).signatureFiles[0]
+              artifact(pomAscFile) {
+                  classifier = null
+                  extension = 'pom.asc'
+              }
+              project.ext.pomFile.delete()
+          }
+      
+          // Sign the artifacts.
+          project.tasks.signArchives.signatureFiles.each {
+              artifact(it) {
+                  def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                  if (matcher.find()) {
+                      classifier = matcher.group(1)
+                  } else {
+                      classifier = null
+                  }
+                  extension = 'jar.asc'
+              }
+          }
+      }
   }
 }
 

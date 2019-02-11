@@ -15,7 +15,6 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -42,7 +41,7 @@ public class JavaFXListViewCheckBoxListCellElementTest extends JavaFXElementTest
     public void selectListItemCheckBoxNotSelectedSelected() {
         IJavaFXElement item = listView.findElementByCssSelector(".::select-by-properties('{\"select\":\"Item 3\"}')");
         IJavaFXElement cb = item.findElementByCssSelector(".::editor");
-        cb.marathon_select("Item 3:checked");
+        cb.marathon_select("checked");
         new Wait("Wait for list item check box to be selected") {
             @Override
             public boolean until() {
@@ -59,7 +58,7 @@ public class JavaFXListViewCheckBoxListCellElementTest extends JavaFXElementTest
         x.setOn(true);
         IJavaFXElement item = listView.findElementByCssSelector(".::select-by-properties('{\"select\":\"Item 3\"}')");
         IJavaFXElement cb = item.findElementByCssSelector(".::editor");
-        cb.marathon_select("Item 3:checked");
+        cb.marathon_select("checked");
         new Wait("Wait for list item check box to be selected") {
             @Override
             public boolean until() {
@@ -76,7 +75,7 @@ public class JavaFXListViewCheckBoxListCellElementTest extends JavaFXElementTest
         x.setOn(true);
         IJavaFXElement item = listView.findElementByCssSelector(".::select-by-properties('{\"select\":\"Item 3\"}')");
         IJavaFXElement cb = item.findElementByCssSelector(".::editor");
-        cb.marathon_select("Item 3:unchecked");
+        cb.marathon_select("unchecked");
         new Wait("Wait for list item check box to be deselected") {
             @Override
             public boolean until() {
@@ -97,7 +96,7 @@ public class JavaFXListViewCheckBoxListCellElementTest extends JavaFXElementTest
                 return selected.equals("false");
             }
         };
-        cb.marathon_select("Item 3:unchecked");
+        cb.marathon_select("unchecked");
         new Wait("Wait for list item check box to be deselected") {
             @Override
             public boolean until() {
@@ -105,12 +104,6 @@ public class JavaFXListViewCheckBoxListCellElementTest extends JavaFXElementTest
                 return selected.equals("false");
             }
         };
-    }
-
-    @Test
-    public void assertContent() {
-        String expected = "[[\"Item 1:unchecked\",\"Item 2:unchecked\",\"Item 3:unchecked\",\"Item 4:unchecked\",\"Item 5:unchecked\",\"Item 6:unchecked\",\"Item 7:unchecked\",\"Item 8:unchecked\",\"Item 9:unchecked\",\"Item 10:unchecked\",\"Item 11:unchecked\",\"Item 12:unchecked\",\"Item 13:unchecked\",\"Item 14:unchecked\",\"Item 15:unchecked\",\"Item 16:unchecked\",\"Item 17:unchecked\",\"Item 18:unchecked\",\"Item 19:unchecked\",\"Item 20:unchecked\"]]";
-        AssertJUnit.assertEquals(expected, listView.getAttribute("content"));
     }
 
     @Override

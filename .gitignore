@@ -13,7 +13,7 @@
 /marathon-java/marathon-java-agent/build/
 /marathon-java/marathon-java-agent/marathon-java-agent.xml
 /marathon-java/marathon-java-agent/.gitignore
-/marathon-java/marathon-java-agent/marathon-java-agent-5.2.3.0.jar
+/marathon-java/marathon-java-agent/marathon-java-agent-5.2.4.0.jar
 /marathon-java/marathon-java-driver/.classpath
 /marathon-java/marathon-java-driver/.project
 /marathon-java/marathon-java-driver/.settings/
@@ -24,7 +24,7 @@
 /marathon-java/marathon-java-recorder/build/
 /marathon-java/marathon-java-recorder/marathon-java-recorder.xml
 /marathon-java/marathon-java-recorder/.gitignore
-/marathon-java/marathon-java-recorder/marathon-java-recorder-5.2.3.0.jar
+/marathon-java/marathon-java-recorder/marathon-java-recorder-5.2.4.0.jar
 /marathon-java/marathon-java-runtime/.classpath
 /marathon-java/marathon-java-runtime/.project
 /marathon-java/marathon-java-runtime/.settings/
@@ -43,10 +43,6 @@
 /marathon-core/test-output
 /marathon-core/.project
 /marathon-core/.settings/
-/marathon-core/JSON-java/.classpath
-/marathon-core/JSON-java/.project
-/marathon-core/JSON-java/.settings/
-/marathon-core/JSON-java/build/
 /marathon-core/build/
 /marathon-core/nanohttpd-2.1.1/.classpath
 /marathon-core/nanohttpd-2.1.1/.project
@@ -62,7 +58,6 @@
 /marathon-java/marathon-kbmap-tool/.gitignore
 /marathon-java/marathon-test-helpers/.gitignore
 /marathon-core/.gitignore
-/marathon-core/JSON-java/.gitignore
 /marathon-core/nanohttpd-2.1.1/.gitignore
 /marathon-core/ruby-selenium-webdriver/.gitignore
 /marathon-javafx/marathon-javafx-agent/.classpath
@@ -71,14 +66,14 @@
 /marathon-javafx/marathon-javafx-agent/build/
 /marathon-javafx/marathon-javafx-agent/marathon-javafx-agent.xml
 /marathon-javafx/marathon-javafx-agent/.gitignore
-/marathon-javafx/marathon-javafx-agent/marathon-javafx-agent-5.2.3.0.jar
+/marathon-javafx/marathon-javafx-agent/marathon-javafx-agent-5.2.4.0.jar
 /marathon-javafx/marathon-javafx-recorder/.classpath
 /marathon-javafx/marathon-javafx-recorder/.project
 /marathon-javafx/marathon-javafx-recorder/.settings/
 /marathon-javafx/marathon-javafx-recorder/build/
 /marathon-javafx/marathon-javafx-recorder/marathon-javafx-recorder.xml
 /marathon-javafx/marathon-javafx-recorder/.gitignore
-/marathon-javafx/marathon-javafx-recorder/marathon-javafx-recorder-5.2.3.0.jar
+/marathon-javafx/marathon-javafx-recorder/marathon-javafx-recorder-5.2.4.0.jar
 /marathon-javafx/marathon-javafx-agent/.externalToolBuilders/
 /marathon-javafx/marathon-javafx-recorder/.externalToolBuilders/
 /marathon-javafx/marathon-javafx-agent/test-output/
@@ -126,7 +121,6 @@
 /marathon-java/marathon-test-helpers/bin/
 /marathon-java/test-output/
 /marathon-javafx/marathon-javafx-runtime/bin/
-/marathon-core/JSON-java/bin/
 /marathon-core/nanohttpd-2.1.1/bin/
 /marathon-java/marathon-java-runtime/moduledir2/
 /marathon-java/marathon-java-runtime/testDir/
@@ -153,7 +147,7 @@
 
 /marathonext-jxbrowser/.externalToolBuilders/
 /marathonext-jxbrowser/.gitignore
-/marathonext-jxbrowser/marathon-jxbrowser-5.2.3.0.jar
+/marathonext-jxbrowser/marathon-jxbrowser-5.2.4.0.jar
 /marathonext-jxbrowser/marathon-jxbrowser.xml
 /marathonext-jxbrowser/.classpath
 /marathonext-jxbrowser/.project
@@ -161,7 +155,7 @@
 /marathonext-jxbrowser/build/
 /marathonext-jxbrowser/bin/
 /marathonext-jxbrowser/marathonext-jxbrowser.xml
-/marathonext-jxbrowser/marathonext-jxbrowser-5.2.3.0.jar
+/marathonext-jxbrowser/marathonext-jxbrowser-5.2.4.0.jar
 
 /marathon-core-base/.classpath
 /marathon-core-base/.gitignore

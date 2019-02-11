@@ -27,9 +27,9 @@ class RubyMarathon < MarathonRuby
         if(url.length != 0)
           caps = Selenium::WebDriver::Remote::Capabilities.new
           caps.browser_name = 'java'
-          client = Selenium::WebDriver::Remote::Http::Default.new
-  		    client.read_timeout = @cwms/1000 # seconds
-          @webdriver = Selenium::WebDriver.for(:remote, :url => url, :desired_capabilities => caps, :http_client => client)
+          @client = Selenium::WebDriver::Remote::Http::Default.new
+  		    @client.read_timeout = (@cwms/1000) + 2 # seconds
+          @webdriver = Selenium::WebDriver.for(:remote, :url => url, :desired_capabilities => caps, :http_client => @client)
           if TestAttributes.get("marathon.profile.url") != nil
             @webdriver.get(TestAttributes.get("marathon.profile.url"))
           end
@@ -49,6 +49,7 @@ class RubyMarathon < MarathonRuby
       @cwms = delayInMS
       System.setProperty("marathon.COMPONENT_WAIT_MS", delayInMS.to_s)
       @webdriver.manage.timeouts.implicit_wait=@cwms/1000
+      @client.read_timeout = (@cwms/1000) + 2 # seconds
     end
     
     def driver()

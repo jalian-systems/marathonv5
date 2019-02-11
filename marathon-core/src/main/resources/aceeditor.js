@@ -41,6 +41,9 @@ function ACEEditor() {
 	});
 	this.ace.setScrollSpeed(0.05);
 	this.ace.setShowPrintMargin(false);
+	this.ace.on('copy', function(text) { java._copy(text); });
+	this.ace.on('cut', function(text) { java._cut(text); });
+	this.ace.on('paste', function(text) { java._paste(JSON.stringify(text)); });
 }
 
 ACEEditor.prototype.toString = function() {
@@ -156,7 +159,6 @@ ACEEditor.prototype.getSelectionStart = function(json) {
 		return this.getCaretPosition(json);
 	}
 	var range = selection.getRange();
-	console.log("Range = " + range.toString());
 	var position = this.ace.getSession().getDocument().positionToIndex({ row: range.start.row, column: range.start.column });
 	return { position: position };
 }

@@ -17,8 +17,12 @@ package net.sourceforge.marathon.model;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.lang.annotation.Retention;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -328,6 +332,7 @@ public class Group {
     private Group(File file) throws IOException {
         this.path = file.getCanonicalFile().toPath();
         String text = new String(Files.readAllBytes(this.path), Charset.defaultCharset());
+        text = stripComments(text);
         init(new JSONObject(text));
     }
 
@@ -503,6 +508,7 @@ public class Group {
         String text = null;
         try {
             text = new String(Files.readAllBytes(group.getPath()));
+            text = stripComments(text);
             group.init(new JSONObject(text));
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -510,6 +516,25 @@ public class Group {
         } catch (JSONException e) {
             Logger.getLogger(Group.class.getName()).warning("Group not in JSON format.");
         }
+    }
+
+    private static String stripComments(String text) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintWriter w = new PrintWriter(out);
+        BufferedReader r = new BufferedReader(new StringReader(text));
+        String line;
+        try {
+            while ((line = r.readLine()) != null) {
+                if (line.trim().startsWith("#"))
+                    continue;
+                w.println(line);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        w.close();
+        return out.toString();
     }
 
     public static void updateFile(Group group) throws IOException {

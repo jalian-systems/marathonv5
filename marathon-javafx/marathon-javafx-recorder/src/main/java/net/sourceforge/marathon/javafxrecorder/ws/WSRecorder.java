@@ -390,10 +390,12 @@ public class WSRecorder implements IJSONRecorder {
 
     public void setRecordingPause(JSONObject o) {
         paused = o.getBoolean("value");
+        System.setProperty("marathon.recording.paused", Boolean.toString(paused));
     }
 
     public void setInsertingScript(JSONObject o) {
         insertingScript = o.getBoolean("value");
+        System.setProperty("marathon.recording.insertscript", Boolean.toString(insertingScript));
     }
 
     public void abortApplication() {
