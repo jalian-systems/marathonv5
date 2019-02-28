@@ -1049,10 +1049,12 @@ public class JavaProfile {
         if (startWindowTitle != null) {
             java_tool_options.append("-Dstart.window.title=\"" + startWindowTitle).append("\" ");
         }
-        java_tool_options.append("-D" + MARATHON_AGENT + "=" + getAgentJarURL()).append(" ");
+        if (LaunchMode.JAVA_WEBSTART == launchMode || LaunchMode.JAVA_APPLET == launchMode)
+            java_tool_options.append("-D" + MARATHON_AGENT + "=" + getAgentJarURL()).append(" ");
         java_tool_options.append("-javaagent:\"" + getAgentJar() + "\"=" + port).append(" ");
         if (recordingPort != -1) {
-            java_tool_options.append("-D" + MARATHON_RECORDER + "=" + getRecorderJarURL()).append(" ");
+            if (LaunchMode.JAVA_WEBSTART == launchMode || LaunchMode.JAVA_APPLET == launchMode)
+                java_tool_options.append("-D" + MARATHON_RECORDER + "=" + getRecorderJarURL()).append(" ");
             java_tool_options.append(" -javaagent:\"" + getRecorderJar() + "\"=" + recordingPort).append(" ");
         }
         addExtensions(java_tool_options);
