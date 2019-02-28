@@ -121,6 +121,17 @@ public class RFXComponentFactory {
         add(new InstanceCheckFinder(componentKlass, rComponentKlass, recordOn));
     }
 
+    @SuppressWarnings("unchecked")
+    public static void add(String componentKlassName, Class<? extends RFXComponent> rComponentKlass, IRecordOn recordOn) {
+        Class<? extends Node> componentKlass;
+        try {
+            componentKlass = (Class<? extends Node>) Class.forName(componentKlassName);
+            add(new InstanceCheckFinder(componentKlass, rComponentKlass, recordOn));
+        } catch (ClassNotFoundException e) {
+            return;
+        }
+    }
+
     public static void add(IRFXComponentFinder f) {
         entries.addFirst(f);
     }

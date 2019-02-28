@@ -183,6 +183,17 @@ public class JavaFXElementFactory {
         add(new InstanceCheckFinder(component, javaelement));
     }
 
+    @SuppressWarnings("unchecked")
+    public static void add(String componentName, Class<? extends IJavaFXElement> javaelement) {
+        Class<? extends Node> component;
+        try {
+            component = (Class<? extends Node>) Class.forName(componentName);
+            add(new InstanceCheckFinder(component, javaelement));
+        } catch (ClassNotFoundException e) {
+            return;
+        }
+    }
+
     public static void add(IJavaElementFinder e) {
         entries.addFirst(e);
     }
