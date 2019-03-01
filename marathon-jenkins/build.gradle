@@ -1,21 +1,11 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			url 'http://repo.jenkins-ci.org/releases/'
-		}
-	}
-
-	dependencies {
-		classpath group: 'org.jenkins-ci.tools', name: 'gradle-jpi-plugin', version: '0.24.0'
-	}
+plugins {
+  id 'org.jenkins-ci.jpi' version '0.29.0'
 }
 
 group = "com.jaliansystems.marathon.jenkins"
 version = "1.0"
 description = "Marathon plugin for Jenkins to run tests"
 
-apply plugin: 'jpi'
 apply plugin: 'eclipse'
 
 jenkinsPlugin {

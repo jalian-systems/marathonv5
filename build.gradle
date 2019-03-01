@@ -54,46 +54,48 @@ subprojects {
     }
   }
 
-  task antBuild << {
-    def buildFile = file(project.name + '.xml')
-    buildFile.delete()
-    buildFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-    buildFile << "<project basedir=\"${file(".").path}\" default=\"${project.name}\" name=\"${project.name}\">\n"
-    buildFile << "    <target name=\"${project.name}\">\n"
-    buildFile << "        <jar jarfile=\"\${basedir}/${jar.archiveName}\" basedir=\"\${basedir}/bin\">\n"
-    configurations.antBuildXML.each {
-      if(it.isFile())
-        buildFile << "            <zipgroupfileset file=\"${it.path}\"/>\n"
-      else
-        buildFile << "            <fileset dir=\"${it.path}\"/>\n"
-    }
-    buildFile << "            <manifest>\n"
-    jar.manifest.attributes.each {
-      buildFile << "              <attribute name=\"${it.key}\" value=\"${it.value}\"></attribute>\n"
-    }
-    buildFile << "            </manifest>\n"
-    buildFile << "        </jar>\n"
-    buildFile << "    </target>\n"
-    buildFile << "</project>\n"
+  task antBuild {
+    doLast {
+        def buildFile = file(project.name + '.xml')
+        buildFile.delete()
+        buildFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        buildFile << "<project basedir=\"${file(".").path}\" default=\"${project.name}\" name=\"${project.name}\">\n"
+        buildFile << "    <target name=\"${project.name}\">\n"
+        buildFile << "        <jar jarfile=\"\${basedir}/${jar.archiveName}\" basedir=\"\${basedir}/bin\">\n"
+        configurations.antBuildXML.each {
+          if(it.isFile())
+            buildFile << "            <zipgroupfileset file=\"${it.path}\"/>\n"
+          else
+            buildFile << "            <fileset dir=\"${it.path}\"/>\n"
+        }
+        buildFile << "            <manifest>\n"
+        jar.manifest.attributes.each {
+          buildFile << "              <attribute name=\"${it.key}\" value=\"${it.value}\"></attribute>\n"
+        }
+        buildFile << "            </manifest>\n"
+        buildFile << "        </jar>\n"
+        buildFile << "    </target>\n"
+        buildFile << "</project>\n"
 
-    file(".externalToolBuilders").mkdir()
-    def externalToolBuilder = file('.externalToolBuilders/' + 'Build ' + project.name + ' JAR.launch')
-    externalToolBuilder.delete()
-    externalToolBuilder << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-    externalToolBuilder << "<launchConfiguration type=\"org.eclipse.ant.AntBuilderLaunchConfigurationType\">\n"
-    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ant.ui.ATTR_TARGETS_UPDATED\" value=\"true\"/>\n"
-    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ant.ui.DEFAULT_VM_INSTALL\" value=\"false\"/>\n"
-    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.debug.core.ATTR_REFRESH_RECURSIVE\" value=\"false\"/>\n"
-    externalToolBuilder << "<stringAttribute key=\"org.eclipse.debug.core.ATTR_REFRESH_SCOPE\" value=\"\${project}\"/>\n"
-    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND\" value=\"false\"/>\n"
-    externalToolBuilder << "<stringAttribute key=\"org.eclipse.jdt.launching.CLASSPATH_PROVIDER\" value=\"org.eclipse.ant.ui.AntClasspathProvider\"/>\n"
-    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.jdt.launching.DEFAULT_CLASSPATH\" value=\"true\"/>\n"
-    externalToolBuilder << "<stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${project.name}\"/>\n"
-    externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_LOCATION\" value=\"\${workspace_loc:/${project.name}/${project.name}.xml}\"/>\n"
-    externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS\" value=\"full,incremental,auto,\"/>\n"
-    externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED\" value=\"true\"/>\n"
-    externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY\" value=\"\${workspace_loc:/${project.name}}\"/>\n"
-    externalToolBuilder << "</launchConfiguration>\n"
+        file(".externalToolBuilders").mkdir()
+        def externalToolBuilder = file('.externalToolBuilders/' + 'Build ' + project.name + ' JAR.launch')
+        externalToolBuilder.delete()
+        externalToolBuilder << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+        externalToolBuilder << "<launchConfiguration type=\"org.eclipse.ant.AntBuilderLaunchConfigurationType\">\n"
+        externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ant.ui.ATTR_TARGETS_UPDATED\" value=\"true\"/>\n"
+        externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ant.ui.DEFAULT_VM_INSTALL\" value=\"false\"/>\n"
+        externalToolBuilder << "<booleanAttribute key=\"org.eclipse.debug.core.ATTR_REFRESH_RECURSIVE\" value=\"false\"/>\n"
+        externalToolBuilder << "<stringAttribute key=\"org.eclipse.debug.core.ATTR_REFRESH_SCOPE\" value=\"\${project}\"/>\n"
+        externalToolBuilder << "<booleanAttribute key=\"org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND\" value=\"false\"/>\n"
+        externalToolBuilder << "<stringAttribute key=\"org.eclipse.jdt.launching.CLASSPATH_PROVIDER\" value=\"org.eclipse.ant.ui.AntClasspathProvider\"/>\n"
+        externalToolBuilder << "<booleanAttribute key=\"org.eclipse.jdt.launching.DEFAULT_CLASSPATH\" value=\"true\"/>\n"
+        externalToolBuilder << "<stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${project.name}\"/>\n"
+        externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_LOCATION\" value=\"\${workspace_loc:/${project.name}/${project.name}.xml}\"/>\n"
+        externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS\" value=\"full,incremental,auto,\"/>\n"
+        externalToolBuilder << "<booleanAttribute key=\"org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED\" value=\"true\"/>\n"
+        externalToolBuilder << "<stringAttribute key=\"org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY\" value=\"\${workspace_loc:/${project.name}}\"/>\n"
+        externalToolBuilder << "</launchConfiguration>\n"
+    }
   }
 
   antBuild.onlyIf { configurations.findByName('antBuildXML') }

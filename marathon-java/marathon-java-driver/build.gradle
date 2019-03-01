@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-
-ext {
-    pomFile = file("${project.buildDir}/generated-pom.xml")
+plugins {
+    id 'maven-publish'
+    id 'signing'
 }
 
 repositories {
@@ -35,62 +33,67 @@ dependencies {
   testCompile project(":marathon-java:marathon-test-helpers")
 }
 
-task packageJavadoc(type: Jar, dependsOn: javadoc) {
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
     from javadoc
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'marathon-java-driver'
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'Marathon Java Agent'
+                description = 'Selenium/WebDriver bindings for Java applications - Main Jar'
+                url = 'https://marathontesting.com'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'dakshinamurthy.karra'
+                        name = 'Dakshinamurthy Karra'
+                        email = 'dakshinamurthy.karra@jaliansystems.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:jalian-systems/marathonv5.git'
+                    developerConnection = 'scm:git:git@github.com:jalian-systems/marathonv5.git'
+                    url = 'https://github.com/jalian-systems/marathonv5'
+                }
+            }
+
+        }
+    }
+
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+
+            credentials {
+                username = mvnUser
+                password = mvnPassword
+            }
+        }
+    }
 }
 
 signing {
-    required { signatory != null }
-	sign configurations.archives
-}
-
-publishing.repositories {
-      maven {
-          url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-  
-          credentials {
-              username = mvnUser
-              password = mvnPassword
-          }
-      }
-}
-
-publishing.publications {
-  mavenJava(MavenPublication) {
-      artifactId = 'marathon-java-driver'
-
-      from components.java
-
-      artifact sourceJar
-      artifact packageJavadoc
-      // Sign the pom.xml and artifacts.
-      if (signing.required) {
-          // Sign the pom.xml.
-          pom.withXml {
-              writeTo(project.ext.pomFile)
-              def pomAscFile = signing.sign(project.ext.pomFile).signatureFiles[0]
-              artifact(pomAscFile) {
-                  classifier = null
-                  extension = 'pom.asc'
-              }
-              project.ext.pomFile.delete()
-          }
-      
-          // Sign the artifacts.
-          project.tasks.signArchives.signatureFiles.each {
-              artifact(it) {
-                  def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-                  if (matcher.find()) {
-                      classifier = matcher.group(1)
-                  } else {
-                      classifier = null
-                  }
-                  extension = 'jar.asc'
-              }
-          }
-      }
-  }
+    sign publishing.publications.mavenJava
 }
 
 test {
