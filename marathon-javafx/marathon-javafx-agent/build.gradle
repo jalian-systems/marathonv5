@@ -93,8 +93,8 @@ publishing {
             artifact javadocJar
 
             pom {
-                name = 'Marathon Java Agent'
-                description = 'Selenium/WebDriver bindings for Java/FX applications'
+                name = 'Marathon JavaFX Agent'
+                description = 'Marathon JavaDriver agent for Java/FX applications'
                 url = 'https://marathontesting.com'
                 licenses {
                     license {
@@ -107,6 +107,8 @@ publishing {
                         id = 'dakshinamurthy.karra'
                         name = 'Dakshinamurthy Karra'
                         email = 'dakshinamurthy.karra@jaliansystems.com'
+                        organization = "Jalian Systems Pvt. Ltd."
+                        organizationUrl = "http://jaliansystems.com"
                     }
                 }
                 scm {

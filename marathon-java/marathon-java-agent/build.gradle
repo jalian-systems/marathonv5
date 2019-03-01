@@ -105,8 +105,8 @@ publishing {
             artifact javadocJar
 
             pom {
-                name = 'Marathon Java Agent'
-                description = 'Selenium/WebDriver bindings for Java/Swing applications'
+                name = 'Marathon Java/Swing Agent'
+                description = 'Marathon JavaDriver agent for Java/Swing applications'
                 url = 'https://marathontesting.com'
                 licenses {
                     license {
@@ -119,10 +119,12 @@ publishing {
                         id = 'dakshinamurthy.karra'
                         name = 'Dakshinamurthy Karra'
                         email = 'dakshinamurthy.karra@jaliansystems.com'
+                        organization = "Jalian Systems Pvt. Ltd."
+                        organizationUrl = "http://jaliansystems.com"
                     }
                 }
                 scm {
-                    connection = 'scm:git:git@github.com:jalian-systems/marathonv5.git'
+                    connection = 'scm:git:https://github.com/jalian-systems/marathonv5.git'
                     developerConnection = 'scm:git:git@github.com:jalian-systems/marathonv5.git'
                     url = 'https://github.com/jalian-systems/marathonv5'
                 }
