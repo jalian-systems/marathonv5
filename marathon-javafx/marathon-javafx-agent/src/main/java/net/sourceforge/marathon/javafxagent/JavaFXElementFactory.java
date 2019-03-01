@@ -85,6 +85,8 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableCellElemen
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXWebViewElement;
+import net.sourceforge.marathon.javafxagent.components.richtextfx.GenericStyledArea;
+import net.sourceforge.marathon.javafxagent.components.richtextfx.RichTextFXGenericStyledAreaElement;
 
 public class JavaFXElementFactory {
 
@@ -167,6 +169,7 @@ public class JavaFXElementFactory {
         add(ChoiceBoxTreeTableCell.class, JavaFXChoiceBoxTreeTableCell.class);
         add(ComboBoxTreeTableCell.class, JavaFXComboBoxTreeTableCell.class);
         add(WebView.class, JavaFXWebViewElement.class);
+        add(GenericStyledArea.GENERIC_STYLED_AREA_CLASS, RichTextFXGenericStyledAreaElement.class);
     }
 
     public static Class<? extends IJavaFXElement> get(Node component) {
