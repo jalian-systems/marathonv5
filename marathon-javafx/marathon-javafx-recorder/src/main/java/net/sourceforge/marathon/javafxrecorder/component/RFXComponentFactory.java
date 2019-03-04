@@ -68,6 +68,7 @@ import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
+import net.sourceforge.marathon.javafxrecorder.component.richtextfx.RFXGenericStyledArea;
 
 public class RFXComponentFactory {
 
@@ -119,6 +120,17 @@ public class RFXComponentFactory {
     public static void add(Class<? extends Node> componentKlass, Class<? extends RFXComponent> rComponentKlass,
             IRecordOn recordOn) {
         add(new InstanceCheckFinder(componentKlass, rComponentKlass, recordOn));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void add(String componentKlassName, Class<? extends RFXComponent> rComponentKlass, IRecordOn recordOn) {
+        Class<? extends Node> componentKlass;
+        try {
+            componentKlass = (Class<? extends Node>) Class.forName(componentKlassName);
+            add(new InstanceCheckFinder(componentKlass, rComponentKlass, recordOn));
+        } catch (ClassNotFoundException e) {
+            return;
+        }
     }
 
     public static void add(IRFXComponentFinder f) {
@@ -504,6 +516,25 @@ public class RFXComponentFactory {
         add(ComboBoxTreeTableCell.class, RFXComboBoxTreeTableCell.class, null);
         add(ChoiceBoxTreeTableCell.class, RFXChoiceBoxTreeTableCell.class, null);
         add(WebView.class, RFXWebView.class, null);
+        add("org.fxmisc.richtext.GenericStyledArea", RFXGenericStyledArea.class, new IRecordOn() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public Node getRecordOn(Node component, Point2D point) {
+                Class<? extends Node> klass;
+                try {
+                    klass = (Class<? extends Node>) Class.forName("org.fxmisc.richtext.GenericStyledArea");
+                    while (component != null) {
+                        if (klass.isInstance(component)) {
+                            return component;
+                        }
+                        component = component.getParent();
+                    }
+                } catch (ClassNotFoundException e) {
+                }
+                return null;
+            }
+        });
     }
 
     static {

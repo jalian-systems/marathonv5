@@ -20,8 +20,10 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.PickResult;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
@@ -46,8 +48,7 @@ public class JavaFXComboBoxOptionElement extends JavaFXElement implements IPseud
 
     @Override
     public String createHandle() {
-        JSONObject o = new JSONObject().put("selector", "nth-option").put("parameters",
-                new JSONArray().put(new JSONObject().put("select", option + 1).toString()));
+        JSONObject o = new JSONObject().put("selector", "nth-option").put("parameters", new JSONArray().put(option + 1));
         return parent.getHandle() + "#" + o.toString();
     }
 
@@ -59,5 +60,10 @@ public class JavaFXComboBoxOptionElement extends JavaFXElement implements IPseud
     @Override
     public String _getText() {
         return getComboBoxText((ComboBox<?>) getComponent(), option, true);
+    }
+
+    @Override
+    public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
+        Platform.runLater(() -> ((ComboBox<?>) getComponent()).getSelectionModel().select(option));
     }
 }

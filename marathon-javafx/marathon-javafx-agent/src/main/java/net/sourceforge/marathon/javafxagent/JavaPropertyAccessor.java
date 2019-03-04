@@ -38,11 +38,11 @@ public class JavaPropertyAccessor {
         this.object = stage;
     }
 
-    public final String getAttribute(final String name) {
+    public String getAttribute(final String name) {
         return getAttribute(name, false);
     }
 
-    public final String getAttribute(final String name, final boolean skipSelf) {
+    public String getAttribute(final String name, final boolean skipSelf) {
         return EventQueueWait.exec(new Callable<String>() {
             @Override
             public String call() throws Exception {

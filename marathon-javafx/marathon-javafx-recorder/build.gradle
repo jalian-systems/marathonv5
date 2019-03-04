@@ -46,6 +46,7 @@ dependencies {
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-javafx:marathon-fxtest-helpers")
   testCompile project(':marathon-javafx:marathon-javafx-agent')
+  testCompile 'org.fxmisc.richtext:richtextfx:0.9.3'
   antBuildXML 'org.json:json:20180813'
   antBuildXML project(':marathon-javafx:marathon-javafx-agent').files("bin")
   antBuildXML "org.java-websocket:Java-WebSocket:${java_websocket_version}"

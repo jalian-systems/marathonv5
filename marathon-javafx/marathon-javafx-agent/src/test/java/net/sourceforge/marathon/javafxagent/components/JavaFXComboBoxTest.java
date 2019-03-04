@@ -57,6 +57,20 @@ public class JavaFXComboBoxTest extends JavaFXElementTest {
     }
 
     @Test
+    public void selectOptionWithOptionElement() {
+        ComboBox<?> comboNode = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
+        IJavaFXElement comboBox = combos.get(0);
+        IJavaFXElement option = comboBox.findElementByCssSelector(".::nth-option(2)");
+        Platform.runLater(() -> option.click());
+        new Wait("Waiting for combo box option to be set.") {
+            @Override
+            public boolean until() {
+                return comboNode.getSelectionModel().getSelectedIndex() == 1;
+            }
+        };
+    }
+
+    @Test
     public void selectOption2() {
         ComboBox<?> comboNode = (ComboBox<?>) getPrimaryStage().getScene().getRoot().lookup(".combo-box");
         IJavaFXElement comboBox = combos.get(0);

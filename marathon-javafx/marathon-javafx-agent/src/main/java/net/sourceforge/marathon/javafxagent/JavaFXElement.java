@@ -274,7 +274,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
     public void submit() {
     }
 
-    private void verifyCanInteractWithElement() {
+    protected void verifyCanInteractWithElement() {
         try {
             if (!isEnabled()) {
                 throw new InvalidElementStateException("You may only interact with enabled elements", null);
@@ -284,7 +284,7 @@ public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJav
         verifyElementNotStale();
     }
 
-    private void verifyElementNotStale() {
+    protected void verifyElementNotStale() {
         String handle = driver.getWindowHandle();
         if (handle == null || !handle.equals(window.getHandle())) {
             throw new StaleElementReferenceException(

@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,149 +14,149 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-
-ext {
-    pomFile = file("${project.buildDir}/generated-pom.xml")
+plugins {
+    id 'maven-publish'
+    id 'signing'
 }
 
 repositories {
-  mavenCentral()
-  maven {
-    url 'https://oss.sonatype.org/content/repositories/snapshots'
-  }
+    mavenCentral()
 }
 
 configurations {
-  antBuildXML
+    antBuildXML
 }
 
 javadoc {
-  exclude 'net/sourceforge/marathon/javaagent/Wait.java'
-  exclude 'net/sourceforge/marathon/javaagent/server/Base64.java'
+    exclude 'net/sourceforge/marathon/javaagent/Wait.java'
+    exclude 'net/sourceforge/marathon/javaagent/server/Base64.java'
 }
 
 eclipse {
-  jdt {
-    sourceCompatibility = '1.6'
-    targetCompatibility = '1.6'
-    javaRuntimeName = 'JavaSE-1.6'
+    jdt {
+        sourceCompatibility = '1.6'
+        targetCompatibility = '1.6'
+        javaRuntimeName = 'JavaSE-1.6'
 
-    file {
-      withProperties { properties ->
-        properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
-        properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
-      }
+        file {
+            withProperties { properties ->
+                properties.setProperty('org.eclipse.jdt.core.compiler.problem.discouragedReference', 'ignore')
+                properties.setProperty('org.eclipse.jdt.core.compiler.problem.forbiddenReference', 'ignore')
+            }
+        }
     }
-  }
 }
 
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
 compileJava {
-	options.fork = true
-	if(project.properties['jdk6home'])
-		options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+    options.fork = true
+    if(project.properties['jdk6home'])
+        options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
 }
 
 compileTestJava {
-	options.fork = true
-	if(project.properties['jdk6home'])
-		options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
+    options.fork = true
+    if(project.properties['jdk6home'])
+     options.forkOptions*.executable = project.properties['jdk6home'] + '/bin/javac'
 }
 
 dependencies {
-  compile 'org.json:json:20180813'
-  compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
-  compile "org.javassist:javassist:${javassist_version}"
-  testCompile "org.testng:testng:${testng_version}"
-  testCompile project(":marathon-java:marathon-test-helpers")
-  antBuildXML 'org.json:json:20180813'
-  antBuildXML "org.nanohttpd:nanohttpd:${nanohttpd_version}"
-  antBuildXML "org.javassist:javassist:${javassist_version}"
+    compile 'org.json:json:20180813'
+    compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
+    compile "org.javassist:javassist:${javassist_version}"
+    testCompile "org.testng:testng:${testng_version}"
+    testCompile project(":marathon-java:marathon-test-helpers")
+    antBuildXML 'org.json:json:20180813'
+    antBuildXML "org.nanohttpd:nanohttpd:${nanohttpd_version}"
+    antBuildXML "org.javassist:javassist:${javassist_version}"
 }
 
 jar {
-  configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
-  manifest {
-    attributes 'Manifest-Version': '1.0',
-      'Agent-Class': 'net.sourceforge.marathon.javaagent.JavaAgentHook',
-      'Can-Redefine-Classes': 'false',
-      'Can-Retransform-Classes': 'false',
-      'Premain-Class': 'net.sourceforge.marathon.javaagent.JavaAgentHook'
-  }
+    configurations.compile.each { from(zipTree(it.path).matching { exclude("META-INF/**") }) }
+    manifest {
+        attributes 'Manifest-Version': '1.0',
+        'Agent-Class': 'net.sourceforge.marathon.javaagent.JavaAgentHook',
+        'Can-Redefine-Classes': 'false',
+        'Can-Retransform-Classes': 'false',
+        'Premain-Class': 'net.sourceforge.marathon.javaagent.JavaAgentHook'
+    }
 }
 
-task packageJavadoc(type: Jar, dependsOn: javadoc) {
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
     from javadoc
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'marathon-java-agent'
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'Marathon Java/Swing Agent'
+                description = 'Marathon JavaDriver agent for Java/Swing applications'
+                url = 'https://marathontesting.com'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'dakshinamurthy.karra'
+                        name = 'Dakshinamurthy Karra'
+                        email = 'dakshinamurthy.karra@jaliansystems.com'
+                        organization = "Jalian Systems Pvt. Ltd."
+                        organizationUrl = "http://jaliansystems.com"
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/jalian-systems/marathonv5.git'
+                    developerConnection = 'scm:git:git@github.com:jalian-systems/marathonv5.git'
+                    url = 'https://github.com/jalian-systems/marathonv5'
+                }
+            }
+
+            pom.withXml {
+                Node pomNode = asNode()
+                pomNode.dependencies.'*'.each() {
+                    it.parent().remove(it)
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+
+            credentials {
+                username = mvnUser
+                password = mvnPassword
+            }
+        }
+    }
 }
 
 signing {
-    required { signatory != null }
-	sign configurations.archives
-}
-
-publishing.repositories {
-      maven {
-          url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-  
-          credentials {
-              username = mvnUser
-              password = mvnPassword
-          }
-      }
-}
-
-publishing.publications {
-  mavenJava(MavenPublication) {
-      artifactId = 'marathon-java-agent'
-
-      pom.withXml {
-        Node pomNode = asNode()
-        pomNode.dependencies.'*'.each() {
-          it.parent().remove(it)
-        }
-      }
-
-      from components.java
-
-      artifact sourceJar
-      artifact packageJavadoc
-
-      // Sign the pom.xml and artifacts.
-      if (signing.required) {
-          // Sign the pom.xml.
-          pom.withXml {
-              writeTo(project.ext.pomFile)
-              def pomAscFile = signing.sign(project.ext.pomFile).signatureFiles[0]
-              artifact(pomAscFile) {
-                  classifier = null
-                  extension = 'pom.asc'
-              }
-              project.ext.pomFile.delete()
-          }
-      
-          // Sign the artifacts.
-          project.tasks.signArchives.signatureFiles.each {
-              artifact(it) {
-                  def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-                  if (matcher.find()) {
-                      classifier = matcher.group(1)
-                  } else {
-                      classifier = null
-                  }
-                  extension = 'jar.asc'
-              }
-          }
-      }
-  }
+    sign publishing.publications.mavenJava
 }
 
 test {
-  useTestNG()
-  systemProperty 'file.encoding', 'utf8'
-  testLogging.showStandardStreams = true
+    useTestNG()
+    systemProperty 'file.encoding', 'utf8'
+    testLogging.showStandardStreams = true
 }

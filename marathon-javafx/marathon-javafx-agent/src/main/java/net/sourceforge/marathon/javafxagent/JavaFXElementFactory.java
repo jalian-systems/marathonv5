@@ -58,17 +58,11 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxListCellEle
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxTableCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxTreeCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXCheckBoxTreeTableCell;
+import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxListCellElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxTableCellElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxTreeCellElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXChoiceBoxTreeTableCell;
 import net.sourceforge.marathon.javafxagent.components.JavaFXColorPickerElement;
+import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxCellElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxListCellElemnt;
-import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxTableCellElemnt;
-import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxTreeCellElement;
-import net.sourceforge.marathon.javafxagent.components.JavaFXComboBoxTreeTableCell;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDatePickerElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXHTMLEditor;
 import net.sourceforge.marathon.javafxagent.components.JavaFXListViewElement;
@@ -85,6 +79,8 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableCellElemen
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeTableViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXTreeViewElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXWebViewElement;
+import net.sourceforge.marathon.javafxagent.components.richtextfx.GenericStyledArea;
+import net.sourceforge.marathon.javafxagent.components.richtextfx.RichTextFXGenericStyledAreaElement;
 
 public class JavaFXElementFactory {
 
@@ -153,20 +149,21 @@ public class JavaFXElementFactory {
         add(TableView.class, JavaFXTableViewElement.class);
         add(TreeTableView.class, JavaFXTreeTableViewElement.class);
         add(CheckBoxListCell.class, JavaFXCheckBoxListCellElement.class);
-        add(ChoiceBoxListCell.class, JavaFXChoiceBoxListCellElement.class);
-        add(ComboBoxListCell.class, JavaFXComboBoxListCellElemnt.class);
+        add(ChoiceBoxListCell.class, JavaFXChoiceBoxCellElement.class);
+        add(ComboBoxListCell.class, JavaFXComboBoxCellElement.class);
         add(CheckBoxTreeCell.class, JavaFXCheckBoxTreeCellElement.class);
-        add(ChoiceBoxTreeCell.class, JavaFXChoiceBoxTreeCellElement.class);
-        add(ComboBoxTreeCell.class, JavaFXComboBoxTreeCellElement.class);
+        add(ChoiceBoxTreeCell.class, JavaFXChoiceBoxCellElement.class);
+        add(ComboBoxTreeCell.class, JavaFXComboBoxCellElement.class);
         add(TableCell.class, JavaFXTableViewCellElement.class);
         add(CheckBoxTableCell.class, JavaFXCheckBoxTableCellElement.class);
-        add(ChoiceBoxTableCell.class, JavaFXChoiceBoxTableCellElement.class);
-        add(ComboBoxTableCell.class, JavaFXComboBoxTableCellElemnt.class);
+        add(ChoiceBoxTableCell.class, JavaFXChoiceBoxCellElement.class);
+        add(ComboBoxTableCell.class, JavaFXComboBoxCellElement.class);
         add(TreeTableCell.class, JavaFXTreeTableCellElement.class);
         add(CheckBoxTreeTableCell.class, JavaFXCheckBoxTreeTableCell.class);
-        add(ChoiceBoxTreeTableCell.class, JavaFXChoiceBoxTreeTableCell.class);
-        add(ComboBoxTreeTableCell.class, JavaFXComboBoxTreeTableCell.class);
+        add(ChoiceBoxTreeTableCell.class, JavaFXChoiceBoxCellElement.class);
+        add(ComboBoxTreeTableCell.class, JavaFXComboBoxCellElement.class);
         add(WebView.class, JavaFXWebViewElement.class);
+        add(GenericStyledArea.GENERIC_STYLED_AREA_CLASS, RichTextFXGenericStyledAreaElement.class);
     }
 
     public static Class<? extends IJavaFXElement> get(Node component) {
@@ -181,6 +178,17 @@ public class JavaFXElementFactory {
 
     public static void add(Class<? extends Node> component, Class<? extends IJavaFXElement> javaelement) {
         add(new InstanceCheckFinder(component, javaelement));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void add(String componentName, Class<? extends IJavaFXElement> javaelement) {
+        Class<? extends Node> component;
+        try {
+            component = (Class<? extends Node>) Class.forName(componentName);
+            add(new InstanceCheckFinder(component, javaelement));
+        } catch (ClassNotFoundException e) {
+            return;
+        }
     }
 
     public static void add(IJavaElementFinder e) {
