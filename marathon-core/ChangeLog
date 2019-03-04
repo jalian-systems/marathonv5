@@ -1,3 +1,16 @@
+Marathon Version 5.2.5.0 (4th March 2019)
+
+01. refact: Merged ComboBox and ChoiceBox cell elements for tree, table, list and treetable
+02. fix: Use platform.runLater in ComboBoxElement#click
+03. feat: added support to getByPseudoElement for ChoiceBoxElement.
+04. feat: Added support to 'RichTextFX' components.
+05. fix: ComboBox support for OptionElement
+06. fixed: POM details
+07. 1. Updated Gradle to 5.2.1
+08. 2. Maven publishing fixes
+09. feat: Added String based add method for JavaFXElementFactory and RFXComponentFactory
+10. fixed: JAVA_TOOL_OPTIONS sets marathon.agent and marathon.recorder only for WebStart and Applet launch modes
+
 Marathon Version 5.2.4.0 (6th February 2019)
 
 01. feat: Added maven-publish plugin to marathon-java-agent, marathon-java-driver and marathon-javafx-agent
