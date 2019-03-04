@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.PickResult;
@@ -63,6 +64,6 @@ public class JavaFXComboBoxOptionElement extends JavaFXElement implements IPseud
 
     @Override
     public void click(int button, Node target, PickResult pickResult, int clickCount, double xoffset, double yoffset) {
-        ((ComboBox<?>) getComponent()).getSelectionModel().select(option);
+        Platform.runLater(() -> ((ComboBox<?>) getComponent()).getSelectionModel().select(option));
     }
 }

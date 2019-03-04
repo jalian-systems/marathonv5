@@ -18,30 +18,46 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.logging.Logger;
 
 import javafx.scene.Node;
+import javafx.scene.control.Cell;
+import javafx.scene.control.cell.ChoiceBoxListCell;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
+import javafx.scene.control.cell.ChoiceBoxTreeCell;
+import javafx.scene.control.cell.ChoiceBoxTreeTableCell;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
-public class JavaFXChoiceBoxTableCellElement extends JavaFXElement {
+public class JavaFXChoiceBoxCellElement extends JavaFXElement {
 
-    public static final Logger LOGGER = Logger.getLogger(JavaFXChoiceBoxTableCellElement.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaFXChoiceBoxCellElement.class.getName());
 
-    public JavaFXChoiceBoxTableCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
+    public JavaFXChoiceBoxCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public String _getValue() {
-        @SuppressWarnings("rawtypes")
-        ChoiceBoxTableCell cell = (ChoiceBoxTableCell) node;
-        @SuppressWarnings("rawtypes")
-        StringConverter converter = cell.getConverter();
+        StringConverter converter = getConverter();
+        Object item = ((Cell) node).getItem();
         if (converter != null) {
-            return converter.toString(cell.getItem());
+            return converter.toString(item);
         }
-        return cell.getItem().toString();
+        return item.toString();
     }
+
+    @SuppressWarnings("rawtypes")
+    private StringConverter getConverter() {
+        if (node instanceof ChoiceBoxListCell<?>)
+            return ((ChoiceBoxListCell) node).getConverter();
+        else if (node instanceof ChoiceBoxTableCell<?, ?>)
+            return ((ChoiceBoxTableCell) node).getConverter();
+        else if (node instanceof ChoiceBoxTreeCell<?>)
+            return ((ChoiceBoxTreeCell) node).getConverter();
+        else if (node instanceof ChoiceBoxTreeTableCell<?, ?>)
+            return ((ChoiceBoxTreeTableCell) node).getConverter();
+        return null;
+    }
+
 }
