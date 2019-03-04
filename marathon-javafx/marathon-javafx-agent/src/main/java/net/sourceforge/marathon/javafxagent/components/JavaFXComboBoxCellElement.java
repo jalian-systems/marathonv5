@@ -18,28 +18,46 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.logging.Logger;
 
 import javafx.scene.Node;
-import javafx.scene.control.cell.ChoiceBoxTreeCell;
+import javafx.scene.control.Cell;
+import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTreeCell;
+import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.util.StringConverter;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 
-public class JavaFXChoiceBoxTreeCellElement extends JavaFXElement {
+public class JavaFXComboBoxCellElement extends JavaFXElement {
 
-    public static final Logger LOGGER = Logger.getLogger(JavaFXChoiceBoxTreeCellElement.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(JavaFXComboBoxCellElement.class.getName());
 
-    public JavaFXChoiceBoxTreeCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
+    public JavaFXComboBoxCellElement(Node component, IJavaFXAgent driver, JFXWindow window) {
         super(component, driver, window);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public String _getValue() {
-        ChoiceBoxTreeCell cell = (ChoiceBoxTreeCell) getComponent();
-        StringConverter converter = cell.getConverter();
+        StringConverter converter = getConverter();
+        Object item = ((Cell) node).getItem();
         if (converter != null) {
-            return converter.toString(cell.getItem());
+            return converter.toString(item);
         }
-        return cell.getItem().toString();
+        return item.toString();
     }
+
+    @SuppressWarnings("rawtypes")
+    private StringConverter getConverter() {
+        if (node instanceof ComboBoxListCell<?>) {
+            return ((ComboBoxListCell) node).getConverter();
+        } else if (node instanceof ComboBoxTableCell<?, ?>)
+            return ((ComboBoxTableCell) node).getConverter();
+        else if (node instanceof ComboBoxTreeCell<?>)
+            return ((ComboBoxTreeCell) node).getConverter();
+        else if (node instanceof ComboBoxTreeTableCell<?, ?>)
+            return ((ComboBoxTreeTableCell) node).getConverter();
+        return null;
+    }
+
 }
