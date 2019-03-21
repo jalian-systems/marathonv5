@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
+import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
@@ -116,11 +117,22 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
 
     @Override
     public String _getText() {
-        return getText((JList) component, item);
+        return resolveDuplicate((JList) component, item, ((JavaElementPropertyAccessor) JavaElementFactory
+                .createElement(getRendererComponent((JList) component, item), driver, window))._getText());
+    }
+
+    @Override
+    public String _getAttribute(String name, boolean skipSelf) {
+        return ((JavaElementPropertyAccessor) JavaElementFactory.createElement(getRendererComponent((JList) component, item),
+                driver, window))._getAttribute(name, skipSelf);
     }
 
     public static String getText(JList list, int index) {
         String original = getItemText(list, index);
+        return resolveDuplicate(list, index, original);
+    }
+
+    protected static String resolveDuplicate(JList list, int index, String original) {
         String itemText = original;
         int suffixIndex = 0;
         if (list.getModel().getSize() > MAX_LIST_ITEMS) {
