@@ -37,10 +37,13 @@ public class RList extends RComponent {
 
     private String cellInfo;
     private int index;
+    private Point point;
+    private String cellValue;
 
     public RList(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
         JList list = (JList) source;
+        this.point = point;
         index = JListJavaElement.getIndexAt(list, point);
         cellInfo = index != -1 ? getText(list, index) : null;
     }
@@ -48,11 +51,27 @@ public class RList extends RComponent {
     @Override
     public void focusGained(RComponent prev) {
         cellInfo = index != -1 ? getText((JList) component, index) : null;
+        cellValue = getListCellValue((JList) component, index);
+    }
+
+    private String getListCellValue(JList list, int index) {
+        if (index == -1) {
+            return null;
+        }
+        Component rendererComponent = JListItemJavaElement.getRendererComponent(list, index);
+        RComponentFactory rComponentFactory = new RComponentFactory(omapConfig);
+        RComponent cellComponent = rComponentFactory.findRComponent(rendererComponent, point, recorder);
+        return cellComponent == null ? null : (String) getAttributeObject(cellComponent, "value");
     }
 
     @Override
     public void focusLost(RComponent next) {
         JList list = (JList) component;
+        String currentCellValue = getListCellValue(list, index);
+        if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
+            recorder.recordSelect2(this, currentCellValue, true);
+            return;
+        }
         Object[] selectedValues = list.getSelectedValues();
         if (next == null || getComponent() != next.getComponent()) {
             if (selectedValues == null || selectedValues.length == 0) {
@@ -90,6 +109,13 @@ public class RList extends RComponent {
 
     @Override
     public void mouseButton1Pressed(MouseEvent me) {
+        Component rendererComponent = JListItemJavaElement.getRendererComponent((JList) component, index);
+        RComponentFactory rComponentFactory = new RComponentFactory(omapConfig);
+        RComponent cellComponent = rComponentFactory.findRComponent(rendererComponent, point, recorder);
+        Boolean selectCall = (Boolean) getAttributeObject(cellComponent, "selectCall");
+        if (selectCall != null && selectCall) {
+            return;
+        }
         recorder.recordClick2(this, me, true);
     }
 

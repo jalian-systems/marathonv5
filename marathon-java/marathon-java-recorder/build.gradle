@@ -55,6 +55,7 @@ compileTestJava {
 dependencies {
   compile 'org.json:json:20180813'
   compile project(':marathon-java:marathon-java-agent')
+  implementation 'com.jidesoft:jide-oss:3.6.18'
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-java:marathon-test-helpers")
   testCompile project(':marathon-java:marathon-java-agent')

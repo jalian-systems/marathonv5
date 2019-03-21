@@ -57,6 +57,11 @@ import net.sourceforge.marathon.javaagent.components.JTextComponentJavaElement;
 import net.sourceforge.marathon.javaagent.components.JToggleButtonJavaElement;
 import net.sourceforge.marathon.javaagent.components.JTreeEditingContainerJavaElement;
 import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
+import net.sourceforge.marathon.javaagent.components.jide.JideCheckBoxListItemElement;
+import net.sourceforge.marathon.javaagent.components.jide.JideCheckBoxTreeNodeElement;
+import net.sourceforge.marathon.javaagent.components.jide.JideDateSpinnerElement;
+import net.sourceforge.marathon.javaagent.components.jide.JideTristateCheckBoxElement;
+import net.sourceforge.marathon.javaagent.components.jide.JideSplitPaneElement;
 
 public class JavaElementFactory {
 
@@ -136,6 +141,11 @@ public class JavaElementFactory {
         add(DefaultEditor.class, DefaultEditorJavaElement.class);
         add(JColorChooser.class, JColorChooserJavaElement.class);
         add(JFileChooser.class, JFileChooserJavaElement.class);
+        add("com.jidesoft.swing.TristateCheckBox", JideTristateCheckBoxElement.class);
+        add("com.jidesoft.swing.CheckBoxListCellRenderer", JideCheckBoxListItemElement.class);
+        add("com.jidesoft.swing.CheckBoxTreeCellRenderer", JideCheckBoxTreeNodeElement.class);
+        add("com.jidesoft.spinner.DateSpinner", JideDateSpinnerElement.class);
+        add("com.jidesoft.swing.JideSplitPane", JideSplitPaneElement.class);
     }
 
     public static Class<? extends IJavaElement> get(Component component) {
@@ -150,6 +160,17 @@ public class JavaElementFactory {
 
     public static void add(Class<? extends Component> component, Class<? extends IJavaElement> javaelement) {
         add(new InstanceCheckFinder(component, javaelement));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void add(String componentName, Class<? extends IJavaElement> javaelement) {
+        Class<? extends Component> component;
+        try {
+            component = (Class<? extends Component>) Class.forName(componentName);
+            add(new InstanceCheckFinder(component, javaelement));
+        } catch (ClassNotFoundException e) {
+            return;
+        }
     }
 
     public static void add(IJavaElementFinder e) {

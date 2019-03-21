@@ -31,6 +31,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import net.sourceforge.marathon.javaagent.components.JTreeJavaElement;
+import net.sourceforge.marathon.javaagent.components.JTreeNodeJavaElement;
 import net.sourceforge.marathon.javaagent.components.PropertyHelper;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
@@ -42,12 +43,15 @@ public class RTree extends RComponent {
     private int row = -1;
     private String text = null;
     private String cellInfo;
+    private String cellValue;
+    private Point point;
 
     public RTree(Component source, JSONOMapConfig omapConfig, Point point, IJSONRecorder recorder) {
         super(source, omapConfig, point, recorder);
         JTree tree = (JTree) source;
         if (point != null) {
             row = tree.getClosestRowForLocation(point.x, point.y);
+            this.point = point;
         } else {
             if (tree.isEditing()) {
                 TreePath editingPath = tree.getEditingPath();
@@ -55,12 +59,28 @@ public class RTree extends RComponent {
             }
         }
         cellInfo = getTextForNode(tree, row);
+
+    }
+
+    private String getTreeCellValue(JTree list, int index) {
+        if (index == -1) {
+            return null;
+        }
+        Component rendererComponent = JTreeNodeJavaElement.getRendererComponent(list, index);
+        RComponentFactory rComponentFactory = new RComponentFactory(omapConfig);
+        RComponent cellComponent = rComponentFactory.findRComponent(rendererComponent, point, recorder);
+        return cellComponent == null ? null : (String) getAttributeObject(cellComponent, "value");
     }
 
     @Override
     public void focusLost(RComponent next) {
         JTree tree = (JTree) component;
         String currentText = getText();
+        String currentCellValue = getTreeCellValue(tree, row);
+        if (currentCellValue != null && !currentCellValue.equals(cellValue)) {
+            recorder.recordSelect2(this, currentCellValue, true);
+            return;
+        }
         if (currentText != null && !currentText.equals(text)) {
             recorder.recordSelect2(this, currentText, true);
         }
@@ -83,6 +103,8 @@ public class RTree extends RComponent {
     public void focusGained(RComponent prev) {
         text = getText();
         cellInfo = getTextForNode((JTree) component, row);
+        String currentCellValue = getTreeCellValue((JTree) component, row);
+        cellValue = currentCellValue == null ? null : currentCellValue;
     }
 
     @Override
@@ -165,7 +187,7 @@ public class RTree extends RComponent {
     }
 
     @Override
-    protected void mousePressed(MouseEvent me) {
+    public void mousePressed(MouseEvent me) {
         // Ignore double clicks on non-leaf tree nodes
         if (me.getButton() == MouseEvent.BUTTON1 && me.getModifiersEx() == InputEvent.BUTTON1_DOWN_MASK && me.getClickCount() > 1) {
             TreePath path = ((JTree) component).getPathForRow(row);
@@ -190,7 +212,14 @@ public class RTree extends RComponent {
     }
 
     @Override
-    protected void mouseButton1Pressed(MouseEvent me) {
+    public void mouseButton1Pressed(MouseEvent me) {
+        Component rendererComponent = JTreeNodeJavaElement.getRendererComponent((JTree) component, row);
+        RComponentFactory rComponentFactory = new RComponentFactory(omapConfig);
+        RComponent cellComponent = rComponentFactory.findRComponent(rendererComponent, point, recorder);
+        Boolean selectCall = (Boolean) getAttributeObject(cellComponent, "selectCall");
+        if (selectCall != null && selectCall) {
+            return;
+        }
         recorder.recordClick2(this, me, true);
     }
 

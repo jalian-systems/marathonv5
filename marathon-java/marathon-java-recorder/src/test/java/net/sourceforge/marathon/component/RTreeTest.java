@@ -16,6 +16,7 @@
 package net.sourceforge.marathon.component;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -83,9 +84,7 @@ public class RTreeTest extends RComponentTest {
                 rTree.focusLost(null);
             }
         });
-        Call call = lr.getCall();
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[]", call.getState());
+        AssertJUnit.assertEquals(0, lr.getCalls().size());
     }
 
     public void singleNodeSelected() throws Throwable, InvocationTargetException {
@@ -102,13 +101,14 @@ public class RTreeTest extends RComponentTest {
         siw(new Runnable() {
             @Override
             public void run() {
-                RTree rTree = new RTree(tree, null, null, lr);
-                rTree.focusLost(null);
+                Rectangle rowBounds = tree.getRowBounds(0);
+                RTree rTree = new RTree(tree, null, rowBounds.getLocation(), lr);
+                rTree.mouseButton1Pressed(null);
             }
         });
         Call call = lr.getCall();
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[/Root Node]", call.getState());
+        AssertJUnit.assertEquals("click", call.getFunction());
+        AssertJUnit.assertEquals("/Root Node", call.getCellinfo());
     }
 
     public void multpleNodesSelected() throws Throwable, InvocationTargetException {
@@ -151,13 +151,14 @@ public class RTreeTest extends RComponentTest {
         siw(new Runnable() {
             @Override
             public void run() {
-                RTree rTree = new RTree(tree, null, null, lr);
-                rTree.focusLost(null);
+                Rectangle cb = tree.getPathBounds(tree.getPathForRow(0));
+                RTree rTree = new RTree(tree, null, new Point(cb.x + 2, cb.y + 2), lr);
+                rTree.mouseButton1Pressed(null);
             }
         });
         Call call = lr.getCall();
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[/Root Node [] \\, \\\\/ Special]", call.getState());
+        AssertJUnit.assertEquals("click", call.getFunction());
+        AssertJUnit.assertEquals("/Root Node [] , \\/ Special", call.getCellinfo());
     }
 
     public void nodeModification() throws Throwable, InvocationTargetException {
@@ -169,24 +170,25 @@ public class RTreeTest extends RComponentTest {
             public void run() {
                 Rectangle rowBounds = tree.getRowBounds(0);
                 RTree rTree = new RTree(tree, null, rowBounds.getLocation(), lr);
-                rTree.focusGained(null);
                 tree.expandRow(0);
                 tree.setSelectionRow(0);
+                rTree.mouseButton1Pressed(null);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
                 root.setUserObject("Root Node - modified");
-                rTree.focusLost(null);
+                rTree.focusGained(null);
+                tree.expandRow(0);
+                tree.setSelectionRow(0);
+                rTree.mouseButton1Pressed(null);
             }
         });
         List<Call> calls = lr.getCalls();
-        Call call = calls.get(1);
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[/Root Node - modified]", call.getState());
-        call = calls.get(0);
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("Root Node - modified", call.getState());
-        AssertJUnit.assertTrue(call.isWithCellInfo());
+        Call call = calls.get(0);
+        AssertJUnit.assertEquals("click", call.getFunction());
         AssertJUnit.assertEquals("/Root Node", call.getCellinfo());
+        call = calls.get(1);
+        AssertJUnit.assertEquals("click", call.getFunction());
+        AssertJUnit.assertEquals("/Root Node - modified", call.getCellinfo());
     }
 
     public void assertContent() {

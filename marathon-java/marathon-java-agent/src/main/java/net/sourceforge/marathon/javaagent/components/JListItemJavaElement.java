@@ -18,9 +18,12 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
@@ -63,6 +67,15 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
     @Override
     public JListJavaElement getParent() {
         return parent;
+    }
+
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+        if (selector.equals("editor")) {
+            return Arrays.asList(
+                    JavaElementFactory.createElement(getRendererComponent((JList) component, item), getDriver(), getWindow()));
+        }
+        return super.getByPseudoElement(selector, params);
     }
 
     @Override
@@ -137,6 +150,10 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         Component rendererComponent = cellRenderer.getListCellRendererComponent(list, value, item, false, false);
         if (rendererComponent == null) {
             return null;
+        }
+        if (rendererComponent instanceof JComponent) {
+            ((JComponent) rendererComponent).putClientProperty("jlist", (JList) list);
+            ((JComponent) rendererComponent).putClientProperty("item", item);
         }
         return rendererComponent;
     }

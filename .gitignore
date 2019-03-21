@@ -171,3 +171,11 @@
 /marathon-recording-server/bin/
 /marathon-recording-server/.gitignore
 
+/marathonext-jide-swing/.gradle
+/marathonext-jide-swing/build
+/marathonext-jide-swing/test-output/
+/marathonext-jide-swing/.classpath
+/marathonext-jide-swing/.project
+/marathonext-jide-swing/.settings/
+/marathonext-jide-swing/bin/
+/marathonext-jide-swing/.DS_Store

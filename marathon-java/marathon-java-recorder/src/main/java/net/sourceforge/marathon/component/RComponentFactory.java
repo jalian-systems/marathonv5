@@ -48,6 +48,11 @@ import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.JTextComponent;
 
+import net.sourceforge.marathon.component.jide.RJideCheckBoxListItem;
+import net.sourceforge.marathon.component.jide.RJideCheckBoxTreeNode;
+import net.sourceforge.marathon.component.jide.RJideDateSpinnerElement;
+import net.sourceforge.marathon.component.jide.RJideSplitPaneElement;
+import net.sourceforge.marathon.component.jide.RJideTristateComponent;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
@@ -96,6 +101,17 @@ public class RComponentFactory {
         add(new InstanceCheckFinder(componentKlass, rComponentKlass));
     }
 
+    @SuppressWarnings("unchecked")
+    public static void add(String componentName, Class<? extends RComponent> javaelement) {
+        Class<? extends Component> component;
+        try {
+            component = (Class<? extends Component>) Class.forName(componentName);
+            add(new InstanceCheckFinder(component, javaelement));
+        } catch (ClassNotFoundException e) {
+            return;
+        }
+    }
+
     public static void add(IRComponentFinder f) {
         entries.addFirst(f);
     }
@@ -125,6 +141,11 @@ public class RComponentFactory {
         add(JEditorPane.class, REditorPane.class);
         add(JLabel.class, RLabel.class);
         add(JScrollBar.class, RIgnoreComponent.class);
+        add("com.jidesoft.swing.TristateCheckBox", RJideTristateComponent.class);
+        add("com.jidesoft.swing.CheckBoxListCellRenderer", RJideCheckBoxListItem.class);
+        add("com.jidesoft.swing.CheckBoxTreeCellRenderer", RJideCheckBoxTreeNode.class);
+        add("com.jidesoft.spinner.DateSpinner", RJideDateSpinnerElement.class);
+        add("com.jidesoft.swing.JideSplitPane", RJideSplitPaneElement.class);
     }
 
     static {
