@@ -18,12 +18,16 @@ package net.sourceforge.marathon.component;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.swing.JList;
 
 import net.sourceforge.marathon.javaagent.components.JListItemJavaElement;
 import net.sourceforge.marathon.javaagent.components.JListJavaElement;
+import net.sourceforge.marathon.javaagent.components.PropertyHelper;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
 
@@ -38,12 +42,12 @@ public class RList extends RComponent {
         super(source, omapConfig, point, recorder);
         JList list = (JList) source;
         index = JListJavaElement.getIndexAt(list, point);
-        cellInfo = index != -1 ? JListItemJavaElement.getText(list, index) : null;
+        cellInfo = index != -1 ? getText(list, index) : null;
     }
 
     @Override
     public void focusGained(RComponent prev) {
-        cellInfo = index != -1 ? JListItemJavaElement.getText((JList) component, index) : null;
+        cellInfo = index != -1 ? getText((JList) component, index) : null;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class RList extends RComponent {
             if (selectedValues == null || selectedValues.length == 0) {
                 recorder.recordSelect(this, "[]");
             } else if (selectedValues.length > 1) {
-                String currentListSelectionText = JListJavaElement.getSelectionText((JList) component);
+                String currentListSelectionText = getSelectionText((JList) component);
                 recorder.recordSelect(this, currentListSelectionText);
             }
         }
@@ -63,13 +67,13 @@ public class RList extends RComponent {
     @Override
     public String getText() {
         if (index == -1)
-            return JListJavaElement.getSelectionText((JList) component);
-        return JListItemJavaElement.getText((JList) component, index);
+            return getSelectionText((JList) component);
+        return getText((JList) component, index);
     }
 
     @Override
     public String[][] getContent() {
-        return JListJavaElement.getContent((JList) component);
+        return getContent((JList) component);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class RList extends RComponent {
     }
 
     @Override
-    protected void mouseButton1Pressed(MouseEvent me) {
+    public void mouseButton1Pressed(MouseEvent me) {
         recorder.recordClick2(this, me, true);
     }
 
@@ -114,6 +118,52 @@ public class RList extends RComponent {
         if (index != other.index)
             return false;
         return true;
+    }
+
+    public String getText(JList list, int index) {
+        String original = getItemText(list, index);
+        return resolveDuplicate(list, index, original);
+    }
+
+    private String resolveDuplicate(JList list, int index, String original) {
+        String itemText = original;
+        int suffixIndex = 0;
+        if (list.getModel().getSize() > JListItemJavaElement.MAX_LIST_ITEMS) {
+            return itemText;
+        }
+        for (int i = 0; i < index; i++) {
+            String current = getItemText(list, i);
+            if (current.equals(original)) {
+                itemText = String.format("%s(%d)", original, ++suffixIndex);
+            }
+        }
+        return itemText;
+    }
+
+    protected String getItemText(JList listItem, int index) {
+        Component renComponent = JListItemJavaElement.getRendererComponent(listItem, index);
+        RComponentFactory finder = new RComponentFactory(omapConfig);
+        return finder.findRawRComponent(renComponent, null, recorder).getText();
+    }
+
+    public String getSelectionText(JList list) {
+        List<Properties> pa = new ArrayList<Properties>();
+        int[] selectedIndices = list.getSelectedIndices();
+        for (int index : selectedIndices) {
+            Properties p = new Properties();
+            p.setProperty("listText", getText(list, index));
+            pa.add(p);
+        }
+        return PropertyHelper.toString(pa.toArray(new Properties[pa.size()]), new String[] { "listText" });
+    }
+
+    public String[][] getContent(JList component) {
+        int nItems = component.getModel().getSize();
+        String[][] content = new String[1][nItems];
+        for (int i = 0; i < nItems; i++) {
+            content[0][i] = getText(component, i);
+        }
+        return content;
     }
 
 }

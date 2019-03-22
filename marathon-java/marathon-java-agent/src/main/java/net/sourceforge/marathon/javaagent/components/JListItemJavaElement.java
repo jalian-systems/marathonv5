@@ -40,7 +40,7 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
 
     private int item;
     private JListJavaElement parent;
-    private static final int MAX_LIST_ITEMS = Integer.parseInt(System.getProperty("marathon.duplicate.check.max", "100"));
+    public static final int MAX_LIST_ITEMS = Integer.parseInt(System.getProperty("marathon.duplicate.check.max", "100"));
 
     public JListItemJavaElement(JListJavaElement parent, int item) {
         super(parent);
@@ -94,16 +94,6 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         });
     }
 
-    public static Component getRendererComponent(JList list, int item) {
-        Object value = list.getModel().getElementAt(item);
-        ListCellRenderer cellRenderer = list.getCellRenderer();
-        Component rendererComponent = cellRenderer.getListCellRendererComponent(list, value, item, false, false);
-        if (rendererComponent == null) {
-            return null;
-        }
-        return rendererComponent;
-    }
-
     public int getIndex() {
         return item;
     }
@@ -121,18 +111,7 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
                 .createElement(getRendererComponent((JList) component, item), driver, window))._getText());
     }
 
-    @Override
-    public String _getAttribute(String name, boolean skipSelf) {
-        return ((JavaElementPropertyAccessor) JavaElementFactory.createElement(getRendererComponent((JList) component, item),
-                driver, window))._getAttribute(name, skipSelf);
-    }
-
-    public static String getText(JList list, int index) {
-        String original = getItemText(list, index);
-        return resolveDuplicate(list, index, original);
-    }
-
-    protected static String resolveDuplicate(JList list, int index, String original) {
+    private String resolveDuplicate(JList list, int index, String original) {
         String itemText = original;
         int suffixIndex = 0;
         if (list.getModel().getSize() > MAX_LIST_ITEMS) {
@@ -147,9 +126,19 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         return itemText;
     }
 
-    protected static String getItemText(JList listItem, int index) {
-        Component renComponent = getRendererComponent(listItem, index);
-        JavaElementPropertyAccessor pa = new JavaElementPropertyAccessor(renComponent);
-        return pa.getText();
+    protected String getItemText(JList listItem, int index) {
+        return ((JavaElementPropertyAccessor) JavaElementFactory.createElement(getRendererComponent((JList) listItem, index),
+                driver, window))._getText();
     }
+
+    public static Component getRendererComponent(JList list, int item) {
+        Object value = list.getModel().getElementAt(item);
+        ListCellRenderer cellRenderer = list.getCellRenderer();
+        Component rendererComponent = cellRenderer.getListCellRendererComponent(list, value, item, false, false);
+        if (rendererComponent == null) {
+            return null;
+        }
+        return rendererComponent;
+    }
+
 }

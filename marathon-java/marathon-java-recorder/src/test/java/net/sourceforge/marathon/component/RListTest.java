@@ -16,6 +16,8 @@
 package net.sourceforge.marathon.component;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Properties;
 
 import javax.swing.DefaultListModel;
@@ -87,14 +89,14 @@ public class RListTest extends RComponentTest {
             @Override
             public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
-                list.setSelectedIndices(new int[] { 1 });
-                RList rList = new RList(list, null, null, lr);
-                rList.focusLost(null);
+                Rectangle cb = list.getCellBounds(1, 1);
+                RList rList = new RList(list, null, new Point(cb.x + 2, cb.y + 2), lr);
+                rList.mouseButton1Pressed(null);
             }
         });
         Call call = lr.getCall();
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[John Smith]", call.getState());
+        AssertJUnit.assertEquals("click", call.getFunction());
+        AssertJUnit.assertEquals("John Smith", call.getCellinfo());
     }
 
     public void selectMultipleItemSelection() {
@@ -121,15 +123,15 @@ public class RListTest extends RComponentTest {
             public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
-                model.set(0, " Special Characters ([],)");
-                list.setSelectedIndices(new int[] { 0 });
-                RList rList = new RList(list, null, null, lr);
-                rList.focusLost(null);
+                model.set(0, "\\ Special Characters ([]\\,)");
+                Rectangle cb = list.getCellBounds(0, 0);
+                RList rList = new RList(list, null, new Point(cb.x + 2, cb.y + 2), lr);
+                rList.mouseButton1Pressed(null);
             }
         });
         Call call = lr.getCall();
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[\\ Special Characters ([]\\,)]", call.getState());
+        AssertJUnit.assertEquals("click", call.getFunction());
+        AssertJUnit.assertEquals("\\ Special Characters ([]\\,)", call.getCellinfo());
     }
 
     public void listDuplicates() throws InterruptedException {
@@ -138,29 +140,31 @@ public class RListTest extends RComponentTest {
             @Override
             public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
-                list.setSelectedIndices(new int[] { 1 });
+                list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                list.setSelectedIndices(new int[] { 1, 2 });
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
             }
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[John Smith]", call.getState());
+        AssertJUnit.assertEquals("[John Smith, Kathy Green]", call.getState());
 
         siw(new Runnable() {
             @Override
             public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 DefaultListModel model = (DefaultListModel) list.getModel();
                 model.set(2, "John Smith");
-                list.setSelectedIndices(new int[] { 2 });
+                list.setSelectedIndices(new int[] { 0, 2 });
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
             }
         });
         Call calll = lr.getCall();
         AssertJUnit.assertEquals("select", calll.getFunction());
-        AssertJUnit.assertEquals("[John Smith(1)]", calll.getState());
+        AssertJUnit.assertEquals("[Jane Doe, John Smith(1)]", calll.getState());
     }
 
     public void listMultipleDuplicates() throws InterruptedException {
@@ -169,14 +173,15 @@ public class RListTest extends RComponentTest {
             @Override
             public void run() {
                 list = (JList) ComponentUtils.findComponent(JList.class, frame);
-                list.setSelectedIndices(new int[] { 1 });
+                list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                list.setSelectedIndices(new int[] { 1, 2 });
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
             }
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[John Smith]", call.getState());
+        AssertJUnit.assertEquals("[John Smith, Kathy Green]", call.getState());
 
         siw(new Runnable() {
             @Override
@@ -186,14 +191,14 @@ public class RListTest extends RComponentTest {
                 model.set(0, "John Smith");
                 model.set(1, "John Smith");
                 model.set(2, "John Smith");
-                list.setSelectedIndices(new int[] { 2 });
+                list.setSelectedIndices(new int[] { 0, 1, 2 });
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
             }
         });
         Call calll = lr.getCall();
         AssertJUnit.assertEquals("select", calll.getFunction());
-        AssertJUnit.assertEquals("[John Smith(2)]", calll.getState());
+        AssertJUnit.assertEquals("[John Smith, John Smith(1), John Smith(2)]", calll.getState());
     }
 
     public void propertyhelperWorksOk() {

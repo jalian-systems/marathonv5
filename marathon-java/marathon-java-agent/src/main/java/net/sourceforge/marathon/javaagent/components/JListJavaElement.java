@@ -53,11 +53,11 @@ public class JListJavaElement extends AbstractJavaElement {
         return new JSONArray(getContent((JList) component)).toString();
     }
 
-    public static String[][] getContent(JList component) {
+    public String[][] getContent(JList component) {
         int nItems = component.getModel().getSize();
         String[][] content = new String[1][nItems];
         for (int i = 0; i < nItems; i++) {
-            content[0][i] = JListItemJavaElement.getText(component, i);
+            content[0][i] = new JListItemJavaElement(this, i)._getText();
         }
         return content;
     }
@@ -165,12 +165,12 @@ public class JListJavaElement extends AbstractJavaElement {
         return true;
     }
 
-    public static String getSelectionText(JList list) {
+    public String getSelectionText(JList list) {
         List<Properties> pa = new ArrayList<Properties>();
         int[] selectedIndices = list.getSelectedIndices();
         for (int index : selectedIndices) {
             Properties p = new Properties();
-            p.setProperty("listText", JListItemJavaElement.getText(list, index));
+            p.setProperty("listText", new JListItemJavaElement(this, index)._getText());
             pa.add(p);
         }
         return PropertyHelper.toString(pa.toArray(new Properties[pa.size()]), new String[] { "listText" });
