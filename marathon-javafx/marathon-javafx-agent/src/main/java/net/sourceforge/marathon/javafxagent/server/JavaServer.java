@@ -21,8 +21,6 @@ import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +76,8 @@ public class JavaServer extends NanoHTTPD {
     private static final String NULL_OBJECT = new String();
 
     private boolean exitOnQuit;
+
+    private String host;
 
     static {
         try {
@@ -301,9 +301,10 @@ public class JavaServer extends NanoHTTPD {
     }
 
     @Override
-    public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
+    public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> params,
             Map<String, String> files) {
         try {
+            this.host = header.get("host");
             handlingRequest = true;
             JSONObject jsonQuery = null;
             String query = files.get("postData");
@@ -544,13 +545,9 @@ public class JavaServer extends NanoHTTPD {
             session.setLogLevel(getLogLevel(query));
             session.log(Level.INFO, "A new session created. sessionID = " + session.getID());
         }
-        try {
-            Response r = newFixedLengthResponse(Status.REDIRECT, MIME_HTML, null);
-            r.addHeader("Location", new URL("http", "localhost", port, "/session/" + liveSession.getID()).toString());
-            return r;
-        } catch (MalformedURLException e) {
-            throw new JavaAgentException(e.getMessage(), e);
-        }
+        Response r = newFixedLengthResponse(Status.REDIRECT, MIME_HTML, null);
+        r.addHeader("Location", "http://" + host + "/session/" + liveSession.getID());
+        return r;
     }
 
     public JSONArray getSessions(JSONObject query, JSONObject uriParams) {
