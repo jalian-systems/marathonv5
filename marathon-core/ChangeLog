@@ -1,3 +1,15 @@
+Marathon Version 5.2.6.0 (30th July 2019)
+
+01. fix: Switch to window using window name property.
+02. fix: Redirect URL when creating a session.
+03. fix: JTable cell setting into edit mode with passing mouse event.
+04. feat: JavaElementFactory and RComponentFactory added InstanceCheckFinder with classname using reflection.
+05. feat: implemented marathon_select and getByPseudoElement in JlistItemJavaElement.
+06. feat: Use JTreeCellRenderer component's JavaElement to find ::editor pseudo element (Required when renderer acts as an editor as in JCheckboxTreeNode in jide-oss)
+07. feat: Support for JIDE checkbox list element and checkbox treenode elements.
+08. fix: JListItem uses RComponentFactory and JavaElementFactory to get the text from renderer element
+09. fix: JListItem creates a JavaElement on renderer to get the attribute and text
+
 Marathon Version 5.2.5.0 (4th March 2019)
 
 01. refact: Merged ComboBox and ChoiceBox cell elements for tree, table, list and treetable
