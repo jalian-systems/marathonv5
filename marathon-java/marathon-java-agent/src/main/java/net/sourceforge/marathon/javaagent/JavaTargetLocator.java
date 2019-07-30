@@ -272,6 +272,7 @@ public class JavaTargetLocator {
         // an exception on error
         try {
             return EventQueueWait.exec(new Callable<IJavaAgent>() {
+
                 @Override
                 public IJavaAgent call() {
                     return window_internal(windowDetails);
@@ -304,23 +305,14 @@ public class JavaTargetLocator {
                 throw e;
             }
             String title = jw.getTitle();
-            if (nameOrHandleOrTitle.startsWith("/") && !nameOrHandleOrTitle.startsWith("//")) {
-                if (title != null && title.matches(nameOrHandleOrTitle.substring(1))) {
-                    setCurrentWindow(window);
-                    return driver;
-                }
-            } else {
-                if (nameOrHandleOrTitle.startsWith("//")) {
-                    if (title != null && title.equals(nameOrHandleOrTitle.substring(1))) {
-                        setCurrentWindow(window);
-                        return driver;
-                    }
-                } else {
-                    if (title != null && title.equals(nameOrHandleOrTitle)) {
-                        setCurrentWindow(window);
-                        return driver;
-                    }
-                }
+            IJavaAgent _driver = _window_internal(nameOrHandleOrTitle, window, title);
+            if (_driver != null) {
+                return _driver;
+            }
+            title = window.getName();
+            _driver = _window_internal(nameOrHandleOrTitle, window, title);
+            if (_driver != null) {
+                return _driver;
             }
         }
         for (Window window : windows) {
@@ -331,6 +323,28 @@ public class JavaTargetLocator {
             }
         }
         throw new NoSuchWindowException("Cannot find window: " + windowDetails, null);
+    }
+
+    private IJavaAgent _window_internal(String nameOrHandleOrTitle, Window window, String title) {
+        if (nameOrHandleOrTitle.startsWith("/") && !nameOrHandleOrTitle.startsWith("//")) {
+            if (title != null && title.matches(nameOrHandleOrTitle.substring(1))) {
+                setCurrentWindow(window);
+                return driver;
+            }
+        } else {
+            if (nameOrHandleOrTitle.startsWith("//")) {
+                if (title != null && title.equals(nameOrHandleOrTitle.substring(1))) {
+                    setCurrentWindow(window);
+                    return driver;
+                }
+            } else {
+                if (title != null && title.equals(nameOrHandleOrTitle)) {
+                    setCurrentWindow(window);
+                    return driver;
+                }
+            }
+        }
+        return null;
     }
 
     private List<List<String>> getContainerNP(Window window, JSONObject map) {

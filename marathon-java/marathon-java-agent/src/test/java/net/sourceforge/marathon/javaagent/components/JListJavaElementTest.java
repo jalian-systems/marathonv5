@@ -142,6 +142,27 @@ public class JListJavaElementTest extends JavaElementTest {
         AssertJUnit.assertEquals("List Item - 1(1)", listItem.getText());
     }
 
+    public void selectForDuplicateItemsX() {
+        IJavaElement listItem;
+        String attribute;
+        IJavaElement list = driver.findElementByName("list-1");
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JList jlist = (JList) ComponentUtils.findComponent(JList.class, frame);
+                DefaultListModel model = (DefaultListModel) jlist.getModel();
+                model.set(2, "List Item - 1");
+            }
+        });
+
+        marathon_select(list, "[List Item - 1(1)]");
+        attribute = list.getAttribute("selectedIndices");
+        AssertJUnit.assertEquals("[2]", attribute);
+        listItem = driver.findElementByCssSelector("#list-1::nth-item(3)");
+        AssertJUnit.assertEquals("List Item - 1(1)", listItem.getText());
+    }
+
     public void selectForMultipleDuplicates() {
         IJavaElement listItem;
         String attribute;
@@ -172,6 +193,10 @@ public class JListJavaElementTest extends JavaElementTest {
         AssertJUnit.assertEquals("[3]", attribute);
         listItem = driver.findElementByCssSelector("#list-1::nth-item(4)");
         AssertJUnit.assertEquals("List Item - 1(2)", listItem.getText());
+        List<IJavaElement> items = list.findElementsByCssSelector(".::all-items");
+        for (IJavaElement item : items) {
+            System.out.println(item.getText());
+        }
     }
 
     public void assertContent() {

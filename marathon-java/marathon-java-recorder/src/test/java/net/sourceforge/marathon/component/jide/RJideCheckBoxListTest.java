@@ -1,26 +1,13 @@
-/*******************************************************************************
- * Copyright 2016 Jalian Systems Pvt. Ltd.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-package net.sourceforge.marathon.component;
+package net.sourceforge.marathon.component.jide;
 
-import java.awt.BorderLayout;
+import java.awt.Checkbox;
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Properties;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
@@ -32,26 +19,37 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import components.ListDemo;
+import com.jidesoft.plaf.LookAndFeelFactory;
+import com.jidesoft.swing.CheckBoxList;
+import com.jidesoft.swing.CheckBoxListCellRenderer;
+
+import net.sourceforge.marathon.component.LoggingRecorder;
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
+import net.sourceforge.marathon.component.RComponentTest;
+import net.sourceforge.marathon.component.RList;
 import net.sourceforge.marathon.javaagent.components.PropertyHelper;
+import net.sourceforge.marathon.javaagent.components.jide.CheckBoxListDemo;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
-@Test
-public class RListTest extends RComponentTest {
+public class RJideCheckBoxListTest extends RComponentTest {
     protected JFrame frame;
-    private JList list;
+    private CheckBoxList list;
 
     @BeforeMethod
     public void showDialog() throws Throwable {
+        System.setProperty("marathon.mode", "recording");
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
-                frame = new JFrame(RListTest.class.getSimpleName());
-                frame.setName("frame-" + RListTest.class.getSimpleName());
-                frame.getContentPane().add(new ListDemo(), BorderLayout.CENTER);
+                LookAndFeelFactory.installDefaultLookAndFeelAndExtension();
+                frame = new JFrame("CheckBoxListDemo");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                CheckBoxListDemo panel = new CheckBoxListDemo();
+                frame.getContentPane().add(panel);
                 frame.pack();
+                frame.setAlwaysOnTop(true);
                 frame.setVisible(true);
+
             }
         });
     }
@@ -67,12 +65,13 @@ public class RListTest extends RComponentTest {
         });
     }
 
+    @Test
     public void selectNoSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 list.setSelectedIndices(new int[0]);
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
@@ -83,28 +82,31 @@ public class RListTest extends RComponentTest {
         AssertJUnit.assertEquals("[]", call.getState());
     }
 
+    @Test
     public void selectSingleItemSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 Rectangle cb = list.getCellBounds(1, 1);
-                RList rList = new RList(list, null, new Point(cb.x + 2, cb.y + 2), lr);
+                int hotspot = new JCheckBox().getPreferredSize().width;
+                RList rList = new RList(list, null, new Point(cb.x + hotspot + 10, cb.y + 2), lr);
                 rList.mouseButton1Pressed(null);
             }
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("click", call.getFunction());
-        AssertJUnit.assertEquals("John Smith", call.getCellinfo());
+        AssertJUnit.assertEquals("China", call.getCellinfo());
     }
 
+    @Test
     public void selectMultipleItemSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 list.setSelectedIndices(new int[] { 0, 2 });
                 RList rList = new RList(list, null, null, lr);
@@ -113,19 +115,21 @@ public class RListTest extends RComponentTest {
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[Jane Doe, Kathy Green]", call.getState());
+        AssertJUnit.assertEquals("[India, USA]", call.getState());
     }
 
+    @Test
     public void selectSpecialItemSelection() {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
                 model.set(0, "\\ Special Characters ([]\\,)");
                 Rectangle cb = list.getCellBounds(0, 0);
-                RList rList = new RList(list, null, new Point(cb.x + 2, cb.y + 2), lr);
+                int hotspot = new JCheckBox().getPreferredSize().width;
+                RList rList = new RList(list, null, new Point(cb.x + hotspot + 10, cb.y + 2), lr);
                 rList.mouseButton1Pressed(null);
             }
         });
@@ -134,12 +138,13 @@ public class RListTest extends RComponentTest {
         AssertJUnit.assertEquals("\\ Special Characters ([]\\,)", call.getCellinfo());
     }
 
+    @Test
     public void listDuplicates() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 list.setSelectedIndices(new int[] { 1, 2 });
                 RList rList = new RList(list, null, null, lr);
@@ -148,15 +153,15 @@ public class RListTest extends RComponentTest {
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[John Smith, Kathy Green]", call.getState());
+        AssertJUnit.assertEquals("[China, USA]", call.getState());
 
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 DefaultListModel model = (DefaultListModel) list.getModel();
-                model.set(2, "John Smith");
+                model.set(2, "India");
                 list.setSelectedIndices(new int[] { 0, 2 });
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
@@ -164,15 +169,16 @@ public class RListTest extends RComponentTest {
         });
         Call calll = lr.getCall();
         AssertJUnit.assertEquals("select", calll.getFunction());
-        AssertJUnit.assertEquals("[Jane Doe, John Smith(1)]", calll.getState());
+        AssertJUnit.assertEquals("[India, India(1)]", calll.getState());
     }
 
+    @Test
     public void listMultipleDuplicates() throws InterruptedException {
         final LoggingRecorder lr = new LoggingRecorder();
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 list.setSelectedIndices(new int[] { 1, 2 });
                 RList rList = new RList(list, null, null, lr);
@@ -181,16 +187,16 @@ public class RListTest extends RComponentTest {
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("[John Smith, Kathy Green]", call.getState());
+        AssertJUnit.assertEquals("[China, USA]", call.getState());
 
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
-                model.set(0, "John Smith");
-                model.set(1, "John Smith");
-                model.set(2, "John Smith");
+                model.set(0, "China");
+                model.set(1, "China");
+                model.set(2, "China");
                 list.setSelectedIndices(new int[] { 0, 1, 2 });
                 RList rList = new RList(list, null, null, lr);
                 rList.focusLost(null);
@@ -198,9 +204,10 @@ public class RListTest extends RComponentTest {
         });
         Call calll = lr.getCall();
         AssertJUnit.assertEquals("select", calll.getFunction());
-        AssertJUnit.assertEquals("[John Smith, John Smith(1), John Smith(2)]", calll.getState());
+        AssertJUnit.assertEquals("[China, China(1), China(2)]", calll.getState());
     }
 
+    @Test
     public void propertyhelperWorksOk() {
         Properties p = new Properties();
         p.setProperty("listText", " Hello");
@@ -208,11 +215,12 @@ public class RListTest extends RComponentTest {
         AssertJUnit.assertEquals("[\\ Hello]", r);
     }
 
+    @Test
     public void assertContent() throws Throwable {
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
             }
         });
         final RList rList = new RList(list, null, null, new LoggingRecorder());
@@ -224,16 +232,19 @@ public class RListTest extends RComponentTest {
             }
         });
         JSONArray a = new JSONArray(content[0]);
-        AssertJUnit.assertEquals("[[\"Jane Doe\",\"John Smith\",\"Kathy Green\"]]", a.toString());
+        AssertJUnit.assertEquals(
+                "[[\"India\",\"China\",\"USA\",\"UAE\",\"UK\",\"Australia\",\"Afghanistan\",\"Albania\",\"Antarctica\"]]",
+                a.toString());
     }
 
+    @Test
     public void assertContentDuplicates() throws Throwable {
         siw(new Runnable() {
             @Override
             public void run() {
-                list = (JList) ComponentUtils.findComponent(JList.class, frame);
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
                 DefaultListModel model = (DefaultListModel) list.getModel();
-                model.set(2, "John Smith");
+                model.set(2, "China");
                 list.setSelectedIndices(new int[] { 2 });
             }
         });
@@ -246,6 +257,44 @@ public class RListTest extends RComponentTest {
             }
         });
         JSONArray a = new JSONArray(content[0]);
-        AssertJUnit.assertEquals("[[\"Jane Doe\",\"John Smith\",\"John Smith(1)\"]]", a.toString());
+        AssertJUnit.assertEquals(
+                "[[\"India\",\"China\",\"China(1)\",\"UAE\",\"UK\",\"Australia\",\"Afghanistan\",\"Albania\",\"Antarctica\"]]",
+                a.toString());
+    }
+
+    @Test
+    public void selectListItemCheckBox() throws InterruptedException {
+
+        final LoggingRecorder lr = new LoggingRecorder();
+        siw(new Runnable() {
+            @Override
+            public void run() {
+                list = (CheckBoxList) ComponentUtils.findComponent(CheckBoxList.class, frame);
+                Point point = getLocationOfCheckBox(list, 2);
+                RList rList = new RList(list, null, point, lr);
+                list.setCheckBoxListSelectedIndex(2);
+                rList.focusLost(null);
+            }
+
+        });
+        Call call = lr.getCall();
+        AssertJUnit.assertEquals("select", call.getFunction());
+        AssertJUnit.assertEquals("true", call.getState());
+    }
+
+    private Point getLocationOfCheckBox(JList list, int index) {
+        Point point = list.indexToLocation(index);
+        Component[] childern = ((CheckBoxListCellRenderer) list.getCellRenderer()).getComponents();
+        Checkbox cb;
+        for (Component component : childern) {
+            if (component instanceof Checkbox) {
+                cb = (Checkbox) component;
+                Rectangle bounds = cb.getBounds();
+                point.x = point.x + bounds.x;
+                point.y = point.y + bounds.y;
+                break;
+            }
+        }
+        return point;
     }
 }

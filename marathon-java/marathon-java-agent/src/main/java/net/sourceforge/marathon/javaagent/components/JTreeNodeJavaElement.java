@@ -40,6 +40,7 @@ import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
+import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
@@ -66,11 +67,19 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
     public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
         if (selector.equals("editor")) {
             Component editor = getEditor();
-            if (editor == null) {
-                throw new UnsupportedCommandException("Unable to find editingComponent for the tree. tree.editable = "
-                        + ((JTree) parent.getComponent()).isEditable(), null);
+            if (editor != null) {
+                return Arrays.asList(JavaElementFactory.createElement(editor, getDriver(), getWindow()));
+            } else {
+                Component rendererComponent = getRendererComponent((JTree) parent.getComponent(), viewRow);
+                if (rendererComponent != null) {
+                    IJavaElement rendererElement = JavaElementFactory.createElement(rendererComponent, getDriver(), getWindow());
+                    return rendererElement.getByPseudoElement(selector, params);
+
+                } else {
+                    throw new UnsupportedCommandException("Unable to find editingComponent for the tree. tree.editable = "
+                            + ((JTree) parent.getComponent()).isEditable(), null);
+                }
             }
-            return Arrays.asList(JavaElementFactory.createElement(editor, getDriver(), getWindow()));
         }
         throw new UnsupportedCommandException("JTree node does not support pseudoelement " + selector, null);
     }
@@ -174,6 +183,12 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
     }
 
     @Override
+    public String _getText() {
+        return ((JavaElementPropertyAccessor) JavaElementFactory.createElement(getRendererComponent((JTree) component, viewRow),
+                driver, window))._getText();
+    }
+
+    @Override
     public Point _getMidpoint() {
         validateRow();
         Rectangle bounds = getCellBounds();
@@ -210,5 +225,21 @@ public class JTreeNodeJavaElement extends AbstractJavaElement implements IPseudo
                 ((JTree) parent.getComponent()).stopEditing();
             }
         });
+    }
+
+    public static Component getRendererComponent(JTree tree, int row) {
+        TreeCellRenderer cellRenderer = tree.getCellRenderer();
+        TreePath pathForRow = tree.getPathForRow(row);
+        Object lastPathComponent = pathForRow.getLastPathComponent();
+        Component rendererComponent = cellRenderer.getTreeCellRendererComponent(tree, lastPathComponent, false, false, false, row,
+                false);
+        if (rendererComponent == null) {
+            return null;
+        }
+        if (rendererComponent instanceof JComponent) {
+            ((JComponent) rendererComponent).putClientProperty("jtree", (JTree) tree);
+            ((JComponent) rendererComponent).putClientProperty("row", row);
+        }
+        return rendererComponent;
     }
 }

@@ -18,9 +18,12 @@ package net.sourceforge.marathon.javaagent.components;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
@@ -29,7 +32,9 @@ import org.json.JSONObject;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
+import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
+import net.sourceforge.marathon.javaagent.JavaElementFactory;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
@@ -39,7 +44,7 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
 
     private int item;
     private JListJavaElement parent;
-    private static final int MAX_LIST_ITEMS = Integer.parseInt(System.getProperty("marathon.duplicate.check.max", "100"));
+    public static final int MAX_LIST_ITEMS = Integer.parseInt(System.getProperty("marathon.duplicate.check.max", "100"));
 
     public JListItemJavaElement(JListJavaElement parent, int item) {
         super(parent);
@@ -62,6 +67,15 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
     @Override
     public JListJavaElement getParent() {
         return parent;
+    }
+
+    @Override
+    public List<IJavaElement> getByPseudoElement(String selector, Object[] params) {
+        if (selector.equals("editor")) {
+            return Arrays.asList(
+                    JavaElementFactory.createElement(getRendererComponent((JList) component, item), getDriver(), getWindow()));
+        }
+        return super.getByPseudoElement(selector, params);
     }
 
     @Override
@@ -93,16 +107,6 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         });
     }
 
-    public static Component getRendererComponent(JList list, int item) {
-        Object value = list.getModel().getElementAt(item);
-        ListCellRenderer cellRenderer = list.getCellRenderer();
-        Component rendererComponent = cellRenderer.getListCellRendererComponent(list, value, item, false, false);
-        if (rendererComponent == null) {
-            return null;
-        }
-        return rendererComponent;
-    }
-
     public int getIndex() {
         return item;
     }
@@ -116,11 +120,11 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
 
     @Override
     public String _getText() {
-        return getText((JList) component, item);
+        return resolveDuplicate((JList) component, item, ((JavaElementPropertyAccessor) JavaElementFactory
+                .createElement(getRendererComponent((JList) component, item), driver, window))._getText());
     }
 
-    public static String getText(JList list, int index) {
-        String original = getItemText(list, index);
+    private String resolveDuplicate(JList list, int index, String original) {
         String itemText = original;
         int suffixIndex = 0;
         if (list.getModel().getSize() > MAX_LIST_ITEMS) {
@@ -135,9 +139,23 @@ public class JListItemJavaElement extends AbstractJavaElement implements IPseudo
         return itemText;
     }
 
-    protected static String getItemText(JList listItem, int index) {
-        Component renComponent = getRendererComponent(listItem, index);
-        JavaElementPropertyAccessor pa = new JavaElementPropertyAccessor(renComponent);
-        return pa.getText();
+    protected String getItemText(JList listItem, int index) {
+        return ((JavaElementPropertyAccessor) JavaElementFactory.createElement(getRendererComponent((JList) listItem, index),
+                driver, window))._getText();
     }
+
+    public static Component getRendererComponent(JList list, int item) {
+        Object value = list.getModel().getElementAt(item);
+        ListCellRenderer cellRenderer = list.getCellRenderer();
+        Component rendererComponent = cellRenderer.getListCellRendererComponent(list, value, item, false, false);
+        if (rendererComponent == null) {
+            return null;
+        }
+        if (rendererComponent instanceof JComponent) {
+            ((JComponent) rendererComponent).putClientProperty("jlist", (JList) list);
+            ((JComponent) rendererComponent).putClientProperty("item", item);
+        }
+        return rendererComponent;
+    }
+
 }

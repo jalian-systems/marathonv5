@@ -216,7 +216,7 @@ public abstract class AbstractJavaElement extends JavaElementPropertyAccessor im
      * @see net.sourceforge.marathon.javaagent.IJavaElement#getHandle()
      */
     @Override
-    final public String getHandle() {
+    public String getHandle() {
         if (this instanceof IPseudoElement) {
             try {
                 return URLEncoder.encode(((IPseudoElement) this).createHandle(), "utf8");
