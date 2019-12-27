@@ -12,7 +12,7 @@ include 'marathon', 'marathon-core:ruby-selenium-webdriver', ':marathon-core',
           'marathon-javafx:marathon-javafx-agent', 'marathon-javafx:marathon-javafx-recorder',
           ':marathon-javafx', 'marathon-javafx:marathon-fxtest-helpers',
           ':marathon-javafx:marathon-javafx-runtime', 'marathon-jenkins', 'marathon-core-base',
-          ':marathon-recording-server'
+          ':marathon-recording-server', ':marathon-web', ':marathon-web:marathon-web-runtime'
 
 if(null != properties['jxbrowser_install_path']) {
 	include 'marathonext-jxbrowser'
