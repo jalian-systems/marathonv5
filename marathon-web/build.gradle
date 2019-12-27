@@ -20,7 +20,6 @@ repositories {
 
 dependencies {
   compile project(":marathon-core")
-  compile project(":marathonite-api")
   compile "commons-io:commons-io:${commons_io_version}"
   testCompile "org.testng:testng:${testng_version}"
 }

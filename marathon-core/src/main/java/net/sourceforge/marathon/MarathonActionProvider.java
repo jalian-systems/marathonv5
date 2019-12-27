@@ -15,19 +15,19 @@
  ******************************************************************************/
 package net.sourceforge.marathon;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+
+import com.jaliansystems.marathonite.api.IAdditionalActionProvider;
 
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.ToggleGroup;
 import net.sourceforge.marathon.display.DisplayWindow;
 import net.sourceforge.marathon.display.IActionProvider;
 import net.sourceforge.marathon.display.IMarathonAction;
@@ -236,6 +236,7 @@ public class MarathonActionProvider implements IActionProvider {
         };
         maction.setMenuName("File");
         mactions.add(maction);
+        mactions.addAll(getAdditionalActions(editorProvider));
         maction = new MarathonAction("helpAbout", "About Marathon", "", editorProvider, false, true, "About...") {
             @Override
             public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script, int beginCaretPostion,
@@ -247,43 +248,9 @@ public class MarathonActionProvider implements IActionProvider {
         };
         maction.setMenuName("Help");
         mactions.add(maction);
-        addBrowserSelectionActions(editorProvider, mactions);
         actions = new IMarathonAction[mactions.size()];
         for (int i = 0; i < mactions.size(); i++) {
             actions[i] = mactions.get(i);
-        }
-    }
-
-    public void addBrowserSelectionActions(IEditorProvider editorProvider, List<MarathonAction> mactions) {
-        if (Constants.getFramework().equals(Constants.FRAMEWORK_WEB)) {
-            Properties props = new Properties();
-            try {
-                props.load(this.getClass().getResourceAsStream("/browsers"));
-                Set<Object> keys = props.keySet();
-                final ToggleGroup toggleGroup = new ToggleGroup();
-                for (Object proxyClass : keys) {
-                    final String proxyClassName = (String) proxyClass;
-                    final String browserName = props.getProperty(proxyClassName);
-                    MarathonAction baction = new MarathonAction(browserName, "Use " + browserName, "", editorProvider, false,
-                            true) {
-                        @Override
-                        public void actionPerformed(DisplayWindow parent, IScriptModel scriptModel, String script,
-                                int beginCaretPostion, int endCaretPosition, int startLine) throws Exception {
-                            net.sourceforge.marathon.runtime.api.Preferences.instance().setValue("project", "browser",
-                                    proxyClassName);
-                        }
-
-                        @Override
-                        public ToggleGroup getButtonGroup() {
-                            return toggleGroup;
-                        }
-                    };
-                    baction.setMenuName("Browser");
-                    mactions.add(baction);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -291,4 +258,15 @@ public class MarathonActionProvider implements IActionProvider {
     public IMarathonAction[] getActions() {
         return actions;
     }
+
+    @SuppressWarnings("unchecked")
+    protected static List<MarathonAction> getAdditionalActions(IEditorProvider editorProvider) {
+        List<MarathonAction> actions = new ArrayList<>();
+        ServiceLoader<IAdditionalActionProvider> providers = ServiceLoader.load(IAdditionalActionProvider.class);
+        for (IAdditionalActionProvider provider : providers) {
+            actions.addAll((Collection<? extends MarathonAction>) provider.getActions(editorProvider));
+        }
+        return actions;
+    }
+
 }
