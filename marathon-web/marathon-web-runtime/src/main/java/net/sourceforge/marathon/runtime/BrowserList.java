@@ -2,9 +2,8 @@ package net.sourceforge.marathon.runtime;
 
 import java.util.StringJoiner;
 
-import com.jaliansystems.marathonite.api.ISupportedBrowserListProvider;
-
 import javafx.collections.ObservableList;
+import net.sourceforge.marathon.api.ISupportedBrowserListProvider;
 
 public class BrowserList implements ISupportedBrowserListProvider {
 

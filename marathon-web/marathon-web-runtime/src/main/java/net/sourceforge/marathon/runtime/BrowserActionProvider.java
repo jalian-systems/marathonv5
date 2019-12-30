@@ -3,12 +3,11 @@ package net.sourceforge.marathon.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jaliansystems.marathonite.api.IAdditionalActionProvider;
-
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import net.sourceforge.marathon.api.IAdditionalActionProvider;
 import net.sourceforge.marathon.display.DisplayWindow;
 import net.sourceforge.marathon.display.MarathonAction;
 import net.sourceforge.marathon.editor.IEditorProvider;

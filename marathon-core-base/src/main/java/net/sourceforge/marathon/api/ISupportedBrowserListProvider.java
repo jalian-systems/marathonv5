@@ -1,4 +1,4 @@
-package com.jaliansystems.marathonite.api;
+package net.sourceforge.marathon.api;
 
 public interface ISupportedBrowserListProvider {
 

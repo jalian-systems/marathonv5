@@ -22,12 +22,11 @@ import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-import com.jaliansystems.marathonite.api.IAdditionalActionProvider;
-
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import net.sourceforge.marathon.api.IAdditionalActionProvider;
 import net.sourceforge.marathon.display.DisplayWindow;
 import net.sourceforge.marathon.display.IActionProvider;
 import net.sourceforge.marathon.display.IMarathonAction;
