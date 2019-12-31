@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<meta>
+	<title>Prompt Testing</title>
+</meta>
+<body>
+
+<p>Click the button to demonstrate the prompt box.</p>
+
+<button onclick="prompt_me()">Prompt</button>
+<button onclick="confirm_me()">Confirm</button>
+<button onclick="alert_me()">Alert</button>
+
+<p id="demo"></p>
+
+<script>
+function prompt_me() {
+    var person = prompt("Please enter your name", "Harry Potter");
+    if (person != null) {
+        document.getElementById("demo").innerHTML =
+        "Hello " + person + "! How are you today?";
+    }
+}
+function confirm_me() {
+    var confirmed = confirm("Press OK or Cancel");
+    if (confirmed) {
+        document.getElementById("demo").innerHTML = "You pressed OK" ;
+    } else {
+        document.getElementById("demo").innerHTML = "You pressed Cancel" ;
+    }
+}
+function alert_me() {
+    alert("You can select only OK here");
+    document.getElementById("demo").innerHTML = "So you selected OK" ;
+}
+</script>
+
+</body>
+</html>
+
