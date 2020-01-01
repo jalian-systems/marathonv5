@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.projectselection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -25,6 +26,9 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import org.json.JSONObject;
+
+import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
@@ -320,9 +324,41 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
             }
             if (projects.size() > 0) {
                 projectInfotable.getSelectionModel().select(selected);
+                setTheme(projects.get(selected).getFolder());
+            } else {
+                setTheme(null);
             }
         } catch (BackingStoreException e) {
             return;
+        }
+    }
+
+    private void setTheme(String mpd) {
+        if (mpd != null) {
+            net.sourceforge.marathon.runtime.api.Preferences preferences = new net.sourceforge.marathon.runtime.api.Preferences(
+                    new File(mpd));
+            JSONObject themeSection = preferences.getSection("theme");
+            boolean builtin = themeSection.optBoolean("builtin");
+            String path = themeSection.optString("path", "/themes/marathonDark.css");
+            String name = themeSection.optString("name", "Marathon");
+            if (builtin) {
+                if (name != null) {
+                    Application.setUserAgentStylesheet(name);
+                }
+            } else {
+                if (path != null) {
+                    URL resource = getClass().getResource(path);
+                    if (resource != null) {
+                        Application.setUserAgentStylesheet(resource.toExternalForm());
+                    }
+                }
+            }
+            net.sourceforge.marathon.runtime.api.Preferences.resetInstance();
+        } else {
+            URL resource = getClass().getResource("/themes/marathonDark.css");
+            if (resource != null) {
+                Application.setUserAgentStylesheet(resource.toExternalForm());
+            }
         }
     }
 
