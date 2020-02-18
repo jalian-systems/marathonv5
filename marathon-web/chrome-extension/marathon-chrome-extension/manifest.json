@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Marathon Disable CSP",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "browsingData",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "version": "0.1"
+}

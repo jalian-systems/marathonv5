@@ -24,6 +24,8 @@ dependencies {
   compile project(":marathon-core")
   runtime project(":marathon")
   runtime project(":marathon-java")
+  runtime project(":marathon-web")
+  runtime project(":marathon-web:marathon-web-runtime")
   runtime project(":marathon-java:marathon-java-driver")
   runtime project(":marathon-java:marathon-java-agent")
   runtime project(":marathon-java:marathon-java-recorder")
@@ -116,6 +118,8 @@ distributions {
       from(startScripts) {
         fileMode = 0755
       }
+      from(project(':marathon-web').file('src/main/dist'))
+      from(project(':marathon-web').file('chrome-extension/marathon-chrome-extension.crx'))
       from(project(':marathon-java:marathon-kbmap-tool').configurations.runtime) {
         exclude('**/marathon*jar')
         into('support')

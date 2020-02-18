@@ -1780,6 +1780,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         ToggleGroup tg = new ToggleGroup();
         String name = Preferences.instance().getSection("theme").optString("name");
         String[] themes = new String[] { "Modena", "Caspian" };
+        String defaultEditorTheme = getDefaultEditorTheme();
         for (String theme : themes) {
             RadioMenuItem mi = new RadioMenuItem(theme);
             mi.setToggleGroup(tg);
@@ -1794,6 +1795,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                 themeSection.put("name", theme);
                 themeSection.put("builtin", true);
                 Preferences.instance().save("theme");
+                updateEditorTheme(defaultEditorTheme);
             });
             menu.getItems().add(mi);
         }
@@ -1817,12 +1819,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
                     themeSection.put("path", theme.getString("path"));
                     themeSection.put("builtin", false);
                     Preferences.instance().save("theme");
+                    updateEditorTheme(theme.getString("editor_theme"));
                 });
                 menu.getItems().add(mi);
             }
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
+        } catch (JSONException | IOException e1) {
             e1.printStackTrace();
         }
         Preferences.instance().addPreferenceChangeListener("theme", new IPreferenceChangeListener() {
@@ -1840,6 +1841,32 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             }
         });
         windowMenu.getItems().add(menu);
+    }
+
+    private String getDefaultEditorTheme() {
+        try {
+            JSONArray customThemes = new JSONArray(
+                    IOUtils.toString(getClass().getResourceAsStream("/themes.json"), Charset.defaultCharset()));
+            for (int i = 0; i < customThemes.length(); i++) {
+                JSONObject theme = customThemes.getJSONObject(i);
+                String nm = theme.getString("name");
+                if (nm.equals("MarathonLight"))
+                    return theme.getString("editor_theme");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void updateEditorTheme(String theme) {
+        Preferences preferences = Preferences.instance();
+        JSONObject editorPreferences = preferences.getSection("ace-editor");
+        editorPreferences.put("theme", theme);
+        preferences.save("ace-editor");
     }
 
     private Menu findMenu(MenuBar menuBar, String menuName) {

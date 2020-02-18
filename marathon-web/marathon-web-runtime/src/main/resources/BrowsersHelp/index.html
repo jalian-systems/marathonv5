@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="pingback" href="http://documentation.com/xmlrpc.php">
+
+<title>Setting up Browsers – Steps for setting up Selenium/WebDriver for use with Marathon</title>
+<meta name="robots" content="noindex,follow">
+<link rel="dns-prefetch" href="http://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Setting up Browsers » Feed" href="http://documentation.com/?feed=rss2">
+<link rel="alternate" type="application/rss+xml" title="Setting up Browsers » Comments Feed" href="http://documentation.com/?feed=comments-rss2">
+<link rel="stylesheet" id="custom-css-css" href="index_files/custom-style.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpbs-style-css" href="index_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="simple_bootstrap_googleFonts-css" href="index_files/css.css" type="text/css" media="all">
+<script type="text/javascript" src="index_files/jquery.js"></script>
+<script type="text/javascript" src="index_files/jquery-migrate.js"></script>
+<script type="text/javascript" src="index_files/app.js"></script>
+<link rel="https://api.w.org/" href="http://documentation.com/?rest_route=/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://documentation.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://documentation.com/wp-includes/wlwmanifest.xml">
+<meta name="generator" content="WordPress 4.7">
+<link rel="canonical" href="http://documentation.com/">
+<link rel="shortlink" href="http://documentation.com/">
+<link rel="alternate" type="application/json+oembed" href="http://documentation.com/?rest_route=%2Foembed%2F1.0%2Fembed&amp;url=http%3A%2F%2Fdocumentation.com%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://documentation.com/?rest_route=%2Foembed%2F1.0%2Fembed&amp;url=http%3A%2F%2Fdocumentation.com%2F&amp;format=xml">
+<style type="text/css" id="custom-background-css">
+body.custom-background {
+	background-color: #0d1551;
+}
+</style>
+</head>
+
+<body class="home page-template page-template-browsers-front-page page-template-browsers-front-page-php page page-id-5 custom-background">
+
+  <div id="content-wrapper">
+
+    <header>
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-responsive-collapse">
+              <span class="sr-only">Navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" title="Steps for setting up Selenium/WebDriver for use with Marathon" href="#">Setting up Browsers</a>
+          </div>
+
+          <div id="navbar-responsive-collapse" class="collapse navbar-collapse">
+            <ul id="menu-browser-menu" class="nav navbar-nav">
+              <li id="menu-item-26" class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#chrome">CHROME</a></li>
+              <li id="menu-item-27" class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#firefox">FIREFOX</a></li>
+              <li id="menu-item-28" class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#edge">EDGE</a></li>
+              <li id="menu-item-31" class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#ie">IE</a></li>
+              <li id="menu-item-32" class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#safari">SAFARI</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </nav>
+    </header>
+
+    <div id="page-content">
+      <div class="container">
+
+        <div id="content" class="row">
+
+          <div id="main" class="col-lg-12" role="main">
+
+
+
+            <span style="padding-top: 20px;" id="introduction">&nbsp;</span>
+            <article id="post-5" class="block post-5 page type-page status-publish hentry" role="article">
+
+              <header>
+
+                <div class="article-header">
+                  <h2>Introduction</h2>
+                </div>
+
+
+
+              </header>
+
+              <section class="post_content">
+                <p>
+                  Marathon<em>ITE</em> uses <a href="http://seleniumhq.org/">Selenium WebDriver</a> to connect to various browsers. Before you can use Marathon<em>ITE</em> for recording and playing your tests, you need to setup your test machine. The following sections explain in detail the steps required to make a browser available for testing with Marathon<em>ITE.</em> You can refer to this help
+                  message any time from the <em>Browser</em> menu.
+                </p>
+                <h3>Advanced Configuration</h3>
+                <p>You can provide advanced configuration through the fixture code of Marathon test scripts. Add a method as following to your fixture class.</p>
+                <pre>def desired_capabilities(caps)
+   # Add any extra capabilities you require into the caps dict
+   caps
+end
+</pre>
+                <p>
+                  The extra capabilities will be passed to the corresponding webdriver instance. For example, you can define the <i>Firefox</i> binary path while using Marionette driver by adding the following:
+                </p>
+                <pre> caps['moz:firefoxOptions'] = { :binary =&gt; '/usr/lib/myfirefox/firefox' }
+</pre>
+                <p>Refer to documentation of specific webdriver implementations for details of options that are available.</p>
+              </section>
+
+              <footer> </footer>
+
+            </article>
+
+
+
+
+
+
+
+            <span style="padding-top: 20px;" id="chrome">&nbsp;</span>
+            <article id="post-11" class="block post-11 page type-page status-publish hentry" role="article">
+
+              <header>
+
+                <div class="article-header">
+                  <h2>Chrome</h2>
+                </div>
+
+
+
+              </header>
+
+              <section class="post_content">
+                <p>
+                  Marathon<em>ITE</em> supports both recording and playback using the Chrome browser. Please use the latest versions of Chrome browser and chromedriver with Marathon<em>ITE</em>.
+                </p>
+                <ol>
+                  <li>If it is not already downloaded, download and install google chrome for your platform from: <a href="https://www.google.com/chrome/">https://www.google.com/chrome/.</a></li>
+                  <li>Download <em>chromedriver</em> from <a href="https://sites.google.com/a/chromium.org/chromedriver/">https://sites.google.com/a/chromium.org/chromedriver/. </a><em>chromedriver </em> provides the Selenium/WebDriver bindings for chrome browser.
+                  </li>
+                  <li>Place the <em>chromedriver</em> executable in a folder that is in your PATH. For <em>Windows</em> systems, C:\Windows is a good option. Alternatively, you can keep the <em>chromedriver</em> executable in any folder and add the folder to your PATH. Refer to the operating system instructions to add the folder to your PATH.
+                  </li>
+                </ol>
+                <p>
+                  You can customize the <em>chromedriver</em> behavior by defining the following environment variables.
+                </p>
+                <table style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th>Variable</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>webdriver.chrome.driver</td>
+                      <td>System property that defines the location of the <em>chromedriver</em> executable that will be used by Marathon<em>ITE</em>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.chrome.logfile</td>
+                      <td>System property that defines the location of the log that will be written.</td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.chrome.verboseLogging</td>
+                      <td>Boolean system property that defines whether the <em>chromedriver</em> executable should be started with verbose logging.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.chrome.silentOutput</td>
+                      <td>Boolean system property that defines whether the <em>chromedriver</em> executable should be started in silent mode.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.chrome.whitelistedIps</td>
+                      <td>System property that defines comma-separated list of remote IPv4 addresses which are allowed to connect to <em>chromedriver</em>.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Refer to <em>chromedriver</em> <a href="https://sites.google.com/a/chromium.org/chromedriver/capabilities">documentation</a> for further details about these arguments.
+                </p>
+              </section>
+
+              <footer> </footer>
+
+            </article>
+
+
+            <span style="padding-top: 20px;" id="firefox">&nbsp;</span>
+            <article id="post-13" class="block post-13 page type-page status-publish hentry" role="article">
+
+              <header>
+
+                <div class="article-header">
+                  <h2>Firefox</h2>
+                </div>
+
+
+
+              </header>
+
+              <section class="post_content">
+                <p>
+                  <b>Use this driver for Firefox version 48 or later.</b><br> Marathon<em>ITE</em> supports both recording and playback using the Firefox browser.
+                </p>
+                <ol>
+                  <li>If it is not already downloaded, download and install Firefox for your platform from: <a href="https://www.mozilla.org/en-US/firefox/new/">https://www.mozilla.org/en-US/firefox/new/.</a></li>
+                  <li>Download <em>Marionette Driver</em> from <a href="https://github.com/mozilla/geckodriver/releases">https://github.com/mozilla/geckodriver/releases. </a><em>Marionette</em> provides the Selenium/WebDriver bindings for firefox browser.
+                  </li>
+                  <li>Place the <em>Marionette</em> executable in a folder that is in your PATH. For <em>Windows</em> systems, C:\Windows is a good option. Alternatively, you can keep the <em>Marionette</em> executable in any folder and add the folder to your PATH. Refer to the operating system instructions to add the folder to your PATH.
+                  </li>
+                </ol>
+                <p>
+                  You can customize the <em>webdriver</em> behavior by defining the following environment variables.
+                </p>
+                <table style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th>Variable</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>webdriver.gecko.driver</td>
+                      <td>System property that defines the location of the GeckoDriver executable that will be used by Marathon<i>ITE</i>.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Refer to <em>Marionette Driver</em> <a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette">documentation</a> for further details.
+                </p>
+              </section>
+
+              <footer> </footer>
+
+            </article>
+
+
+            <span style="padding-top: 20px;" id="edge">&nbsp;</span>
+            <article id="post-14" class="block post-14 page type-page status-publish hentry" role="article">
+
+              <header>
+
+                <div class="article-header">
+                  <h2>Edge</h2>
+                </div>
+
+
+
+              </header>
+
+              <section class="post_content">
+                <p>
+                  Marathon<em>ITE</em> supports both recording and playback using the Microsoft Edge browser. Please use the latest versions of Windows 10 Edge browser and corresponding edge driver executable with Marathon<em>ITE</em>.
+                </p>
+                <ol>
+                  <li>Download <em>MicrosoftWebDriver</em> from <a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/">https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/. </a><em>MicroSoftWebDriver</em> provides the Selenium/WebDriver bindings for Edge browser. <b>Note that your Windows 10 build should match the version of <em>MicrosoftWebDriver</em>
+                      you use. Please look at the documentation on the link for more details.
+                  </b></li>
+                  <li>Place the <em> MicrosoftWebDriver</em> executable in a folder that is in your PATH. For <em>Windows</em> systems, C:\Windows is a good option. Alternatively, you can keep the <em>chromedriver</em> executable in any folder and add the folder to your PATH. Refer to the operating system instructions to add the folder to your PATH.
+                  </li>
+                  <li>From an administrator command prompt run the following command:<br>
+                  <code>CheckNetIsolation LoopbackExempt -a -n=Microsoft.MicrosoftEdge_8wekyb3d8bbwe</code><br>This command allows Edge driver to be connected to by Marathon<em>ITE</em>.
+                  </li>
+                </ol>
+                <p>
+                  You can customize the <em>MicroSoftWebDriver</em> behavior by defining the following environment variables.
+                </p>
+                <table style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th>Variable</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>webdriver.edge.driver</td>
+                      <td>System property that defines the location of the MicrosoftWebDriver executable that will be used by the Marathon<i>ITE</i>.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Refer to <em>MicrosoftWebDriver</em> <a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/">documentation</a> for further details.
+                </p>
+              </section>
+
+              <footer> </footer>
+
+            </article>
+
+            <span style="padding-top: 20px;" id="ie">&nbsp;</span>
+            <article id="post-20" class="block post-20 page type-page status-publish hentry" role="article">
+
+              <header>
+
+                <div class="article-header">
+                  <h2>IE</h2>
+                </div>
+
+
+
+              </header>
+
+              <section class="post_content">
+                <p>
+                  Marathon<em>ITE</em> supports <b>only playback</b> using the Internet Explorer browser. Please use the latest versions of Internet Explorer browser and iedriver with Marathon<em>ITE</em>.
+                </p>
+                <ol>
+                  <li>Download <em>iedriver</em> from <a href="http://www.seleniumhq.org/download/">http://www.seleniumhq.org/download/. </a><em>iedriver </em> provides the Selenium/WebDriver bindings for Internet Explorer.
+                  </li>
+                  <li>Place the <em>iedriver</em> executable in a folder that is in your PATH. For <em>Windows</em> systems, C:\Windows is a good option. Alternatively, you can keep the <em>iedriver</em> executable in any folder and add the folder to your PATH. Refer to the operating system instructions to add the folder to your PATH.
+                  </li>
+                </ol>
+                <p>
+                  You can customize the <em>iedriver</em> behavior by defining the following environment variables.
+                </p>
+                <table style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th>Variable</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>webdriver.ie.driver</td>
+                      <td>System property that defines the location of the IEDriverServer executable that will be used by Marathon<i>ITE</i>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.ie.driver.logfile</td>
+                      <td>System property that defines the location of the file where IEDriverServer should write log messages to.</td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.ie.driver.loglevel</td>
+                      <td>System property that defines the detalization level the IEDriverServer logs.</td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.ie.driver.engine</td>
+                      <td>System property that defines the implementation of the driver engine to use.</td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.ie.driver.host</td>
+                      <td>System property that defines host to which will be bound IEDriverServer.</td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.ie.driver.extractpath</td>
+                      <td>System property that defines path to which will be extracted IEDriverServer library.</td>
+                    </tr>
+                    <tr>
+                      <td>webdriver.ie.driver.silent</td>
+                      <td>System property that defines logging to stdout for IEDriverServer.</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Refer to <em>iedriver</em> <a href="https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver">documentation</a> for further details.
+                </p>
+              </section>
+
+              <footer> </footer>
+
+            </article>
+
+
+            <span style="padding-top: 20px;" id="safari">&nbsp;</span>
+            <article id="post-21" class="block post-21 page type-page status-publish hentry" role="article">
+
+              <header>
+
+                <div class="article-header">
+                  <h2>Safari</h2>
+                </div>
+
+
+
+              </header>
+
+              <section class="post_content">
+                <p>
+                  Marathon<em>ITE</em> supports <b>only playback</b> using the Safari 10 and above on OSX.
+                </p>
+                <p>There are no configuration parameters available through the environmental variables for Safari driver.</p>
+              </section>
+
+              <footer> </footer>
+
+            </article>
+
+
+
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+    <footer>
+      <div id="inner-footer" class="vertical-nav">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-xs-12 text-center">
+              <p>
+                Design by <a href="https://github.com/nicolas-van">@nicolas-van</a>
+              </p>
+              <p>Powered by WordPress</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script type="text/javascript" src="index_files/custom-scripts.js"></script>
+  <script type="text/javascript" src="index_files/wp-embed.js"></script>
+
+
+
+</body>
+</html>

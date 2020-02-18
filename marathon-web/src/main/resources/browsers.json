@@ -1,0 +1,44 @@
+[
+	{
+		"name": "Chrome",
+		"proxy": "net.sourceforge.marathon.runtime.ChromeWebDriverProxy",
+		"abbrev": "chrome",
+		"canRecord": true,
+		"canPlay": true
+	},
+	{
+		"name": "Firefox",
+		"proxy": "net.sourceforge.marathon.runtime.FirefoxWebDriverProxy",
+		"abbrev": "firefox,ff,mozilla",
+		"canRecord": true,
+		"canPlay": true
+	},
+	{
+		"name": "Microsoft Edge",
+		"proxy": "net.sourceforge.marathon.runtime.EdgeWebDriverProxy",
+		"abbrev": "edge",
+		"canRecord": false,
+		"canPlay": true
+	},
+	{
+		"name": "Internet Explorer",
+		"proxy": "net.sourceforge.marathon.runtime.IEWebDriverProxy",
+		"abbrev": "ie",
+		"canRecord": false,
+		"canPlay": true
+	},
+	{
+		"name": "Opera",
+		"proxy": "net.sourceforge.marathon.runtime.OperaWebDriverProxy",
+		"abbrev": "opera,blink",
+		"canRecord": false,
+		"canPlay": true
+	},
+	{
+		"name": "Safari",
+		"proxy": "net.sourceforge.marathon.runtime.SafariWebDriverProxy",
+		"abbrev": "safari",
+		"canRecord": false,
+		"canPlay": true
+	}
+]
