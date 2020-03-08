@@ -103,21 +103,26 @@ public class DriverProxy implements IWebdriverProxy {
                     .warning("Unable to load class: " + proxyClass + ". Defaulting to " + FirefoxWebDriverProxy.class.getName());
             proxy = new FirefoxWebDriverProxy();
         }
-        return proxy.createService(port);
+        try {
+            return proxy.createService(port);
+        } catch (Throwable e) {
+            browserName = null;
+            throw e;
+        }
+
     }
 
     private void stopPreviousService() {
         if (service != null && service.isRunning())
             service.stop();
         service = null;
+        browserName = null;
     }
 
     @Override
     public void quit(boolean force) {
         if (force) {
-            if (service != null && service.isRunning())
-                service.stop();
-            service = null;
+            stopPreviousService();
         }
     }
 
