@@ -1,0 +1,16 @@
+1. Create a Fixture with No Launcher - You can name it anything you want. For this example we name it rspec-wrapper
+2. Install rspec for use with marathonite
+     a. Create a folder to keep the GEMS
+     b. SET GEM_HOME environment variable to point to the folder
+     c. run `gem install rspec` from marathonite installation folder.
+3. SET GEM_PATH environment variable to the gem folder defined in (2)
+4. Copy the rspec project to the marathonite project that you are using.
+5. Ensure that you are able to execute the specs from marathonite project folder.
+   a. Running `<gem-folder>\bin\rspec` should execute all the tests. You can just run a single test to ensure that everything is working
+6. Copy <marathonite-home>\extras\spec_wrapper.rb to Modules folder of marathonite project
+7. Copy <marathonite-home>\extras\convert_rspec_tests.rb to TestCases folder of marathonite project
+8. Open convert_rspec_tests.rb file and change the fixture name in line number 25 and 2 to the fixutre created in (1).
+9. Check the validity of $spec_folder variable in line (66)
+10. Run the convert_rspec_tests
+11. The script create a test file for each one of the examples defined in the spec project in the same folder structure used by rspec.
+12. Delete convert_rspec_tests.rb file.

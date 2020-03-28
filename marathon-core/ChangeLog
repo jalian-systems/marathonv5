@@ -1,3 +1,10 @@
+Marathon Version 5.3.0.0 (23rd March 2020)
+
+01. feat(Web): Enabled web testing for Marathon
+02. fix(Web): ECONNREFUSED error when driver is changed.
+03. fix(browser-menu): Renaming service names did not reflect in service loader conf
+04. feat(themes): Simplified themes to 2 (MarathonDark and MarathonLight).
+
 Marathon Version 5.2.6.0 (30th July 2019)
 
 01. fix: Switch to window using window name property.
