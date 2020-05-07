@@ -1,12 +1,81 @@
-.modaldialog-title {
-	-fx-font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-	-fx-font-weight: bold;
-	-fx-font-size: 1.5em;
+@font-face {
+	src: url('../segoeui.ttf');
 }
 
-.modaldialog-subtitle {
-	-fx-font-family: 'Arial', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+@font-face {
+	src: url('../segoeuib.ttf');
+}
+
+@font-face {
+	src: url('../segoeuil.ttf');
+}
+
+@font-face {
+	src: url('../segoeuisl.ttf');
+}
+
+@font-face {
+	src: url('../seguisb.ttf');
+}
+
+.text {
+	-fx-font-size: 14px;
+}
+
+.toggle-switch {
+	-fx-skin: "impl.org.controlsfx.skin.ToggleSwitchSkin";
+	-toggle-display: right;
+	-fx-padding: 0 20 0 0;
+}
+
+.toggle-switch .thumb {
+	-fx-pref-width: 23px;
+	-fx-pref-height: 23px;
+	-fx-background-image: url("../icons/sun.png");
+	-fx-background-repeat: stretch;
+	-fx-background-position: center center;
+}
+
+.toggle-switch:selected .thumb {
+	-fx-pref-width: 23px;
+	-fx-pref-height: 23px;
+	-fx-background-image: url("../icons/moon.png");
+	-fx-background-repeat: stretch;
+	-fx-background-position: center center;
+}
+
+.toggle-switch:selected .thumb {
+	-fx-pref-width: 23px;
+	-fx-pref-height: 23px;
+	-fx-background-image: url("../icons/moon.png");
+	-fx-background-repeat: stretch;
+	-fx-background-position: center center;
+	-fx-background-color: thumb_unselected_hover_color;
+}
+
+.toggle-switch .thumb-area {
+	-fx-pref-width: 50px;
+	-fx-pref-height: 23px;
+	-fx-background-position: center center;
+}
+
+.toggle-switch .thumb {
+	-fx-background-color: thumb_selected_color;
+}
+
+.marathonite-splash-screen .text {
+	-fx-font-size: 12px;
+}
+
+.modaldialog-title .text {
+	-fx-font-size: 24px;
+}
+
+.modaldialog-subtitle .text {
+	-fx-font-family: 'Arial', 'Palatino Linotype', 'Book Antiqua', Palatino,
+		serif;
 	-fx-font-style: italic;
+	-fx-font-size: 12px;
 }
 
 .form-pane {
@@ -28,7 +97,7 @@
 	-fx-padding: 3 10 5 0;
 }
 
-.marathonite-splash-screen .label {
+.marathonite-splash-screen .label .text {
 	-fx-font-size: 11;
 	-fx-font-weight: bold;
 }
@@ -139,9 +208,10 @@
 	-fx-font-weight: bold;
 	-fx-font-size: 1.5em;
 }
-.ace-editor-preferences-stage #ButtonBar{
+
+.ace-editor-preferences-stage #ButtonBar {
 	-fx-padding: 2.5 5 2.5 5;
-} 
+}
 
 .test-runner .green-bar {
 	-fx-accent: limegreen;
@@ -162,9 +232,36 @@
 .icon-button {
 	-fx-color: -fx-hover-base;
 }
-.marathon-input #ErrorMessageLabel{
+
+.marathon-input #ErrorMessageLabel {
 	-fx-padding: 0 0 0 5;
 }
-.project-selection #ProjectSelectionButtonbar{
+
+.project-selection #ProjectSelectionButtonbar {
 	-fx-padding: 2.5 5 2.5 5;
+}
+
+.image-label-fa .text {
+	-fx-font-family: "fontawesome";
+	-fx-font-size: 16px;
+}
+
+.image-label-mi .text {
+	-fx-font-family: "Material Icons";
+	-fx-font-size: 16px;
+}
+
+.image-label-mdi .text {
+	-fx-font-family: "Material Design Icons";
+	-fx-font-size: 16px;
+}
+
+.image-label-im .text {
+	-fx-font-family: "IcoMoon-Free";
+	-fx-font-size: 16px;
+}
+
+.image-label-mdl2 .text {
+	-fx-font-family: "Segoe MDL2 Assets";
+	-fx-font-size: 16px;
 }

@@ -46,7 +46,7 @@ public class MarathonSplashScreen extends ModalDialog<MarathonSplashScreenInfo> 
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox root = new VBox();
         root.setStyle("-fx-background-color:black");
         root.setId("marathonITESplashScreen");

@@ -55,7 +55,7 @@ public class AddPreferenceStage extends ModalDialog<BrowserPreference> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox content = new VBox();
         content.getStyleClass().add("add-preference-stage");
         content.setId("addPreferenceStage");

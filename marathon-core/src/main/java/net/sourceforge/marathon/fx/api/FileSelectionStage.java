@@ -53,7 +53,7 @@ public class FileSelectionStage extends ModalDialog<FileSelectionInfo> implement
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox root = new VBox();
         root.setId("FileSelectionStage");
         root.getStyleClass().add("file-selection");

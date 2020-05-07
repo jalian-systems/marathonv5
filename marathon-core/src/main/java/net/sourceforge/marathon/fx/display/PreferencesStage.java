@@ -63,7 +63,7 @@ public class PreferencesStage extends ModalDialog<MarathonPreferencesInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("preferences-stage");
         root.setId("PreferencesStage");

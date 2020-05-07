@@ -62,7 +62,7 @@ public class MessageStage extends ModalDialog<MessageInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.setId("message-stage");
         root.setCenter(new ScrollPane(textArea));

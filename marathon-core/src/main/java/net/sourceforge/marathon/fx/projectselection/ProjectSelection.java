@@ -85,7 +85,7 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox content = new VBox();
         content.setId("ProjectSelectionParent");
         content.getStyleClass().add("project-selection");
@@ -324,7 +324,6 @@ public class ProjectSelection extends ModalDialog<ProjectInfo> {
             }
             if (projects.size() > 0) {
                 projectInfotable.getSelectionModel().select(selected);
-                setTheme(projects.get(selected).getFolder());
             } else {
                 setTheme(null);
             }

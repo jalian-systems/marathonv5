@@ -32,6 +32,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import net.sourceforge.marathon.api.ThemeHelper.StyleClassHelper;
 
 public class FormPane extends GridPane {
 
@@ -51,6 +52,7 @@ public class FormPane extends GridPane {
         ColumnConstraints cc = new ColumnConstraints();
         cc.setMinWidth(Region.USE_PREF_SIZE);
         getColumnConstraints().add(cc);
+        getStyleClass().add(StyleClassHelper.BACKGROUND);
     }
 
     public FormPane addFormField(String text, Node... fields) {

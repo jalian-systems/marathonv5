@@ -50,7 +50,7 @@ public class FixtureSelection extends ModalDialog<String> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox root = new VBox();
         root.getStyleClass().add("fixture-selection");
         root.setId("fixtureSelection");

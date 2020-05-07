@@ -61,7 +61,7 @@ public class BrowserConfigurationStage extends ModalDialog<List<Browser>> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane borderPane = new BorderPane();
         browserTabs = new TabPane();
         browserTabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);

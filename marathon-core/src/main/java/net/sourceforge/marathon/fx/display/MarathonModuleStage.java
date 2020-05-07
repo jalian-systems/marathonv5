@@ -58,7 +58,7 @@ public class MarathonModuleStage extends ModalDialog<ModuleInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox content = new VBox();
         content.getStyleClass().add("marathon-module");
         FormPane form = new FormPane("marathon-module-form", 2);

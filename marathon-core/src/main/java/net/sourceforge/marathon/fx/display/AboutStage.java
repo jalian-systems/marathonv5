@@ -75,7 +75,7 @@ public class AboutStage extends ModalDialog<VersionInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox root = new VBox();
         root.setStyle("-fx-background-color:black");
         root.getStyleClass().add("about-stage");

@@ -41,6 +41,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import net.sourceforge.marathon.api.ThemeHelper;
+import net.sourceforge.marathon.api.ThemeHelper.StyleClassHelper;
 
 public abstract class ModalDialog<T> {
 
@@ -63,8 +65,8 @@ public abstract class ModalDialog<T> {
 
     public ModalDialog(String title, String subTitle, Node icon) {
         this.title = title;
-        this.subTitle = subTitle;
-        this.icon = icon;
+        this.setSubTitle(subTitle);
+        this.setIcon(icon);
     }
 
     public T show(Window parent) {
@@ -97,20 +99,23 @@ public abstract class ModalDialog<T> {
             return stage;
         }
         Parent contentPane = getContentPane();
+        contentPane.getStyleClass().add(StyleClassHelper.BACKGROUND);
         BorderPane sceneContent = new BorderPane();
+        sceneContent.getStyleClass().add(StyleClassHelper.BACKGROUND);
         if (title != null && !"".equals(title)) {
             VBox titleBox = new VBox();
-            Label titleLabel = new Label(title, icon);
+            Label titleLabel = new Label(title, getIcon());
             titleLabel.getStyleClass().add("modaldialog-title");
             titleBox.getChildren().add(titleLabel);
-            if (subTitle != null) {
-                Label subTitleLabel = new Label(subTitle);
+            if (getSubTitle() != null) {
+                Label subTitleLabel = new Label(getSubTitle());
                 subTitleLabel.getStyleClass().add("modaldialog-subtitle");
-                if (icon != null)
-                    subTitleLabel.setPadding(new Insets(0, 0, 0, 20));
+                if (getIcon() != null)
+                    subTitleLabel.setPadding(new Insets(0, 0, 5, 20));
                 titleBox.getChildren().add(subTitleLabel);
             }
             titleBox.getChildren().add(new Separator());
+            titleBox.setPadding(new Insets(5, 5, 5, 5));
             sceneContent.setTop(titleBox);
         }
         sceneContent.setCenter(contentPane);
@@ -120,10 +125,9 @@ public abstract class ModalDialog<T> {
         } else {
             scene = new Scene(sceneContent);
         }
-        scene.getStylesheets().add(ModalDialog.class.getClassLoader()
-                .getResource("net/sourceforge/marathon/fx/api/css/marathon.css").toExternalForm());
         initialize(scene);
         stage = new Stage();
+        ThemeHelper._getInstance().setSceneStyle(scene);
         stage.setScene(scene);
         initialize(stage);
         stage.addEventFilter(KeyEvent.KEY_PRESSED, (e) -> {
@@ -211,7 +215,7 @@ public abstract class ModalDialog<T> {
     protected void initialize(Scene scene) {
     }
 
-    protected abstract Parent getContentPane();
+    public abstract Parent getContentPane();
 
     protected abstract void setDefaultButton();
 
@@ -239,5 +243,21 @@ public abstract class ModalDialog<T> {
 
     public void setCancelHandler(ICancelHandler cancelHandler) {
         this.cancelHandler = cancelHandler;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
+    public Node getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Node icon) {
+        this.icon = icon;
     }
 }

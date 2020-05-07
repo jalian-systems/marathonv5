@@ -18,6 +18,7 @@ package net.sourceforge.marathon.fx.projectselection;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -29,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.api.ITestApplication;
+import net.sourceforge.marathon.api.ThemeHelper.StyleClassHelper;
 import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
@@ -60,7 +62,7 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox root = new VBox();
         root.setId("MPFConfigurationParent");
         root.getStyleClass().add("mpf-configuration");
@@ -76,7 +78,9 @@ public class MPFConfigurationStage extends ModalDialog<MPFConfigurationInfo> {
         layouts = mpfConfigurationInfo.getProperties(this);
         for (IPropertiesLayout layout : layouts) {
             String name = layout.getName();
-            Tab tab = new Tab(name, layout.getContent());
+            Node content = layout.getContent();
+            content.getStyleClass().add(StyleClassHelper.BACKGROUND);
+            Tab tab = new Tab(name, content);
             tab.setId(name);
             tab.setGraphic(layout.getIcon());
             tabPane.getTabs().add(tab);

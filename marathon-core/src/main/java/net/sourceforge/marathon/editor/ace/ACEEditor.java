@@ -45,6 +45,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import net.sourceforge.marathon.api.ThemeHelper;
 import net.sourceforge.marathon.editor.FileBasedEditor;
 import net.sourceforge.marathon.editor.IContentChangeListener;
 import net.sourceforge.marathon.editor.IEditor;
@@ -637,10 +638,14 @@ public class ACEEditor extends FileBasedEditor implements IPreferenceChangeListe
     }
 
     public void loadPreferences(JSONObject preferences) {
-        if (preferences.has("theme")) {
-            setTheme(preferences.getString("theme"));
+        if (preferences.has("default-theme")) {
+            setTheme(preferences.getString("default-theme"));
         } else {
-            setTheme("ace/theme/cobalt");
+            if (ThemeHelper._getInstance().isDarkThemeSelected()) {
+                setTheme("ace/theme/idle_fingers");
+            }else {
+                setTheme("ace/theme/tomorrow");
+            }
         }
         if (preferences.has("keyboard-handler")) {
             setKeyboardHandler(preferences.getString("keyboard-handler"));

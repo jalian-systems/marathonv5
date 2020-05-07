@@ -85,7 +85,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("ace-editor-preferences-stage");
         root.setId("PreferencesStage");
@@ -165,7 +165,7 @@ public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesI
     private void onDefault() {
         Preferences preferences = Preferences.instance();
         JSONObject editorPreferences = preferences.getSection("ace-editor");
-        editorPreferences.put("theme", themesCombo.valueProperty().getValue().getTheme());
+        editorPreferences.put("default-theme", themesCombo.valueProperty().getValue().getTheme());
         editorPreferences.put("keyboard-handler", kbHandlerCombo.valueProperty().getValue());
         editorPreferences.put("tabSize", tabSizeSpinner.getValue());
         editorPreferences.put("tabConversion", tabConversionCheckBox.isSelected());

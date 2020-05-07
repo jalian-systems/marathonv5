@@ -94,7 +94,7 @@ public class FunctionStage extends ModalDialog<FunctionInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane content = new BorderPane();
         content.getStyleClass().add("function-stage");
         content.setId("functionStage");
