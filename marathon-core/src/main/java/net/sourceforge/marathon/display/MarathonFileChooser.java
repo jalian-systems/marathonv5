@@ -117,7 +117,7 @@ public class MarathonFileChooser extends ModalDialog<MarathonFileChooserInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane root = new BorderPane();
 
         root.getStyleClass().add("MarathonFileChooser");

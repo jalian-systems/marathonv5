@@ -39,7 +39,7 @@ public class AddPropertiesStage extends ModalDialog<TestPropertiesInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         root = new AddPropertiesView(issueInfo);
         okButton.setOnAction((e) -> onOK());
         cancelButton.setOnAction((e) -> dispose());

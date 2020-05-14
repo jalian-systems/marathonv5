@@ -44,7 +44,7 @@ public class NewChekListInputStage extends ModalDialog<String> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane borderPane = new BorderPane();
         FormPane formPane = new FormPane("new-checkList-input-stage", 2);
         //@formatter:off

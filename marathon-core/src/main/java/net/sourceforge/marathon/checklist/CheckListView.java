@@ -206,7 +206,7 @@ public class CheckListView extends BorderPane implements IContentChangeListener 
         }
 
         @Override
-        protected Parent getContentPane() {
+        public Parent getContentPane() {
             BorderPane borderPane = new BorderPane();
             borderPane.setId("check-list-input-stage");
             FormPane form = new FormPane("check-list-input-stage-form", 2);

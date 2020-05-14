@@ -66,7 +66,7 @@ public class MarathonCheckListStage extends ModalDialog<CheckListForm> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane pane = new BorderPane();
         pane.setCenter(splitPane);
         pane.setBottom(buttonBar);

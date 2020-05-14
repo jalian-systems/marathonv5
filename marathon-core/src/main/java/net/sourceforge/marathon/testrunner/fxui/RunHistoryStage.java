@@ -70,7 +70,7 @@ public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         addButtonsToVerticalButtonBar();
         BorderPane content = new BorderPane();
         content.getStyleClass().add("run-history-stage");

@@ -73,7 +73,7 @@ public class AnnotateScreenCapture extends ModalDialog<String> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(imagePanel);
         borderPane.setBottom(buttonBar);

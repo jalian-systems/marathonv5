@@ -118,7 +118,7 @@ public abstract class Blurb {
         }
 
         @Override
-        protected Parent getContentPane() {
+        public Parent getContentPane() {
             VBox content = new VBox();
             content.getStyleClass().add("blurb-stage");
             content.setId("blurbStage");

@@ -60,7 +60,7 @@ public class CreditsStage extends ModalDialog<String> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox content = new VBox();
         content.getStyleClass().add("credits-stage");
         content.setId("creditsStage");

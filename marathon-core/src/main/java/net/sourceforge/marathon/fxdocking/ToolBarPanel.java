@@ -54,4 +54,8 @@ public class ToolBarPanel extends HBox {
         }
         children.add(toolbar);
     }
+
+    public void add(Node node) {
+        getChildren().add(node);
+    }
 }

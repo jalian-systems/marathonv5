@@ -32,6 +32,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import net.sourceforge.marathon.api.ThemeHelper.StyleClassHelper;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.FileSelectionInfo;
 import net.sourceforge.marathon.fx.api.FileSelectionStage;
@@ -122,6 +123,7 @@ public abstract class ListLayout implements IPropertiesLayout {
         hBox.setId("ListLayout");
         hBox.getStyleClass().add("path-list");
         hBox.getChildren().addAll(createListView(), createVerticalButtonBar());
+        hBox.getStyleClass().add(StyleClassHelper.BACKGROUND);
         return hBox;
     }
 

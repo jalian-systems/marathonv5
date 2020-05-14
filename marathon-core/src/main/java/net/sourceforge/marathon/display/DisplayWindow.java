@@ -29,8 +29,6 @@ import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.io.Writer;
 import java.net.URI;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,8 +41,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
+import org.controlsfx.control.ToggleSwitch;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.runner.Description;
@@ -52,7 +49,6 @@ import org.junit.runner.notification.Failure;
 
 import com.google.inject.Inject;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -77,6 +73,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -94,6 +91,8 @@ import net.sourceforge.marathon.ProjectHTTPDServer;
 import net.sourceforge.marathon.Version;
 import net.sourceforge.marathon.api.LogRecord;
 import net.sourceforge.marathon.api.TestAttributes;
+import net.sourceforge.marathon.api.ThemeHelper;
+import net.sourceforge.marathon.api.ThemeHelper.StyleClassHelper;
 import net.sourceforge.marathon.checklist.CheckList;
 import net.sourceforge.marathon.checklist.CheckListForm;
 import net.sourceforge.marathon.checklist.CheckListForm.CheckListElement;
@@ -109,7 +108,6 @@ import net.sourceforge.marathon.editor.IEditor.IGutterListener;
 import net.sourceforge.marathon.editor.IEditorProvider;
 import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
-import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.display.AddPropertiesStage;
 import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
 import net.sourceforge.marathon.fx.display.FixtureStage;
@@ -174,7 +172,6 @@ import net.sourceforge.marathon.runtime.api.Function;
 import net.sourceforge.marathon.runtime.api.IConsole;
 import net.sourceforge.marathon.runtime.api.ILogger;
 import net.sourceforge.marathon.runtime.api.IPlaybackListener;
-import net.sourceforge.marathon.runtime.api.IPreferenceChangeListener;
 import net.sourceforge.marathon.runtime.api.IRuntimeLauncherModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel;
 import net.sourceforge.marathon.runtime.api.IScriptModel.SCRIPT_FILE_TYPE;
@@ -1045,7 +1042,9 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             getIcons().add(FXUIUtils.getImageURL("logo16"));
             getIcons().add(FXUIUtils.getImageURL("logo32"));
             initComponents();
-            setScene(new Scene(content));
+            Scene scene = new Scene(content);
+            content.getStyleClass().add(StyleClassHelper.BACKGROUND);
+            setScene(scene);
             setAlwaysOnTop(true);
             setOnShown((e) -> {
                 Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -1125,6 +1124,7 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     void startController() {
         WaitMessageDialog.setVisible(false);
+        _themeHelper.setSceneStyle(controller.getScene());
         controller.show();
         close();
     }
@@ -1145,6 +1145,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
     private IResourceChangeListener resourceChangeListener;
 
     private Project project;
+
+    private ThemeHelper _themeHelper = ThemeHelper._getInstance();
 
     /**
      * Constructs a DisplayWindow object.
@@ -1245,7 +1247,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         setName("DisplayWindow");
 
         setWindowState();
-        setTheme();
         String projectName = System.getProperty(Constants.PROP_PROJECT_NAME, "");
         if (projectName.equals("")) {
             projectName = "Marathon";
@@ -1264,11 +1265,11 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         createToolBar(container);
         container.setContent(workspace);
         BorderPane fxBorderPane = new BorderPane(container);
+        fxBorderPane.getStyleClass().add(StyleClassHelper.BACKGROUND);
         fxBorderPane.setTop(createMenuBar());
         fxBorderPane.setBottom(statusPanel);
         Scene scene = new Scene(fxBorderPane);
-        scene.getStylesheets().add(ModalDialog.class.getClassLoader()
-                .getResource("net/sourceforge/marathon/fx/api/css/marathon.css").toExternalForm());
+        _themeHelper.setSceneStyle(scene);
         setScene(scene);
         initStatusBar();
         initDesktop();
@@ -1304,25 +1305,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             setY(y);
             if (p.optBoolean("iconified"))
                 setIconified(true);
-        }
-    }
-
-    public void setTheme() {
-        JSONObject themeSection = Preferences.instance().getSection("theme");
-        boolean builtin = themeSection.optBoolean("builtin");
-        String path = themeSection.optString("path", "/themes/marathon.css");
-        String name = themeSection.optString("name", "Marathon");
-        if (builtin) {
-            if (name != null) {
-                Application.setUserAgentStylesheet(name);
-            }
-        } else {
-            if (path != null) {
-                URL resource = getClass().getResource(path);
-                if (resource != null) {
-                    Application.setUserAgentStylesheet(resource.toExternalForm());
-                }
-            }
         }
     }
 
@@ -1686,7 +1668,6 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         menu = new Menu("Window");
         menu.getItems().add(resetWorkspaceAction.getMenuItem());
         menu.getItems().add(new SeparatorMenuItem());
-        addThemeMenu(menu);
         addViews(menu);
         menuBar.getMenus().add(menuBar.getMenus().size() - 1, menu);
         menu = findMenu(menuBar, "Help");
@@ -1775,91 +1756,23 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
         dockable.getComponent().requestFocus();
     }
 
-    public void addThemeMenu(Menu windowMenu) {
-        Menu menu = new Menu("Theme");
-        ToggleGroup tg = new ToggleGroup();
-        String name = Preferences.instance().getSection("theme").optString("name");
-        String[] themes = new String[] { "Modena", "Caspian" };
-        String defaultEditorTheme = getDefaultEditorTheme();
-        for (String theme : themes) {
-            RadioMenuItem mi = new RadioMenuItem(theme);
-            mi.setToggleGroup(tg);
-            if (theme.equals(name)) {
-                mi.setSelected(true);
-            }
-            mi.selectedProperty().addListener((event, o, n) -> {
-                if (!n) {
-                    return;
-                }
-                JSONObject themeSection = Preferences.instance().getSection("theme");
-                themeSection.put("name", theme);
-                themeSection.put("builtin", true);
-                Preferences.instance().save("theme");
-                updateEditorTheme(defaultEditorTheme);
-            });
-            menu.getItems().add(mi);
-        }
+    private void updateEditorTheme() {
+        String theme = null;
+        String defaultTheme = null;
         try {
-            JSONArray customThemes = new JSONArray(
-                    IOUtils.toString(getClass().getResourceAsStream("/themes.json"), Charset.defaultCharset()));
-            for (int i = 0; i < customThemes.length(); i++) {
-                JSONObject theme = customThemes.getJSONObject(i);
-                String nm = theme.getString("name");
-                RadioMenuItem mi = new RadioMenuItem(nm);
-                mi.setToggleGroup(tg);
-                if (nm.equals(name)) {
-                    mi.setSelected(true);
-                }
-                mi.selectedProperty().addListener((event, o, n) -> {
-                    if (!n) {
-                        return;
-                    }
-                    JSONObject themeSection = Preferences.instance().getSection("theme");
-                    themeSection.put("name", nm);
-                    themeSection.put("path", theme.getString("path"));
-                    themeSection.put("builtin", false);
-                    Preferences.instance().save("theme");
-                    updateEditorTheme(theme.getString("editor_theme"));
-                });
-                menu.getItems().add(mi);
-            }
-        } catch (JSONException | IOException e1) {
-            e1.printStackTrace();
-        }
-        Preferences.instance().addPreferenceChangeListener("theme", new IPreferenceChangeListener() {
-            @Override
-            public void preferencesChanged(String section, JSONObject preferences) {
-                setTheme();
-                ObservableList<MenuItem> items = menu.getItems();
-                for (MenuItem menuItem : items) {
-                    if (preferences.has("name")) {
-                        String theme = preferences.getString("name");
-                        if (menuItem.getText().equals(theme))
-                            ((RadioMenuItem) menuItem).setSelected(true);
-                    }
-                }
-            }
-        });
-        windowMenu.getItems().add(menu);
-    }
-
-    private String getDefaultEditorTheme() {
-        try {
-            JSONArray customThemes = new JSONArray(
-                    IOUtils.toString(getClass().getResourceAsStream("/themes.json"), Charset.defaultCharset()));
-            for (int i = 0; i < customThemes.length(); i++) {
-                JSONObject theme = customThemes.getJSONObject(i);
-                String nm = theme.getString("name");
-                if (nm.equals("MarathonLight"))
-                    return theme.getString("editor_theme");
-            }
+            Preferences preferences = Preferences.instance();
+            JSONObject editorPreferences = preferences.getSection("ace-editor");
+            defaultTheme = editorPreferences.getString("default-theme");
         } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (defaultTheme == null || defaultTheme.equals("")) {
+                if (_themeHelper.isDarkThemeSelected()) {
+                    theme = "ace/theme/idle_fingers";
+                } else {
+                    theme = "ace/theme/tomorrow";
+                }
+            }
         }
-        return null;
+        updateEditorTheme(theme);
     }
 
     private void updateEditorTheme(String theme) {
@@ -1938,7 +1851,17 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
             toolBarPanel.add(toolBar);
         }
         showReportAction.setEnabled(false);
+        darkThemeSwitch.setTooltip(new Tooltip("Dark Theme"));
+        darkThemeSwitch.setSelected(_themeHelper.selectedDarkThemePropety().get());
+        darkThemeSwitch.selectedProperty().bindBidirectional(_themeHelper.selectedDarkThemePropety());
+        darkThemeSwitch.selectedProperty().addListener((b, o, n) -> refreshTheme());
+        toolBarPanel.add(darkThemeSwitch);
         return;
+    }
+
+    public void refreshTheme() {
+        updateEditorTheme();
+        _themeHelper.setSceneStyle(this.getScene());
     }
 
     private AbstractSimpleAction createAction(final IMarathonAction action) {
@@ -2959,6 +2882,8 @@ public class DisplayWindow extends Stage implements INameValidateChecker, IResou
 
     @ISimpleAction(description = "Create a new Issue file", value = "New Issue")
     AbstractSimpleAction newIssueFileAction;
+
+    ToggleSwitch darkThemeSwitch = new ToggleSwitch();
 
     AbstractSimpleAction refreshAction = new AbstractSimpleAction("refresh", "Refresh Editor", "F5", "Refresh Editor Content") {
         private static final long serialVersionUID = 1L;

@@ -1,3 +1,18 @@
+Marathon Version 5.4.0.0 (14th May 2020)
+
+01. feat(metro): Implemented metro UI using JMetro.
+    * Added marathon-javafx-agent dependency for marthon-core.
+    * Implemented Test cases for GUI -- ProjectSelection.
+    * Added support for JMetro Dark & Light Themes.
+    * Fixed font icons for JMetro Theme.
+    * Added MDL2 Font Icons to FXUIUtils.
+    * Modified Icons to MDL2Icons.
+    * Added iconed toggle switch for dark theme.
+    * Added all the segoe fonts.
+    * Removed all the old unused themes.
+    * Change ace editor theme to dark and light.
+    * Added ControlsFX version 8.40.14  dependecy.
+
 Marathon Version 5.3.0.0 (23rd March 2020)
 
 01. feat(Web): Enabled web testing for Marathon

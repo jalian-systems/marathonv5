@@ -65,7 +65,7 @@ public class FixtureStage extends ModalDialog<FixtureStageInfo> {
     }
 
     @Override
-    protected Parent getContentPane() {
+    public Parent getContentPane() {
         VBox content = new VBox();
         content.setId("FixtureStage");
         content.getStyleClass().add("fixture");
