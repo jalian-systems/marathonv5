@@ -135,6 +135,10 @@ public class JavaProfile {
          * Launched using an executable jar. <code>java -jar</code>
          */
         EXECUTABLE_JAR("executablejar", "Executable JAR", "executablejar", "appargument", "startwindowtitle", "vmargument"),
+        /**
+         * Standalone test which basically just opens a port so the driver can interact
+         */
+        STANDALONE("standalone", "Standalone test"),
         ;
         // @formatter:on
 
@@ -252,6 +256,20 @@ public class JavaProfile {
         parse(url);
         this.port = findPort();
     }
+    
+    /**
+     * Creates a new {@code JavaProfile} which just opens a specified port by the user
+     * 
+     * @param port 
+     * 		   the port to open
+     * @throws URISyntaxException
+     * @throws MalformedURLException
+     */
+    public JavaProfile(int port) throws URISyntaxException, MalformedURLException {
+	URL url = new URL("http", "localhost", port, "/?launchmode=STANDALONE");	
+	parse(url);
+	this.port = port;
+    }
 
     /**
      * Get the port number the WebDriver server listens to
@@ -261,7 +279,7 @@ public class JavaProfile {
     public int getPort() {
         return port;
     }
-
+        
     /**
      * Creates the {@link org.openqa.selenium.os.CommandLine} from the profile.
      * Executing this command line, starts the AUT and listens on the port.
@@ -368,6 +386,7 @@ public class JavaProfile {
             }
             return commandLine;
         }
+        //STANDALONE returns null on purpose!
         return null;
     }
 
