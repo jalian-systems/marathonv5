@@ -258,7 +258,7 @@ public class JavaProfile {
     }
     
     /**
-     * Creates a new profile given the URL and specified port by the user
+     * Creates a new {@code JavaProfile} given the URL and specified port by the user
      * 
      * @param url
      * 		  the url to use
