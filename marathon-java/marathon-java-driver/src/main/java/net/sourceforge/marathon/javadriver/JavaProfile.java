@@ -269,7 +269,7 @@ public class JavaProfile {
      */
     public JavaProfile(URL url, int port) throws URISyntaxException, MalformedURLException {
 	URL newURL = new URL(url.getProtocol(), url.getHost(), port, url.getPath()+"/?launchMode=STANDALONE");
-	parse(newUrl);
+	parse(newURL);
 	this.port = port;
     }
     
