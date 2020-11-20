@@ -258,6 +258,22 @@ public class JavaProfile {
     }
     
     /**
+     * Creates a new profile given the URL and specified port by the user
+     * 
+     * @param url
+     * 		  the url to use
+     * @param port
+     * 		  the port to open
+     * @throws URISyntaxException
+     * @throws MalformedURLException
+     */
+    public JavaProfile(URL url, int port) throws URISyntaxException, MalformedURLException {
+	URL newURL = new URL(url.getProtocol(), url.getHost(), port, url.getPath()+"/?launchMode=STANDALONE");
+	parse(newUrl);
+	this.port = port;
+    }
+    
+    /**
      * Creates a new {@code JavaProfile} which just opens a specified port by the user
      * 
      * @param port 
