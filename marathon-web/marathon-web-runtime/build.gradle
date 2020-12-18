@@ -38,7 +38,6 @@ targetCompatibility = '1.8'
 
 dependencies {
   compile project(":marathon-core")
-  compile project(":marathonite-core")
   compile "org.seleniumhq.selenium:selenium-java:${selenium_java_version}"
   compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
   compile "commons-io:commons-io:${commons_io_version}"
