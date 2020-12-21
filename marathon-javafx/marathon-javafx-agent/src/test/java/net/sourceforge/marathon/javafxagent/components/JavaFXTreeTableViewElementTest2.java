@@ -62,8 +62,13 @@ public class JavaFXTreeTableViewElementTest2 extends JavaFXElementTest {
 
     @Test
     public void assertContent() {
-        String expected = "[[\"Sales Department\",\"\",\":unchecked\"],[\"Ethan Williams\",\"ethan.williams@example.com\",\":unchecked\"],[\"Emma Jones\",\"emma.jones@example.com\",\":unchecked\"],[\"Michael Brown\",\"michael.brown@example.com\",\":unchecked\"],[\"Anna Black\",\"anna.black@example.com\",\":unchecked\"],[\"Rodger York\",\"roger.york@example.com\",\":unchecked\"],[\"Susan Collins\",\"susan.collins@example.com\",\":unchecked\"]]";
-        AssertJUnit.assertEquals(expected, treeTable.getAttribute("content"));
+        String expected = "[Sales Department, , :unchecked, Ethan Williams, ethan.williams@example.com, :unchecked, Emma Jones, emma.jones@example.com, :unchecked, Michael Brown, michael.brown@example.com, :unchecked, Anna Black, anna.black@example.com, :unchecked, Rodger York, roger.york@example.com, :unchecked, Susan Collins, susan.collins@example.com, :unchecked]";
+        List<IJavaFXElement> elements = treeTable.findElementsByCssSelector(".::all-cells");
+        ArrayList<String> actual = new ArrayList<>();
+        for (int i = 0; i < elements.size(); i++) {
+            actual.add(elements.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actual.toString());
     }
 
     @Override
