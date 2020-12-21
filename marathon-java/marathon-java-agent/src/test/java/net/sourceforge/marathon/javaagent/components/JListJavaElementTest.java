@@ -22,7 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -31,6 +30,7 @@ import org.testng.annotations.Test;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test

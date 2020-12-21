@@ -25,13 +25,12 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import org.json.JSONArray;
-
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class JComboBoxJavaElement extends AbstractJavaElement {
 

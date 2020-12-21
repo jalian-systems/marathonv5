@@ -1,4 +1,4 @@
-package org.json;
+package net.sourceforge.marathon.json;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

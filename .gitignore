@@ -197,3 +197,12 @@
 /marathon-web/marathon-web-runtime/bin-test/
 /marathon-web/marathon-web-runtime/internetexplorer.log 
 
+/marathon-json/.gradle
+/marathon-json/build
+/marathon-json/test-output/
+/marathon-json/.classpath
+/marathon-json/.project
+/marathon-json/.settings/
+/marathon-json/bin/
+/marathon-json/.DS_Store
+/marathon-json/.gitignore

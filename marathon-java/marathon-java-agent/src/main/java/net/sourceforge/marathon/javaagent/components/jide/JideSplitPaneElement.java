@@ -2,13 +2,12 @@ package net.sourceforge.marathon.javaagent.components.jide;
 
 import java.awt.Component;
 
-import org.json.JSONArray;
-
 import com.jidesoft.swing.JideSplitPane;
 
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class JideSplitPaneElement extends AbstractJavaElement {
 
