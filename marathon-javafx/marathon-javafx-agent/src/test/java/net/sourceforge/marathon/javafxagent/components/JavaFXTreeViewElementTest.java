@@ -126,7 +126,7 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
         JSONObject o = new JSONObject();
         o.put("select", "/Root node/Child Node 1");
         IJavaFXElement e = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
-        AssertJUnit.assertEquals("Child Node 1", e.getText());
+        AssertJUnit.assertEquals("/Root node/Child Node 1", e.getText());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
                 return text.size() > 0;
             }
         };
-        AssertJUnit.assertEquals("Child Node 1", text.get(0));
+        AssertJUnit.assertEquals("/Root node/Child Node 1", text.get(0));
     }
 
     @Test
@@ -154,8 +154,13 @@ public class JavaFXTreeViewElementTest extends JavaFXElementTest {
 
     @Test
     public void assertContent() {
-        String expected = "[[\"Root node\",\"Child Node 1\",\"Child Node 2\",\"Child Node 3\"]]";
-        AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
+        String expected = "[/Root node, /Root node/Child Node 1, /Root node/Child Node 2, /Root node/Child Node 3]";
+        List<IJavaFXElement> e = treeView.findElementsByCssSelector(".::all-nodes");
+        ArrayList<String> actualValue = new ArrayList<String>();
+        for (int i = 0; i < e.size(); i++) {
+            actualValue.add(e.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actualValue.toString());
     }
 
     @Override

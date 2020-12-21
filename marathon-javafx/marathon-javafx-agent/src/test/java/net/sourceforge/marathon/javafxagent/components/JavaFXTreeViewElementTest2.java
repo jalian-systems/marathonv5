@@ -15,6 +15,9 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -45,8 +48,14 @@ public class JavaFXTreeViewElementTest2 extends JavaFXElementTest {
             TreeItem<?> treeItem = treeViewNode.getTreeItem(treeViewNode.getExpandedItemCount() - 1);
             treeItem.setExpanded(true);
         });
-        String expected = "[[\"Root node\",\"Child Node 1\",\"Child Node 2\",\"Child Node 3\",\"Child Node 4\",\"Child Node 5\",\"Child Node 6\",\"Child Node 7\",\"Child Node 8\",\"Child Node 9\",\"Child Node 10\",\"Child Node 11\",\"Child Node 12\",\"Child Node 13\",\"Child Node 14\",\"Child Node 15\",\"Child Node 16\",\"Child Node 17\",\"Child Node 18\",\"Child Node 19\",\"Child Node 20\",\"Child Node 21\",\"Child Node 22\",\"Child Node 23\",\"Child Node 24\"]]";
-        AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
+        String expected = "[/Root node, /Root node/Child Node 1, /Root node/Child Node 2, /Root node/Child Node 3, /Root node/Child Node 3/Child Node 4, /Root node/Child Node 3/Child Node 5, /Root node/Child Node 3/Child Node 6, /Root node/Child Node 3/Child Node 7, /Root node/Child Node 3/Child Node 8, /Root node/Child Node 3/Child Node 9, /Root node/Child Node 3/Child Node 10, /Root node/Child Node 3/Child Node 11, /Root node/Child Node 3/Child Node 12, /Root node/Child Node 3/Child Node 13, /Root node/Child Node 3/Child Node 14, /Root node/Child Node 3/Child Node 15, /Root node/Child Node 3/Child Node 16, /Root node/Child Node 3/Child Node 17, /Root node/Child Node 3/Child Node 18, /Root node/Child Node 3/Child Node 19, /Root node/Child Node 3/Child Node 20, /Root node/Child Node 3/Child Node 21, /Root node/Child Node 3/Child Node 22, /Root node/Child Node 3/Child Node 23, /Root node/Child Node 3/Child Node 24]";
+
+        List<IJavaFXElement> e = treeView.findElementsByCssSelector(".::all-nodes");
+        ArrayList<String> actualValue = new ArrayList<String>();
+        for (int i = 0; i < e.size(); i++) {
+            actualValue.add(e.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actualValue.toString());
     }
 
     @Override
