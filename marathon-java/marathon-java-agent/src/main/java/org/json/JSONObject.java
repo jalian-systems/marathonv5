@@ -1,75 +1,149 @@
 package org.json;
 
+import java.io.StringReader;
 import java.util.Iterator;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class JSONObject {
 
-    public JSONObject(Object substring) {
-        // TODO Auto-generated constructor stub
+    private JsonObject jsonObject;
+
+    public JSONObject(JsonObject jsonObject) {
+        this.jsonObject = jsonObject;
+    }
+
+    public JSONObject(Object object) {
+        Gson g = new Gson();
+        String jS = g.toJson(object);
+        StringReader reader = new StringReader(jS);
+        jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+    }
+
+    public JSONObject(String string) {
+        StringReader reader = new StringReader(string);
+        jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
     }
 
     public JSONObject() {
-        // TODO Auto-generated constructor stub
+        jsonObject = new JsonObject();
     }
 
     public Object get(String string) {
-        // TODO Auto-generated method stub
-        return null;
+        return jsonObject.get(string).getAsString();
     }
 
     public boolean getBoolean(String string) {
-        // TODO Auto-generated method stub
-        return false;
+        return jsonObject.get(string).getAsBoolean();
     }
 
     public int getInt(String string) {
-        // TODO Auto-generated method stub
-        return 0;
+        return jsonObject.get(string).getAsInt();
     }
 
     public JSONArray getJSONArray(String string) {
-        // TODO Auto-generated method stub
-        return null;
+        return new JSONArray(jsonObject.get(string).getAsJsonArray());
     }
 
     public JSONObject getJSONObject(String string) {
-        // TODO Auto-generated method stub
-        return null;
+        return new JSONObject(jsonObject.get(string).getAsJsonObject());
     }
 
     public long getLong(String string) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public static String[] getNames(JSONObject urp) {
-        // TODO Auto-generated method stub
-        return null;
+        return jsonObject.get(string).getAsLong();
     }
 
     public String getString(String string) {
-        // TODO Auto-generated method stub
-        return null;
+        return jsonObject.get(string).getAsString();
     }
 
     public boolean has(String string) {
-        // TODO Auto-generated method stub
-        return false;
+        return jsonObject.has(string);
     }
 
     public Iterator<String> keys() {
-        // TODO Auto-generated method stub
-        return null;
+        return jsonObject.keySet().iterator();
     }
 
-    public JSONObject put(String string, String string2) {
-        // TODO Auto-generated method stub
-        return null;
+    public JSONObject put(String key, boolean value) {
+        jsonObject.addProperty(key, value);
+        return this;
+
     }
 
-    public JSONObject put(String string, Object b) {
-        // TODO Auto-generated method stub
-        return null;
+    public JSONObject put(String key, double value) {
+        jsonObject.addProperty(key, value);
+        return this;
+
+    }
+
+    public JSONObject put(String key, float value) {
+        jsonObject.addProperty(key, value);
+        return this;
+
+    }
+
+    public JSONObject put(String key, int value) {
+        jsonObject.addProperty(key, value);
+        return this;
+
+    }
+
+    public JSONObject put(String key, long value) {
+        jsonObject.addProperty(key, value);
+        return this;
+
+    }
+
+    public JSONObject put(String key, String value) {
+        jsonObject.addProperty(key, value);
+        return this;
+    }
+
+    public int length() {
+        return jsonObject.size();
+    }
+
+    public JSONObject put(String key, JSONArray value) {
+        jsonObject.add(key, value.getValue());
+        return this;
+    }
+
+    public JSONObject put(String key, JSONObject put) {
+        jsonObject.add(key, put.getValue());
+        return this;
+
+    }
+
+    public JsonElement getValue() {
+        return jsonObject;
+    }
+
+    public JSONObject put(String key, Object value) {
+        Gson g = new Gson();
+        String json = g.toJson(value);
+        JsonElement vElement = JsonParser.parseString(json);
+        jsonObject.add(key, vElement);
+        return this;
+    }
+
+    public static String[] getNames(JSONObject urp) {
+        if (urp.isEmpty()) {
+            return null;
+        }
+        return ((JsonObject) urp.getValue()).keySet().toArray(new String[urp.length()]);
+    }
+
+    private boolean isEmpty() {
+        return jsonObject.size() == 0;
+    }
+
+    @Override
+    public String toString() {
+        return jsonObject.toString();
     }
 
 }

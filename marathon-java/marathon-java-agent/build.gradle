@@ -63,7 +63,7 @@ compileTestJava {
 }
 
 dependencies {
-    compile 'org.json:json:20180813'
+    implementation 'com.google.code.gson:gson:${gson_version}'
     compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
     compile "org.javassist:javassist:${javassist_version}"
     implementation 'com.jidesoft:jide-oss:3.6.18'
