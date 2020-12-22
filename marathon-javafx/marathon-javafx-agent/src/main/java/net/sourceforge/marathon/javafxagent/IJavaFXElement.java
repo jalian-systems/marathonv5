@@ -18,12 +18,11 @@ package net.sourceforge.marathon.javafxagent;
 import java.util.List;
 import java.util.UUID;
 
-import org.json.JSONArray;
-
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.PickResult;
+import net.sourceforge.marathon.json.JSONArray;
 
 public interface IJavaFXElement {
 

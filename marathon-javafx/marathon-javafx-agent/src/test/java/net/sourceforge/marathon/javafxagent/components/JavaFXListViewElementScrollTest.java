@@ -18,7 +18,6 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -35,6 +34,7 @@ import net.sourceforge.marathon.javafx.tests.SimpleListViewScrollSample;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
 import net.sourceforge.marathon.javafxagent.Wait;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXListViewElementScrollTest extends JavaFXElementTest {
 

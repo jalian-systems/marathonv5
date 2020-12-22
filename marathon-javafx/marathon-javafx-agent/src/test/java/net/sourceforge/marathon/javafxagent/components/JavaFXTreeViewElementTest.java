@@ -18,7 +18,6 @@ package net.sourceforge.marathon.javafxagent.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -31,6 +30,7 @@ import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
 import net.sourceforge.marathon.javafxagent.Wait;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXTreeViewElementTest extends JavaFXElementTest {
 

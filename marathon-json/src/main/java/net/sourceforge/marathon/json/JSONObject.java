@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.util.Iterator;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -33,7 +34,13 @@ public class JSONObject {
     }
 
     public Object get(String string) {
-        return jsonObject.get(string).getAsString();
+        JsonElement jsonElement = jsonObject.get(string);
+        if (jsonElement instanceof JsonObject) {
+            return new JSONObject(jsonElement.getAsJsonObject());
+        } else if (jsonElement instanceof JsonArray) {
+            return new JSONArray(jsonElement.getAsJsonArray());
+        }
+        return jsonElement.getAsString();
     }
 
     public boolean getBoolean(String string) {

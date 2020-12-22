@@ -23,7 +23,6 @@ public class JSONArray {
         jsonArray = JsonParser.parseReader(reader).getAsJsonArray();
     }
 
-    
     public JSONArray(JsonArray jsonArray) {
         this.jsonArray = jsonArray;
     }
@@ -110,5 +109,13 @@ public class JSONArray {
     @Override
     public String toString() {
         return jsonArray.toString();
+    }
+
+    public double getDouble(int i) {
+        return jsonArray.get(i).getAsDouble();
+    }
+
+    public JSONArray getJSONArray(int i) {
+        return new JSONArray(jsonArray.get(i).getAsJsonArray());
     }
 }

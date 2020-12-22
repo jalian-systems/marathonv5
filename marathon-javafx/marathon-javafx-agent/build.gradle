@@ -51,13 +51,12 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 dependencies {
-    compile 'org.json:json:20180813'
+    compile project(":marathon-json")
     compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
     compile "org.javassist:javassist:${javassist_version}"
     testCompile "org.testng:testng:${testng_version}"
     testCompile project(":marathon-javafx:marathon-fxtest-helpers")
     testCompile 'org.fxmisc.richtext:richtextfx:0.9.3'
-    antBuildXML 'org.json:json:20180813'
     antBuildXML "org.nanohttpd:nanohttpd:${nanohttpd_version}"
     antBuildXML "org.javassist:javassist:${javassist_version}"
 }
