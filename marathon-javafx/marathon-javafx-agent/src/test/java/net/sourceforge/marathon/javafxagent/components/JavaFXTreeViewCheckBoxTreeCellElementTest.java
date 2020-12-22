@@ -15,6 +15,9 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
@@ -45,7 +48,7 @@ public class JavaFXTreeViewCheckBoxTreeCellElementTest extends JavaFXElementTest
         o.put("select", "/Root node/Child Node 1");
         IJavaFXElement item = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
         IJavaFXElement cb = item.findElementByCssSelector(".::editor");
-        cb.marathon_select("Child Node 1:checked");
+        cb.marathon_select("checked");
         new Wait("Wait for tree item check box to be selected") {
             @Override
             public boolean until() {
@@ -64,7 +67,7 @@ public class JavaFXTreeViewCheckBoxTreeCellElementTest extends JavaFXElementTest
         o.put("select", "/Root node/Child Node 2");
         IJavaFXElement item = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
         IJavaFXElement cb = item.findElementByCssSelector(".::editor");
-        cb.marathon_select("Child Node 2:checked");
+        cb.marathon_select("checked");
         new Wait("Wait for tree item check box to be selected") {
             @Override
             public boolean until() {
@@ -83,7 +86,7 @@ public class JavaFXTreeViewCheckBoxTreeCellElementTest extends JavaFXElementTest
         o.put("select", "/Root node/Child Node 2");
         IJavaFXElement item = treeView.findElementByCssSelector(".::select-by-properties('" + o.toString() + "')");
         IJavaFXElement cb = item.findElementByCssSelector(".::editor");
-        cb.marathon_select("Child Node 2:unchecked");
+        cb.marathon_select("unchecked");
         new Wait("Wait for tree item check box to be deselected") {
             @Override
             public boolean until() {
@@ -106,7 +109,7 @@ public class JavaFXTreeViewCheckBoxTreeCellElementTest extends JavaFXElementTest
                 return selected.equals("false");
             }
         };
-        cb.marathon_select("Child Node 2:unchecked");
+        cb.marathon_select("unchecked");
         new Wait("Wait for tree item check box to be deselected") {
             @Override
             public boolean until() {
@@ -118,8 +121,13 @@ public class JavaFXTreeViewCheckBoxTreeCellElementTest extends JavaFXElementTest
 
     @Test
     public void assertContent() {
-        String expected = "[[\"Root node:unchecked\",\"Child Node 1:unchecked\",\"Child Node 2:unchecked\",\"Child Node 3:unchecked\"]]";
-        AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
+        String expected = "[/Root node, /Root node/Child Node 1, /Root node/Child Node 2, /Root node/Child Node 3]";
+        List<IJavaFXElement> elements = treeView.findElementsByCssSelector(".::all-nodes");
+        ArrayList<String> actual = new ArrayList<>();
+        for (int i = 0; i < elements.size(); i++) {
+            actual.add(elements.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actual.toString());
     }
 
     @Override
