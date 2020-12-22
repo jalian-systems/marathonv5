@@ -212,8 +212,13 @@ public class JavaFXTableViewElementTest extends JavaFXElementTest {
 
     @Test
     public void assertContent() {
-        String expected = "[[\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
-        AssertJUnit.assertEquals(expected, tableView.getAttribute("content"));
+        String expected = "[Jacob, Smith, jacob.smith@example.com, Isabella, Johnson, isabella.johnson@example.com, Ethan, Williams, ethan.williams@example.com, Emma, Jones, emma.jones@example.com, Michael, Brown, michael.brown@example.com]";
+        List<IJavaFXElement> elements = tableView.findElementsByCssSelector(".::all-cells");
+        ArrayList<String> actual = new ArrayList<>();
+        for (int i = 0; i < elements.size(); i++) {
+            actual.add(elements.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actual.toString());
     }
 
     @Override
