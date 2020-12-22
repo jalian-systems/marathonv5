@@ -15,6 +15,9 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -37,8 +40,13 @@ public class JavaFXTableViewCheckBoxElementTest extends JavaFXElementTest {
 
     @Test
     public void assertContent() {
-        String expected = "[[\":checked\",\"Jacob\",\"Smith\",\"jacob.smith@example.com\"],[\":unchecked\",\"Isabella\",\"Johnson\",\"isabella.johnson@example.com\"],[\":checked\",\"Ethan\",\"Williams\",\"ethan.williams@example.com\"],[\":checked\",\"Emma\",\"Jones\",\"emma.jones@example.com\"],[\":unchecked\",\"Michael\",\"Brown\",\"michael.brown@example.com\"]]";
-        AssertJUnit.assertEquals(expected, tableView.getAttribute("content"));
+        String expected = "[:checked, Jacob, Smith, jacob.smith@example.com, :unchecked, Isabella, Johnson, isabella.johnson@example.com, :checked, Ethan, Williams, ethan.williams@example.com, :checked, Emma, Jones, emma.jones@example.com, :unchecked, Michael, Brown, michael.brown@example.com]";
+        List<IJavaFXElement> elements = tableView.findElementsByCssSelector(".::all-cells");
+        ArrayList<String> actual = new ArrayList<>();
+        for (int i = 0; i < elements.size(); i++) {
+            actual.add(elements.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actual.toString());
     }
 
     @Override

@@ -15,6 +15,9 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javafxagent.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -37,8 +40,13 @@ public class JavaFXTreeViewChoiceBoxTreeCellElementTest extends JavaFXElementTes
 
     @Test
     public void assertContent() {
-        String expected = "[[\"Root node\",\"Option 1\",\"Option 2\",\"Option 3\"]]";
-        AssertJUnit.assertEquals(expected, treeView.getAttribute("content"));
+        String expected = "[/Root node, /Root node/Option 1, /Root node/Option 2, /Root node/Option 3]";
+        List<IJavaFXElement> elements = treeView.findElementsByCssSelector(".::all-nodes");
+        ArrayList<String> actual = new ArrayList<>();
+        for (int i = 0; i < elements.size(); i++) {
+            actual.add(elements.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actual.toString());
     }
 
     @Override
