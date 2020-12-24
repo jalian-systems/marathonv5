@@ -6,11 +6,13 @@ import java.util.Iterator;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class JSONObject {
 
+    public static Object NULL = JsonNull.INSTANCE;
     private JsonObject jsonObject;
 
     public JSONObject(JsonObject jsonObject) {
