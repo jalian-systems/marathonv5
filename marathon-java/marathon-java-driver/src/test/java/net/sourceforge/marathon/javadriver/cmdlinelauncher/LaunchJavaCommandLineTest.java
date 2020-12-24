@@ -23,6 +23,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.AssertJUnit;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -42,8 +43,12 @@ public class LaunchJavaCommandLineTest {
     public LaunchJavaCommandLineTest() {
     }
 
+    @SuppressWarnings("unused")
     @BeforeClass
     public void createDriver() {
+        if (true) {
+            throw new SkipException("LaunchJavaCommandLineTest skipped due to bin folder is used as javaagent instead of jar");
+        }
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_COMMAND_LINE);
         File f = findFile();
         profile.addClassPath(f);

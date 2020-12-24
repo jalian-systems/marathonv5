@@ -412,7 +412,7 @@ public class JavaServer extends NanoHTTPD {
                 return (Response) result;
             }
             if (result == null || result == NULL_OBJECT) {
-                r.put("value", (Object) null);
+                r.put("value", JSONObject.NULL);
             } else {
                 r.put("value", result);
             }

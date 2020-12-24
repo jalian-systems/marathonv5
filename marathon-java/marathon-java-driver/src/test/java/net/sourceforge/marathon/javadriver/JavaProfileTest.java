@@ -60,10 +60,10 @@ public class JavaProfileTest {
         };
         BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
         String line = reader.readLine();
-        while (line != null && !line.contains("java version")) {
+        while (line != null && !line.contains("JAVA_TOOL_OPTIONS")) {
             line = reader.readLine();
         }
-        AssertJUnit.assertTrue(line.contains("java version"));
+        AssertJUnit.assertTrue(line.contains("JAVA_TOOL_OPTIONS"));
     }
 
     public void getJavaCommandLineWithClasspath() throws Throwable {
@@ -96,6 +96,7 @@ public class JavaProfileTest {
             throw new SkipException("Test not valid for Windows");
         }
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_WEBSTART).addWSArgument("-verbose").addVMArgument("-Dx.y.z=hello");
+        profile.setJNLPPath("");
         final CommandLine commandLine = profile.getCommandLine();
         AssertJUnit.assertNotNull(commandLine);
         AssertJUnit.assertTrue(commandLine.toString().contains("-javaagent:"));

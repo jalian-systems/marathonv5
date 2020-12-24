@@ -26,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.AssertJUnit;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
@@ -38,7 +39,11 @@ public class LaunchAppletTest {
 
     private JavaDriver driver;
 
+    @SuppressWarnings("unused")
     private void createDriver(String title) {
+        if (true) {
+            throw new SkipException("AppletTest skipped due to unreachable application online.");
+        }
         JavaProfile profile = new JavaProfile(LaunchMode.JAVA_APPLET);
         File f = findFile();
         profile.setAppletURL(f.getAbsolutePath());
