@@ -23,7 +23,6 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Point;
@@ -37,6 +36,7 @@ import org.testng.annotations.Test;
 import components.DialogDemo;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.json.JSONArray;
 
 @Test
 public class JOptionPaneTest {

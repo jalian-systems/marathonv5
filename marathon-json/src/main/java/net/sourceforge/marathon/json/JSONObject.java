@@ -1,6 +1,8 @@
 package net.sourceforge.marathon.json;
 
 import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Iterator;
 
 import com.google.gson.Gson;
@@ -9,133 +11,141 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 public class JSONObject {
 
     public static Object NULL = JsonNull.INSTANCE;
-    private JsonObject jsonObject;
+    private JsonObject jObject;
 
     public JSONObject(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
+        this.jObject = jsonObject;
     }
 
     public JSONObject(Object object) {
         Gson g = new Gson();
         String jS = g.toJson(object);
         StringReader reader = new StringReader(jS);
-        jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+        jObject = JsonParser.parseReader(reader).getAsJsonObject();
     }
 
     public JSONObject(String string) {
         StringReader reader = new StringReader(string);
-        jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+        jObject = JsonParser.parseReader(reader).getAsJsonObject();
     }
 
     public JSONObject() {
-        jsonObject = new JsonObject();
+        jObject = new JsonObject();
     }
 
     public Object get(String string) {
-        JsonElement jsonElement = jsonObject.get(string);
-        if (jsonElement instanceof JsonObject) {
-            return new JSONObject(jsonElement.getAsJsonObject());
-        } else if (jsonElement instanceof JsonArray) {
-            return new JSONArray(jsonElement.getAsJsonArray());
+        Object o = JSONObject.unwrap(jObject.get(string));
+        if (o != null) {
+            if (o instanceof JsonArray) {
+                return new JSONArray((JsonArray) o);
+            } else if (o instanceof JsonObject) {
+                return new JSONObject((JsonObject) o);
+            }
         }
-        return jsonElement.getAsString();
+        return o;
     }
 
     public boolean getBoolean(String string) {
-        return jsonObject.get(string).getAsBoolean();
+        return jObject.get(string).getAsBoolean();
     }
 
     public int getInt(String string) {
-        return jsonObject.get(string).getAsInt();
+        return jObject.get(string).getAsInt();
     }
 
     public JSONArray getJSONArray(String string) {
-        return new JSONArray(jsonObject.get(string).getAsJsonArray());
+        return new JSONArray(jObject.get(string).getAsJsonArray());
     }
 
     public JSONObject getJSONObject(String string) {
-        return new JSONObject(jsonObject.get(string).getAsJsonObject());
+        return new JSONObject(jObject.get(string).getAsJsonObject());
     }
 
     public long getLong(String string) {
-        return jsonObject.get(string).getAsLong();
+        return jObject.get(string).getAsLong();
     }
 
     public String getString(String string) {
-        return jsonObject.get(string).getAsString();
+        return jObject.get(string).getAsString();
     }
 
     public boolean has(String string) {
-        return jsonObject.has(string);
+        return jObject.has(string);
     }
 
     public Iterator<String> keys() {
-        return jsonObject.keySet().iterator();
+        return jObject.keySet().iterator();
     }
 
     public JSONObject put(String key, boolean value) {
-        jsonObject.addProperty(key, value);
+        jObject.addProperty(key, value);
         return this;
 
     }
 
     public JSONObject put(String key, double value) {
-        jsonObject.addProperty(key, value);
+        jObject.addProperty(key, value);
         return this;
 
     }
 
     public JSONObject put(String key, float value) {
-        jsonObject.addProperty(key, value);
+        jObject.addProperty(key, value);
         return this;
 
     }
 
     public JSONObject put(String key, int value) {
-        jsonObject.addProperty(key, value);
+        jObject.addProperty(key, value);
         return this;
 
     }
 
     public JSONObject put(String key, long value) {
-        jsonObject.addProperty(key, value);
+        jObject.addProperty(key, value);
         return this;
 
     }
 
     public JSONObject put(String key, String value) {
-        jsonObject.addProperty(key, value);
+        jObject.addProperty(key, value);
         return this;
     }
 
     public int length() {
-        return jsonObject.size();
+        return jObject.size();
     }
 
     public JSONObject put(String key, JSONArray value) {
-        jsonObject.add(key, value.getValue());
+        jObject.add(key, value.getValue());
         return this;
     }
 
     public JSONObject put(String key, JSONObject put) {
-        jsonObject.add(key, put.getValue());
+        jObject.add(key, put.getValue());
         return this;
 
     }
 
     public JsonElement getValue() {
-        return jsonObject;
+        return jObject;
     }
 
     public JSONObject put(String key, Object value) {
+        if (value instanceof JSONArray) {
+            return put(key, (JSONArray) value);
+        } else if (value instanceof JSONObject) {
+            return put(key, (JSONObject) value);
+        }
         Gson g = new Gson();
         String json = g.toJson(value);
         JsonElement vElement = JsonParser.parseString(json);
-        jsonObject.add(key, vElement);
+        jObject.add(key, vElement);
         return this;
     }
 
@@ -147,12 +157,72 @@ public class JSONObject {
     }
 
     private boolean isEmpty() {
-        return jsonObject.size() == 0;
+        return jObject.size() == 0;
     }
 
     @Override
     public String toString() {
-        return jsonObject.toString();
+        return jObject.toString();
+    }
+
+    public static Object unwrap(final Object o) {
+        if (o == null) {
+            return null;
+        }
+
+        if (!(o instanceof JsonElement)) {
+            return o;
+        }
+
+        JsonElement e = (JsonElement) o;
+
+        if (e.isJsonNull()) {
+            return null;
+        } else if (e.isJsonPrimitive()) {
+
+            JsonPrimitive p = e.getAsJsonPrimitive();
+            if (p.isString()) {
+                return p.getAsString();
+            } else if (p.isBoolean()) {
+                return p.getAsBoolean();
+            } else if (p.isNumber()) {
+                return unwrapNumber(p.getAsNumber());
+            }
+        }
+
+        return o;
+    }
+
+    private static boolean isPrimitiveNumber(final Number n) {
+        return n instanceof Integer || n instanceof Double || n instanceof Long || n instanceof BigDecimal
+                || n instanceof BigInteger;
+    }
+
+    private static Number unwrapNumber(final Number n) {
+        Number unwrapped;
+
+        if (!isPrimitiveNumber(n)) {
+            BigDecimal bigDecimal = new BigDecimal(n.toString());
+            if (bigDecimal.scale() <= 0) {
+                if (bigDecimal.compareTo(new BigDecimal(Integer.MAX_VALUE)) <= 0) {
+                    unwrapped = bigDecimal.intValue();
+                } else if (bigDecimal.compareTo(new BigDecimal(Long.MAX_VALUE)) <= 0) {
+                    unwrapped = bigDecimal.longValue();
+                } else {
+                    unwrapped = bigDecimal;
+                }
+            } else {
+                final double doubleValue = bigDecimal.doubleValue();
+                if (BigDecimal.valueOf(doubleValue).compareTo(bigDecimal) != 0) {
+                    unwrapped = bigDecimal;
+                } else {
+                    unwrapped = doubleValue;
+                }
+            }
+        } else {
+            unwrapped = n;
+        }
+        return unwrapped;
     }
 
 }

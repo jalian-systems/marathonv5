@@ -23,12 +23,12 @@ import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
-import org.json.JSONArray;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import net.sourceforge.marathon.javaagent.KeysMap;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class OSUtils {
 

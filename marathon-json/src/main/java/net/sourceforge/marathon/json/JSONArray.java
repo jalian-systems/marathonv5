@@ -5,117 +5,132 @@ import java.io.StringReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class JSONArray {
 
-    private JsonArray jsonArray;
+    private JsonArray jArray;
 
     public JSONArray(Object string) {
         Gson gson = new Gson();
         String json = gson.toJson(string);
         StringReader reader = new StringReader(json);
-        jsonArray = JsonParser.parseReader(reader).getAsJsonArray();
+        jArray = JsonParser.parseReader(reader).getAsJsonArray();
     }
 
     public JSONArray(String string) {
         StringReader reader = new StringReader(string);
-        jsonArray = JsonParser.parseReader(reader).getAsJsonArray();
+        jArray = JsonParser.parseReader(reader).getAsJsonArray();
     }
 
     public JSONArray(JsonArray jsonArray) {
-        this.jsonArray = jsonArray;
+        this.jArray = jsonArray;
     }
 
     public JSONArray() {
-        jsonArray = new JsonArray();
+        jArray = new JsonArray();
     }
 
     public int length() {
-        return jsonArray.size();
+        return jArray.size();
     }
 
     public Object get(int i) {
-        return jsonArray.get(i);
+        Object o = JSONObject.unwrap(jArray.get(i));
+        if (o != null) {
+            if (o instanceof JsonArray) {
+                return new JSONArray((JsonArray) o);
+            } else if (o instanceof JsonObject) {
+                return new JSONObject((JsonObject) o);
+            }
+        }
+        return o;
     }
 
     public int getInt(int i) {
-        return jsonArray.get(i).getAsInt();
+        return jArray.get(i).getAsInt();
     }
 
     public JSONObject getJSONObject(int i) {
 
-        return new JSONObject(jsonArray.get(i).getAsJsonObject());
+        return new JSONObject(jArray.get(i).getAsJsonObject());
     }
 
     public String getString(int i) {
-        return jsonArray.get(i).getAsString();
+        return jArray.get(i).getAsString();
     }
 
     public JSONArray put(boolean value) {
-        jsonArray.add(value);
+        jArray.add(value);
         return this;
     }
 
     public JSONArray put(double value) {
-        jsonArray.add(value);
+        jArray.add(value);
         return this;
     }
 
     public JSONArray put(float value) {
-        jsonArray.add(value);
+        jArray.add(value);
         return this;
     }
 
     public JSONArray put(int value) {
-        jsonArray.add(value);
+        jArray.add(value);
         return this;
     }
 
     public JSONArray put(long value) {
-        jsonArray.add(value);
+        jArray.add(value);
         return this;
     }
 
     public JSONArray put(Object value) {
+        if (value instanceof JSONObject) {
+            return put((JSONObject) value);
+        } else if (value instanceof JSONArray) {
+            return put((JSONArray) value);
+        }
         Gson g = new Gson();
         String json = g.toJson(value);
         JsonElement vElement = JsonParser.parseString(json);
-        jsonArray.add(vElement);
+        jArray.add(vElement);
         return this;
 
     }
 
     public JSONArray put(JSONArray value) {
-        jsonArray.add(value.getValue());
+        jArray.add(value.getValue());
         return this;
     }
 
     public JSONArray put(JSONObject value) {
-        jsonArray.add(value.getValue());
+        jArray.add(value.getValue());
         return this;
     }
 
     public JSONArray put(String value) {
-        jsonArray.add(value);
+        jArray.add(value);
         return this;
 
     }
 
     public JsonElement getValue() {
-        return jsonArray;
+        return jArray;
     }
 
     @Override
     public String toString() {
-        return jsonArray.toString();
+        return jArray.toString();
     }
 
     public double getDouble(int i) {
-        return jsonArray.get(i).getAsDouble();
+        return jArray.get(i).getAsDouble();
     }
 
     public JSONArray getJSONArray(int i) {
-        return new JSONArray(jsonArray.get(i).getAsJsonArray());
+        return new JSONArray(jArray.get(i).getAsJsonArray());
     }
+
 }
