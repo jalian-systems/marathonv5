@@ -74,12 +74,11 @@ public class RTableTest extends RComponentTest {
             @Override
             public void run() {
                 RTable rTable = new RTable(table, null, null, lr);
+                rTable.focusGained(null);
                 rTable.focusLost(null);
             }
         });
-        Call call = lr.getCall();
-        AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("", call.getState());
+        AssertJUnit.assertEquals(0, lr.getCalls().size());
     }
 
     public void selectAllCells() throws Throwable {
@@ -121,7 +120,7 @@ public class RTableTest extends RComponentTest {
         });
         Call call = lr.getCall();
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("rows:[1],columns:[First Name]", call.getState());
+        AssertJUnit.assertEquals("{1, First Name}", call.getCellinfo());
     }
 
     public void selectRows() throws Throwable {
@@ -189,20 +188,22 @@ public class RTableTest extends RComponentTest {
         siw(new Runnable() {
             @Override
             public void run() {
+                table.setRowSelectionAllowed(true);
+                table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 table.addRowSelectionInterval(2, 2);
                 table.addColumnSelectionInterval(2, 2);
                 RTable rTable = new RTable(table, null, null, lr);
-                rTable.focusGained(null);
+                rTable.focusLost(null);
                 AbstractTableModel model = (AbstractTableModel) table.getModel();
                 model.setValueAt("Rowing", 2, 2);
                 rTable.focusLost(null);
             }
         });
         List<Call> calls = lr.getCalls();
-        Call call = calls.get(1);
+        Call call = calls.get(0);
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("rows:[2],columns:[Sport]", call.getState());
-        call = calls.get(0);
+        AssertJUnit.assertEquals("Knitting", call.getState());
+        call = calls.get(1);
         AssertJUnit.assertEquals("select", call.getFunction());
         AssertJUnit.assertEquals("Rowing", call.getState());
         AssertJUnit.assertEquals("{2, Sport}", call.getCellinfo());
@@ -233,17 +234,18 @@ public class RTableTest extends RComponentTest {
                 table.addRowSelectionInterval(2, 2);
                 table.addColumnSelectionInterval(3, 3);
                 RTable rTable = new RTable(table, null, null, lr);
-                rTable.focusGained(null);
+                rTable.focusLost(null);
                 model = table.getModel();
                 model.setValueAt("100", 2, 3);
                 rTable.focusLost(null);
             }
         });
         List<Call> calls = lr.getCalls();
-        Call call = calls.get(1);
+        Call call = calls.get(0);
         AssertJUnit.assertEquals("select", call.getFunction());
-        AssertJUnit.assertEquals("rows:[2],columns:[ ## of \\Years[0#;20]]", call.getState());
-        call = calls.get(0);
+        AssertJUnit.assertEquals("2", call.getState());
+        AssertJUnit.assertEquals("{2,  # of \\Years[0,20]}", call.getCellinfo());
+        call = calls.get(1);
         AssertJUnit.assertEquals("select", call.getFunction());
         AssertJUnit.assertEquals("100", call.getState());
         AssertJUnit.assertEquals("{2,  # of \\Years[0,20]}", call.getCellinfo());
