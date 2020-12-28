@@ -48,7 +48,7 @@ public class RFXTreeViewCheckBoxTreeCellTest extends RFXComponentTest {
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
-        AssertJUnit.assertEquals("Child Node 1:checked", recording.getParameters()[0]);
+        AssertJUnit.assertEquals("checked", recording.getParameters()[0]);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class RFXTreeViewCheckBoxTreeCellTest extends RFXComponentTest {
         List<Recording> recordings = lr.waitAndGetRecordings(1);
         Recording recording = recordings.get(0);
         AssertJUnit.assertEquals("recordSelect", recording.getCall());
-        AssertJUnit.assertEquals("Child Node 1:unchecked", recording.getParameters()[0]);
+        AssertJUnit.assertEquals("unchecked", recording.getParameters()[0]);
     }
 
     @Override
