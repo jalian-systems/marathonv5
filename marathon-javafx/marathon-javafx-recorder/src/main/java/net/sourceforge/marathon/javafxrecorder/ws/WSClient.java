@@ -21,7 +21,8 @@ import java.util.logging.Logger;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.json.JSONObject;
+
+import net.sourceforge.marathon.json.JSONObject;
 
 public class WSClient extends WebSocketClient {
 

@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -64,6 +62,7 @@ import net.sourceforge.marathon.javafxrecorder.component.RFXFolderChooser;
 import net.sourceforge.marathon.javafxrecorder.component.RFXMenuItem;
 import net.sourceforge.marathon.javafxrecorder.component.RFXUnknownComponent;
 import net.sourceforge.marathon.javafxrecorder.ws.WSRecorder;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFxRecorderHook implements EventHandler<Event> {
 

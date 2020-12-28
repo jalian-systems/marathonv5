@@ -18,7 +18,6 @@ package net.sourceforge.marathon.javafxrecorder.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -28,6 +27,7 @@ import javafx.scene.layout.Pane;
 import net.sourceforge.marathon.javafx.tests.SplitPaneSample;
 import net.sourceforge.marathon.javafxagent.Wait;
 import net.sourceforge.marathon.javafxrecorder.component.LoggingRecorder.Recording;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class RFXSplitPaneTest extends RFXComponentTest {
 
