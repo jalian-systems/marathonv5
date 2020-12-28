@@ -32,14 +32,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.javaagent.KeysMap;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class WSRecorder implements IJSONRecorder {
 

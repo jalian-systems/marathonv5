@@ -22,10 +22,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONObject;
 
 public final class LoggingRecorder implements IJSONRecorder {
 

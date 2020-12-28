@@ -20,9 +20,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.component.RComponent;
+import net.sourceforge.marathon.json.JSONObject;
 
 public interface IJSONRecorder {
 

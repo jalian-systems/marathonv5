@@ -25,7 +25,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.json.JSONArray;
 import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
@@ -37,6 +36,7 @@ import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.javaagent.Device;
 import net.sourceforge.marathon.javaagent.IDevice;
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test

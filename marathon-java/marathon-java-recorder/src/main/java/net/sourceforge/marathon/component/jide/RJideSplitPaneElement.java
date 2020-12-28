@@ -4,13 +4,12 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import org.json.JSONArray;
-
 import com.jidesoft.swing.JideSplitPane;
 
 import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class RJideSplitPaneElement extends RComponent {
 
