@@ -15,6 +15,7 @@ import com.google.gson.JsonPrimitive;
 
 public class JSONObject {
 
+    private static final String CLASS_VALUE_PREFIX = "~~class~~";
     public static Object NULL = JsonNull.INSTANCE;
     private JsonObject jObject;
 
@@ -45,6 +46,16 @@ public class JSONObject {
                 return new JSONArray((JsonArray) o);
             } else if (o instanceof JsonObject) {
                 return new JSONObject((JsonObject) o);
+            } else if (o instanceof String) {
+                String s = (String) o ;
+                if(s.startsWith(CLASS_VALUE_PREFIX)) {
+                    try {
+                       o = Class.forName(s.substring(CLASS_VALUE_PREFIX.length()));
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        o = null;
+                    }
+                }
             }
         }
         return o;
@@ -141,6 +152,8 @@ public class JSONObject {
             return put(key, (JSONArray) value);
         } else if (value instanceof JSONObject) {
             return put(key, (JSONObject) value);
+        } else if (value instanceof Class<?>) {
+            value = CLASS_VALUE_PREFIX + ((Class<?>)value).getName();
         }
         Gson g = new Gson();
         String json = g.toJson(value);
