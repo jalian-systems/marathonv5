@@ -21,12 +21,11 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.common.io.Files;
 
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class Issue {

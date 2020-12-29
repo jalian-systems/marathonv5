@@ -17,7 +17,7 @@ package net.sourceforge.marathon.editor.ace;
 
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class AceEditorTheme {
 

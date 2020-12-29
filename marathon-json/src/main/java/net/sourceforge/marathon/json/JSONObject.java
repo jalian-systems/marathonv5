@@ -1,9 +1,13 @@
 package net.sourceforge.marathon.json;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,6 +16,8 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
 
 public class JSONObject {
 
@@ -47,10 +53,10 @@ public class JSONObject {
             } else if (o instanceof JsonObject) {
                 return new JSONObject((JsonObject) o);
             } else if (o instanceof String) {
-                String s = (String) o ;
-                if(s.startsWith(CLASS_VALUE_PREFIX)) {
+                String s = (String) o;
+                if (s.startsWith(CLASS_VALUE_PREFIX)) {
                     try {
-                       o = Class.forName(s.substring(CLASS_VALUE_PREFIX.length()));
+                        o = Class.forName(s.substring(CLASS_VALUE_PREFIX.length()));
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                         o = null;
@@ -153,7 +159,7 @@ public class JSONObject {
         } else if (value instanceof JSONObject) {
             return put(key, (JSONObject) value);
         } else if (value instanceof Class<?>) {
-            value = CLASS_VALUE_PREFIX + ((Class<?>)value).getName();
+            value = CLASS_VALUE_PREFIX + ((Class<?>) value).getName();
         }
         Gson g = new Gson();
         String json = g.toJson(value);
@@ -183,6 +189,9 @@ public class JSONObject {
             return null;
         }
 
+        if (NULL.equals(o)) {
+            return o;
+        }
         if (!(o instanceof JsonElement)) {
             return o;
         }
@@ -237,5 +246,172 @@ public class JSONObject {
         }
         return unwrapped;
     }
+
+    public Set<String> keySet() {
+        return jObject.keySet();
+    }
+
+    public void remove(String property) {
+        jObject.remove(property);
+    }
+
+    public String optString(String key) {
+        return this.optString(key, "");
+    }
+
+    public String optString(String key, String defaultValue) {
+        Object object = opt(key);
+        return NULL.equals(object) ? defaultValue : object.toString();
+    }
+
+    public Object opt(String key) {
+        return key == null ? null : unwrap(jObject.get(key));
+    }
+
+    public boolean optBoolean(String key) {
+        return this.optBoolean(key, false);
+    }
+
+    public boolean optBoolean(String key, boolean defaultValue) {
+        Object val = this.opt(key);
+        if (NULL.equals(val)) {
+            return defaultValue;
+        }
+        if (val instanceof Boolean) {
+            return ((Boolean) val).booleanValue();
+        }
+        try {
+            return this.getBoolean(key);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    public double getDouble(String key) throws JSONException {
+        Object object = this.get(key);
+        try {
+            return object instanceof Number ? ((Number) object).doubleValue() : Double.parseDouble(object.toString());
+        } catch (Exception e) {
+            throw new JSONException("JSONObject[" + quote(key) + "] is not a number.", e);
+        }
+    }
+
+    public static String quote(String string) {
+        StringWriter sw = new StringWriter();
+        synchronized (sw.getBuffer()) {
+            try {
+                return quote(string, sw).toString();
+            } catch (IOException ignored) {
+                return "";
+            }
+        }
+    }
+
+    public static Writer quote(String string, Writer w) throws IOException {
+        if (string == null || string.isEmpty()) {
+            w.write("\"\"");
+            return w;
+        }
+
+        char b;
+        char c = 0;
+        String hhhh;
+        int i;
+        int len = string.length();
+
+        w.write('"');
+        for (i = 0; i < len; i += 1) {
+            b = c;
+            c = string.charAt(i);
+            switch (c) {
+            case '\\':
+            case '"':
+                w.write('\\');
+                w.write(c);
+                break;
+            case '/':
+                if (b == '<') {
+                    w.write('\\');
+                }
+                w.write(c);
+                break;
+            case '\b':
+                w.write("\\b");
+                break;
+            case '\t':
+                w.write("\\t");
+                break;
+            case '\n':
+                w.write("\\n");
+                break;
+            case '\f':
+                w.write("\\f");
+                break;
+            case '\r':
+                w.write("\\r");
+                break;
+            default:
+                if (c < ' ' || (c >= '\u0080' && c < '\u00a0') || (c >= '\u2000' && c < '\u2100')) {
+                    w.write("\\u");
+                    hhhh = Integer.toHexString(c);
+                    w.write("0000", 0, 4 - hhhh.length());
+                    w.write(hhhh);
+                } else {
+                    w.write(c);
+                }
+            }
+        }
+        w.write('"');
+        return w;
+    }
+
+    public double optDouble(String key, double defaultValue) {
+        Object val = this.opt(key);
+        if (NULL.equals(val)) {
+            return defaultValue;
+        }
+        if (val instanceof Number) {
+            return ((Number) val).doubleValue();
+        }
+        if (val instanceof String) {
+            try {
+                return Double.parseDouble((String) val);
+            } catch (Exception e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+
+    }
+
+    public JSONArray optJSONArray(String key) {
+        Object o = this.opt(key);
+        return o instanceof JsonArray ? new JSONArray((JsonArray) o) : null;
+    }
+
+    public JSONObject optJSONObject(String key) {
+        Object o = this.opt(key);
+        return o instanceof JsonObject ? new JSONObject((JsonObject) o) : null;
+    }
+
+    public String toString(int indentFactor) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("");
+        if (indentFactor > 0) {
+            for (int i = 1; i <= indentFactor; i++)
+                stringBuilder.append(" ");
+        }
+        try {
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter jsonWriter = new JsonWriter(stringWriter);
+            jsonWriter.setIndent(stringBuilder.toString());
+            jsonWriter.setLenient(true);
+            Streams.write(getValue(), jsonWriter);
+            return stringWriter.toString();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
 
 }

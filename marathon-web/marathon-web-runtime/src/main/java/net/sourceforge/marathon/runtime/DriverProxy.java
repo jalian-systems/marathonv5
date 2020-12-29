@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.service.DriverService;
 
 import net.sourceforge.marathon.api.TestAttributes;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.IPreferenceChangeListener;
 
 public class DriverProxy implements IWebdriverProxy {

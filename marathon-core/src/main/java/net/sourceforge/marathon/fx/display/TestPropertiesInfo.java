@@ -18,9 +18,8 @@ package net.sourceforge.marathon.fx.display;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.resource.Project;
 import net.sourceforge.marathon.runtime.api.Constants;
 

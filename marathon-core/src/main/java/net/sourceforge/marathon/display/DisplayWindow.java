@@ -42,8 +42,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.controlsfx.control.ToggleSwitch;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 
@@ -152,6 +150,8 @@ import net.sourceforge.marathon.fxdocking.ToolBarContainer;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
 import net.sourceforge.marathon.fxdocking.ToolBarPanel;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.junit.MarathonAssertion;
 import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.junit.StdOutConsole;

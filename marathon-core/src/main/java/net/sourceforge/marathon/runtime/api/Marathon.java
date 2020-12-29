@@ -36,12 +36,11 @@ import java.util.regex.Pattern;
 
 import javax.swing.KeyStroke;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import junit.framework.AssertionFailedError;
 import net.sourceforge.marathon.api.INamingStrategy;
 import net.sourceforge.marathon.api.TestAttributes;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.objectmap.ObjectMapException;
 import net.sourceforge.marathon.runtime.NamingStrategyFactory;
 

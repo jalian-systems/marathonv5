@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -62,6 +60,8 @@ import net.sourceforge.marathon.fxdocking.DockKey.TabPolicy;
 import net.sourceforge.marathon.fxdocking.Dockable;
 import net.sourceforge.marathon.fxdocking.ToolBarPanel;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.junit.MarathonDDTestSuite;
 import net.sourceforge.marathon.junit.MarathonTestCase;
 import net.sourceforge.marathon.junit.MarathonTestRunner;

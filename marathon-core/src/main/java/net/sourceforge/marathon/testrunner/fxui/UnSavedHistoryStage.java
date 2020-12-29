@@ -17,14 +17,13 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.display.IInputHanler;
 import net.sourceforge.marathon.fx.display.MarathonInputStage;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class UnSavedHistoryStage extends RunHistoryStage {

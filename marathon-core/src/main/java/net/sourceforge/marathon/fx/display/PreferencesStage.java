@@ -17,8 +17,6 @@ package net.sourceforge.marathon.fx.display;
 
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -35,6 +33,7 @@ import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.runtime.api.Constants;
 

@@ -29,9 +29,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -57,6 +54,8 @@ import net.sourceforge.marathon.fxdocking.ToolBarContainer;
 import net.sourceforge.marathon.fxdocking.ToolBarContainer.Orientation;
 import net.sourceforge.marathon.fxdocking.ToolBarPanel;
 import net.sourceforge.marathon.fxdocking.VLToolBar;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.model.Group;
 import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.resource.Project;

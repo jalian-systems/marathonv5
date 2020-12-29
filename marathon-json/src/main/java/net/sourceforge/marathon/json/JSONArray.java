@@ -1,12 +1,17 @@
 package net.sourceforge.marathon.json;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
 
 public class JSONArray {
 
@@ -17,6 +22,11 @@ public class JSONArray {
         String json = gson.toJson(string);
         StringReader reader = new StringReader(json);
         jArray = JsonParser.parseReader(reader).getAsJsonArray();
+    }
+
+    public JSONArray(JSONTokener tokener) {
+        InputStreamReader inputStreamReader = new InputStreamReader(tokener.getResourceAsStream());
+        jArray = JsonParser.parseReader(inputStreamReader).getAsJsonArray();
     }
 
     public JSONArray(String string) {
@@ -133,4 +143,26 @@ public class JSONArray {
         return new JSONArray(jArray.get(i).getAsJsonArray());
     }
 
+    public void remove(int i) {
+        jArray.remove(i);
+    }
+
+    public String toString(int indentFactor) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("");
+        if (indentFactor > 0) {
+            for (int i = 1; i <= indentFactor; i++)
+                stringBuilder.append(" ");
+        }
+        try {
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter jsonWriter = new JsonWriter(stringWriter);
+            jsonWriter.setIndent(stringBuilder.toString());
+            jsonWriter.setLenient(true);
+            Streams.write(getValue(), jsonWriter);
+            return stringWriter.toString();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
 }

@@ -17,13 +17,12 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class HistoryUpDownHandler implements EventHandler<ActionEvent> {
 

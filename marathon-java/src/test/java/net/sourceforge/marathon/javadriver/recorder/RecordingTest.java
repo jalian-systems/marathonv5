@@ -20,9 +20,8 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.fx.display.FXContextMenuTriggers;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.NamingStrategyFactory;
 import net.sourceforge.marathon.runtime.api.IRecorder;
 import net.sourceforge.marathon.runtime.api.IScriptElement;

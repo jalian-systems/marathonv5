@@ -164,6 +164,7 @@
 /marathon-core-base/.settings/
 /marathon-core-base/build
 /marathon-core-base/bin
+/marathon-core-base/test-output/
 
 /marathon-recording-server/.classpath
 /marathon-recording-server/.project
@@ -171,6 +172,7 @@
 /marathon-recording-server/build/
 /marathon-recording-server/bin/
 /marathon-recording-server/.gitignore
+/marathon-recording-server/test-output/
 
 /marathonext-jide-swing/.gradle
 /marathonext-jide-swing/build

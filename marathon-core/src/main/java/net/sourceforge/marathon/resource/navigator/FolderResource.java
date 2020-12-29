@@ -32,9 +32,6 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -50,6 +47,8 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import junit.framework.Test;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.junit.TestCreator;
 import net.sourceforge.marathon.resource.Resource;
 import net.sourceforge.marathon.resource.ResourceView;
