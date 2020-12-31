@@ -1,7 +1,5 @@
 package net.sourceforge.marathon.json;
 
-import java.io.IOException;
-
 @SuppressWarnings("serial")
 public class JSONException extends RuntimeException {
 
@@ -9,7 +7,7 @@ public class JSONException extends RuntimeException {
         super(message, cause);
     }
 
-    public JSONException(IOException exception) {
+    public JSONException(Throwable exception) {
         super(exception);
     }
 

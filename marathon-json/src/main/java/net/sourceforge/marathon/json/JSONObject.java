@@ -25,24 +25,27 @@ public class JSONObject {
     public static Object NULL = JsonNull.INSTANCE;
     private JsonObject jObject;
 
-    public JSONObject(JsonObject jsonObject) {
+    public JSONObject() {
+        this(new JsonObject());
+    }
+
+    JSONObject(JsonObject jsonObject) {
         this.jObject = jsonObject;
     }
 
     public JSONObject(Object object) {
         Gson g = new Gson();
         String jS = g.toJson(object);
-        StringReader reader = new StringReader(jS);
-        jObject = JsonParser.parseReader(reader).getAsJsonObject();
+        initJsonObject(jS);
     }
 
     public JSONObject(String string) {
-        StringReader reader = new StringReader(string);
-        jObject = JsonParser.parseReader(reader).getAsJsonObject();
+        initJsonObject(string);
     }
 
-    public JSONObject() {
-        jObject = new JsonObject();
+    private void initJsonObject(String jS) {
+        StringReader reader = new StringReader(jS);
+        jObject = JsonParser.parseReader(reader).getAsJsonObject();
     }
 
     public Object get(String string) {
@@ -68,27 +71,51 @@ public class JSONObject {
     }
 
     public boolean getBoolean(String string) {
-        return jObject.get(string).getAsBoolean();
+        try {
+            return jObject.get(string).getAsBoolean();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public int getInt(String string) {
-        return jObject.get(string).getAsInt();
+        try {
+            return jObject.get(string).getAsInt();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public JSONArray getJSONArray(String string) {
-        return new JSONArray(jObject.get(string).getAsJsonArray());
+        try {
+            return new JSONArray(jObject.get(string).getAsJsonArray());
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public JSONObject getJSONObject(String string) {
-        return new JSONObject(jObject.get(string).getAsJsonObject());
+        try {
+            return new JSONObject(jObject.get(string).getAsJsonObject());
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public long getLong(String string) {
-        return jObject.get(string).getAsLong();
+        try {
+            return jObject.get(string).getAsLong();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public String getString(String string) {
-        return jObject.get(string).getAsString();
+        try {
+            return jObject.get(string).getAsString();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public boolean has(String string) {
@@ -261,7 +288,10 @@ public class JSONObject {
 
     public String optString(String key, String defaultValue) {
         Object object = opt(key);
-        return NULL.equals(object) ? defaultValue : object.toString();
+        if (object == null || NULL.equals(object)) {
+            return defaultValue;
+        }
+        return object.toString();
     }
 
     public Object opt(String key) {
@@ -274,7 +304,7 @@ public class JSONObject {
 
     public boolean optBoolean(String key, boolean defaultValue) {
         Object val = this.opt(key);
-        if (NULL.equals(val)) {
+        if (val == null || NULL.equals(val)) {
             return defaultValue;
         }
         if (val instanceof Boolean) {
@@ -367,7 +397,7 @@ public class JSONObject {
 
     public double optDouble(String key, double defaultValue) {
         Object val = this.opt(key);
-        if (NULL.equals(val)) {
+        if (val == null || NULL.equals(val)) {
             return defaultValue;
         }
         if (val instanceof Number) {
@@ -386,12 +416,19 @@ public class JSONObject {
 
     public JSONArray optJSONArray(String key) {
         Object o = this.opt(key);
-        return o instanceof JsonArray ? new JSONArray((JsonArray) o) : null;
+        if (o == null || NULL.equals(o)) {
+            return new JSONArray();
+        }
+        return new JSONArray((JsonArray) o);
     }
 
     public JSONObject optJSONObject(String key) {
         Object o = this.opt(key);
-        return o instanceof JsonObject ? new JSONObject((JsonObject) o) : null;
+        if (o == null || NULL.equals(o)) {
+            return new JSONObject();
+        }
+
+        return new JSONObject((JsonObject) o);
     }
 
     public String toString(int indentFactor) {
@@ -412,6 +449,5 @@ public class JSONObject {
             throw new AssertionError(e);
         }
     }
-
 
 }

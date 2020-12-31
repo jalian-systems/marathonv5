@@ -17,11 +17,22 @@ public class JSONArray {
 
     private JsonArray jArray;
 
+    public JSONArray() {
+        jArray = new JsonArray();
+    }
+
+    JSONArray(JsonArray jsonArray) {
+        this.jArray = jsonArray;
+    }
+
+    public JSONArray(String string) {
+        intJSONArray(string);
+    }
+
     public JSONArray(Object string) {
         Gson gson = new Gson();
         String json = gson.toJson(string);
-        StringReader reader = new StringReader(json);
-        jArray = JsonParser.parseReader(reader).getAsJsonArray();
+        intJSONArray(json);
     }
 
     public JSONArray(JSONTokener tokener) {
@@ -29,17 +40,9 @@ public class JSONArray {
         jArray = JsonParser.parseReader(inputStreamReader).getAsJsonArray();
     }
 
-    public JSONArray(String string) {
+    private void intJSONArray(String string) {
         StringReader reader = new StringReader(string);
         jArray = JsonParser.parseReader(reader).getAsJsonArray();
-    }
-
-    public JSONArray(JsonArray jsonArray) {
-        this.jArray = jsonArray;
-    }
-
-    public JSONArray() {
-        jArray = new JsonArray();
     }
 
     public int length() {
@@ -59,16 +62,27 @@ public class JSONArray {
     }
 
     public int getInt(int i) {
-        return jArray.get(i).getAsInt();
+        try {
+            return jArray.get(i).getAsInt();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public JSONObject getJSONObject(int i) {
-
-        return new JSONObject(jArray.get(i).getAsJsonObject());
+        try {
+            return new JSONObject(jArray.get(i).getAsJsonObject());
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public String getString(int i) {
-        return jArray.get(i).getAsString();
+        try {
+            return jArray.get(i).getAsString();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public JSONArray put(boolean value) {
@@ -136,11 +150,19 @@ public class JSONArray {
     }
 
     public double getDouble(int i) {
-        return jArray.get(i).getAsDouble();
+        try {
+            return jArray.get(i).getAsDouble();
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public JSONArray getJSONArray(int i) {
-        return new JSONArray(jArray.get(i).getAsJsonArray());
+        try {
+            return new JSONArray(jArray.get(i).getAsJsonArray());
+        } catch (Throwable e) {
+            throw new JSONException(e);
+        }
     }
 
     public void remove(int i) {
