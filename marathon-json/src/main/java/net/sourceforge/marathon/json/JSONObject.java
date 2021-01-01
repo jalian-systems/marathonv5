@@ -417,7 +417,7 @@ public class JSONObject {
     public JSONArray optJSONArray(String key) {
         Object o = this.opt(key);
         if (o == null || NULL.equals(o)) {
-            return new JSONArray();
+            return null;
         }
         return new JSONArray((JsonArray) o);
     }
@@ -425,9 +425,8 @@ public class JSONObject {
     public JSONObject optJSONObject(String key) {
         Object o = this.opt(key);
         if (o == null || NULL.equals(o)) {
-            return new JSONObject();
+            return null;
         }
-
         return new JSONObject((JsonObject) o);
     }
 
