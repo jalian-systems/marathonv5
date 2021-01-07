@@ -20,14 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import net.sourceforge.marathon.compat.JavaCompatibility;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class JavaFXFileChooserElement extends JavaFXElement {
 

@@ -20,14 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONException;
-
 import net.sourceforge.marathon.javafxagent.EventQueueWait;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.NoSuchWindowException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
+import net.sourceforge.marathon.json.JSONException;
 
 public class SimpleSelector implements Selector {
 

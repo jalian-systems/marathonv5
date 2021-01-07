@@ -63,15 +63,17 @@ compileTestJava {
 }
 
 dependencies {
-    compile 'org.json:json:20180813'
+    compile project(":marathon-json")
+    compile "com.google.code.gson:gson:${gson_version}"
     compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"
     compile "org.javassist:javassist:${javassist_version}"
     implementation 'com.jidesoft:jide-oss:3.6.18'
     testCompile "org.testng:testng:${testng_version}"
     testCompile project(":marathon-java:marathon-test-helpers")
-    antBuildXML 'org.json:json:20180813'
     antBuildXML "org.nanohttpd:nanohttpd:${nanohttpd_version}"
+    antBuildXML project(":marathon-json").files("bin")
     antBuildXML "org.javassist:javassist:${javassist_version}"
+    antBuildXML "com.google.code.gson:gson:${gson_version}"
 }
 
 jar {

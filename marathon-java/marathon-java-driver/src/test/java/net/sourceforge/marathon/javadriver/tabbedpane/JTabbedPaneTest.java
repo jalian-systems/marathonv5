@@ -21,7 +21,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -34,6 +33,7 @@ import org.testng.annotations.Test;
 import components.TabbedPaneDemo;
 import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test

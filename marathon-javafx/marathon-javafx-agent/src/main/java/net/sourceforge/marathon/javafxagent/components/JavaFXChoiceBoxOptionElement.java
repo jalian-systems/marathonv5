@@ -1,8 +1,5 @@
 package net.sourceforge.marathon.javafxagent.components;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
@@ -10,6 +7,8 @@ import javafx.scene.input.PickResult;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXChoiceBoxOptionElement extends JavaFXElement implements IPseudoElement {
 

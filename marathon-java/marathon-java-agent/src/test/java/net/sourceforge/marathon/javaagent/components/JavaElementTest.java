@@ -19,9 +19,8 @@ import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.IJavaElement;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaElementTest {
 

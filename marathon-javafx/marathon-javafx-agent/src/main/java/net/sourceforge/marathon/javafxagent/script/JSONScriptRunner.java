@@ -19,14 +19,13 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaAgentException;
 import net.sourceforge.marathon.javafxagent.server.ExecuteMode;
 import net.sourceforge.marathon.javafxagent.server.Session;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JSONScriptRunner {
 

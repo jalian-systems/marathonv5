@@ -34,13 +34,12 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import org.json.JSONObject;
-
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import net.sourceforge.marathon.javafxagent.Device.Type;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXAgent implements IJavaFXAgent {
 

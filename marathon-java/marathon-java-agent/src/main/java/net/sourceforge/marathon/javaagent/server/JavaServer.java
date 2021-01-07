@@ -34,10 +34,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import net.sourceforge.marathon.javaagent.Device;
@@ -56,6 +52,9 @@ import net.sourceforge.marathon.javaagent.SessionNotCreatedException;
 import net.sourceforge.marathon.javaagent.StaleElementReferenceException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javaagent.script.JSONScriptRunner;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaServer extends NanoHTTPD {
 

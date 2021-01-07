@@ -71,10 +71,9 @@ import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.table.JTableHeader;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.components.ContextManager;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaElementPropertyAccessor {
 

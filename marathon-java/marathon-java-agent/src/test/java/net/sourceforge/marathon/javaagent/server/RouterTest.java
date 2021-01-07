@@ -15,11 +15,11 @@
  ******************************************************************************/
 package net.sourceforge.marathon.javaagent.server;
 
-import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import fi.iki.elonen.NanoHTTPD.Method;
+import net.sourceforge.marathon.json.JSONObject;
 
 @Test
 public class RouterTest {

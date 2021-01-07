@@ -45,8 +45,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.component.FileDialogTransformer;
 import net.sourceforge.marathon.component.RComponent;
 import net.sourceforge.marathon.component.RComponentFactory;
@@ -55,6 +53,7 @@ import net.sourceforge.marathon.component.RUnknownComponent;
 import net.sourceforge.marathon.contextmenu.ContextMenuHandler;
 import net.sourceforge.marathon.javaagent.server.JavaServer;
 import net.sourceforge.marathon.javarecorder.ws.WSRecorder;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaRecorderHook implements AWTEventListener, ChangeListener, ActionListener {
 

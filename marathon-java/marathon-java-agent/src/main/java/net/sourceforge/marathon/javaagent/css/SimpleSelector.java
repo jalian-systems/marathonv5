@@ -20,12 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONException;
-
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.json.JSONException;
 import net.sourceforge.marathon.javaagent.NoSuchWindowException;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 

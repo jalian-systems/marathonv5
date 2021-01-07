@@ -13,7 +13,6 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -29,6 +28,7 @@ import net.sourceforge.marathon.component.RComponentTest;
 import net.sourceforge.marathon.component.RList;
 import net.sourceforge.marathon.javaagent.components.PropertyHelper;
 import net.sourceforge.marathon.javaagent.components.jide.CheckBoxListDemo;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 public class RJideCheckBoxListTest extends RComponentTest {

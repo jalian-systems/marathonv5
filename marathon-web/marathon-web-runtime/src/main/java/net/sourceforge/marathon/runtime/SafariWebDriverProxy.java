@@ -17,8 +17,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
 import org.openqa.selenium.safari.SafariDriverService;
 
-import net.sourceforge.marathon.runtime.IWebBrowserProxy;
-
 public class SafariWebDriverProxy implements IWebBrowserProxy {
 
     public static final Logger LOGGER = Logger.getLogger(SafariWebDriverProxy.class.getName());

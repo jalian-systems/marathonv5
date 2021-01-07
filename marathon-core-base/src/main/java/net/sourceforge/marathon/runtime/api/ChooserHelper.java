@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class ChooserHelper {
 

@@ -25,13 +25,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.event.Event;
 import javafx.scene.layout.BorderPane;
 import net.sourceforge.marathon.fxdocking.DockableState.State;
 import net.sourceforge.marathon.fxdocking.DockingConstants.Split;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.Constants;
 
 public class DockingDesktop extends BorderPane {

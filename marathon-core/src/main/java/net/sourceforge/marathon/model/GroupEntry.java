@@ -19,11 +19,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.scene.Node;
 import junit.framework.Test;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.model.Group.GroupType;
 import net.sourceforge.marathon.runtime.api.IConsole;
 

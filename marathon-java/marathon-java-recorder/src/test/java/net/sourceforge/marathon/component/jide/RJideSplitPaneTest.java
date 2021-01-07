@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -20,6 +19,7 @@ import net.sourceforge.marathon.component.LoggingRecorder.Call;
 import net.sourceforge.marathon.component.RComponentTest;
 import net.sourceforge.marathon.javaagent.Wait;
 import net.sourceforge.marathon.javaagent.components.jide.JideSplitPaneDemo;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 public class RJideSplitPaneTest extends RComponentTest {

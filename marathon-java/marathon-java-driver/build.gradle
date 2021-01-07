@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-  compile 'org.json:json:20180813'
+  compile project(":marathon-json")
   compile project(":marathon-java:marathon-java-agent")
   compile project(":marathon-javafx:marathon-javafx-agent")
   compile "org.nanohttpd:nanohttpd:${nanohttpd_version}"

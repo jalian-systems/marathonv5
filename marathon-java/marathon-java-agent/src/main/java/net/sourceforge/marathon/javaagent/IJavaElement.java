@@ -21,7 +21,7 @@ import java.awt.Point;
 import java.util.List;
 import java.util.UUID;
 
-import org.json.JSONArray;
+import net.sourceforge.marathon.json.JSONArray;
 
 public interface IJavaElement {
 

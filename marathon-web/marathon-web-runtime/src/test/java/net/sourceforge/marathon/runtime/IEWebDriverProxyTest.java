@@ -10,8 +10,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
-import net.sourceforge.marathon.runtime.IEWebDriverProxy;
-
 @Test
 public class IEWebDriverProxyTest extends WebDriverProxyTest {
 

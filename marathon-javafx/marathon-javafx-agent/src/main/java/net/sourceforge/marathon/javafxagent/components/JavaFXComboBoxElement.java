@@ -20,14 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class JavaFXComboBoxElement extends JavaFXElement {
 

@@ -19,10 +19,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.json.JSONObject;
 
 public interface IJavaFXAgent {
 

@@ -17,9 +17,6 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -27,6 +24,8 @@ import javafx.scene.input.PickResult;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXComboBoxOptionElement extends JavaFXElement implements IPseudoElement {
 

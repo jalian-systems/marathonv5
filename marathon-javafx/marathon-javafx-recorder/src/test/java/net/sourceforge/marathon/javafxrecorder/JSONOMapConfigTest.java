@@ -28,11 +28,12 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 
-import org.json.JSONObject;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import net.sourceforge.marathon.json.JSONObject;
 
 @Test
 public class JSONOMapConfigTest {

@@ -17,8 +17,6 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,6 +38,7 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.display.IInputHanler;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.testrunner.fxui.TestTreeItem.State;
 
 public abstract class RunHistoryStage extends ModalDialog<RunHistoryInfo> {

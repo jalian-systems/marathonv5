@@ -17,12 +17,11 @@ package net.sourceforge.marathon.javafxrecorder;
 
 import java.io.IOException;
 
-import org.json.JSONObject;
-
 import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
+import net.sourceforge.marathon.json.JSONObject;
 
 public interface IJSONRecorder {
 

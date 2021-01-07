@@ -29,8 +29,6 @@ import java.util.logging.Logger;
 
 import javax.swing.event.ChangeEvent;
 
-import org.json.JSONObject;
-
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -46,6 +44,7 @@ import net.sourceforge.marathon.javafxagent.JavaFXElementPropertyAccessor;
 import net.sourceforge.marathon.javafxagent.components.ContextManager;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONObject;
 
 public abstract class RFXComponent extends JavaFXElementPropertyAccessor {
 

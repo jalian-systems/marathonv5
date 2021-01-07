@@ -30,12 +30,11 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.css.FindByCssSelector;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public abstract class AbstractJavaElement extends JavaElementPropertyAccessor implements IJavaElement {
 

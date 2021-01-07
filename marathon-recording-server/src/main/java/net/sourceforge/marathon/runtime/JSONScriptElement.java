@@ -18,8 +18,7 @@ package net.sourceforge.marathon.runtime;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.IScriptElement;
 import net.sourceforge.marathon.runtime.api.Indent;
 import net.sourceforge.marathon.runtime.api.RecordingScriptModel;

@@ -54,7 +54,8 @@ compileTestJava {
 }
 
 dependencies {
-	compile project(":marathon-core-base")
-  compile 'org.json:json:20180813'
+  compile project(":marathon-core-base")
+  compile project(":marathon-json")
   compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
+  compile "com.google.code.gson:gson:${gson_version}"
 }

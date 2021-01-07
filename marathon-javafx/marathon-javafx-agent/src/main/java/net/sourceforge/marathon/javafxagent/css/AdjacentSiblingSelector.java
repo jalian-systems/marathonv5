@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONException;
-
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -31,6 +29,7 @@ import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.NoSuchWindowException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
+import net.sourceforge.marathon.json.JSONException;
 
 public class AdjacentSiblingSelector implements Selector {
 
