@@ -32,8 +32,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONObject;
-
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.JSObject;
@@ -53,6 +51,7 @@ import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXBrowserViewElement extends JavaFXElement {
 
