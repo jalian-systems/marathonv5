@@ -26,6 +26,9 @@ $ ./gradlew eclipse
 C:\> .\gradlew eclipse
 ```
 
+## Change log
+Change log is available [here](marathon-core/ChangeLog).
+
 ## More Information
 
 You can get more information about Marathon and documentation/support from:
