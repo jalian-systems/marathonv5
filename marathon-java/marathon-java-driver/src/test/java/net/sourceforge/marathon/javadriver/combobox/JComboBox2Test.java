@@ -22,7 +22,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,6 +32,7 @@ import org.testng.annotations.Test;
 
 import components.ComboBoxDemo2;
 import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.json.JSONArray;
 
 @Test
 public class JComboBox2Test {

@@ -26,10 +26,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -42,6 +38,9 @@ import net.sourceforge.marathon.javafxagent.KeysMap;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
 import net.sourceforge.marathon.javafxrecorder.component.RFXComponent;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class WSRecorder implements IJSONRecorder {
 

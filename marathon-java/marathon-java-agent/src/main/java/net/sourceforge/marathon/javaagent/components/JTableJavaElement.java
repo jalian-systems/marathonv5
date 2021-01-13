@@ -32,14 +32,13 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
 
 public class JTableJavaElement extends AbstractJavaElement {

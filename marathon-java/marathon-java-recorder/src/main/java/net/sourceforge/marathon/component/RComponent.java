@@ -40,12 +40,11 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.components.ContextManager;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONObject;
 
 public abstract class RComponent extends JavaElementPropertyAccessor {
 

@@ -24,15 +24,14 @@ import java.util.logging.Logger;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.AbstractJavaElement;
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.IPseudoElement;
 import net.sourceforge.marathon.javaagent.JavaElementPropertyAccessor;
 import net.sourceforge.marathon.javaagent.NoSuchElementException;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JTableHeaderItemJavaElement extends AbstractJavaElement implements IPseudoElement {
 

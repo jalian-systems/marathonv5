@@ -27,9 +27,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
@@ -43,6 +40,8 @@ import net.sourceforge.marathon.javafxagent.components.JavaFXContextMenuElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXDirectoryChooserElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXFileChooserElement;
 import net.sourceforge.marathon.javafxagent.components.JavaFXMenuBarElement;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXTargetLocator {
 

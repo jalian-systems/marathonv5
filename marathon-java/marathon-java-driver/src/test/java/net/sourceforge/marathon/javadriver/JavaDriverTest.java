@@ -44,7 +44,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
@@ -78,6 +77,7 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javaagent.JavaElementFactory;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
 @Test

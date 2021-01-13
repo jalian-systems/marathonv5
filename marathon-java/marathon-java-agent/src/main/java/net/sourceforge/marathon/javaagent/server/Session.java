@@ -26,14 +26,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.Device;
 import net.sourceforge.marathon.javaagent.IJavaAgent;
 import net.sourceforge.marathon.javaagent.IJavaElement;
 import net.sourceforge.marathon.javaagent.JavaAgent;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.javaagent.UnsupportedCommandException;
 
 public class Session {

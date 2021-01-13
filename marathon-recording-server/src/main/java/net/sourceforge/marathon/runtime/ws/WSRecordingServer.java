@@ -24,10 +24,10 @@ import java.util.logging.Logger;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import net.sourceforge.marathon.api.INamingStrategy;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration;
 import net.sourceforge.marathon.objectmap.ObjectMapException;
 import net.sourceforge.marathon.runtime.IRecordingServer;

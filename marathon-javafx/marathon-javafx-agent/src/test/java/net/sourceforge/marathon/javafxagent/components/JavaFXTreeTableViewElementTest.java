@@ -212,8 +212,13 @@ public class JavaFXTreeTableViewElementTest extends JavaFXElementTest {
 
     @Test
     public void assertContent() {
-        String expected = "[[\"Sales Department\",\"\"],[\"Ethan Williams\",\"ethan.williams@example.com\"],[\"Emma Jones\",\"emma.jones@example.com\"],[\"Michael Brown\",\"michael.brown@example.com\"],[\"Anna Black\",\"anna.black@example.com\"],[\"Rodger York\",\"roger.york@example.com\"],[\"Susan Collins\",\"susan.collins@example.com\"]]";
-        AssertJUnit.assertEquals(expected, treeTable.getAttribute("content"));
+        String expected = "[Sales Department, , Ethan Williams, ethan.williams@example.com, Emma Jones, emma.jones@example.com, Michael Brown, michael.brown@example.com, Anna Black, anna.black@example.com, Rodger York, roger.york@example.com, Susan Collins, susan.collins@example.com]";
+        List<IJavaFXElement> elements = treeTable.findElementsByCssSelector(".::all-cells");
+        ArrayList<String> actual = new ArrayList<>();
+        for (int i = 0; i < elements.size(); i++) {
+            actual.add(elements.get(i).getAttribute("text"));
+        }
+        AssertJUnit.assertEquals(expected, actual.toString());
     }
 
     @SuppressWarnings("rawtypes")

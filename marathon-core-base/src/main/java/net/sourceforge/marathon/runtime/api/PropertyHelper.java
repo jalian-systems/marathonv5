@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONObject;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class PropertyHelper {
 

@@ -24,9 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.scene.Node;
 import net.sourceforge.marathon.javafxagent.Device;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
@@ -34,6 +31,8 @@ import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class Session {
 

@@ -32,10 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.inject.BindingAnnotation;
 
 import javafx.scene.Node;
@@ -43,6 +39,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import net.sourceforge.marathon.editor.IEditorProvider.EditorType;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.model.GroupEntry.GroupEntryType;
 import net.sourceforge.marathon.runtime.api.Constants;
 

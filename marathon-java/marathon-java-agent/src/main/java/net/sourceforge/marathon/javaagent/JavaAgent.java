@@ -36,11 +36,10 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.Device.Type;
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
 import net.sourceforge.marathon.javaagent.css.FindByCssSelector;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaAgent implements IJavaAgent {
 

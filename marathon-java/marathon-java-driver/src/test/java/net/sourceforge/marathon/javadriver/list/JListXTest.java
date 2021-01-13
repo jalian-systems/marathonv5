@@ -35,7 +35,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -50,6 +49,7 @@ import org.testng.annotations.Test;
 
 import net.sourceforge.marathon.javaagent.EventQueueWait;
 import net.sourceforge.marathon.javadriver.JavaDriver;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.MissingException;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })

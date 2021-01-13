@@ -18,8 +18,6 @@ package net.sourceforge.marathon.editor.ace;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -35,6 +33,7 @@ import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ICancelHandler;
 import net.sourceforge.marathon.fx.api.ModalDialog;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.Preferences;
 
 public class AceEditorPreferencesStage extends ModalDialog<AceEditorPreferencesInfo> implements ICancelHandler {

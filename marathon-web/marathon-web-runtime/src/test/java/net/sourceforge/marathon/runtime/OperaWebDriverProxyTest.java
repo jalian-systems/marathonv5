@@ -13,8 +13,6 @@ import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
 
-import net.sourceforge.marathon.runtime.OperaWebDriverProxy;
-
 @Test
 public class OperaWebDriverProxyTest extends WebDriverProxyTest {
 

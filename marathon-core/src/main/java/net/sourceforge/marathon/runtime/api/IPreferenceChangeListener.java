@@ -15,7 +15,7 @@
  ******************************************************************************/
 package net.sourceforge.marathon.runtime.api;
 
-import org.json.JSONObject;
+import net.sourceforge.marathon.json.JSONObject;
 
 public interface IPreferenceChangeListener {
     void preferencesChanged(String section, JSONObject preferences);

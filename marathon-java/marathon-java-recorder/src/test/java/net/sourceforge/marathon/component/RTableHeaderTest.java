@@ -28,7 +28,6 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -41,6 +40,7 @@ import net.sourceforge.marathon.javaagent.Device;
 import net.sourceforge.marathon.javaagent.IDevice;
 import net.sourceforge.marathon.javaagent.IDevice.Buttons;
 import net.sourceforge.marathon.javaagent.Wait;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test

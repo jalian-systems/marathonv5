@@ -32,10 +32,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import javafx.geometry.Point2D;
@@ -55,6 +51,9 @@ import net.sourceforge.marathon.javafxagent.SessionNotCreatedException;
 import net.sourceforge.marathon.javafxagent.StaleElementReferenceException;
 import net.sourceforge.marathon.javafxagent.UnsupportedCommandException;
 import net.sourceforge.marathon.javafxagent.script.JSONScriptRunner;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONException;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaServer extends NanoHTTPD {
 
@@ -410,7 +409,7 @@ public class JavaServer extends NanoHTTPD {
                 return (Response) result;
             }
             if (result == null || result == NULL_OBJECT) {
-                r.put("value", (Object) null);
+                r.put("value", JSONObject.NULL);
             } else {
                 r.put("value", result);
             }

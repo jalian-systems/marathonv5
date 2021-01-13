@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -38,6 +36,7 @@ import javafx.scene.input.PickResult;
 import net.sourceforge.marathon.javafxagent.IDevice.Buttons;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
 import net.sourceforge.marathon.javafxagent.css.FindByCssSelector;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class JavaFXElement extends JavaFXElementPropertyAccessor implements IJavaFXElement {
 

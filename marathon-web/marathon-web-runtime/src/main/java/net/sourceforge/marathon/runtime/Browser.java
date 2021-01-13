@@ -1,11 +1,11 @@
 package net.sourceforge.marathon.runtime;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import net.sourceforge.marathon.json.JSONTokener;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class Browser {
     private String browserName;

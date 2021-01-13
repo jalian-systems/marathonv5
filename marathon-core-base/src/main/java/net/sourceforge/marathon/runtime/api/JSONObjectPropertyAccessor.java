@@ -21,7 +21,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JSONObjectPropertyAccessor extends DefaultMatcher implements Serializable {
 

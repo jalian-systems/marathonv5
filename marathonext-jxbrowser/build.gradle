@@ -61,6 +61,7 @@ dependencies {
   compile project(':marathon-javafx:marathon-javafx-agent')
   compile project(':marathon-javafx:marathon-javafx-recorder')
   compile fileTree(dir: "${jxbrowser_install_path}/lib", include: "*.jar")
+  compile project(':marathon-json')
 }
 
 jar {

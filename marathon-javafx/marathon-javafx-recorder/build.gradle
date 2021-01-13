@@ -41,15 +41,17 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 dependencies {
-  compile 'org.json:json:20180813'
+  compile project(':marathon-json')
   compile project(':marathon-javafx:marathon-javafx-agent')
+  compile "com.google.code.gson:gson:${gson_version}"
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-javafx:marathon-fxtest-helpers")
   testCompile project(':marathon-javafx:marathon-javafx-agent')
   testCompile 'org.fxmisc.richtext:richtextfx:0.9.3'
-  antBuildXML 'org.json:json:20180813'
   antBuildXML project(':marathon-javafx:marathon-javafx-agent').files("bin")
+  antBuildXML project(":marathon-json").files("bin")
   antBuildXML "org.java-websocket:Java-WebSocket:${java_websocket_version}"
+  antBuildXML "com.google.code.gson:gson:${gson_version}"
   compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
 }
 

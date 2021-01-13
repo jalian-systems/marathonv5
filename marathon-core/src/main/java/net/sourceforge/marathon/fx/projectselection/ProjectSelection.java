@@ -26,8 +26,6 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import org.json.JSONObject;
-
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,6 +48,7 @@ import javafx.util.Callback;
 import net.sourceforge.marathon.fx.api.ButtonBarX;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.api.ModalDialog;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.api.Constants;
 import net.sourceforge.marathon.runtime.api.ProjectFile;
 

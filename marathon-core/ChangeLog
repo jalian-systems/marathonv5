@@ -1,3 +1,39 @@
+Marathon Version 5.5.0.0 (7th Jan 2021)
+
+01. fix: Deleted marathon-javafx and marathon-java agent and recorder old jars.
+    
+02. Replaced json.org library with Gson
+    * fix: marathon-json project name in playback-web.rb
+    * fix: Return null in optJSONObject value is null.
+    * fix: marathon-json and gson class not found while recording.
+    * feat: added marathon-json support to marathon-core ...
+    * feat: added marathon-json support to marathon-jfx-recorder.
+    * fix: JSONObject get return class object.
+    * feat: added marathon-json support to marathon-java-recorder.
+    * feat: Added support for marathon-java-driver.
+    * fix: Created json null instance.
+    * feat: Added marathon-json support for javafx-agent.
+    * feat: implemented JSONArray and JSONObject methods and test cases.
+    * feat: added gson 2.8.6 dependency to marathon-java-agent.
+    * Removed json.org dependency for marathon-java-agent.
+    * Fixed missing json.org classes.
+
+03. fix: NPE while playback JFXSpinner.
+    
+04. Fixed Java Driver, Java Agent, JavaFX Agnet, Java Recorder and JavaFX Recorder Test cases.
+    * fix: RFXTreeView, TableView test cases in marathon-javafx-recorder.
+    * fix: Fixed RFXListViewTest cases.
+    * fix: RTableTest testcase in marathon-java-recorder.
+    * fix: Skipped LaunchTest in JavaDriver.
+    * fix: fixed JavaProfileTest cases.
+    * fix: JavaServer not returning null object for unsupported attribute.
+    * skip: Skipped JavaFXTableViewElementsScrollTest.
+    * fix: fixed JavaFXTableViewElementTest CheckBox test cases.
+    * fix: fixed JavaFXTreeViewElementTest CheckBox, ChoiceBox and ComboBox test cases.
+    * fix: fixed JavaFXTableViewElementTest test cases.
+    * fix: fixed JavaFXTreeTableViewElementTest test cases.
+    * fix: fixed JavaFXTreeViewElementTest test cases.
+
 Marathon Version 5.4.0.0 (14th May 2020)
 
 01. feat(metro): Implemented metro UI using JMetro.

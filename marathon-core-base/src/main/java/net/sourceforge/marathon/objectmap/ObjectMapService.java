@@ -26,9 +26,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.ObjectIdentity;
 import net.sourceforge.marathon.objectmap.ObjectMapConfiguration.PropertyList;
 import net.sourceforge.marathon.runtime.api.IPropertyAccessor;

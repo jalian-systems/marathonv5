@@ -21,11 +21,10 @@ import java.awt.Point;
 import java.awt.Window;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.WindowTitle;
 import net.sourceforge.marathon.javarecorder.IJSONRecorder;
 import net.sourceforge.marathon.javarecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class RWindow extends RComponent {
 

@@ -43,10 +43,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.components.FileDialogElement;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import sun.awt.AppContext;
 
 public class JavaTargetLocator {

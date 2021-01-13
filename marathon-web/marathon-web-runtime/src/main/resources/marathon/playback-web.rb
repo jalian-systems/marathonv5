@@ -12,7 +12,7 @@ java_import 'net.sourceforge.marathon.runtime.api.ComponentId'
 java_import 'net.sourceforge.marathon.ruby.MarathonRuby'
 java_import 'net.sourceforge.marathon.runtime.api.Constants'
 java_import 'net.sourceforge.marathon.api.TestAttributes'
-java_import 'org.json.JSONObject'
+java_import 'net.sourceforge.marathon.json.JSONObject'
 java_import 'net.sourceforge.marathon.display.WaitMessageDialog'
 
 require 'marathon/results'

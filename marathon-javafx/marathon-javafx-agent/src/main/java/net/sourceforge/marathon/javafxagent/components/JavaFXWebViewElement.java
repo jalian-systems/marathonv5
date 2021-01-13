@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
@@ -40,6 +38,7 @@ import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.json.JSONObject;
 import netscape.javascript.JSObject;
 
 public class JavaFXWebViewElement extends JavaFXElement {

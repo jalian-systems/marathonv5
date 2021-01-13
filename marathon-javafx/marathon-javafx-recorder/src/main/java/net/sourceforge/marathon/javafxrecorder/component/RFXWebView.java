@@ -8,8 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
@@ -21,6 +19,7 @@ import javafx.scene.web.WebView;
 import net.sourceforge.marathon.javafxagent.components.JavaFXWebViewElement;
 import net.sourceforge.marathon.javafxrecorder.IJSONRecorder;
 import net.sourceforge.marathon.javafxrecorder.JSONOMapConfig;
+import net.sourceforge.marathon.json.JSONObject;
 import netscape.javascript.JSObject;
 
 public class RFXWebView extends RFXComponent {

@@ -17,11 +17,10 @@ package net.sourceforge.marathon.testrunner.fxui;
 
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.scene.control.Button;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class FavouriteHistoryStage extends RunHistoryStage {
 

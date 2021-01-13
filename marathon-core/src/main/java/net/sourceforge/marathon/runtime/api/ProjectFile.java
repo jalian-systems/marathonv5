@@ -8,10 +8,9 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
-
 import javafx.scene.control.Alert.AlertType;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class ProjectFile {
 

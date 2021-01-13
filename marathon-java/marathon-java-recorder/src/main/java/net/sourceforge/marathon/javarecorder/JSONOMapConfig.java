@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JSONOMapConfig {
 

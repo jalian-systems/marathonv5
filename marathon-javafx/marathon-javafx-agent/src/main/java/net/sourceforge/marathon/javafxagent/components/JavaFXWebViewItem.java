@@ -5,14 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.scene.Node;
 import javafx.scene.input.PickResult;
 import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXWebViewItem extends JavaFXElement implements IPseudoElement {
 

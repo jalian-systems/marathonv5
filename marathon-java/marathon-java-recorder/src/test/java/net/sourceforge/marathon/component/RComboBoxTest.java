@@ -21,7 +21,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONArray;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -30,6 +29,7 @@ import org.testng.annotations.Test;
 import com.sun.swingset3.demos.combobox.ComboBoxDemo;
 
 import net.sourceforge.marathon.component.LoggingRecorder.Call;
+import net.sourceforge.marathon.json.JSONArray;
 import net.sourceforge.marathon.testhelpers.ComponentUtils;
 
 @Test

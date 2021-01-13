@@ -53,15 +53,17 @@ compileTestJava {
 }
 
 dependencies {
-  compile 'org.json:json:20180813'
+  compile project(':marathon-json')
+  compile "com.google.code.gson:gson:${gson_version}"
   compile project(':marathon-java:marathon-java-agent')
   implementation 'com.jidesoft:jide-oss:3.6.18'
   testCompile "org.testng:testng:${testng_version}"
   testCompile project(":marathon-java:marathon-test-helpers")
   testCompile project(':marathon-java:marathon-java-agent')
-  antBuildXML 'org.json:json:20180813'
   antBuildXML project(':marathon-java:marathon-java-agent').files("bin")
   antBuildXML "org.java-websocket:Java-WebSocket:${java_websocket_version}"
+  antBuildXML project(":marathon-json").files("bin")
+  antBuildXML "com.google.code.gson:gson:${gson_version}"
   compile "org.java-websocket:Java-WebSocket:${java_websocket_version}"
 }
 

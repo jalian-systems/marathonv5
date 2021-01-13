@@ -19,9 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -35,6 +32,8 @@ import net.sourceforge.marathon.javafxagent.IJavaFXElement;
 import net.sourceforge.marathon.javafxagent.IPseudoElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXElementFactory;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 
 public class JavaFXListViewItemElement extends JavaFXElement implements IPseudoElement {
 

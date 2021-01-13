@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.ie.InternetExplorerDriverLogLevel;
@@ -44,6 +42,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import net.sourceforge.marathon.fx.api.FXUIUtils;
 import net.sourceforge.marathon.fx.projectselection.FormPane;
 import net.sourceforge.marathon.fx.projectselection.FormPane.ISetConstraints;
+import net.sourceforge.marathon.json.JSONArray;
+import net.sourceforge.marathon.json.JSONObject;
 import net.sourceforge.marathon.runtime.fx.api.FileSelectionHandler;
 import net.sourceforge.marathon.runtime.fx.api.IFileSelectedAction;
 

@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import net.sourceforge.marathon.javaagent.JavaTargetLocator.JWindow;
+import net.sourceforge.marathon.json.JSONObject;
 
 public interface IJavaAgent {
 

@@ -17,13 +17,12 @@ package net.sourceforge.marathon.javafxagent.components;
 
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import net.sourceforge.marathon.javafxagent.IJavaFXAgent;
 import net.sourceforge.marathon.javafxagent.JavaFXElement;
 import net.sourceforge.marathon.javafxagent.JavaFXTargetLocator.JFXWindow;
+import net.sourceforge.marathon.json.JSONArray;
 
 public class JavaFXSplitPaneElement extends JavaFXElement {
 

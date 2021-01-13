@@ -35,6 +35,7 @@ dependencies {
   runtime project(":marathon-javafx:marathon-javafx-recorder")
   runtime project(":marathon-javafx:marathon-javafx-runtime")
   runtime project(":marathon-core:ruby-selenium-webdriver")
+  runtime project(":marathon-json")
 }
 
 jar.doFirst{
@@ -109,6 +110,7 @@ distributions {
         include('**/marathon*jar')
       }
       from(project(':marathon-jenkins').file('build/libs'))
+      from(project(':marathon-json').file('build/libs'))
       from(project(':marathon-core').file('src/main/dist'))
 			if(project.properties['jxbrowser_install_path']) {
       	from(project(':marathonext-jxbrowser').jar)
