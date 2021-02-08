@@ -1190,15 +1190,20 @@ public class JavaProfile {
                 }
             }
         }
-        ;
         return path;
     }
 
     private String getClassPath() {
         StringBuilder sb = new StringBuilder();
-        for (String f : classPathEntries) {
+        classPathEntries.forEach((f) -> {
+            File file = new File(f);
+            if (file.isDirectory()) {
+                sb.append(file.getAbsolutePath()).append("/*").append(File.pathSeparator);
+            } else {
+                sb.append(file.getAbsolutePath()).append(File.pathSeparator);
+            }
             sb.append(f).append(File.pathSeparator);
-        }
+        });
         sb.setLength(sb.length() - 1);
         return sb.toString();
     }
