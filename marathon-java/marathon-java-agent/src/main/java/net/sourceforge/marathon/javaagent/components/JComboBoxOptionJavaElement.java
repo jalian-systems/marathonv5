@@ -63,7 +63,9 @@ public class JComboBoxOptionJavaElement extends AbstractJavaElement implements I
         if (option >= model.getSize()) {
             throw new NoSuchElementException("Index out-of-bounds error on JComboBox: " + option, null);
         }
-        Component rendererComponent = comboBox.getRenderer().getListCellRendererComponent(new JList(model),
+        JList list = new JList(model);
+		list.setUI(null);
+		Component rendererComponent = comboBox.getRenderer().getListCellRendererComponent(list,
                 model.getElementAt(option), option, false, false);
         return rendererComponent;
     }
